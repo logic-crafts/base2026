@@ -37,8 +37,8 @@ python3 ./scripts/validate-public-text-excerpts.py --data $ExportRoot | Write-Ou
 Assert-NativeSuccess "validate-public-text-excerpts"
 python3 ./scripts/validate-public-release-contract.py --export-dir $ExportRoot --baseline-export-dir ./public-data/tiktok --enforce-count-floor | Write-Output
 Assert-NativeSuccess "validate-public-release-contract"
-python3 ./scripts/check-public-content-readiness.py --data-root $ExportRoot --latest 1 --fail | Write-Output
-Assert-NativeSuccess "check-public-content-readiness"
+python3 ./scripts/check-public-content-readiness.py --data-root $ExportRoot --latest 1 | Write-Output
+Assert-NativeSuccess "check-public-content-readiness-audit"
 $SignalBriefPath = Join-Path $ExportRoot "topic_signal_briefs.jsonl"
 python3 ./scripts/generate-topic-signal-briefs.py --data $ExportRoot --out $SignalBriefPath --max-topics 50 | Write-Output
 Assert-NativeSuccess "generate-topic-signal-briefs"
@@ -50,6 +50,13 @@ python3 ./scripts/generate-public-analytics.py --data $ExportRoot --out $Analyti
 Assert-NativeSuccess "generate-public-analytics"
 python3 ./scripts/generate-info-pages.py --source ./docs/public-pages --out ./web/static | Write-Output
 Assert-NativeSuccess "generate-info-pages"
+if (Test-Path "./data/ai_visibility_pages_master.json") {
+  python3 ./scripts/generate-ai-visibility-pages.py --input ./data/ai_visibility_pages_master.json --out ./web/static --indexable | Write-Output
+  Assert-NativeSuccess "generate-ai-visibility-pages"
+} elseif (Test-Path "./data/ai_visibility_pages_batch01.json") {
+  python3 ./scripts/generate-ai-visibility-pages.py --input ./data/ai_visibility_pages_batch01.json --out ./web/static --indexable | Write-Output
+  Assert-NativeSuccess "generate-ai-visibility-pages"
+}
 
 $ReleaseRoot = Join-Path $Root "output\releases\$ReleaseName"
 $WebRoot = Join-Path $ReleaseRoot "web"
@@ -57,6 +64,9 @@ $StaticRoot = Join-Path $WebRoot "static"
 $ScriptsRoot = Join-Path $ReleaseRoot "scripts"
 $DataRoot = Join-Path $ReleaseRoot "public-data\tiktok"
 
+if (Test-Path $ReleaseRoot) {
+  Remove-Item $ReleaseRoot -Recurse -Force
+}
 New-Item -ItemType Directory -Force -Path $StaticRoot, $ScriptsRoot, $DataRoot | Out-Null
 
 $Html = Get-Content -Path ".\web\static\meili.html" -Raw
@@ -108,6 +118,7 @@ foreach ($TestPageAsset in @("roadmap-dataviz-test.html", "roadmap-dataviz-test.
 $DocPages = @(
   "methodology.html",
   "api.html",
+  "apply-research.html",
   "opt-out.html",
   "roadmap.html",
   "story.html",
@@ -129,6 +140,32 @@ Copy-Item "./scripts/meili-index-public.py" (Join-Path $ScriptsRoot "meili-index
 Copy-Item (Join-Path $ExportRoot "*") $DataRoot -Recurse -Force
 python3 ./scripts/generate-public-pages.py --data $ExportRoot --out $WebRoot | Write-Output
 Assert-NativeSuccess "generate-public-pages"
+if (Test-Path "./data/ai_visibility_pages_master.json") {
+  python3 ./scripts/generate-ai-visibility-pages.py --input ./data/ai_visibility_pages_master.json --out $WebRoot --indexable | Write-Output
+  Assert-NativeSuccess "generate-ai-visibility-pages-release"
+} elseif (Test-Path "./data/ai_visibility_pages_batch01.json") {
+  python3 ./scripts/generate-ai-visibility-pages.py --input ./data/ai_visibility_pages_batch01.json --out $WebRoot --indexable | Write-Output
+  Assert-NativeSuccess "generate-ai-visibility-pages-release"
+}
+if (Test-Path "./data/base2026_ai_recommends_solutions_pilot.json") {
+  $SolutionInput = "./data/base2026_ai_recommends_solutions_pilot.json"
+  $SolutionReport = Join-Path $BuildRoot "ai-recommends-solutions-generation.json"
+  $SolutionHtmlReport = Join-Path $BuildRoot "ai-recommends-solutions-html-qa.json"
+  python3 ./scripts/validate-ai-recommends-solutions.py --input $SolutionInput --data-root $ExportRoot --report (Join-Path $BuildRoot "ai-recommends-solutions-validation.json") | Write-Output
+  Assert-NativeSuccess "validate-ai-recommends-solutions"
+  python3 ./scripts/generate-ai-recommends-solutions.py --input $SolutionInput --data-root $ExportRoot --out $WebRoot --report $SolutionReport | Write-Output
+  Assert-NativeSuccess "generate-ai-recommends-solutions"
+  Copy-Item (Join-Path $WebRoot "ai-recommends-solutions.css") (Join-Path $StaticRoot "ai-recommends-solutions.css") -Force
+  python3 ./scripts/validate-ai-recommends-html.py --out $WebRoot --generation-report $SolutionReport --report $SolutionHtmlReport | Write-Output
+  Assert-NativeSuccess "validate-ai-recommends-html"
+}
+Get-ChildItem -Path "./web/static" -Filter "indexnow-*.txt" -File -ErrorAction SilentlyContinue | ForEach-Object {
+  $Target = Join-Path $WebRoot $_.Name
+  Copy-Item $_.FullName $Target -Force
+  chmod 0644 $Target
+}
+python3 ./scripts/check-public-content-readiness.py --data-root $ExportRoot --latest 1 --web-root $WebRoot --allow-generated-noindex --fail | Write-Output
+Assert-NativeSuccess "check-public-content-readiness-generated"
 python3 ./scripts/generate-base2026-sitemap.py --web-root $WebRoot | Write-Output
 Assert-NativeSuccess "generate-base2026-sitemap"
 
@@ -137,6 +174,7 @@ Assert-NativeSuccess "generate-base2026-sitemap"
 # paths; the public package must give all of them the current release version.
 $VersionedAssets = @(
   "styles.css",
+  "ai-recommends-solutions.css",
   "meili.js",
   "cookie-consent.js",
   "share-actions.js",

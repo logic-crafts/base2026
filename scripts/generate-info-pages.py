@@ -71,6 +71,15 @@ PAGE_MAP = {
         "lead": "Public read-only files and agent-readable entry points for using Base2026 as an attributed source intelligence library.",
         "body_class": "doc-page",
     },
+    "09_APPLY_RESEARCH.md": {
+        "slug": "apply-research.html",
+        "eyebrow": "Apply the research",
+        "title": "Apply Base2026 Research",
+        "lead": "Use Base2026 as a public SEO/GEO/AEO research layer, then route business-specific AI visibility, technical SEO, content and entity trust work into Alex Yarosh audits.",
+        "seo_title": "Apply Base2026 Research | SEO, GEO & AEO Source Intelligence",
+        "meta_description": "Use Base2026 as a public SEO/GEO/AEO research layer, then route business-specific AI visibility, technical SEO, content and entity trust work into Alex Yarosh audits.",
+        "body_class": "doc-page",
+    },
 }
 
 
@@ -84,9 +93,11 @@ SOCIAL_IMAGE_ALT = "Alex Yarosh profile photo"
 TWITTER_SITE = "@AleksejAros"
 
 PROJECT_NAV_LINKS = [
-    ("search", "Search", "index.html"),
+    ("search", "Search", ""),
     ("analytics", "Analytics", "analytics.html"),
     ("api", "API", "api.html"),
+    ("apply", "Apply Research", "apply-research.html"),
+    ("ai_visibility_pages", "AI Visibility Pages", "ai-visibility-pages/"),
     ("topics", "Topics", "topics/"),
     ("creators", "Creators", "creators/"),
     ("methodology", "Methodology", "methodology.html"),
@@ -103,6 +114,7 @@ FOOTER_LINKS = [
     ("Roadmap", "./roadmap.html"),
     ("Methodology", "./methodology.html"),
     ("API & AI access", "./api.html"),
+    ("Apply research", "./apply-research.html"),
     ("Source policy", "./source-policy.html"),
     ("Privacy", "./privacy.html"),
     ("Support", "./support.html"),
@@ -169,6 +181,8 @@ def nav_key_for_slug(slug_value: str) -> str:
         return "support"
     if slug_value == "api.html":
         return "api"
+    if slug_value == "apply-research.html":
+        return "apply"
     return ""
 
 
@@ -179,7 +193,7 @@ def base2026_dropdown(relative_root: str = ".", current: str = "") -> str:
         links.append(f'<a href="{html.escape(root_href(relative_root, target))}"{active}>{html.escape(label)}</a>')
     return f"""
           <div class="site-header__base">
-            <a class="site-header__link site-header__link--base2026" href="{html.escape(root_href(relative_root, 'index.html'))}" aria-haspopup="true">Base2026</a>
+            <a class="site-header__link site-header__link--base2026" href="{html.escape(root_href(relative_root, ''))}" aria-haspopup="true">Base2026</a>
             <div class="site-header__base-menu" aria-label="Base2026 navigation">
               <span>Base2026 Library</span>
               {''.join(links)}
@@ -244,7 +258,7 @@ def base2026_breadcrumbs(title: str) -> str:
     current = (title.split("|", 1)[0] or "Current page").strip()
     return f"""
       <nav class="breadcrumbs" aria-label="Breadcrumb">
-        <a href="./index.html">Base2026</a>
+        <a href="./">Base2026</a>
         <span aria-hidden="true">/</span>
         <span aria-current="page">{html.escape(current)}</span>
       </nav>
@@ -456,9 +470,10 @@ def contact_form_markup(kind: str) -> str:
 
 def page_shell(meta: dict[str, str], h1: str, body: str) -> str:
     title = normalize_copy(meta["title"])
-    page_title = f"{title} | Base2026"
+    page_title = normalize_copy(meta.get("seo_title", f"{title} | Base2026"))
     eyebrow = normalize_copy(meta["eyebrow"])
     lead = normalize_copy(meta["lead"])
+    meta_description = normalize_copy(meta.get("meta_description", lead))
     page_class = meta["body_class"]
     current_nav = nav_key_for_slug(meta["slug"])
     canonical = f"https://aggressorbulkit.online/knowledge/{meta['slug']}"
@@ -467,7 +482,7 @@ def page_shell(meta: dict[str, str], h1: str, body: str) -> str:
         "@context": "https://schema.org",
         "@type": "WebPage",
         "name": page_title,
-        "description": lead,
+        "description": meta_description,
         "url": canonical,
         "isPartOf": {
             "@type": "WebSite",
@@ -609,10 +624,10 @@ def page_shell(meta: dict[str, str], h1: str, body: str) -> str:
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="{html.escape(lead)}" />
+    <meta name="description" content="{html.escape(meta_description)}" />
     <meta name="robots" content="{html.escape(robots)}" />
     <link rel="canonical" href="{html.escape(canonical)}" />
-{social_meta_tags(page_title, lead, canonical)}
+{social_meta_tags(page_title, meta_description, canonical)}
     <title>{html.escape(page_title)}</title>
     <script type="application/ld+json">{json.dumps(schema, ensure_ascii=False)}</script>
 {favicon_links(".")}
@@ -632,6 +647,7 @@ def page_shell(meta: dict[str, str], h1: str, body: str) -> str:
         <p class="lead">{html.escape(lead)}</p>
         <div class="hero-actions">
           <a class="ay-button{' is-current' if current_nav == 'search' else ''}" href="./"{' aria-current="page"' if current_nav == 'search' else ''}>Search the library</a>
+          <a class="ay-button-secondary{' is-current' if current_nav == 'apply' else ''}" href="./apply-research.html"{' aria-current="page"' if current_nav == 'apply' else ''}>Apply research</a>
           <a class="ay-button-secondary{' is-current' if current_nav == 'roadmap' else ''}" href="./roadmap.html"{' aria-current="page"' if current_nav == 'roadmap' else ''}>Roadmap</a>
           <a class="ay-button-secondary{' is-current' if current_nav == 'support' else ''}" href="./support.html"{' aria-current="page"' if current_nav == 'support' else ''}>Support</a>
         </div>
@@ -670,11 +686,11 @@ def page_shell(meta: dict[str, str], h1: str, body: str) -> str:
         <nav aria-label="Footer services">
           <h3>Services</h3>
           <ul class="ay-footer-menu">
-            <li><a href="/services/#ai-visibility-audit">AI Visibility Audit</a></li>
-            <li><a href="/services/#technical-foundation">SEO/GEO Technical Foundation</a></li>
-            <li><a href="/services/#answer-ready-content">Answer-Ready Content</a></li>
+            <li><a href="/ai-visibility-diagnostic-audit/">AI Visibility Diagnostic Audit</a></li>
+            <li><a href="/technical-seo-geo-foundation/">Technical SEO &amp; GEO Foundation</a></li>
+            <li><a href="/answer-ready-service-pages/">Answer-Ready Service Pages</a></li>
+            <li><a href="/entity-trust-source-intelligence/">Entity, Trust &amp; Source Intelligence</a></li>
             <li><a href="/services/#local-seo">Local SEO &amp; Citations</a></li>
-            <li><a href="/services/#entity-schema">Entity &amp; Schema Optimization</a></li>
             <li><a href="/services/#monitoring">AI Visibility Monitoring</a></li>
           </ul>
         </nav>
@@ -689,10 +705,11 @@ def page_shell(meta: dict[str, str], h1: str, body: str) -> str:
         </nav>
         <nav aria-label="Footer Base2026">
           <h3>Base2026 Pilot Project</h3>
-          <p>Independent pilot project: a searchable knowledge base for short-form expert video.</p>
+          <p>Independent experimental startup product: a searchable knowledge base for short-form expert video.</p>
           <ul class="ay-footer-menu">
             <li><a href="./">Search Base2026</a></li>
             <li><a href="./api.html">API &amp; AI access</a></li>
+            <li><a href="./apply-research.html">Apply research</a></li>
             <li><a href="./roadmap.html">Roadmap</a></li>
             <li><a href="./topics/">Topics</a></li>
             <li><a href="./creators/">Creators</a></li>
@@ -713,7 +730,7 @@ def page_shell(meta: dict[str, str], h1: str, body: str) -> str:
         </nav>
       </div>
       <div class="ay-footer-bottom">
-        <span>&copy; 2026 Alex Yarosh. Available remotely for US-based local businesses.</span>
+        <span>&copy; 2026 Logic Crafts LLC, Kyrgyzstan. Base2026 was created by Alex Yarosh as an independent experimental startup product. It is not a marketing agency and not a marketing-services offering.</span>
       </div>
     </footer>
     {cookie_consent_markup()}

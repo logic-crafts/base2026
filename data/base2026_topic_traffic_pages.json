@@ -1,0 +1,2084 @@
+{
+  "ai-citation-tracking": {
+    "target_query": "AI citation tracking",
+    "seo_title": "AI Citation Tracking: How to Track AI Search Sources | Base2026",
+    "meta_description": "Source-backed notes on tracking which pages ChatGPT, Gemini, Perplexity and AI search systems cite for buyer prompts.",
+    "answer_capsule": {
+      "heading": "AI citation tracking shows which sources AI systems trust.",
+      "body": "AI citation tracking means testing buyer-like prompts, recording which brands and URLs AI systems cite, and using those source patterns to find visibility gaps before competitors own the answer."
+    },
+    "proof_source_ids": [
+      "tiktok:tjrobertson52:7577857865130495246",
+      "tiktok:tjrobertson52:7573447188185894157"
+    ],
+    "faq": [
+      {
+        "question": "What is AI citation tracking?",
+        "answer": "AI citation tracking records which pages, brands and third-party sources appear inside ChatGPT, Gemini, Perplexity, Copilot and AI search answers for a defined prompt set."
+      },
+      {
+        "question": "What should a business track first?",
+        "answer": "Start with buyer prompts, competitor prompts, local-service prompts and problem-aware prompts, then record cited URLs, brand mentions, answer position and missing source evidence."
+      },
+      {
+        "question": "How does this connect to SEO?",
+        "answer": "Traditional rankings still matter, but AI systems also reuse trusted source footprints, entity signals and third-party evidence beyond one website."
+      }
+    ],
+    "cta": {
+      "title": "Turn citation tracking into a source footprint audit",
+      "body": "Use the Base2026 evidence pattern to inspect which third-party pages, social surfaces and proof records support your brand before an AI system recommends it.",
+      "primary_label": "Audit your source footprint",
+      "primary_href": "/ai-visibility-source-footprint/",
+      "secondary_label": "Start with the AI Visibility Audit",
+      "secondary_href": "/ai-visibility-audit/"
+    }
+  },
+  "ai-citations": {
+    "target_query": "AI citations",
+    "seo_title": "AI Citations: What AI Search Systems Cite and Why | Base2026",
+    "meta_description": "A source-backed Base2026 page on AI citations, brand mentions, source footprint gaps and citation-ready evidence.",
+    "answer_capsule": {
+      "heading": "AI citations are a source-footprint problem, not just a ranking problem.",
+      "body": "An AI citation is the visible source or entity evidence an answer engine uses to support a recommendation. Winning citations usually requires clear owned pages, corroborating third-party sources and enough structured context for the system to trust the claim."
+    },
+    "proof_source_ids": [
+      "tiktok:tjrobertson52:7649531548655521038",
+      "tiktok:build_in_public:7649090452150390049"
+    ],
+    "faq": [
+      {
+        "question": "What counts as an AI citation?",
+        "answer": "An AI citation can be a URL, brand reference, source card, cited publication, review source, directory page or other evidence used to support an AI answer."
+      },
+      {
+        "question": "Can a small business earn AI citations?",
+        "answer": "Yes, but it needs specific, verifiable pages and third-party evidence that match the prompts buyers actually ask."
+      },
+      {
+        "question": "Why do AI citations change?",
+        "answer": "They vary by prompt wording, model, freshness, location, source access, entity confidence and the quality of competing evidence."
+      }
+    ],
+    "cta": {
+      "title": "Map citations before chasing rankings",
+      "body": "Turn citation evidence into an operational map: where the brand appears, which sources support it, and which gaps need trustworthy coverage.",
+      "primary_label": "See the Source Footprint method",
+      "primary_href": "/ai-visibility-source-footprint/",
+      "secondary_label": "View diagnostic options",
+      "secondary_href": "/pricing/"
+    }
+  },
+  "ai-search-reporting": {
+    "target_query": "AI search reporting",
+    "seo_title": "AI Search Reporting: What to Measure Beyond Rankings | Base2026",
+    "meta_description": "How AI search reporting should separate website performance, source coverage, citation gaps and competitor visibility.",
+    "answer_capsule": {
+      "heading": "AI search reporting needs source-level visibility, not vanity charts.",
+      "body": "A useful AI search report tracks prompt coverage, brand mentions, cited URLs, competitor share of voice, missing source evidence and the pages that can be fixed first."
+    },
+    "proof_source_ids": [
+      "tiktok:joshuamaraney:7647809342548266258",
+      "tiktok:tjrobertson52:7647384874541731086",
+      "tiktok:build_in_public:7647271917606456609"
+    ],
+    "faq": [
+      {
+        "question": "Does Search Console show all AI visibility?",
+        "answer": "No. Search Console can show traditional search performance and some AI Overview-adjacent behavior, but it does not fully expose LLM citations or prompt-level visibility."
+      },
+      {
+        "question": "What should an AI search report include?",
+        "answer": "It should include prompt sets, brand mention rate, cited source URLs, competitor presence, narrative accuracy, source-footprint gaps and prioritized fixes."
+      },
+      {
+        "question": "Why separate source coverage from rankings?",
+        "answer": "A brand can rank yet still be absent from AI answers if the answer engine trusts other sources or cannot verify the brand story."
+      }
+    ],
+    "cta": {
+      "title": "Report the gaps a business can actually fix",
+      "body": "Use AI search reporting to separate website fixes, off-site source coverage and citation-risk gaps so the next sprint is operational.",
+      "primary_label": "Request a diagnostic audit",
+      "primary_href": "/ai-visibility-diagnostic-audit/",
+      "secondary_label": "Check source footprint gaps",
+      "secondary_href": "/ai-visibility-source-footprint/"
+    }
+  },
+  "chatgpt-query-research": {
+    "target_query": "ChatGPT query research",
+    "seo_title": "ChatGPT Query Research for SEO and AI Visibility | Base2026",
+    "meta_description": "Use ChatGPT-style buyer prompts to shape answer-ready service pages, headings, FAQs and AI visibility audits.",
+    "answer_capsule": {
+      "heading": "ChatGPT query research starts with buyer prompts, not keyword labels.",
+      "body": "Instead of only collecting keywords, query research for AI search maps the actual questions buyers ask an assistant, then turns those prompts into answer-ready headings, FAQs, proof sections and service-page fixes."
+    },
+    "proof_source_ids": [
+      "tiktok:build_in_public:7637268866544028950",
+      "tiktok:build_in_public:7583834615236922646"
+    ],
+    "faq": [
+      {
+        "question": "How is ChatGPT query research different from keyword research?",
+        "answer": "It focuses on full buyer prompts, comparison questions, local recommendation prompts and decision language, not just short keyword phrases."
+      },
+      {
+        "question": "Where should prompt research be used?",
+        "answer": "Use it in H2s, FAQ sections, service pages, schema, proof blocks and audit checklists where buyers need direct answers."
+      },
+      {
+        "question": "Can prompt research improve leads?",
+        "answer": "Yes, when it reveals high-intent questions that can be answered with a clear CTA and specific proof."
+      }
+    ],
+    "cta": {
+      "title": "Turn prompt research into answer-ready service pages",
+      "body": "Map buyer prompts to pages that answer first, prove claims and route the reader toward a diagnostic audit or consultation.",
+      "primary_label": "Build answer-ready service pages",
+      "primary_href": "/answer-ready-service-pages/",
+      "secondary_label": "Start with a visibility audit",
+      "secondary_href": "/ai-visibility-audit/"
+    }
+  },
+  "local-seo-google-business-profile": {
+    "target_query": "Google Business Profile AI visibility",
+    "seo_title": "Google Business Profile, Local SEO and AI Visibility | Base2026",
+    "meta_description": "Source-backed notes on Google Business Profile, local SEO, reviews, service pages and AI search visibility for local businesses.",
+    "answer_capsule": {
+      "heading": "Local AI visibility still starts with clean local SEO signals.",
+      "body": "For a local business, AI search systems need consistent service pages, Google Business Profile data, reviews, location evidence and crawlable proof before they can confidently recommend the business."
+    },
+    "proof_source_ids": [
+      "tiktok:build_in_public:7626098026745990422",
+      "tiktok:build_in_public:7617156138475212054",
+      "tiktok:tjrobertson52:7567459516833434893",
+      "tiktok:webhivedigital:7545910978563689750"
+    ],
+    "faq": [
+      {
+        "question": "Does Google Business Profile affect AI visibility?",
+        "answer": "It can support local entity confidence, especially when GBP data matches website pages, reviews, categories, services and location information."
+      },
+      {
+        "question": "What should a local business fix first?",
+        "answer": "Fix service/category clarity, NAP consistency, review language, location pages, booking/contact paths and schema that matches visible content."
+      },
+      {
+        "question": "Why connect GBP to source footprint?",
+        "answer": "AI systems compare owned pages with external and local signals; mismatches can reduce confidence even if the website looks polished."
+      }
+    ],
+    "cta": {
+      "title": "Find local AI visibility gaps before competitors do",
+      "body": "Use a local visibility audit to check GBP, service pages, reviews, schema and source-footprint gaps across AI search and Google.",
+      "primary_label": "Get a free AI Visibility Snapshot",
+      "primary_href": "/ai-visibility-audit/",
+      "secondary_label": "View local SEO services",
+      "secondary_href": "/services/#local-seo"
+    }
+  },
+  "google-business-profile": {
+    "target_query": "Google Business Profile AI agents",
+    "seo_title": "Google Business Profile Signals for AI Search | Base2026",
+    "meta_description": "How Google Business Profile data, reviews, services and location consistency can support local AI search visibility.",
+    "answer_capsule": {
+      "heading": "Google Business Profile is structured business context for local discovery.",
+      "body": "GBP is not a full AI visibility strategy by itself, but it gives local search systems structured facts about services, categories, reviews, hours, location and customer intent."
+    },
+    "proof_source_ids": [
+      "tiktok:tjrobertson52:7651765211682196749",
+      "tiktok:tjrobertson52:7644370408707345677"
+    ],
+    "faq": [
+      {
+        "question": "Is GBP enough for AI search visibility?",
+        "answer": "No. It should match the website, service pages, reviews, directories and other third-party sources that support the same entity facts."
+      },
+      {
+        "question": "Which GBP fields matter most?",
+        "answer": "Categories, services, description, location, hours, reviews, images and booking/contact links should be accurate and consistent with the website."
+      },
+      {
+        "question": "What is the common GBP mistake?",
+        "answer": "Businesses often treat GBP as a listing instead of a source of structured evidence that must align with the rest of their source footprint."
+      }
+    ],
+    "cta": {
+      "title": "Connect GBP to the rest of the source footprint",
+      "body": "Check whether your local profile, website, reviews and service pages tell the same story before AI search systems summarize your business.",
+      "primary_label": "Audit local AI visibility",
+      "primary_href": "/ai-visibility-audit/",
+      "secondary_label": "See local SEO services",
+      "secondary_href": "/services/#local-seo"
+    }
+  },
+  "google-search-console-ai-visibility-reporting": {
+    "target_query": "Google Search Console AI visibility reporting",
+    "seo_title": "Google Search Console and AI Visibility Reporting | Base2026",
+    "meta_description": "What GSC can and cannot show about AI visibility, AI Overviews, indexed pages, impressions and citation gaps.",
+    "answer_capsule": {
+      "heading": "GSC is necessary, but it is not a complete AI visibility dashboard.",
+      "body": "Search Console helps diagnose indexing, impressions, clicks and page-level search performance. AI visibility reporting also needs prompt tests, citation tracking and source-footprint checks that GSC does not fully expose."
+    },
+    "proof_source_ids": [
+      "tiktok:gobigsystems:7655467342561938702",
+      "tiktok:gobigsystems:7655142750530194702"
+    ],
+    "faq": [
+      {
+        "question": "Can GSC tell whether AI recommends my business?",
+        "answer": "Not completely. It can show search impressions and indexed pages, but it does not directly report every ChatGPT, Perplexity, Gemini or Copilot citation."
+      },
+      {
+        "question": "What GSC data matters first?",
+        "answer": "Start with pages indexed, discovered but not indexed, impressions with low clicks, query clusters, canonical issues and sitemap processing."
+      },
+      {
+        "question": "What should be added to GSC data?",
+        "answer": "Add prompt-level testing, competitor answer snapshots, cited URL lists and source-footprint gap notes."
+      }
+    ],
+    "cta": {
+      "title": "Combine GSC with AI visibility diagnostics",
+      "body": "Use GSC to find crawl and impression gaps, then add prompt testing and citation evidence to decide what to fix first.",
+      "primary_label": "Run a diagnostic audit",
+      "primary_href": "/ai-visibility-diagnostic-audit/",
+      "secondary_label": "Get a free snapshot",
+      "secondary_href": "/ai-visibility-audit/"
+    }
+  },
+  "brand-proof-pages": {
+    "target_query": "Brand proof pages for AI visibility",
+    "seo_title": "Brand Proof Pages for AI Search and Source Trust | Base2026",
+    "meta_description": "How proof pages, reviews, case studies, entity facts and third-party corroboration help AI systems trust a brand.",
+    "answer_capsule": {
+      "heading": "Brand proof pages should make claims easy to verify.",
+      "body": "A brand proof page gathers specific claims, outcomes, reviews, case evidence, service facts and entity details so search and AI systems can verify what the business actually does."
+    },
+    "proof_source_ids": [
+      "tiktok:tjrobertson52:7641752539150437646",
+      "tiktok:tjrobertson52:7565264224507809038"
+    ],
+    "faq": [
+      {
+        "question": "What belongs on a brand proof page?",
+        "answer": "Use clear service facts, customer proof, locations, credentials, FAQs, comparisons, case examples and links to credible supporting sources."
+      },
+      {
+        "question": "Can proof pages help AI visibility?",
+        "answer": "They can help when the claims are visible, specific, internally linked and corroborated by external sources rather than unsupported marketing copy."
+      },
+      {
+        "question": "What makes proof pages weak?",
+        "answer": "Generic claims, no evidence, missing entity details, no reviews, unclear services and no connection to third-party validation make proof pages weak."
+      }
+    ],
+    "cta": {
+      "title": "Build proof pages that match external evidence",
+      "body": "A proof page gets stronger when the surrounding source footprint supports the same claims across credible third-party and owned surfaces.",
+      "primary_label": "Inspect source footprint gaps",
+      "primary_href": "/ai-visibility-source-footprint/",
+      "secondary_label": "See entity trust services",
+      "secondary_href": "/entity-trust-source-intelligence/"
+    }
+  },
+  "answer-first-content": {
+    "target_query": "answer-first content for AI search",
+    "seo_title": "Answer-First Content for AI Search Visibility | Base2026",
+    "meta_description": "How answer-first pages help buyers and AI systems understand services, proof and next steps without digging through vague copy.",
+    "answer_capsule": {
+      "heading": "Answer-first content gives the useful answer before the proof trail.",
+      "body": "An answer-first page opens with the direct answer a buyer or AI system needs, then supports it with examples, source evidence, FAQs, schema and a clear next step."
+    },
+    "proof_source_ids": [
+      "tiktok:build_in_public:7637268866544028950",
+      "tiktok:build_in_public:7632906326124924162"
+    ],
+    "faq": [
+      {
+        "question": "What is answer-first content?",
+        "answer": "It is content structured to answer the main buyer question immediately, then expand with proof, context and follow-up questions."
+      },
+      {
+        "question": "Why does it matter for AI search?",
+        "answer": "AI systems often extract concise answer blocks and supporting evidence; vague introductions make retrieval and citation harder."
+      },
+      {
+        "question": "Where should local businesses use it?",
+        "answer": "Use it on service pages, pricing pages, FAQs, comparison sections, location pages and audit landing pages."
+      }
+    ],
+    "cta": {
+      "title": "Turn service pages into answer-ready assets",
+      "body": "Use answer-first sections, FAQs and proof blocks so both buyers and AI systems can understand the page quickly.",
+      "primary_label": "Build answer-ready service pages",
+      "primary_href": "/answer-ready-service-pages/",
+      "secondary_label": "Request an audit",
+      "secondary_href": "/ai-visibility-audit/"
+    }
+  },
+  "schema-ai-citations": {
+    "target_query": "schema for AI citations",
+    "seo_title": "Schema Markup and AI Citations: What It Can and Cannot Do | Base2026",
+    "meta_description": "A practical source-backed view on schema markup, structured data, AI search visibility and citation limitations.",
+    "answer_capsule": {
+      "heading": "Schema helps clarify facts, but it does not magically create AI citations.",
+      "body": "Structured data can make entities, services, FAQs and page meaning easier to interpret. It works best when it reflects visible content and is paired with useful pages and credible source evidence."
+    },
+    "proof_source_ids": [
+      "tiktok:build_in_public:7639575644417821985",
+      "tiktok:build_in_public:7638802553081253142"
+    ],
+    "faq": [
+      {
+        "question": "Does schema markup guarantee AI citations?",
+        "answer": "No. Schema can clarify page meaning, but AI citations depend on relevance, authority, crawlability, source trust and competing evidence."
+      },
+      {
+        "question": "Which schema types are useful for local AI visibility?",
+        "answer": "LocalBusiness, Organization, Service, FAQPage, BreadcrumbList, Review where valid, and Article can help when they match visible page content."
+      },
+      {
+        "question": "What is the biggest schema risk?",
+        "answer": "Misleading or invisible structured data can reduce trust. Markup should accurately represent what users can see on the page."
+      }
+    ],
+    "cta": {
+      "title": "Use schema as part of the technical GEO foundation",
+      "body": "Treat structured data as one layer of a crawlable, answer-ready, evidence-backed visibility system — not a standalone shortcut.",
+      "primary_label": "Review technical SEO & GEO",
+      "primary_href": "/technical-seo-geo-foundation/",
+      "secondary_label": "Run a diagnostic audit",
+      "secondary_href": "/ai-visibility-diagnostic-audit/"
+    }
+  },
+  "internal-linking": {
+    "target_query": "internal linking for programmatic SEO",
+    "seo_title": "Internal Linking for Programmatic SEO and AI Visibility | Base2026",
+    "meta_description": "Source-backed notes on internal links, hub pages, crawl paths and why sitemap-only pages struggle to earn search visibility.",
+    "answer_capsule": {
+      "heading": "Internal links tell search systems which evidence pages matter.",
+      "body": "For programmatic SEO, a page should not rely only on the sitemap. It needs contextual links from hubs, related pages and commercial pages so crawlers and users can understand why the page exists."
+    },
+    "faq": [
+      {
+        "question": "Why does internal linking matter for programmatic SEO?",
+        "answer": "Internal links create discovery paths and signal relative importance. Pages reachable only through a sitemap are easier for crawlers to ignore or treat as low-priority."
+      },
+      {
+        "question": "What should a demand-led topic page link to?",
+        "answer": "It should link to source proof, related topic pages, comparison pages and a relevant commercial next step such as an audit or service page."
+      },
+      {
+        "question": "How should Base2026 use internal links?",
+        "answer": "Base2026 should use topic hubs, source cards, compare pages and MoneyPage bridges so evidence pages support both search discovery and lead capture."
+      }
+    ],
+    "cta": {
+      "title": "Turn internal links into a lead path",
+      "body": "Use the Base2026 evidence graph to connect demand pages, source proof and audit offers instead of leaving useful pages orphaned.",
+      "primary_label": "Audit your source footprint",
+      "primary_href": "/ai-visibility-source-footprint/",
+      "secondary_label": "View AI visibility services",
+      "secondary_href": "/services/"
+    },
+    "proof_source_ids": [
+      "tiktok:build_in_public:7647909694559767840",
+      "tiktok:webhivedigital:7640117982898752790",
+      "tiktok:build_in_public:7565641445026106646",
+      "tiktok:build_in_public:7535690550763179286"
+    ]
+  },
+  "on-page-seo": {
+    "target_query": "on-page SEO for AI search",
+    "seo_title": "On-Page SEO for AI Search Visibility | Base2026",
+    "meta_description": "How answer-first structure, headings, service clarity, FAQs and proof blocks support both SEO and AI search visibility.",
+    "answer_capsule": {
+      "heading": "On-page SEO now has to answer buyers and machines clearly.",
+      "body": "Strong on-page SEO gives a page a clear topic, direct answer, useful headings, entity facts, proof, schema and a next step. Those same blocks help AI systems interpret what the business can credibly claim."
+    },
+    "faq": [
+      {
+        "question": "What is the first on-page fix for AI visibility?",
+        "answer": "Make the page answer the buyer's main question immediately, then support that answer with proof, examples, FAQs and clear service/entity facts."
+      },
+      {
+        "question": "Does schema replace good content?",
+        "answer": "No. Schema should describe visible content; it cannot compensate for vague copy, missing service details or weak proof."
+      },
+      {
+        "question": "How does on-page SEO create leads?",
+        "answer": "It turns vague traffic into qualified action by matching intent, answering objections and routing the visitor to a diagnostic audit, quote or consultation."
+      }
+    ],
+    "cta": {
+      "title": "Make service pages answer-ready",
+      "body": "Convert existing pages into answer-first assets with visible proof, FAQ coverage and a source-footprint path into audit demand.",
+      "primary_label": "Build answer-ready service pages",
+      "primary_href": "/answer-ready-service-pages/",
+      "secondary_label": "Start with an AI visibility audit",
+      "secondary_href": "/ai-visibility-audit/"
+    },
+    "proof_source_ids": [
+      "tiktok:build_in_public:7645031279561280801",
+      "tiktok:tjrobertson52:7583118754536508685",
+      "tiktok:build_in_public:7536440007330958614",
+      "tiktok:build_in_public:7517704841112653078"
+    ]
+  },
+  "search-console-low-hanging-fruit": {
+    "target_query": "Search Console low hanging fruit SEO",
+    "seo_title": "Search Console Low-Hanging Fruit for AI Visibility | Base2026",
+    "meta_description": "Use Google Search Console impressions, indexing gaps and query clusters to choose practical SEO and AI visibility fixes.",
+    "answer_capsule": {
+      "heading": "Search Console shows where demand already brushes against the site.",
+      "body": "Low-hanging fruit work starts with indexed pages, impressions without clicks, queries with weak answers and sitemap/indexing gaps, then upgrades the pages most likely to move first."
+    },
+    "faq": [
+      {
+        "question": "What is low-hanging fruit in GSC?",
+        "answer": "Pages or queries that already get impressions, have indexing coverage, or sit close to a useful ranking/CTR threshold but need a clearer title, answer, FAQ or internal link path."
+      },
+      {
+        "question": "Can GSC show AI visibility?",
+        "answer": "It can show search demand and indexing health, but prompt-level AI visibility still needs citation tracking and source-footprint checks."
+      },
+      {
+        "question": "What should be fixed first?",
+        "answer": "Fix sitemap/indexing issues, then upgrade pages with impressions, clear commercial intent and enough evidence to support stronger answers."
+      }
+    ],
+    "cta": {
+      "title": "Use GSC to choose the next visibility sprint",
+      "body": "Combine Search Console data with AI citation checks so the next sprint is based on demand signals, not random content ideas.",
+      "primary_label": "Run a diagnostic audit",
+      "primary_href": "/ai-visibility-diagnostic-audit/",
+      "secondary_label": "Audit source footprint gaps",
+      "secondary_href": "/ai-visibility-source-footprint/"
+    },
+    "proof_source_ids": [
+      "tiktok:build_in_public:7614653353057897750",
+      "tiktok:build_in_public:7601237660723711254"
+    ]
+  },
+  "local-seo": {
+    "target_query": "local SEO AI visibility",
+    "seo_title": "Local SEO for AI Visibility and AI Recommendations | Base2026",
+    "meta_description": "Source-backed local SEO signals that help businesses appear in search, maps, reviews and AI recommendation contexts.",
+    "answer_capsule": {
+      "heading": "Local AI visibility depends on consistent local proof.",
+      "body": "A local business needs aligned service pages, GBP categories, reviews, location details, third-party mentions and crawlable proof before AI systems can confidently recommend it for buyer prompts."
+    },
+    "faq": [
+      {
+        "question": "Is local SEO still relevant for AI search?",
+        "answer": "Yes. AI recommendations still depend on discoverable business facts, reviews, service/location relevance and trusted local sources."
+      },
+      {
+        "question": "What local signals should be checked first?",
+        "answer": "Check GBP, service pages, review language, NAP consistency, local citations, schema and whether the site answers buyer prompts clearly."
+      },
+      {
+        "question": "How can a local business turn this into leads?",
+        "answer": "Prioritize prompts with buying intent, fix pages and profiles that support those prompts, and route visitors to booking or diagnostic actions."
+      }
+    ],
+    "cta": {
+      "title": "Find local AI visibility gaps",
+      "body": "Use a mini-audit to check how a local business appears across Google, service pages, reviews and AI-style recommendation prompts.",
+      "primary_label": "Get a free AI Visibility Snapshot",
+      "primary_href": "/ai-visibility-audit/",
+      "secondary_label": "View local SEO services",
+      "secondary_href": "/services/#local-seo"
+    },
+    "proof_source_ids": [
+      "tiktok:build_in_public:7644305161850031392",
+      "tiktok:build_in_public:7641390193878043936"
+    ]
+  },
+  "review-strategy": {
+    "target_query": "review strategy for local SEO and AI visibility",
+    "seo_title": "Review Strategy for Local SEO and AI Visibility | Base2026",
+    "meta_description": "How review quality, review language and source consistency support local SEO, AI recommendations and trust signals.",
+    "answer_capsule": {
+      "heading": "Reviews are source evidence, not just reputation decoration.",
+      "body": "Reviews help search and AI systems understand services, locations, customer outcomes and trust. The strongest review strategy improves real customer proof without spam, gating or manipulation."
+    },
+    "faq": [
+      {
+        "question": "Do reviews affect AI recommendations?",
+        "answer": "They can support entity trust and service relevance when review content aligns with website claims, GBP categories and third-party sources."
+      },
+      {
+        "question": "What is a safe review strategy?",
+        "answer": "Ask real customers for honest reviews, avoid gating or incentives that violate platform rules, and make sure service/location details are consistent."
+      },
+      {
+        "question": "What should a review audit inspect?",
+        "answer": "Review volume, recency, sentiment, service-specific language, location coverage, competitor gaps and whether website pages reflect the same proof."
+      }
+    ],
+    "cta": {
+      "title": "Audit review proof before AI summarizes it",
+      "body": "Check whether reviews, service pages and local profiles support the same claims before AI systems compress the business story into an answer.",
+      "primary_label": "Audit local AI visibility",
+      "primary_href": "/ai-visibility-audit/",
+      "secondary_label": "See source footprint method",
+      "secondary_href": "/ai-visibility-source-footprint/"
+    },
+    "proof_source_ids": [
+      "tiktok:build_in_public:7644305161850031392",
+      "tiktok:tjrobertson52:7641752539150437646"
+    ]
+  },
+  "listicles-ai-recommendations": {
+    "target_query": "listicles AI recommendations",
+    "seo_title": "Listicles and AI Recommendations: Source Footprint Risk | Base2026",
+    "meta_description": "Why listicles, best-of pages and third-party recommendation pages can influence AI answers and brand visibility.",
+    "answer_capsule": {
+      "heading": "Best-of listicles can become third-party evidence for AI recommendations.",
+      "body": "AI systems often lean on pages that compare, rank or summarize providers. A brand with no credible third-party footprint may lose recommendation prompts even if its own website is polished."
+    },
+    "faq": [
+      {
+        "question": "Do listicles influence AI recommendations?",
+        "answer": "They can, especially when they are crawled, trusted and aligned with buyer prompts that ask for best providers, tools or local options."
+      },
+      {
+        "question": "Should a business buy every listicle placement?",
+        "answer": "No. The useful strategy is to evaluate relevance, quality, disclosure, editorial credibility and whether the placement supports truthful claims."
+      },
+      {
+        "question": "How should listicle risk be audited?",
+        "answer": "Compare which third-party recommendation pages appear for buyer prompts, which competitors are included, and whether the brand has credible alternatives."
+      }
+    ],
+    "cta": {
+      "title": "Map the third-party pages AI may trust",
+      "body": "A source footprint audit shows which listicles, directories, reviews and comparison pages may shape AI recommendations around your category.",
+      "primary_label": "Audit third-party source footprint",
+      "primary_href": "/ai-visibility-source-footprint/",
+      "secondary_label": "Run diagnostic audit",
+      "secondary_href": "/ai-visibility-diagnostic-audit/"
+    },
+    "proof_source_ids": [
+      "tiktok:tjrobertson52:7585694848066276621",
+      "tiktok:tjrobertson52:7568223295963761975"
+    ]
+  },
+  "self-promotional-listicles": {
+    "target_query": "self promotional listicles SEO risk",
+    "seo_title": "Self-Promotional Listicles: SEO and AI Visibility Risk | Base2026",
+    "meta_description": "Source-backed notes on self-promotional best-of pages, disclosure risk, recommendation spam and AI citation trust.",
+    "answer_capsule": {
+      "heading": "Self-promotional listicles can create trust risk if they pretend to be independent.",
+      "body": "Best-of pages can help buyers, but undisclosed self-promotion, thin comparisons or manipulative recommendation pages can weaken trust and create future SEO or AI visibility risk."
+    },
+    "faq": [
+      {
+        "question": "Are self-promotional listicles always bad?",
+        "answer": "No. They can be useful when disclosure is clear, comparisons are honest and the page genuinely helps a buyer decide."
+      },
+      {
+        "question": "What makes a listicle risky?",
+        "answer": "Thin content, fake objectivity, hidden ownership, exaggerated rankings and no evidence behind recommendations increase risk."
+      },
+      {
+        "question": "How should this be handled in source footprint work?",
+        "answer": "Map existing third-party pages, separate credible evidence from risky assets, and avoid building a footprint that depends on deceptive pages."
+      }
+    ],
+    "cta": {
+      "title": "Avoid building a fragile AI source footprint",
+      "body": "Use evidence review to separate credible third-party proof from risky pages before scaling AI visibility work.",
+      "primary_label": "Review source footprint risk",
+      "primary_href": "/ai-visibility-source-footprint/",
+      "secondary_label": "Start diagnostic audit",
+      "secondary_href": "/ai-visibility-diagnostic-audit/"
+    },
+    "proof_source_ids": [
+      "tiktok:build_in_public:7652053212958231831",
+      "tiktok:build_in_public:7651655907494972694",
+      "tiktok:build_in_public:7649831101036252438"
+    ]
+  },
+  "youtube-ai-citations": {
+    "target_query": "YouTube AI citations",
+    "seo_title": "YouTube AI Citations and Video Source Visibility | Base2026",
+    "meta_description": "How YouTube videos, transcripts, metadata and creator evidence can support AI citations and source visibility.",
+    "answer_capsule": {
+      "heading": "YouTube can act as both content channel and citation surface.",
+      "body": "Videos, transcripts, titles, descriptions and creator authority can become part of the public source footprint that AI systems and search engines use to understand a topic or brand."
+    },
+    "faq": [
+      {
+        "question": "Can YouTube content support AI citations?",
+        "answer": "It can, especially when the video has clear metadata, transcriptable claims, useful examples and links to supporting pages."
+      },
+      {
+        "question": "What should a YouTube AI visibility audit inspect?",
+        "answer": "Inspect titles, descriptions, transcripts, entity mentions, linked pages, topic consistency and whether videos answer buyer prompts."
+      },
+      {
+        "question": "How does this help lead generation?",
+        "answer": "Video evidence can support trust while pages capture intent and route the buyer toward an audit, booking or service offer."
+      }
+    ],
+    "cta": {
+      "title": "Connect video proof to source footprint",
+      "body": "Use video content as part of a broader AI visibility system instead of leaving it disconnected from service pages and source proof.",
+      "primary_label": "Audit your source footprint",
+      "primary_href": "/ai-visibility-source-footprint/",
+      "secondary_label": "Get visibility snapshot",
+      "secondary_href": "/ai-visibility-audit/"
+    },
+    "proof_source_ids": [
+      "tiktok:build_in_public:7612386741697252630",
+      "tiktok:build_in_public:7604225606712216854",
+      "tiktok:build_in_public:7600172711721241879"
+    ]
+  },
+  "risk-avoid-scaled-content-abuse": {
+    "target_query": "scaled content abuse programmatic SEO risk",
+    "seo_title": "Scaled Content Abuse Risk in Programmatic SEO | Base2026",
+    "meta_description": "How to scale programmatic SEO without publishing thin, duplicate or low-value pages that search systems may ignore.",
+    "answer_capsule": {
+      "heading": "Programmatic SEO should scale value, not just URLs.",
+      "body": "The safe aggressive path is to index pages with real demand, unique evidence, complete data blocks, useful internal links and a clear reason to exist; thin variations should stay noindex or unpublished."
+    },
+    "faq": [
+      {
+        "question": "What is scaled content abuse risk?",
+        "answer": "It is the risk of publishing many low-effort or near-duplicate pages primarily for search manipulation rather than user value."
+      },
+      {
+        "question": "Can programmatic SEO still work?",
+        "answer": "Yes, when each page has stable intent, unique data, real synthesis, clean canonicals and internal links from relevant hubs."
+      },
+      {
+        "question": "How should Base2026 avoid the risk?",
+        "answer": "Use indexability thresholds, source proof, answer capsules, FAQ/schema and demand scoring before opening more pages to index."
+      }
+    ],
+    "cta": {
+      "title": "Scale only the pages that deserve indexation",
+      "body": "Use a demand + evidence scoring model to decide which pages should be indexable, improved or kept noindex.",
+      "primary_label": "Run a diagnostic audit",
+      "primary_href": "/ai-visibility-diagnostic-audit/",
+      "secondary_label": "See source footprint method",
+      "secondary_href": "/ai-visibility-source-footprint/"
+    },
+    "proof_source_ids": [
+      "tiktok:build_in_public:7625635907302952214",
+      "tiktok:tjrobertson52:7551893512619363597"
+    ]
+  },
+  "content-freshness": {
+    "target_query": "content freshness SEO AI visibility",
+    "seo_title": "Content Freshness for SEO and AI Visibility | Base2026",
+    "meta_description": "Why freshness, updated evidence, lastmod signals and current source proof matter for search and AI visibility.",
+    "answer_capsule": {
+      "heading": "Freshness matters when answers, sources and buyer expectations change.",
+      "body": "Content freshness is not changing dates for optics. It means updating evidence, examples, FAQs, source proof and technical freshness signals when the market or search behavior changes."
+    },
+    "faq": [
+      {
+        "question": "Does changing the date improve rankings?",
+        "answer": "Not by itself. Freshness should reflect meaningful updates to evidence, examples, claims, screenshots, FAQs or source references."
+      },
+      {
+        "question": "Why does freshness matter for AI visibility?",
+        "answer": "AI and search systems need current source evidence when tools, recommendations, policies and market facts change quickly."
+      },
+      {
+        "question": "What should be updated first?",
+        "answer": "Update pages with impressions, old claims, changed services, new source evidence or high-intent topics where competitors publish fresher answers."
+      }
+    ],
+    "cta": {
+      "title": "Keep source proof current enough to be trusted",
+      "body": "Use periodic visibility checks to refresh the pages and proof records that matter most for buyer prompts and AI answers.",
+      "primary_label": "Check visibility gaps",
+      "primary_href": "/ai-visibility-audit/",
+      "secondary_label": "Audit source footprint",
+      "secondary_href": "/ai-visibility-source-footprint/"
+    },
+    "proof_source_ids": [
+      "tiktok:tjrobertson52:7572774209382911246",
+      "tiktok:build_in_public:7535690550763179286",
+      "tiktok:webhivedigital:7509080977575136534"
+    ]
+  },
+  "backlink-quality": {
+    "target_query": "backlink quality for AI visibility",
+    "seo_title": "Backlink Quality for SEO and AI Visibility | Base2026",
+    "meta_description": "Source-backed notes on backlink quality, trust signals, third-party proof and why weak links do not create durable AI visibility.",
+    "answer_capsule": {
+      "heading": "Backlink quality is a trust signal, not a link-count game.",
+      "body": "For SEO and AI visibility, useful backlinks come from relevant, crawlable and credible sources that reinforce the same entity facts and claims a business wants search systems to trust."
+    },
+    "faq": [
+      {
+        "question": "What makes a backlink high quality?",
+        "answer": "Relevance, editorial context, crawlability, real audience value, topical fit and consistency with the brand's source footprint matter more than raw link count."
+      },
+      {
+        "question": "Do backlinks affect AI visibility?",
+        "answer": "They can support authority and source discovery, especially when the linking pages are credible evidence surfaces that AI systems may crawl or cite."
+      },
+      {
+        "question": "What backlink work should come first?",
+        "answer": "Map existing source footprint, remove obvious spam dependency, and pursue credible mentions that support service/category claims buyers ask about."
+      }
+    ],
+    "cta": {
+      "title": "Audit links as part of the source footprint",
+      "body": "Separate useful third-party proof from weak link noise before investing in more authority building.",
+      "primary_label": "Audit your source footprint",
+      "primary_href": "/ai-visibility-source-footprint/",
+      "secondary_label": "Run diagnostic audit",
+      "secondary_href": "/ai-visibility-diagnostic-audit/"
+    },
+    "proof_source_ids": [
+      "tiktok:tjrobertson52:7627345524999359757",
+      "tiktok:build_in_public:7557817944982474006",
+      "tiktok:build_in_public:7540500381059599638"
+    ]
+  },
+  "core-update-analysis": {
+    "target_query": "Google core update analysis SEO",
+    "seo_title": "Core Update Analysis for SEO and AI Visibility | Base2026",
+    "meta_description": "How to analyze Google core update impact with indexed pages, content quality, trust signals and source-footprint evidence.",
+    "answer_capsule": {
+      "heading": "Core update analysis should separate symptoms from causes.",
+      "body": "A useful core update review compares traffic, indexed pages, content quality, query intent, internal links, trust evidence and competitor/source changes instead of blaming one surface metric."
+    },
+    "faq": [
+      {
+        "question": "What should be checked after a core update?",
+        "answer": "Check affected pages, query groups, indexing changes, cannibalization, content freshness, competitor movement and whether pages still satisfy intent."
+      },
+      {
+        "question": "Can AI visibility be affected by core updates?",
+        "answer": "Indirectly, yes. If search systems reassess trust or usefulness, the same weak evidence can also reduce visibility in AI-style answers."
+      },
+      {
+        "question": "What is the safest recovery path?",
+        "answer": "Improve pages with real demand and evidence, remove or noindex weak scaled pages, strengthen internal links and update proof where claims changed."
+      }
+    ],
+    "cta": {
+      "title": "Turn core update symptoms into a prioritized fix list",
+      "body": "Use a diagnostic audit to identify whether the problem is indexing, intent, content quality, authority or source-footprint weakness.",
+      "primary_label": "Run a diagnostic audit",
+      "primary_href": "/ai-visibility-diagnostic-audit/",
+      "secondary_label": "Check AI visibility gaps",
+      "secondary_href": "/ai-visibility-audit/"
+    },
+    "proof_source_ids": [
+      "tiktok:webhivedigital:7647174232719248662",
+      "tiktok:webhivedigital:7646438628347956502",
+      "tiktok:tjrobertson52:7642833683384192270"
+    ]
+  },
+  "ecommerce-seo-collection-pages": {
+    "target_query": "ecommerce SEO collection pages",
+    "seo_title": "Ecommerce Collection Page SEO and AI Visibility | Base2026",
+    "meta_description": "Source-backed notes on collection pages, category intent, internal links, product proof and answer-ready ecommerce SEO.",
+    "answer_capsule": {
+      "heading": "Collection pages need more than product grids to rank and convert.",
+      "body": "A strong ecommerce collection page explains the category, answers buying questions, links related choices, uses clean facets/canonicals and supports products with trustworthy proof."
+    },
+    "faq": [
+      {
+        "question": "What should an ecommerce collection page include?",
+        "answer": "A clear category title, buyer guidance, unique copy, internal links, product filters that do not create crawl traps, FAQs and visible trust signals."
+      },
+      {
+        "question": "How do collection pages connect to AI search?",
+        "answer": "AI systems need category context, product/entity facts, reviews and external proof to recommend a store or product category confidently."
+      },
+      {
+        "question": "What is the common collection-page SEO mistake?",
+        "answer": "Publishing thin grids with duplicate meta, uncontrolled filters and no unique answer content creates weak indexation and low conversion value."
+      }
+    ],
+    "cta": {
+      "title": "Make ecommerce category pages answer-ready",
+      "body": "Audit collection pages for indexability, buyer answers, internal links, structured data and proof that can support AI recommendations.",
+      "primary_label": "Build answer-ready service pages",
+      "primary_href": "/answer-ready-service-pages/",
+      "secondary_label": "Start visibility audit",
+      "secondary_href": "/ai-visibility-audit/"
+    },
+    "proof_source_ids": [
+      "tiktok:webhivedigital:7638529791515299094",
+      "tiktok:webhivedigital:7634075560586611990",
+      "tiktok:webhivedigital:7610834485151681814"
+    ]
+  },
+  "content-strategy": {
+    "target_query": "AI visibility content strategy",
+    "seo_title": "Content Strategy for AI Visibility and Search Demand | Base2026",
+    "meta_description": "How to choose content by buyer prompts, evidence gaps, Search Console signals and source-footprint opportunities.",
+    "answer_capsule": {
+      "heading": "AI visibility content strategy starts with demand and proof gaps.",
+      "body": "Instead of publishing random posts, choose pages where buyer prompts, search demand, existing evidence and commercial next steps overlap."
+    },
+    "faq": [
+      {
+        "question": "What should guide AI visibility content planning?",
+        "answer": "Use buyer prompts, GSC impressions, competitor citations, source-footprint gaps, internal link opportunities and conversion intent."
+      },
+      {
+        "question": "How many pages should be published at once?",
+        "answer": "Publish in verified batches: only pages with clear intent, unique evidence and enough value to deserve indexation."
+      },
+      {
+        "question": "What content should not be indexed?",
+        "answer": "Thin variations, duplicate summaries and pages without enough proof or demand should stay noindex or unpublished until improved."
+      }
+    ],
+    "cta": {
+      "title": "Build content around demand plus evidence",
+      "body": "Use Base2026-style proof mapping to decide which pages can create traffic and which gaps need source work first.",
+      "primary_label": "Audit content/source gaps",
+      "primary_href": "/ai-visibility-source-footprint/",
+      "secondary_label": "Run diagnostic audit",
+      "secondary_href": "/ai-visibility-diagnostic-audit/"
+    },
+    "proof_source_ids": [
+      "tiktok:build_in_public:7649507228147256598",
+      "tiktok:tjrobertson52:7649531548655521038"
+    ]
+  },
+  "ai-content-quality": {
+    "target_query": "AI content quality SEO",
+    "seo_title": "AI Content Quality for SEO and AI Visibility | Base2026",
+    "meta_description": "Source-backed guidance on using AI content safely: quality, usefulness, evidence, editing and scaled-content risk.",
+    "answer_capsule": {
+      "heading": "AI content quality depends on usefulness, not the tool that drafted it.",
+      "body": "AI-assisted content can work when it is edited, specific, evidence-backed and useful. It becomes risky when it scales generic pages without expertise, proof or search intent fit."
+    },
+    "faq": [
+      {
+        "question": "Is AI-generated content bad for SEO?",
+        "answer": "Not automatically. The risk is low-value, inaccurate or scaled content that exists mainly to manipulate search instead of helping users."
+      },
+      {
+        "question": "What makes AI-assisted content higher quality?",
+        "answer": "Original evidence, specific examples, expert review, clear structure, accurate claims, freshness and visible usefulness for the target intent."
+      },
+      {
+        "question": "How should teams use AI safely?",
+        "answer": "Use AI for drafting and analysis, but require human review, source checks, unique value and indexation thresholds before publishing at scale."
+      }
+    ],
+    "cta": {
+      "title": "Separate useful AI content from scaled risk",
+      "body": "Audit pages for answer quality, evidence, duplication and whether each page deserves to be indexed.",
+      "primary_label": "Run diagnostic audit",
+      "primary_href": "/ai-visibility-diagnostic-audit/",
+      "secondary_label": "See source footprint method",
+      "secondary_href": "/ai-visibility-source-footprint/"
+    },
+    "proof_source_ids": [
+      "tiktok:tjrobertson52:7575334473387019533",
+      "tiktok:tjrobertson52:7557492989233319181"
+    ]
+  },
+  "ai-content-disclosure": {
+    "target_query": "AI content disclosure SEO",
+    "seo_title": "AI Content Disclosure and SEO Trust Signals | Base2026",
+    "meta_description": "When AI content disclosure, editorial review, transparency and source evidence matter for SEO and brand trust.",
+    "answer_capsule": {
+      "heading": "AI disclosure is a trust and expectation question.",
+      "body": "Disclosure alone does not make content helpful, but transparency, editorial standards and visible source evidence can reduce trust risk when AI-assisted workflows are used."
+    },
+    "faq": [
+      {
+        "question": "Does Google require AI content disclosure?",
+        "answer": "Not as a universal ranking requirement, but disclosure may be appropriate where users would reasonably expect to know how content was produced."
+      },
+      {
+        "question": "What matters more than disclosure?",
+        "answer": "Accuracy, usefulness, originality, expertise, evidence, review process and whether the content genuinely satisfies the user intent."
+      },
+      {
+        "question": "How should a business document AI content workflows?",
+        "answer": "Create clear editorial rules: what AI can draft, what humans review, how sources are checked and when content should not be indexed."
+      }
+    ],
+    "cta": {
+      "title": "Document content trust before scaling AI workflows",
+      "body": "Use an audit to check whether AI-assisted pages have enough review, source proof and visible usefulness to support search visibility.",
+      "primary_label": "Audit AI content risk",
+      "primary_href": "/ai-visibility-diagnostic-audit/",
+      "secondary_label": "Review source footprint",
+      "secondary_href": "/ai-visibility-source-footprint/"
+    },
+    "proof_source_ids": [
+      "tiktok:build_in_public:7645415032691412256",
+      "tiktok:build_in_public:7558544343183871254"
+    ]
+  },
+  "ai-knowledge-base": {
+    "target_query": "AI knowledge base SEO",
+    "seo_title": "AI Knowledge Base SEO and Source Footprint | Base2026",
+    "meta_description": "How knowledge-base pages can support AI answers, entity clarity, internal links, support demand and source trust.",
+    "answer_capsule": {
+      "heading": "A knowledge base can become source infrastructure for AI answers.",
+      "body": "Useful knowledge-base pages answer specific questions, define entities, link related proof and make product/service facts easy for users and search systems to verify."
+    },
+    "faq": [
+      {
+        "question": "Can a knowledge base help AI visibility?",
+        "answer": "Yes, if pages are crawlable, answer real questions, use consistent terminology and link to product, service and evidence pages."
+      },
+      {
+        "question": "What knowledge-base pages should be indexable?",
+        "answer": "Index pages with demand, unique answers and strategic value; keep internal-only, thin or duplicate support snippets out of the index."
+      },
+      {
+        "question": "What structure works best?",
+        "answer": "Use hubs, clear questions, direct answers, related links, schema where appropriate and updates when product or policy facts change."
+      }
+    ],
+    "cta": {
+      "title": "Turn support content into answer infrastructure",
+      "body": "Audit your knowledge base for crawlability, answer quality, internal links and source-footprint gaps that affect AI visibility.",
+      "primary_label": "Audit knowledge-base visibility",
+      "primary_href": "/ai-visibility-audit/",
+      "secondary_label": "See source footprint method",
+      "secondary_href": "/ai-visibility-source-footprint/"
+    },
+    "proof_source_ids": [
+      "tiktok:tjrobertson52:7650601606215372046",
+      "tiktok:tjrobertson52:7648867263541464334"
+    ]
+  },
+  "wordpress-seo-plugin-capabilities": {
+    "target_query": "WordPress SEO plugin capabilities",
+    "seo_title": "WordPress SEO Plugin Capabilities and Limits | Base2026",
+    "meta_description": "What WordPress SEO plugins can automate, what they cannot fix, and why content, links and source proof still matter.",
+    "answer_capsule": {
+      "heading": "SEO plugins help with signals, but they do not create strategy by themselves.",
+      "body": "WordPress SEO plugins can manage titles, meta, schema, sitemaps and canonicals, but they cannot replace demand research, useful content, source proof or internal linking decisions."
+    },
+    "faq": [
+      {
+        "question": "What can WordPress SEO plugins do well?",
+        "answer": "They can generate sitemaps, manage metadata, add schema, control indexation settings and surface technical issues."
+      },
+      {
+        "question": "What can they not solve?",
+        "answer": "They cannot invent unique value, choose high-intent topics, create credible proof or fix weak business/source positioning."
+      },
+      {
+        "question": "How should plugin output be audited?",
+        "answer": "Check actual rendered metadata, canonicals, robots tags, schema, sitemap inclusion and whether pages still satisfy search intent."
+      }
+    ],
+    "cta": {
+      "title": "Audit plugin settings against actual visibility goals",
+      "body": "Verify the technical output, then connect it to content demand, source proof and lead capture rather than assuming green lights equal growth.",
+      "primary_label": "Run technical/AI visibility audit",
+      "primary_href": "/ai-visibility-diagnostic-audit/",
+      "secondary_label": "View services",
+      "secondary_href": "/services/"
+    },
+    "proof_source_ids": [
+      "tiktok:webhivedigital:7652365345709231382",
+      "tiktok:webhivedigital:7519945419988684054"
+    ]
+  },
+  "llms-txt-risk": {
+    "target_query": "llms.txt risk AI SEO",
+    "seo_title": "llms.txt Risk and AI Crawler Visibility | Base2026",
+    "meta_description": "Source-backed notes on llms.txt, AI crawler control, visibility tradeoffs and why the file is not a complete AI SEO strategy.",
+    "answer_capsule": {
+      "heading": "llms.txt is not a substitute for crawlable, trustworthy content.",
+      "body": "An llms.txt file may help communicate preferred AI-readable resources, but it does not guarantee citations, crawling or ranking. Blocking or over-controlling AI crawlers can also create visibility tradeoffs."
+    },
+    "faq": [
+      {
+        "question": "Does llms.txt guarantee AI visibility?",
+        "answer": "No. It is an emerging convention, not a guarantee that AI systems will crawl, cite or trust the listed pages."
+      },
+      {
+        "question": "What is the main llms.txt risk?",
+        "answer": "Treating it as a magic solution while neglecting crawlable pages, sitemaps, internal links, entity clarity and third-party proof."
+      },
+      {
+        "question": "Should every site add llms.txt?",
+        "answer": "It can be tested, but the priority should be useful public pages, clean robots/sitemaps and source evidence that systems can actually access."
+      }
+    ],
+    "cta": {
+      "title": "Do not let llms.txt distract from real source proof",
+      "body": "Audit AI crawler visibility, public evidence and source footprint before relying on one file to solve AI search visibility.",
+      "primary_label": "Audit AI visibility infrastructure",
+      "primary_href": "/ai-visibility-source-footprint/",
+      "secondary_label": "Run diagnostic audit",
+      "secondary_href": "/ai-visibility-diagnostic-audit/"
+    },
+    "proof_source_ids": [
+      "tiktok:build_in_public:7517388546865564951"
+    ]
+  },
+  "llms-txt-contradiction-ai-crawlers": {
+    "target_query": "llms.txt AI crawler contradiction",
+    "seo_title": "llms.txt Contradictions and AI Crawler Policy | Base2026",
+    "meta_description": "How robots rules, llms.txt, AI crawler access and visibility goals can conflict if source strategy is not explicit.",
+    "answer_capsule": {
+      "heading": "AI crawler policy should match the visibility goal.",
+      "body": "If a brand wants AI systems to understand and recommend it, crawler controls, robots rules, public source pages and llms.txt guidance should not contradict each other."
+    },
+    "faq": [
+      {
+        "question": "How can crawler rules contradict AI visibility goals?",
+        "answer": "A site may ask to be cited while blocking important pages, hiding evidence, or listing resources that are noindex, thin or inaccessible."
+      },
+      {
+        "question": "What should be checked first?",
+        "answer": "Check robots.txt, sitemap, noindex tags, canonicals, llms.txt, key public pages and whether important claims are supported by accessible sources."
+      },
+      {
+        "question": "What is the practical fix?",
+        "answer": "Define which pages should be public evidence, make them crawlable and indexable when appropriate, then align crawler guidance with that strategy."
+      }
+    ],
+    "cta": {
+      "title": "Align crawler policy with AI visibility strategy",
+      "body": "Use a source-footprint audit to find contradictions between what you want AI systems to know and what your site actually exposes.",
+      "primary_label": "Review crawler/source policy",
+      "primary_href": "/ai-visibility-source-footprint/",
+      "secondary_label": "Start visibility audit",
+      "secondary_href": "/ai-visibility-audit/"
+    },
+    "proof_source_ids": [
+      "tiktok:build_in_public:7538555750768053526",
+      "tiktok:tjrobertson52:7534095319798189325"
+    ]
+  },
+  "bing-ai-citations": {
+    "target_query": "Bing AI citations",
+    "seo_title": "Bing AI Citations: How to Become a Citable Source | Base2026",
+    "meta_description": "Source-backed notes on Bing AI citations, Copilot grounding, citable URLs, source trust and answer-ready business evidence.",
+    "proof_source_ids": [
+      "tiktok:build_in_public:7606345507253832982"
+    ],
+    "answer_capsule": {
+      "heading": "Bing AI citations depend on crawlable, verifiable source pages.",
+      "body": "For Bing and Copilot, the safest path is not keyword stuffing. Build one focused URL with a clear answer, visible facts, schema that matches the page, internal links, and source evidence Bing can crawl and verify."
+    },
+    "faq": [
+      {
+        "question": "How do Bing AI citations differ from normal SEO rankings?",
+        "answer": "They still depend on crawl and indexing, but the page also needs enough explicit evidence for Bing or Copilot grounding to understand and cite the answer."
+      },
+      {
+        "question": "What should a business page expose early?",
+        "answer": "The service, location or entity, the exact claim, proof, supporting sources, and the next step should appear near the top of the page."
+      },
+      {
+        "question": "Does IndexNow guarantee a Bing citation?",
+        "answer": "No. IndexNow notifies Bing about changed URLs; the page still needs quality, crawlability, canonical clarity, internal links and useful content."
+      }
+    ],
+    "cta": {
+      "title": "Turn Bing citation gaps into a source-footprint sprint",
+      "body": "Use this page to check whether your business has clear, crawlable evidence pages that can support Copilot-style answers.",
+      "primary_label": "Audit Bing/Copilot visibility",
+      "primary_href": "/ai-visibility-audit/",
+      "secondary_label": "Check source footprint",
+      "secondary_href": "/ai-visibility-source-footprint/"
+    }
+  },
+  "ai-search-source-trust": {
+    "target_query": "AI search source trust",
+    "seo_title": "AI Search Source Trust: Signals Bing and Copilot Can Verify | Base2026",
+    "meta_description": "How source trust works for AI search: explicit facts, consistent entities, third-party evidence, internal links and crawlable proof.",
+    "proof_source_ids": [
+      "tiktok:tjrobertson52:7617949064474152206"
+    ],
+    "answer_capsule": {
+      "heading": "AI search trust is built from consistent evidence across sources.",
+      "body": "A page becomes more useful for AI search when its facts stand alone, match other public entity signals, and link to proof that a crawler can reach without guessing."
+    },
+    "faq": [
+      {
+        "question": "What weakens source trust?",
+        "answer": "Conflicting business facts, thin service pages, hidden proof, duplicate URLs, unclear authorship and unsupported claims all reduce confidence."
+      },
+      {
+        "question": "What strengthens source trust for a local business?",
+        "answer": "Consistent NAP data, clear service pages, reviews, source links, structured data, internal links and explicit proof sections help."
+      },
+      {
+        "question": "Should every trust signal be on one page?",
+        "answer": "No. Keep each URL focused, then connect related proof pages through crawlable internal links and a logical hub."
+      }
+    ],
+    "cta": {
+      "title": "Map the trust signals behind the recommendation",
+      "body": "Check whether the business has enough visible proof for a search engine or answer engine to verify it.",
+      "primary_label": "Run a trust/source audit",
+      "primary_href": "/ai-visibility-diagnostic-audit/",
+      "secondary_label": "View Base2026 research",
+      "secondary_href": "/knowledge/ai-visibility-resources.html"
+    }
+  },
+  "ai-search-strategy-trusted-sources": {
+    "target_query": "AI search strategy trusted sources",
+    "seo_title": "AI Search Strategy: Build Trusted Sources Before More Content | Base2026",
+    "meta_description": "A Bing/Copilot-oriented AI search strategy page about trusted sources, crawlable proof, source footprint and internal links.",
+    "proof_source_ids": [
+      "tiktok:tjrobertson52:7599093173335493943"
+    ],
+    "answer_capsule": {
+      "heading": "The strategy is to create trusted sources, not just more pages.",
+      "body": "A practical AI search strategy starts with high-intent questions, then builds source-backed pages, proof hubs and internal links that make the answer easy to retrieve."
+    },
+    "faq": [
+      {
+        "question": "What is the first AI search strategy step?",
+        "answer": "Choose the business questions that matter commercially, then check whether existing pages answer them with visible proof."
+      },
+      {
+        "question": "Why avoid a raw page dump?",
+        "answer": "Large-scale pages without quality control can look thin or duplicative and may waste crawl budget instead of earning trust."
+      },
+      {
+        "question": "How does Bing fit the strategy?",
+        "answer": "Bing needs discoverable canonical URLs, sitemaps, IndexNow updates, crawlable links, clear structure and verifiable page-level facts."
+      }
+    ],
+    "cta": {
+      "title": "Prioritize trusted-source work before scaling pages",
+      "body": "Turn buyer queries into a short sprint of source-backed URLs, not a generic content dump.",
+      "primary_label": "Plan the AI visibility sprint",
+      "primary_href": "/ai-visibility-audit/",
+      "secondary_label": "See pricing",
+      "secondary_href": "/pricing/"
+    }
+  },
+  "ai-search-crawl-constraints": {
+    "target_query": "AI search crawl constraints",
+    "seo_title": "AI Search Crawl Constraints: What Blocks Bing and Copilot | Base2026",
+    "meta_description": "A source-backed checklist for crawl constraints that can block AI search visibility: robots, rendering, duplicate URLs, low-value pages and noindex mistakes.",
+    "proof_source_ids": [
+      "tiktok:build_in_public:7556691379448237334"
+    ],
+    "answer_capsule": {
+      "heading": "AI search cannot cite what it cannot crawl, render and trust.",
+      "body": "Bing/Copilot visibility starts with crawl basics: allow important URLs, avoid parameter waste, keep canonicals clean, expose key content in HTML, and link every priority page from crawlable hubs."
+    },
+    "faq": [
+      {
+        "question": "Which crawl mistakes hurt AI visibility first?",
+        "answer": "Blocking important paths, relying on hidden client-rendered content, serving duplicate URLs, using accidental noindex, and leaving pages orphaned hurt discovery."
+      },
+      {
+        "question": "How should new pages be submitted to Bing?",
+        "answer": "Use XML sitemaps and IndexNow for added or updated canonical URLs after the page passes live indexability checks."
+      },
+      {
+        "question": "What should not be submitted?",
+        "answer": "Do not submit query-state URLs, duplicate pages, noindex pages, redirected URLs, or thin drafts."
+      }
+    ],
+    "cta": {
+      "title": "Fix crawl constraints before asking for more traffic",
+      "body": "A small crawl/indexation audit can reveal why useful pages are not becoming discoverable surfaces.",
+      "primary_label": "Audit crawl and AI visibility",
+      "primary_href": "/technical-seo-geo-foundation/",
+      "secondary_label": "Get a free snapshot",
+      "secondary_href": "/ai-visibility-audit/"
+    }
+  },
+  "ai-search-google-index-overlap": {
+    "target_query": "AI search Google index overlap",
+    "seo_title": "AI Search and Google Index Overlap: What to Check | Base2026",
+    "meta_description": "How Google indexing, Bing crawl discovery and AI search visibility overlap without being the same measurement problem.",
+    "proof_source_ids": [
+      "tiktok:build_in_public:7542686797982158102"
+    ],
+    "answer_capsule": {
+      "heading": "Indexing is a prerequisite signal, not the whole AI visibility system.",
+      "body": "If a URL is not discoverable and indexable, it is unlikely to support AI answers. But indexed pages still need direct answers, entity clarity, proof and internal links to become useful citation candidates."
+    },
+    "faq": [
+      {
+        "question": "Does a Google-indexed page automatically work for Bing/Copilot?",
+        "answer": "No. Bing has its own crawl, index and quality systems, so verify sitemaps, Bingbot access, IndexNow receipt and page quality separately."
+      },
+      {
+        "question": "What overlap should be tracked?",
+        "answer": "Track canonical status, sitemap inclusion, indexability, impressions, citations, brand mentions and whether the page answers the intended query."
+      },
+      {
+        "question": "Why keep Bing and Google actions separate?",
+        "answer": "Google relies on GSC/sitemaps for normal pages, while Bing supports IndexNow for timely URL change notification."
+      }
+    ],
+    "cta": {
+      "title": "Separate indexation from AI citation readiness",
+      "body": "Use the audit to decide which pages need technical indexing work and which need stronger evidence or answers.",
+      "primary_label": "Run diagnostic audit",
+      "primary_href": "/ai-visibility-diagnostic-audit/",
+      "secondary_label": "Open resources hub",
+      "secondary_href": "/knowledge/ai-visibility-resources.html"
+    }
+  },
+  "ai-search-revenue-visibility": {
+    "target_query": "AI search revenue visibility",
+    "seo_title": "AI Search Revenue Visibility: Connect Citations to Leads | Base2026",
+    "meta_description": "A business-intent page about turning AI search visibility, source mentions, service-page clarity and Bing/Copilot discovery into measurable leads.",
+    "proof_source_ids": [
+      "tiktok:webhivedigital:7654592219722157334"
+    ],
+    "answer_capsule": {
+      "heading": "AI search visibility only matters when it connects to revenue paths.",
+      "body": "For service businesses, the useful metric is not page count. It is whether buyers can find a clear offer, trust the proof, and contact the business from pages AI systems can crawl and cite."
+    },
+    "faq": [
+      {
+        "question": "What should revenue visibility measure?",
+        "answer": "Measure indexed priority URLs, brand mentions, cited sources, commercial-page impressions, form starts, qualified leads and which pages assisted the inquiry."
+      },
+      {
+        "question": "Which pages matter most?",
+        "answer": "Service pages, proof pages, pricing/audit pages, local pages with unique evidence, and third-party source surfaces matter more than generic blog posts."
+      },
+      {
+        "question": "How does Bing help lead generation?",
+        "answer": "Bing and Copilot can surface answer-grounding and search traffic when the site provides clear, focused and crawlable commercial answers."
+      }
+    ],
+    "cta": {
+      "title": "Connect AI visibility to a lead path",
+      "body": "Audit whether the pages that can be discovered also route buyers into a clear diagnostic or quote request.",
+      "primary_label": "Check revenue visibility",
+      "primary_href": "/ai-visibility-audit/",
+      "secondary_label": "View services",
+      "secondary_href": "/services/"
+    }
+  },
+  "ai-visibility-commercial-pages": {
+    "target_query": "AI visibility commercial pages",
+    "seo_title": "AI Visibility Commercial Pages: Build URLs Buyers and Copilot Understand | Base2026",
+    "meta_description": "How commercial pages for AI visibility should combine exact intent, proof, entity clarity, FAQs, schema, and conversion paths.",
+    "proof_source_ids": [
+      "tiktok:build_in_public:7621641395954027798"
+    ],
+    "answer_capsule": {
+      "heading": "Commercial pages need direct answers plus proof, not a sales wall.",
+      "body": "A commercial AI-visibility URL should focus on one buyer problem, answer it early, show verifiable proof, connect to related evidence, and make the next action obvious."
+    },
+    "faq": [
+      {
+        "question": "What belongs on an AI-ready commercial page?",
+        "answer": "A precise title/H1, answer block, service scope, proof, process, FAQ, schema, internal links and a clear CTA belong on the page."
+      },
+      {
+        "question": "What makes a commercial page thin?",
+        "answer": "Generic claims, no proof, duplicated service text, vague location coverage and missing contact paths can make the page weak."
+      },
+      {
+        "question": "Should it mention Bing directly?",
+        "answer": "Only when relevant. The page should primarily satisfy the buyer, while keeping structure and crawl signals clear for Bing and Copilot."
+      }
+    ],
+    "cta": {
+      "title": "Build commercial pages with evidence built in",
+      "body": "Use a diagnostic sprint to turn one offer into pages search engines and buyers can both understand.",
+      "primary_label": "Build answer-ready service pages",
+      "primary_href": "/answer-ready-service-pages/",
+      "secondary_label": "Start with audit",
+      "secondary_href": "/ai-visibility-audit/"
+    }
+  },
+  "ai-visibility-citation-mechanics": {
+    "target_query": "AI visibility citation mechanics",
+    "seo_title": "AI Visibility Citation Mechanics: Why Some URLs Get Referenced | Base2026",
+    "meta_description": "A source-backed explainer on AI visibility citation mechanics: focused pages, explicit claims, source trust, internal links and crawl discovery.",
+    "proof_source_ids": [
+      "tiktok:tjrobertson52:7616560119375056142"
+    ],
+    "answer_capsule": {
+      "heading": "Citation mechanics start with explicit, retrievable facts.",
+      "body": "A URL is easier to cite when it has one clear topic, direct wording near the top, stable canonical structure, visible evidence and links from related pages."
+    },
+    "faq": [
+      {
+        "question": "Can schema force an AI citation?",
+        "answer": "No. Schema can clarify visible content, but it does not guarantee citations or replace useful page content."
+      },
+      {
+        "question": "Why do citations change across prompts?",
+        "answer": "Different prompts, context, freshness and competing sources can change which evidence the answer engine retrieves."
+      },
+      {
+        "question": "What is the safest optimization pattern?",
+        "answer": "Create focused pages with answer-first structure, proof cards, FAQ schema where appropriate, and crawlable internal links."
+      }
+    ],
+    "cta": {
+      "title": "Diagnose why the page is not being cited",
+      "body": "Check whether the URL is focused, indexed, internally linked and backed by evidence before adding more content.",
+      "primary_label": "Audit citation readiness",
+      "primary_href": "/ai-visibility-source-footprint/",
+      "secondary_label": "View resources",
+      "secondary_href": "/knowledge/ai-visibility-resources.html"
+    }
+  },
+  "ai-visibility-source-strategy": {
+    "target_query": "AI visibility source strategy",
+    "seo_title": "AI Visibility Source Strategy: Owned, Earned and Third-Party Proof | Base2026",
+    "meta_description": "How to build an AI visibility source strategy across owned pages, third-party mentions, reviews, directories, video and proof surfaces.",
+    "proof_source_ids": [
+      "tiktok:tjrobertson52:7556775604587105550"
+    ],
+    "answer_capsule": {
+      "heading": "A source strategy decides which evidence should support the brand answer.",
+      "body": "Owned pages explain the offer, third-party sources corroborate it, reviews prove trust, and internal links connect the story into a crawlable source footprint."
+    },
+    "faq": [
+      {
+        "question": "What sources should a local business prioritize?",
+        "answer": "Start with service pages, about/entity pages, review profiles, credible directories, case proof, source-backed content and consistent business profiles."
+      },
+      {
+        "question": "What is a source-footprint gap?",
+        "answer": "A gap is a buyer or AI prompt where competitors have credible evidence and the business has no clear supporting URL or mention."
+      },
+      {
+        "question": "How should sources be linked?",
+        "answer": "Use crawlable internal links from hubs to spokes and from proof pages back to the relevant service or audit page."
+      }
+    ],
+    "cta": {
+      "title": "Build a source strategy around buyer prompts",
+      "body": "Map prompts to owned pages and third-party proof before running another generic content sprint.",
+      "primary_label": "Audit source footprint",
+      "primary_href": "/ai-visibility-source-footprint/",
+      "secondary_label": "Get snapshot",
+      "secondary_href": "/ai-visibility-audit/"
+    }
+  },
+  "ai-visibility-tracking-brand-mentions": {
+    "target_query": "AI visibility tracking brand mentions",
+    "seo_title": "AI Visibility Tracking for Brand Mentions | Base2026",
+    "meta_description": "Track brand mentions in AI answers, Bing/Copilot-style prompts, third-party sources and commercial search surfaces.",
+    "proof_source_ids": [
+      "tiktok:tjrobertson52:7521560612770499895"
+    ],
+    "answer_capsule": {
+      "heading": "Brand mention tracking shows whether AI systems recognize the entity.",
+      "body": "Track prompt sets, whether the brand appears, which competitors appear, which URLs are cited, and what evidence is missing from the brand source footprint."
+    },
+    "faq": [
+      {
+        "question": "What should brand mention tracking include?",
+        "answer": "Include prompts, model/search surface, brand presence, competitor presence, cited URLs, answer accuracy and next evidence gap."
+      },
+      {
+        "question": "Is a mention enough?",
+        "answer": "No. A mention without accurate context, proof or a conversion path is weaker than a cited, verifiable answer."
+      },
+      {
+        "question": "How often should it be checked?",
+        "answer": "Check after major page updates, new proof publication, directory/profile changes and meaningful crawl or indexation cycles."
+      }
+    ],
+    "cta": {
+      "title": "Turn mention tracking into corrective actions",
+      "body": "Find where the brand is absent, misdescribed or unsupported, then build the missing evidence page or source link.",
+      "primary_label": "Track AI visibility gaps",
+      "primary_href": "/ai-visibility-diagnostic-audit/",
+      "secondary_label": "Check source footprint",
+      "secondary_href": "/ai-visibility-source-footprint/"
+    }
+  },
+  "brand-mentions-ai-visibility": {
+    "target_query": "Brand mentions AI visibility",
+    "seo_title": "Brand Mentions and AI Visibility: Make Entity Signals Consistent | Base2026",
+    "meta_description": "A Bing/Copilot-oriented page about brand mentions, entity clarity, third-party corroboration and source-backed AI visibility.",
+    "proof_source_ids": [
+      "tiktok:tjrobertson52:7580541959245237559"
+    ],
+    "answer_capsule": {
+      "heading": "Brand mentions become useful when they reinforce one consistent entity story.",
+      "body": "AI visibility improves when owned pages, profiles, reviews and third-party mentions describe the same business, services, locations and proof in compatible language."
+    },
+    "faq": [
+      {
+        "question": "Which brand mentions matter most?",
+        "answer": "Mentions on credible directories, reviews, social profiles, source pages, partnerships and pages that already rank or get cited matter most."
+      },
+      {
+        "question": "What makes brand mentions confusing?",
+        "answer": "Name variants, different addresses, old service descriptions, unsupported claims and disconnected profiles can weaken entity confidence."
+      },
+      {
+        "question": "How should mentions connect to the site?",
+        "answer": "Important mention surfaces should support, not contradict, the website's about, service, proof and contact pages."
+      }
+    ],
+    "cta": {
+      "title": "Clean up the entity story behind the brand",
+      "body": "Audit where the brand appears and whether those mentions help or confuse AI search systems.",
+      "primary_label": "Audit brand/entity signals",
+      "primary_href": "/entity-trust-source-intelligence/",
+      "secondary_label": "Start free snapshot",
+      "secondary_href": "/ai-visibility-audit/"
+    }
+  },
+  "entity-mentions-ai-visibility": {
+    "target_query": "Entity mentions AI visibility",
+    "seo_title": "Entity Mentions for AI Visibility and Bing Grounding | Base2026",
+    "meta_description": "How entity mentions support AI visibility when names, services, people, locations and proof are clear and consistent.",
+    "proof_source_ids": [
+      "tiktok:tjrobertson52:7517027077158096142"
+    ],
+    "answer_capsule": {
+      "heading": "Entity mentions help only when they are clear and consistent.",
+      "body": "Search and AI systems need stable names, relationships, services and locations. A mention that uses ambiguous or conflicting facts can weaken the confidence of the answer."
+    },
+    "faq": [
+      {
+        "question": "What entities should a service business define?",
+        "answer": "Define the company, founder or practitioner, service categories, locations, proof assets, offers and primary contact path."
+      },
+      {
+        "question": "Where should entity clarity appear?",
+        "answer": "Use the homepage, about page, service pages, schema, footer, social profiles and key third-party sources."
+      },
+      {
+        "question": "What is the common entity mistake?",
+        "answer": "Businesses spread inconsistent names, old descriptions and vague service claims across many profiles without a canonical explanation."
+      }
+    ],
+    "cta": {
+      "title": "Make entity mentions support the same answer",
+      "body": "Check whether public mentions reinforce the business identity or create contradictions for search systems.",
+      "primary_label": "Audit entity trust",
+      "primary_href": "/entity-trust-source-intelligence/",
+      "secondary_label": "View resources",
+      "secondary_href": "/knowledge/ai-visibility-resources.html"
+    }
+  },
+  "entity-seo-branded-search": {
+    "target_query": "Entity SEO branded search",
+    "seo_title": "Entity SEO for Branded Search and AI Answers | Base2026",
+    "meta_description": "A practical page about entity SEO, branded search, exact business facts, schema, source consistency and AI answer readiness.",
+    "proof_source_ids": [
+      "tiktok:build_in_public:7630997290609577238"
+    ],
+    "answer_capsule": {
+      "heading": "Entity SEO makes the brand easy to identify and verify.",
+      "body": "For branded search and AI answers, the site should state who the business is, what it does, where it serves, why it is credible, and which public sources support those facts."
+    },
+    "faq": [
+      {
+        "question": "Why does branded search matter for AI visibility?",
+        "answer": "Branded queries reveal whether search systems understand the entity and can connect it to services, people, locations and proof."
+      },
+      {
+        "question": "What should be audited first?",
+        "answer": "Audit title/H1 clarity, about copy, organization schema, local business facts, profile consistency, reviews and source links."
+      },
+      {
+        "question": "Can entity SEO help non-branded discovery?",
+        "answer": "Yes. Clear entity facts can support broader category recommendations when AI systems compare credible providers."
+      }
+    ],
+    "cta": {
+      "title": "Strengthen branded search before scaling discovery pages",
+      "body": "A clear entity base makes every service, proof and citation page easier to interpret.",
+      "primary_label": "Audit entity SEO",
+      "primary_href": "/entity-trust-source-intelligence/",
+      "secondary_label": "Get AI visibility snapshot",
+      "secondary_href": "/ai-visibility-audit/"
+    }
+  },
+  "source-citation-seo": {
+    "target_query": "Source citation SEO",
+    "seo_title": "Source Citation SEO: Build Pages AI Search Can Reference | Base2026",
+    "meta_description": "Source citation SEO for Bing/Copilot and AI search: clear answers, crawlable evidence, stable URLs, internal links and verified facts.",
+    "proof_source_ids": [
+      "tiktok:build_in_public:7579357745883696406"
+    ],
+    "answer_capsule": {
+      "heading": "Source citation SEO is page-level evidence engineering.",
+      "body": "The goal is to make a URL useful enough to be referenced: one topic, clear answer, visible proof, stable canonical, structured data and links from the right hubs."
+    },
+    "faq": [
+      {
+        "question": "Is source citation SEO the same as link building?",
+        "answer": "No. Links can help discovery and authority, but citation readiness also depends on content clarity, verifiable facts and page structure."
+      },
+      {
+        "question": "What makes a page citable?",
+        "answer": "A focused answer, explicit claims, proof, author/entity clarity, source links and stable crawlable HTML make a page easier to cite."
+      },
+      {
+        "question": "What should be avoided?",
+        "answer": "Avoid prompt-injection language, artificial keyword repetition, unsupported claims and duplicate pages created only for scale."
+      }
+    ],
+    "cta": {
+      "title": "Build citable evidence pages, not generic articles",
+      "body": "Turn the highest-value buyer questions into source-backed URLs that can support search and AI answers.",
+      "primary_label": "Plan citable pages",
+      "primary_href": "/answer-ready-service-pages/",
+      "secondary_label": "Audit source footprint",
+      "secondary_href": "/ai-visibility-source-footprint/"
+    }
+  },
+  "citations-and-ai-visibility": {
+    "target_query": "Citations and AI visibility",
+    "seo_title": "Citations and AI Visibility: What Businesses Should Build | Base2026",
+    "meta_description": "How citations, source mentions, local profiles, reviews and proof pages work together for AI visibility and Bing/Copilot grounding.",
+    "proof_source_ids": [
+      "tiktok:tjrobertson52:7571257203991137591"
+    ],
+    "answer_capsule": {
+      "heading": "Citations matter when they create a trustworthy source footprint.",
+      "body": "A citation can be a local profile, directory page, review source, article, video source or owned page. The value comes from consistency, relevance and whether it supports a real buyer answer."
+    },
+    "faq": [
+      {
+        "question": "Which citations are useful for AI visibility?",
+        "answer": "Useful citations are relevant, crawlable, accurate and connected to the same entity, services and proof the business wants to be known for."
+      },
+      {
+        "question": "Are directory citations enough?",
+        "answer": "No. Directories help entity consistency, but service pages, reviews, proof and answer-ready content usually need to work together."
+      },
+      {
+        "question": "How should citations be monitored?",
+        "answer": "Track whether important public profiles are accurate, indexable, linked, and reflected in AI/search answer testing."
+      }
+    ],
+    "cta": {
+      "title": "Turn citations into a real visibility system",
+      "body": "Check whether citations support the business answer or sit disconnected from conversion pages.",
+      "primary_label": "Audit citations/source footprint",
+      "primary_href": "/ai-visibility-source-footprint/",
+      "secondary_label": "Get free snapshot",
+      "secondary_href": "/ai-visibility-audit/"
+    }
+  },
+  "on-page-seo-for-ai-search": {
+    "target_query": "On-page SEO for AI search",
+    "seo_title": "On-Page SEO for AI Search: Answer-First Structure | Base2026",
+    "meta_description": "A Bing/Copilot-friendly on-page SEO checklist for AI search: exact title, H1, answer block, schema, proof, internal links and clarity.",
+    "proof_source_ids": [
+      "tiktok:build_in_public:7573750072597433622"
+    ],
+    "answer_capsule": {
+      "heading": "On-page SEO for AI search is about clarity, not tricks.",
+      "body": "Use a precise title and H1, answer the query early, keep one main topic per URL, add visible proof, use schema accurately and link related pages with descriptive anchors."
+    },
+    "faq": [
+      {
+        "question": "What is the first on-page change to make?",
+        "answer": "Put the direct answer and primary entity/service context near the top so users and crawlers do not have to infer the point."
+      },
+      {
+        "question": "Should keywords be repeated aggressively?",
+        "answer": "No. Bing guidelines warn against artificial language and keyword stuffing; exact wording should be natural and useful."
+      },
+      {
+        "question": "Where do internal links fit?",
+        "answer": "Internal links connect the answer page to the service page, proof page, resource hub and related evidence pages."
+      }
+    ],
+    "cta": {
+      "title": "Fix on-page AI search clarity first",
+      "body": "Before publishing more URLs, make sure each priority page can answer, prove and route the buyer clearly.",
+      "primary_label": "Audit on-page visibility",
+      "primary_href": "/technical-seo-geo-foundation/",
+      "secondary_label": "Build answer pages",
+      "secondary_href": "/answer-ready-service-pages/"
+    }
+  },
+  "ai-visibility-exact-answer-pages": {
+    "target_query": "AI visibility exact answer pages",
+    "seo_title": "Exact-Answer Pages for AI Visibility and Bing Search | Base2026",
+    "meta_description": "How exact-answer pages support AI visibility: focused URL, answer capsule, proof, FAQ schema, internal links and buyer CTA.",
+    "proof_source_ids": [
+      "tiktok:tjrobertson52:7512265578388737322"
+    ],
+    "answer_capsule": {
+      "heading": "Exact-answer pages help AI systems retrieve the right response fast.",
+      "body": "An exact-answer page targets one business question, gives a concise answer first, then supports it with proof, examples, FAQ and links to the relevant service path."
+    },
+    "faq": [
+      {
+        "question": "What is an exact-answer page?",
+        "answer": "It is a focused URL built around one buyer or operator question, not a broad blog post that mixes multiple topics."
+      },
+      {
+        "question": "Why does it help Bing/Copilot?",
+        "answer": "Focused structure, visible facts and internal links make the page easier to interpret and retrieve for grounding-style answers."
+      },
+      {
+        "question": "What should it link to?",
+        "answer": "Link to the offer page, proof resources, methodology and related pages that expand the answer without duplicating it."
+      }
+    ],
+    "cta": {
+      "title": "Create exact-answer URLs for real buyer prompts",
+      "body": "Use prompt research to decide which answers deserve standalone pages and which belong inside existing service pages.",
+      "primary_label": "Build answer-ready pages",
+      "primary_href": "/answer-ready-service-pages/",
+      "secondary_label": "Start with audit",
+      "secondary_href": "/ai-visibility-audit/"
+    }
+  },
+  "faq-pages-ai-search": {
+    "target_query": "FAQ pages AI search",
+    "seo_title": "FAQ Pages for AI Search: Useful Answers Without Thin Content | Base2026",
+    "meta_description": "How FAQ pages can support AI search when answers are original, focused, verifiable, schema-aligned and linked to service pages.",
+    "proof_source_ids": [
+      "tiktok:tjrobertson52:7596144261624548663"
+    ],
+    "answer_capsule": {
+      "heading": "FAQ pages work when they answer real decisions, not filler questions.",
+      "body": "For AI search, FAQs should answer specific buyer objections, define terms clearly, reflect visible page content, and link to proof or service pages where the buyer can act."
+    },
+    "faq": [
+      {
+        "question": "Should every question become a separate page?",
+        "answer": "No. Use standalone pages only for high-intent questions with enough unique value; smaller questions can live inside a stronger service page."
+      },
+      {
+        "question": "Does FAQ schema guarantee visibility?",
+        "answer": "No. Schema must match visible content and can clarify structure, but useful content and crawlability still matter."
+      },
+      {
+        "question": "What makes FAQ content thin?",
+        "answer": "Generic definitions, duplicated answers, no proof, no internal links and no business-specific next step make the page weak."
+      }
+    ],
+    "cta": {
+      "title": "Turn FAQs into buyer decision support",
+      "body": "Build FAQ sections that reduce friction and strengthen answer eligibility without creating doorway content.",
+      "primary_label": "Audit FAQ/search readiness",
+      "primary_href": "/answer-ready-service-pages/",
+      "secondary_label": "View resources",
+      "secondary_href": "/knowledge/ai-visibility-resources.html"
+    }
+  },
+  "service-page-seo": {
+    "target_query": "Service page SEO for AI visibility",
+    "seo_title": "Service Page SEO for AI Visibility and Local Leads | Base2026",
+    "meta_description": "Service page SEO for Bing/Copilot and local AI visibility: direct offer clarity, proof, FAQs, schema, internal links and conversion path.",
+    "proof_source_ids": [
+      "tiktok:build_in_public:7511824850902633750"
+    ],
+    "answer_capsule": {
+      "heading": "A service page should explain the offer clearly enough for buyers and AI systems.",
+      "body": "The page needs the service, who it fits, location or market context, proof, process, FAQ, schema and a clear quote/audit path without hiding the answer behind fluff."
+    },
+    "faq": [
+      {
+        "question": "What does a weak service page miss?",
+        "answer": "Weak pages often miss precise service scope, proof, local context, differentiators, FAQs and a next step."
+      },
+      {
+        "question": "How does service page SEO support AI visibility?",
+        "answer": "Clear service facts and proof give search systems a better source to retrieve when answering commercial prompts."
+      },
+      {
+        "question": "Should service pages link to proof pages?",
+        "answer": "Yes. Link between service, proof, case/review and FAQ pages so crawlers can understand the evidence chain."
+      }
+    ],
+    "cta": {
+      "title": "Make service pages answer-ready and conversion-ready",
+      "body": "Use the audit to identify which service pages need structure, proof and internal-link upgrades first.",
+      "primary_label": "Build service pages",
+      "primary_href": "/answer-ready-service-pages/",
+      "secondary_label": "Get snapshot",
+      "secondary_href": "/ai-visibility-audit/"
+    }
+  },
+  "local-seo-service-area-pages": {
+    "target_query": "Local SEO service area pages",
+    "seo_title": "Local SEO Service Area Pages: Avoid Doorway Pages | Base2026",
+    "meta_description": "How to build service area pages for local SEO and AI visibility without thin doorway pages: unique proof, local context, reviews and internal links.",
+    "proof_source_ids": [
+      "tiktok:tjrobertson52:7585359125744307469"
+    ],
+    "answer_capsule": {
+      "heading": "Service area pages need unique local evidence, not swapped city names.",
+      "body": "A safe service-area page should show real service context, local proof, reviews or examples, clear coverage, FAQs and links to the core service and contact path."
+    },
+    "faq": [
+      {
+        "question": "What makes a service area page risky?",
+        "answer": "Only changing the city name across many pages creates thin or doorway-style content that may waste crawl budget or reduce trust."
+      },
+      {
+        "question": "What unique evidence should be added?",
+        "answer": "Use local projects, reviews, service constraints, photos, neighborhoods, team coverage, permits or other proof that belongs to that area."
+      },
+      {
+        "question": "Should weak local drafts be indexed?",
+        "answer": "No. Keep weak city/niche drafts noindex or unpublished until each page has real unique value."
+      }
+    ],
+    "cta": {
+      "title": "Build local pages that deserve indexation",
+      "body": "Audit whether each service-area URL has enough proof before submitting it to Bing or Google.",
+      "primary_label": "Audit local service pages",
+      "primary_href": "/services/#local-seo",
+      "secondary_label": "Get free snapshot",
+      "secondary_href": "/ai-visibility-audit/"
+    }
+  },
+  "local-seo-landing-pages": {
+    "target_query": "Local SEO landing pages",
+    "seo_title": "Local SEO Landing Pages for AI Visibility and Leads | Base2026",
+    "meta_description": "A practical local SEO landing page checklist for Bing/Copilot clarity: offer, area, proof, reviews, schema, internal links and lead path.",
+    "proof_source_ids": [
+      "tiktok:build_in_public:7565641445026106646"
+    ],
+    "answer_capsule": {
+      "heading": "Local landing pages need commercial clarity plus local proof.",
+      "body": "The page should answer what service is offered, where, why the business is trusted, how to contact it, and which proof supports the claim."
+    },
+    "faq": [
+      {
+        "question": "What is the first block on a local landing page?",
+        "answer": "Use a direct service + location answer, then immediately support it with proof, reviews or examples."
+      },
+      {
+        "question": "How should local pages interlink?",
+        "answer": "Link from the main service page to local pages, from local pages back to the core offer, and between related proof resources."
+      },
+      {
+        "question": "What should be avoided?",
+        "answer": "Avoid generic city-swapped text, fake local claims, hidden content and pages without a real contact or quote path."
+      }
+    ],
+    "cta": {
+      "title": "Turn local landing pages into proof-led conversion paths",
+      "body": "Check which local pages deserve indexation and which need stronger proof before release.",
+      "primary_label": "Improve local landing pages",
+      "primary_href": "/services/#local-seo",
+      "secondary_label": "Run audit",
+      "secondary_href": "/ai-visibility-audit/"
+    }
+  },
+  "local-service-seo": {
+    "target_query": "Local service SEO",
+    "seo_title": "Local Service SEO for AI Search and Bing Discovery | Base2026",
+    "meta_description": "Local service SEO for AI visibility: GBP, reviews, service pages, proof, citations, schema and internal links that support buyer prompts.",
+    "proof_source_ids": [
+      "tiktok:build_in_public:7511085007818001686"
+    ],
+    "answer_capsule": {
+      "heading": "Local service SEO is the source footprint behind the recommendation.",
+      "body": "A local service business needs consistent profiles, strong service pages, reviews, proof, schema and internal links so search and AI systems can verify what to recommend."
+    },
+    "faq": [
+      {
+        "question": "What should a local service business fix first?",
+        "answer": "Fix service clarity, Google Business Profile data, review proof, location coverage, contact paths and indexability of the main pages."
+      },
+      {
+        "question": "How does this relate to Bing?",
+        "answer": "Bing needs crawlable canonical URLs, sitemap inclusion, internal links and useful page-level facts for discovery and grounding eligibility."
+      },
+      {
+        "question": "What is the local SEO trap?",
+        "answer": "Chasing hundreds of weak location pages before fixing core service pages and proof usually creates crawl waste."
+      }
+    ],
+    "cta": {
+      "title": "Prioritize local SEO work that creates leads",
+      "body": "Use a diagnostic pass to choose the pages and proof signals most likely to influence buyers.",
+      "primary_label": "Audit local AI visibility",
+      "primary_href": "/ai-visibility-audit/",
+      "secondary_label": "View local SEO services",
+      "secondary_href": "/services/#local-seo"
+    }
+  },
+  "local-seo-gbp": {
+    "target_query": "Local SEO GBP AI visibility",
+    "seo_title": "Local SEO GBP Signals for AI Visibility | Base2026",
+    "meta_description": "How Google Business Profile signals connect to local SEO, source trust, reviews, service pages and AI visibility.",
+    "proof_source_ids": [
+      "tiktok:tjrobertson52:7583118754536508685"
+    ],
+    "answer_capsule": {
+      "heading": "GBP supports local entity trust when it matches the website and reviews.",
+      "body": "Categories, services, location, reviews, hours and links should reinforce the same facts shown on service pages and other public profiles."
+    },
+    "faq": [
+      {
+        "question": "Can GBP alone create AI visibility?",
+        "answer": "No. It supports local context, but the website, reviews, citations and proof pages need to agree with it."
+      },
+      {
+        "question": "Which GBP signals should be checked?",
+        "answer": "Check primary category, services, description, hours, locations, reviews, photos, booking/contact links and consistency with the site."
+      },
+      {
+        "question": "How does GBP connect to Bing work?",
+        "answer": "Even though GBP is a Google surface, the consistency of public local facts also supports broader entity trust and source-footprint checks."
+      }
+    ],
+    "cta": {
+      "title": "Connect GBP to the rest of the visibility system",
+      "body": "Audit whether local profiles, pages and reviews tell one consistent story.",
+      "primary_label": "Audit local profiles",
+      "primary_href": "/services/#local-seo",
+      "secondary_label": "Start free snapshot",
+      "secondary_href": "/ai-visibility-audit/"
+    }
+  },
+  "reviews-local-seo": {
+    "target_query": "Reviews local SEO AI visibility",
+    "seo_title": "Reviews, Local SEO and AI Visibility | Base2026",
+    "meta_description": "How reviews support local SEO and AI visibility when they align with service pages, proof, entities and answer-ready content.",
+    "proof_source_ids": [
+      "tiktok:tjrobertson52:7388369836922981678"
+    ],
+    "answer_capsule": {
+      "heading": "Reviews are proof signals, not just reputation widgets.",
+      "body": "Useful reviews reinforce services, locations, outcomes and trust. They become stronger when service pages and profiles reference the same claims accurately."
+    },
+    "faq": [
+      {
+        "question": "How do reviews help AI visibility?",
+        "answer": "Reviews can corroborate service quality, locations and recurring customer language that answer engines may use when evaluating trust."
+      },
+      {
+        "question": "Where should review proof appear?",
+        "answer": "Place relevant review snippets near service, location, proof and conversion sections without fabricating or overclaiming."
+      },
+      {
+        "question": "What review pattern is risky?",
+        "answer": "Fake reviews, copied testimonials, unsupported star claims and review text hidden from users can damage trust."
+      }
+    ],
+    "cta": {
+      "title": "Use review language as proof, not decoration",
+      "body": "Find where reviews should support service pages and local proof before adding more generic content.",
+      "primary_label": "Audit review visibility",
+      "primary_href": "/ai-visibility-audit/",
+      "secondary_label": "View local SEO services",
+      "secondary_href": "/services/#local-seo"
+    }
+  },
+  "owned-branded-review-pages": {
+    "target_query": "Owned branded review pages",
+    "seo_title": "Owned Branded Review Pages for AI Visibility | Base2026",
+    "meta_description": "How owned review and proof pages can support branded search, local trust and AI visibility without fake or thin testimonial content.",
+    "proof_source_ids": [
+      "tiktok:tjrobertson52:7563499276777688333"
+    ],
+    "answer_capsule": {
+      "heading": "Owned review pages should organize real proof around buyer decisions.",
+      "body": "The page should explain what customers say, which services the reviews support, where third-party proof lives, and how the buyer can verify the claims."
+    },
+    "faq": [
+      {
+        "question": "Should a business create a review page?",
+        "answer": "Yes, if it adds useful context, links to third-party profiles, groups reviews by service or outcome, and avoids fake or duplicated claims."
+      },
+      {
+        "question": "How does it support AI visibility?",
+        "answer": "It gives crawlers a focused page that connects brand trust, service claims and corroborating review sources."
+      },
+      {
+        "question": "What should it link to?",
+        "answer": "Link to core service pages, review profiles, case proof, about/entity pages and contact or audit paths."
+      }
+    ],
+    "cta": {
+      "title": "Turn reviews into an evidence page",
+      "body": "Build proof pages that make real customer trust easier to verify and connect to services.",
+      "primary_label": "Improve proof pages",
+      "primary_href": "/entity-trust-source-intelligence/",
+      "secondary_label": "Run audit",
+      "secondary_href": "/ai-visibility-audit/"
+    }
+  },
+  "bottom-of-funnel-seo-landing-pages": {
+    "target_query": "Bottom of funnel SEO landing pages",
+    "seo_title": "Bottom-of-Funnel SEO Landing Pages for AI Search | Base2026",
+    "meta_description": "Bottom-of-funnel SEO landing pages for Bing/Copilot discovery: exact intent, comparison, proof, FAQ, pricing context and conversion path.",
+    "proof_source_ids": [
+      "tiktok:build_in_public:7627903046642699542"
+    ],
+    "answer_capsule": {
+      "heading": "Bottom-of-funnel pages should answer the buying decision directly.",
+      "body": "For commercial AI/search prompts, the page should state the offer, who it fits, proof, process, price or package context where possible, FAQ and the action path."
+    },
+    "faq": [
+      {
+        "question": "What is a bottom-of-funnel search page?",
+        "answer": "It targets buyers comparing solutions, pricing, providers, audits, implementation options or urgent service choices."
+      },
+      {
+        "question": "What makes it AI-ready?",
+        "answer": "Direct answers, clear entity/service facts, proof, schema, internal links and concise sections make it easier to retrieve and trust."
+      },
+      {
+        "question": "Should it be long?",
+        "answer": "It should be complete, not bloated. Put the answer and proof early, then expand only where it helps the buyer decide."
+      }
+    ],
+    "cta": {
+      "title": "Build pages for buyers who are ready to act",
+      "body": "Use commercial-intent pages to connect AI visibility work to qualified inquiries, not vanity traffic.",
+      "primary_label": "Create BOFU pages",
+      "primary_href": "/answer-ready-service-pages/",
+      "secondary_label": "View pricing",
+      "secondary_href": "/pricing/"
+    }
+  },
+  "transactional-seo-landing-page-structure": {
+    "target_query": "Transactional SEO landing page structure",
+    "seo_title": "Transactional SEO Landing Page Structure for AI Visibility | Base2026",
+    "meta_description": "A practical transactional landing page structure for search and AI visibility: direct answer, proof, offer, FAQ, schema and CTA.",
+    "proof_source_ids": [
+      "tiktok:build_in_public:7517033401145167126"
+    ],
+    "answer_capsule": {
+      "heading": "Transactional pages need an answer, a reason to trust, and a next step.",
+      "body": "The page should align title, H1, intro, proof blocks, FAQs and CTA around one transaction-intent query so buyers and crawlers see the same purpose."
+    },
+    "faq": [
+      {
+        "question": "What sections should a transactional page include?",
+        "answer": "Use direct answer, offer fit, benefits, proof, process, FAQ, related links, schema and CTA."
+      },
+      {
+        "question": "How is it different from a blog post?",
+        "answer": "It is built for a buyer decision and conversion path, not general education alone."
+      },
+      {
+        "question": "What should be measured?",
+        "answer": "Measure indexability, impressions, assisted leads, form starts, scroll/click signals and whether AI/search answers can retrieve the page."
+      }
+    ],
+    "cta": {
+      "title": "Structure transactional pages around the decision",
+      "body": "Audit whether commercial pages answer the buyer before asking them to convert.",
+      "primary_label": "Audit landing pages",
+      "primary_href": "/ai-visibility-diagnostic-audit/",
+      "secondary_label": "Build answer pages",
+      "secondary_href": "/answer-ready-service-pages/"
+    }
+  },
+  "landing-page-conversion": {
+    "target_query": "Landing page conversion AI visibility",
+    "seo_title": "Landing Page Conversion and AI Visibility | Base2026",
+    "meta_description": "How landing page conversion and AI visibility connect through clear offers, trust proof, page structure, internal links and answer-ready copy.",
+    "proof_source_ids": [
+      "tiktok:build_in_public:7570438225337011478"
+    ],
+    "answer_capsule": {
+      "heading": "AI visibility should lead to a page that can convert the buyer.",
+      "body": "Discovery is wasted if the landing page does not explain the offer, proof, fit, process and next step in a format a buyer can trust quickly."
+    },
+    "faq": [
+      {
+        "question": "What conversion elements matter for AI-search traffic?",
+        "answer": "The page needs a direct offer, trust proof, friction-free contact path, specific FAQs and internal links to deeper evidence."
+      },
+      {
+        "question": "What hurts conversion from search?",
+        "answer": "Vague hero copy, missing proof, too many CTAs, no service clarity and disconnected lead forms hurt conversion."
+      },
+      {
+        "question": "How does this help Bing?",
+        "answer": "A focused, crawlable landing page with clear content and links can be discovered and evaluated more reliably than a vague funnel page."
+      }
+    ],
+    "cta": {
+      "title": "Make discovery pages conversion-ready",
+      "body": "Connect the traffic page to a clear audit, service or quote path before scaling more URLs.",
+      "primary_label": "Improve conversion path",
+      "primary_href": "/ai-visibility-audit/",
+      "secondary_label": "View services",
+      "secondary_href": "/services/"
+    }
+  },
+  "technical-seo-indexing": {
+    "target_query": "Technical SEO indexing for Bing",
+    "seo_title": "Technical SEO Indexing for Bing and AI Search | Base2026",
+    "meta_description": "Technical SEO indexing checklist for Bing/Copilot: canonical URLs, sitemaps, IndexNow, noindex control, crawl paths and page quality gates.",
+    "proof_source_ids": [
+      "tiktok:build_in_public:7580690431793433879"
+    ],
+    "answer_capsule": {
+      "heading": "Indexing work starts with a clean URL ledger and live gates.",
+      "body": "Before submitting URLs, verify 200 status, self-canonical, indexable robots, sitemap inclusion, crawlable internal links, no query-state URLs and enough unique content value."
+    },
+    "faq": [
+      {
+        "question": "What should be submitted through IndexNow?",
+        "answer": "Submit added, updated or removed canonical URLs that pass live checks and belong to the verified host."
+      },
+      {
+        "question": "What does IndexNow not guarantee?",
+        "answer": "It does not guarantee crawl or indexation. It tells search engines that a URL changed and should be considered."
+      },
+      {
+        "question": "What should be excluded from indexation?",
+        "answer": "Exclude noindex pages, redirects, duplicates, thin drafts, query URLs and pages without useful unique content."
+      }
+    ],
+    "cta": {
+      "title": "Build a controlled indexing pipeline",
+      "body": "Use a gated ledger so only quality, canonical URLs are pushed to Bing and monitored afterwards.",
+      "primary_label": "Audit technical indexing",
+      "primary_href": "/technical-seo-geo-foundation/",
+      "secondary_label": "Open resource hub",
+      "secondary_href": "/knowledge/ai-visibility-resources.html"
+    }
+  },
+  "technical-seo-site-crawling": {
+    "target_query": "Technical SEO site crawling",
+    "seo_title": "Technical SEO Site Crawling for Bing/Copilot Visibility | Base2026",
+    "meta_description": "Technical crawling checklist for Bing and AI search: internal links, renderable content, sitemap quality, duplicate control and crawl budget protection.",
+    "proof_source_ids": [
+      "tiktok:webhivedigital:7512094665848507670"
+    ],
+    "answer_capsule": {
+      "heading": "Crawl quality decides which pages get discovered and refreshed.",
+      "body": "A Bing/Copilot-ready site keeps important URLs reachable through links, avoids crawl waste, exposes content in HTML, keeps sitemaps canonical and updates changed URLs with IndexNow."
+    },
+    "faq": [
+      {
+        "question": "What should a crawl audit check first?",
+        "answer": "Check status codes, canonical tags, meta robots, internal links, sitemap membership, duplicate patterns, rendering and broken assets."
+      },
+      {
+        "question": "Why does crawl waste matter?",
+        "answer": "Low-value duplicate URLs, parameters and thin pages can delay discovery of pages that actually matter for visibility and leads."
+      },
+      {
+        "question": "How often should crawling be rechecked?",
+        "answer": "Recheck after template changes, new page batches, sitemap updates, deployments and major source/content refreshes."
+      }
+    ],
+    "cta": {
+      "title": "Protect crawl budget before scaling pages",
+      "body": "Use crawl evidence to decide whether to add pages, reinforce links or fix templates first.",
+      "primary_label": "Run crawl/index audit",
+      "primary_href": "/technical-seo-geo-foundation/",
+      "secondary_label": "Get visibility snapshot",
+      "secondary_href": "/ai-visibility-audit/"
+    }
+  }
+}

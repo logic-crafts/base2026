@@ -11,7 +11,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 DATA_ROOT = ROOT / "public-data" / "tiktok"
 PLANNING = ROOT / ".planning"
-PROMPT_VERSION = "base2026-chatgpt-review-v1"
+PROMPT_VERSION = "base2026-semantic-review-v2"
 
 
 def now_iso() -> str:
@@ -263,8 +263,8 @@ def markdown_for_packet(packet: dict) -> str:
     lines = [
         f"# Base2026 ChatGPT {packet.get('mode', 'review').title()} Packet",
         "",
-        "Paste this packet into ChatGPT Pro/GPT-5.4 as a manual quality job.",
-        "This is not an automated production worker. Use only the supplied public passages.",
+        "Review this packet with the configured Hermes semantic reviewer (currently GPT-5.6 Sol).",
+        "This is a gated semantic-review job, not an autonomous publisher. Use only the supplied public passages.",
         "",
         f"- review_batch_id: `{packet['review_batch_id']}`",
         f"- prompt_version: `{packet['prompt_version']}`",

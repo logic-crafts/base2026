@@ -11,7 +11,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 PLANNING = ROOT / ".planning"
-PROMPT_VERSION = "base2026-chatgpt-review-v1"
+PROMPT_VERSION = "base2026-semantic-review-v2"
 
 
 def now_iso() -> str:
@@ -89,7 +89,7 @@ def quality_score(decision: dict) -> int:
         return -1
 
 
-def build_candidate_row(source: dict, decision: dict, original: dict | None) -> dict:
+def build_candidate_row(source: dict, decision: dict, original: dict | None, provenance: dict) -> dict:
     claim_text = decision.get("claim_text") or (original or {}).get("claim_text") or ""
     topic_label = decision.get("topic_label") or (original or {}).get("topic_label") or ""
     suggested_action = decision.get("suggested_action") or (original or {}).get("suggested_action") or ""
@@ -105,9 +105,9 @@ def build_candidate_row(source: dict, decision: dict, original: dict | None) -> 
         "evidence_excerpt": evidence_excerpt,
         "evidence_source": "passage",
         "source_passage_id": "",
-        "model_name": "chatgpt-pro-manual-review",
-        "model_endpoint_type": "manual_browser_review",
-        "prompt_version": PROMPT_VERSION,
+        "model_name": provenance["model_name"],
+        "model_endpoint_type": provenance["model_endpoint_type"],
+        "prompt_version": provenance["prompt_version"],
         "input_hash": source.get("input_hash") or "",
         "status": "candidate",
         "public": False,
@@ -129,6 +129,11 @@ def apply_review(packet: dict, review: dict, args: argparse.Namespace) -> tuple[
         raise ValueError(f"review_batch_id mismatch: expected {expected_batch}, got {actual_batch}")
 
     sources, candidates = source_maps(packet)
+    provenance = {
+        "model_name": review.get("reviewer_model") or "unspecified-reviewer",
+        "model_endpoint_type": review.get("reviewer_endpoint_type") or "review_json_import",
+        "prompt_version": packet.get("prompt_version") or PROMPT_VERSION,
+    }
     output: list[dict] = []
     stats = {
         "review_batch_id": expected_batch,
@@ -188,7 +193,7 @@ def apply_review(packet: dict, review: dict, args: argparse.Namespace) -> tuple[
             stats["skipped_too_many_new_candidates"] += 1
             continue
 
-        row = build_candidate_row(source, decision, original)
+        row = build_candidate_row(source, decision, original, provenance)
         if not row["claim_text"] or not row["topic_label"] or not row["evidence_excerpt"]:
             stats["skipped_missing_required_fields"] += 1
             continue

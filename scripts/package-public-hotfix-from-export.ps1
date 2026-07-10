@@ -77,6 +77,13 @@ foreach ($File in $SourceCounts.Keys) {
 
 python3 ./scripts/generate-info-pages.py --source ./docs/public-pages --out ./web/static | Write-Output
 Assert-NativeSuccess "generate-info-pages"
+if (Test-Path "./data/ai_visibility_pages_master.json") {
+  python3 ./scripts/generate-ai-visibility-pages.py --input ./data/ai_visibility_pages_master.json --out ./web/static --indexable | Write-Output
+  Assert-NativeSuccess "generate-ai-visibility-pages"
+} elseif (Test-Path "./data/ai_visibility_pages_batch01.json") {
+  python3 ./scripts/generate-ai-visibility-pages.py --input ./data/ai_visibility_pages_batch01.json --out ./web/static --indexable | Write-Output
+  Assert-NativeSuccess "generate-ai-visibility-pages"
+}
 
 $ReleaseRoot = Join-Path $Root "output\releases\$ReleaseName"
 $WebRoot = Join-Path $ReleaseRoot "web"
@@ -137,6 +144,7 @@ foreach ($TestPageAsset in @("roadmap-dataviz-test.html", "roadmap-dataviz-test.
 $DocPages = @(
   "methodology.html",
   "api.html",
+  "apply-research.html",
   "opt-out.html",
   "roadmap.html",
   "story.html",
@@ -152,6 +160,16 @@ foreach ($DocPage in $DocPages) {
   $DocHtml | Set-Content -Path (Join-Path $WebRoot $DocPage) -Encoding UTF8
 }
 
+$SignalBriefPath = Join-Path $ExportRoot "topic_signal_briefs.jsonl"
+python3 ./scripts/generate-topic-signal-briefs.py --data $ExportRoot --out $SignalBriefPath --max-topics 50 | Write-Output
+Assert-NativeSuccess "generate-topic-signal-briefs"
+$AnalyticsPath = Join-Path $ExportRoot "base2026_analytics.json"
+python3 ./scripts/generate-base2026-analytics.py --data $ExportRoot --out $AnalyticsPath | Write-Output
+Assert-NativeSuccess "generate-base2026-analytics"
+$AnalyticsSummaryPath = Join-Path $ExportRoot "analytics_summary.json"
+python3 ./scripts/generate-public-analytics.py --data $ExportRoot --out $AnalyticsSummaryPath | Write-Output
+Assert-NativeSuccess "generate-public-analytics"
+
 foreach ($StaticDataFile in @("documents.jsonl", "passages.jsonl", "insight_cards.jsonl", "manifest.json", "topic_signal_briefs.jsonl", "base2026_analytics.json", "analytics_summary.json")) {
   $StaticDataSource = Join-Path $ExportRoot $StaticDataFile
   if (Test-Path $StaticDataSource) {
@@ -164,6 +182,18 @@ Copy-Item "./scripts/meili-index-public.py" (Join-Path $ScriptsRoot "meili-index
 Copy-Item (Join-Path $ExportRoot "*") $DataRoot -Recurse -Force
 python3 ./scripts/generate-public-pages.py --data $ExportRoot --out $WebRoot | Write-Output
 Assert-NativeSuccess "generate-public-pages"
+if (Test-Path "./data/ai_visibility_pages_master.json") {
+  python3 ./scripts/generate-ai-visibility-pages.py --input ./data/ai_visibility_pages_master.json --out $WebRoot --indexable | Write-Output
+  Assert-NativeSuccess "generate-ai-visibility-pages-release"
+} elseif (Test-Path "./data/ai_visibility_pages_batch01.json") {
+  python3 ./scripts/generate-ai-visibility-pages.py --input ./data/ai_visibility_pages_batch01.json --out $WebRoot --indexable | Write-Output
+  Assert-NativeSuccess "generate-ai-visibility-pages-release"
+}
+Get-ChildItem -Path "./web/static" -Filter "indexnow-*.txt" -File -ErrorAction SilentlyContinue | ForEach-Object {
+  $Target = Join-Path $WebRoot $_.Name
+  Copy-Item $_.FullName $Target -Force
+  chmod 0644 $Target
+}
 python3 ./scripts/generate-base2026-sitemap.py --web-root $WebRoot | Write-Output
 Assert-NativeSuccess "generate-base2026-sitemap"
 

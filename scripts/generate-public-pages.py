@@ -9,7 +9,7 @@ from pathlib import Path
 from urllib.parse import urlencode
 
 
-STYLE_VERSION = "20260617-source-readability1"
+STYLE_VERSION = "20260627-bing-cookie-compact-v1"
 CONTACT_EMAIL = "offflinerpsy@gmail.com"
 FONT_LINK = "https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600;700&family=Geist:wght@400;500;600;700;800&display=swap"
 FAVICON_ASSET_PATH = "static/assets/alex-yarosh-favicon-32.png"
@@ -21,7 +21,9 @@ PROJECT_NAV_LINKS = [
     ("search", "Search", ""),
     ("analytics", "Analytics", "analytics.html"),
     ("api", "API", "api.html"),
-    ("topics", "Topics", "topics/"),
+    ("apply", "Apply Research", "apply-research.html"),
+    ("solutions", "AI Recommends", "solutions/"),
+    ("ai_visibility_pages", "AI Visibility Lab", "ai-visibility-pages/"),
     ("creators", "Creators", "creators/"),
     ("methodology", "Methodology", "methodology.html"),
 ]
@@ -148,6 +150,12 @@ def read_jsonl(path: Path) -> list[dict]:
         if line.strip():
             rows.append(json.loads(line))
     return rows
+
+
+def read_json(path: Path) -> dict:
+    if not path.exists():
+        return {}
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
 def write_text(path: Path, text: str) -> None:
@@ -830,6 +838,7 @@ def page_shell(
     current: str = "",
     description: str = "",
     canonical_path: str = "",
+    main_class: str = "app-shell content-page",
 ) -> str:
     description = compact(description or title, 180)
     canonical = f"https://aggressorbulkit.online/knowledge/{canonical_path.lstrip('/')}" if canonical_path else ""
@@ -865,7 +874,7 @@ def page_shell(
   <body>
     <a class="skip-link" href="#content">Skip to content</a>
     {site_header(relative_root, current)}
-    <main id="content" class="app-shell content-page">
+    <main id="content" class="{escape(main_class)}">
       {base2026_breadcrumbs(relative_root, title)}
       {body}
     </main>
@@ -898,11 +907,11 @@ def page_shell(
         <nav aria-label="Footer services">
           <h3>Services</h3>
           <ul class="ay-footer-menu">
-            <li><a href="/services/#ai-visibility-audit">AI Visibility Audit</a></li>
-            <li><a href="/services/#technical-foundation">SEO/GEO Technical Foundation</a></li>
-            <li><a href="/services/#answer-ready-content">Answer-Ready Content</a></li>
+            <li><a href="/ai-visibility-diagnostic-audit/">AI Visibility Diagnostic Audit</a></li>
+            <li><a href="/technical-seo-geo-foundation/">Technical SEO &amp; GEO Foundation</a></li>
+            <li><a href="/answer-ready-service-pages/">Answer-Ready Service Pages</a></li>
+            <li><a href="/entity-trust-source-intelligence/">Entity, Trust &amp; Source Intelligence</a></li>
             <li><a href="/services/#local-seo">Local SEO &amp; Citations</a></li>
-            <li><a href="/services/#entity-schema">Entity &amp; Schema Optimization</a></li>
             <li><a href="/services/#monitoring">AI Visibility Monitoring</a></li>
           </ul>
         </nav>
@@ -917,11 +926,15 @@ def page_shell(
         </nav>
         <nav aria-label="Footer Base2026">
           <h3>Base2026 Pilot Project</h3>
-          <p>Independent pilot project: a searchable knowledge base for short-form expert video.</p>
+          <p>Independent experimental startup product: a searchable knowledge base for short-form expert video.</p>
           <ul class="ay-footer-menu">
             <li><a href="{relative_root}/">Search Base2026</a></li>
             <li><a href="{relative_root}/analytics.html">Analytics</a></li>
             <li><a href="{relative_root}/api.html">API &amp; AI access</a></li>
+            <li><a href="{relative_root}/apply-research.html">Apply research</a></li>
+            <li><a href="{relative_root}/solutions/">AI Recommends Solutions</a></li>
+            <li><a href="{relative_root}/ai-visibility-pages/">AI Visibility Lab</a></li>
+            <li><a href="{relative_root}/ai-visibility-resources.html">AI Visibility Library</a></li>
             <li><a href="{relative_root}/roadmap.html">Roadmap</a></li>
             <li><a href="{relative_root}/topics/">Topics</a></li>
             <li><a href="{relative_root}/creators/">Creators</a></li>
@@ -942,7 +955,7 @@ def page_shell(
         </nav>
       </div>
       <div class="ay-footer-bottom">
-        <span>&copy; 2026 Alex Yarosh. Available remotely for US-based local businesses.</span>
+        <span>&copy; 2026 Logic Crafts LLC, Kyrgyzstan. Base2026 was created by Alex Yarosh as an independent experimental startup product. It is not a marketing agency and not a marketing-services offering.</span>
       </div>
     </footer>
     <script src="{relative_root}/static/share-actions.js?v={STYLE_VERSION}" defer></script>
@@ -1171,6 +1184,39 @@ def source_has_public_evidence(source: dict, passages: list[dict] | None = None,
     return any(row.get("public") for row in (insights or []))
 
 
+def source_is_normal_public_card(source: dict) -> bool:
+    state = source.get("admission_state")
+    surface = source.get("public_surface")
+    if state and state != "normal_public_card":
+        return False
+    if surface and surface != "main_search":
+        return False
+    return True
+
+
+def is_indexable_source(source: dict, passages: list[dict] | None = None, insights: list[dict] | None = None) -> bool:
+    """Require independent source-page value, not merely an excerpt.
+
+    Weak/uncertain records remain available as attributed source archive pages with
+    noindex,follow and may still contribute to stronger topic pages.
+    """
+    if not source_is_normal_public_card(source):
+        return False
+    public_insights = [row for row in (insights or []) if row.get("public")]
+    topics = source.get("topics") or source.get("topic_labels") or []
+    summary = (source.get("source_summary_short") or "").strip()
+    source_url = (source.get("source_url") or "").strip()
+    return bool(
+        source_has_public_evidence(source, passages, public_insights)
+        and passages
+        and public_insights
+        and topics
+        and summary
+        and source_url
+        and source.get("full_transcript_public") is not True
+    )
+
+
 def creator_href(handle: str, prefix: str = "../creators") -> str:
     return f"{prefix}/{slug(handle)}.html"
 
@@ -1321,10 +1367,13 @@ def creator_page(handle: str, creator: dict, sources: list[dict], insights: list
 
 def source_page(source: dict, passages: list[dict], insights: list[dict]) -> str:
     source_id = source.get("source_id") or source.get("item_id") or "source"
+    archive_source = not source_is_normal_public_card(source)
     handle = display_handle(source.get("creator_handle") or source.get("handle") or "Unknown creator")
     avatar_html = creator_avatar_markup(handle, source.get("avatar_url") or "")
-    public_insights = [row for row in insights if row.get("source_id") == source_id and row.get("public")]
-    has_public_evidence = source_has_public_evidence(source, passages, public_insights)
+    public_insights = [] if archive_source else [
+        row for row in insights if row.get("source_id") == source_id and row.get("public")
+    ]
+    indexable_source = is_indexable_source(source, passages, public_insights)
     source_topic_rows = [
         (topic_id, label, 0)
         for topic_id, label in zip(source.get("topics") or [], source.get("topic_labels") or [])
@@ -1364,6 +1413,31 @@ def source_page(source: dict, passages: list[dict], insights: list[dict]) -> str
         if insight_html
         else source_intelligence_empty_state()
     )
+    hero_eyebrow = "Provenance archive" if archive_source else "Source record"
+    if archive_source:
+        hero_actions = f"""
+            <a class="ay-button" href="{escape(source.get('source_url') or '#')}" target="_blank" rel="noreferrer">Open original</a>
+            <a class="ay-button-secondary" href="../opt-out.html">Correction or opt-out</a>
+        """
+        intelligence_section = f"""
+      <section class="content-section">
+        {section_title("Archive status", "Reviewed source retained for provenance. Editorial review did not approve a transferable public Source Intelligence card.")}
+        <p class="meta">This noindex archive record is excluded from Search Workspace, creator listings, topic evidence pages, and normal public-card counts.</p>
+      </section>
+        """
+    else:
+        hero_actions = f"""
+            <a class="ay-button" href="{escape(workspace_href(source=source.get('item_id') or source_id))}">Open in Search Workspace</a>
+            <a class="ay-button-secondary" href="{escape(source.get('source_url') or '#')}" target="_blank" rel="noreferrer">Open original</a>
+            <a class="ay-button-secondary" href="{escape(workspace_href(creator=clean_handle(handle)))}">Creator</a>
+        """
+        intelligence_section = f"""
+      <section class="content-section">
+        {section_title("Source Intelligence", "Reviewed source-backed claims promoted from this evidence.")}
+        {source_intelligence_body}
+      </section>
+      {source_answer_section(source, public_insights, passages)}
+        """
     schema = {
         "@context": "https://schema.org",
         "@graph": [
@@ -1396,14 +1470,12 @@ def source_page(source: dict, passages: list[dict], insights: list[dict]) -> str
         f"""
       <section class="page-hero source-page-hero">
         <div class="source-hero-main">
-          <p class="eyebrow">Source record</p>
+          <p class="eyebrow">{escape(hero_eyebrow)}</p>
           {source_identity_markup(handle, avatar_html, source.get('published_date') or source.get('published_at') or 'No date', source.get('platform') or source.get('source_type') or 'tiktok', variant="source")}
           <p class="lead">{escape(summary_short)}</p>
           {f'<p class="source-detail-lead">{escape(summary_long)}</p>' if show_summary_long else ''}
           <div class="hero-actions">
-            <a class="ay-button" href="{escape(workspace_href(source=source.get('item_id') or source_id))}">Open in Search Workspace</a>
-            <a class="ay-button-secondary" href="{escape(source.get('source_url') or '#')}" target="_blank" rel="noreferrer">Open original</a>
-            <a class="ay-button-secondary" href="{escape(workspace_href(creator=clean_handle(handle)))}">Creator</a>
+            {hero_actions}
           </div>
         </div>
         <div class="source-hero-tools">
@@ -1418,11 +1490,7 @@ def source_page(source: dict, passages: list[dict], insights: list[dict]) -> str
         {section_title("Source Text", "Reviewed polished transcript/source text normalized for reading and search. Raw captions and private QA stay local.")}
         <div class="source-excerpt-text source-full-text">{paragraphize_full(public_text)}</div>
       </section>
-      <section class="content-section">
-        {section_title("Source Intelligence", "Reviewed source-backed claims promoted from this evidence.")}
-        {source_intelligence_body}
-      </section>
-      {source_answer_section(source, public_insights, passages)}
+      {intelligence_section}
       {f'''
       <section class="content-section">
         {section_title("Supporting Passages", "Distinct public passages that add context beyond the Source Text.")}
@@ -1431,7 +1499,7 @@ def source_page(source: dict, passages: list[dict], insights: list[dict]) -> str
       ''' if passage_html else ''}
       <script type="application/ld+json">{json.dumps(schema, ensure_ascii=False)}</script>
         """,
-        robots="index,follow" if has_public_evidence else "noindex,follow",
+        robots="index,follow" if indexable_source else "noindex,follow",
         current="sources",
         description=source_seo_description(source, handle),
         canonical_path=f"sources/{slug(source.get('item_id') or source_id)}.html",
@@ -1446,6 +1514,144 @@ def signal_list(items: list[str], empty: str) -> str:
     if not items:
         return f'<p class="meta">{escape(empty)}</p>'
     return "<ul>" + "".join(f"<li>{escape(item)}</li>" for item in items) + "</ul>"
+
+
+TOPIC_MONEY_BRIDGE_COPY: dict[str, dict[str, str]] = {
+    "ai-citation-tracking": {
+        "title": "Turn citation tracking into a source footprint audit",
+        "body": "This topic shows why AI visibility work cannot stop at rankings. Use it to inspect which third-party pages, social surfaces, and evidence records can be found before a model recommends a brand.",
+        "primary_label": "Audit your source footprint",
+        "primary_href": "/ai-visibility-source-footprint/",
+        "secondary_label": "Start with the AI Visibility Audit",
+        "secondary_href": "/ai-visibility-audit/",
+    },
+    "ai-citations": {
+        "title": "Map citations before chasing rankings",
+        "body": "AI citation evidence is useful only when it becomes an operational map: where the brand appears, which sources support claims, and which gaps need trustworthy coverage.",
+        "primary_label": "See the Source Footprint method",
+        "primary_href": "/ai-visibility-source-footprint/",
+        "secondary_label": "View diagnostic options",
+        "secondary_href": "/pricing/",
+    },
+    "ai-search-reporting": {
+        "title": "Reporting needs source-level visibility, not vanity charts",
+        "body": "The practical next layer is a report that separates website performance, off-site source coverage, and citation-risk gaps so the business knows what to fix first.",
+        "primary_label": "Check source footprint gaps",
+        "primary_href": "/ai-visibility-source-footprint/",
+        "secondary_label": "Request an AI Visibility Audit",
+        "secondary_href": "/ai-visibility-audit/",
+    },
+    "brand-proof-pages": {
+        "title": "Brand proof pages need external corroboration",
+        "body": "A proof page is stronger when the surrounding source footprint supports the same claims across credible third-party and owned surfaces.",
+        "primary_label": "Inspect source footprint gaps",
+        "primary_href": "/ai-visibility-source-footprint/",
+        "secondary_label": "See service architecture",
+        "secondary_href": "/services/",
+    },
+    "youtube-ai-citations": {
+        "title": "Video citations belong in the public source footprint",
+        "body": "YouTube and short-form video can become part of what AI systems inspect. The next step is deciding which video evidence is trustworthy enough to support a brand story.",
+        "primary_label": "Audit off-site source coverage",
+        "primary_href": "/ai-visibility-source-footprint/",
+        "secondary_label": "Run a diagnostic audit",
+        "secondary_href": "/ai-visibility-diagnostic-audit/",
+    },
+}
+
+
+def topic_answer_capsule_section(traffic: dict, label: str) -> str:
+    capsule = traffic.get("answer_capsule") or {}
+    heading = capsule.get("heading") or ""
+    body = capsule.get("body") or ""
+    if not heading and not body:
+        return ""
+    return f"""
+      <section class="content-section topic-answer-capsule" aria-labelledby="topic-answer-capsule-title">
+        <p class="eyebrow">Answer first</p>
+        <h2 id="topic-answer-capsule-title">{escape(heading or label)}</h2>
+        <p class="section-helper">{escape(body)}</p>
+      </section>
+    """
+
+
+def topic_source_proof_section(traffic: dict, sources_by_id: dict[str, dict]) -> str:
+    proof_ids = [str(value) for value in traffic.get("proof_source_ids") or [] if value]
+    cards = []
+    for source_id in proof_ids[:4]:
+        source = sources_by_id.get(source_id) or {}
+        if not source:
+            continue
+        cards.append(
+            card(
+                source_display_title(source),
+                source.get("excerpt") or source.get("source_summary_short") or "",
+                source_href(source),
+                f"{display_handle(source.get('creator_handle'))} · {source.get('published_date') or source.get('published_at') or ''}",
+            )
+        )
+    if not cards:
+        return ""
+    return f"""
+      <section class="content-section topic-source-proof" aria-labelledby="topic-source-proof-title">
+        <p class="eyebrow">Source proof</p>
+        <h2 id="topic-source-proof-title">Evidence records behind this answer</h2>
+        <p class="section-helper">Public Base2026 source records connected to this topic. Each card keeps attribution and the original-source path visible.</p>
+        <div class="card-grid topic-source-proof__grid">{''.join(cards)}</div>
+      </section>
+    """
+
+
+def topic_faq_section(traffic: dict, topic_id: str) -> tuple[str, str]:
+    rows = [row for row in traffic.get("faq") or [] if row.get("question") and row.get("answer")]
+    if not rows:
+        return "", ""
+    faq_items = "".join(
+        f"""
+        <article class="topic-faq__item">
+          <h3>{escape(row.get('question') or '')}</h3>
+          <p>{escape(row.get('answer') or '')}</p>
+        </article>
+        """
+        for row in rows[:6]
+    )
+    html = f"""
+      <section class="content-section topic-faq" aria-labelledby="topic-faq-title-{escape(slug(topic_id))}">
+        <p class="eyebrow">FAQ</p>
+        <h2 id="topic-faq-title-{escape(slug(topic_id))}">Questions buyers and operators ask</h2>
+        <div class="topic-faq__grid">{faq_items}</div>
+      </section>
+    """
+    schema = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": row.get("question") or "",
+                "acceptedAnswer": {"@type": "Answer", "text": row.get("answer") or ""},
+            }
+            for row in rows[:6]
+        ],
+    }
+    return html, f'<script type="application/ld+json">{json.dumps(schema, ensure_ascii=False)}</script>'
+
+
+def topic_money_bridge_section(topic_id: str, traffic: dict | None = None) -> str:
+    bridge = (traffic or {}).get("cta") or TOPIC_MONEY_BRIDGE_COPY.get(topic_id)
+    if not bridge:
+        return ""
+    return f"""
+      <section class="content-section topic-traffic-cta" aria-labelledby="source-footprint-bridge-{escape(slug(topic_id))}">
+        <p class="eyebrow">Apply this evidence</p>
+        <h2 id="source-footprint-bridge-{escape(slug(topic_id))}">{escape(bridge['title'])}</h2>
+        <p class="section-helper">{escape(bridge['body'])}</p>
+        <div class="hero-actions">
+          <a class="ay-button" href="{escape(bridge['primary_href'])}">{escape(bridge['primary_label'])}</a>
+          <a class="ay-button-secondary" href="{escape(bridge['secondary_href'])}">{escape(bridge['secondary_label'])}</a>
+        </div>
+      </section>
+    """
 
 
 def topic_signal_brief_section(brief: dict | None, topic_id: str, label: str) -> str:
@@ -1555,10 +1761,18 @@ def topic_signal_brief_section(brief: dict | None, topic_id: str, label: str) ->
     """
 
 
-def topic_page(topic: dict, sources: list[dict], passages: list[dict], insights: list[dict], signal_briefs: dict[str, dict] | None = None) -> str:
+def topic_page(
+    topic: dict,
+    sources: list[dict],
+    passages: list[dict],
+    insights: list[dict],
+    signal_briefs: dict[str, dict] | None = None,
+    topic_traffic_pages: dict[str, dict] | None = None,
+) -> str:
     topic_id = topic.get("topic_id") or slug(topic.get("topic") or "uncategorized")
     label = topic.get("topic") or topic_id.replace("-", " ").title()
     signal_brief = (signal_briefs or {}).get(topic_id)
+    traffic = (topic_traffic_pages or {}).get(topic_id) or {}
     public_insights = [
         row for row in insights if row.get("public") and (row.get("topic_id") or "") == topic_id
     ]
@@ -1568,7 +1782,11 @@ def topic_page(topic: dict, sources: list[dict], passages: list[dict], insights:
         related_sources = [
             row for row in sources if topic_id in (row.get("topics") or [])
         ][:12]
-    sources_by_id = {row.get("source_id") or "": row for row in sources}
+    sources_by_id = {}
+    for row in sources:
+        for key in (row.get("source_id"), row.get("item_id"), slug(row.get("item_id") or "")):
+            if key:
+                sources_by_id[str(key)] = row
     related_passages = [
         row for row in passages if topic_id in (row.get("topics") or [])
     ][:10]
@@ -1615,11 +1833,12 @@ def topic_page(topic: dict, sources: list[dict], passages: list[dict], insights:
             """
         )
     passage_html = "".join(passage_cards)
+    faq_html, faq_schema = topic_faq_section(traffic, topic_id)
     schema = {
         "@context": "https://schema.org",
         "@type": "CollectionPage",
-        "name": f"{label} creator evidence",
-        "description": compact(topic.get("definition") or "", 260),
+        "name": traffic.get("seo_title") or f"{label} creator evidence",
+        "description": compact(traffic.get("meta_description") or topic.get("definition") or "", 260),
         "about": label,
     }
     if signal_brief:
@@ -1639,8 +1858,10 @@ def topic_page(topic: dict, sources: list[dict], passages: list[dict], insights:
                 )
             ],
         }
+    seo_title = traffic.get("seo_title") or f"{label} creator evidence | Base2026"
+    seo_description = traffic.get("meta_description") or topic.get("definition") or f"Source-backed creator evidence and viewpoints related to {label}."
     return page_shell(
-        f"{label} creator evidence | Base2026",
+        seo_title,
         f"""
       <section class="page-hero topic-page-hero">
         <div class="topic-page-hero__main">
@@ -1662,8 +1883,12 @@ def topic_page(topic: dict, sources: list[dict], passages: list[dict], insights:
           </div>
         </aside>
       </section>
+      {topic_answer_capsule_section(traffic, label)}
       {topic_signal_brief_section(signal_brief, topic_id, label)}
       {topic_answer_section(topic, public_insights, related_sources, creator_rows, signal_brief)}
+      {topic_source_proof_section(traffic, sources_by_id)}
+      {faq_html}
+      {topic_money_bridge_section(topic_id, traffic)}
       <section class="content-section">
         <h2>Top Creators</h2>
         <div class="topic-chip-list">{creator_html or '<p class="meta">No creator distribution available yet.</p>'}</div>
@@ -1683,10 +1908,11 @@ def topic_page(topic: dict, sources: list[dict], passages: list[dict], insights:
         <div class="passage-stack">{passage_html or '<p class="meta">No related passages available.</p>'}</div>
       </section>
       <script type="application/ld+json">{json.dumps(schema, ensure_ascii=False)}</script>
+      {faq_schema}
         """,
         robots="index,follow" if is_indexable_topic(topic) else "noindex,follow",
         current="topics",
-        description=topic.get("definition") or f"Source-backed creator evidence and viewpoints related to {label}.",
+        description=seo_description,
         canonical_path=f"topics/{slug(topic_id)}.html",
     )
 
@@ -1900,15 +2126,145 @@ def analytics_page(analytics: dict) -> str:
     )
 
 
+def traffic_resources_page(topic_traffic_pages: dict, topics: list[dict]) -> str:
+    """Hub page for demand-led Base2026 traffic resources."""
+    topics_by_id = {
+        (row.get("topic_id") or slug(row.get("topic") or "")): row
+        for row in topics
+        if row.get("public")
+    }
+    clusters = [
+        ("AI citations and reporting", "Prompt testing, AI citation tracking, GSC limits and source-footprint reporting.", ["ai-citation-tracking", "ai-citations", "ai-search-reporting", "chatgpt-query-research", "google-search-console-ai-visibility-reporting"]),
+        ("Bing and Copilot citation readiness", "Bing-specific grounding, citation mechanics, crawl constraints, IndexNow-safe discovery and revenue visibility.", ["bing-ai-citations", "ai-visibility-citation-mechanics", "ai-search-crawl-constraints", "ai-search-google-index-overlap", "technical-seo-indexing", "technical-seo-site-crawling", "ai-search-revenue-visibility"]),
+        ("AI source trust and entity footprint", "Trusted sources, brand/entity mentions, source citation SEO and source-footprint strategy for answer engines.", ["ai-search-source-trust", "ai-search-strategy-trusted-sources", "ai-visibility-source-strategy", "ai-visibility-tracking-brand-mentions", "brand-mentions-ai-visibility", "entity-mentions-ai-visibility", "entity-seo-branded-search", "source-citation-seo", "citations-and-ai-visibility"]),
+        ("Local visibility and business proof", "Google Business Profile, local SEO, reviews and the proof surfaces local businesses need before AI systems can recommend them.", ["local-seo-google-business-profile", "google-business-profile", "local-seo", "review-strategy", "brand-proof-pages", "local-service-seo", "local-seo-gbp", "reviews-local-seo", "owned-branded-review-pages"]),
+        ("Answer-ready commercial and service pages", "Commercial, transactional and local-service pages that answer buyer prompts and route readers toward a real next step.", ["ai-visibility-commercial-pages", "on-page-seo-for-ai-search", "ai-visibility-exact-answer-pages", "faq-pages-ai-search", "service-page-seo", "local-seo-service-area-pages", "local-seo-landing-pages", "bottom-of-funnel-seo-landing-pages", "transactional-seo-landing-page-structure", "landing-page-conversion"]),
+        ("Content quality and answer-ready pages", "Answer-first content, freshness, AI-assisted content quality, disclosure and knowledge-base structure.", ["answer-first-content", "schema-ai-citations", "content-freshness", "content-strategy", "ai-content-quality", "ai-content-disclosure", "ai-knowledge-base"]),
+        ("Technical SEO and crawl discovery", "Internal linking, on-page SEO, low-hanging Search Console opportunities, WordPress SEO plugin limits and indexation hygiene.", ["internal-linking", "on-page-seo", "search-console-low-hanging-fruit", "wordpress-seo-plugin-capabilities"]),
+        ("Authority, lists and third-party source footprint", "Backlink quality, listicles, third-party recommendation surfaces and the source evidence that supports AI answers.", ["backlink-quality", "listicles-ai-recommendations", "self-promotional-listicles", "youtube-ai-citations", "core-update-analysis", "ecommerce-seo-collection-pages"]),
+        ("AI crawler policy and risk controls", "Scaled-content risk, llms.txt limitations and crawler-policy contradictions that can weaken AI visibility infrastructure.", ["risk-avoid-scaled-content-abuse", "llms-txt-risk", "llms-txt-contradiction-ai-crawlers"]),
+    ]
+
+    def resource_card(topic_id: str) -> str:
+        cfg = topic_traffic_pages.get(topic_id, {})
+        topic = topics_by_id.get(topic_id, {})
+        title = cfg.get("target_query") or topic.get("topic") or topic_id.replace("-", " ").title()
+        desc = cfg.get("meta_description") or topic.get("definition") or "Base2026 source-backed traffic resource."
+        proof_count = len(cfg.get("proof_source_ids") or [])
+        faq_count = len(cfg.get("faq") or [])
+        proof_label = f"{proof_count} source proofs" if proof_count != 1 else "1 source proof"
+        return f"""
+          <article class=\"traffic-resource-card\">
+            <div>
+              <p class=\"traffic-resource-card__meta\">{escape(proof_label)} · {faq_count} FAQs · indexable topic</p>
+              <h3><a href=\"topics/{escape(slug(topic_id))}.html\">{escape(title)}</a></h3>
+              <p>{escape(compact(desc, 220))}</p>
+            </div>
+            <a class=\"button-link\" href=\"topics/{escape(slug(topic_id))}.html\">Open resource</a>
+          </article>
+        """
+
+    cluster_sections = []
+    used: set[str] = set()
+    for cluster_title, cluster_desc, ids in clusters:
+        cards = []
+        for topic_id in ids:
+            if topic_id in topic_traffic_pages:
+                used.add(topic_id)
+                cards.append(resource_card(topic_id))
+        if cards:
+            cluster_sections.append(
+                f"""
+      <section class=\"content-section traffic-resource-cluster\" id=\"{escape(slug(cluster_title))}\">
+        <div class=\"section-title-row\">
+          <div>
+            <p class=\"eyebrow\">Resource cluster</p>
+            <h2>{escape(cluster_title)}</h2>
+            <p>{escape(cluster_desc)}</p>
+          </div>
+        </div>
+        <div class=\"traffic-resource-grid\">{''.join(cards)}</div>
+      </section>
+                """
+            )
+    remaining = [topic_id for topic_id in sorted(topic_traffic_pages) if topic_id not in used]
+    if remaining:
+        cluster_sections.append(
+            f"""
+      <section class=\"content-section traffic-resource-cluster\" id=\"more-resources\">
+        <div class=\"section-title-row\">
+          <div>
+            <p class=\"eyebrow\">More resources</p>
+            <h2>Additional demand-led pages</h2>
+            <p>Other source-backed Base2026 resources in the traffic layer.</p>
+          </div>
+        </div>
+        <div class=\"traffic-resource-grid\">{''.join(resource_card(topic_id) for topic_id in remaining)}</div>
+      </section>
+            """
+        )
+
+    body = f"""
+      <section class=\"b26-about-hero ay-about-contact-hero\" aria-label=\"Alex Yarosh source library hero\">
+        <div class=\"b26-about-hero-copy ay-about-contact-hero-copy\">
+          <div class=\"b26-founder-quote ay-founder-quote\" role=\"presentation\"><span>AI VISIBILITY</span><span>NEEDS PROOF.</span><span>MAKE EVERY PAGE - <br class=\"b26-founder-mobile-break\">CITABLE.</span></div>
+          <p class=\"b26-founder-support ay-founder-support\">Source-backed library for the visibility pages.</p>
+        </div>
+        <figure class=\"b26-hero-figure ay-hero-figure\">
+          <img class=\"b26-hero-person ay-hero-person\" src=\"./static/assets/alex-yarosh-cutout-v115.png\" alt=\"Alex Yarosh\" loading=\"eager\" decoding=\"async\" width=\"1400\" height=\"1264\" />
+        </figure>
+      </section>
+      <section class=\"content-section traffic-resource-intro\">
+        <p class=\"eyebrow\">AI Visibility Library</p>
+        <h1>Source-backed resources that support the AI Visibility Pages.</h1>
+        <p class=\"lead\">This library is the deeper evidence layer behind the main AI Visibility Pages hub. It keeps crawlable topic clusters, proof references, FAQs and internal links organized without competing with the primary visitor path.</p>
+        <div class=\"hero-actions\">
+          <a class=\"ay-button\" href=\"/knowledge/ai-visibility-pages/\">Open AI Visibility Pages</a>
+          <a class=\"ay-button-secondary\" href=\"/ai-visibility-audit/\">Get a free AI Visibility Snapshot</a>
+        </div>
+      </section>
+      <section class=\"content-section traffic-resource-summary\">
+        <div class=\"analytics-stat-grid\">
+          {analytics_stat("library resources", len(topic_traffic_pages))}
+          {analytics_stat("topic clusters", len(cluster_sections))}
+          {analytics_stat("public evidence links", sum(len(v.get('proof_source_ids') or []) for v in topic_traffic_pages.values()))}
+          {analytics_stat("FAQ answers", sum(len(v.get('faq') or []) for v in topic_traffic_pages.values()))}
+        </div>
+      </section>
+      {''.join(cluster_sections)}
+      <section class=\"content-section traffic-resource-cta\">
+        <p class=\"eyebrow\">From library to money pages</p>
+        <h2>Use the library as support, not the primary sales path.</h2>
+        <p>The main route for visitors is the AI Visibility Pages hub. This library stays indexable and useful for crawlers, researchers and internal linking, then routes qualified readers into the diagnostic/audit path.</p>
+        <div class=\"hero-actions\">
+          <a class=\"ay-button\" href=\"/knowledge/ai-visibility-pages/\">Go to AI Visibility Pages</a>
+          <a class=\"ay-button-secondary\" href=\"/ai-visibility-diagnostic-audit/\">Run diagnostic audit</a>
+        </div>
+      </section>
+    """
+    return page_shell(
+        "AI Visibility Library | Base2026",
+        body,
+        relative_root=".",
+        current="",
+        description="A source-backed Base2026 library connecting AI visibility, AI citations, local SEO, content quality, technical SEO and crawler-policy resources behind the main AI Visibility Pages hub.",
+        canonical_path="ai-visibility-resources.html",
+        main_class="app-shell content-page doc-page ai-visibility-page",
+    )
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Generate public creator/source pages from public JSONL.")
     parser.add_argument("--data", type=Path, default=Path("public-data/tiktok"))
     parser.add_argument("--out", type=Path, required=True)
+    parser.add_argument("--topic-traffic-config", type=Path, default=Path("data/base2026_topic_traffic_pages.json"))
     args = parser.parse_args()
 
     data = args.data
     out = args.out
+    topic_traffic_pages = read_json(args.topic_traffic_config)
     sources = read_jsonl(data / "source_records.jsonl")
+    normal_sources = [source for source in sources if source_is_normal_public_card(source)]
     passages = read_jsonl(data / "passages.jsonl")
     insights = read_jsonl(data / "insight_cards.jsonl")
     topics = read_jsonl(data / "topics.jsonl")
@@ -1940,7 +2296,7 @@ def main() -> int:
         insights_by_source[insight.get("source_id") or ""].append(insight)
 
     sources_by_handle: dict[str, list[dict]] = defaultdict(list)
-    for source in sources:
+    for source in normal_sources:
         sources_by_handle[source.get("creator_handle") or source.get("handle") or "Unknown"].append(source)
 
     creators_by_handle = {
@@ -1960,6 +2316,7 @@ def main() -> int:
         creator_cards.append(creator_index_card(handle, creator, len(source_rows), public_insight_count))
 
     source_cards = []
+    indexable_source_count = 0
     for source in sources:
         source_key = source.get("source_id") or ""
         source_passages = passages_by_source.get(source_key, [])
@@ -1967,7 +2324,8 @@ def main() -> int:
         page_name = f"{slug(source.get('item_id') or source_key)}.html"
         html = source_page(source, source_passages, source_insights)
         write_text(out / "sources" / page_name, html)
-        if source_has_public_evidence(source, source_passages, source_insights):
+        if is_indexable_source(source, source_passages, source_insights):
+            indexable_source_count += 1
             source_cards.append(
                 card(
                     source_display_title(source),
@@ -1985,7 +2343,7 @@ def main() -> int:
     indexable_topics = [topic for topic in public_topics if is_indexable_topic(topic)]
     for topic in public_topics:
         topic_id = topic.get("topic_id") or slug(topic.get("topic") or "uncategorized")
-        write_text(out / "topics" / f"{slug(topic_id)}.html", topic_page(topic, sources, passages, insights, signal_briefs))
+        write_text(out / "topics" / f"{slug(topic_id)}.html", topic_page(topic, normal_sources, passages, insights, signal_briefs, topic_traffic_pages))
         write_text(out / "compare" / f"{slug(topic_id)}.html", compare_page(topic, insights))
     for topic in indexable_topics:
         topic_id = topic.get("topic_id") or slug(topic.get("topic") or "uncategorized")
@@ -2025,12 +2383,16 @@ def main() -> int:
         ),
     )
     write_text(out / "analytics.html", analytics_page(analytics))
+    write_text(out / "ai-visibility-resources.html", traffic_resources_page(topic_traffic_pages, topics))
 
     print(
         json.dumps(
             {
                 "creators": len(sources_by_handle),
                 "sources": len(sources),
+                "normal_sources": len(normal_sources),
+                "archive_sources": len(sources) - len(normal_sources),
+                "indexable_sources": indexable_source_count,
                 "topics": len(public_topics),
                 "indexable_topics": len(indexable_topics),
                 "compare_pages": len(public_topics),

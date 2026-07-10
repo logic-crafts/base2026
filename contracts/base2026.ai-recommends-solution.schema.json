@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aggressorbulkit.online/knowledge/contracts/base2026.ai-recommends-solution.schema.json",
+  "title": "Base2026 AI Recommends Solutions payload",
+  "type": "object",
+  "required": ["contract_version", "updated_at", "solutions"],
+  "additionalProperties": false,
+  "properties": {
+    "contract_version": {"const": "base2026-ai-recommends-solution-v1"},
+    "updated_at": {"type": "string", "format": "date"},
+    "solutions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/solution"}
+    }
+  },
+  "$defs": {
+    "nonEmptyText": {"type": "string", "minLength": 1},
+    "solution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "slug", "title", "meta_description", "updated_at", "audience", "problem",
+        "primary_query", "recommendation", "decision_scope", "why_now", "evidence",
+        "authoritative_sources", "playbook", "checklist", "decision_table", "risks",
+        "kpis", "cadence", "cta", "related_solution_slugs", "editorial"
+      ],
+      "properties": {
+        "slug": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+        "title": {"$ref": "#/$defs/nonEmptyText"},
+        "meta_description": {"type": "string", "minLength": 1, "maxLength": 180},
+        "updated_at": {"type": "string", "format": "date"},
+        "audience": {"$ref": "#/$defs/nonEmptyText"},
+        "problem": {"$ref": "#/$defs/nonEmptyText"},
+        "primary_query": {"$ref": "#/$defs/nonEmptyText"},
+        "recommendation": {"$ref": "#/$defs/nonEmptyText"},
+        "decision_scope": {"$ref": "#/$defs/nonEmptyText"},
+        "why_now": {"$ref": "#/$defs/nonEmptyText"},
+        "evidence": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["source_id", "claim_id", "why_relevant"],
+            "properties": {
+              "source_id": {"$ref": "#/$defs/nonEmptyText"},
+              "claim_id": {"$ref": "#/$defs/nonEmptyText"},
+              "why_relevant": {"$ref": "#/$defs/nonEmptyText"}
+            }
+          }
+        },
+        "authoritative_sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["title", "url", "scope"],
+            "properties": {
+              "title": {"$ref": "#/$defs/nonEmptyText"},
+              "url": {"type": "string", "format": "uri", "pattern": "^https://"},
+              "scope": {"$ref": "#/$defs/nonEmptyText"}
+            }
+          }
+        },
+        "playbook": {
+          "type": "array",
+          "minItems": 3,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["title", "body"],
+            "properties": {
+              "title": {"$ref": "#/$defs/nonEmptyText"},
+              "body": {"$ref": "#/$defs/nonEmptyText"}
+            }
+          }
+        },
+        "checklist": {"type": "array", "minItems": 5, "items": {"$ref": "#/$defs/nonEmptyText"}},
+        "decision_table": {
+          "type": "array",
+          "minItems": 3,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["signal", "decision", "measure"],
+            "properties": {
+              "signal": {"$ref": "#/$defs/nonEmptyText"},
+              "decision": {"$ref": "#/$defs/nonEmptyText"},
+              "measure": {"$ref": "#/$defs/nonEmptyText"}
+            }
+          }
+        },
+        "risks": {"type": "array", "minItems": 2, "items": {"$ref": "#/$defs/nonEmptyText"}},
+        "kpis": {"type": "array", "minItems": 3, "items": {"$ref": "#/$defs/nonEmptyText"}},
+        "cadence": {"$ref": "#/$defs/nonEmptyText"},
+        "cta": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["label", "href"],
+          "properties": {
+            "label": {"$ref": "#/$defs/nonEmptyText"},
+            "href": {"type": "string", "pattern": "^(?:/knowledge/|#)"}
+          }
+        },
+        "related_solution_slugs": {
+          "type": "array",
+          "items": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"}
+        },
+        "editorial": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "reviewer", "reviewed_at", "contract_version"],
+          "properties": {
+            "status": {"const": "approved_local"},
+            "reviewer": {"$ref": "#/$defs/nonEmptyText"},
+            "reviewed_at": {"type": "string", "format": "date-time"},
+            "contract_version": {"const": "base2026-ai-recommends-solution-v1"}
+          }
+        }
+      }
+    }
+  }
+}

@@ -74,6 +74,11 @@ def main() -> int:
     parser.add_argument("--min-preservation", type=float, default=0.72)
     parser.add_argument("--batch-dir", type=Path, default=None)
     parser.add_argument("--json", action="store_true")
+    parser.add_argument(
+        "--allow-needs-review",
+        action="store_true",
+        help="Exit 0 when polished outputs exist but QA intentionally gates rows as needs_review.",
+    )
     args = parser.parse_args()
 
     batch_ids = read_batch_video_ids(args.batch_dir)
@@ -129,7 +134,11 @@ def main() -> int:
     else:
         for key, value in data.items():
             print(f"{key}={value}")
-    return 1 if needs_review else 0
+    if missing:
+        return 2
+    if needs_review and not args.allow_needs_review:
+        return 1
+    return 0
 
 
 if __name__ == "__main__":
