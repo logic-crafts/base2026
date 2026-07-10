@@ -135,10 +135,35 @@ Candidates:
   - Transcript excerpt has UGC pipeline discussion.
   - Status: `transcript_check`.
 
+## Category 5: WordPress / CMS implementation insights
+
+Source type: WordPress/CMS creator Q&A, tutorials, plugin/theme/admin workflows, and source-backed implementation advice. This is a child vertical under the broader web-development expansion, not a replacement for SEO/GEO.
+
+Audit reference: `BASE2026_WORDPRESS_VERTICAL_AUDIT_2026_07_04.md`.
+
+Initial creator mapping:
+
+- `@iamdandavies` — `wordpress_anchor`; strong repeated WordPress Q&A/tutorial signal, including static homepage setup, plugin loyalty, plugin risk, contact forms, and WordPress-vs-framework discussions.
+- `@webhivedigital` — `seo_wordpress_hybrid`; keep SEO/search material in SEO lanes, but route plugin/CMS/WordPress implementation material into this vertical.
+- `@tjrobertson52` — `webdev_cms_platform_risk`; useful CMS/WordPress/AI workflow topics, but not the first WordPress anchor.
+- `@joshuamaraney` — `ai_web_search_hybrid`; some WordPress term matches, mostly AI/search/web governance material.
+
+Canonical vertical aliases to start with:
+
+- Exact: `wordpress`, `woocommerce`, `elementor`, `gutenberg`, `wp`.
+- Broad/supporting: `plugin`, `theme`, `cms`, `homepage`, `contact form`, `builder`, `admin`, `speed`, `security`.
+
+Private-first gate:
+
+- Collect into review/report queue before public promotion.
+- Keep `platform=tiktok` separate from `vertical=wordpress_cms`.
+- Do not publish bulk WordPress pages or singleton thin topic pages without the existing exact-evidence/indexation release gate.
+
 ## Next execution queue
 
 1. Verify source URLs and platform type for P1 marketer batch.
 2. For TikTok candidates, check whether TikTok exposes useful captions/transcripts or whether audio transcription is needed.
 3. Move only text-rich candidates into private intake/dry-run.
 4. Keep OSS repo categories separate from creator/video categories.
-5. Do not publish to public Base2026 until existing source review and release gates pass.
+5. Build the private WordPress/CMS implementation insight queue from `@iamdandavies` and `@webhivedigital` before public promotion.
+6. Do not publish to public Base2026 until existing source review and release gates pass.

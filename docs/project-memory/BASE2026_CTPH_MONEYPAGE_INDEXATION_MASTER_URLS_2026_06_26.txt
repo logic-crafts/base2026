@@ -1,0 +1,56 @@
+# Base2026 CTPH/MoneyPage moderately-aggressive master IndexNow set — 2026-06-26
+# Rule: submit only live indexable URLs; no city/niche drafts; no noindex topic pages.
+
+# Batch 01 — original controlled set
+https://aggressorbulkit.online/ai-visibility-audit/
+https://aggressorbulkit.online/ai-visibility-diagnostic-audit/
+https://aggressorbulkit.online/technical-seo-geo-foundation/
+https://aggressorbulkit.online/answer-ready-service-pages/
+https://aggressorbulkit.online/entity-trust-source-intelligence/
+https://aggressorbulkit.online/services/
+https://aggressorbulkit.online/pricing/
+https://aggressorbulkit.online/knowledge/
+https://aggressorbulkit.online/knowledge/ai-visibility-pages/
+https://aggressorbulkit.online/knowledge/service-area-pages-and-ai-visibility-for-local-businesses/
+https://aggressorbulkit.online/knowledge/ai-ready-business-documentation-for-service-pages/
+https://aggressorbulkit.online/knowledge/review-sentiment-and-ai-visibility-for-local-businesses/
+https://aggressorbulkit.online/knowledge/measuring-ai-visibility-without-query-click-data/
+https://aggressorbulkit.online/knowledge/apply-research.html
+https://aggressorbulkit.online/knowledge/api.html
+https://aggressorbulkit.online/knowledge/methodology.html
+https://aggressorbulkit.online/knowledge/analytics.html
+https://aggressorbulkit.online/knowledge/topics/
+https://aggressorbulkit.online/knowledge/creators/
+https://aggressorbulkit.online/knowledge/source-policy.html
+https://aggressorbulkit.online/knowledge/topics/ai-citations.html
+https://aggressorbulkit.online/knowledge/topics/ai-citation-tracking.html
+https://aggressorbulkit.online/knowledge/topics/answer-first-content.html
+https://aggressorbulkit.online/knowledge/topics/brand-proof-pages.html
+https://aggressorbulkit.online/knowledge/topics/content-freshness.html
+https://aggressorbulkit.online/knowledge/topics/ai-knowledge-base.html
+https://aggressorbulkit.online/knowledge/topics/schema-ai-citations.html
+https://aggressorbulkit.online/knowledge/topics/search-console-low-hanging-fruit.html
+https://aggressorbulkit.online/knowledge/topics/internal-linking.html
+https://aggressorbulkit.online/knowledge/topics/risk-avoid-scaled-content-abuse.html
+https://aggressorbulkit.online/knowledge/topics/local-seo-google-business-profile.html
+https://aggressorbulkit.online/knowledge/topics/google-business-profile.html
+https://aggressorbulkit.online/knowledge/sources/tiktok-video-7512265578388737322.html
+https://aggressorbulkit.online/knowledge/sources/tiktok-video-7394990033972809002.html
+https://aggressorbulkit.online/knowledge/sources/tiktok-video-7649531548655521038.html
+https://aggressorbulkit.online/knowledge/sources/tiktok-video-7509080977575136534.html
+https://aggressorbulkit.online/knowledge/sources/tiktok-video-7390067814838619438.html
+https://aggressorbulkit.online/knowledge/sources/tiktok-video-7652384458804432136.html
+
+# Batch 02 — fresh reviewed source pages from 2026-06-24..26
+https://aggressorbulkit.online/knowledge/sources/tiktok-video-7655467342561938702.html
+https://aggressorbulkit.online/knowledge/sources/tiktok-video-7655569129801272594.html
+https://aggressorbulkit.online/knowledge/sources/tiktok-video-7655142750530194702.html
+https://aggressorbulkit.online/knowledge/sources/tiktok-video-7655332131513617686.html
+https://aggressorbulkit.online/knowledge/sources/tiktok-video-7655365071878524167.html
+https://aggressorbulkit.online/knowledge/sources/tiktok-video-7655405261770870038.html
+https://aggressorbulkit.online/knowledge/sources/tiktok-video-7654721318499142926.html
+https://aggressorbulkit.online/knowledge/sources/tiktok-video-7654866238983785735.html
+https://aggressorbulkit.online/knowledge/sources/tiktok-video-7654965000531971346.html
+https://aggressorbulkit.online/knowledge/sources/tiktok-video-7654976387362704647.html
+https://aggressorbulkit.online/knowledge/sources/tiktok-video-7655093009544989974.html
+https://aggressorbulkit.online/knowledge/sources/tiktok-video-7655095690288172302.html

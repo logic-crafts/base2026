@@ -1,5 +1,19 @@
 # Decisions
 
+## 2026-07-04 — Add WordPress/CMS as a private-first Base2026 vertical under web development
+
+Decision: Base2026 should treat WordPress/CMS implementation insights as a separate source/category vertical under the broader web-development expansion, rather than burying them inside generic SEO. Initial anchors are `@iamdandavies` as a WordPress-focused creator and `@webhivedigital` as an SEO/WordPress hybrid source. The vertical remains private-first until reviewed source text, exact-evidence insight cards, and the existing indexation/release gates approve any public promotion.
+
+Reason: A 2026-07-04 audit found that Base2026 already has a staged WebDevLog category, 61 exact WordPress public source-record matches, 13 WordPress/CMS topic rows, and multiple existing WordPress topics/cards. The current signal is real but scattered across SEO/CMS/web-dev topics, so a canonical vertical prevents routing loss while preserving the thin-content/publication safeguards.
+
+Execution note: the first cards-only batch was completed on 2026-07-04 with 12 exact-evidence WordPress/CMS `insight_card_candidate` rows promoted to `reviewed` in local SQLite, 0 promoted to `approved`, and no public pages/deploy/indexation/outreach. Batch #2 was completed the same day with 12 more exact-evidence rows (10 from `@webhivedigital`, 2 from `@iamdandavies`) promoted only to `reviewed`, bringing the two-batch private reviewed WordPress/CMS card set to 24 rows with 0 public/approved promotion from these batches.
+
+## 2026-06-26 — Hold templated city/niche AI visibility pages out of the index until evidence-approved
+
+Decision: Broad Base2026 AI visibility hub pages may remain indexable, but generated city/niche audit pages must render `noindex,nofollow` and stay out of the sitemap unless a page is explicitly evidence-approved with unique local source material.
+
+Reason: QA showed the current 16 California city/niche pages are mostly templated swaps after normalizing city and niche terms. Indexing them would create doorway/thin-content risk and conflict with the public research/proof layer.
+
 ## 2026-06-23 — Keep Base2026 discovery state out of crawlable query URLs
 
 Decision: canonical Base2026 search/discovery URLs should be `/knowledge/` plus client-side `#search?...` state, not `/knowledge/index.html?...` or other crawlable query variants. Generated static entity pages should link back to the search workspace through hash state, while sitemap generation remains limited to self-canonical, indexable HTML files.

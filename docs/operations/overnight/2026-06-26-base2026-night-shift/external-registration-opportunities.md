@@ -1,0 +1,30 @@
+# External registration / placement opportunities for Base2026
+
+Цель: white-hat placements, где Alex сам регистрируется или размещает проект. Я ничего не регистрировал, не покупал и не отправлял.
+
+| Priority | Площадка | Free/paid | Что размещать | Почему может дать targeted traffic | Требования / риск | Source |
+|---:|---|---|---|---|---|---|
+| 1 | Product Hunt | Free. PH пишет: “100% free to use.” | `Base2026 — searchable source-intelligence database for short-form SEO/GEO/AEO/AI visibility videos`. Demo URL, screenshots, 3 use cases: SEO consultants, local-business visibility, AI-search content planning. | Early adopters, AI/SaaS/SEO makers, feedback loop, indexed launch page. | Нужен личный maker profile; нельзя просить upvote напрямую; лучше запускать после polish demo. | https://www.producthunt.com/launch |
+| 2 | GitHub public repo/profile | Free public repo. | Public README: what Base2026 is, data boundary, sample public files, demo links, topics: `seo`, `ai-search`, `geo`, `aeo`, `local-seo`, `source-intelligence`, `video-seo`. | GitHub хорошо индексируется и часто используется AI/research workflows. Topics помогают discovery. | Не выкладывать private/raw transcripts. Только public-safe samples/manifest/methodology. | https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/classifying-your-repository-with-topics |
+| 3 | DEV.to technical article | Free posting via account. | “Building a source-intelligence database for AI search visibility”. Use canonical back to Base2026 if republishing. | Developer + technical SEO audience; indexed article; good for proof-of-work. | Не promo-post. Нужен technical lesson, schema/data boundary, examples. | https://dev.to/maddy/how-to-add-canonical-links-on-devto-4j3h |
+| 4 | Hacker News / Show HN | Free. | Only when demo is tryable: “Show HN: Base2026 — searchable source database for SEO/GEO/AEO short-form videos”. | Strong technical traffic and feedback if the product is usable without signup. | Show HN forbids blog posts, sign-up pages, lists, fundraisers; don’t ask friends to upvote. | https://news.ycombinator.com/showhn.html |
+| 5 | BetaList | Regular submission appears free; paid priority exists but price not visible in fetched FAQ. | Startup listing: public search database for AI-era local SEO/source intelligence. | Early adopters; FAQ says featured listing uses tracked Visit Site link and can send referral traffic. | Own domain required; clear value proposition/design/innovative idea; review queue can take weeks/months. | https://betalist.com/faq |
+| 6 | Launching Next | Free submission; $99 upgrade for 1-business-day consideration shown on submit page. | Startup/side-project listing with 5-10 tags: AI, SEO, local SEO, video marketing, search intelligence. | Founder/startup discovery traffic; low-risk free queue. | Paid upgrade optional; no purchase without approval. | https://www.launchingnext.com/submit/ |
+| 7 | There’s An AI For That | Paid: Website only $49 one-time review fee; “Everything you need” $347 one-time fee. | AI-search/source-intelligence tool listing, only if positioned as an AI-era research/search tool. | Claims 5M+ monthly visitors and AI-tool search intent. | Paid. Manual review. Use only if demo clearly fits “AI tool”, not generic directory. | https://theresanaiforthat.com/launch/ |
+| 8 | Futurepedia | Paid: Basic $247 sold out in fetched page; Verified $497 one-time fee. | AI tool/company listing after demo polish. | AI-tool directory audience; possible directory visibility. | Expensive; editorial approval; do after free channels. | https://www.futurepedia.io/submit-tool |
+| 9 | AlternativeTo | Submission flow is free; new accounts must wait a week. | Only if Base2026 becomes a real web app/search product, not a blog/directory. | Alternative pages can capture “alternative to [tool]” discovery. | High rejection risk: FAQ says they reject personal websites/blogs, directories of AI tools, review/comparison websites, low-effort/basic AI tools. | https://alternativeto.net/faq/ |
+| 10 | Google Business Profile | Free Business Profile, if Alex’s service model qualifies. | Alex Yarosh service-area profile, not Base2026 as an online-only project. | Strong local search/maps surface for service leads. | Use only if eligibility fits real business/service-area contact. No fake local listing. | https://business.google.com/us/business-profile/ |
+
+## Fast copy block for Alex
+**Base2026** is a public source-intelligence database for short-form expert video about SEO, GEO, AEO, AI visibility, local search, and service-page strategy. It turns scattered TikTok/short-form signals into searchable source records, reviewed evidence cards, topic pages, and practical workflows for marketers and local-service businesses.
+
+## Suggested first link after deploy
+
+Use `/knowledge/measuring-ai-visibility-without-query-click-data/` as the proof link for Product Hunt/DEV.to/HN/LinkedIn posts about AI visibility measurement. It is stronger than linking to a generic landing page because it cites Google docs and reviewed Base2026 source cards.
+
+## Update — extra share target after review-sentiment page deploy
+
+Use `/knowledge/review-sentiment-and-ai-visibility-for-local-businesses/` as the safer local-business trust/reputation share target. Best channels: LinkedIn/X thread, DEV.to article section, and future Product Hunt/README proof links. Do not submit it to directories as a standalone product page; it works as supporting evidence for Base2026 and Alex's audit offer.
+## Update — service-area page share target
+
+Use `/knowledge/service-area-pages-and-ai-visibility-for-local-businesses/` when the channel or conversation is about local SEO, service-area businesses, city pages, GBP service areas, or pSEO safety. It is the cleanest proof link for explaining why Base2026 does not index templated city pages without local evidence. Good fit: LinkedIn/X thread, DEV.to section, GitHub README methodology link, and future Product Hunt proof links. Not a standalone directory submission.

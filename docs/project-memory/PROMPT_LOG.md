@@ -1,5 +1,1593 @@
 # Prompt Log
 
+## 2026-07-08 — Public TikTok transcript polish batch 001 from 21:20 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260708-212035/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7660320575360978190.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7660320575360978190.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7660285582773456142.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7660285582773456142.json`.
+- Added punctuation, sentence boundaries, capitalization, and paragraph breaks only.
+- Preserved uncertain caption wording instead of correcting from context.
+- Marked `7660320575360978190` and `7660285582773456142` as `needs_review`.
+
+Verification:
+
+- `7660320575360978190`: raw word count 763; polished word count 760; paragraph count 14; `meaning_added=false`.
+- `7660285582773456142`: raw word count 80; polished word count 80; paragraph count 3; `meaning_added=false`.
+- JSON validation passed for both QA files.
+- Reviewer pass found no added meaning and no public/private boundary issue in the written outputs.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, durable decision, or status-board phase transition was run.
+
+## 2026-07-08 — Public TikTok transcript polish batch 001 from 19:19 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260708-191909/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7660299988165070098.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7660299988165070098.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7660280059416087815.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7660280059416087815.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7660277647775124769.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7660277647775124769.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7660276976137080078.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7660276976137080078.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7660270853615045901.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7660270853615045901.json`.
+- Added punctuation, sentence boundaries, capitalization, and paragraph breaks only.
+- Preserved uncertain caption wording instead of correcting from context.
+- Marked `7660280059416087815`, `7660277647775124769`, and `7660276976137080078` as `pass`.
+- Marked `7660299988165070098` and `7660270853615045901` as `needs_review`.
+
+Verification:
+
+- `7660299988165070098`: raw word count 92; polished word count 92; paragraph count 5; `meaning_added=false`.
+- `7660280059416087815`: raw word count 180; polished word count 180; paragraph count 6; `meaning_added=false`.
+- `7660277647775124769`: raw word count 96; polished word count 94; paragraph count 4; `meaning_added=false`.
+- `7660276976137080078`: raw word count 74; polished word count 74; paragraph count 5; `meaning_added=false`.
+- `7660270853615045901`: raw word count 170; polished word count 169; paragraph count 7; `meaning_added=false`.
+- JSON validation passed for all five QA files.
+- Reviewer pass found no added meaning and no public/private boundary issue in the written outputs.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, durable decision, or status-board phase transition was run.
+
+## 2026-07-08 — Public TikTok transcript polish batch 001 from 11:14 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260708-111427/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7660174845128330514.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7660174845128330514.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7660173788058848534.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7660173788058848534.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7660173392812739861.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7660173392812739861.json`.
+- Added punctuation, sentence boundaries, capitalization, and paragraph breaks only.
+- Preserved uncertain caption wording instead of correcting from context.
+- Marked `7660173788058848534` as `pass`.
+- Marked `7660174845128330514` and `7660173392812739861` as `needs_review`.
+
+Verification:
+
+- `7660174845128330514`: raw word count 172; polished word count 172; paragraph count 5; `meaning_added=false`.
+- `7660173788058848534`: raw word count 134; polished word count 134; paragraph count 6; `meaning_added=false`.
+- `7660173392812739861`: raw word count 143; polished word count 143; paragraph count 5; `meaning_added=false`.
+- JSON validation passed for all three QA files.
+- Reviewer pass found no added meaning and no public/private boundary issue in the written outputs.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, durable decision, or status-board phase transition was run.
+
+## 2026-07-08 — Public TikTok transcript polish batch 001 from 09:10 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260708-091012/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7660113123013086484.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7660113123013086484.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7659910364045364494.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7659910364045364494.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7659616264888864013.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7659616264888864013.json`.
+- Added punctuation, sentence boundaries, capitalization, and paragraph breaks only.
+- Preserved uncertain caption wording instead of correcting from context.
+- Marked all three videos as `needs_review`.
+
+Verification:
+
+- `7660113123013086484`: raw word count 156; polished word count 156; paragraph count 5; `meaning_added=false`.
+- `7659910364045364494`: raw word count 1663; polished word count 1663; paragraph count 30; `meaning_added=false`.
+- `7659616264888864013`: raw word count 83; polished word count 83; paragraph count 4; `meaning_added=false`.
+- JSON validation passed for all three QA files.
+- Reviewer pass found no added meaning and no public/private boundary issue in the written outputs.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, durable decision, or status-board phase transition was run.
+
+## 2026-07-08 — Public TikTok transcript polish batch 001 from 03:06 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260708-030635/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7660023514602294536.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7660023514602294536.json`.
+- Added punctuation, sentence boundaries, capitalization, and paragraph breaks only.
+- Preserved uncertain caption wording instead of correcting from context.
+- Marked `7660023514602294536` as `needs_review`.
+
+Verification:
+
+- `7660023514602294536`: raw word count 206; polished word count 206; paragraph count 5; `meaning_added=false`.
+- JSON validation passed for the QA file.
+- Reviewer pass found no added meaning and no public/private boundary issue in the written outputs.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, durable decision, or status-board phase transition was run.
+
+## 2026-07-08 — Public TikTok transcript polish batch 001 from 01:05 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260708-010518/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7659988001254018335.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7659988001254018335.json`.
+- Added punctuation, sentence boundaries, capitalization, and paragraph breaks only.
+- Preserved uncertain caption wording instead of correcting from context.
+- Marked `7659988001254018335` as `needs_review`.
+
+Verification:
+
+- `7659988001254018335`: raw word count 446; polished word count 446; paragraph count 7; `meaning_added=false`.
+- JSON validation passed for the QA file.
+- Reviewer pass found no added meaning and no public/private boundary issue in the written outputs.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-07-07 — Public TikTok transcript polish batch 001 from 19:01 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260707-190128/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7659920897708510495.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7659920897708510495.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7659916231759203592.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7659916231759203592.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7659906773452655886.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7659906773452655886.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7659897729237208341.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7659897729237208341.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7659896560246852897.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7659896560246852897.json`.
+- Added punctuation, sentence boundaries, capitalization, and paragraph breaks only.
+- Preserved uncertain caption wording instead of correcting from context.
+- Marked all five videos as `needs_review`.
+
+Verification:
+
+- `7659920897708510495`: raw word count 37; polished word count 37; paragraph count 3; `meaning_added=false`.
+- `7659916231759203592`: raw word count 61; polished word count 61; paragraph count 4; `meaning_added=false`.
+- `7659906773452655886`: raw word count 70; polished word count 70; paragraph count 3; `meaning_added=false`.
+- `7659897729237208341`: raw word count 212; polished word count 212; paragraph count 9; `meaning_added=false`.
+- `7659896560246852897`: raw word count 150; polished word count 150; paragraph count 5; `meaning_added=false`.
+- JSON validation passed for all five QA files.
+- Reviewer pass found no added meaning and no public/private boundary issue in the written outputs.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-07-07 — Public TikTok transcript polish batch 001 from 17:00 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260707-170015/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7659869392741649696.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7659869392741649696.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7659862588200668430.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7659862588200668430.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7659614281050098958.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7659614281050098958.json`.
+- Added punctuation, sentence boundaries, capitalization, and paragraph breaks only.
+- Marked all three videos as `pass`.
+
+Verification:
+
+- `7659869392741649696`: raw word count 104; polished word count 104; paragraph count 4; `meaning_added=false`.
+- `7659862588200668430`: raw word count 735; polished word count 735; paragraph count 12; `meaning_added=false`.
+- `7659614281050098958`: raw word count 63; polished word count 63; paragraph count 4; `meaning_added=false`.
+- JSON validation passed for all three QA files.
+- Reviewer pass found no added meaning and no public/private boundary issue in the written outputs.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-07-07 — Public TikTok transcript polish batch 001 from 14:58 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260707-145800/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7659855832762404128.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7659855832762404128.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7659849749528448269.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7659849749528448269.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7659849592518806816.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7659849592518806816.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7659847612467563794.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7659847612467563794.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7659830760165182733.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7659830760165182733.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7659608733495905550.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7659608733495905550.json`.
+- Added punctuation, sentence boundaries, capitalization, and paragraph breaks only.
+- Preserved uncertain caption wording instead of correcting from context.
+- Marked `7659855832762404128` and `7659830760165182733` as `pass`.
+- Marked `7659849749528448269`, `7659849592518806816`, `7659847612467563794`, and `7659608733495905550` as `needs_review`.
+
+Verification:
+
+- `7659855832762404128`: raw word count 171; polished word count 171; paragraph count 5; `meaning_added=false`.
+- `7659849749528448269`: raw word count 265; polished word count 265; paragraph count 5; `meaning_added=false`.
+- `7659849592518806816`: raw word count 215; polished word count 215; paragraph count 6; `meaning_added=false`.
+- `7659847612467563794`: raw word count 244; polished word count 239; paragraph count 5; `meaning_added=false`.
+- `7659830760165182733`: raw word count 228; polished word count 228; paragraph count 6; `meaning_added=false`.
+- `7659608733495905550`: raw word count 77; polished word count 77; paragraph count 4; `meaning_added=false`.
+- JSON validation passed for all six QA files.
+- Reviewer pass found no added meaning and no public/private boundary issue in the written outputs.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-07-07 — Public TikTok transcript polish batch 001 from 08:53 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260707-085316/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7659756013557452046.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7659756013557452046.json`.
+- Added punctuation, sentence boundaries, capitalization, and paragraph breaks only.
+- Preserved uncertain caption wording instead of correcting from context.
+- Marked `7659756013557452046` as `needs_review`.
+
+Verification:
+
+- `7659756013557452046`: raw word count 179; polished word count 178; paragraph count 5; `meaning_added=false`.
+- JSON validation passed for the QA file.
+- Reviewer pass found no added meaning and no public/private boundary issue in the written outputs.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-07-07 — Public TikTok transcript polish batch 001 from 06:51 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260707-065159/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7659485175625043230.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7659485175625043230.json`.
+- Added punctuation, sentence boundaries, capitalization, and paragraph breaks only.
+- Removed one obvious duplicated caption fragment.
+- Preserved uncertain caption wording instead of correcting from context.
+- Marked `7659485175625043230` as `needs_review`.
+
+Verification:
+
+- `7659485175625043230`: raw word count 310; polished word count 296; paragraph count 6; `meaning_added=false`.
+- JSON validation passed for the QA file.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-07-07 — Public TikTok transcript polish batch 001 from 04:49 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260707-044943/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7659701518395985159.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7659701518395985159.json`.
+- Added punctuation, sentence boundaries, capitalization, and paragraph breaks only.
+- Preserved uncertain caption wording instead of correcting from context.
+- Marked `7659701518395985159` as `needs_review`.
+
+Verification:
+
+- `7659701518395985159`: raw word count 295; polished word count 295; paragraph count 10; `meaning_added=false`.
+- JSON validation passed for the QA file.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-07-07 — Public TikTok transcript polish batch 001 from 00:47 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260707-004710/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7659623846990843166.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7659623846990843166.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7659614039756115218.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7659614039756115218.json`.
+- Added punctuation, sentence boundaries, capitalization, and paragraph breaks only.
+- Preserved uncertain caption wording instead of correcting from context.
+- Marked `7659623846990843166` as `needs_review`; marked `7659614039756115218` as `pass`.
+
+Verification:
+
+- `7659623846990843166`: raw word count 494; polished word count 494; paragraph count 7; `meaning_added=false`.
+- `7659614039756115218`: raw word count 187; polished word count 187; paragraph count 5; `meaning_added=false`.
+- JSON validation passed for both QA files.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-07-06 — Public TikTok transcript polish batch 001 from 12:35 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260706-123531/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7659447835888225543.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7659447835888225543.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7659431137894239496.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7659431137894239496.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7659426642040802578.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7659426642040802578.json`.
+- Added punctuation, sentence boundaries, capitalization, and paragraph breaks only.
+- Preserved uncertain caption wording instead of correcting from context.
+- Marked `7659447835888225543` and `7659431137894239496` as `pass`; marked `7659426642040802578` as `needs_review`.
+
+Verification:
+
+- `7659447835888225543`: raw word count 179; polished word count 178; paragraph count 5; `meaning_added=false`.
+- `7659431137894239496`: raw word count 143; polished word count 143; paragraph count 5; `meaning_added=false`.
+- `7659426642040802578`: raw word count 246; polished word count 246; paragraph count 7; `meaning_added=false`.
+- JSON validation passed for all three QA files.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-07-06 — Public TikTok transcript polish batch 001 from 10:33 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260706-103305/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7659420536350493972.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7659420536350493972.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7659408385841925383.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7659408385841925383.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7658058104449420557.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7658058104449420557.json`.
+- Added punctuation, sentence boundaries, capitalization, and paragraph breaks only.
+- Preserved uncertain caption wording instead of correcting from context.
+- Marked `7659420536350493972` as `needs_review`; marked `7659408385841925383` and `7658058104449420557` as `pass`.
+
+Verification:
+
+- `7659420536350493972`: raw word count 109; polished word count 108; paragraph count 4; `meaning_added=false`.
+- `7659408385841925383`: raw word count 131; polished word count 131; paragraph count 4; `meaning_added=false`.
+- `7658058104449420557`: raw word count 148; polished word count 148; paragraph count 4; `meaning_added=false`.
+- JSON validation passed for all three QA files.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-07-06 — Public TikTok transcript polish batch 001 from 08:31 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260706-083149/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7659385952556616974.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7659385952556616974.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7659374289417817365.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7659374289417817365.json`.
+- Added punctuation, sentence boundaries, capitalization, and paragraph breaks only.
+- Preserved uncertain caption wording instead of correcting from context.
+- Marked both videos as `needs_review`.
+
+Verification:
+
+- `7659385952556616974`: raw word count 191; polished word count 191; paragraph count 4; `meaning_added=false`.
+- `7659374289417817365`: raw word count 143; polished word count 141; paragraph count 4; `meaning_added=false`.
+- JSON validation passed for both QA files.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-07-06 — Public TikTok transcript polish batch 001 from 06:30 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260706-063033/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7659351921198943496.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7659351921198943496.json`.
+- Added punctuation, sentence boundaries, capitalization, and paragraph breaks only.
+- Marked `7659351921198943496` as `pass`.
+
+Verification:
+
+- `7659351921198943496`: raw word count 142; polished word count 142; paragraph count 4; `meaning_added=false`.
+- JSON validation passed for the QA file.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-07-06 — Public TikTok transcript polish batch 001 from 00:26 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260706-002639/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7659258272448367879.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7659258272448367879.json`.
+- Added punctuation, sentence boundaries, capitalization, and paragraph breaks only.
+- Preserved uncertain caption wording instead of correcting from context.
+- Marked `7659258272448367879` as `needs_review` because raw captions contain likely uncertain wording around `AI can't correlate them between the different things that things are fake`.
+
+Verification:
+
+- `7659258272448367879`: raw word count 195; polished word count 195; paragraph count 5; `meaning_added=false`.
+- JSON validation passed for the QA file.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-07-05 — Public TikTok transcript polish batch 001 from 22:25 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260705-222522/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7659136766812638478.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7659136766812638478.json`.
+- Added punctuation, sentence boundaries, capitalization, and paragraph breaks only.
+- Preserved uncertain caption wording instead of correcting from context.
+- Marked `7659136766812638478` as `needs_review` because raw captions contain likely uncertain wording around `chat TVT`.
+
+Verification:
+
+- `7659136766812638478`: raw word count 72; polished word count 72; paragraph count 3; `meaning_added=false`.
+- JSON validation passed for the QA file.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-07-05 — Public TikTok transcript polish batch 001 from 20:24 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260705-202404/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7659197902652181767.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7659197902652181767.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7659132653249056013.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7659132653249056013.json`.
+- Added punctuation, sentence boundaries, capitalization, and paragraph breaks only.
+- Preserved uncertain caption wording instead of correcting from context.
+- Marked `7659197902652181767` as `needs_review` because raw captions contain uncertain entity/domain wording around `linked. Io`.
+- Marked `7659132653249056013` as `needs_review` because raw captions contain likely uncertain ASR/entity wording around `Chagibiti`.
+
+Verification:
+
+- `7659197902652181767`: raw word count 78; polished word count 78; paragraph count 2; `meaning_added=false`.
+- `7659132653249056013`: raw word count 126; polished word count 126; paragraph count 5; `meaning_added=false`.
+- JSON validation passed for both QA files.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-07-05 — Public TikTok transcript polish batch 001 from 14:20 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260705-142023/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7659106196422479118.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7659106196422479118.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7658013106831953166.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7658013106831953166.json`.
+- Added punctuation, sentence boundaries, capitalization, and paragraph breaks only.
+- Preserved uncertain caption wording instead of correcting from context.
+- Marked `7659106196422479118` as `needs_review` because raw captions contain likely uncertain wording around `Air traffic`, `Chad GPT`, and `not a marketing language in their language`.
+- Marked `7658013106831953166` as `pass`.
+
+Verification:
+
+- `7659106196422479118`: raw word count 247; polished word count 247; paragraph count 5; `meaning_added=false`.
+- `7658013106831953166`: raw word count 74; polished word count 74; paragraph count 3; `meaning_added=false`.
+- JSON validation passed for both QA files.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-07-05 — Public TikTok transcript polish batch 001 from 10:17 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260705-101756/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7658859214877494541.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7658859214877494541.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7658011895013592334.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7658011895013592334.json`.
+- Added punctuation, sentence boundaries, capitalization, and paragraph breaks only.
+- Preserved uncertain caption wording instead of correcting from context.
+- Marked `7658859214877494541` as `pass`.
+- Marked `7658011895013592334` as `needs_review` because raw captions contain likely uncertain entity wording around `Chad GBT`.
+
+Verification:
+
+- `7658859214877494541`: raw word count 76; polished word count 76; paragraph count 4; `meaning_added=false`.
+- `7658011895013592334`: raw word count 102; polished word count 102; paragraph count 6; `meaning_added=false`.
+- JSON validation passed for both QA files.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-07-05 — Public TikTok transcript polish batch 001 from 05:16 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260705-051623/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7659013348259892493.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7659013348259892493.json`.
+- Added punctuation, sentence boundaries, capitalization, and paragraph breaks only.
+- Preserved clipped/uncertain caption wording instead of correcting from context.
+- Marked `7659013348259892493` as `needs_review` because raw captions contain clipped or likely uncertain wording requiring audio/source verification.
+
+Verification:
+
+- `7659013348259892493`: raw word count 202; polished word count 202; paragraph count 6; `meaning_added=false`.
+- JSON validation passed for the QA file.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-07-05 — Public TikTok transcript polish batch 001 from 03:14 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260705-031455/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7658970393864080648.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7658970393864080648.json`.
+- Added punctuation, sentence boundaries, capitalization, and paragraph breaks only.
+- Marked `7658970393864080648` as `pass`.
+
+Verification:
+
+- `7658970393864080648`: raw word count 102; polished word count 102; paragraph count 4; `meaning_added=false`.
+- JSON validation passed for the QA file.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-07-04 — Public TikTok transcript polish batch 001 from 23:12 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260704-231226/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7658913900196400402.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7658913900196400402.json`.
+- Added punctuation, sentence boundaries, capitalization, and paragraph breaks only.
+- Preserved uncertain caption wording instead of correcting from context.
+- Marked `7658913900196400402` as `needs_review` because raw captions contain unclear wording requiring audio/source verification.
+
+Verification:
+
+- `7658913900196400402`: raw word count 179; polished word count 179; paragraph count 7; `meaning_added=false`.
+- JSON validation passed for the QA file.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-07-04 — Public TikTok transcript polish batch 001 from 15:07 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260704-150729/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7658792758496283917.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7658792758496283917.json`.
+- Added punctuation, sentence boundaries, capitalization, and paragraph breaks only.
+- Preserved uncertain caption wording instead of correcting from context.
+- Marked `7658792758496283917` as `needs_review` because raw captions contain unclear wording requiring audio/source verification.
+
+Verification:
+
+- `7658792758496283917`: raw word count 707; polished word count 706; paragraph count 9; `meaning_added=false`.
+- JSON validation passed for the QA file.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-07-04 — Public TikTok transcript polish batch 001 from 13:06 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260704-130620/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7658735365594828046.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7658735365594828046.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7657320803792456974.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7657320803792456974.json`.
+- Added punctuation, sentence boundaries, capitalization, and paragraph breaks only.
+- Preserved uncertain caption wording instead of correcting from context.
+- Marked `7658735365594828046` as `needs_review` because raw captions contain unclear wording requiring audio/source verification.
+- Marked `7657320803792456974` as `pass`.
+
+Verification:
+
+- `7658735365594828046`: raw word count 222; polished word count 222; paragraph count 5; `meaning_added=false`.
+- `7657320803792456974`: raw word count 150; polished word count 150; paragraph count 4; `meaning_added=false`.
+- JSON validation passed for both QA files.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-07-04 — Base2026 WordPress/CMS webhive hybrid batch #2 reviewed
+
+User approved the recommended next step: make Batch #2 from `@webhivedigital` WordPress/SEO hybrid, supplemented by `@iamdandavies` only where it strengthens the CMS implementation category, while keeping everything cards-only/private.
+
+Actions:
+
+- Created `docs/research/BASE2026_WORDPRESS_CMS_CARD_BATCH2_2026_07_04.md`.
+- Created `docs/research/BASE2026_WORDPRESS_CMS_CARD_BATCH2_REVIEW_REPORT_2026_07_04.md`.
+- Created private planning batches under `.planning/claim-candidates-20260704-wordpress-cms-webhive-batch2*.jsonl` and `.planning/wordpress-cms-webhive-batch2-review-20260704.json`.
+- Imported 12 private `insight_card_candidate` rows into local SQLite and promoted them only to `reviewed`, not `approved` or public.
+- Created Agency OS task #75 and marked it `done` for the private-card scope.
+
+Verification:
+
+- Deterministic evidence verification passed: 12 candidates, 12 exact matches, 0 rejected, 0 needs review.
+- Review report classified 12/12 as `promotion_candidate`, with no warnings or hard failures.
+- SQLite verification: 12 Batch #2 claims have `review_status='reviewed'`; 0 have `review_status='approved'`; 12 evidence rows exist.
+- `web/static/*wordpress*` search returned 0 files; `git diff --check` passed.
+- Publication-boundary audit found `forbidden=0` and `secret_findings=0`, but `needs_review=5` from pre-existing dirty-tree paths; no public WordPress pages, public export, deploy, IndexNow, GSC/Bing indexing request, outreach, source/transcript publication, staging, or commit was run.
+
+## 2026-07-04 — Public TikTok transcript polish batch 001 from 07:02 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260704-070243/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7658642242361412878.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7658642242361412878.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7657320795588349197.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7657320795588349197.json`.
+- Added punctuation, sentence boundaries, capitalization, and paragraph breaks only.
+- Preserved uncertain caption wording instead of correcting from context.
+- Marked `7658642242361412878` as `needs_review` because raw captions contain unclear wording requiring audio/source verification.
+- Marked `7657320795588349197` as `pass`.
+
+Verification:
+
+- `7658642242361412878`: raw word count 186; polished word count 186; paragraph count 5; `meaning_added=false`.
+- `7657320795588349197`: raw word count 56; polished word count 56; paragraph count 2; `meaning_added=false`.
+- JSON validation passed for both QA files.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-07-04 — Base2026 WordPress/CMS cards-only vertical batch reviewed
+
+User asked to continue from the WordPress vertical audit: review source text/evidence, create cards, and run release/indexation gates without creating separate public WordPress pages.
+
+Actions:
+
+- Kept scope as `WordPress/CMS vertical + cards only`, nested under `web_development`.
+- Created `docs/research/BASE2026_WORDPRESS_CMS_CARD_BATCH_2026_07_04.md`.
+- Created `docs/research/BASE2026_WORDPRESS_CMS_CARD_REVIEW_REPORT_2026_07_04.md`.
+- Created private planning batches under `.planning/claim-candidates-20260704-wordpress-cms-cards*.jsonl` and `.planning/wordpress-cms-insight-cards-review-20260704.json`.
+- Imported 12 private `insight_card_candidate` rows into local SQLite and promoted them only to `reviewed`, not `approved` or public.
+- Updated the WordPress vertical audit addendum and Agency OS task #74 run log.
+
+Verification:
+
+- Deterministic evidence verification passed: 12 candidates, 12 exact matches, 0 rejected, 0 needs review.
+- Review report classified 12/12 as `promotion_candidate`, with no warnings or hard failures.
+- SQLite verification: 12 WordPress batch claims have `review_status='reviewed'`; 0 have `review_status='approved'`; 12 evidence rows exist.
+- Publication-boundary audit found `forbidden=0` and `secret_findings=0`, but `needs_review=5` from pre-existing dirty-tree paths; no public WordPress pages, deploy, IndexNow, GSC/Bing indexing request, outreach, source/transcript publication, staging, or commit was run.
+
+## 2026-07-03 — Alex personal site Home form/card trim live hotfix
+
+User corrected the recovery path: active task was Alex personal site/Home, not Aster. Continued the interrupted Home form/card work on the static overlay serving `https://aggressorbulkit.online/`.
+
+Actions:
+
+- Patched live `/var/www/alex-yarosh-static/current/web/index.html` via SSH alias `geo` after creating timestamped backups.
+- Replaced the Home snapshot form with a compact version: Website URL, Your name, Email.
+- Removed visible `Business name`, `Best contact`, and `FORM 01-B`/`Form 01-B` from the Home form card.
+- Tightened first lower card row copy to `Services and locations`, `Proof AI can verify`, and `Competitor gaps`.
+- Appended scoped Home CSS under marker `alex-home-form-card-fix-20260703b` and bumped Home CSS query to `/alex-native/styles.css?v=alex-home-form-trim-20260703b`.
+- Patched `scripts/generate-alex-base2026-native-site.py` so future generated Home output keeps the compact form and tighter card copy.
+
+Verification:
+
+- `python3 scripts/generate-alex-base2026-native-site.py` succeeded and generated Home contains compact fields only.
+- Live HTTP/curl verification showed labels `Website URL`, `Your name`, `Email`; removed labels/badge were absent.
+- Browser DOM verification showed the updated CSS URL, same three visible fields, and `overflow=0`.
+- Browser visual verification on desktop showed the simplified form and first card section visually integrated; no CAPTCHA/verification challenge was visible.
+- No Git commit, push, Base2026 `/knowledge/` release, data export, Meilisearch reindex, or TikTok/source pipeline action was run.
+
+## 2026-07-03 — Public TikTok transcript polish batch 001 from 14:52 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260703-145233/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7658422643137203469.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7658422643137203469.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7658420235816406285.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7658420235816406285.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7658411374975995150.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7658411374975995150.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7658403678428138774.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7658403678428138774.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7658395858353884447.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7658395858353884447.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7657320796016184589.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7657320796016184589.json`.
+- Added punctuation, sentence boundaries, capitalization, and paragraph breaks only.
+- Preserved uncertain caption wording instead of correcting from context.
+- Marked `7658420235816406285` and `7658403678428138774` as `pass`.
+- Marked `7658422643137203469`, `7658411374975995150`, `7658395858353884447`, and `7657320796016184589` as `needs_review` because captions contain unclear wording requiring audio/source verification.
+
+Verification:
+
+- `7658422643137203469`: raw word count 64; polished word count 64; paragraph count 4; `meaning_added=false`.
+- `7658420235816406285`: raw word count 211; polished word count 211; paragraph count 5; `meaning_added=false`.
+- `7658411374975995150`: raw word count 659; polished word count 655; paragraph count 11; `meaning_added=false`.
+- `7658403678428138774`: raw word count 150; polished word count 148; paragraph count 4; `meaning_added=false`.
+- `7658395858353884447`: raw word count 27; polished word count 27; paragraph count 1; `meaning_added=false`.
+- `7657320796016184589`: raw word count 58; polished word count 58; paragraph count 2; `meaning_added=false`.
+- JSON validation passed for all six QA files.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-07-03 — Public TikTok transcript polish batch 001 from 12:51 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260703-125149/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7658364826338512141.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7658364826338512141.json`.
+- Added punctuation, sentence boundaries, capitalization, and paragraph breaks only.
+- Preserved spoken wording without summarizing, translating, or adding claims.
+- Marked QA status `pass` because no uncertain wording remained after faithful punctuation/capitalization cleanup.
+
+Verification:
+
+- `7658364826338512141`: raw word count 116; polished word count 116; paragraph count 4; `meaning_added=false`.
+- JSON validation passed for the QA file.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-07-03 — Public TikTok transcript polish batch 001 from 10:50 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260703-105026/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7658356872130432288.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7658356872130432288.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7657320805184851213.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7657320805184851213.json`.
+- Added punctuation, sentence boundaries, capitalization, and paragraph breaks only.
+- Preserved uncertain caption wording instead of correcting from context.
+- Marked both QA statuses `needs_review` because raw captions contain unclear wording requiring audio/source verification.
+
+Verification:
+
+- `7658356872130432288`: raw word count 149; polished word count 149; paragraph count 5; `meaning_added=false`.
+- `7657320805184851213`: raw word count 84; polished word count 84; paragraph count 4; `meaning_added=false`.
+- JSON validation passed for both QA files.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-07-03 — Public TikTok transcript polish batch 001 from 06:47 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260703-064753/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7658287119634402578.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7658287119634402578.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7658272059235044622.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7658272059235044622.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7657320829214035214.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7657320829214035214.json`.
+- Added punctuation, sentence boundaries, capitalization, and paragraph breaks only.
+- Preserved uncertain caption wording instead of correcting from context.
+- Marked `7658287119634402578` as `needs_review` because raw captions contain unclear wording requiring audio/source verification.
+- Marked `7658272059235044622` and `7657320829214035214` as `pass` because no uncertain wording remained after faithful punctuation/capitalization cleanup.
+
+Verification:
+
+- `7658287119634402578`: raw word count 353; polished word count 344; paragraph count 7; `meaning_added=false`.
+- `7658272059235044622`: raw word count 155; polished word count 155; paragraph count 4; `meaning_added=false`.
+- `7657320829214035214`: raw word count 88; polished word count 88; paragraph count 4; `meaning_added=false`.
+- JSON validation passed for all three QA files.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-07-02 — Public TikTok transcript polish batch 001 from 14:37 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260702-143745/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7658042214500617490.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7658042214500617490.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7658018213669834006.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7658018213669834006.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7657320834268204301.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7657320834268204301.json`.
+- Added punctuation, sentence boundaries, capitalization, and paragraph breaks only.
+- Preserved uncertain caption wording instead of correcting from context.
+- Marked `7658018213669834006` as `needs_review` because raw captions contain unclear product/name wording requiring audio/source verification.
+- Marked `7658042214500617490` and `7657320834268204301` as `pass` because no uncertain wording remained after faithful punctuation/capitalization cleanup.
+
+Verification:
+
+- `7658042214500617490`: raw word count 188; polished word count 188; paragraph count 4; `meaning_added=false`.
+- `7658018213669834006`: raw word count 313; polished word count 313; paragraph count 6; `meaning_added=false`.
+- `7657320834268204301`: raw word count 85; polished word count 85; paragraph count 3; `meaning_added=false`.
+- JSON validation passed for all three QA files.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-07-02 — Public TikTok transcript polish batch 001 from 12:35 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260702-123553/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7658016028970175752.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7658016028970175752.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7658005594724486433.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7658005594724486433.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7657993586964729102.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7657993586964729102.json`.
+- Added punctuation, sentence boundaries, capitalization, and paragraph breaks only.
+- Preserved uncertain caption wording instead of correcting from context.
+- Marked all three QA statuses `needs_review` because raw captions contain unclear wording requiring audio/source verification.
+
+Verification:
+
+- `7658016028970175752`: raw word count 191; polished word count 188; paragraph count 4; `meaning_added=false`.
+- `7658005594724486433`: raw word count 159; polished word count 159; paragraph count 5; `meaning_added=false`.
+- `7657993586964729102`: raw word count 239; polished word count 239; paragraph count 7; `meaning_added=false`.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-07-02 — Public TikTok transcript polish batch 001 from 08:32 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260702-083221/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7657947082317188353.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7657947082317188353.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7657935809881836822.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7657935809881836822.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7657924798470982919.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7657924798470982919.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7657924615288737032.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7657924615288737032.json`.
+- Added punctuation, sentence boundaries, capitalization, and paragraph breaks only.
+- Preserved uncertain caption wording instead of correcting from context.
+- Marked all four QA statuses `needs_review` because raw captions contain unclear wording requiring audio/source verification.
+
+Verification:
+
+- `7657947082317188353`: raw word count 453; polished word count 453; paragraph count 7; `meaning_added=false`.
+- `7657935809881836822`: raw word count 40; polished word count 40; paragraph count 1; `meaning_added=false`.
+- `7657924798470982919`: raw word count 112; polished word count 112; paragraph count 3; `meaning_added=false`.
+- `7657924615288737032`: raw word count 72; polished word count 72; paragraph count 2; `meaning_added=false`.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-07-02 — Public TikTok transcript polish batch 001 from 02:28 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260702-022842/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7657856095582604551.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7657856095582604551.json`.
+- Added punctuation, sentence boundaries, capitalization, and paragraph breaks only.
+- Preserved uncertain caption wording instead of correcting from context.
+- Marked QA status `needs_review` because raw captions contain unclear wording requiring audio/source verification.
+
+Verification:
+
+- Raw word count: 142.
+- Polished word count: 142.
+- Paragraph count: 4.
+- `meaning_added=false`.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-07-01 — Public TikTok transcript polish batch 001 from 04:15 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260701-041506/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7657326106558696734.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7657326106558696734.json`.
+- Added punctuation, sentence boundaries, and paragraph breaks only.
+- Normalized obvious caption spacing `U G C` to `UGC`.
+- Marked QA status `pass` because no uncertain wording remained after faithful punctuation/capitalization cleanup.
+
+Verification:
+
+- Raw word count: 167.
+- Polished word count: 165.
+- Paragraph count: 4.
+- `meaning_added=false`.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-07-01 — Public TikTok transcript polish batch 001 from 02:13 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260701-021352/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7657481176965205255.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7657481176965205255.json`.
+- Added punctuation, sentence boundaries, and paragraph breaks only.
+- Marked QA status `pass` because no uncertain wording remained after faithful punctuation/capitalization cleanup.
+
+Verification:
+
+- Raw word count: 184.
+- Polished word count: 184.
+- Paragraph count: 3.
+- `meaning_added=false`.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-07-01 — Public TikTok transcript polish batch 001 from 20:10 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260630-201003/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7657388320971902239.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7657388320971902239.json`.
+- Preserved uncertain caption wording instead of correcting from context.
+- Marked QA status `needs_review` because raw captions contain unclear repository/product and Claude/plugin wording requiring audio/source verification.
+
+Verification:
+
+- Raw word count: 356.
+- Polished word count: 353.
+- Paragraph count: 7.
+- `meaning_added=false`.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-06-30 — Public TikTok transcript polish batch 001 from 12:03 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260630-120355/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7657252099226471682.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7657252099226471682.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7657250892437097742.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7657250892437097742.json`.
+- Preserved uncertain caption wording instead of correcting from context.
+- Marked `7657250892437097742` as `needs_review` because raw captions contain unclear wording requiring audio/source verification.
+- Marked `7657252099226471682` as `pass` because no uncertain wording remained after faithful punctuation/capitalization cleanup.
+
+Verification:
+
+- `7657252099226471682`: raw word count 280; polished word count 280; paragraph count 5; `meaning_added=false`.
+- `7657250892437097742`: raw word count 205; polished word count 205; paragraph count 4; `meaning_added=false`.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-06-30 — Public TikTok transcript polish batch 001 from 10:02 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260630-100238/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7657228175931395350.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7657228175931395350.json`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7657215002788547858.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7657215002788547858.json`.
+- Preserved uncertain caption wording instead of correcting from context.
+- Marked `7657228175931395350` as `needs_review` because raw captions contain unclear/clipped wording requiring audio/source verification.
+- Marked `7657215002788547858` as `pass` because no uncertain wording remained after faithful punctuation/capitalization cleanup.
+
+Verification:
+
+- `7657228175931395350`: raw word count 274; polished word count 270; paragraph count 5; `meaning_added=false`.
+- `7657215002788547858`: raw word count 115; polished word count 115; paragraph count 3; `meaning_added=false`.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-06-30 — Public TikTok transcript polish batch 001 from 08:01 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260630-080122/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7656946252583619854.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7656946252583619854.json`.
+- Added punctuation, sentence boundaries, and paragraph breaks only.
+- Marked QA status `pass` because no uncertain wording remained after faithful punctuation/capitalization cleanup.
+
+Verification:
+
+- Raw word count: 100.
+- Polished word count: 100.
+- Paragraph count: 4.
+- `meaning_added=false`.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-06-30 — Public TikTok transcript polish batch 001 from 03:54 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260630-035400/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7657127416376102152.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7657127416376102152.json`.
+- Preserved uncertain caption wording instead of correcting from context.
+- Marked QA status `needs_review` because raw captions contain unclear wording and brand/entity renderings requiring audio/source verification.
+
+Verification:
+
+- Raw word count: 144.
+- Polished word count: 144.
+- Paragraph count: 4.
+- `meaning_added=false`.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-06-30 — Public TikTok transcript polish batch 001 from 00:51 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260630-005124/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7657076323256454430.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7657076323256454430.json`.
+- Preserved uncertain caption wording instead of correcting from context.
+- Marked QA status `needs_review` because raw captions contain unclear product, automation, support, and outreach wording requiring audio/source verification.
+
+Verification:
+
+- Raw word count: 432.
+- Polished word count: 432.
+- Paragraph count: 8.
+- `meaning_added=false`.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-06-30 — Public TikTok transcript polish batch 001 from 22:49 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260629-224909/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7657036545643334942.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7657036545643334942.json`.
+- Preserved uncertain caption wording instead of correcting from context.
+- Marked QA status `needs_review` because raw captions contain unclear product/integration wording requiring audio/source verification.
+
+Verification:
+
+- Raw word count: 431.
+- Polished word count: 431.
+- Paragraph count: 8.
+- `meaning_added=false`.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-06-29 — Public TikTok transcript polish batch 001 from 16:43 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260629-164317/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created polished transcript files for `7656947326929358101`, `7656938862102547726`, `7656933805332139271`, `7656644813202197773`, and `7655790846754721038`.
+- Created QA JSON files for the same five videos.
+- Preserved uncertain caption wording instead of correcting from context.
+- Marked `7656947326929358101` and `7656644813202197773` as `needs_review`.
+
+Verification:
+
+- QA status counts: 3 `pass`, 2 `needs_review`.
+- JSON validation passed for all five QA files.
+- Word counts verified: `7656947326929358101` raw 267 / polished 267 / paragraphs 5; `7656938862102547726` raw 322 / polished 322 / paragraphs 7; `7656933805332139271` raw 144 / polished 144 / paragraphs 4; `7656644813202197773` raw 58 / polished 57 / paragraphs 3; `7655790846754721038` raw 86 / polished 86 / paragraphs 3.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-06-29 — Deployed Base2026 priority crawl-path hotfix and submitted changed priority URLs
+
+Actions:
+
+- Interpreted Alex's follow-up as approval to deploy the previously prepared internal-link/crawl-path candidate.
+- Loaded controlled indexation/release QA skills.
+- Checked repo/deploy runbook and confirmed deploy target.
+- Initial hotfix packaging from local `public-data/tiktok` failed content readiness because newest `tiktok:gobigsystems:7656643400426458382` was source-only without public topic/insight assignment.
+- Avoided shipping that data by copying current live production `public-data/tiktok` from the VPS and packaging from that source instead.
+- Built `base2026-priority-crawl-path-20260629` release zip.
+- Ran targeted release QA for AI Visibility Lab + 10 priority pages.
+- Deployed with `deploy-public-vps.ps1 -SkipPackage -SkipReindex`.
+- Ran live QA across 11 URLs plus static asset/sitemap checks.
+- Submitted 11 changed live-gated priority URLs to IndexNow.
+- Wrote report `docs/project-memory/BASE2026_PRIORITY_CRAWL_PATH_DEPLOYED_2026_06_29.md`.
+
+Results:
+
+- Production symlink now points to `/var/www/base2026-knowledge/releases/base2026-priority-crawl-path-20260629`.
+- Live QA bad checks: `0`.
+- IndexNow: `11` input, `11` eligible, `0` skipped, HTTP `202`.
+- No Meilisearch reindex was run because this was a static/data-preserving hotfix.
+
+## 2026-06-29 — Priority internal-link candidate prepared after Bing bulk submission
+
+User asked to continue work by priorities after the Bing indexing push.
+
+Actions:
+
+- Tried to open Bing Webmaster Tools dashboard in Chrome; local Chrome window capture was unavailable and browser session was not logged in, so dashboard confirmation was not completed in this pass.
+- Ran live seed-hub and money-page CTA/link audit for the top Bing/Copilot/local-service pages.
+- Patched `scripts/generate-ai-visibility-pages.py` to add a `Priority crawl path` section for the 10 priority pages.
+- Generated a local preview from `data/ai_visibility_pages_master.json` into `output/ai_visibility_priority_link_preview_20260629`.
+- Created report `docs/project-memory/BASE2026_PRIORITY_INTERNAL_LINK_CANDIDATE_2026_06_29.md`.
+
+Verification:
+
+- Preview generated 65 pages.
+- AI Visibility Lab preview contains 10 priority crawl-path links.
+- Sampled priority pages contain the priority section, `index,follow`, and one H1.
+- All 10 priority pages exist in preview.
+- 16 California city/niche drafts remained `noindex,nofollow`.
+- `git diff --check` passed.
+- No public deploy, GSC automation, commit, source-review clearance, or Meilisearch reindex was run.
+
+## 2026-06-29 — Bing full-sitemap IndexNow bulk submission completed
+
+User asked to shift back to indexation, verify Bing's large submission allowance, prepare Base2026, submit the site to Bing, and re-prioritize the active marketing work.
+
+Actions:
+
+- Verified current Bing/IndexNow documentation: Bing URL Submission supports up to 10,000 URLs/domain/day; IndexNow bulk POST supports up to 10,000 URLs/request; Bing recommends IndexNow for automated URL notifications.
+- Parsed live `https://aggressorbulkit.online/knowledge/sitemap.xml` and found 1,703 unique Base2026 URLs.
+- Ran a parallel live eligibility gate across all 1,703 URLs: HTTP 200, no `noindex`, self-canonical, final URL equivalent to submitted URL.
+- Submitted all 1,703 eligible URLs to Bing's IndexNow endpoint.
+- Created report `docs/project-memory/BASE2026_BING_BULK_INDEXNOW_2026_06_29.md` and updated `NEXT_ACTION.md`.
+
+Verification:
+
+- Eligibility: 1,703 checked / 1,703 eligible / 0 skipped.
+- Bing IndexNow submission: HTTP 200, no Retry-After.
+- Evidence files under `output/indexnow/`: URL list, fast checks CSV, summary JSON, payload JSON, and Bing submit result JSON.
+- No deploy, commit, GSC automation, source-review clearance, or public-data reindex was run.
+
+## 2026-06-29 — Public TikTok transcript polish batch 001 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260629-022826/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7656725330815765767.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7656725330815765767.json`.
+- Preserved uncertain caption wording instead of correcting from context.
+- Marked QA status `needs_review` because raw captions contain unclear wording requiring audio/source verification.
+
+Verification:
+
+- Raw word count: 132.
+- Polished word count: 132.
+- Paragraph count: 5.
+- `meaning_added=false`.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-06-28 — Public TikTok transcript polish batch 001 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260628-222453/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7656657102106004743.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7656657102106004743.json`.
+- Preserved uncertain caption wording instead of correcting from context.
+- Marked QA status `needs_review` because raw captions contain unclear phrases requiring audio/source verification.
+
+Verification:
+
+- Raw word count: 121.
+- Polished word count: 121.
+- Paragraph count: 5.
+- `meaning_added=false`.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-06-28 — Public TikTok transcript polish batch 001 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260628-121538/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7656507738217925902.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7656507738217925902.json`.
+- Preserved uncertain caption wording instead of correcting from context.
+- Marked QA status `needs_review` because raw captions contain unclear phrases requiring audio/source verification.
+
+Verification:
+
+- Raw word count: 240.
+- Polished word count: 237.
+- Paragraph count: 7.
+- `meaning_added=false`.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-06-28 — Public TikTok transcript polish batch 001 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260628-060951/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created polished transcript files for `7656416565587381518`, `7656414991163084039`, `7656233027986525471`, `7655467354918259982`, `7656198191108443400`, and `7656153851124370710`.
+- Created matching QA JSON files for all six videos.
+- Preserved uncertain caption wording instead of correcting from context.
+- Marked four rows `needs_review` because the raw captions contain likely ASR/caption errors, clipped endings, lyric/music uncertainty, or wording/statistical claims requiring audio/source verification.
+
+Verification:
+
+- QA status counts: 2 `pass`, 4 `needs_review`.
+- JSON validation passed for all six QA files.
+- Paragraph/word count check passed against the written transcript files.
+- No deploy, commit, intake automation, source clearance, public export, or status-board phase transition was run.
+
+## 2026-06-28 — Bing/Copilot money pages deployed and submitted
+
+User approved the styled local Base2026 CTPH/MoneyPage batch and asked to proceed with all actions.
+
+Actions:
+
+- Fixed release packaging so AI visibility generation uses `data/ai_visibility_pages_master.json` first, with `ai_visibility_pages_batch01.json` only as fallback. Patched both `scripts/package-public-hotfix-from-export.ps1` and `scripts/package-public-release.ps1` so future packages keep the full approved page set.
+- Packaged data-preserving static hotfix release `base2026-bing-money-pages-r1-20260628` from the existing public TikTok export. Meilisearch reindex was intentionally skipped because public passage/index data did not change.
+- Deployed the release to `https://aggressorbulkit.online/knowledge/`.
+- Prepared and submitted a controlled IndexNow batch for 40 live-gated, indexable canonical URLs. First submission accepted 39 URLs with status 200; one transient connection reset URL was retried separately and accepted with status 200.
+
+Verification:
+
+- Package generation: 55 AI visibility pages, sitemap `1693` URLs.
+- Boundary gates: `git diff --check` pass; Python compile pass; `scripts/audit-publication-boundary.py` => `needs_review=0`, `forbidden=0`, `secret_findings=0`.
+- Live smoke: root, resource hub, Bing/local service money pages and CSS all return `200`; checked pages have `index,follow`, one H1, self-canonical, and CSS version `base2026-bing-money-pages-r1-20260628`.
+- Live SEO crawl gate: `status=pass`, 500 crawled pages, 1,693 sitemap URLs, 0 bad link-contracts, 0 crawled error pages, `warning_groups=0`.
+- Visual QA: live `Bing SEO for Roofing Companies` page renders styled header, orange hero, CTAs, cards, form, and footer; screenshot `~/.hermes/cache/screenshots/browser_screenshot_7e14791fbe144bb7a541328732d98d78.png`.
+- City/niche California drafts remain `noindex,nofollow` and were not included in IndexNow.
+
+Next:
+
+- Re-check Bing Webmaster Tools / GSC discovery after one crawl cycle.
+- Do not add more weak URL volume until the submitted 40-page set shows discovery/indexing movement.
+- Next growth step is conversion layer: pick 3-5 strongest Bing/local-service pages, connect them tighter to Alex audit/pricing/contact, and optionally test Microsoft Ads on those landing URLs.
+
+## 2026-06-27 — Public TikTok transcript polish batch 001 processed
+
+User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260627-075356/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
+
+Actions:
+
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished/7656045476281650445.txt`.
+- Created `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7656045476281650445.json`.
+- Preserved uncertain caption wording instead of correcting from context.
+- Marked QA status `needs_review` because the raw caption includes likely uncertain wording that needs audio/source verification.
+
+Verification:
+
+- Raw word count: 168.
+- Polished word count: 168.
+- Paragraph count: 7.
+- `meaning_added=false`.
+- No deploy, commit, intake automation, source clearance, or public export was run.
+
+## 2026-06-27 — Build-in-public social-source footprint video source-reviewed and deployed
+
+User asked to check whether the `@build_in_public` TikTok about a LinkedIn post being cited in Google AI Overview was live or local, rerun the correct pipeline if local, extract it properly, and publish it because it was a good source.
+
+Actions:
+
+- Confirmed the guessed old `/knowledge/source/...` URL was just the SPA fallback; the video was local/private, not a real public source page.
+- Downloaded TikTok metadata, VTT, thumbnail/video, extracted audio, and ran faster-whisper ASR to resolve the previous ending ambiguity.
+- Rewrote clean/polished transcript with corrected wording, including `paying customers, users, and warm leads calling you up at compactkeywords.com`.
+- Changed polished QA from `needs_review` to explicit `pass` with source-review evidence notes.
+- Cleared `videos.csv` row `7655821023589272864` from `needs_source_review` to `transcribed` using `scripts/tiktok-clear-reviewed-source-rows.py`.
+- Added one reviewed Source Intelligence card under `AI Overview source footprint` with cautionary framing: social/UGC posts can become AI-search citation surfaces, but self-asserted claims require trust review/corroboration.
+- Rebuilt SQLite/export, packaged, deployed release `base2026-social-source-footprint-20260627`, and reindexed Meilisearch.
+
+Verification:
+
+- Source review clear: 1 cleared, 0 blocked; backup `.planning/backups/videos-before-source-review-clear-20260627-135940.csv`.
+- Public export: 1,543 source records, 2,097 passages, 1,642 insight cards, 1,071 public insight cards, 1,532 topics, 1,018 public topics.
+- Reviewed insight card `claim-social-footprint-ai-overview-7655821023589272864` is public with evidence score 1.0.
+- Live source page: `https://aggressorbulkit.online/knowledge/sources/tiktok-video-7655821023589272864.html` returns 200 and contains the reviewed AI Overview source-footprint framing.
+- Public release gate passed: readiness latest 3, publication boundary, GitHub metadata, public export policy, public release contract.
+- Deploy/reindex: live release `base2026-social-source-footprint-20260627`; Meilisearch task `451` indexed 2,097 passages.
+- Live SEO crawl gate: pass, 500 crawled pages, 1,662 sitemap URLs, 0 bad link-contracts, 0 crawled error pages, `warning_groups=0`.
+- Mobile visual QA: 78 results, 0 failures.
+
+Next:
+
+- Keep using this source as off-site public source footprint / trust-risk evidence, not as a fake-claim/spam playbook.
+- Continue one-by-one review of remaining private `needs_source_review` rows.
+
+## 2026-06-27 — Overnight marketing TikTok creator expansion deployed
+
+User asked an autonomous overnight worker to find more TikTok creators in marketing/growth/SEO/AI search/paid ads/funnels/local business marketing, verify >=50k followers, add only safe approved sources, process private intake, run QA gates, and deploy only if safe.
+
+Actions:
+
+- Read the project-memory/runbook files, checked `git status`, and inspected existing TikTok intake automation/config before changing anything.
+- Verified and added 9 approved creator/account sources to `config/tiktok-intake-queue.local.json`: `@neilpatel`, `@willfrancis24`, `@samdespo`, `@keenyakelly`, `@jera.bean`, `@keeansocial`, `@pulpdigitalagency`, `@tiktokforbusiness`, `@tiktok_small_business`.
+- Used TikTok profile JSON follower counts in config notes; did not add `unable_to_verify` profiles to approved config.
+- Ran creator discovery/import and transcript processing. New approved sources produced 45 local video rows; 17 rows reached the publishable transcribed/pass batch, while 24 uncertain rows stayed private as source-review holds and 5 older/off-topic rows were marked `out_of_scope_old`.
+- Ran GPT transcript polish after setting the local Codex path, fixed newest-source readiness with one strict evidence-backed reviewed insight card, rebuilt public export, packaged release `base2026-overnight-marketing-creators-20260626`, deployed to VPS, and reindexed Meilisearch.
+
+Verification:
+
+- Current batch polish status: 17 transcribed/pass rows, 17 clean files, 17 polished files, 0 missing polished, 0 `needs_review`.
+- Public export after rebuild: 1,542 source records, 2,096 passages, 1,641 insight cards, 1,070 public insight cards, 1,531 topics, 1,017 public topics.
+- Public content readiness: 0 blockers.
+- Publication boundary/public release contract: PASS; `needs_review=0`, `forbidden=0`, `secret_findings=0`, `violation_count=0`.
+- Deploy/reindex: live release `base2026-overnight-marketing-creators-20260626`; Meilisearch task `447` indexed 2,096 passages.
+- Live SEO crawl gate: pass, 500 crawled pages, 1,661 sitemap URLs, 0 bad link-contracts, 0 crawled error pages, `warning_groups=0`.
+- Mobile visual QA: 78 results, 0 failures.
+
+Next:
+
+- Manually review the 24 private `needs_source_review` rows one by one before any future public release.
+- Monitor the 2-hour TikTok creator auto-refresh after the queue expansion.
+
+## 2026-06-26 — Fresh TikTok creator batch polished and deployed
+
+User asked to finish the freshly discovered creator TikToks properly: polish, run the gates, and publish what is safe.
+
+Actions:
+
+- Applied 22 new TikTok candidates already discovered by the Base2026 creator auto-refresh.
+- Ran caption/ASR processing and GPT-5.5 transcript polish for batch `fresh-creators-20260626-072221`.
+- Kept 10 QA `needs_review` rows private by moving them to `needs_source_review` / `source_review_required_after_polish_qa` instead of publishing uncertain ASR/caption text.
+- Added 3 strict exact-evidence reviewed Source Intelligence cards for newest-source readiness blockers.
+- Deployed data release `base2026-fresh-creators-20260626` and reindexed Meilisearch task `443`.
+
+Verification:
+
+- Current batch polish status: 12 transcribed/pass rows, 12 clean files, 12 polished files, 0 missing polished, 0 `needs_review` in the publishable batch.
+- Public export: 1,524 source records, 2,076 passages, 1,640 insight cards, 1,069 public insight cards, 1,530 topics, 1,016 public topics.
+- Public content readiness: 0 blockers for latest 3 sources.
+- Publication boundary: `needs_review=0`, `forbidden=0`, `secret_findings=0`.
+- Live SEO crawl gate: pass, 500 crawled pages, 1,637 sitemap URLs, 0 bad link-contracts, 0 crawled error pages, `warning_groups=0`.
+- Base2026-only mobile visual QA: 42 results, 0 failures.
+- Full mobile QA had 4 unrelated WordPress-home CTA-anchor failures; all Base2026 routes passed.
+
+Next:
+
+- Review remaining `needs_source_review` queue one by one; do not bulk-clear uncertain caption/audio rows.
+- Keep the 2-hour creator auto-refresh cron silent on no-new-video runs and noisy only when new candidates are imported.
+
+## 2026-06-26 — Base2026 analytics zero-state hotfix
+
+User reported that `/knowledge/analytics.html` was empty/zeroed even though Base2026 had previously shipped a populated analytics layer.
+
+Actions:
+
+- Reproduced live zero-state on `/knowledge/analytics.html`: 0 source records, 0 passages, 0 public insight cards, 0 public topics.
+- Confirmed live JSON endpoints existed and were non-empty, but the latest deployed HTML release `base2026-service-area-ai-visibility-20260626` had generated analytics HTML from an empty analytics payload.
+- Found root cause in `scripts/package-public-hotfix-from-export.ps1`: the data-preserving hotfix path ran `generate-public-pages.py --data $ExportRoot`, but `$ExportRoot` did not contain derived `analytics_summary.json` / `base2026_analytics.json`, so `analytics_page({})` overwrote `web/analytics.html` with zeros.
+- Patched hotfix packaging to regenerate `topic_signal_briefs.jsonl`, `base2026_analytics.json`, and `analytics_summary.json` inside `$ExportRoot` before copying static data and generating public pages.
+- Packaged and deployed `base2026-analytics-hotfix-preflight-20260626` with `-SkipPackage -SkipReindex`.
+
+Verification:
+
+- Preflight package analytics HTML shows `1,512` source records, `2,063` searchable passages, `1,066` public insight cards, `1,014` public topics.
+- Live `/knowledge/analytics.html` now shows the same non-zero stats and 24 topic rows.
+- Live `/knowledge/static/analytics_summary.json` and `/knowledge/static/base2026_analytics.json` return `200` and matching totals.
+- `node scripts/live-seo-crawl-gate.mjs --base-url https://aggressorbulkit.online --limit 120` passed: 500 crawled pages, 1,623 sitemap URLs, 0 bad link-contracts, 0 crawled error pages, `warning_groups=0`.
+- `git diff --check`, Python compile gate, and publication-boundary audit passed.
+
+Next:
+
+- Keep the hotfix analytics-generation step in any future data-preserving package path so static analytics HTML cannot be regenerated from an empty payload.
+- If packaging again from `public-data/tiktok`, verify `output/releases/<release>/web/analytics.html` before deploy.
+
+## 2026-06-26 — Overnight Base2026 service-area AI visibility page deployed
+
+User requested an autonomous night shift to strengthen Base2026 traffic and AI/SEO visibility without questions, paid purchases, registrations, or unapproved outreach.
+
+Actions:
+
+- Continued from the existing overnight artifact set under `docs/operations/overnight/2026-06-26-base2026-night-shift/`.
+- Added source-backed page `/knowledge/service-area-pages-and-ai-visibility-for-local-businesses/` to `data/ai_visibility_pages_batch01.json`.
+- Used official Google Business Profile/Search documentation plus reviewed Base2026 insight cards; no raw transcripts or private paths were published.
+- Regenerated AI visibility pages and sitemap, packaged `base2026-service-area-ai-visibility-20260626`, and deployed through the existing data-preserving hotfix path with `-SkipReindex`.
+- Did not run GSC request-indexing, IndexNow, Ahrefs recrawl, registrations, paid submissions, or outreach.
+
+Verification:
+
+- Live service-area page returns `200`, has one H1, `index,follow`, canonical URL, Google source links, reviewed Base2026 source IDs, and child sitemap inclusion.
+- City/niche draft sample stays `noindex,nofollow` and out of child sitemaps.
+- Live SEO crawl gate passed: 500 crawled pages, 1,623 sitemap URLs, 0 bad link-contracts, 0 crawled error pages, `warning_groups=0`.
+- `git diff --check`, Python compile gate, publication-boundary audit, and public release contract passed.
+
+Next:
+
+- Use the service-area page as the proof link for local SEO, service-area, and pSEO-safety discussions.
+- Keep city/niche pages noindex until unique local evidence exists.
+
+
+## 2026-06-26 — Overnight Base2026 review sentiment AI visibility page deployed
+
+User requested an autonomous night shift to strengthen Base2026 traffic and AI/SEO visibility without questions, paid purchases, registrations, or unapproved outreach.
+
+Actions:
+
+- Continued from the existing overnight artifact set under `docs/operations/overnight/2026-06-26-base2026-night-shift/`.
+- Added source-backed page `/knowledge/review-sentiment-and-ai-visibility-for-local-businesses/` to `data/ai_visibility_pages_batch01.json`.
+- Used official Google Business Profile/Search documentation plus reviewed Base2026 insight cards; no raw transcripts or private paths were published.
+- Regenerated AI visibility pages and sitemap, then deployed `base2026-review-sentiment-ai-visibility-20260626` through the canonical release gate.
+- Did not run GSC request-indexing, IndexNow, Ahrefs recrawl, registrations, paid submissions, or outreach.
+
+Verification:
+
+- Release gate passed git diff whitespace check, public content readiness, publication boundary, GitHub metadata, public export policy, and public release contract.
+- Deploy switched `/var/www/base2026-knowledge/current` to `base2026-review-sentiment-ai-visibility-20260626` and reindexed Meilisearch task `439` with 2,063 passages.
+- Live review sentiment page returns `200`, has H1, `index,follow`, canonical URL, Google source links, reviewed Base2026 source IDs, and sitemap inclusion.
+- City/niche draft sample stays `noindex,nofollow`.
+- Live SEO crawl gate passed: 500 crawled pages, 1,622 sitemap URLs, 0 bad link-contracts, 0 crawled error pages, `warning_groups=0`.
+
+Next:
+
+- Use the measurement, AI-ready documentation, and review sentiment pages as the first share targets.
+- Keep city/niche pages noindex until unique local evidence exists.
+
+
+## 2026-06-26 — Overnight Base2026 AI/SEO visibility page deployed
+
+User requested an autonomous night shift to strengthen Base2026 traffic and AI/SEO visibility without asking questions, paid purchases, registrations, or unapproved outreach.
+
+Actions:
+
+- Continued from existing overnight artifacts under `docs/operations/overnight/2026-06-26-base2026-night-shift/` instead of duplicating the batch.
+- Verified live network/SSH access, then deployed `base2026-nightshift-ai-visibility-measurement-socialfix-20260626` through the existing data-preserving hotfix deploy path with `-SkipPackage -SkipReindex`.
+- Added a 1200×630 social preview card: `web/static/assets/base2026-ai-visibility-card.png`.
+- Patched `scripts/generate-ai-visibility-pages.py` so AI visibility pages and the collection page emit complete OG/X metadata and use the social card instead of the square avatar image.
+- Kept 16 California city/niche drafts `noindex,nofollow` and out of sitemaps.
+- Did not run GSC request-indexing, IndexNow, Ahrefs recrawl, registrations, paid submissions, or outreach.
+
+Verification:
+
+- Live `/knowledge/measuring-ai-visibility-without-query-click-data/` returns `200`, has one H1, `index,follow`, canonical URL, source links, and complete OG/X metadata.
+- Live `/knowledge/ai-visibility-pages/` returns `200`, has one H1, `index,follow`, canonical URL, and complete OG/X metadata.
+- Live city/niche sample `/knowledge/california/los-angeles-roofers-ai-visibility-audit/` returns `200` but remains `noindex,nofollow`.
+- Live social preview asset returns `200 image/png`; server file is `1200 x 630`.
+- Live sitemap index has 5 child sitemaps / 1,620 URLs; `base2026-001.xml` includes the measurement page and excludes the city/niche noindex draft.
+- `node scripts/live-seo-crawl-gate.mjs` passed: 500 crawled pages, 1,620 sitemap URLs, 0 bad link-contracts, 0 crawled error pages, `warning_groups=0`.
+- `git diff --check`, Python compile gate, publication-boundary audit, and public release contract passed.
+
+Next:
+
+- Use the live measurement page as the first share target for DEV.to/LinkedIn/Product Hunt prep.
+- Keep city/niche pages noindex until each has unique local evidence.
+- If doing GSC, inspect/submit only strong live indexable URLs after manual review.
+
+## 2026-06-26 — Overnight Base2026 AI/SEO visibility safety batch
+
+User requested an autonomous night shift to strengthen Base2026 traffic and AI/SEO visibility without asking questions, paid purchases, registrations, or unapproved outreach.
+
+Actions:
+
+- Inspected repo state, project-memory files, web/static output, generator scripts, sitemap files, and AI visibility batch data.
+- Ran `session_search` for recent Base2026/TikTok/transcript context; no matches were returned, so local files/logs were used.
+- Created durable operation artifacts under `docs/operations/overnight/2026-06-26-base2026-night-shift/`: `worklog.md`, `keyword-ledger.csv`, `external-registration-opportunities.md`, and `traffic-experiments.md`.
+- QA found all 21 generated AI visibility targets present, but 16 city/niche pages had high pSEO/doorway risk because they were templated city/niche swaps without unique local evidence.
+- Patched `scripts/generate-ai-visibility-pages.py` so generated pages render a page-specific H1, the Alex slogan is no longer the only H1, broad hubs can stay indexable, and city/niche pages stay noindex until explicitly evidence-approved.
+- Removed private absolute `source_file` paths from `data/ai_visibility_pages_batch01.json` and normalized `HVAC` display text.
+- Regenerated `web/static` AI visibility pages and sitemap; added `web/static/topics/index.html` and `web/static/creators/index.html` to fix nav/footer targets.
+
+Verification:
+
+- `python3 scripts/generate-ai-visibility-pages.py --input data/ai_visibility_pages_batch01.json --out web/static --indexable` returned `pages=21`.
+- `python3 scripts/generate-base2026-sitemap.py --web-root web/static --base-url https://aggressorbulkit.online/knowledge --out web/static/sitemap.xml` returned `sitemap_urls=473 sitemap_files=2`.
+- Sample city/niche page is `noindex,nofollow` and excluded from sitemap; sample hub page is `index,follow` and included.
+- JSON batch no longer contains `source_file`.
+
+Next:
+
+- Build one evidence-backed public page from reviewed TikTok/source insight cards, starting with AI visibility measurement when query/click data disappears.
+- Keep local city/niche pSEO drafts out of index until city-specific evidence exists.
+- Deploy only after the normal release/preflight path and publication-boundary audit.
+
+## 2026-06-26 — TikTok press-release AI visibility case moved into Base2026 research
+
+User asked to move the TikTok analysis result into Base2026 with a short explanation of what it is, why we looked at it, and what we found.
+
+Actions:
+
+- Created internal Base2026 research note: `docs/research/TIKTOK_PRESS_RELEASE_AI_VISIBILITY_CASE_2026_06_26.md`.
+- Captured the visible TikTok case pattern: Zeeshan Yaseen / ZeeKnows, paid Yahoo Finance / GlobeNewswire press release, exact LLM SEO / AI Search Optimization phrase placement, and follow-on citation/article amplification.
+- Framed the lesson for Base2026 as source-intelligence/evidence-quality research, not as a recommendation to publish PR spam or doorway pages.
+- Preserved public/private boundary: montage/audio remain local working artifacts; the note explicitly says not to publish or ingest as reviewed source until the original TikTok and referenced pages are independently verified.
+
+Next:
+
+- If this becomes a public Base2026 page, first verify the original TikTok URL, press-release URL, linked article(s), dates, and whether the claims surface in search/AI tools.
+- Use the note as input for a safer topic such as `Press releases and AI visibility` or `Paid PR vs real third-party citations in LLM SEO`.
+
+## 2026-06-24 — Base2026 to Alex traffic architecture source pass
+
+User requested one integrated overnight implementation: Base2026 as research/proof/source-intelligence layer, Alex personal site as conversion/money/service layer, with reciprocal links, GSC-ready prioritization, publication-boundary safety, and deploy if safe.
+
+Actions:
+
+- Added Base2026 public bridge page `docs/public-pages/09_APPLY_RESEARCH.md` and generated `web/static/apply-research.html`.
+- Added Base2026 Apply navigation/footer/search-root bridges in the info-page generator, public-page generator, search root, `llms.txt`, root llms mirror, API index, and packaging scripts.
+- Added Alex money pages in the WordPress content generator: `/ai-visibility-diagnostic-audit/`, `/technical-seo-geo-foundation/`, `/answer-ready-service-pages/`, and `/entity-trust-source-intelligence/`.
+- Added Alex reciprocal Base2026 proof links in generated services/audit content, theme submenu/footer, and generated `llms.txt` output.
+- Created `docs/project-memory/GSC_READY_TRAFFIC_ACTION_SET_2026_06_24.md` with manual GSC priority URLs and no automated request-indexing clicks.
+- Avoided Telegram CTA, Reddit execution plans, YouTube plans, and Google Business Profile recommendations for Base2026. Existing public source/topic corpus may still mention those terms as research evidence.
+
+Verification:
+
+- Base2026 syntax/diff checks passed with local pycache: `PYTHONPYCACHEPREFIX=/private/tmp/base2026-pycache python3 -m py_compile scripts/generate-info-pages.py scripts/generate-public-pages.py` and `git diff --check`.
+- Base2026 publication boundary passed: `changed_files=29`, `needs_review=0`, `forbidden=0`, `secret_findings=0`.
+- Base2026 public release contract passed: `ok=true`, `violation_count=0`.
+- Data-preserving package succeeded: `base2026-traffic-architecture-ay59-20260624`; release output has `web/apply-research.html`, zip artifact, and sitemap `1614` URLs.
+- Base bridge page checks passed: canonical, `robots index,follow`, one H1, and links to Alex audit/services/pricing plus Base search.
+- Geo generator check passed: generated `17` WordPress content items; all four new money pages are `publish`, have H1s, Base2026 proof links, and audit CTAs.
+- Geo `node --check scripts/build-wordpress-content.mjs`, `node scripts/build-wordpress-content.mjs`, and `git diff --check` passed.
+
+Blocked:
+
+- `curl -I --max-time 10 https://aggressorbulkit.online/knowledge/` failed from the sandbox: `Could not resolve host`.
+- `ssh -o BatchMode=yes -o ConnectTimeout=10 geo 'echo ssh_ok'` failed from the sandbox: port 22 `Operation not permitted`.
+- Local `php` is not installed, so WordPress theme PHP lint could not run here.
+- No deploy/live QA was run from this environment.
+
+Next:
+
+- From a network-enabled shell, deploy Base2026 package with `pwsh -NoProfile -ExecutionPolicy Bypass -File ./scripts/deploy-public-vps.ps1 -ReleaseName base2026-traffic-architecture-ay59-20260624 -SkipPackage`.
+- Deploy/import the Alex generated WordPress content/theme changes, then run server PHP lint, cache clear, live crawl/schema/index checks, and the GSC-ready priority set.
+
+## 2026-06-24 — ay58 remaining Alex-approved source-review rows to production
+
+User approved remaining review-list numbers 15, 14, 13, 12, 11, 10, and 9 for posting.
+
+Actions:
+
+- Mapped those numbers to seven video IDs: `7652483737283874062`, `7652858388396657934`, `7652858372311633165`, `7654241371187907853`, `7654341038856817933`, `7654425733405756703`, `7654808550417468703`.
+- Created private manifest `.planning/source-review-approval-alex-20260624-remaining-nums-15-14-13-12-11-10-9.json`.
+- Applied QA decisions with `scripts/tiktok-qa-review-apply.py`, then cleared `videos.csv` rows with `scripts/tiktok-clear-reviewed-source-rows.py`; backup `.planning/backups/videos-before-source-review-clear-20260624-091514.csv`.
+- Release gate initially blocked newest source-only records, so added exact-evidence reviewed cards for `Multi-perspective AI research prompts` (`@ray_fu`) and `Competitor Google Ads offer research` (`@gobigsystems`).
+- Deployed `base2026-source-review-alex-approved-remaining-ay58-20260624` through the canonical gate; Meilisearch task `423` indexed 2,063 passages.
+
+Verification:
+
+- Public export: 1,512 source records, 2,063 passages, 1,637 insight cards, 1,066 public insight cards, 1,528 topics, 1,014 public topics, `include_full_transcripts=false`.
+- Newest-source readiness passed with 0 blocked records.
+- Live SEO crawl gate passed: 500 crawled pages, 1,613 sitemap URLs, 0 bad link-contracts, 0 crawled error pages.
+- Direct live smoke returned 200 for all seven newly approved source pages.
+- Initial mobile QA had one transient `ERR_CONNECTION_RESET`; rerun passed 78 checks, 0 failures.
+
+Held/private:
+
+- 8 fresh source-review rows remain private.
+- 1 fresh ASR-too-little row remains private.
+- Historical source/audio verification debt remains gated; no bulk-pass was done.
+
+## 2026-06-24 — ay56 fresh TikTok pipeline to production
+
+User asked to run the full production-grade fresh TikTok pipeline for already configured creators, avoiding prior mistakes around check-only writes, broad inventory expansion, missing Source Intelligence, and skipped production verification.
+
+Actions:
+
+- Verified latest check-only discovery `.planning/social-discovered-checkonly-20260623-234401.jsonl` and current `videos.csv` hash before mutation.
+- Dry-ran then applied 45 new TikTok candidate rows into private `videos.csv` with backup `.planning/backups/videos-before-social-import-20260623-234902.csv`; post-apply dry-run returned 0 new rows.
+- Ran bounded refresh with `-SkipInventory -TranscriptLimit 45 -AsrLimit 45 -PolishLimit 45` so no broad inventory expansion occurred.
+- Caption/ASR result: 44 usable transcripts and 1 `asr_too_little` held private.
+- GPT-5.5 polish wrote 44 polished transcript files and 44 QA files; 21 passed, 23 were explicitly gated as `needs_source_review` with backup `.planning/backups/videos-before-gate-fresh45-needs-review-20260623-235614.csv`.
+- Ran `-AfterPolish`, rebuilt SQLite/export, then fixed newest-source readiness by adding 3 exact-evidence reviewed Source Intelligence cards for the latest `@build_in_public`, `@webhivedigital`, and `@iamdandavies` sources.
+- Deployed `base2026-fresh-tiktok-pipeline-ay56-20260624` through `scripts/base2026-release-gate.ps1 -LatestReadiness 3 -Deploy`.
+
+Verification:
+
+- Public export: 1,497 source records, 2,044 passages, 1,634 insight cards, 1,063 public insight cards, 1,525 topics, 1,011 public topics, `include_full_transcripts=false`.
+- Newest-source readiness passed with 0 blocked records.
+- VPS current symlink points to `base2026-fresh-tiktok-pipeline-ay56-20260624`.
+- Meilisearch reindexed 2,044 passages, task `415`.
+- Live SEO crawl gate passed: 500 crawled pages, 1,598 sitemap URLs, 0 bad link-contracts, 0 crawled error pages.
+- Full live mobile visual QA passed: 78 checks, 0 failures, evidence under `output/evidence/mobile-visual-qa-live-base2026-fresh-tiktok-pipeline-ay56-20260624/`.
+- Live source smoke confirmed `/knowledge/sources/tiktok-video-7654752232675593504.html` renders ay56 assets, Source Intelligence, and `Google Business Profile analytics`.
+
+Held/private:
+
+- 23 fresh polished rows remain private as `needs_source_review` because GPT QA marked them `needs_review`.
+- 1 fresh ASR row remains private because ASR produced too little usable speech.
+- Historical source-review debt remains gated; no bulk-pass was done.
+
+## 2026-06-23 — Overnight Base2026 indexation plan and local-business audit queue
+
+Scheduled overnight job asked to verify repo/live crawl state, triage the remaining canonical warning, create a concrete 7-day Base2026 indexation/growth checklist, and analyze Agency OS local-business TikTok leads without outreach.
+
+Actions:
+
+- Checked Base2026 branch/status and required project-memory files.
+- Verified full live crawl artifact `output/seo-crawl-gate/ay56b-full-20260623/summary.json`: 1,700 crawled pages, 1,577 sitemap URLs, all crawled pages `200`, bad link-contract count `0`, crawled error pages `0`.
+- Directly fetched `/ai-visibility-audit/?plan=diagnostic` and `/ai-visibility-audit/`; both return `200` and canonicalize to `/ai-visibility-audit/`.
+- Saved WordPress-layer canonical conclusion in `CANONICAL_WARNING_TRIAGE_2026_06_23.md`.
+- Created operational 7-day checklist in `BASE2026_7_DAY_INDEXATION_GROWTH_CHECKLIST_2026_06_23.md`.
+- Analyzed Agency OS `data/tiktok_local_business_leads.csv` (79 rows) and saved a 10-candidate no-outreach audit queue in `04_Audits/2026-06-23-top-priority-audit-queue.md`.
+- Updated `NEXT_ACTION.md` and local-business project log.
+
+Not done:
+
+- No redeploy, commit, push, GSC request-indexing automation, TikTok intake, outreach, DM/comment/email, or Telegram delivery.
+
+Next:
+
+- Build the first three mini-audits: Shine MD Medspa, Beyond Dental & Implant Center, Dream Aesthetics Medspa.
+- Use the Day 1 checklist to prepare a strong-URL GSC request set; do not submit weak/noindex pages.
+
 ## 2026-06-23 — Ahrefs/GSC live SEO check after ay55
 
 User asked to continue down the SEO list and try the open Ahrefs / Google Search Console tabs.
@@ -5387,3 +6975,217 @@ Verification:
 - public export now has 1,476 source records, 2,016 passages, 1,631 insight cards, 1,060 public insight cards, 1,522 topics, 1,008 public topics, and 10 creators;
 - release gate passed newest-source readiness `--latest 3`, publication boundary, GitHub metadata, public export policy, public release contract, VPS deploy/reindex, live SEO crawl, and mobile visual QA 78/0;
 - direct live smoke confirmed the reported source page has Source Intelligence, no empty state, and no old raw-source Q&A fallback.
+
+## 2026-06-26 — Cron: Base2026 night shift, AI visibility measurement page
+
+User/task: autonomous overnight Base2026 growth shift. Do not ask questions; inspect repo/session state; use local TikTok/source evidence; create durable artifacts; build only evidence-backed public pages; verify; do not deploy or register/send outreach without approval.
+
+Actions:
+- Inspected repo/project memory/state, existing overnight artifacts, AI visibility generator/data, sitemap behavior, deployment/hotfix runbook, local public TikTok reviewed-source artifacts.
+- Searched recent sessions for Base2026/TikTok/transcript context. No newer chat-only transcript material was found via the available session search, so the run used local reviewed source cards plus official Google docs.
+- Added source-backed public page data for `/knowledge/measuring-ai-visibility-without-query-click-data/`.
+- Updated `scripts/generate-ai-visibility-pages.py` with safe body Markdown link rendering.
+- Regenerated static AI visibility pages and sitemap.
+- Patched `scripts/package-public-hotfix-from-export.ps1` so hotfix packages include AI visibility pages in the release root before sitemap generation.
+- Built local deploy-ready hotfix package `base2026-nightshift-ai-visibility-measurement-20260626`; no deploy was executed.
+- Updated overnight worklog, keyword ledger, traffic experiment note, external-opportunities note, and `NEXT_ACTION.md`.
+
+Verification:
+- Generator and sitemap commands passed locally.
+- New page has `index,follow`, one H1, canonical, official Google links, reviewed TikTok source links, and package sitemap inclusion.
+- City/niche noindex drafts remained noindex and absent from release sitemaps.
+- Hotfix package build passed with package sitemap `1620` URLs / `5` sitemap files.
+- Publication boundary audit passed with `needs_review=0`, `forbidden=0`, `secret_findings=0`.
+- Public release contract passed with `ok=true`, `violation_count=0`.
+
+Blocked/not attempted:
+- No public deploy, paid registration, account creation, GSC submission, or outreach was performed.
+
+
+## 2026-06-26 — Cron continuation: AI-ready documentation page
+
+Prompt: autonomous Base2026 night shift for evidence-backed AI/SEO visibility pages, internal linking, indexability, TikTok/source intelligence, external opportunities, and safe local work without unapproved registrations or outreach.
+
+Outcome: added and deployed the source-backed page `/knowledge/ai-ready-business-documentation-for-service-pages/` in `base2026-ai-ready-documentation-page-20260626`. The page uses official Google Search Central docs plus reviewed Base2026 TikTok insight cards, publishes no raw transcript dump, keeps city/niche drafts noindex, and passed live crawl/publication gates.
+
+## 2026-06-28 — Public TikTok transcript polish batch 001 from 08:12
+
+Prompt: process `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260628-081207/batch-001.md` only, using GPT-5.5 quality lane, and create/update polished transcript and QA JSON outputs for each video.
+
+Actions:
+
+- Created faithful polished transcript output for `7656461338797002002`.
+- Created QA JSON output for `7656461338797002002` with status `pass`, model tier `gpt-5.5`, raw word count 268, polished word count 268, and paragraph count 6.
+- Preserved spoken wording and meaning; only punctuation, capitalization, sentence boundaries, and paragraph breaks were adjusted.
+
+Verification:
+
+- JSON validation passed for `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7656461338797002002.json`.
+- Word/paragraph counts were checked.
+- Reviewer pass found no added meaning and no public/private boundary issue in the written outputs.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-07-05 — Public TikTok transcript polish batch 001 from 18:22
+
+Prompt: process `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260705-182250/batch-001.md` only, using GPT-5.5 quality lane, and create/update polished transcript and QA JSON outputs for each video.
+
+Actions:
+
+- Created faithful polished transcript output for `7659160474881215752`.
+- Created QA JSON output for `7659160474881215752` with status `needs_review`, model tier `gpt-5.5`, raw word count 132, polished word count 132, and paragraph count 5.
+- Created faithful polished transcript output for `7659145667855617302`.
+- Created QA JSON output for `7659145667855617302` with status `needs_review`, model tier `gpt-5.5`, raw word count 638, polished word count 633, and paragraph count 10.
+- Preserved spoken wording and meaning; only punctuation, capitalization, sentence boundaries, paragraph breaks, and obvious caption spacing/tokenization were adjusted.
+
+Verification:
+
+- JSON validation passed for both QA files.
+- Word/paragraph counts were checked.
+- Reviewer pass found no added meaning and no public/private boundary issue in the written outputs.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-07-01 — Public TikTok transcript polish batch 001 from 18:07
+
+Prompt: process `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260630-180746/batch-001.md` only, using GPT-5.5 quality lane, and create/update polished transcript and QA JSON outputs for each video.
+
+Actions:
+
+- Created faithful polished transcript output for `7657353682996006158`.
+- Created QA JSON output for `7657353682996006158` with status `needs_review`, model tier `gpt-5.5`, raw word count 69, polished word count 69, and paragraph count 4.
+- Created faithful polished transcript output for `7657333505461996814`.
+- Created QA JSON output for `7657333505461996814` with status `needs_review`, model tier `gpt-5.5`, raw word count 627, polished word count 623, and paragraph count 13.
+- Created faithful polished transcript output for `7657265821907045646`.
+- Created QA JSON output for `7657265821907045646` with status `needs_review`, model tier `gpt-5.5`, raw word count 80, polished word count 80, and paragraph count 4.
+- Preserved spoken wording and meaning; only punctuation, capitalization, sentence boundaries, paragraph breaks, and obvious AI/SEO/AMA casing-tokenization were adjusted.
+
+Verification:
+
+- JSON validation passed for all three QA files.
+- Word/paragraph counts were checked.
+- Reviewer pass found no added meaning and no public/private boundary issue in the written outputs.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-06-29 — Public TikTok transcript polish batch 001 from 08:34
+
+Prompt: process `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260629-083412/batch-001.md` only, using GPT-5.5 quality lane, and create/update polished transcript and QA JSON outputs for each video.
+
+Actions:
+
+- Created faithful polished transcript output for `7656828593024109832`.
+- Created QA JSON output for `7656828593024109832` with status `needs_review`, model tier `gpt-5.5`, raw word count 111, polished word count 110, and paragraph count 4.
+- Preserved spoken wording and meaning; only punctuation, capitalization, sentence boundaries, paragraph breaks, and captioned domain spacing were adjusted.
+
+Verification:
+
+- JSON validation passed for `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7656828593024109832.json`.
+- Word/paragraph counts were checked.
+- Reviewer pass found no added meaning and no public/private boundary issue in the written outputs.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-06-29 — Public TikTok transcript polish batch 001 from 12:38
+
+Prompt: process `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260629-123845/batch-001.md` only, using GPT-5.5 quality lane, and create/update polished transcript and QA JSON outputs for each video.
+
+Actions:
+
+- Created faithful polished transcript output for `7656880848293088525`.
+- Created QA JSON output for `7656880848293088525` with status `needs_review`, model tier `gpt-5.5`, raw word count 232, polished word count 232, and paragraph count 6.
+- Created faithful polished transcript output for `7656877206848703777`.
+- Created QA JSON output for `7656877206848703777` with status `pass`, model tier `gpt-5.5`, raw word count 122, polished word count 121, and paragraph count 4.
+- Preserved spoken wording and meaning; only punctuation, capitalization, sentence boundaries, paragraph breaks, and allowed `ChatGPT` normalization were adjusted.
+
+Verification:
+
+- JSON validation passed for both QA files.
+- Word/paragraph counts were checked.
+- Reviewer pass found no added meaning and no public/private boundary issue in the written outputs.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-07-01 — Alex/Base2026 AI Visibility funnel deployment
+
+User sent ChatGPT Pro content batch and asked to move into correct turbo execution. Saved returned batch as `docs/project-memory/BASE2026_CHATGPT_PRO_CONTENT_BATCH_2026_07_01.md`, updated `scripts/generate-alex-base2026-native-site.py`, generated and deployed release `alex-ai-visibility-funnel-20260701`, patched nginx redirects/static overlay routes, patched WordPress lead handler for `ay_intent`/competitors/freeform/extra notes, and verified live SEO/visual/form state. Full report: `docs/project-memory/BASE2026_AI_VISIBILITY_FUNNEL_DEPLOYED_2026_07_01.md`.
+
+## 2026-07-03 — Public TikTok transcript polish batch 001 from 22:42
+
+Prompt: process `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260702-224253/batch-001.md` only, using GPT-5.5 quality lane, and create/update polished transcript and QA JSON outputs for each video.
+
+Actions:
+
+- Created faithful polished transcript output for `7658159021370920200`.
+- Created QA JSON output for `7658159021370920200` with status `needs_review`, model tier `gpt-5.5`, raw word count 244, polished word count 243, and paragraph count 7.
+- Preserved spoken wording and meaning; only punctuation, capitalization, sentence boundaries, paragraph breaks, and obvious tool-name casing/tokenization were adjusted.
+
+Verification:
+
+- JSON validation passed for `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7658159021370920200.json`.
+- Word/paragraph counts were checked.
+- Reviewer pass found no added meaning and no public/private boundary issue in the written outputs.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-07-07 — Public TikTok transcript polish batch 001 from 12:55
+
+Prompt: process `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260707-125546/batch-001.md` only, using GPT-5.5 quality lane, and create/update polished transcript and QA JSON outputs for each video.
+
+Actions:
+
+- Created faithful polished transcript output for `7659802353842933012`.
+- Created QA JSON output for `7659802353842933012` with status `needs_review`, model tier `gpt-5.5`, raw word count 173, polished word count 173, and paragraph count 5.
+- Preserved spoken wording and meaning; only punctuation, capitalization, sentence boundaries, paragraph breaks, and allowed `AI` casing were adjusted.
+
+Verification:
+
+- JSON validation passed for `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7659802353842933012.json`.
+- Word/paragraph counts were checked.
+- Reviewer pass found no added meaning and no public/private boundary issue in the written outputs.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-07-09 — Public TikTok transcript polish batch 001 from 11:30
+
+Prompt: process `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260709-113001/batch-001.md` only, using GPT-5.5 quality lane, and create/update polished transcript and QA JSON outputs for each video.
+
+Actions:
+
+- Created faithful polished transcript outputs for `7660539746162281750` and `7660537994952052000`.
+- Created QA JSON outputs for both videos with status `needs_review`, model tier `gpt-5.5`, and no added meaning.
+- Preserved spoken wording and meaning; only punctuation, capitalization, sentence boundaries, paragraph breaks, and conservative obvious casing/spacing cleanup were adjusted.
+
+Verification:
+
+- JSON validation passed for both QA files.
+- Word/paragraph counts were checked: `7660539746162281750` raw 3357 / polished 3323 / paragraphs 62; `7660537994952052000` raw 230 / polished 230 / paragraphs 5.
+- Reviewer pass found no added meaning and no public/private boundary issue in the written outputs.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, durable decision, or status-board phase transition was run.
+
+## 2026-07-08 — Public TikTok transcript polish batch 001 from 17:18
+
+Prompt: process `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260708-171809/batch-001.md` only, using GPT-5.5 quality lane, and create/update polished transcript and QA JSON outputs for each video.
+
+Actions:
+
+- Created faithful polished transcript output for `7660251226839321878`.
+- Created QA JSON output for `7660251226839321878` with status `pass`, model tier `gpt-5.5`, raw word count 298, polished word count 297, and paragraph count 7.
+- Preserved spoken wording and meaning; only punctuation, capitalization, sentence boundaries, paragraph breaks, and allowed WordPress/WP Rocket/JavaScript casing plus `built-in` punctuation were adjusted.
+
+Verification:
+
+- JSON validation passed for `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7660251226839321878.json`.
+- Word/paragraph counts were checked.
+- Reviewer pass found no added meaning and no public/private boundary issue in the written outputs.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-07-08 — Public TikTok transcript polish batch 001 from 13:15
+
+Prompt: process `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260708-131540/batch-001.md` only, using GPT-5.5 quality lane, and create/update polished transcript and QA JSON outputs for each video.
+
+Actions:
+
+- Created faithful polished transcript output for `7660181167278279944`.
+- Created QA JSON output for `7660181167278279944` with status `needs_review`, model tier `gpt-5.5`, raw word count 419, polished word count 419, and paragraph count 7.
+- Preserved spoken wording and meaning; only punctuation, capitalization, sentence boundaries, paragraph breaks, and allowed `Google` casing were adjusted.
+
+Verification:
+
+- JSON validation passed for `12_knowledge-base/sources/tiktok/transcripts/polished-qa/7660181167278279944.json`.
+- Word/paragraph counts were checked.
+- Reviewer pass found no added meaning and no public/private boundary issue in the written outputs.
+- No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
