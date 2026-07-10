@@ -31,7 +31,9 @@ IndexNow closure was completed after live-gating the full current sitemap and th
 
 IndexNow receipt: `.planning/tiktok-pipeline-v2/indexnow-card-completeness-2026-07-10/indexnow-release-closure-receipt.json`.
 
-Git publication closure is proceeding through the existing `codex/base2026-launch-next` branch and PR #8. Before push, the complete dirty worktree was classified; temporary GSC helpers were removed; private/generated ignored artifacts remained outside Git; publication boundary was 218/218 public-safe with 0 forbidden, 0 needs-review, and 0 secret findings. Full tests passed 45/45 and `git diff --check` was clean.
+Git publication closure is complete. Four scoped release commits were pushed through PR #8; CodeQL Python, JavaScript/TypeScript, and aggregate checks passed; PR #8 merged into `main` as `0ca9f2a7f985be2d58e62c76432fa29fff82b4bd`; the remote feature branch was deleted; local and remote `main` were synchronized. Before push, the complete dirty worktree was classified; temporary GSC helpers were removed; private/generated ignored artifacts remained outside Git; publication boundary was 218/218 public-safe with 0 forbidden, 0 needs-review, and 0 secret findings. Full tests passed 45/45 and `git diff --check` was clean.
+
+Post-merge live verification passed again for the normal/archive/future samples, 1,493 unique normal documents, 1,734 sitemap URLs, the AI Recommends Solutions hub, and the 2,052-chunk Meilisearch index. Receipt: `.planning/tiktok-pipeline-v2/final-post-merge-live-verification.json`.
 
 ## Superseded pre-release correction — production previously had 934 source-only normal cards
 

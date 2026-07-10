@@ -70,7 +70,10 @@ IndexNow acceptance is a crawl notification, not a guarantee that Bing will inde
 - Publication boundary: **218/218 public-safe**, 0 forbidden, 0 needs-review, 0 secret findings.
 - Tests: **45/45 passed**; Python compile, GitHub metadata, AI Recommends contract/HTML validation, and `git diff --check` passed.
 - Scoped commits were prepared on `codex/base2026-launch-next` for pipeline/contracts/tests, public surfaces, research/project records, and final release documentation.
-- Remote publication proceeds through existing PR #8 rather than an unreviewable blanket commit.
+- Remote publication completed through PR #8 rather than an unreviewable blanket commit.
+- CodeQL Python, JavaScript/TypeScript, and aggregate checks passed.
+- PR #8 merged into canonical `main` as `0ca9f2a7f985be2d58e62c76432fa29fff82b4bd`; the remote feature branch was deleted and local/remote `main` were synchronized.
+- Post-merge live verification passed again for normal/archive/future behavior, 1,493 unique normal documents, 1,734 sitemap URLs, the AI Recommends Solutions hub, and 2,052 Meilisearch chunks. Receipt: `.planning/tiktok-pipeline-v2/final-post-merge-live-verification.json`.
 
 No Google bulk indexing automation was performed. Google remains on sitemap discovery plus selective GSC inspection for priority pages; no outreach was performed.
 

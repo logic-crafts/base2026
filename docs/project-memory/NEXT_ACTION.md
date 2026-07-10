@@ -18,7 +18,7 @@ Next safe sequence:
 2. Keep the normal card/search surface limited to complete records; treat any newly ingested unclassified source fail-closed until reviewed.
 3. Preserve archive labeling/noindex and private future exclusion throughout redesign work.
 4. Run local responsive/interaction/data-contract QA before any later production release.
-5. Treat the current source-card release closure as complete after GitHub PR/remote verification. Any later redesign deploy, broad external indexing, outreach, or new data-changing release still requires its own gate and approval.
+5. The current source-card release closure is complete in production, IndexNow, GitHub PR #8, and canonical `main`. Any later redesign deploy, broad external indexing, outreach, or new data-changing release still requires its own gate and approval.
 
 Canonical production receipt: `.planning/tiktok-pipeline-v2/production-completeness-release-receipt-2026-07-10.json`.
 
