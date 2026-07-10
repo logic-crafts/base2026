@@ -29,6 +29,7 @@ Base2026 has two layers:
 - reviewed public-safe documentation under `12_knowledge-base/`
 - `config/creator-profiles.json`
 - public-safe examples under `config/`, such as `config/creators.example.json`
+- public-safe generator source data under `data/`, such as `data/ai_visibility_pages_batch01.json`, after private absolute paths and unreviewed source material are removed
 
 ## Do not commit
 

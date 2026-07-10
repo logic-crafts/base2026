@@ -80,7 +80,15 @@ if ($BatchSet) {
     throw "BatchSet not found: $BatchDir"
   }
   Run-Step "current batch polish status" {
-    python3 ./scripts/tiktok-polish-status.py --batch-dir $BatchDir --json
+    if ($RunAfterPolish) {
+      # Mixed batches are allowed at this pre-release step: `needs_review` rows are
+      # moved to the private source-review lane by hermes-tiktok-refresh -AfterPolish
+      # before rebuild/export. Missing polish output or invalid JSON still fails.
+      python3 ./scripts/tiktok-polish-status.py --batch-dir $BatchDir --json --allow-needs-review
+    }
+    else {
+      python3 ./scripts/tiktok-polish-status.py --batch-dir $BatchDir --json
+    }
     Assert-NativeSuccess "tiktok-polish-status"
   }
 }

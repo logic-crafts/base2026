@@ -29,9 +29,22 @@ def read_jsonl(path: Path) -> list[dict]:
     return rows
 
 
+def load_source_scope(path: Path | None) -> set[str]:
+    if path is None:
+        return set()
+    return {str(row.get("source_id")) for row in read_jsonl(path) if row.get("source_id")}
+
+
 def write_json(path: Path, payload: dict) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def write_jsonl(path: Path, rows: list[dict]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8", newline="\n") as handle:
+        for row in rows:
+            handle.write(json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n")
 
 
 def normalize(text: str) -> str:
@@ -186,6 +199,13 @@ def classify(row: dict, soft_warnings: list[str], hard_failures: list[str]) -> s
 def review_candidates(args: argparse.Namespace) -> dict:
     rows = pending_candidates(args.db, args.status)
     sources_by_source, sources_by_video = load_source_maps(args.data_root)
+    source_scope = load_source_scope(args.source_ids_jsonl)
+    if source_scope:
+        rows = [
+            row
+            for row in rows
+            if source_id_for(row, sources_by_source, sources_by_video) in source_scope
+        ]
     passages_by_source = load_passages(args.data_root)
     public_candidate_counts = existing_public_candidate_counts(args.db, sources_by_video)
     source_counts = Counter()
@@ -256,6 +276,8 @@ def review_candidates(args: argparse.Namespace) -> dict:
         "generated_at": now_iso(),
         "db": str(args.db),
         "status": args.status,
+        "source_scope_file": str(args.source_ids_jsonl or ""),
+        "source_scope_count": len(source_scope),
         "total_candidates": len(reviewed),
         "recommendation_counts": dict(sorted(counts.items())),
         "evidence_counts": dict(sorted(evidence_counts.items())),
@@ -326,8 +348,20 @@ def main() -> int:
     parser.add_argument("--db", type=Path, default=DB)
     parser.add_argument("--data-root", type=Path, default=DATA_ROOT)
     parser.add_argument("--status", default="pending")
+    parser.add_argument(
+        "--source-ids-jsonl",
+        type=Path,
+        default=None,
+        help="Optional JSONL scope; only pending candidates whose source_id appears in this file are reviewed.",
+    )
     parser.add_argument("--out-json", type=Path, default=None)
     parser.add_argument("--out-md", type=Path, default=None)
+    parser.add_argument(
+        "--out-candidates-jsonl",
+        type=Path,
+        default=None,
+        help="Optional strict-check input containing only promotion_candidate rows from this scoped report.",
+    )
     parser.add_argument("--max-promotion-candidates-per-source", type=int, default=2)
     parser.add_argument("--min-claim-chars", type=int, default=35)
     parser.add_argument("--max-claim-chars", type=int, default=220)
@@ -344,9 +378,16 @@ def main() -> int:
     write_json(out_json, report)
     out_md.parent.mkdir(parents=True, exist_ok=True)
     out_md.write_text(markdown_for_report(report), encoding="utf-8")
+    strict_rows = [
+        row for row in report["candidates"] if row["recommended_status"] == "promotion_candidate"
+    ]
+    if args.out_candidates_jsonl:
+        write_jsonl(args.out_candidates_jsonl, strict_rows)
     summary = {
         "out_json": str(out_json),
         "out_md": str(out_md),
+        "out_candidates_jsonl": str(args.out_candidates_jsonl or ""),
+        "strict_candidates": len(strict_rows),
         "total_candidates": report["total_candidates"],
         "sources": report["sources"],
         "recommendation_counts": report["recommendation_counts"],

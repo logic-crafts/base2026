@@ -239,3 +239,10 @@ $rows | Export-Csv $VideosCsv -NoTypeInformation -Encoding UTF8
   asr_no_audio = $asrNoAudio
   asr_worker_parse_failed = $asrWorkerParseFailed
 } | Format-List
+
+# yt-dlp/faster-whisper can return a non-zero native LASTEXITCODE for rows that this
+# script has already converted into an explicit queue state (`needs_asr` or
+# `needs_source_review`). The caller should treat those handled outcomes as a
+# successful pipeline stage so ASR/polish gates can continue for publishable rows.
+$global:LASTEXITCODE = 0
+exit 0

@@ -15,6 +15,7 @@ VIDEOS_CSV = TIKTOK / "videos.csv"
 CLEAN_DIR = TIKTOK / "transcripts" / "clean"
 POLISHED_DIR = TIKTOK / "transcripts" / "polished"
 QA_DIR = TIKTOK / "transcripts" / "polished-qa"
+VIDEO_ID_RE = re.compile(r"^## Video\s+(\d+)\s*$", re.MULTILINE)
 
 
 TERM_REPLACEMENTS: list[tuple[re.Pattern[str], str]] = [
@@ -88,7 +89,7 @@ TERM_REPLACEMENTS: list[tuple[re.Pattern[str], str]] = [
 
 
 UNCERTAIN_RE = re.compile(
-    r"\b(inaudible|unclear|unknown|clawbo|skema|wow wow|gonna|wanna|gotta)\b",
+    r"\b(inaudible|unclear|unknown|clawbo|skema|wow wow)\b",
     re.IGNORECASE,
 )
 
@@ -102,6 +103,17 @@ def read_rows() -> list[dict[str, str]]:
         return []
     with VIDEOS_CSV.open("r", encoding="utf-8-sig", newline="") as handle:
         return list(csv.DictReader(handle))
+
+
+def read_batch_video_ids(batch_dir: Path | None) -> set[str]:
+    if not batch_dir:
+        return set()
+    if not batch_dir.exists():
+        return set()
+    ids: set[str] = set()
+    for path in sorted(batch_dir.glob("batch-*.md")):
+        ids.update(VIDEO_ID_RE.findall(path.read_text(encoding="utf-8", errors="replace")))
+    return ids
 
 
 def normalize_whitespace(text: str) -> str:
@@ -206,17 +218,24 @@ def qa_status(raw: str, polished: str, metrics: dict) -> tuple[str, list[str]]:
 
 
 def process(args: argparse.Namespace) -> dict:
+    batch_ids = read_batch_video_ids(args.batch_dir)
+    target_ids = set(args.video_id or []) | batch_ids
+    eligible_statuses = {"transcribed"}
+    if args.include_source_review:
+        eligible_statuses.add("needs_source_review")
     rows = [
         row for row in read_rows()
-        if row.get("transcript_status") == "transcribed"
+        if row.get("transcript_status") in eligible_statuses
         and (CLEAN_DIR / f"{row.get('video_id')}.txt").exists()
+        and (not target_ids or row.get("video_id") in target_ids)
     ]
     rows.sort(key=lambda row: (row.get("published_at") or "", row.get("video_id") or ""), reverse=True)
     selected: list[dict[str, str]] = []
     for row in rows:
         video_id = row.get("video_id") or ""
         polished_path = POLISHED_DIR / f"{video_id}.txt"
-        if args.missing_only and polished_path.exists():
+        qa_path = QA_DIR / f"{video_id}.json"
+        if args.missing_only and polished_path.exists() and qa_path.exists():
             continue
         selected.append(row)
     if args.limit > 0:
@@ -230,6 +249,8 @@ def process(args: argparse.Namespace) -> dict:
         "failed": 0,
         "dry_run": not args.apply,
         "missing_only": args.missing_only,
+        "batch_dir": str(args.batch_dir) if args.batch_dir else "",
+        "target_video_ids": sorted(target_ids),
         "samples": [],
     }
     if args.apply:
@@ -284,6 +305,13 @@ def main() -> int:
     parser.add_argument("--sample", type=int, default=8)
     parser.add_argument("--missing-only", action="store_true", default=True)
     parser.add_argument("--all", dest="missing_only", action="store_false")
+    parser.add_argument("--batch-dir", type=Path, default=None, help="Optional transcript-polish-batches/<set> dir; only videos listed in batch-*.md are eligible.")
+    parser.add_argument("--video-id", action="append", default=[], help="Optional exact video_id filter. May be repeated.")
+    parser.add_argument(
+        "--include-source-review",
+        action="store_true",
+        help="Allow an explicit batch/video filter to recompute polished and QA files for needs_source_review rows; does not change videos.csv.",
+    )
     parser.add_argument("--apply", action="store_true")
     args = parser.parse_args()
     print(json.dumps(process(args), ensure_ascii=False, indent=2, sort_keys=True))

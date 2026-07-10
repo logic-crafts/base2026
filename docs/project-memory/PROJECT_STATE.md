@@ -1,6 +1,10 @@
 # Project State
 
-Last updated: 2026-06-19
+Last updated: 2026-07-10
+
+## Current override — local source-card completeness gate closed; redesign unblocked
+
+The pre-redesign local data/card gate is closed. The frozen admission ledger contains 1,811 unique sources: 1,493 `normal_public_card`, 199 `provenance_archive_noindex`, and 119 `future_private_backlog`. All 47 approved editorial cards are promoted locally; all 1,493 normal generated pages contain public Source Intelligence and `Questions this source answers`; incomplete normal cards = 0. Archive records are explicit `noindex` provenance pages and are excluded from normal search/listings/sitemaps; future records remain private and are absent from public artifacts. Production remains unchanged. Canonical receipt: `.planning/tiktok-pipeline-v2/local-completeness-gate-receipt-2026-07-10.json`. The next phase may redesign the frontend only against these frozen states; no deploy/reindex/indexation/commit is authorized.
 
 Base2026 is being split into a public open-source source-intelligence product and private local research assets.
 
@@ -9,13 +13,22 @@ Current public product:
 - public TikTok knowledge search UI under `/knowledge/`
 - Meilisearch-backed public index: `base2026_public_tiktok`
 - public release deployed on VPS at `/var/www/base2026-knowledge/current`
-- latest deployed release: `base2026-source-intelligence-contract-ay54-20260619`
+- latest deployed release: `base2026-creator-avatar-assets-ay55-20260623`
 - canonical public domain: `https://aggressorbulkit.online`
 - public dataset shape today: TikTok source records, searchable passages, creator/source/topic/compare pages, public roadmap/policy/support pages, reviewed public insight cards, excerpt-only source payload, and in-page source-detail workspace
 - corrected product contract as of 2026-06-15: Base2026 behaves as a searchable video-source text database with one visible source text surface plus a separate Source Intelligence layer. Raw captions/ASR/media remain private; reviewed polished public source text/transcript is the source-record reading surface when policy allows, paired with Base2026-authored summaries, topics, insight cards, attribution, methodology, sharing actions, and correction/removal paths. Insight evidence should be collapsed by default instead of repeating the full source text.
 - live search proxy fixed: nginx now adds the Meilisearch search-key Authorization header for `/knowledge-search/multi-search`
 
 Latest live release:
+
+- `base2026-tiktok-fresh-qa-gated-20260703` is live under `/knowledge/`. This data-changing TikTok refresh fixes the July post-polish production gap by applying QA gates before SQLite rebuild/public export: QA-pass rows stay `transcribed`, while QA `needs_review`/missing/invalid rows move to private `needs_source_review`. The release adds three exact-evidence Source Intelligence cards for fresh rows, exports 1,609 source records, 2,183 passages, 1,645 insight cards, 1,074 public insight cards, and 1,535 topics, then reindexes Meilisearch with 2,183 public passages. Verification passed: AfterPolish rebuild/export, public export policy, public release contract, newest-source readiness latest 3 with 0 blockers, nginx config test, live `/knowledge/` release marker, 200s for fresh pages `7657320786566450445`, `7657320834268204301`, `7657749901186583816`, and 404 for held private row `7658094847831723278`.
+
+
+- `base2026-bing-money-pages-r1-20260628` is live under `/knowledge/`. This data-preserving static release publishes the approved Bing/Copilot/local-service money-page batch from `data/ai_visibility_pages_master.json`, fixes release packaging to use the master AI visibility source instead of batch01-only fallback, keeps California city/niche drafts `noindex,nofollow`, skips Meilisearch reindex because public passage/index data did not change, and submits 40 live-gated canonical/indexable URLs through IndexNow. Verification passed: package 55 AI visibility pages / sitemap 1,693 URLs, live smoke for hub/pages/CSS, live SEO crawl gate 500 pages / 0 bad link-contracts / 0 crawled error pages / `warning_groups=0`, publication-boundary audit, and live visual QA screenshot `browser_screenshot_7e14791fbe144bb7a541328732d98d78.png`.
+
+- `base2026-service-area-ai-visibility-20260626` is live under `/knowledge/`. This data-preserving static hotfix adds the source-backed page `/knowledge/service-area-pages-and-ai-visibility-for-local-businesses/`, preserves the earlier measurement, AI-ready documentation, and review sentiment pages, keeps broad AI visibility hub pages indexable, keeps 16 California city/niche drafts `noindex,nofollow` and out of sitemaps, and keeps complete OG/X metadata with the 1200×630 social preview card. Meilisearch reindex was intentionally skipped because public passage/search data did not change. Verification passed: deploy script, live service-area/review/documentation/measurement page smoke, city noindex smoke, live sitemap child inclusion, social image `200 image/png`, live SEO crawl gate 500 pages / 0 bad link-contracts / 0 crawled error pages / `warning_groups=0`, publication-boundary audit, and public release contract.
+
+- `base2026-creator-avatar-assets-ay55-20260623` is live under `/knowledge/`. This data-preserving avatar hotfix fixes live search-page console 404s for missing creator avatar assets after the ay54 creator expansion. It fetched stable local TikTok avatar images, regenerated the public export so avatar URLs reach creator/source/document/passage/chunk data, deployed the release, and reindexed Meilisearch with 2,016 public passages. Verification passed: missing avatar assets now return 200 image/jpeg, Meili search hits include avatar URLs, failed-request probe on `/knowledge/` returns no 404s, and desktop/tablet Base2026 visual QA passed 14 checks with 0 failures.
 
 - `base2026-source-intelligence-contract-ay54-20260619` is live under `/knowledge/`. This data-changing release fixes the source-detail Source Intelligence/Q&A contract after `tiktok-video-7652384458804432136` showed no Source Intelligence and rendered junk "Questions this source answers" from the beginning of Source Text. The fix adds one strict reviewed public Source Intelligence card for the `@darrenshawseo` service-area ranking source and changes the generator so source Q&A renders only from reviewed Source Intelligence cards, never from raw source-text fallbacks. Current live export has 1,476 source records, 2,016 passages, 1,631 insight cards, 1,060 public insight cards, 1,522 topics, 1,008 public topics, and 10 creators. Meilisearch reindexed 2,016 public passages. Verification passed: newest-source readiness `--latest 3`, public export policy `include_full_transcripts=false`, public release contract, live SEO crawl gate, direct live URL smoke, and full mobile visual QA with 78 checks and 0 failures.
 
@@ -49,7 +62,8 @@ Current local repo state:
 
 - current checked-out branch on this MacBook: `codex/base2026-launch-next`
 - GitHub default branch: `main`
-- GitHub public repository: `https://github.com/offflinerpsy/base2026`
+- GitHub public repository: `https://github.com/logic-crafts/base2026`
+- GitHub organization/company account: `logic-crafts` (`https://github.com/orgs/logic-crafts/repositories`); the repo was moved there because startup/registration flows often require a company/org identity. Local `origin` on this Mac is now `https://github.com/logic-crafts/base2026.git`.
 - working branch `codex/github-publication-staging` also exists on GitHub as the original publication staging branch
 - first public-safe commit exists
 - Hermes reliability pass completed: WebUI scheduled task repaired, GPT-5.4 worker script added, false ASR backlog closed

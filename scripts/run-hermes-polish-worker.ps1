@@ -3,7 +3,9 @@ param(
   [string]$BatchDir = "",
   [string]$Model = "gpt-5.5",
   [string]$CodexPath = "",
-  [switch]$DryRun
+  [switch]$DryRun,
+  [switch]$DeterministicFallback,
+  [switch]$RunAfterPolish
 )
 
 $ErrorActionPreference = "Stop"
@@ -31,10 +33,46 @@ if (-not $BatchDir) {
 }
 
 $BatchDir = Resolve-Path $BatchDir
-if (-not $CodexPath -or -not (Test-Path $CodexPath)) { throw "Codex worker not found. Set -CodexPath or HERMES_CODEX_PATH." }
+if (-not $DeterministicFallback -and -not (Test-Path -LiteralPath $CodexPath)) {
+  throw "Codex worker not found. Set -CodexPath or HERMES_CODEX_PATH, or use -DeterministicFallback."
+}
 
 $batchFiles = @(Get-ChildItem -LiteralPath $BatchDir -Filter "batch-*.md" | Sort-Object Name)
 if ($batchFiles.Count -eq 0) { throw "No batch-*.md files found in $BatchDir" }
+
+if ($DeterministicFallback) {
+  if ($DryRun) {
+    [pscustomobject]@{
+      ok = $true
+      dry_run = $true
+      mode = "deterministic_fallback"
+      batch_dir = "$BatchDir"
+      batch_files = $batchFiles.Count
+      after_polish = [bool]$RunAfterPolish
+    } | ConvertTo-Json -Depth 4
+    exit 0
+  }
+  $localPolish = Join-Path $Root "scripts/tiktok-faithful-polish-local.py"
+  $statusScript = Join-Path $Root "scripts/tiktok-polish-status.py"
+  & python3 $localPolish --batch-dir $BatchDir --missing-only --limit 80 --apply
+  if (-not $?) { throw "Deterministic polish failed." }
+  & python3 $statusScript --batch-dir $BatchDir --json --allow-needs-review
+  if (-not $?) { throw "Deterministic polish status failed." }
+  if ($RunAfterPolish) {
+    $refreshScript = Join-Path $Root "scripts/hermes-tiktok-refresh.ps1"
+    & $refreshScript -AfterPolish -BatchSet $BatchSet
+    if (-not $?) { throw "AfterPolish refresh failed." }
+  }
+  [pscustomobject]@{
+    ok = $true
+    mode = "deterministic_fallback"
+    model = "none"
+    batch_dir = "$BatchDir"
+    batch_files = $batchFiles.Count
+    after_polish = [bool]$RunAfterPolish
+  } | ConvertTo-Json -Depth 4
+  exit 0
+}
 
 New-Item -ItemType Directory -Force -Path $Planning, $Results | Out-Null
 
@@ -115,6 +153,12 @@ Get-Content -Raw $taskPath | & $CodexPath exec `
   -
 
 if (-not $?) { throw "Hermes polish worker failed." }
+
+if ($RunAfterPolish) {
+  $refreshScript = Join-Path $Root "scripts/hermes-tiktok-refresh.ps1"
+  & $refreshScript -AfterPolish -BatchSet $BatchSet
+  if (-not $?) { throw "AfterPolish refresh failed." }
+}
 
 [pscustomobject]@{
   ok = $true

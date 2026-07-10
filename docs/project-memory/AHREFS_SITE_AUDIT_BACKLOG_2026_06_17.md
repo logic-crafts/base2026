@@ -158,3 +158,38 @@ Verification:
 ## Indexing Rule
 
 Do not submit the affected URL set to GSC or IndexNow until P0 and core P1 items are fixed. Submitting pages while the crawl still contains broken internal links, redirect chains, duplicate query URLs, incomplete social metadata, and schema errors would waste crawl budget and make Search Console noise harder to interpret.
+
+
+## 2026-06-23 Ahrefs/GSC Live Check After ay55
+
+Status: live baseline improved, still needs Ahrefs recrawl / GSC follow-up.
+
+Ahrefs dashboard, project `9961307` / `Aggressorbulkit`:
+
+- Health Score: `Crawl failed` in Ahrefs dashboard; this is an Ahrefs crawl-state issue to rerun/repair, not reproduced by live HTTP checks.
+- Domain Rating: `0`.
+- Referring domains: `76` with `+41` trend.
+- Organic traffic: `0`; organic keywords: `0`.
+- Ahrefs dashboard project target: `*.aggressorbulkit.online/*`.
+
+Google Search Console, domain property `aggressorbulkit.online`:
+
+- Performance, last 3 months: `0` clicks, `110` impressions, `0%` CTR, average position `27.8`; last update shown as `12.5 hours ago`.
+- Page indexing overview: `29` indexed pages, `814` not indexed pages, `6` reasons; last update shown as `2026-06-11`.
+
+Live technical smoke from terminal/browser:
+
+- `robots.txt` is 200 and lists both WordPress sitemap and `/knowledge/sitemap.xml`.
+- `/knowledge/sitemap.xml` is 200 and exposes 4 sitemap files, `1,577` URLs.
+- No `index.html?` query URLs were found in the live Base2026 sitemap.
+- 70 sampled sitemap URLs returned 200 with no canonical mismatches and no `noindex` findings.
+- Representative live pages (`/knowledge/`, `/knowledge/roadmap.html`, `/knowledge/support.html`, one source page) return 200, self-canonical, `index,follow`, and expected H1/title.
+- Live OG/X metadata spot-check passed for `/knowledge/`, `/knowledge/roadmap.html`, and a source page.
+- `AhrefsBot/7.0` and `Googlebot/2.1` user-agent requests to `/knowledge/` return 200; HTTP to HTTPS redirect for `/knowledge/` returns 301 then 200.
+
+Current interpretation:
+
+- P0 broken URL/redirect work remains deployed-pending-recrawl in Ahrefs; live smoke does not reproduce the old P0 blockers.
+- P1 social metadata appears live on representative pages, but should remain pending a full recrawl/export check before closing.
+- Sitemap canonical hygiene appears clean in live sample; keep `AHREFS-P1-08` pending recrawl unless the exact old non-canonical sitemap URL is identified.
+- Main next action is to restart/fix Ahrefs Site Audit crawl for project `9961307` and export fresh issue CSVs; GSC indexation has only 29 indexed pages vs 1,577 sitemap URLs, so source/archive discoverability and crawl-budget/query-duplicate cleanup remain the highest-impact SEO tasks.

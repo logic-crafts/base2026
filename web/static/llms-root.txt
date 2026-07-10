@@ -1,27 +1,38 @@
 # Alex Yarosh
 
-Alex Yarosh helps local service businesses improve visibility across Google, ChatGPT, Gemini, Perplexity, Bing, and AI-powered search through SEO, GEO, AEO, content, schema, local trust signals, and answer-ready pages.
+Alex Yarosh helps US-based local service businesses improve visibility across Google Search, Google AI Overviews, ChatGPT, Gemini, Perplexity, Copilot, Bing, and AI-powered discovery paths through SEO, GEO, AEO, technical SEO, answer-ready content, schema, citations, reviews, entity trust, and source intelligence.
 
 ## Site Areas
 
 - Home: https://aggressorbulkit.online/
 - Services: https://aggressorbulkit.online/services/
 - Pricing: https://aggressorbulkit.online/pricing/
-- AI Visibility Audit: https://aggressorbulkit.online/ai-visibility-audit/
+- Free AI Visibility Snapshot: https://aggressorbulkit.online/ai-visibility-audit/
+- AI Visibility Diagnostic Audit: https://aggressorbulkit.online/ai-visibility-diagnostic-audit/
+- Technical SEO & GEO Foundation: https://aggressorbulkit.online/technical-seo-geo-foundation/
+- Answer-Ready Service Pages: https://aggressorbulkit.online/answer-ready-service-pages/
+- Entity, Trust & Source Intelligence: https://aggressorbulkit.online/entity-trust-source-intelligence/
 - About: https://aggressorbulkit.online/about/
 - Base2026 knowledge library: https://aggressorbulkit.online/knowledge/
+- Apply Base2026 research: https://aggressorbulkit.online/knowledge/apply-research.html
+
+
+## Base2026 Project Identity
+
+Base2026 is an independent experimental startup product created by Alex Yarosh. Ownership and rights belong to Logic Crafts LLC, Kyrgyzstan. Base2026 is not a marketing agency and does not provide marketing services. It should be treated as a separate product/startup, not as a marketing-services offer.
 
 ## Base2026
 
-Base2026 is an independent public pilot project: a searchable source-text library and signal map built from public short-form expert videos about SEO, GEO, AEO, AI search visibility, schema, content strategy, local SEO, and related topics.
+Base2026 is the public research and proof layer: a searchable source library and signal map built from public short-form expert videos about SEO, GEO, AEO, AI search visibility, schema, content strategy, local SEO, citations, entity trust, and related topics. It is not a lead database, a private client vault, or a replacement for original creators.
 
 Key Base2026 files:
 
 - Base2026 llms file: https://aggressorbulkit.online/knowledge/llms.txt
 - Base2026 API and AI access: https://aggressorbulkit.online/knowledge/api.html
+- Applying Base2026 research to a business audit: https://aggressorbulkit.online/knowledge/apply-research.html
 - Base2026 data dictionary: https://aggressorbulkit.online/knowledge/data-dictionary.json
 - Base2026 API index: https://aggressorbulkit.online/knowledge/api-index.json
 
 ## Public Boundary
 
-The public site does not publish private notes, credentials, raw source vaults, raw captions, raw ASR, audio, video, local databases, or unreviewed pipeline artifacts.
+The public site does not publish private notes, client data, credentials, raw source vaults, raw captions, raw ASR, audio, video, local databases, or unreviewed pipeline artifacts.

@@ -13,6 +13,17 @@ ROOT = Path(__file__).resolve().parents[1]
 KB = ROOT / "12_knowledge-base"
 DB = KB / "indexes" / "kb.sqlite"
 OUT = ROOT / "public-data" / "tiktok"
+SOURCE_ADMISSION = KB / "sources" / "tiktok" / "source-admission.jsonl"
+
+NORMAL_PUBLIC_CARD = "normal_public_card"
+FUTURE_PRIVATE_BACKLOG = "future_private_backlog"
+PROVENANCE_ARCHIVE_NOINDEX = "provenance_archive_noindex"
+PRIVATE_HOLD_UNCLASSIFIED = "private_hold_unclassified"
+ALLOWED_ADMISSION_STATES = {
+    NORMAL_PUBLIC_CARD,
+    FUTURE_PRIVATE_BACKLOG,
+    PROVENANCE_ARCHIVE_NOINDEX,
+}
 
 
 def read_kb_text(rel_path: str | None) -> str:
@@ -39,6 +50,33 @@ def read_optional_json(path: Path) -> dict:
     if not path.exists():
         return {}
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def load_source_admission(path: Path) -> dict[str, str]:
+    admissions: dict[str, str] = {}
+    if not path.exists():
+        return admissions
+    with path.open("r", encoding="utf-8") as handle:
+        for line_number, line in enumerate(handle, start=1):
+            if not line.strip():
+                continue
+            row = json.loads(line)
+            source_id = (row.get("source_id") or "").strip()
+            state = (row.get("admission_state") or "").strip()
+            if not source_id:
+                raise ValueError(f"missing source_id at {path}:{line_number}")
+            if source_id in admissions:
+                raise ValueError(f"duplicate source_id {source_id} at {path}:{line_number}")
+            if state not in ALLOWED_ADMISSION_STATES:
+                raise ValueError(f"invalid admission_state {state!r} for {source_id}")
+            admissions[source_id] = state
+    return admissions
+
+
+def source_admission_state(source_id: str, admissions: dict[str, str], *, ledger_active: bool) -> str:
+    if not ledger_active:
+        return NORMAL_PUBLIC_CARD
+    return admissions.get(source_id, PRIVATE_HOLD_UNCLASSIFIED)
 
 
 def creator_profile(profiles: dict, creator_id: str, handle: str) -> dict:
@@ -304,17 +342,29 @@ def main() -> int:
         default=ROOT / "config" / "creator-profiles.json",
         help="Optional local metadata override keyed by creator_id or handle. Supports avatar_url and display_name.",
     )
+    parser.add_argument(
+        "--admission-ledger",
+        type=Path,
+        default=SOURCE_ADMISSION,
+        help="Private one-row-per-source admission ledger. Unknown sources are held private when the ledger exists.",
+    )
     parser.add_argument("--out", type=Path, default=OUT)
     args = parser.parse_args()
     creator_profiles = read_optional_json(args.creator_profiles)
+    admission_active = args.admission_ledger.exists()
+    admissions = load_source_admission(args.admission_ledger)
 
     con = sqlite3.connect(DB)
     con.row_factory = sqlite3.Row
     try:
         documents: list[dict] = []
+        source_records: list[dict] = []
         chunks: list[dict] = []
+        passages: list[dict] = []
         insight_cards: list[dict] = []
         creators: dict[str, dict] = {}
+        emitted_source_ids: set[str] = set()
+        admission_counts: Counter[str] = Counter()
 
         item_rows = con.execute(
             """
@@ -386,15 +436,6 @@ def main() -> int:
             profile = creator_profile(creator_profiles, creator_id, handle)
             avatar_url = profile.get("avatar_url") or profile.get("profile_image_url") or ""
             display_name = profile.get("display_name") or profile.get("name") or ""
-            creators[creator_id] = {
-                "creator_id": creator_id,
-                "handle": item["handle"],
-                "url": item["creator_url"],
-                "niche": item["niche"],
-                "language": item["language"],
-                "avatar_url": avatar_url,
-                "display_name": display_name,
-            }
             base = {
                 "item_id": item_id,
                 "source_id": source_id,
@@ -432,6 +473,24 @@ def main() -> int:
             ).fetchall()
             if not transcript.strip() and not item_chunks:
                 continue
+            emitted_source_ids.add(source_id)
+            admission_state = source_admission_state(source_id, admissions, ledger_active=admission_active)
+            admission_counts[admission_state] += 1
+            if admission_state in {FUTURE_PRIVATE_BACKLOG, PRIVATE_HOLD_UNCLASSIFIED}:
+                continue
+            is_normal_public_card = admission_state == NORMAL_PUBLIC_CARD
+            public_surface = "main_search" if is_normal_public_card else "provenance_archive"
+            base["admission_state"] = admission_state
+            base["public_surface"] = public_surface
+            creators[creator_id] = {
+                "creator_id": creator_id,
+                "handle": item["handle"],
+                "url": item["creator_url"],
+                "niche": item["niche"],
+                "language": item["language"],
+                "avatar_url": avatar_url,
+                "display_name": display_name,
+            }
             public_source_text = normalize_public_source_text(transcript, item_chunks)
             summary_short = source_summary_short(
                 item["title"] or "",
@@ -441,32 +500,36 @@ def main() -> int:
                 claim_rows,
             )
             summary_long = source_summary_long(summary_short, topic_labels, public_source_text, claim_rows)
-            documents.append(
-                {
-                    **base,
-                    "transcript_type": doc_row["document_type"] if doc_row else "",
-                    "language": doc_row["language"] if doc_row else "en",
-                    "transcript": transcript if args.include_full_transcripts else "",
-                    "public_source_text": public_source_text,
-                    "public_source_text_available": bool(public_source_text),
-                    "source_summary_short": summary_short,
-                    "source_summary_long": summary_long,
-                    "excerpt": public_excerpt_text(public_source_text, item_chunks),
-                }
-            )
+            source_record = {
+                **base,
+                "transcript_type": doc_row["document_type"] if doc_row else "",
+                "language": doc_row["language"] if doc_row else "en",
+                "transcript": transcript if args.include_full_transcripts else "",
+                "public_source_text": public_source_text,
+                "public_source_text_available": bool(public_source_text),
+                "source_summary_short": summary_short,
+                "source_summary_long": summary_long,
+                "excerpt": public_excerpt_text(public_source_text, item_chunks),
+            }
+            source_records.append(source_record)
+            if is_normal_public_card:
+                documents.append(source_record)
             for chunk in item_chunks:
-                chunks.append(
-                    {
-                        **base,
-                        "id": chunk["chunk_id"],
-                        "chunk_id": chunk["chunk_id"],
-                        "chunk_index": chunk["chunk_index"],
-                        "body": chunk["text"],
-                        "topics": topic_ids,
-                        "topic_labels": topic_labels,
-                        "public_policy": "search_passage",
-                    }
-                )
+                passage = {
+                    **base,
+                    "id": chunk["chunk_id"],
+                    "chunk_id": chunk["chunk_id"],
+                    "chunk_index": chunk["chunk_index"],
+                    "body": chunk["text"],
+                    "topics": topic_ids,
+                    "topic_labels": topic_labels,
+                    "public_policy": "search_passage" if is_normal_public_card else "archive_passage",
+                }
+                passages.append(passage)
+                if is_normal_public_card:
+                    chunks.append(passage)
+            if not is_normal_public_card:
+                continue
             for claim in claim_rows:
                 review_status = claim["review_status"] or "pending"
                 claim_type = claim["claim_type"] or "claim"
@@ -513,13 +576,23 @@ def main() -> int:
                     }
                 )
 
+        if admission_active:
+            unclassified_source_ids = sorted(emitted_source_ids - set(admissions))
+            stale_admission_ids = sorted(set(admissions) - emitted_source_ids)
+            if unclassified_source_ids or stale_admission_ids:
+                raise ValueError(
+                    "source admission ledger mismatch: "
+                    f"unclassified={len(unclassified_source_ids)} stale={len(stale_admission_ids)} "
+                    f"unclassified_sample={unclassified_source_ids[:5]} stale_sample={stale_admission_ids[:5]}"
+                )
+
         out = args.out
         out.mkdir(parents=True, exist_ok=True)
         topics = build_topic_records(insight_cards, chunks)
         write_jsonl(out / "documents.jsonl", documents)
         write_jsonl(out / "chunks.jsonl", chunks)
-        write_jsonl(out / "source_records.jsonl", documents)
-        write_jsonl(out / "passages.jsonl", chunks)
+        write_jsonl(out / "source_records.jsonl", source_records)
+        write_jsonl(out / "passages.jsonl", passages)
         write_jsonl(out / "insight_cards.jsonl", insight_cards)
         write_jsonl(out / "topics.jsonl", topics)
         write_jsonl(out / "creators.jsonl", sorted(creators.values(), key=lambda x: x.get("handle") or ""))
@@ -528,11 +601,16 @@ def main() -> int:
             "dataset": "base2026-public-tiktok",
             "scope": "public TikTok-only export",
             "documents": len(documents),
+            "source_records": len(source_records),
             "chunks": len(chunks),
+            "passages": len(passages),
             "creators": len(creators),
             "topics": len(topics),
             "insight_cards": len(insight_cards),
             "public_insight_cards": sum(1 for row in insight_cards if row["public"]),
+            "source_admission_ledger": str(args.admission_ledger) if admission_active else "",
+            "source_admission_active": admission_active,
+            "source_admission_counts": dict(sorted(admission_counts.items())),
             "source_db": str(DB),
             "include_full_transcripts": bool(args.include_full_transcripts),
             "auto_promote_insights": bool(args.auto_promote_insights),
@@ -549,7 +627,11 @@ def main() -> int:
             ],
         }
         (out / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True), encoding="utf-8")
-        print(f"documents={len(documents)} chunks={len(chunks)} creators={len(creators)} topics={len(topics)} out={out}")
+        print(
+            f"documents={len(documents)} source_records={len(source_records)} "
+            f"chunks={len(chunks)} passages={len(passages)} creators={len(creators)} "
+            f"topics={len(topics)} admission={dict(sorted(admission_counts.items()))} out={out}"
+        )
         return 0
     finally:
         con.close()

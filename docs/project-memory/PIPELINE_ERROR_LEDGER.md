@@ -172,6 +172,21 @@ Fix:
 
 Rule: `tiktok-qa-review-apply.py` updates QA artifacts; `tiktok-clear-reviewed-source-rows.py` is the only allowed transition from reviewed `needs_source_review` back into the public export lane.
 
+### 2026-07-03: QA-needs-review rows stalled production refresh
+
+Observed: the July TikTok creator refresh had fresh polished rows, but production could not advance cleanly because mixed polish batches contained legitimate QA `needs_review` outputs. Treating `needs_review` as a hard pipeline failure prevented `AfterPolish`/release flow, while leaving those rows as `transcribed` let public export/readiness see fresh source-only rows.
+
+Fix:
+
+- Added `scripts/tiktok-apply-qa-gates.py` to apply QA outcomes back to private `videos.csv` before SQLite rebuild/export.
+- `hermes-tiktok-refresh.ps1 -AfterPolish -BatchSet <batch>` now runs the QA gate before rebuild/export.
+- `base2026-release-gate.ps1 -RunAfterPolish` allows mixed batches only at the pre-release polish-status step; `AfterPolish` then gates non-pass rows private. Missing polish output or invalid QA still fails.
+- Added exact-evidence reviewed Source Intelligence cards for the newest publishable rows before deploy.
+
+Proof: release `base2026-tiktok-fresh-qa-gated-20260703` deployed live. Recent window since 2026-07-01 resolved to 19 QA-pass/exportable rows and 29 private `needs_source_review` rows. Public export passed with `source_records=1609`, `passages=2183`, `public_insight_cards=1074`; newest-source readiness latest 3 had `blocked_source_only_records=0`. Live source pages `7657320786566450445`, `7657320834268204301`, and `7657749901186583816` return 200; held video `7658094847831723278` returns 404.
+
+Rule: `needs_review` is a valid private outcome, not a production outcome. Every post-polish release must apply QA gates before `build-kb-sqlite.py`/`export-public-tiktok.py`; only QA-pass rows remain `transcribed` for public export.
+
 ## Current Policy
 
 - Raw captions, raw ASR, audio/video, logs, local DBs, `.planning/`, `output/`, `public-data/`, and private reviewed-candidate archives are never GitHub source.

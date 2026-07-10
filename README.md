@@ -6,6 +6,10 @@ The current public demo focuses on TikTok creators talking about SEO, GEO, AEO, 
 
 Live demo: <https://aggressorbulkit.online/knowledge/>
 
+## Project Identity and Ownership
+
+Base2026 is an independent experimental startup product created by Alex Yarosh. Ownership and rights belong to Logic Crafts LLC, Kyrgyzstan. Base2026 is not a marketing agency, does not represent marketing agency services, and should not be evaluated as a marketing-services business. It is a productized public source-intelligence and knowledge-base system for short-form expert video.
+
 Public API and AI access: <https://aggressorbulkit.online/knowledge/api.html>
 
 ## Public API & AI Access

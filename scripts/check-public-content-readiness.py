@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 from collections import Counter
 from pathlib import Path
 
@@ -29,6 +30,19 @@ def source_has_topics(row: dict) -> bool:
     return bool(row.get("topics") or row.get("topic_labels"))
 
 
+def generated_source_is_noindex(source: dict, web_root: Path) -> bool:
+    item_id = str(source.get("item_id") or source.get("source_id") or "").strip()
+    if not item_id:
+        return False
+    safe_name = re.sub(r"[^a-z0-9]+", "-", item_id.lower()).strip("-")
+    page = web_root / "sources" / f"{safe_name}.html"
+    if not page.exists():
+        return False
+    text = page.read_text(encoding="utf-8", errors="ignore")
+    robots = re.search(r'<meta\s+name="robots"\s+content="([^"]+)"', text, re.IGNORECASE)
+    return bool(robots and "noindex" in robots.group(1).lower())
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(
         description="Audit Base2026 public export for source-only records that have text but no public intelligence layer."
@@ -36,6 +50,8 @@ def main() -> int:
     parser.add_argument("--data-root", type=Path, default=DATA_ROOT)
     parser.add_argument("--latest", type=int, default=0, help="Check only the newest N source records by published_at.")
     parser.add_argument("--fail", action="store_true", help="Exit non-zero when blocking source-only records are found.")
+    parser.add_argument("--web-root", type=Path, help="Generated HTML root used to prove incomplete sources are quarantined as noindex.")
+    parser.add_argument("--allow-generated-noindex", action="store_true", help="Treat a generated noindex source page as a safe quarantine, not a release blocker.")
     args = parser.parse_args()
 
     sources = read_jsonl(args.data_root / "source_records.jsonl")
@@ -51,11 +67,15 @@ def main() -> int:
         candidates = candidates[: args.latest]
 
     blocked = []
+    quarantined_noindex = []
     for source in candidates:
         source_id = source.get("source_id") or ""
         if not source_id or not source_has_public_text(source):
             continue
         if public_insight_count[source_id] or source_has_topics(source):
+            continue
+        if args.allow_generated_noindex and args.web_root and generated_source_is_noindex(source, args.web_root):
+            quarantined_noindex.append(source_id)
             continue
         blocked.append(
             {
@@ -71,8 +91,10 @@ def main() -> int:
         "data_root": str(args.data_root),
         "sources_checked": len(candidates),
         "blocked_source_only_records": len(blocked),
+        "quarantined_noindex_records": len(quarantined_noindex),
+        "quarantined_noindex_source_ids": quarantined_noindex[:20],
         "blocked": blocked[:20],
-        "policy": "Newest published sources should not ship as plain source text without at least one reviewed/public insight or topic assignment.",
+        "policy": "Sources without reviewed/public intelligence may ship only as generated noindex quarantine pages; indexable source-only text remains blocked.",
     }
     print(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True))
     return 1 if args.fail and blocked else 0

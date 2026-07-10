@@ -7,7 +7,7 @@ Current public path:
 - WordPress root: `/var/www/alex-yarosh`
 - server current symlink: `/var/www/base2026-knowledge/current`
 - server releases: `/var/www/base2026-knowledge/releases/`
-- latest deployed release: `base2026-source-intelligence-contract-ay54-20260619`
+- latest deployed release: `base2026-card-completeness-r1-20260710-173448`
 - SSL certificate: Let's Encrypt `aggressorbulkit.online`, domains `aggressorbulkit.online` and `www.aggressorbulkit.online`, auto-renewed by `certbot.timer`
 
 Latest WordPress root visual pass: `alex-yarosh` child theme `style.css?ver=1.5.63`, applied directly on 2026-06-19 for the compact `/about/` founder hero. Cache Enabler generated cache for `aggressorbulkit.online` should be cleared after direct theme updates.
@@ -48,11 +48,13 @@ nginx -t
 
 ## Local package
 
-Current live release: `base2026-source-intelligence-contract-ay54-20260619`.
+Current live release: `base2026-card-completeness-r1-20260710-173448`.
 
-Latest data/reindex checkpoint: `base2026-source-intelligence-contract-ay54-20260619`.
+Latest data/reindex checkpoint: the same completeness release, with Meilisearch task `487` succeeded.
 
-This checkpoint fixes the source-detail Source Intelligence/Q&A contract and deploys `base2026-source-intelligence-contract-ay54-20260619`. Current live export has 1,476 public source records, 2,016 public passages, 1,631 insight cards, 1,060 public insight cards, 1,522 topics, 1,008 public topics, and 10 creators. Meilisearch was reindexed with 2,016 public passages during ay54 deploy.
+Current live export has 1,493 normal public cards, 199 provenance archive/noindex records, 122 private future-backlog sources, 1,692 public source records, 2,276 public passages, 2,396 insight cards, 1,873 public insight cards, 1,628 topics, and 18 creators. Normal incomplete cards = 0. Machine receipt: `.planning/tiktok-pipeline-v2/production-completeness-release-receipt-2026-07-10.json`.
+
+Latest IndexNow closure for this release: 1,734/1,734 current sitemap URLs passed the live 200/indexable/self-canonical gate and were accepted with HTTP 200; 62/62 previous-public/current-private URLs returned 404 and their deletion notification was accepted with HTTP 200; all 199 archive URLs were live `noindex` and excluded. Receipt: `.planning/tiktok-pipeline-v2/indexnow-card-completeness-2026-07-10/indexnow-release-closure-receipt.json`.
 
 The `base2026-api-nav-footer-r3-20260616` deploy changed generated HTML/navigation and the hotfix packaging contract only. It intentionally skipped Meilisearch reindex because public data and index fields did not change. The deploy fixed global `/knowledge/api.html` navigation in the search root, generated pages, mobile Base2026 nav, and footer.
 
@@ -60,7 +62,9 @@ The `base2026-api-nav-footer-r3-20260616` deploy changed generated HTML/navigati
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\package-public-release.ps1 -ReleaseName <release-name>
 ```
 
-Current public packages use reviewed public source text where policy allows. Public package/deploy scripts must not expose `-IncludeFullTranscripts` as a public shortcut and must not call `--auto-promote-insights`. Raw captions, raw ASR, media, private QA, and unreviewed transcripts stay private. Private/gated review exports should use `scripts/export-public-tiktok.py --out <ignored-private-dir>` directly and must not be deployed as the public `/knowledge/` release.
+Current public packages use reviewed public source text where policy allows. Latest deployed release: `base2026-identity-disclaimer-20260626` (identity/legal disclaimer hotfix: Base2026 is an independent experimental startup product created by Alex Yarosh and owned by Logic Crafts LLC, Kyrgyzstan; it is not a marketing agency or marketing-services offering). Public package/deploy scripts must not expose `-IncludeFullTranscripts` as a public shortcut and must not call `--auto-promote-insights`. Raw captions, raw ASR, media, private QA, and unreviewed transcripts stay private. Private/gated review exports should use `scripts/export-public-tiktok.py --out <ignored-private-dir>` directly and must not be deployed as the public `/knowledge/` release.
+
+Latest data-preserving static hotfix: `base2026-bing-money-pages-r1-20260628`. It added the live source-backed `/knowledge/service-area-pages-and-ai-visibility-for-local-businesses/` page, preserves the live measurement, AI-ready documentation, and review sentiment pages, keeps AI visibility collection/social metadata complete, keeps the 1200×630 social preview card, keeps city/niche drafts `noindex,nofollow`, skipped Meilisearch reindex, and passed live crawl with `warning_groups=0`.
 
 For explicitly approved data-preserving hotfixes where the current ignored `public-data/tiktok` membership/counts must be preserved while static UI/page rendering is repaired, use:
 

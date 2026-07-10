@@ -1,0 +1,670 @@
+{
+  "contract_version": "base2026-ai-recommends-solution-v1",
+  "updated_at": "2026-07-10",
+  "solutions": [
+    {
+      "slug": "google-business-profile-visibility-audit",
+      "title": "Google Business Profile Visibility Audit",
+      "meta_description": "A measured Google Business Profile audit for categories, description, search demand and website alignment, backed by reviewed signals and Google documentation.",
+      "updated_at": "2026-07-10",
+      "audience": "Owners and operators of verified local-service Business Profiles who need a repeatable visibility audit instead of a list of random profile edits.",
+      "problem": "A Business Profile can be complete yet still describe the business too vaguely, use weak categories, or reveal local search demand that the website does not answer.",
+      "primary_query": "How should I audit a Google Business Profile for stronger Search, Maps and AI-answer context?",
+      "recommendation": "Treat the profile as a controlled entity record: verify real-world facts, choose the fewest accurate categories, make the description explicit, mine performance search terms, and align the website before measuring changes.",
+      "decision_scope": "One verified profile or one consistent location group. This is an audit and controlled test, not a promise of Map Pack or AI-answer inclusion.",
+      "why_now": "Business Profile performance exposes how people discover the profile, while current AI interfaces can reuse business information. Clear, consistent facts are useful even when the ranking impact of an individual edit is uncertain.",
+      "evidence": [
+        {
+          "source_id": "tiktok:darrenshawseo:7660551196687617287",
+          "claim_id": "claim-backfill-d152051c8c5d0b9feb36",
+          "why_relevant": "Supports the need to make the description explicit about the offer and service area while keeping the creator claim separate from official verification."
+        },
+        {
+          "source_id": "tiktok:gobigsystems:7660286335848172814",
+          "claim_id": "claim-backfill-580dbe4b5e473e4424d7",
+          "why_relevant": "Adds a practical category-audit signal that can be bounded by Google's official category rules."
+        },
+        {
+          "source_id": "tiktok:gobigsystems:7657320829214035214",
+          "claim_id": "claim-base2026-20260703-gbp-searches-services-pages",
+          "why_relevant": "Connects profile search terms to real service and local-page coverage rather than treating profile optimization as an isolated task."
+        },
+        {
+          "source_id": "tiktok:gobigsystems:7658859214877494541",
+          "claim_id": "repair-gpt55-20260707-006",
+          "why_relevant": "Provides a measurement-oriented signal, while the playbook avoids assuming every account exposes the same interface or integration."
+        }
+      ],
+      "authoritative_sources": [
+        {
+          "title": "Manage your business category — Google Business Profile Help",
+          "url": "https://support.google.com/business/answer/7249669?hl=en",
+          "scope": "Google's rules for choosing a primary category and additional categories that accurately describe the business."
+        },
+        {
+          "title": "Guidelines for representing your business on Google",
+          "url": "https://support.google.com/business/answer/3038177",
+          "scope": "The governing accuracy, consistency, category and real-world representation requirements for Business Profiles."
+        },
+        {
+          "title": "Understand your Business Profile performance",
+          "url": "https://support.google.com/business/answer/7689763?hl=en-GB",
+          "scope": "Definitions and availability of profile views, searches and customer interaction metrics."
+        }
+      ],
+      "playbook": [
+        {
+          "title": "Freeze a factual baseline",
+          "body": "Record the current name, primary and additional categories, description, service area, website URL, phone, hours and key performance metrics. Do not edit before the baseline is saved."
+        },
+        {
+          "title": "Run an accuracy-first entity audit",
+          "body": "Confirm that every field matches the real-world business and the website. Remove keyword-like additions and categories that describe services the business has rather than what the business is."
+        },
+        {
+          "title": "Rewrite the description for explicit context",
+          "body": "State the core service, customer type or use case, and served location in natural factual language. Avoid rankings claims, promotional superlatives and unsupported scale statistics."
+        },
+        {
+          "title": "Map search terms to owned content",
+          "body": "Review the profile's performance search terms. For legitimate services with repeated demand, confirm that the website has an accurate service or location answer rather than stuffing the phrase into the profile."
+        },
+        {
+          "title": "Change one layer and measure",
+          "body": "Apply the smallest justified category, description or content-alignment change. Annotate the date and compare the same profile metrics and website conversions after a stable observation window."
+        }
+      ],
+      "checklist": [
+        "Verified profile and correct owner access confirmed",
+        "Before-state fields and performance metrics saved",
+        "Primary category describes what the business is",
+        "Additional categories are accurate and non-redundant",
+        "Description states service and location without promotional claims",
+        "Website business facts match the profile",
+        "Relevant performance search terms have an owned-content answer",
+        "Change date and measurement window recorded"
+      ],
+      "decision_table": [
+        {
+          "signal": "Profile category is broad but a more specific accurate category exists",
+          "decision": "Test the specific category only if it truthfully represents the core business.",
+          "measure": "Profile discovery metrics, qualified actions and lead quality before versus after."
+        },
+        {
+          "signal": "Search terms repeatedly name a real service missing from the site",
+          "decision": "Create or improve a useful service answer on the website; do not force the term into unrelated profile fields.",
+          "measure": "Relevant page impressions, profile website clicks and qualified enquiries."
+        },
+        {
+          "signal": "Description is generic or company-first",
+          "decision": "Rewrite it once with explicit offer and service-area facts.",
+          "measure": "Record completion and downstream actions; do not claim causality from an isolated visibility movement."
+        },
+        {
+          "signal": "Business facts conflict across profile and website",
+          "decision": "Resolve accuracy and consistency before any optimization experiment.",
+          "measure": "Zero unresolved factual conflicts and stable crawlable business information."
+        }
+      ],
+      "risks": [
+        "Adding categories as keywords can violate the intended use of categories and make the profile less accurate.",
+        "Performance data may be delayed, unavailable for unverified profiles, or too sparse for a short before-and-after conclusion.",
+        "Competitor categories and creator observations are research inputs, not permission to misrepresent the business."
+      ],
+      "kpis": [
+        "Profile searches, views and qualified customer actions using the same date-range definition",
+        "Website clicks from the profile and conversion rate of those visits",
+        "Count of high-demand legitimate services with a complete owned-content answer",
+        "Accuracy and consistency exceptions remaining after the audit"
+      ],
+      "cadence": "Establish a 28-day baseline where volume allows, review the controlled change after another comparable 28-day period, and repeat quarterly or when the business materially changes.",
+      "cta": {
+        "label": "Apply this audit in Base2026",
+        "href": "/knowledge/apply-research.html?solution=google-business-profile-visibility-audit"
+      },
+      "related_solution_slugs": [
+        "answer-ready-service-page-checklist",
+        "measure-ai-search-visibility"
+      ],
+      "editorial": {
+        "status": "approved_local",
+        "reviewer": "gpt-5.6-sol-hermes-session",
+        "reviewed_at": "2026-07-10T09:00:20-04:00",
+        "contract_version": "base2026-ai-recommends-solution-v1"
+      }
+    },
+    {
+      "slug": "search-console-high-impression-low-ctr",
+      "title": "High-Impression, Low-CTR Search Console Workflow",
+      "meta_description": "A controlled Search Console workflow to prioritize high-impression, low-CTR query-page pairs, improve one decision layer and measure the result.",
+      "updated_at": "2026-07-10",
+      "audience": "SEO and content operators with enough Search Console data to compare query-page performance and a need to prioritize existing URLs before commissioning new content.",
+      "problem": "High impressions with weak clicks can signal a title, intent, snippet, position or page-coverage problem, but changing all of them together makes the result impossible to interpret.",
+      "primary_query": "What should I do with high-impression, low-CTR queries in Google Search Console?",
+      "recommendation": "Work at the query-page pair level: verify intent and position, choose one likely bottleneck, make one bounded change, and compare CTR and qualified traffic against a saved baseline.",
+      "decision_scope": "Existing indexable pages with meaningful impressions. The workflow does not assume that every low CTR is a title problem or that CTR alone represents business value.",
+      "why_now": "Search Console already records where a site is seen and clicked. This makes existing demand a lower-waste prioritization input than publishing pages without a measured opportunity.",
+      "evidence": [
+        {
+          "source_id": "tiktok:gobigsystems:7660304695969287437",
+          "claim_id": "claim-backfill-2179152f7bf836ab4ba6",
+          "why_relevant": "Provides the direct high-impression, low-CTR opportunity signal and a bounded one-page action."
+        },
+        {
+          "source_id": "tiktok:gobigsystems:7658058104449420557",
+          "claim_id": "repair-gpt55-20260707-010",
+          "why_relevant": "Adds an internal-link decision for pages already receiving impressions near page-one visibility."
+        },
+        {
+          "source_id": "tiktok:build_in_public:7604912449459948822",
+          "claim_id": "tiktok-b010-claim-022",
+          "why_relevant": "Supports improving an existing page with query-aligned sections and titles instead of defaulting to a new URL."
+        },
+        {
+          "source_id": "tiktok:tjrobertson52:7567191282888494349",
+          "claim_id": "tiktok-b019-claim-035",
+          "why_relevant": "Adds a second creator's use of impression sorting as an opportunity-discovery method for established sites."
+        }
+      ],
+      "authoritative_sources": [
+        {
+          "title": "Performance report — Search Console Help",
+          "url": "https://support.google.com/webmasters/answer/7576553",
+          "scope": "Official definitions and setup for clicks, impressions, CTR, position, dimensions and date ranges."
+        },
+        {
+          "title": "What are impressions, position, and clicks?",
+          "url": "https://support.google.com/webmasters/answer/7042828",
+          "scope": "Metric counting rules and the warning that meaningful impressions matter more than raw volume."
+        },
+        {
+          "title": "Influencing your title links in search results",
+          "url": "https://developers.google.com/search/docs/appearance/title-link",
+          "scope": "Google's guidance on descriptive, concise, distinct title text and the sources used to form title links."
+        },
+        {
+          "title": "SEO link best practices for Google",
+          "url": "https://developers.google.com/search/docs/crawling-indexing/links-crawlable",
+          "scope": "Crawlable HTML links and descriptive anchor-text principles for internal linking."
+        }
+      ],
+      "playbook": [
+        {
+          "title": "Save the query-page baseline",
+          "body": "Export clicks, impressions, CTR and average position for a stable date range. Keep query and page dimensions together so an aggregate site average does not drive the decision."
+        },
+        {
+          "title": "Check whether low CTR is actually abnormal",
+          "body": "Review position, query intent, brand versus non-brand status, device, country and visible SERP features. A lower CTR may be expected when the result is low or the query is informational."
+        },
+        {
+          "title": "Select one bottleneck",
+          "body": "Choose title clarity, missing answer coverage, weak internal discovery, or intent mismatch. Do not rewrite the title, body, URL and navigation in the same test."
+        },
+        {
+          "title": "Apply the smallest useful change",
+          "body": "Make the title accurate and distinctive, add the missing answer if the page genuinely serves it, or add relevant internal links from authoritative pages. Preserve the URL unless there is a separate migration case."
+        },
+        {
+          "title": "Compare the same cohort",
+          "body": "After an observation window, compare the same query-page pair and segment. Keep the change only when qualified clicks or downstream outcomes improve without creating a relevance loss."
+        }
+      ],
+      "checklist": [
+        "Query and landing page are paired in the analysis",
+        "Baseline clicks, impressions, CTR and position saved",
+        "Device, country, brand status and query intent reviewed",
+        "One primary bottleneck selected",
+        "Title remains accurate to visible page content",
+        "New page section adds useful information rather than keyword repetition",
+        "Internal links use crawlable HTML and descriptive anchors",
+        "Post-change window and conversion metric defined"
+      ],
+      "decision_table": [
+        {
+          "signal": "High impressions, stable top positions, weak CTR and a vague title",
+          "decision": "Test a clearer, accurate title that states the page's actual value.",
+          "measure": "Query-page CTR, qualified clicks and conversion rate."
+        },
+        {
+          "signal": "Impressions exist but the page does not answer a visible sub-intent",
+          "decision": "Add a concise, useful section only if the existing URL is the correct destination.",
+          "measure": "Impressions and clicks for the target query plus engagement with the updated page."
+        },
+        {
+          "signal": "Relevant page ranks around positions 11–20 and receives few internal links",
+          "decision": "Add contextual links from genuinely related high-authority internal pages.",
+          "measure": "Position distribution, impressions and qualified organic sessions."
+        },
+        {
+          "signal": "Query intent conflicts with the page's job",
+          "decision": "Do not force the query onto the page; map it to a better existing page or a justified new asset.",
+          "measure": "Reduction in mismatched impressions and better qualified engagement on the chosen destination."
+        }
+      ],
+      "risks": [
+        "CTR comparisons can be distorted by position, device, country, brand queries, SERP features and changes in the query mix.",
+        "A more enticing title that overpromises the page can increase low-quality clicks and weaken trust.",
+        "Low-volume rows do not support confident short-window conclusions."
+      ],
+      "kpis": [
+        "CTR and clicks for the same query-page cohort",
+        "Qualified organic sessions or conversions from the updated page",
+        "Average position distribution, treated as context rather than a promise",
+        "Number of changes with a saved baseline and explicit keep or reverse decision"
+      ],
+      "cadence": "Use 28-day versus prior comparable 28-day windows when seasonality and volume permit. Recheck after major SERP or site changes and avoid daily optimization from preliminary data.",
+      "cta": {
+        "label": "Apply this workflow in Base2026",
+        "href": "/knowledge/apply-research.html?solution=search-console-high-impression-low-ctr"
+      },
+      "related_solution_slugs": [
+        "content-refresh-prioritization",
+        "answer-ready-service-page-checklist"
+      ],
+      "editorial": {
+        "status": "approved_local",
+        "reviewer": "gpt-5.6-sol-hermes-session",
+        "reviewed_at": "2026-07-10T09:00:20-04:00",
+        "contract_version": "base2026-ai-recommends-solution-v1"
+      }
+    },
+    {
+      "slug": "measure-ai-search-visibility",
+      "title": "Measure AI Search Visibility Without Invented Attribution",
+      "meta_description": "A measurement framework combining GA4 referrals, Search Console trends and manual citation checks while separating visibility from attributable traffic.",
+      "updated_at": "2026-07-10",
+      "audience": "Marketing and analytics operators who need a credible AI-visibility baseline without treating every direct visit, branded search or tool score as proven AI traffic.",
+      "problem": "AI interfaces expose incomplete referral and citation data. A single dashboard can look precise while mixing referred sessions, search visibility, manual observations and vendor estimates.",
+      "primary_query": "How can I measure traffic and visibility from ChatGPT, AI Overviews and other AI search experiences?",
+      "recommendation": "Use a three-layer ledger: attributable GA4 referrals, Search Console search performance, and sampled manual citations. Report each layer separately and label unknown attribution instead of forcing a total AI-traffic number.",
+      "decision_scope": "Directional measurement for owned pages and named AI/search platforms. It does not prove that every AI answer view, direct visit or branded search was caused by an AI citation.",
+      "why_now": "AI discovery is becoming a real acquisition surface, but reporting coverage differs by platform. A bounded measurement model prevents false precision while still revealing which pages deserve deeper investment.",
+      "evidence": [
+        {
+          "source_id": "tiktok:gobigsystems:7659543819439967502",
+          "claim_id": "repair-gpt55-20260707-012",
+          "why_relevant": "Provides the practical GA4 session-source filtering signal for attributable AI referrals."
+        },
+        {
+          "source_id": "tiktok:gobigsystems:7660287484147830029",
+          "claim_id": "claim-backfill-2d7c9d3fbe84cc8a818b",
+          "why_relevant": "Captures a creator report about generative-search visibility, which must be bounded by the current official Search documentation and account availability."
+        },
+        {
+          "source_id": "tiktok:build_in_public:7655821023589272864",
+          "claim_id": "claim-social-footprint-ai-overview-7655821023589272864",
+          "why_relevant": "Adds the need to inspect citation surfaces and corroborate social or user-generated mentions before treating them as reliable evidence."
+        },
+        {
+          "source_id": "tiktok:harrysandersseo:7659535509131152658",
+          "claim_id": "repair-gpt55-20260707-014",
+          "why_relevant": "Supports a multi-tool operating stack while the solution deliberately keeps each tool's measurement claim separate."
+        }
+      ],
+      "authoritative_sources": [
+        {
+          "title": "GA4 Traffic acquisition report",
+          "url": "https://support.google.com/analytics/answer/12923437?hl=en",
+          "scope": "Official definitions for session source, source/medium, report filters and traffic-acquisition metrics."
+        },
+        {
+          "title": "AI features and your website",
+          "url": "https://developers.google.com/search/docs/appearance/ai-features",
+          "scope": "Google Search Central guidance for AI Overviews and AI Mode from a site-owner perspective."
+        },
+        {
+          "title": "Performance report — Search Console Help",
+          "url": "https://support.google.com/webmasters/answer/7576553",
+          "scope": "Official Search performance metrics and segmentation capabilities used for the owned-search layer."
+        }
+      ],
+      "playbook": [
+        {
+          "title": "Define three separate evidence layers",
+          "body": "Create fields for attributable referrals, owned-search performance and manual citation observations. Do not add them into one total because they have different units and collection rules."
+        },
+        {
+          "title": "Build the GA4 referral view",
+          "body": "Use session source or source/medium filters for named AI referrers. Save landing page, sessions, engagement and key-event definitions, and keep direct or unknown traffic outside the attributable total."
+        },
+        {
+          "title": "Record the Search Console layer",
+          "body": "Track clicks, impressions, CTR, position and landing pages for relevant search demand. Label the report exactly as Google exposes it in the account rather than assuming a separate generative report exists everywhere."
+        },
+        {
+          "title": "Run a repeatable citation sample",
+          "body": "Use a fixed prompt set, location, date, platform and account state. Record whether the brand or page was cited, the cited URL and the answer context; treat the sample as observational, not universal."
+        },
+        {
+          "title": "Choose page-level actions",
+          "body": "Prioritize pages that show a real referral, repeated search visibility or credible citations. Improve proof, clarity and internal discovery, then compare the same measurement layer after the change."
+        }
+      ],
+      "checklist": [
+        "Named AI referrers and matching rules documented",
+        "Direct and unknown traffic excluded from attributable AI referrals",
+        "GA4 session scope used consistently",
+        "Search Console metric and date-range definitions saved",
+        "Manual prompt sample is fixed and reproducible",
+        "Citation URL and answer context captured",
+        "Vendor-estimated visibility labeled separately",
+        "Each page action tied to one measurement layer"
+      ],
+      "decision_table": [
+        {
+          "signal": "Named AI referrer sends engaged sessions to one page",
+          "decision": "Protect and strengthen that page's answer, proof and conversion path.",
+          "measure": "Referred sessions, engagement and key events from the same session-source definition."
+        },
+        {
+          "signal": "Manual citations repeat but no referrer is visible",
+          "decision": "Record citation visibility separately; do not relabel direct traffic as AI traffic.",
+          "measure": "Citation frequency in the fixed sample and cited-URL stability."
+        },
+        {
+          "signal": "Search visibility grows without referrals or sampled citations",
+          "decision": "Continue normal search analysis and avoid claiming an AI-specific win.",
+          "measure": "Search Console clicks, impressions, CTR and qualified landing-page outcomes."
+        },
+        {
+          "signal": "Tool score changes but no first-party layer moves",
+          "decision": "Treat the score as a research lead, not a business outcome.",
+          "measure": "Whether first-party referrals, search performance or citations corroborate the movement."
+        }
+      ],
+      "risks": [
+        "Many AI interactions do not expose a reliable referral, so attributable sessions are a lower bound rather than total influence.",
+        "Manual prompt results vary by time, account, location and model state; small samples should not be universalized.",
+        "Vendor visibility scores use proprietary sampling and should not be merged with first-party analytics."
+      ],
+      "kpis": [
+        "Named AI-referred sessions and key events by landing page",
+        "Search Console clicks and impressions for the owned-search layer",
+        "Citation rate and cited-URL stability in the fixed manual sample",
+        "Share of reported AI metrics with a documented collection rule"
+      ],
+      "cadence": "Review first-party referral and Search Console layers monthly; run the fixed manual citation sample monthly or after major model/search changes; retain dated snapshots for trend comparison.",
+      "cta": {
+        "label": "Apply this measurement model",
+        "href": "/knowledge/apply-research.html?solution=measure-ai-search-visibility"
+      },
+      "related_solution_slugs": [
+        "answer-ready-service-page-checklist",
+        "google-business-profile-visibility-audit"
+      ],
+      "editorial": {
+        "status": "approved_local",
+        "reviewer": "gpt-5.6-sol-hermes-session",
+        "reviewed_at": "2026-07-10T09:00:20-04:00",
+        "contract_version": "base2026-ai-recommends-solution-v1"
+      }
+    },
+    {
+      "slug": "answer-ready-service-page-checklist",
+      "title": "Answer-Ready Service Page Checklist",
+      "meta_description": "A practical service-page checklist for explicit answers, original evidence, trust signals, internal links and measured usefulness across search and AI discovery.",
+      "updated_at": "2026-07-10",
+      "audience": "Local-service and specialist businesses improving an existing service page that must help a buyer decide and provide clear source material for search and AI systems.",
+      "problem": "Many service pages repeat category language, hide the actual answer, and add generic FAQs or schema without specific experience, evidence, scope or next steps.",
+      "primary_query": "What should an answer-ready service page include for search and AI visibility?",
+      "recommendation": "Build one page around one real service decision: state the answer early, define scope and location, add original proof and experience, address buyer questions visibly, connect supporting evidence, and measure qualified actions.",
+      "decision_scope": "A real service or use-case page with a distinct buyer job. This is not a recipe for mass-generated near-duplicate location pages or unsupported FAQ/schema expansion.",
+      "why_now": "Search and AI interfaces need clear, trustworthy source material, while people need a concrete reason to choose or reject the service. The same page can serve both only when it contains specific, visible value.",
+      "evidence": [
+        {
+          "source_id": "tiktok:gobigsystems:7652081880103275789",
+          "claim_id": "claim-backfill-dcb59e424e9ea609425e",
+          "why_relevant": "Provides a broad readiness checklist covering original data, FAQs, service clarity, proof, reviews and consistency."
+        },
+        {
+          "source_id": "tiktok:gobigsystems:7656946286486113550",
+          "claim_id": "repair-gpt55-20260707-023",
+          "why_relevant": "Adds the need for specific experience and original insight rather than generic service-category text."
+        },
+        {
+          "source_id": "tiktok:build_in_public:7645726458362531104",
+          "claim_id": "claim-backfill-ff7af579a21b0d9f7d82",
+          "why_relevant": "Adds a UX and visibility trade-off for FAQ presentation without turning the observation into a universal rule."
+        },
+        {
+          "source_id": "tiktok:harrysandersseo:7659351921198943496",
+          "claim_id": "repair-gpt55-20260707-013",
+          "why_relevant": "Supplies the information-gain principle: unique data, experience and stories distinguish the page from commodity summaries."
+        }
+      ],
+      "authoritative_sources": [
+        {
+          "title": "Creating helpful, reliable, people-first content",
+          "url": "https://developers.google.com/search/docs/fundamentals/creating-helpful-content",
+          "scope": "Google's self-assessment framework for original, substantial, trustworthy content made for an intended audience."
+        },
+        {
+          "title": "Introduction to structured data markup",
+          "url": "https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data",
+          "scope": "Structured data should describe visible page content accurately; fewer complete properties are better than inaccurate markup."
+        },
+        {
+          "title": "SEO link best practices for Google",
+          "url": "https://developers.google.com/search/docs/crawling-indexing/links-crawlable",
+          "scope": "Crawlable links and descriptive anchor text for connecting supporting pages and evidence."
+        }
+      ],
+      "playbook": [
+        {
+          "title": "Define the buyer decision",
+          "body": "Write the exact customer, service, location or constraint and the decision the page helps make. If two pages serve the same job, consolidate before adding copy."
+        },
+        {
+          "title": "Put the bounded answer first",
+          "body": "State what the service does, who it fits, the outcome it targets and the main limitation near the top. Avoid slogans that require the reader to infer the offer."
+        },
+        {
+          "title": "Add information gain",
+          "body": "Use first-party process details, examples, data, photos, limitations, comparisons or decisions learned from real delivery. Separate verified facts from opinions and estimates."
+        },
+        {
+          "title": "Answer real objections visibly",
+          "body": "Cover cost drivers, timing, eligibility, preparation, risk and alternatives in normal visible content. Use FAQs only where they help the reader and never as schema-only filler."
+        },
+        {
+          "title": "Connect proof and the next action",
+          "body": "Link supporting cases, methodology, entity facts and related solutions with descriptive anchors. End with a specific action that matches the decision stage, then measure qualified use."
+        }
+      ],
+      "checklist": [
+        "One distinct service decision and audience defined",
+        "Clear answer and scope visible before generic brand copy",
+        "Service area or eligibility stated accurately",
+        "At least one piece of original experience, data or evidence",
+        "Limitations and when not to choose the service included",
+        "Real buyer questions answered in visible content",
+        "Claims linked to trustworthy supporting sources",
+        "Crawlable internal links use descriptive anchors",
+        "Structured data matches visible content only",
+        "CTA matches the reader's decision stage"
+      ],
+      "decision_table": [
+        {
+          "signal": "Page repeats what every competitor says",
+          "decision": "Add specific process, evidence, limits or first-party examples before expanding word count.",
+          "measure": "Qualified engagement, assisted conversions and completion of the page-value checklist."
+        },
+        {
+          "signal": "Multiple pages target the same service decision",
+          "decision": "Consolidate or differentiate the buyer job before adding another URL.",
+          "measure": "Reduced intent overlap and clearer query-to-page mapping."
+        },
+        {
+          "signal": "FAQs exist only for keywords or schema",
+          "decision": "Keep only questions that resolve real buyer uncertainty and display the answers visibly.",
+          "measure": "FAQ interaction, downstream actions and zero markup/content mismatch."
+        },
+        {
+          "signal": "Page receives relevant impressions but weak qualified actions",
+          "decision": "Audit answer clarity, proof, limitations and CTA before seeking more traffic.",
+          "measure": "Qualified conversion rate and assisted lead quality."
+        }
+      ],
+      "risks": [
+        "Mass-producing near-duplicate service or location pages creates thin intent overlap instead of information gain.",
+        "Unsupported proof, reviews or business statistics can damage trust and should not be generated from creator claims.",
+        "Adding structured data does not replace useful visible content or guarantee a search feature."
+      ],
+      "kpis": [
+        "Qualified conversion rate for the service-page audience",
+        "Relevant Search Console clicks and query-to-page alignment",
+        "Completion rate of the page-value checklist and evidence links",
+        "Reduction in overlapping or thin service URLs"
+      ],
+      "cadence": "Review after a meaningful traffic or lead sample, at least quarterly for core commercial pages, and whenever the service, pricing logic, evidence or eligibility changes.",
+      "cta": {
+        "label": "Apply the page checklist",
+        "href": "/knowledge/apply-research.html?solution=answer-ready-service-page-checklist"
+      },
+      "related_solution_slugs": [
+        "search-console-high-impression-low-ctr",
+        "measure-ai-search-visibility",
+        "content-refresh-prioritization"
+      ],
+      "editorial": {
+        "status": "approved_local",
+        "reviewer": "gpt-5.6-sol-hermes-session",
+        "reviewed_at": "2026-07-10T09:00:20-04:00",
+        "contract_version": "base2026-ai-recommends-solution-v1"
+      }
+    },
+    {
+      "slug": "content-refresh-prioritization",
+      "title": "Content Refresh Prioritization Framework",
+      "meta_description": "A measured framework for choosing existing pages to refresh using Search Console demand, content gaps, substantive updates and explicit keep-or-reverse decisions.",
+      "updated_at": "2026-07-10",
+      "audience": "Content and SEO operators with an established site, limited editorial capacity and a need to choose between refreshing an existing page and creating a new one.",
+      "problem": "Teams often update dates, rewrite pages with no demand signal, or publish a new URL when an existing page already owns the intent and has search history.",
+      "primary_query": "Which existing pages should I refresh first, and when should I create new content instead?",
+      "recommendation": "Prioritize pages with real impressions, relevant near-ranking queries, declining qualified outcomes or material outdated gaps; make substantive changes, preserve the URL when intent remains stable, and document the result.",
+      "decision_scope": "Existing pages with search history or strategic business importance. Refreshing is not automatically better than a new page when the intended audience, task or canonical answer has materially changed.",
+      "why_now": "Existing URLs contain performance evidence and accumulated discovery paths. Using that evidence can reduce waste, while a substantive refresh keeps important answers accurate for people and retrieval systems.",
+      "evidence": [
+        {
+          "source_id": "tiktok:webhivedigital:7649379133155282208",
+          "claim_id": "claim-backfill-26a0623477ed0ca34897",
+          "why_relevant": "Provides the core hypothesis that an existing page with history can be a faster opportunity than a net-new asset."
+        },
+        {
+          "source_id": "tiktok:build_in_public:7604912449459948822",
+          "claim_id": "tiktok-b010-claim-021",
+          "why_relevant": "Adds a query-position opportunity band for established pages instead of defaulting to new blog production."
+        },
+        {
+          "source_id": "tiktok:tjrobertson52:7567191282888494349",
+          "claim_id": "tiktok-b019-claim-036",
+          "why_relevant": "Supports substantive heading, formatting, data and title work while preserving the existing URL when the intent remains relevant."
+        },
+        {
+          "source_id": "tiktok:tjrobertson52:7588250289552067895",
+          "claim_id": "tiktok-b014-claim-012",
+          "why_relevant": "Provides an explicit guardrail that changing only the year or date is not a meaningful content refresh."
+        }
+      ],
+      "authoritative_sources": [
+        {
+          "title": "Creating helpful, reliable, people-first content",
+          "url": "https://developers.google.com/search/docs/fundamentals/creating-helpful-content",
+          "scope": "A framework for evaluating whether content is substantial, trustworthy and useful to the intended audience."
+        },
+        {
+          "title": "SEO Starter Guide",
+          "url": "https://developers.google.com/search/docs/fundamentals/seo-starter-guide",
+          "scope": "Google's guidance to keep published content up to date and remove it when it is no longer relevant, alongside basic title and linking practices."
+        },
+        {
+          "title": "Performance report — Search Console Help",
+          "url": "https://support.google.com/webmasters/answer/7576553",
+          "scope": "The first-party metrics used to find existing query and page demand before a refresh decision."
+        }
+      ],
+      "playbook": [
+        {
+          "title": "Build the opportunity inventory",
+          "body": "Export page and query performance, conversion or lead outcomes, last substantive update, business importance and known accuracy gaps. Keep seasonality and migrations visible."
+        },
+        {
+          "title": "Score the reason to refresh",
+          "body": "Prioritize pages with relevant impressions, near-ranking queries, declining qualified results, outdated facts or an important unanswered sub-intent. Do not score traffic alone."
+        },
+        {
+          "title": "Choose refresh, consolidate or create",
+          "body": "Refresh when the audience and canonical job remain stable; consolidate overlapping pages; create a new URL only for a genuinely distinct decision or audience."
+        },
+        {
+          "title": "Make a substantive update",
+          "body": "Correct facts, improve the answer, add current evidence or original experience, remove obsolete material, strengthen structure and update title or links only where justified."
+        },
+        {
+          "title": "Annotate and decide",
+          "body": "Record what changed, why, date, baseline and review window. Keep, revise or reverse based on qualified outcomes rather than declaring success from a new date label."
+        }
+      ],
+      "checklist": [
+        "Page and query baseline exported",
+        "Audience and canonical page job still valid",
+        "Refresh reason is demand, accuracy or business value—not age alone",
+        "Overlapping URLs checked before editing",
+        "Facts and external references reverified",
+        "Substantive value added beyond a date change",
+        "Title and internal links remain accurate",
+        "Change log and measurement window saved",
+        "Keep, revise or reverse decision scheduled"
+      ],
+      "decision_table": [
+        {
+          "signal": "Relevant impressions exist and the page partly answers the query",
+          "decision": "Refresh the existing page around the missing decision support.",
+          "measure": "Query-page clicks, qualified engagement and conversions."
+        },
+        {
+          "signal": "Several pages answer the same intent weakly",
+          "decision": "Consolidate into the strongest canonical page and preserve necessary redirects or links.",
+          "measure": "Reduced intent overlap and combined qualified search performance."
+        },
+        {
+          "signal": "The audience or task is materially different",
+          "decision": "Create a new page only when it serves a distinct job and can earn standalone value.",
+          "measure": "Distinct query-to-page alignment and incremental qualified outcomes."
+        },
+        {
+          "signal": "Only the year or displayed date is stale",
+          "decision": "Do not relabel freshness without reviewing and materially updating the content.",
+          "measure": "Documented substantive changes and accuracy review completion."
+        }
+      ],
+      "risks": [
+        "Seasonality, reporting changes and site migrations can look like content decay; check context before rewriting.",
+        "Changing a successful page's intent, URL or core title too aggressively can destroy useful discovery paths.",
+        "A new date without substantive review creates false freshness and weakens trust."
+      ],
+      "kpis": [
+        "Qualified clicks and conversions for refreshed query-page cohorts",
+        "Number of refreshed pages with a documented baseline and decision",
+        "Reduction in outdated facts and overlapping URLs",
+        "Median time from identified opportunity to measured keep-or-reverse outcome"
+      ],
+      "cadence": "Review core commercial and high-opportunity pages quarterly, the broader inventory at least annually, and any page immediately when a material fact, product or eligibility rule changes.",
+      "cta": {
+        "label": "Apply the refresh framework",
+        "href": "/knowledge/apply-research.html?solution=content-refresh-prioritization"
+      },
+      "related_solution_slugs": [
+        "search-console-high-impression-low-ctr",
+        "answer-ready-service-page-checklist"
+      ],
+      "editorial": {
+        "status": "approved_local",
+        "reviewer": "gpt-5.6-sol-hermes-session",
+        "reviewed_at": "2026-07-10T09:00:20-04:00",
+        "contract_version": "base2026-ai-recommends-solution-v1"
+      }
+    }
+  ]
+}

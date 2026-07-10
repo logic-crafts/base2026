@@ -123,9 +123,28 @@ function compactText(value) {
 function decodeHtmlEntities(value) {
   const text = String(value || "");
   if (!/[&][a-zA-Z#0-9]+;/.test(text)) return text;
-  const textarea = document.createElement("textarea");
-  textarea.innerHTML = text;
-  return textarea.value;
+  const namedEntities = {
+    amp: "&",
+    lt: "<",
+    gt: ">",
+    quot: '"',
+    apos: "'",
+    nbsp: " ",
+  };
+  return text.replace(/&(#x[0-9a-fA-F]+|#\d+|[a-zA-Z][a-zA-Z0-9]+);/g, (match, entity) => {
+    if (entity[0] === "#") {
+      const codePoint = entity[1]?.toLowerCase() === "x" ? Number.parseInt(entity.slice(2), 16) : Number.parseInt(entity.slice(1), 10);
+      if (Number.isFinite(codePoint) && codePoint > 0 && codePoint <= 0x10ffff) {
+        try {
+          return String.fromCodePoint(codePoint);
+        } catch (_err) {
+          return match;
+        }
+      }
+      return match;
+    }
+    return Object.prototype.hasOwnProperty.call(namedEntities, entity) ? namedEntities[entity] : match;
+  });
 }
 
 function escapeHtml(value) {
@@ -279,7 +298,7 @@ function sourcePageHref(hit) {
 }
 
 function workspaceRouteHref(patch = {}) {
-  const params = new URLSearchParams(window.location.search);
+  const params = routeSearchParams();
   const currentQuery = compactText(search?.helper?.state?.query || params.get("q") || "");
   if (currentQuery && !Object.prototype.hasOwnProperty.call(patch, "q")) params.set("q", currentQuery);
   Object.entries(patch).forEach(([key, value]) => {
@@ -290,11 +309,23 @@ function workspaceRouteHref(patch = {}) {
     }
   });
   const query = params.toString();
-  return `./${query ? `?${query}` : ""}`;
+  return `./${query ? `#search?${query}` : ""}`;
+}
+
+function routeSearchParams() {
+  const params = new URLSearchParams(window.location.search);
+  const hash = window.location.hash || "";
+  if (hash.startsWith("#search?")) {
+    const hashParams = new URLSearchParams(hash.slice("#search?".length));
+    hashParams.forEach((value, key) => {
+      if (!params.has(key)) params.set(key, value);
+    });
+  }
+  return params;
 }
 
 function getKnowledgeRouteState() {
-  const params = new URLSearchParams(window.location.search);
+  const params = routeSearchParams();
   return {
     q: params.get("q") || params.get(`${searchIndex}[query]`) || "",
     source: params.get("source") || "",
@@ -307,7 +338,7 @@ function getKnowledgeRouteState() {
 }
 
 function setKnowledgeRouteState(patch = {}, options = {}) {
-  const params = new URLSearchParams(window.location.search);
+  const params = routeSearchParams();
   const currentQuery = compactText(search?.helper?.state?.query || "");
   if (currentQuery && !Object.prototype.hasOwnProperty.call(patch, "q")) params.set("q", currentQuery);
   Object.entries(patch).forEach(([key, value]) => {
@@ -318,8 +349,8 @@ function setKnowledgeRouteState(patch = {}, options = {}) {
     }
   });
   const query = params.toString();
-  const nextUrl = `${window.location.pathname}${query ? `?${query}` : ""}`;
-  if (nextUrl === `${window.location.pathname}${window.location.search}`) return;
+  const nextUrl = `${window.location.pathname}${query ? `#search?${query}` : ""}`;
+  if (nextUrl === `${window.location.pathname}${window.location.hash}`) return;
   window.history[options.replace ? "replaceState" : "pushState"]({}, "", nextUrl);
 }
 

@@ -17,6 +17,7 @@ audio_*.ogg
 base2026-*.png
 base2026-*.md
 docs/*_roadmap_pack.zip
+scripts/tmp_*.py
 
 # Knowledge base generated/private data
 00_sources/

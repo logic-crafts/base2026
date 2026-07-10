@@ -24,6 +24,12 @@
       "description": "Human-readable API and AI access documentation."
     },
     {
+      "id": "apply_research_page",
+      "url": "https://aggressorbulkit.online/knowledge/apply-research.html",
+      "format": "html",
+      "description": "Human-readable bridge from Base2026 public source intelligence to Alex Yarosh's business-specific AI visibility audit and service workflow."
+    },
+    {
       "id": "llms_context",
       "url": "https://aggressorbulkit.online/knowledge/llms.txt",
       "format": "text",
@@ -111,5 +117,14 @@
       "no raw caption or private pipeline exposure",
       "stable source, creator, topic, and signal lookup tools before write tools"
     ]
+  },
+  "project_identity": {
+    "product": "Base2026",
+    "creator": "Alex Yarosh",
+    "owner": "Logic Crafts LLC, Kyrgyzstan",
+    "status": "independent experimental startup product",
+    "not_a_marketing_agency": true,
+    "not_marketing_services": true,
+    "description": "Base2026 is a separate product/startup: a public source-intelligence and knowledge-base system for short-form expert video."
   }
 }

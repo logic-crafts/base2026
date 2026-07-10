@@ -35,7 +35,7 @@
       <div class="site-header__bar">
         <a class="site-header__brand" href="/"><span class="site-header__avatar" aria-hidden="true"></span><span>Alex Yarosh</span></a>
         <nav class="site-header__nav" aria-label="Base2026 navigation">
-          <a class="site-header__link" href="./index.html">Search</a><a class="site-header__link" href="./analytics.html">Analytics</a><a class="site-header__link" href="./api.html" aria-current="page">API</a><a class="site-header__link" href="./topics/">Topics</a><a class="site-header__link" href="./creators/">Creators</a><a class="site-header__link" href="./methodology.html">Methodology</a><span class="site-header__nav-divider" aria-hidden="true"></span><a class="site-header__link site-header__link--site" href="/services/">Services</a><a class="site-header__link site-header__link--site" href="/pricing/">Pricing</a><a class="site-header__link site-header__link--site" href="/about/">About</a>
+          <a class="site-header__link" href="./">Search</a><a class="site-header__link" href="./analytics.html">Analytics</a><a class="site-header__link" href="./api.html" aria-current="page">API</a><a class="site-header__link" href="./apply-research.html">Apply Research</a><a class="site-header__link" href="./ai-visibility-pages/">AI Visibility Pages</a><a class="site-header__link" href="./topics/">Topics</a><a class="site-header__link" href="./creators/">Creators</a><a class="site-header__link" href="./methodology.html">Methodology</a><span class="site-header__nav-divider" aria-hidden="true"></span><a class="site-header__link site-header__link--site" href="/services/">Services</a><a class="site-header__link site-header__link--site" href="/pricing/">Pricing</a><a class="site-header__link site-header__link--site" href="/about/">About</a>
         </nav>
         <a class="site-header__cta" href="/ai-visibility-audit/">Check My AI Visibility</a>
         <details class="site-header__mobile-menu">
@@ -44,7 +44,7 @@
             <nav aria-label="Mobile navigation">
               <details class="site-header__mobile-base" open>
                 <summary>Base2026</summary>
-                <div><a href="./index.html">Search</a><a href="./analytics.html">Analytics</a><a href="./api.html" aria-current="page">API</a><a href="./topics/">Topics</a><a href="./creators/">Creators</a><a href="./methodology.html">Methodology</a></div>
+                <div><a href="./">Search</a><a href="./analytics.html">Analytics</a><a href="./api.html" aria-current="page">API</a><a href="./apply-research.html">Apply Research</a><a href="./ai-visibility-pages/">AI Visibility Pages</a><a href="./topics/">Topics</a><a href="./creators/">Creators</a><a href="./methodology.html">Methodology</a></div>
               </details>
               <strong class="mobile-menu-label">Alex Yarosh</strong>
               <a href="/services/">Services</a>
@@ -60,7 +60,7 @@
     <main id="content" class="app-shell content-page doc-page">
 
       <nav class="breadcrumbs" aria-label="Breadcrumb">
-        <a href="./index.html">Base2026</a>
+        <a href="./">Base2026</a>
         <span aria-hidden="true">/</span>
         <span aria-current="page">Base2026 API &amp; AI Access</span>
       </nav>
@@ -71,6 +71,7 @@
         <p class="lead">Public read-only files and agent-readable entry points for using Base2026 as an attributed source intelligence library.</p>
         <div class="hero-actions">
           <a class="ay-button" href="./">Search the library</a>
+          <a class="ay-button-secondary" href="./apply-research.html">Apply research</a>
           <a class="ay-button-secondary" href="./roadmap.html">Roadmap</a>
           <a class="ay-button-secondary" href="./support.html">Support</a>
         </div>
@@ -78,10 +79,10 @@
 
 
       <section class="content-section"><p>Base2026 is built to be useful to humans and AI agents without forcing either one to scrape the visual interface. The public site exposes a small read-only data layer with the same public boundary as the website: reviewed source records, public passages, creator/topic metadata, and source-backed intelligence only.</p><p>Private research vaults, raw captions, raw ASR, media files, credentials, logs, and unreviewed pipeline artifacts are not part of the public API surface.</p></section>
-<section class="content-section"><h2>Public entry points</h2><ul><li>Human search workspace: <code>/knowledge/</code></li><li>Agent-readable context file: <code>/knowledge/llms.txt</code></li><li>Public data dictionary: <code>/knowledge/data-dictionary.json</code></li><li>Public API index: <code>/knowledge/api-index.json</code></li><li>Public sitemap: <code>/knowledge/sitemap.xml</code></li></ul></section>
+<section class="content-section"><h2>Public entry points</h2><ul><li>Human search workspace: <code>/knowledge/</code></li><li>Agent-readable context file: <code>/knowledge/llms.txt</code></li><li>Public data dictionary: <code>/knowledge/data-dictionary.json</code></li><li>Public API index: <code>/knowledge/api-index.json</code></li><li>Public sitemap: <code>/knowledge/sitemap.xml</code></li><li>Research-to-audit bridge: <code>/knowledge/apply-research.html</code></li></ul></section>
 <section class="content-section"><h2>Static public data</h2><p>These files are safe read-only exports for external tools, notebooks, audits, and AI workflows.</p><ul><li><code>/knowledge/static/manifest.json</code> - release counts and public export metadata.</li><li><code>/knowledge/static/documents.jsonl</code> - source-level search documents and public source records.</li><li><code>/knowledge/static/passages.jsonl</code> - searchable public evidence passages linked to source records.</li><li><code>/knowledge/static/insight_cards.jsonl</code> - reviewed public source-backed insight cards.</li><li><code>/knowledge/static/topic_signal_briefs.jsonl</code> - deterministic summaries for strong topics.</li><li><code>/knowledge/data-dictionary.json</code> - field descriptions and public/private boundary notes.</li></ul></section>
 <section class="content-section"><h2>Search endpoint</h2><p>The public UI searches through a server-side Meilisearch proxy:</p><p><code>POST /knowledge-search/multi-search</code></p><p>The proxy injects the public search key server-side. Do not call Meilisearch directly and do not expect private data, raw captions, or write access. External integrations should prefer the static JSONL files unless they need live search ranking.</p></section>
-<section class="content-section"><h2>AI usage</h2><p>AI agents can use Base2026 as a source-backed research layer by reading <code>/knowledge/llms.txt</code>, then using the data dictionary and public JSONL files. When citing Base2026, prefer canonical source, topic, creator, or comparison pages rather than copying raw rows.</p><p>Good use cases:</p><ul><li>find creators who discuss a topic;</li><li>compare repeated tactics across creators;</li><li>inspect source-backed SEO/GEO/AEO claims;</li><li>build internal research notebooks from public records;</li><li>cite a canonical Base2026 source page with original creator attribution.</li></ul><p>Not supported:</p><ul><li>raw transcript harvesting;</li><li>creator impersonation;</li><li>private lead or admin data access;</li><li>writes, corrections, or moderation through public endpoints;</li><li>replacing the original creator channel.</li></ul></section>
+<section class="content-section"><h2>AI usage</h2><p>AI agents can use Base2026 as a source-backed research layer by reading <code>/knowledge/llms.txt</code>, then using the data dictionary and public JSONL files. When citing Base2026, prefer canonical source, topic, creator, or comparison pages rather than copying raw rows.</p><p>For business-specific implementation, use <code>/knowledge/apply-research.html</code> as the public bridge from Base2026 source intelligence to Alex Yarosh&#x27;s AI Visibility Snapshot, Diagnostic Audit, and service workflow.</p><p>Good use cases:</p><ul><li>find creators who discuss a topic;</li><li>compare repeated tactics across creators;</li><li>inspect source-backed SEO/GEO/AEO claims;</li><li>build internal research notebooks from public records;</li><li>cite a canonical Base2026 source page with original creator attribution.</li></ul><p>Not supported:</p><ul><li>raw transcript harvesting;</li><li>creator impersonation;</li><li>private lead or admin data access;</li><li>writes, corrections, or moderation through public endpoints;</li><li>replacing the original creator channel.</li></ul></section>
 <section class="content-section"><h2>Future MCP contract</h2><p>The planned MCP layer should remain read-only at first:</p><ul><li>search sources by query and filters;</li><li>get one source by item ID;</li><li>get one topic by topic ID;</li><li>list creators with filters;</li><li>compare creator viewpoints for one topic.</li></ul><p>Every tool response must preserve attribution, canonical URLs, original source links, and public/private policy flags.</p></section>
 
     </main>
@@ -114,11 +115,11 @@
         <nav aria-label="Footer services">
           <h3>Services</h3>
           <ul class="ay-footer-menu">
-            <li><a href="/services/#ai-visibility-audit">AI Visibility Audit</a></li>
-            <li><a href="/services/#technical-foundation">SEO/GEO Technical Foundation</a></li>
-            <li><a href="/services/#answer-ready-content">Answer-Ready Content</a></li>
+            <li><a href="/ai-visibility-diagnostic-audit/">AI Visibility Diagnostic Audit</a></li>
+            <li><a href="/technical-seo-geo-foundation/">Technical SEO &amp; GEO Foundation</a></li>
+            <li><a href="/answer-ready-service-pages/">Answer-Ready Service Pages</a></li>
+            <li><a href="/entity-trust-source-intelligence/">Entity, Trust &amp; Source Intelligence</a></li>
             <li><a href="/services/#local-seo">Local SEO &amp; Citations</a></li>
-            <li><a href="/services/#entity-schema">Entity &amp; Schema Optimization</a></li>
             <li><a href="/services/#monitoring">AI Visibility Monitoring</a></li>
           </ul>
         </nav>
@@ -133,10 +134,11 @@
         </nav>
         <nav aria-label="Footer Base2026">
           <h3>Base2026 Pilot Project</h3>
-          <p>Independent pilot project: a searchable knowledge base for short-form expert video.</p>
+          <p>Independent experimental startup product: a searchable knowledge base for short-form expert video.</p>
           <ul class="ay-footer-menu">
             <li><a href="./">Search Base2026</a></li>
             <li><a href="./api.html">API &amp; AI access</a></li>
+            <li><a href="./apply-research.html">Apply research</a></li>
             <li><a href="./roadmap.html">Roadmap</a></li>
             <li><a href="./topics/">Topics</a></li>
             <li><a href="./creators/">Creators</a></li>
@@ -157,7 +159,7 @@
         </nav>
       </div>
       <div class="ay-footer-bottom">
-        <span>&copy; 2026 Alex Yarosh. Available remotely for US-based local businesses.</span>
+        <span>&copy; 2026 Logic Crafts LLC, Kyrgyzstan. Base2026 was created by Alex Yarosh as an independent experimental startup product. It is not a marketing agency and not a marketing-services offering.</span>
       </div>
     </footer>
 

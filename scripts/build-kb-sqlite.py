@@ -207,7 +207,7 @@ def load_reviewed_candidate_claims(path: Path) -> list[dict[str, str]]:
         if review_status not in replay_statuses:
             continue
         claim_id = (row.get("claim_id") or "").strip()
-        claim_text = (row.get("claim_text") or "").strip()
+        claim_text = (row.get("claim_text") or row.get("text") or "").strip()
         video_id = str(row.get("video_id") or "").strip()
         if not claim_id or not claim_text or not video_id:
             continue

@@ -206,10 +206,21 @@ try {
 
   Run-Step "polish-status" {
     $statusArgs = @("--json")
+    if ($AfterPolish) {
+      # `needs_review` is a valid gated outcome after GPT/Codex polish; it must not abort
+      # the local rebuild/export refresh. Missing polished outputs still exit non-zero.
+      $statusArgs += @("--allow-needs-review")
+    }
     if ($AfterPolish -and $BatchSet) {
       $statusArgs += @("--batch-dir", (Join-Path $Root "12_knowledge-base\sources\tiktok\transcript-polish-batches\$BatchSet"))
     }
     & $PythonExe (Join-Path $Root "scripts\tiktok-polish-status.py") @statusArgs
+  }
+  if ($AfterPolish -and $BatchSet) {
+    Run-Step "apply-qa-gates" {
+      $BatchDir = Join-Path $Root "12_knowledge-base\sources\tiktok\transcript-polish-batches\$BatchSet"
+      & $PythonExe (Join-Path $Root "scripts\tiktok-apply-qa-gates.py") --batch-dir $BatchDir --apply
+    }
   }
   Run-Step "rebuild-sqlite" {
     & $PythonExe (Join-Path $Root "scripts\build-kb-sqlite.py")
@@ -234,6 +245,17 @@ try {
     Copy-Item (Join-Path $ExportRoot "*") $PublicDataRoot -Recurse -Force
   }
 
+  Run-Step "refresh-editorial-queues" {
+    $InsightRepairRoot = Join-Path $Planning "insight-repair"
+    & $PythonExe (Join-Path $Root "scripts\base2026-tiktok-repair-queue.py") --out-dir $InsightRepairRoot --write
+    & $PythonExe (Join-Path $Root "scripts\base2026-solution-backlog-portfolio.py") `
+      --queue (Join-Path $InsightRepairRoot "needs-insight-latest.jsonl") `
+      --repair-summary (Join-Path $InsightRepairRoot "repair-summary-latest.json") `
+      --out-jsonl (Join-Path $Planning "tiktok-pipeline-v2\needs-insight-portfolio.jsonl") `
+      --out-summary (Join-Path $Planning "tiktok-pipeline-v2\needs-insight-portfolio-summary.json") `
+      --out-markdown (Join-Path $Planning "tiktok-pipeline-v2\NEEDS_INSIGHT_PORTFOLIO.md")
+  }
+
   if ($Package -or $Deploy) {
     Run-Step "package-public-release" {
       & $PowerShellExe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $Root "scripts\package-public-release.ps1") -ReleaseName "base2026-public-hermes-$Stamp"
@@ -245,6 +267,10 @@ try {
   }
 
   Write-State -Status "completed" -Stage "done" -Message "Hermes TikTok refresh completed locally." -Ok $true
+}
+catch {
+  Write-State -Status "failed" -Stage "exception" -Message $_.Exception.Message -Ok $false
+  throw
 }
 finally {
   Remove-Item -LiteralPath $Lock -ErrorAction SilentlyContinue
