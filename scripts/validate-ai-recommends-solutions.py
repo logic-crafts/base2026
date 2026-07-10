@@ -15,6 +15,27 @@ def main() -> int:
     args = parser.parse_args()
 
     payload = read_json(args.input)
+    required_public_files = [args.data_root / "source_records.jsonl", args.data_root / "insight_cards.jsonl"]
+    missing_public_files = [path.as_posix() for path in required_public_files if not path.is_file()]
+    if missing_public_files:
+        public_report = {
+            "contract_version": payload.get("contract_version"),
+            "errors": [
+                "public evidence export is missing; pass --data-root for a verified release export",
+                *[f"missing required public evidence file: {path}" for path in missing_public_files],
+            ],
+            "indexable_count": 0,
+            "ok": False,
+            "solution_count": len(payload.get("solutions") or []),
+            "solutions": [],
+        }
+        rendered = json.dumps(public_report, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+        if args.report:
+            args.report.parent.mkdir(parents=True, exist_ok=True)
+            args.report.write_text(rendered, encoding="utf-8")
+        print(rendered, end="")
+        return 2
+
     context = build_public_context(args.data_root)
     report = validate_payload(payload, context)
     public_report = {key: value for key, value in report.items() if key != "_internal_reports"}
