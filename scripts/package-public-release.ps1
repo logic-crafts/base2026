@@ -156,6 +156,8 @@ if (Test-Path "./data/base2026_ai_recommends_solutions_pilot.json") {
   python3 ./scripts/generate-ai-recommends-solutions.py --input $SolutionInput --data-root $ExportRoot --out $WebRoot --report $SolutionReport | Write-Output
   Assert-NativeSuccess "generate-ai-recommends-solutions"
   Copy-Item (Join-Path $WebRoot "ai-recommends-solutions.css") (Join-Path $StaticRoot "ai-recommends-solutions.css") -Force
+  Copy-Item (Join-Path $WebRoot "alex-v4-static-shell.css") (Join-Path $StaticRoot "alex-v4-static-shell.css") -Force
+  Copy-Item (Join-Path $WebRoot "alex-v4-static-shell.js") (Join-Path $StaticRoot "alex-v4-static-shell.js") -Force
   python3 ./scripts/validate-ai-recommends-html.py --out $WebRoot --generation-report $SolutionReport --report $SolutionHtmlReport | Write-Output
   Assert-NativeSuccess "validate-ai-recommends-html"
 }
@@ -175,6 +177,8 @@ Assert-NativeSuccess "generate-base2026-sitemap"
 $VersionedAssets = @(
   "styles.css",
   "ai-recommends-solutions.css",
+  "alex-v4-static-shell.css",
+  "alex-v4-static-shell.js",
   "meili.js",
   "cookie-consent.js",
   "share-actions.js",

@@ -134,6 +134,7 @@ PUBLIC_SAFE_EXACT = {
     "scripts/generate-info-pages.py",
     "scripts/generate-ai-visibility-pages.py",
     "scripts/generate-ai-recommends-solutions.py",
+    "scripts/alex_v4_static_shell.py",
     "scripts/generate-alex-base2026-native-site.py",
     "scripts/generate-alex-static-site.py",
     "scripts/hermes-tiktok-refresh.ps1",

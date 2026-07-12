@@ -61,8 +61,6 @@ python3 ./scripts/check-public-export-policy.py $ExportRoot | Write-Output
 Assert-NativeSuccess "check-public-export-policy"
 python3 ./scripts/validate-public-text-excerpts.py --data $ExportRoot | Write-Output
 Assert-NativeSuccess "validate-public-text-excerpts"
-python3 ./scripts/check-public-content-readiness.py --data-root $ExportRoot --latest 1 --fail | Write-Output
-Assert-NativeSuccess "check-public-content-readiness"
 
 foreach ($File in $SourceCounts.Keys) {
   $Path = Join-Path $ExportRoot $File
@@ -189,6 +187,22 @@ if (Test-Path "./data/ai_visibility_pages_master.json") {
   python3 ./scripts/generate-ai-visibility-pages.py --input ./data/ai_visibility_pages_batch01.json --out $WebRoot --indexable | Write-Output
   Assert-NativeSuccess "generate-ai-visibility-pages-release"
 }
+if (Test-Path "./data/base2026_ai_recommends_solutions_pilot.json") {
+  $SolutionInput = "./data/base2026_ai_recommends_solutions_pilot.json"
+  $SolutionReport = Join-Path $BuildRoot "ai-recommends-solutions-generation.json"
+  $SolutionHtmlReport = Join-Path $BuildRoot "ai-recommends-solutions-html-qa.json"
+  python3 ./scripts/validate-ai-recommends-solutions.py --input $SolutionInput --data-root $ExportRoot --report (Join-Path $BuildRoot "ai-recommends-solutions-validation.json") | Write-Output
+  Assert-NativeSuccess "validate-ai-recommends-solutions"
+  python3 ./scripts/generate-ai-recommends-solutions.py --input $SolutionInput --data-root $ExportRoot --out $WebRoot --report $SolutionReport | Write-Output
+  Assert-NativeSuccess "generate-ai-recommends-solutions"
+  Copy-Item (Join-Path $WebRoot "ai-recommends-solutions.css") (Join-Path $StaticRoot "ai-recommends-solutions.css") -Force
+  Copy-Item (Join-Path $WebRoot "alex-v4-static-shell.css") (Join-Path $StaticRoot "alex-v4-static-shell.css") -Force
+  Copy-Item (Join-Path $WebRoot "alex-v4-static-shell.js") (Join-Path $StaticRoot "alex-v4-static-shell.js") -Force
+  python3 ./scripts/validate-ai-recommends-html.py --out $WebRoot --generation-report $SolutionReport --report $SolutionHtmlReport | Write-Output
+  Assert-NativeSuccess "validate-ai-recommends-html"
+}
+python3 ./scripts/check-public-content-readiness.py --data-root $ExportRoot --latest 1 --web-root $WebRoot --allow-generated-noindex --fail | Write-Output
+Assert-NativeSuccess "check-public-content-readiness-generated"
 Get-ChildItem -Path "./web/static" -Filter "indexnow-*.txt" -File -ErrorAction SilentlyContinue | ForEach-Object {
   $Target = Join-Path $WebRoot $_.Name
   Copy-Item $_.FullName $Target -Force
@@ -199,6 +213,9 @@ Assert-NativeSuccess "generate-base2026-sitemap"
 
 $VersionedAssets = @(
   "styles.css",
+  "ai-recommends-solutions.css",
+  "alex-v4-static-shell.css",
+  "alex-v4-static-shell.js",
   "meili.js",
   "cookie-consent.js",
   "share-actions.js",

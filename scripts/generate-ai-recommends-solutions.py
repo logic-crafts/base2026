@@ -7,6 +7,7 @@ from html import escape
 from pathlib import Path
 from typing import Any
 
+from alex_v4_static_shell import apply_alex_v4_shell, shell_css, shell_js
 from base2026_ai_recommends_core import build_public_context, read_json, validate_payload
 
 PUBLIC_PAGES_PATH = Path(__file__).with_name("generate-public-pages.py")
@@ -233,7 +234,7 @@ def solution_page(solution: dict[str, Any], report: dict[str, Any]) -> str:
         canonical_path=f"solutions/{solution['slug']}.html",
         main_class="app-shell content-page solution-page",
     )
-    return inject_solution_head(page, solution, resolved)
+    return apply_alex_v4_shell(inject_solution_head(page, solution, resolved), relative_root="..")
 
 
 def hub_page(solutions: list[dict[str, Any]], reports_by_slug: dict[str, dict[str, Any]]) -> str:
@@ -282,56 +283,28 @@ def hub_page(solutions: list[dict[str, Any]], reports_by_slug: dict[str, dict[st
         canonical_path="solutions/",
         main_class="app-shell content-page solution-page solution-hub",
     )
-    return page.replace(
+    page = page.replace(
         "  </head>",
         f'    <link rel="stylesheet" href="../static/ai-recommends-solutions.css?v={STYLE_VERSION}" />\n  </head>',
         1,
     )
+    return apply_alex_v4_shell(page, relative_root="..")
 
 
 def css_text() -> str:
     return """
-.solution-page { --solution-orange: #ff6b18; --solution-ink: #101820; --solution-mist: #eef2f0; }
-.solution-hero { display:grid; grid-template-columns:minmax(0,1.5fr) minmax(280px,.7fr); gap:28px; align-items:stretch; margin:18px 0 36px; }
-.solution-hero__copy, .solution-verdict { border:1px solid var(--line, #d9ddd9); border-radius:22px; padding:clamp(24px,4vw,52px); background:var(--surface, #fff); }
-.solution-hero__copy h1 { max-width:900px; margin:.35rem 0 1rem; font-size:clamp(2.35rem,5vw,5.4rem); line-height:.96; letter-spacing:-.055em; }
-.solution-hero__actions, .solution-card-actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:24px; }
-.solution-verdict { background:var(--solution-ink); color:#fff; display:flex; flex-direction:column; justify-content:space-between; }
-.solution-verdict span, .solution-intent-grid span, .solution-hub-card__meta, .evidence-role { font-family:var(--font-mono, monospace); font-size:.74rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; }
-.solution-verdict p { font-size:1.25rem; line-height:1.45; }
-.solution-intent-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
-.solution-intent-grid article { padding:22px; border:1px solid var(--line, #d9ddd9); border-radius:16px; background:#fff; }
-.solution-intent-grid p { margin:.65rem 0 0; }
-.solution-steps { display:grid; gap:12px; }
-.solution-step { display:grid; grid-template-columns:64px 1fr; gap:18px; padding:22px; border:1px solid var(--line, #d9ddd9); border-radius:16px; background:#fff; }
-.solution-step__number { color:var(--solution-orange); font:700 1.25rem var(--font-mono, monospace); }
-.solution-step h3, .solution-step p { margin:0; }
-.solution-step p { margin-top:.45rem; }
-.solution-two-column, .solution-measurement__grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px; }
-.solution-checklist, .solution-risk-list, .solution-measurement ul { padding-left:1.25rem; }
-.solution-checklist li, .solution-risk-list li, .solution-measurement li { margin:.65rem 0; }
-.solution-checklist li::marker { color:var(--solution-orange); }
-.solution-decision-table table { width:100%; border-collapse:collapse; }
-.solution-decision-table th, .solution-decision-table td { padding:14px; text-align:left; vertical-align:top; border-bottom:1px solid var(--line, #d9ddd9); }
-.solution-evidence-grid, .solution-hub-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; }
-.solution-evidence-card, .solution-hub-card { padding:22px; border:1px solid var(--line, #d9ddd9); border-radius:18px; background:#fff; }
-.solution-evidence-card__meta, .solution-hub-card__meta { display:flex; flex-wrap:wrap; gap:10px 18px; color:var(--muted, #59635f); }
-.solution-evidence-card blockquote { margin:18px 0; padding:16px 18px; border-left:3px solid var(--solution-orange); background:var(--solution-mist); }
-.solution-evidence-card__claim { font-size:1.08rem; font-weight:650; }
-.solution-authority li { margin:14px 0; }
-.solution-authority li span { display:block; color:var(--muted, #59635f); margin-top:4px; }
-.solution-next-action { padding:clamp(24px,4vw,48px); border-radius:20px; background:var(--solution-ink); color:#fff; }
-.solution-next-action h2, .solution-next-action p, .solution-next-action .eyebrow { color:#fff; }
-.solution-next-action .ay-button { background:var(--solution-orange); border-color:var(--solution-orange); color:#fff; }
-.solution-next-action h2 { max-width:800px; }
-.solution-next-action p { max-width:760px; }
-.solution-hub-card h2 { margin:.8rem 0; }
-.solution-hub-card__verdict { padding-top:14px; border-top:1px solid var(--line, #d9ddd9); }
-@media (max-width:820px) {
-  .solution-hero, .solution-two-column, .solution-measurement__grid, .solution-evidence-grid, .solution-hub-grid, .solution-intent-grid { grid-template-columns:1fr; }
-  .solution-hero__copy h1 { font-size:clamp(2.3rem,12vw,4rem); }
-  .solution-step { grid-template-columns:44px 1fr; }
-}
+.solution-page{--solution-ink:#0F172A;--solution-muted:#5f5e58;--solution-line:rgba(15,23,42,.10);--solution-paper:#fff;--solution-soft:#E5E2DA;--solution-cream:#F4F1E9;--solution-accent:#D9730D}
+.solution-page .eyebrow{margin:0 0 16px;color:rgba(15,23,42,.52);font:700 11px/1 Geist,Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase}.solution-page .lead{max-width:760px;margin:24px 0 0;color:rgba(15,23,42,.68);font:400 clamp(16px,1.45vw,20px)/1.6 Manrope,sans-serif}.solution-hero{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(300px,.55fr);gap:22px;align-items:stretch;margin:10px 0 0}.solution-hero__copy,.solution-verdict{border:1px solid var(--solution-line);border-radius:32px;background:rgba(255,255,255,.76);box-shadow:0 18px 54px rgba(15,23,42,.045)}.solution-hero__copy{padding:clamp(34px,5vw,70px)}.solution-hero__copy h1{max-width:920px;margin:0;color:var(--solution-ink);font:800 clamp(48px,6.1vw,84px)/.94 Manrope,sans-serif;letter-spacing:-.062em;text-wrap:balance}.solution-hero__actions,.solution-card-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:30px}.solution-page .ay-button,.solution-page .ay-button-secondary,.solution-page .button-link{position:relative;display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:13px 20px;border:1px solid transparent;border-radius:999px;overflow:hidden;font:700 11px/1 Geist,Manrope,sans-serif;letter-spacing:.1em;text-decoration:none;text-transform:uppercase;transition:transform .28s,box-shadow .28s,background .28s,border-color .28s}.solution-page .ay-button,.solution-page .button-link{background:var(--solution-ink);color:#fff}.solution-page .ay-button-secondary,.solution-page .button-link--quiet{border-color:var(--solution-line);background:transparent;color:var(--solution-ink)}.solution-page .ay-button:hover,.solution-page .button-link:hover{transform:translateY(-1px) scale(1.018);box-shadow:0 18px 40px rgba(15,23,42,.18)}.solution-page .ay-button-secondary:hover,.solution-page .button-link--quiet:hover{transform:translateY(-1px);background:#fff;border-color:rgba(15,23,42,.22);color:var(--solution-ink)}.solution-verdict{display:flex;flex-direction:column;justify-content:space-between;padding:clamp(30px,4vw,48px);background:var(--solution-ink);color:#fff;transform:rotate(.45deg)}.solution-verdict span,.solution-intent-grid span,.solution-hub-card__meta,.evidence-role{font:700 11px/1 Geist,Manrope,sans-serif;letter-spacing:.12em;text-transform:uppercase}.solution-verdict span{color:rgba(255,255,255,.56)}.solution-verdict p{margin:80px 0 0;color:#fff;font:700 clamp(20px,2.1vw,28px)/1.3 Manrope,sans-serif;letter-spacing:-.025em}
+.solution-intent-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;padding:0!important;border-top:1px solid var(--solution-line)!important;border-bottom:1px solid var(--solution-line)!important}.solution-intent-grid article{padding:28px;border-right:1px solid var(--solution-line);background:transparent}.solution-intent-grid article:last-child{border-right:0}.solution-intent-grid span{color:rgba(15,23,42,.46)}.solution-intent-grid p{margin:28px 0 0;color:rgba(15,23,42,.75);font-weight:600;line-height:1.55}
+.solution-steps{display:grid;gap:0;border-top:1px solid var(--solution-line)}.solution-step{display:grid;grid-template-columns:80px minmax(0,1fr);gap:24px;padding:28px 6px;border-bottom:1px solid var(--solution-line);transition:padding .25s,background .25s}.solution-step:hover{padding-left:18px;padding-right:18px;background:rgba(255,255,255,.48)}.solution-step__number{color:var(--solution-accent);font:700 13px Geist,sans-serif;letter-spacing:.1em}.solution-step h3{margin:0;font:800 20px/1.18 Manrope,sans-serif;letter-spacing:-.025em}.solution-step p{max-width:850px;margin:8px 0 0;color:rgba(15,23,42,.65);line-height:1.65}
+.solution-two-column,.solution-measurement__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}.solution-two-column>div,.solution-measurement__grid>div{padding:clamp(24px,3vw,38px);border:1px solid var(--solution-line);border-radius:26px;background:rgba(255,255,255,.58)}.solution-checklist,.solution-risk-list,.solution-measurement ul{margin:24px 0 0;padding:0;list-style:none}.solution-checklist li,.solution-risk-list li,.solution-measurement li{position:relative;margin:0;padding:13px 0 13px 24px;border-bottom:1px solid rgba(15,23,42,.07);color:rgba(15,23,42,.7);line-height:1.55}.solution-checklist li:before,.solution-measurement li:before{content:"✓";position:absolute;left:0;color:#137a48;font-weight:800}.solution-risk-list li:before{content:"—";position:absolute;left:0;color:#a46200;font-weight:800}
+.solution-decision-table{overflow:hidden;border:1px solid var(--solution-line);border-radius:26px;background:rgba(255,255,255,.64)}.solution-decision-table table{width:100%;border-collapse:collapse}.solution-decision-table th,.solution-decision-table td{padding:18px 20px;text-align:left;vertical-align:top;border-bottom:1px solid var(--solution-line)}.solution-decision-table th{background:rgba(229,226,218,.62);font:700 11px Geist,sans-serif;letter-spacing:.1em;text-transform:uppercase}.solution-decision-table td{color:rgba(15,23,42,.7);font-size:14px;line-height:1.55}.solution-decision-table tr:last-child td{border-bottom:0}
+.solution-evidence-grid,.solution-hub-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.solution-evidence-card,.solution-hub-card{position:relative;padding:30px;border:1px solid var(--solution-line);border-radius:26px;background:rgba(255,255,255,.56);overflow:hidden;transition:transform .28s,box-shadow .28s,background .28s}.solution-evidence-card:hover,.solution-hub-card:hover{transform:translateY(-4px);background:#fff;box-shadow:0 24px 64px rgba(15,23,42,.08)}.solution-evidence-card__meta,.solution-hub-card__meta{display:flex;flex-wrap:wrap;gap:10px 18px;color:rgba(15,23,42,.46)}.solution-hub-card h2{margin:50px 0 14px;font:800 clamp(23px,2.3vw,32px)/1.05 Manrope,sans-serif;letter-spacing:-.04em}.solution-hub-card h2 a{text-decoration:none}.solution-hub-card>p{color:rgba(15,23,42,.66);line-height:1.62}.solution-hub-card__verdict{margin-top:22px;padding-top:18px;border-top:1px solid var(--solution-line)}.solution-hub-card .button-link{margin-top:12px}.solution-evidence-card h3{margin:26px 0 12px;font:800 23px/1.1 Manrope,sans-serif;letter-spacing:-.03em}.solution-evidence-card blockquote{margin:20px 0;padding:18px 20px;border:0;border-left:3px solid var(--solution-accent);border-radius:0 14px 14px 0;background:var(--solution-soft);color:rgba(15,23,42,.72);line-height:1.6}.solution-evidence-card__claim{font-size:17px;font-weight:650;line-height:1.55}.section-intro{max-width:780px;color:rgba(15,23,42,.64);line-height:1.65}
+.solution-authority ul{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:26px 0 0;padding:0;list-style:none}.solution-authority li{padding:20px;border:1px solid var(--solution-line);border-radius:18px;background:rgba(255,255,255,.48)}.solution-authority li a{font-weight:750}.solution-authority li span{display:block;margin-top:8px;color:rgba(15,23,42,.58);font-size:13px;line-height:1.5}
+.solution-next-action{padding:clamp(48px,7vw,86px)!important;border-radius:34px;background:var(--solution-ink)!important;color:#fff;text-align:center;overflow:hidden}.solution-next-action .eyebrow{color:rgba(255,255,255,.56)}.solution-next-action h2{max-width:900px;margin:0 auto;color:#fff;font:800 clamp(34px,5vw,64px)/1 Manrope,sans-serif;letter-spacing:-.055em;text-wrap:balance}.solution-next-action p{max-width:720px;margin:22px auto 0;color:rgba(255,255,255,.68);font-size:17px;line-height:1.62}.solution-next-action .ay-button{margin-top:28px;background:#fff;color:var(--solution-ink)}.solution-page .topic-tags{display:flex;flex-wrap:wrap;gap:10px}.solution-page .topic-chip{padding:10px 14px;border:1px solid var(--solution-line);border-radius:999px;background:rgba(255,255,255,.52);font:700 11px Geist,sans-serif;letter-spacing:.08em;text-decoration:none;text-transform:uppercase}
+@media(max-width:1024px){.solution-intent-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.solution-intent-grid article:nth-child(2){border-right:0}.solution-intent-grid article:nth-child(-n+2){border-bottom:1px solid var(--solution-line)}}
+@media(max-width:820px){.solution-hero,.solution-two-column,.solution-measurement__grid,.solution-evidence-grid,.solution-hub-grid,.solution-authority ul{grid-template-columns:1fr}.solution-hero__copy h1{font-size:clamp(34px,9vw,44px);overflow-wrap:normal;word-break:normal}.solution-verdict{transform:none}.solution-verdict p{margin-top:40px}.solution-step{grid-template-columns:46px 1fr}.solution-intent-grid{grid-template-columns:1fr}.solution-intent-grid article{border-right:0;border-bottom:1px solid var(--solution-line)}.solution-intent-grid article:last-child{border-bottom:0}.solution-decision-table{overflow-x:auto}.solution-decision-table table{min-width:720px}}
+@media(max-width:520px){.solution-hero__copy,.solution-verdict{border-radius:24px;padding:26px}.solution-hero__actions a,.solution-card-actions a{width:100%}.solution-hub-card,.solution-evidence-card{padding:24px}.solution-hub-card h2{margin-top:34px}.solution-next-action{border-radius:24px!important}.solution-step{padding:22px 0}.solution-step:hover{padding-left:0;padding-right:0}}
 """.strip() + "\n"
 
 
@@ -351,6 +324,8 @@ def main() -> int:
     solutions = payload["solutions"]
 
     write_text(args.out / "ai-recommends-solutions.css", css_text())
+    write_text(args.out / "alex-v4-static-shell.css", shell_css())
+    write_text(args.out / "alex-v4-static-shell.js", shell_js())
     for solution in solutions:
         report = reports_by_slug[solution["slug"]]
         write_text(args.out / "solutions" / f"{solution['slug']}.html", solution_page(solution, report))
