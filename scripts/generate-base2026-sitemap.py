@@ -2,22 +2,48 @@ from __future__ import annotations
 
 import argparse
 import html
-import re
+import json
 import math
 from datetime import date
+from html.parser import HTMLParser
 from pathlib import Path
 
 
+class HeadMetadataParser(HTMLParser):
+    """Extract canonical and robots metadata regardless of attribute order."""
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.canonical: str | None = None
+        self.robots: list[str] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        values = {name.lower(): (value or "") for name, value in attrs}
+        if tag.lower() == "meta" and values.get("name", "").lower() == "robots":
+            self.robots.append(values.get("content", ""))
+        if tag.lower() == "link" and "canonical" in values.get("rel", "").lower().split():
+            self.canonical = self.canonical or values.get("href") or None
+
+
+def head_metadata(path: Path) -> HeadMetadataParser:
+    parser = HeadMetadataParser()
+    parser.feed(path.read_text(encoding="utf-8", errors="ignore"))
+    return parser
+
+
 def is_indexable(path: Path) -> bool:
-    text = path.read_text(encoding="utf-8", errors="ignore")
-    robots = re.search(r'<meta\s+name="robots"\s+content="([^"]+)"', text, re.IGNORECASE)
-    return not (robots and "noindex" in robots.group(1).lower())
+    metadata = head_metadata(path)
+    directives = {
+        directive.strip().lower()
+        for content in metadata.robots
+        for directive in content.split(",")
+    }
+    return "noindex" not in directives
 
 
 def canonical_url(path: Path) -> str | None:
-    text = path.read_text(encoding="utf-8", errors="ignore")
-    canonical = re.search(r'<link\s+rel="canonical"\s+href="([^"]+)"', text, re.IGNORECASE)
-    return html.unescape(canonical.group(1)) if canonical else None
+    canonical = head_metadata(path).canonical
+    return html.unescape(canonical) if canonical else None
 
 
 def url_for(web_root: Path, path: Path, base_url: str) -> str:
@@ -35,14 +61,43 @@ def main() -> int:
     parser.add_argument("--base-url", default="https://aggressorbulkit.online/knowledge")
     parser.add_argument("--out", type=Path)
     parser.add_argument("--chunk-size", type=int, default=400)
+    parser.add_argument(
+        "--source-detail-manifest",
+        type=Path,
+        help="Optional immutable Source Detail V2 manifest. Archive/noindex routes are required and future/private routes are forbidden.",
+    )
     args = parser.parse_args()
 
     web_root = args.web_root.resolve()
     out = args.out or (web_root / "sitemap.xml")
     chunk_size = max(1, args.chunk_size)
+    required_archive_routes: set[str] = set()
+    forbidden_future_routes: set[str] = set()
+    if args.source_detail_manifest:
+        manifest = json.loads(args.source_detail_manifest.resolve().read_text(encoding="utf-8"))
+        required_archive_routes = {
+            item["route"]
+            for item in manifest["rendered"]
+            if item["admission_state"] == "provenance_archive_noindex"
+        }
+        forbidden_future_routes = set(manifest["future_private_not_emitted"])
+
+    html_paths = sorted(web_root.rglob("*.html"))
+    emitted_routes = {path.relative_to(web_root).as_posix() for path in html_paths}
+    missing_archives = sorted(required_archive_routes - emitted_routes)
+    emitted_future = sorted(forbidden_future_routes & emitted_routes)
+    if missing_archives or emitted_future:
+        raise SystemExit(
+            "Source Detail sitemap contract failed: "
+            f"missing_archive={len(missing_archives)}, future_private_emitted={len(emitted_future)}"
+        )
+
     urls = []
-    for path in sorted(web_root.rglob("*.html")):
-        if path.name.startswith("roadmap-dataviz-test") or not is_indexable(path):
+    for path in html_paths:
+        route = path.relative_to(web_root).as_posix()
+        if route in forbidden_future_routes or path.name.startswith("roadmap-dataviz-test"):
+            continue
+        if not is_indexable(path) and route not in required_archive_routes:
             continue
         url = url_for(web_root, path, args.base_url)
         canonical = canonical_url(path)
@@ -88,7 +143,10 @@ def main() -> int:
             f"{index_body}\n"
             "</sitemapindex>\n"
         )
-    print(f"sitemap_urls={len(urls)} sitemap_files={len(chunk_paths)} out={out}")
+    print(
+        f"sitemap_urls={len(urls)} sitemap_files={len(chunk_paths)} "
+        f"required_archive={len(required_archive_routes)} forbidden_future={len(forbidden_future_routes)} out={out}"
+    )
     return 0
 
 

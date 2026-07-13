@@ -1,6 +1,10 @@
 # Project State
 
-Last updated: 2026-07-10
+Last updated: 2026-07-13
+
+## Current override — Source Detail V2 deployed and live-verified
+
+Release `base2026-source-detail-v2-admission1827-deploycontract-20260713-142944` is active at `/var/www/base2026-knowledge/current`, bound to ZIP SHA-256 `a25f1a037572b6878ebc33951e6eec5ff4a89c86ad9c8ea80d3b59b41af6dd65`. Production exact-byte/status coverage passed for 1,706 HTTP 200 routes, including 1,493 normal public Source Detail pages and 199 archive/noindex pages; all 135 future/private routes return 404. Five child sitemaps contain 1,933 unique URLs with no admission leaks. Responsive browser QA passed 8/8 at 320/390/1280/1440 with no console/page/network failures. Rollback was armed and not needed. Meilisearch stayed unchanged; IndexNow accepted all 1,493 changed indexable Source Detail URLs with HTTP 200. Canonical record: `docs/project-memory/BASE2026_SOURCE_DETAIL_V2_PRODUCTION_RELEASE_2026_07_13.md`.
 
 ## Current override — local source-card completeness gate closed; redesign unblocked
 

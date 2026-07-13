@@ -1,0 +1,15 @@
+{% macro platform_icon(key) -%}
+  {% if key == "tiktok" -%}
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M16.7 3c.3 2.1 1.5 3.5 3.6 3.7v3.1c-1.3 0-2.5-.4-3.6-1.1v6.6c0 4.4-4.8 7.2-8.7 5.1-2.3-1.3-3.5-4-2.8-6.6.7-2.6 3.3-4.4 6-4.1v3.2c-1.8-.3-3.2 1.2-2.8 2.9.3 1.4 1.8 2.2 3.1 1.7.9-.4 1.5-1.3 1.5-2.3V3h3.7Z"/></svg>
+  {% elif key == "instagram" -%}
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3.2" y="3.2" width="17.6" height="17.6" rx="5" ry="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.35" cy="6.7" r="1.15" fill="currentColor"/></svg>
+  {% elif key == "youtube" -%}
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M21.5 7.2a2.9 2.9 0 0 0-2-2C17.7 4.7 12 4.7 12 4.7s-5.7 0-7.5.5a2.9 2.9 0 0 0-2 2C2 9 2 12 2 12s0 3 .5 4.8a2.9 2.9 0 0 0 2 2c1.8.5 7.5.5 7.5.5s5.7 0 7.5-.5a2.9 2.9 0 0 0 2-2C22 15 22 12 22 12s0-3-.5-4.8ZM10 15.4V8.6l5.8 3.4-5.8 3.4Z"/></svg>
+  {% else -%}
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M14 4h6v6m0-6-9 9M20 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h5"/></svg>
+  {% endif -%}
+{%- endmacro %}
+
+{% macro platform_action(key, href, label, accessible_label) -%}
+<a class="b26-action b26-action--platform" href="{{ href }}" target="_blank" rel="noreferrer" aria-label="{{ accessible_label }}"><span class="b26-platform-mark" aria-hidden="true">{{ platform_icon(key) }}</span><span>{{ label }}</span></a>
+{%- endmacro %}

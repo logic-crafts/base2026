@@ -3,7 +3,9 @@ param(
   [string]$SourceExportRoot = "./public-data/tiktok",
   [string]$MeiliUrl = "/knowledge-search",
   [string]$MeiliIndex = "base2026_public_tiktok",
-  [string]$MeiliKey = ""
+  [string]$MeiliKey = "",
+  [string]$SourceDetailCandidate = "",
+  [string]$SourceAdmissionClosureReceipt = ""
 )
 
 $ErrorActionPreference = "Stop"
@@ -201,6 +203,70 @@ if (Test-Path "./data/base2026_ai_recommends_solutions_pilot.json") {
   python3 ./scripts/validate-ai-recommends-html.py --out $WebRoot --generation-report $SolutionReport --report $SolutionHtmlReport | Write-Output
   Assert-NativeSuccess "validate-ai-recommends-html"
 }
+
+$ResolvedSourceDetailCandidate = $null
+$SourceDetailPackageReport = $null
+$SourceDetailCandidateManifestJson = $null
+$ResolvedSourceAdmissionClosureReceipt = $null
+$SourceAdmissionClosureReceiptJson = $null
+$SourceAdmissionLedgerSha256 = $null
+if ($SourceDetailCandidate -ne "") {
+  $ResolvedSourceDetailCandidate = Resolve-Path $SourceDetailCandidate
+  $CandidateManifest = Join-Path $ResolvedSourceDetailCandidate "candidate-manifest.json"
+  $CandidateSources = Join-Path $ResolvedSourceDetailCandidate "sources"
+  $CandidateStatic = Join-Path $ResolvedSourceDetailCandidate "static"
+  if (-not (Test-Path $CandidateManifest -PathType Leaf)) {
+    throw "Source Detail V2 candidate manifest is missing: $CandidateManifest"
+  }
+  if (-not (Test-Path $CandidateSources -PathType Container)) {
+    throw "Source Detail V2 candidate sources directory is missing: $CandidateSources"
+  }
+  if (-not (Test-Path $CandidateStatic -PathType Container)) {
+    throw "Source Detail V2 candidate static directory is missing: $CandidateStatic"
+  }
+  if ([string]::IsNullOrWhiteSpace($SourceAdmissionClosureReceipt)) {
+    throw "SourceAdmissionClosureReceipt is mandatory when SourceDetailCandidate is provided."
+  }
+  $ResolvedSourceAdmissionClosureReceipt = Resolve-Path $SourceAdmissionClosureReceipt
+  $SourceAdmissionClosureReceiptJson = Get-Content $ResolvedSourceAdmissionClosureReceipt -Raw | ConvertFrom-Json
+  if ($SourceAdmissionClosureReceiptJson.status -ne "PASS") {
+    throw "Source admission closure receipt is not PASS."
+  }
+  if (-not $SourceAdmissionClosureReceiptJson.verification.all_13_absent_from_all_public_export_files) {
+    throw "Source admission closure receipt does not prove the new future/private records are absent from every public export artifact."
+  }
+  $SourceDetailCandidateManifestJson = Get-Content $CandidateManifest -Raw | ConvertFrom-Json
+  $SourceAdmissionLedgerPath = Resolve-Path "./12_knowledge-base/sources/tiktok/source-admission.jsonl"
+  $SourceAdmissionLedgerSha256 = (Get-FileHash -Algorithm SHA256 $SourceAdmissionLedgerPath).Hash.ToLowerInvariant()
+  if ($SourceAdmissionClosureReceiptJson.ledger_new_sha256 -ne $SourceAdmissionLedgerSha256) {
+    throw "Source admission closure receipt is stale for the current ledger."
+  }
+  if ($SourceDetailCandidateManifestJson.expected.'200:normal_public_card' -ne $SourceAdmissionClosureReceiptJson.admission_counts.normal_public_card -or
+      $SourceDetailCandidateManifestJson.expected.'200:provenance_archive_noindex' -ne $SourceAdmissionClosureReceiptJson.admission_counts.provenance_archive_noindex -or
+      $SourceDetailCandidateManifestJson.expected.'404:future_private_backlog' -ne $SourceAdmissionClosureReceiptJson.admission_counts.future_private_backlog) {
+    throw "Source Detail candidate counts are not bound to the source admission closure receipt."
+  }
+
+  python3 ./scripts/validate-source-detail-v2-full-candidate.py --candidate $ResolvedSourceDetailCandidate --source-root ./web/static | Write-Output
+  Assert-NativeSuccess "validate-source-detail-v2-full-candidate-before-package"
+
+  $ReleaseSources = Join-Path $WebRoot "sources"
+  $CandidateNames = @(Get-ChildItem -Path $CandidateSources -Filter "tiktok-video-*.html" -File | ForEach-Object { $_.Name } | Sort-Object)
+  $ReleaseNames = @(Get-ChildItem -Path $ReleaseSources -Filter "tiktok-video-*.html" -File | ForEach-Object { $_.Name } | Sort-Object)
+  $SourceNameDiff = @(Compare-Object -ReferenceObject $CandidateNames -DifferenceObject $ReleaseNames)
+  if ($SourceNameDiff.Count -ne 0) {
+    $DiffPreview = ($SourceNameDiff | Select-Object -First 20 | Out-String)
+    throw "Source Detail V2 candidate/release route membership differs before overlay:`n$DiffPreview"
+  }
+  Copy-Item (Join-Path $CandidateSources "tiktok-video-*.html") $ReleaseSources -Force
+
+  Get-ChildItem -Path $CandidateStatic -Recurse -File | ForEach-Object {
+    $RelativeAsset = [System.IO.Path]::GetRelativePath($CandidateStatic, $_.FullName)
+    $TargetAsset = Join-Path $StaticRoot $RelativeAsset
+    New-Item -ItemType Directory -Force -Path (Split-Path $TargetAsset -Parent) | Out-Null
+    Copy-Item $_.FullName $TargetAsset -Force
+  }
+}
 python3 ./scripts/check-public-content-readiness.py --data-root $ExportRoot --latest 1 --web-root $WebRoot --allow-generated-noindex --fail | Write-Output
 Assert-NativeSuccess "check-public-content-readiness-generated"
 Get-ChildItem -Path "./web/static" -Filter "indexnow-*.txt" -File -ErrorAction SilentlyContinue | ForEach-Object {
@@ -208,7 +274,11 @@ Get-ChildItem -Path "./web/static" -Filter "indexnow-*.txt" -File -ErrorAction S
   Copy-Item $_.FullName $Target -Force
   chmod 0644 $Target
 }
-python3 ./scripts/generate-base2026-sitemap.py --web-root $WebRoot | Write-Output
+$SitemapArgs = @("./scripts/generate-base2026-sitemap.py", "--web-root", $WebRoot)
+if ($ResolvedSourceDetailCandidate) {
+  $SitemapArgs += @("--source-detail-manifest", $CandidateManifest)
+}
+python3 @SitemapArgs | Write-Output
 Assert-NativeSuccess "generate-base2026-sitemap"
 
 $VersionedAssets = @(
@@ -216,6 +286,8 @@ $VersionedAssets = @(
   "ai-recommends-solutions.css",
   "alex-v4-static-shell.css",
   "alex-v4-static-shell.js",
+  "source-detail-v2.css",
+  "source-detail-v2.js",
   "meili.js",
   "cookie-consent.js",
   "share-actions.js",
@@ -231,10 +303,31 @@ Get-ChildItem -Path $WebRoot -Recurse -Filter "*.html" | ForEach-Object {
       $Match.Groups[1].Value + '="' + $Match.Groups[2].Value + "?v=$CacheBust" + '"'
     })
   }
-  $PageHtml | Set-Content -Path $_.FullName -Encoding UTF8
+  [System.IO.File]::WriteAllText(
+    $_.FullName,
+    $PageHtml,
+    [System.Text.UTF8Encoding]::new($false)
+  )
+}
+
+if ($ResolvedSourceDetailCandidate) {
+  $SourceDetailPackageReport = Join-Path $BuildRoot "source-detail-v2-package-validation.json"
+  python3 ./scripts/validate-source-detail-v2-release-package.py --candidate $ResolvedSourceDetailCandidate --web-root $WebRoot --report $SourceDetailPackageReport | Write-Output
+  Assert-NativeSuccess "validate-source-detail-v2-release-package"
+  Copy-Item (Join-Path $ResolvedSourceDetailCandidate "candidate-manifest.json") (Join-Path $ReleaseRoot "SOURCE_DETAIL_V2_CANDIDATE_MANIFEST.json") -Force
+  Copy-Item $SourceDetailPackageReport (Join-Path $ReleaseRoot "SOURCE_DETAIL_V2_PACKAGE_VALIDATION.json") -Force
 }
 
 $Manifest = Get-Content (Join-Path $ExportRoot "manifest.json") -Raw
+$SourceDetailScope = ""
+if ($ResolvedSourceDetailCandidate) {
+  $CandidateManifestHash = (Get-FileHash -Algorithm SHA256 (Join-Path $ResolvedSourceDetailCandidate "candidate-manifest.json")).Hash.ToLowerInvariant()
+  $SourceDetailScope = @"
+- Overlay the validated immutable Source Detail V2 candidate.
+- Source Detail V2 candidate: $ResolvedSourceDetailCandidate
+- Source Detail V2 candidate manifest SHA-256: $CandidateManifestHash
+"@
+}
 $ReleaseInfo = @"
 Base2026 Public TikTok Data-Preserving Hotfix Release
 Release: $ReleaseName
@@ -247,7 +340,7 @@ Hotfix scope:
 - Preserve existing public export membership and counts.
 - Repair public excerpt text from reviewed public passages.
 - Rebuild static pages and assets with current UI fixes.
-
+$SourceDetailScope
 Dataset manifest:
 $Manifest
 
@@ -258,6 +351,40 @@ Public path:
 /knowledge/
 "@
 $ReleaseInfo | Set-Content -Path (Join-Path $ReleaseRoot "RELEASE.txt") -Encoding UTF8
+
+$SourceDetailPackageContract = $null
+if ($ResolvedSourceDetailCandidate) {
+  $SourceDetailPackageContract = [ordered]@{
+    candidate_manifest_sha256 = $CandidateManifestHash
+    route_manifest_sha256 = $SourceDetailCandidateManifestJson.route_manifest_sha256
+    source_admission_ledger_sha256 = $SourceAdmissionLedgerSha256
+    source_admission_closure_receipt_sha256 = (Get-FileHash -Algorithm SHA256 $ResolvedSourceAdmissionClosureReceipt).Hash.ToLowerInvariant()
+    counts = [ordered]@{
+      normal_public_card = [int]$SourceDetailCandidateManifestJson.expected.'200:normal_public_card'
+      provenance_archive_noindex = [int]$SourceDetailCandidateManifestJson.expected.'200:provenance_archive_noindex'
+      future_private_backlog = [int]$SourceDetailCandidateManifestJson.expected.'404:future_private_backlog'
+    }
+    public_effect_verified_absent = [bool]$SourceAdmissionClosureReceiptJson.verification.all_13_absent_from_all_public_export_files
+    archive_sitemap_policy = "included"
+    future_private_sitemap_policy = "excluded"
+  }
+}
+$PackageManifest = [ordered]@{
+  schema = "base2026.public-hotfix-from-export/v3"
+  release_name = $ReleaseName
+  package_mode = "data-preserving-static-release"
+  source_export_manifest_sha256 = (Get-FileHash -Algorithm SHA256 (Join-Path $ExportRoot "manifest.json")).Hash.ToLowerInvariant()
+  source_detail = $SourceDetailPackageContract
+  required_runtime_files = @(
+    "web/index.html",
+    "web/sources/index.html",
+    "web/sitemap.xml",
+    "web/static/styles.css",
+    "public-data/tiktok/manifest.json",
+    "public-data/tiktok/source_records.jsonl"
+  )
+}
+$PackageManifest | ConvertTo-Json -Depth 8 | Set-Content -Path (Join-Path $ReleaseRoot "manifest.json") -Encoding UTF8
 
 $ZipPath = Join-Path $Root "output\releases\$ReleaseName.zip"
 $ZipScript = @'

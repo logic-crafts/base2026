@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="{{ view.language_code }}">
+<head>
+{{ view.head_html | safe }}
+<link rel="stylesheet" href="../static/alex-v4-static-shell.css?v={{ renderer_version }}">
+<link rel="stylesheet" href="../static/source-detail-v2.css?v={{ renderer_version }}">
+</head>
+<body class="ay-alex-v4-static ay-stitch-home-v3 ay-stitch-home-v4 b26-source-v2{% if view.archive %} b26-source-v2--archive{% endif %}" data-source-platform="{{ view.platform_key }}">
+<a class="skip-link" href="#content">Skip to content</a>
+{{ view.header_html | safe }}
+{% block content %}{% endblock %}
+{{ view.footer_html | safe }}
+<script src="../static/alex-v4-static-shell.js?v={{ renderer_version }}" defer></script>
+<script src="../static/source-detail-v2.js?v={{ renderer_version }}" defer></script>
+</body>
+</html>
