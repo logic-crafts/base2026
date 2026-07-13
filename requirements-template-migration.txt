@@ -1,0 +1,4 @@
+# Isolated renderer/migration tooling. This does not change the production generator.
+Jinja2>=3.1,<4
+pydantic>=2.11,<3
+beautifulsoup4>=4.15,<5

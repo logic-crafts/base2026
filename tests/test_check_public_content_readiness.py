@@ -22,6 +22,14 @@ class PublicContentReadinessTests(unittest.TestCase):
             target.write_text('<meta name="robots" content="noindex,follow" />', encoding="utf-8")
             self.assertTrue(readiness.generated_source_is_noindex({"item_id": "tiktok-video-123"}, root))
 
+    def test_generated_noindex_accepts_content_before_name(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            target = root / "sources" / "tiktok-video-123.html"
+            target.parent.mkdir(parents=True)
+            target.write_text('<meta content="noindex,follow" name="robots"/>', encoding="utf-8")
+            self.assertTrue(readiness.generated_source_is_noindex({"item_id": "tiktok-video-123"}, root))
+
     def test_indexable_or_missing_source_is_not_quarantine(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

@@ -1,6 +1,10 @@
 # Active Phase
 
-Last updated: 2026-06-19
+Last updated: 2026-07-13
+
+## Current override — Source Detail V2 production release closed
+
+Release `base2026-source-detail-v2-admission1827-deploycontract-20260713-142944` is live at exact ZIP SHA-256 `a25f1a037572b6878ebc33951e6eec5ff4a89c86ad9c8ea80d3b59b41af6dd65`. The transactional deploy and integrated live contract/browser gate passed: 1,493 normal/indexable, 199 archive/noindex, 135 future/private 404, 1,933 sitemap URLs and 8/8 responsive browser checks. Rollback was armed and not required. Meilisearch was intentionally not reindexed because public search data did not change. IndexNow accepted the 1,493 changed indexable Source Detail URLs with HTTP 200; archive/noindex and private/404 URLs were excluded. Canonical record: `docs/project-memory/BASE2026_SOURCE_DETAIL_V2_PRODUCTION_RELEASE_2026_07_13.md`.
 
 ## Current active phase
 

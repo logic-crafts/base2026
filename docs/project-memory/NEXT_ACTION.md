@@ -1,5 +1,19 @@
 # Next Action
 
+## Current Focus: Source Detail V2 production closure complete — 2026-07-13
+
+No further release action is pending. Exact release `base2026-source-detail-v2-admission1827-deploycontract-20260713-142944` is live at SHA-256 `a25f1a037572b6878ebc33951e6eec5ff4a89c86ad9c8ea80d3b59b41af6dd65`; transactional deploy and live contract/browser QA passed, rollback was not needed, Meilisearch was intentionally unchanged, and IndexNow accepted the 1,493 changed indexable Source Detail URLs with HTTP 200. Archive/noindex and future/private URLs were excluded from submission. Canonical closure: `docs/project-memory/BASE2026_SOURCE_DETAIL_V2_PRODUCTION_RELEASE_2026_07_13.md`.
+
+## Current Focus: Base2026 template migration — Batch 0 inventory complete — 2026-07-12
+
+The Source Detail V2 local pilot is visually approved as the first-family reference. This remains **planning only**: production generators, public output, deploy, reindexing, indexation and Git state remain unchanged.
+
+Decision record: `docs/project-memory/BASE2026_TEMPLATE_MIGRATION_DISCOVERY_2026_07_12.md`.
+
+Batch 0 receipt: `.planning/base2026-template-migration/inventory-20260712/`. The read-only inventory captures **4,251 route contracts**: 4,129 current HTML `200` routes plus 122 `future_private_backlog` expected `404` routes. It has 0 admission exceptions, 0 missing H1s, 0 invalid JSON-LD entries, and a clean re-check (`contract_errors=[]`).
+
+Next safe action: review and freeze the manifest as the migration control plane, then build an isolated full Source Detail V2 candidate against it. Do not integrate the V2 pilot or rewrite `scripts/generate-public-pages.py` before that review.
+
 ## Current Focus: Begin redesign against the live three-state admission contract — 2026-07-10
 
 Verified production state:

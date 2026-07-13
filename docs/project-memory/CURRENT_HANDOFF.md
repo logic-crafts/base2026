@@ -1,5 +1,142 @@
 # Current Handoff
 
+## 2026-07-13 — Source Detail V2 production release closed
+
+**Current gate: COMPLETE.** Exact release `base2026-source-detail-v2-admission1827-deploycontract-20260713-142944` is live at ZIP SHA-256 `a25f1a037572b6878ebc33951e6eec5ff4a89c86ad9c8ea80d3b59b41af6dd65`. Transactional deploy and exact live contract/browser QA passed; rollback was armed and not required. Production coverage is 1,493 normal/indexable, 199 archive/noindex, 135 future/private 404 and 1,933 sitemap URLs; browser QA passed 8/8 at 320/390/1280/1440. Meilisearch was intentionally unchanged. IndexNow accepted all 1,493 changed indexable Source Detail URLs with HTTP 200 and excluded archive/private routes. Canonical closure: `docs/project-memory/BASE2026_SOURCE_DETAIL_V2_PRODUCTION_RELEASE_2026_07_13.md`.
+
+## Superseded pre-deploy packet — retained for audit history
+
+- Exact release: `base2026-source-detail-v2-sitemapcontract-20260713-133158`.
+- Exact ZIP: `output/releases/base2026-source-detail-v2-sitemapcontract-20260713-133158.zip`; SHA-256 `9b69b32042e62322395e546b10ad06543cdb039485457a81bc3bdd6596acc8bb`; fresh `unzip -t` exit `0` with no compressed-data errors.
+- Immutable input: `.planning/release-candidate-a/candidate-manifest.json`; SHA-256 `92d5571f4d427a88be3646e303fc71ae62d76ef1c1c41120fb818e4b70587303`.
+- Integrated local gate receipt: `.planning/source-detail-v2-sitemapcontract-20260713-133158-final/gate-receipt.json`; contract `PASS`, browser `PASS`, release/ZIP binding exact.
+- Contract coverage: `1,493` normal public, `199` archive/noindex, `122` future/private 404; `1,706` exact byte/status checks; missing normal/archive sitemap URLs `0`; future/private sitemap leaks `0`.
+- Browser/visual evidence: normal + archive across 320/390/1280/1440; `8/8` automated checks green, no console/page/network failures; manual exact-artifact review `PASS` at 390/1440.
+- Fresh package validation: `ok=true`, staged `1,692/1,692`, future/private not emitted `122`, no HTML mismatches; report `.planning/source-detail-v2-sitemapcontract-20260713-133158-review-package-validation.json`, SHA-256 `7b9a29b58c1dc694781b899542ee604fac2602244d1cfec099924693e317c977`.
+- Fresh regression/boundary checks: `51 passed in 0.82s`; publication boundary has no forbidden/needs-review/secret findings; `git diff --check` exit `0`.
+- Frozen independent-review packet: `.planning/source-detail-v2-sitemapcontract-20260713-133158-independent-review-packet.md`; SHA-256 `411c0cfa42e6fa008359137cf68750dc865d1f6b4ed564fd225e89816633004a`.
+- The background notification for `base2026-source-detail-v2-sitemapfix-20260713-171440` is historical evidence for a different artifact and must not be used as the verdict or SHA binding for this release.
+- No deploy, upload, SSH/network mutation, symlink switch, nginx reload, Meilisearch reindex, IndexNow, git push or production action occurred.
+
+Next exact action: obtain and verify an independent read-only Sol/high `DEPLOYMENT_GO`/`DEPLOYMENT_NO_GO` for the exact sitemap-contract ZIP and review packet. Even a GO is not deploy authorization; VPS readiness and explicit production authorization remain separate gates.
+
+## 2026-07-13 — Source Detail V2 b26-3/b26-4 green; fresh independent deployment review required
+
+## 2026-07-13 — Source Detail V2 immutable package built and validated; deployment permit pending
+
+**Current gate: PACKAGE GO. DEPLOYMENT PENDING separate Sol/high permit. Production remains unchanged.**
+
+- Immutable source candidate remains `.planning/release-candidate-a`; candidate-manifest SHA-256 is unchanged at `92d5571f4d427a88be3646e303fc71ae62d76ef1c1c41120fb818e4b70587303`.
+- The first package attempt failed closed because PowerShell `Set-Content` appended a second terminal newline to every rewritten HTML file. Membership and all candidate asset hashes were already correct; the package validator rejected `1,692` HTML mismatches.
+- Root cause was repaired in `scripts/package-public-hotfix-from-export.ps1` by replacing pipeline `Set-Content` with UTF-8-no-BOM `System.IO.File.WriteAllText`, preserving the candidate byte shape except for approved cache-bust query values. PowerShell parsing, `git diff --check`, and an exact representative normalized-HTML microtest passed.
+- Successful release: `base2026-source-detail-v2-20260713-150938`.
+- Release directory: `output/releases/base2026-source-detail-v2-20260713-150938`.
+- ZIP: `output/releases/base2026-source-detail-v2-20260713-150938.zip`; SHA-256 `8bd0ecec9a396b1f89f50ca61522df1db708c4f79919eb945f715a84ad86904b`; `unzip -t` passed.
+- Package receipt: `.planning/source-detail-v2-package-build-receipt.json`; SHA-256 `f93674f530fb521f96b8687e870c3d74a1355158b92006fc4e9541ded1145218`.
+- Package validation: `.planning/source-detail-v2-release-package-validation.json`; SHA-256 `096e501d9a970d0aef22882fa25adb3a559a11f7e3bc83aa767bd0fe196bf3e1`; `ok: true`, `errors: []`, `html_mismatches: []`, staged `1,692/1,692`, future-private not emitted `122`, all six candidate assets exact.
+- ZIP inventory contains `4,186` entries and all required package manifests, validation receipt, release text, sitemap, and `1,692` Source Detail HTML files.
+- No deploy, symlink switch, nginx reload, Meilisearch reindex, IndexNow submission, push, or production mutation has occurred at this checkpoint.
+
+Next exact action: issue a separate Sol/high deployment GO/NO-GO over this exact ZIP/hash, deploy atomically with `-SkipPackage -SkipReindex` only on complete GO, then run exact live normal/archive/future contract probes plus desktop/mobile visual QA and sitemap checks before any changed-URL indexation decision.
+
+## 2026-07-13 — Admission and sitemap blockers closed
+
+**Release: NO-GO until ownership/worktree scope and independent release permit are closed.**
+
+- 13 post-freeze emitted source records were classified `future_private_backlog` because they have transcripts but zero reviewed/public claims.
+- isolated public export PASS: `normal_public_card=1493`, `provenance_archive_noindex=199`, `future_private_backlog=135`, `source_records=1692`, `passages=2052`.
+- all 13 new IDs are absent from all 8 public export artifacts; unit tests: `4 passed`; public corpus did not expand.
+- decision record: `docs/project-memory/BASE2026_SOURCE_ADMISSION_CLOSURE_2026_07_13.md`.
+- the reported sitemap omission was a false positive: `Framework` is title wording; canonical route is `solutions/content-refresh-prioritization.html`.
+- isolated sitemap regeneration PASS: `1734` URLs / `5` files; canonical route appears exactly once locally and once live; noncanonical `...-framework.html` appears zero times.
+- sitemap record: `docs/project-memory/BASE2026_SITEMAP_CLOSURE_2026_07_13.md`.
+- no package, deploy, indexation request, or production mutation was performed.
+
+## 2026-07-13 — Source Detail V2 shared-footer closure: isolated visual GO
+
+The isolated Source Detail V2 footer parity gate is closed against current-live WordPress authority. No package, deploy, reindex, indexation or production mutation occurred.
+
+- Final candidates: `.planning/source-detail-v2-full-candidate-20260713-footer-final-o` and `...-final-p`.
+- Each candidate contains 1,712 files and represents 1,692 emitted normal/archive routes; 122 `future_private_backlog` routes remain absent/404.
+- Both independent validators returned `valid: true`, `errors: []`.
+- Byte determinism is `true`, differences `[]`; both candidate manifests have SHA-256 `92d5571f4d427a88be3646e303fc71ae62d76ef1c1c41120fb818e4b70587303`.
+- Final strict matrix at 1440/1280/390/320: `passed: true`, `failures: []`; report `.planning/source-detail-v2-footer-visual-final2/report.json`, SHA-256 `b6977cf26ce7159348300a18fcb330742dd37e38845432a6c6019589bcf7d49c`.
+- Manual comparison of all final normal/archive contact sheets against current-live is PASS at all four widths. CTA, social controls, disabled LinkedIn, nav rows, Cookie Preferences and copyright/bottom area match visually.
+- Manual review caught and fixed one real mobile-only regression missed by the previous runner: a candidate-only separator above copyright. The runner now fail-closes on `bottomStyleEqual`; only O/P plus `visual-final2` are final evidence.
+- Canonical review receipt: `.planning/source-detail-v2-footer-visual-final2/MANUAL_REVIEW.md`.
+
+Gate split:
+- **Source Detail V2 shared-footer visual gate: GO.**
+- **Admission gate: GO.** The 13 post-freeze records were terminally classified private; isolated export and absence verification passed.
+- **Sitemap gate: GO.** The reported `...-framework.html` omission was a noncanonical route-label false positive; the exact canonical route is present once locally and live.
+- **Overall package/deploy gate: NO-GO until separate release blockers close.** Remaining blockers are clean ownership/publication-scope recapture and an independent release permit.
+
+Next execution sequence: recapture scoped publication/Git ownership evidence, build an immutable scoped candidate, obtain independent go/no-go review, then package/deploy atomically only if every gate is green.
+
+## 2026-07-12 — User-authorized full template rollout, fail-closed
+
+The user explicitly authorized an overnight **local → production** Base2026 template rollout. This supersedes the earlier *planning-only* scope **only if every gate below passes**; it does not authorize shortcuts, manual edits to generated output, or a deploy with failing contract/visual/footer checks.
+
+Decision routing:
+- Sol/X High owns architecture, analytical conclusions, material visual/SEO/release decisions, and explicit go/no-go verdicts.
+- Terra High executes the approved deterministic implementation and verification steps.
+
+Required closure before package/deploy:
+1. deterministic, manifest-driven generation — never a DOM/regex reskin of `web/static`;
+2. per-route contracts preserve title/meta, canonical, robots, JSON-LD, H1, attribution, original links, public-state membership and future 404 absence;
+3. isolated candidate and reproducibility validation pass for every family;
+4. Playwright/browser checks across 1440, 1280, 390 and 320, including overflow, console/network errors, keyboard/focus, header and canonical responsive footer;
+5. exact footer evidence confirms the compact Home v4 grid/CTA behavior rather than an uncontrolled wide replacement;
+6. scoped public-safe Git package, deploy preflight, atomic deploy, and live verification pass.
+
+Current gate state: Source Detail V2 full-family isolated build renders 1,692 200 routes and excludes 122 future-private routes. Initial independent validation failed closed on candidate asset-layout and typed semantic-normalization defects; these are being repaired and will be rerun before any integration. Production remains unchanged.
+
+## 2026-07-12 — Sol/X High architecture verdict + Source Detail V2 isolated evidence
+
+### Sol/X High decision (read-only independent review)
+
+**Verdict: do not execute a broad site-wide migration or deploy yet.** The visual/template family route inventory and output mapping are not established for the other families; Source Detail is the only bounded family candidate. A broad rollout would violate the user-required evidence gate.
+
+### Current isolated Source Detail V2 state
+
+- Contract/provenance validator: `valid: true`, `errors: []`; expected states reconcile to `1,493 normal`, `199 archive`, `122 future/404`.
+- Determinism: two clean candidates contain the same `1,712` files and identical SHA-256 hashes after removal of volatile timestamp from `candidate-manifest.json`.
+- **Visual acceptance: BLOCKED.** Live-vs-candidate footer matrix at `1440`, `1280`, `390`, and `320` has no horizontal overflow, but candidate footer is materially taller than live (`+113/+98/+103/+60px` respectively); inner HTML signatures differ and candidate adds an unwanted 1px top border at 1280.
+- Source: `.planning/source-detail-v2-live-candidate-footer-matrix.json`; candidates: `.planning/source-detail-v2-full-candidate-20260712-final` and `...-final-rerun`.
+
+- 2026-07-13: fresh direct Playwright live authority corrected a stale cached geometry assumption: the current Home v4 footer is `1160px` wide with a `450px` lead at `1440/1280`; the main/header containment contract remains `1120px`. Portable footer must follow live footer geometry, not the old 1120/410 provisional matrix. Mobile live geometry is `20px` gutters and `22px/1.16` footer h2 at `390/320`.
+
+### Required next bounded repair
+
+Reconcile `scripts/alex_v4_static_shell.py` portable footer HTML/CSS with **current live WordPress DOM/CSS**, then rebuild two clean candidates, repeat independent validator, and repeat the four-viewport browser matrix. Do not integrate/deploy until parity passes and a Sol/X High visual acceptance review is captured.
+
+### 2026-07-13 — bounded portable-footer repair in progress
+
+Live Home was refetched directly from WordPress (`HTTP 200`, body classes include `ay-stitch-home-v3 ay-stitch-home-v4`, canonical `.ay-site-footer` exists). The stale portable shell differs from the live compact footer in three contract-relevant ways: 1160px instead of 1120px desktop container, 450px instead of approximately 410px lead grid, and stale CTA/section markup. The repair is confined to `scripts/alex_v4_static_shell.py`; it does not modify `web/static`, routes, production, package, deploy, sitemap, or index state. Next: clean dual builds, independent semantic/footer validation, then four viewport Playwright geometry + screenshots.
+
+## 2026-07-12 Source Detail v2 local pilot — historical visual reference, superseded by full-family verification
+
+Scope: Base2026 Source Detail redesign only. This is the replacement for the fully rejected first five-page V4 pilot; it is not Alex Personal Home work. The following local-pilot evidence is **historical and insufficient for a corpus migration or production change**; the current full-family candidate must re-pass all required gates in the top handoff section.
+
+Current verified state:
+
+- the rejected pilot remains architecture evidence only and must not be reused as the presentation layer;
+- Source Detail v2 is rebuilt with new semantic body markup, not a CSS skin over the legacy composition;
+- normal and provenance/archive records are two states of the same template;
+- the body follows the accepted direction: arrival-aware breadcrumb/back link, one horizontal creator row, restrained source thesis, functional actions, editorial Source Text, compact Source Intelligence, hairline Questions disclosures, and a quiet archive provenance row;
+- the static shell mirrors the canonical Alex Personal Home v4 header/footer contract; production has not been changed;
+- automated QA passed at 1440, 1280, 390, and 320 widths for both states: HTTP 200, one H1, zero horizontal overflow, creator/avatar/H1 same row, expected actions and canonical footer copy present, zero orange/ochre surfaces, and no browser errors.
+
+Artifacts:
+
+- generator: `scripts/generate-base2026-source-detail-v2.py`;
+- shared shell: `scripts/alex_v4_static_shell.py`;
+- page CSS/JS: `scripts/base2026_source_detail_v2.css`, `scripts/base2026_source_detail_v2.js`;
+- local output: `.planning/base2026-source-detail-v2/site/`;
+- QA report/screenshots: `.planning/base2026-source-detail-v2/qa/`.
+
+There is no unresolved clarification needed from Alex at this checkpoint. Exact next action: show the normal and archive local pilot for visual review. Only after explicit visual acceptance, expand to pathological fixtures and integrate the accepted template into the common generator. Do not mass-migrate or deploy before that acceptance.
+
 ## 2026-07-10 production source-card completeness release deployed and verified
 
 Release `base2026-card-completeness-r1-20260710-173448` is active at `/var/www/base2026-knowledge/current`. It replaced `base2026-tiktok-public-20260703-1711` after explicit user approval.

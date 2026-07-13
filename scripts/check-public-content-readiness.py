@@ -39,8 +39,18 @@ def generated_source_is_noindex(source: dict, web_root: Path) -> bool:
     if not page.exists():
         return False
     text = page.read_text(encoding="utf-8", errors="ignore")
-    robots = re.search(r'<meta\s+name="robots"\s+content="([^"]+)"', text, re.IGNORECASE)
-    return bool(robots and "noindex" in robots.group(1).lower())
+    for meta in re.findall(r"<meta\b[^>]*>", text, re.IGNORECASE):
+        attrs = {
+            name.lower(): value
+            for name, _quote, value in re.findall(
+                r"([:\w-]+)\s*=\s*(['\"])(.*?)\2",
+                meta,
+                re.IGNORECASE | re.DOTALL,
+            )
+        }
+        if attrs.get("name", "").lower() == "robots":
+            return "noindex" in attrs.get("content", "").lower()
+    return False
 
 
 def main() -> int:

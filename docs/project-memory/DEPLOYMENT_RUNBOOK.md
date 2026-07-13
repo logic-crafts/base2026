@@ -52,9 +52,9 @@ Current live release: `base2026-card-completeness-r1-20260710-173448`.
 
 Latest data/reindex checkpoint: the same completeness release, with Meilisearch task `487` succeeded.
 
-Current live export has 1,493 normal public cards, 199 provenance archive/noindex records, 122 private future-backlog sources, 1,692 public source records, 2,276 public passages, 2,396 insight cards, 1,873 public insight cards, 1,628 topics, and 18 creators. Normal incomplete cards = 0. Machine receipt: `.planning/tiktok-pipeline-v2/production-completeness-release-receipt-2026-07-10.json`.
+The current live release snapshot has 1,493 normal public cards, 199 provenance archive/noindex records, 122 private future-backlog sources, 1,692 public source records, 2,276 public passages, 2,396 insight cards, 1,873 public insight cards, 1,628 topics, and 18 creators. Normal incomplete cards = 0. Machine receipt: `.planning/tiktok-pipeline-v2/production-completeness-release-receipt-2026-07-10.json`. The current admission ledger is newer: 1,827 total with 135 future/private; its 13 additions have no public effect and must remain absent from every public artifact.
 
-Latest IndexNow closure for this release: 1,734/1,734 current sitemap URLs passed the live 200/indexable/self-canonical gate and were accepted with HTTP 200; 62/62 previous-public/current-private URLs returned 404 and their deletion notification was accepted with HTTP 200; all 199 archive URLs were live `noindex` and excluded. Receipt: `.planning/tiktok-pipeline-v2/indexnow-card-completeness-2026-07-10/indexnow-release-closure-receipt.json`.
+Historical pre-Source-Detail-V2 IndexNow closure for the 2026-07-10 completeness release: 1,734/1,734 then-current sitemap URLs passed the live 200/indexable/self-canonical gate and were accepted with HTTP 200; 62/62 previous-public/current-private URLs returned 404 and their deletion notification was accepted with HTTP 200; all 199 archive URLs were then live `noindex` and excluded. Receipt: `.planning/tiktok-pipeline-v2/indexnow-card-completeness-2026-07-10/indexnow-release-closure-receipt.json`. This historical sitemap state is superseded for Source Detail V2 by the explicit contract below: the same 199 public archive source-detail URLs are sitemap-included, while the current 135 future/private URLs are sitemap-excluded. IndexNow/reindex remains a separate explicit post-live decision.
 
 The `base2026-api-nav-footer-r3-20260616` deploy changed generated HTML/navigation and the hotfix packaging contract only. It intentionally skipped Meilisearch reindex because public data and index fields did not change. The deploy fixed global `/knowledge/api.html` navigation in the search root, generated pages, mobile Base2026 nav, and footer.
 
@@ -66,24 +66,34 @@ Current public packages use reviewed public source text where policy allows. Lat
 
 Latest data-preserving static hotfix: `base2026-bing-money-pages-r1-20260628`. It added the live source-backed `/knowledge/service-area-pages-and-ai-visibility-for-local-businesses/` page, preserves the live measurement, AI-ready documentation, and review sentiment pages, keeps AI visibility collection/social metadata complete, keeps the 1200×630 social preview card, keeps city/niche drafts `noindex,nofollow`, skipped Meilisearch reindex, and passed live crawl with `warning_groups=0`.
 
-For explicitly approved data-preserving hotfixes where the current ignored `public-data/tiktok` membership/counts must be preserved while static UI/page rendering is repaired, use:
+For explicitly approved data-preserving static releases, package first and deploy only the reviewed immutable ZIP. The deploy step requires the exact ZIP SHA-256 and candidate manifest; it never chooses them implicitly:
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\package-public-hotfix-from-export.ps1 -ReleaseName <release-name> -MeiliUrl /knowledge-search
-powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\deploy-public-vps.ps1 -ReleaseName <release-name> -SkipPackage -SkipReindex
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\package-public-hotfix-from-export.ps1 `
+  -ReleaseName <release-name> `
+  -MeiliUrl /knowledge-search `
+  -SourceDetailCandidate .planning/<approved-immutable-candidate> `
+  -SourceAdmissionClosureReceipt .planning/<hash-bound-admission-closure-receipt.json>
+
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\deploy-public-vps.ps1 `
+  -ReleaseName <release-name> `
+  -ZipPath output/releases/<release-name>.zip `
+  -ExpectedZipSha256 <approved-64-hex-sha256> `
+  -CandidateManifest .planning/<approved-immutable-candidate>/candidate-manifest.json `
+  -SkipPackage `
+  -SkipReindex `
+  -PlanOnly
 ```
 
-This hotfix path copies the existing export, repairs public excerpt fields from already-public passages, validates the current safe public policy and text-boundary safety, verifies JSONL counts are preserved, rebuilds generated pages/static assets, and skips Meilisearch reindex unless passages or index settings changed.
+Remove `-PlanOnly` only after an independent textual `DEPLOYMENT_GO` for those exact identifiers, verified VPS prerequisites, and Alex's explicit publication authorization. `-SkipReindex` is mandatory for this data-preserving static path; Meilisearch and IndexNow are separate release decisions.
 
-## One-command deploy
+This path copies the existing export, repairs public excerpt fields from already-public passages, validates the current safe public policy and text-boundary safety, verifies JSONL counts are preserved, overlays the approved immutable candidate, regenerates sitemaps with every `normal_public_card` and every public `provenance_archive_noindex` route present, keeps every `future_private_backlog` route absent, and skips Meilisearch reindex.
 
-Use this for normal VPS deploys:
+Source Detail V2 packages use schema `base2026.public-hotfix-from-export/v3`. The root manifest binds release name, candidate-manifest SHA, route-manifest SHA, current admission-ledger SHA, closure-receipt SHA, counts, and sitemap policy. The deploy wrapper validates that manifest and the exact ZIP locally even under `-PlanOnly`, then repeats required-file checks after VPS extraction. Required runtime files are the static `web/` and public-data files named in that manifest, including `web/sources/index.html`. There is no release-local Python app: public search remains the existing nginx proxy to Meilisearch. An in-package nginx config is neither required nor mutated because the wrapper validates the already-installed system config with `sudo nginx -t`.
 
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\deploy-public-vps.ps1 -ReleaseName <release-name>
-```
+## Deprecated unpinned deploy mode
 
-The script packages the release, uploads the zip, unpacks to a new release folder, switches the `current` symlink, reloads nginx after `nginx -t`, reindexes Meilisearch, and verifies the deployed path.
+Do not invoke `deploy-public-vps.ps1` with only a release name. The static deploy wrapper is fail-closed: `ExpectedZipSha256`, `CandidateManifest`, and `-SkipReindex` are mandatory, and release-boundary approval is attached to the exact ZIP/candidate identifiers.
 
 For data-changing TikTok/source refreshes, prefer the canonical release gate instead of calling deploy directly:
 
