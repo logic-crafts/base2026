@@ -41,6 +41,10 @@ def test_canonical_search_runtime_and_generated_links_use_query_string_routes() 
     assert "function safeHtmlFragment(html)" in runtime
     assert "function replaceSafeHtml(target, html)" in runtime
     assert ".innerHTML =" not in runtime
+    assert 'button.append(document.createTextNode(term));' in runtime
+    assert 'dismiss.textContent = "×";' in runtime
+    assert "selectedTerms.replaceChildren(...buttons);" in runtime
+    assert "replaceSafeHtml(\n    selectedTerms" not in runtime
     assert "replaceSafeHtml(sourceDetailPanel, renderSourceDetailShell" in runtime
     assert 'onerror="this.closest' not in runtime
 

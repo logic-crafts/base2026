@@ -1274,16 +1274,19 @@ function syncPresetButtons(query) {
 function renderSelectedTerms(query) {
   if (!selectedTerms) return;
   const terms = splitQueryTerms(query);
-  if (!terms.length) {
-    selectedTerms.replaceChildren();
-    return;
-  }
-  replaceSafeHtml(
-    selectedTerms,
-    terms
-      .map((term) => `<button type="button" class="selected-term" data-remove-term="${escapeHtml(term)}" aria-label="Remove ${escapeHtml(term)}">${escapeHtml(term)}<span>×</span></button>`)
-      .join(""),
-  );
+  const buttons = terms.map((term) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "selected-term";
+    button.dataset.removeTerm = term;
+    button.setAttribute("aria-label", `Remove ${term}`);
+    button.append(document.createTextNode(term));
+    const dismiss = document.createElement("span");
+    dismiss.textContent = "×";
+    button.append(dismiss);
+    return button;
+  });
+  selectedTerms.replaceChildren(...buttons);
 }
 
 function hitTemplate(hit) {

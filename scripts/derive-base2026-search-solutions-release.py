@@ -198,8 +198,9 @@ def main() -> int:
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
         if manifest.get("schema") != PACKAGE_SCHEMA:
             raise RuntimeError(f"Unsupported base package schema: {manifest.get('schema')}")
-        if manifest.get("release_name") != "base2026-search-v1-derived-20260714-024003":
-            raise RuntimeError(f"Unexpected immutable Search base release: {manifest.get('release_name')}")
+        base_search_release = str(manifest.get("release_name") or "")
+        if not base_search_release.startswith("base2026-search-v1-"):
+            raise RuntimeError(f"Unexpected immutable Search base release: {base_search_release}")
         if manifest.get("package_mode") != "data-preserving-static-derived-search-release":
             raise RuntimeError(f"Unexpected Search base package mode: {manifest.get('package_mode')}")
 
@@ -290,7 +291,7 @@ def main() -> int:
         manifest["package_mode"] = "data-preserving-static-derived-search-solutions-release"
         manifest["search_solutions_overlay"] = {
             "schema": SCHEMA,
-            "base_search_release": "base2026-search-v1-derived-20260714-024003",
+            "base_search_release": base_search_release,
             "base_search_zip_sha256": actual_base_sha,
             "solutions_input_sha256": solutions_input_sha,
             "generator_sha256": generator_sha,
@@ -308,7 +309,7 @@ def main() -> int:
         manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
         (extracted / "RELEASE.txt").write_text(
             f"{args.release_name}\n"
-            "Derived from base2026-search-v1-derived-20260714-024003\n"
+            f"Derived from {base_search_release}\n"
             f"Search base ZIP SHA256 {actual_base_sha}\n"
             f"Solutions input SHA256 {solutions_input_sha}\n",
             encoding="utf-8",
@@ -326,7 +327,7 @@ def main() -> int:
             "schema": SCHEMA,
             "created_at": deterministic_release_timestamp(args.release_name),
             "release_name": args.release_name,
-            "base_search_release": "base2026-search-v1-derived-20260714-024003",
+            "base_search_release": base_search_release,
             "base_search_zip_sha256": actual_base_sha,
             "solutions_input": solutions_input.relative_to(repo_root).as_posix(),
             "solutions_input_sha256": solutions_input_sha,
