@@ -309,20 +309,29 @@ function workspaceRouteHref(patch = {}) {
     }
   });
   const query = params.toString();
-  return `./${query ? `#search?${query}` : ""}`;
+  return `./${query ? `?${query}` : ""}`;
 }
 
 function routeSearchParams() {
-  const params = new URLSearchParams(window.location.search);
-  const hash = window.location.hash || "";
-  if (hash.startsWith("#search?")) {
-    const hashParams = new URLSearchParams(hash.slice("#search?".length));
-    hashParams.forEach((value, key) => {
-      if (!params.has(key)) params.set(key, value);
-    });
-  }
-  return params;
+  return new URLSearchParams(window.location.search);
 }
+
+function migrateLegacyHashSearchRoute() {
+  const legacySearchPrefix = "#search?";
+  const hash = window.location.hash || "";
+  if (!hash.startsWith(legacySearchPrefix)) return false;
+  const params = routeSearchParams();
+  const legacyParams = new URLSearchParams(hash.slice(legacySearchPrefix.length));
+  legacyParams.forEach((value, key) => {
+    if (!params.has(key)) params.append(key, value);
+  });
+  const query = params.toString();
+  const nextUrl = `${window.location.pathname}${query ? `?${query}` : ""}`;
+  window.history.replaceState({}, "", nextUrl);
+  return true;
+}
+
+migrateLegacyHashSearchRoute();
 
 function getKnowledgeRouteState() {
   const params = routeSearchParams();
@@ -349,8 +358,9 @@ function setKnowledgeRouteState(patch = {}, options = {}) {
     }
   });
   const query = params.toString();
-  const nextUrl = `${window.location.pathname}${query ? `#search?${query}` : ""}`;
-  if (nextUrl === `${window.location.pathname}${window.location.hash}`) return;
+  const retainedHash = window.location.hash || "";
+  const nextUrl = `${window.location.pathname}${query ? `?${query}` : ""}${retainedHash}`;
+  if (nextUrl === `${window.location.pathname}${window.location.search}${window.location.hash}`) return;
   window.history[options.replace ? "replaceState" : "pushState"]({}, "", nextUrl);
 }
 
@@ -1322,9 +1332,23 @@ async function loadDocumentById(itemId) {
   return inspectLine(buffer);
 }
 
+function initialUiStateFromKnowledgeRoute(route = {}) {
+  const indexState = {};
+  const query = compactText(route.q || (!route.q && route.topic ? routeTopicLabel(route.topic) : ""));
+  if (query) indexState.query = query;
+  const refinementList = {};
+  if (route.creator) refinementList.handle = [`@${stripHandle(route.creator)}`];
+  if (route.year) refinementList.year = [route.year];
+  if (route.source_type) refinementList.source_type = [route.source_type];
+  if (Object.keys(refinementList).length) indexState.refinementList = refinementList;
+  return { [searchIndex]: indexState };
+}
+
+const initialKnowledgeRoute = getKnowledgeRouteState();
 const search = instantsearch({
   indexName: searchIndex,
   searchClient,
+  initialUiState: initialUiStateFromKnowledgeRoute(initialKnowledgeRoute),
 });
 
 search.addWidgets([
@@ -1432,7 +1456,7 @@ function applyKnowledgeRouteState(route = {}, options = {}) {
 
 search.start();
 
-applyKnowledgeRouteState(getKnowledgeRouteState(), { initial: true });
+applyKnowledgeRouteState(initialKnowledgeRoute, { initial: true });
 updateManifestCounters();
 loadAnalyticsData().then((state) => {
   renderAnalyticsStrip(state);

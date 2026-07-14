@@ -1,5 +1,13 @@
 # Decisions
 
+## 2026-07-14 — Search V1 uses canonical query URLs with a grandfathered immutable legacy baseline
+
+Decision: Base2026 Search V1 canonical and newly generated discovery links use `/knowledge/?q=...` plus explicit query parameters. The outbound `#search?...` prohibition applies to Search V1 changed paths and to all new or regenerated generation paths. The immutable Source Detail V2 baseline is grandfathered: its 4,183 unchanged files may retain their 10,340 inherited outbound hash-search links until those page families are deliberately regenerated under a separately verified release. Runtime code must continue accepting an inbound `#search?...` bookmark and immediately migrate it to the canonical query URL with `history.replaceState`.
+
+Reason: the exact Search V1 derivative changes only the search shell/assets and compatibility aliases while preserving 4,183 baseline files byte-for-byte. Rewriting every inherited link now would silently turn a bounded search-shell release into a thousands-of-pages corpus migration, invalidate the exact candidate SHA, and require full semantic, responsive, sitemap, and release revalidation. Grandfathering the immutable baseline preserves provenance and release safety without emitting any new legacy links.
+
+Execution authorization: Alex explicitly chose option A (`Продолжай по а`). Proceed with the exact verified candidate `base2026-search-v1-derived-20260714-002149.zip` at SHA-256 `a12f4c5fa2f2b9ab6ca0c1b40a1180e3fab3b93c4b2e78c9f250ec118bfc8b67` through scoped Git review/CI and exact-SHA deployment if all remaining gates pass. Do not re-export the corpus, reindex Meilisearch, submit IndexNow, mutate WordPress, or rewrite inherited baseline pages in this release.
+
 ## 2026-07-04 — Add WordPress/CMS as a private-first Base2026 vertical under web development
 
 Decision: Base2026 should treat WordPress/CMS implementation insights as a separate source/category vertical under the broader web-development expansion, rather than burying them inside generic SEO. Initial anchors are `@iamdandavies` as a WordPress-focused creator and `@webhivedigital` as an SEO/WordPress hybrid source. The vertical remains private-first until reviewed source text, exact-evidence insight cards, and the existing indexation/release gates approve any public promotion.
@@ -14,7 +22,7 @@ Decision: Broad Base2026 AI visibility hub pages may remain indexable, but gener
 
 Reason: QA showed the current 16 California city/niche pages are mostly templated swaps after normalizing city and niche terms. Indexing them would create doorway/thin-content risk and conflict with the public research/proof layer.
 
-## 2026-06-23 — Keep Base2026 discovery state out of crawlable query URLs
+## 2026-06-23 — Keep Base2026 discovery state out of crawlable query URLs (superseded for new/changed paths by 2026-07-14 Search V1 decision)
 
 Decision: canonical Base2026 search/discovery URLs should be `/knowledge/` plus client-side `#search?...` state, not `/knowledge/index.html?...` or other crawlable query variants. Generated static entity pages should link back to the search workspace through hash state, while sitemap generation remains limited to self-canonical, indexable HTML files.
 

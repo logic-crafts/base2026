@@ -7189,3 +7189,20 @@ Verification:
 - Word/paragraph counts were checked.
 - Reviewer pass found no added meaning and no public/private boundary issue in the written outputs.
 - No deploy, commit, intake automation, source clearance, public export, source-status change, or status-board phase transition was run.
+
+## 2026-07-14 — Search V1 Option A selected and independent final review closed
+
+Prompt: continue with Option A for the exact Search V1 candidate and close the inherited `#search?` review conflict.
+
+Actions:
+
+- Recorded Option A as an explicit release contract: new/changed Search V1 outbound paths must use query-string routing, while `10,340` links in `4,183` byte-identical immutable baseline files are grandfathered until a separately authorized family regeneration.
+- Re-ran focused and full tests, deterministic derivation, package validation, Source Detail contract, publication boundary, Search browser and deployment PlanOnly gates against `base2026-search-v1-derived-20260714-002149.zip`.
+- Ran a fresh independent read-only Codex review against the explicit Option A scope.
+
+Verification:
+
+- Exact candidate SHA-256 remained `a12f4c5fa2f2b9ab6ca0c1b40a1180e3fab3b93c4b2e78c9f250ec118bfc8b67`.
+- Local gates passed: focused `9/9`, full `55/55`, `9` changed paths, `4,183` unchanged files, `10,340` inherited legacy literals, `0` changed outbound legacy paths, browser/contract/package/publication gates PASS.
+- Independent final verdict: `PASS`; blocking findings: none; safe to proceed with scoped commit/PR and exact-SHA deployment using `-SkipPackage -SkipReindex`, with no IndexNow.
+- No commit, push, merge or deployment had occurred at the time of this log entry.

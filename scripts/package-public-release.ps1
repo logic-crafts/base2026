@@ -171,6 +171,51 @@ Assert-NativeSuccess "check-public-content-readiness-generated"
 python3 ./scripts/generate-base2026-sitemap.py --web-root $WebRoot | Write-Output
 Assert-NativeSuccess "generate-base2026-sitemap"
 
+$SearchV1Generator = Join-Path $PSScriptRoot "generate-base2026-search-v1.py"
+if (-not (Test-Path $SearchV1Generator)) {
+  throw "Base2026 Search V1 generator missing: $SearchV1Generator"
+}
+$SearchV1OverlayRoot = Join-Path $BuildRoot "_base2026-search-v1-overlay"
+python3 $SearchV1Generator --source-root $WebRoot --out $SearchV1OverlayRoot | Write-Output
+Assert-NativeSuccess "generate-base2026-search-v1"
+
+$SearchV1Assets = @(
+  "alex-v4-static-shell.css",
+  "base2026-search-v1.css",
+  "base2026-search-v3.js"
+)
+Copy-Item (Join-Path $SearchV1OverlayRoot "index.html") (Join-Path $WebRoot "index.html") -Force
+foreach ($AssetName in $SearchV1Assets) {
+  $GeneratedAsset = Join-Path $SearchV1OverlayRoot $AssetName
+  if (-not (Test-Path $GeneratedAsset)) {
+    throw "Base2026 Search V1 asset missing: $GeneratedAsset"
+  }
+  Copy-Item $GeneratedAsset (Join-Path $StaticRoot $AssetName) -Force
+}
+Remove-Item $SearchV1OverlayRoot -Recurse -Force
+
+# Keep legacy/bookmarked search URLs usable without creating a second crawlable
+# search surface. JavaScript preserves query/hash state; the no-script fallback
+# returns visitors to the canonical Base2026 workspace.
+$SearchAliasHtml = @'
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex,follow">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="canonical" href="https://aggressorbulkit.online/knowledge/">
+  <title>Base2026 Search</title>
+  <script>location.replace('/knowledge/' + location.search + location.hash);</script>
+</head>
+<body><a href="/knowledge/">Open Base2026 Search</a></body>
+</html>
+'@
+$SearchAliasDir = Join-Path $WebRoot "search"
+New-Item -ItemType Directory -Force -Path $SearchAliasDir | Out-Null
+Set-Content -LiteralPath (Join-Path $SearchAliasDir "index.html") -Value $SearchAliasHtml -Encoding utf8
+Set-Content -LiteralPath (Join-Path $WebRoot "search.html") -Value $SearchAliasHtml -Encoding utf8
+
 # Normalize generated asset cache-busts after every generator has written HTML.
 # Source/topic pages use ../static/... paths, while root pages use ./static/...
 # paths; the public package must give all of them the current release version.
@@ -179,6 +224,8 @@ $VersionedAssets = @(
   "ai-recommends-solutions.css",
   "alex-v4-static-shell.css",
   "alex-v4-static-shell.js",
+  "base2026-search-v1.css",
+  "base2026-search-v3.js",
   "meili.js",
   "cookie-consent.js",
   "share-actions.js",

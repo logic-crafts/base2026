@@ -1,5 +1,11 @@
 # Next Action
 
+## Current Focus: Search V1 option A reviewed; ship exact release — 2026-07-14
+
+Alex explicitly selected option A. The exact Search V1 candidate remains `base2026-search-v1-derived-20260714-002149.zip` at SHA-256 `a12f4c5fa2f2b9ab6ca0c1b40a1180e3fab3b93c4b2e78c9f250ec118bfc8b67`. Canonical/new discovery links use `/knowledge/?q=...`; the 4,183 unchanged immutable-baseline files are grandfathered and may retain 10,340 inherited outbound `#search?...` links. Runtime must accept legacy inbound bookmarks and migrate them to query URLs. This release must not re-export public data, reindex Meilisearch, submit IndexNow, mutate WordPress, or rewrite inherited pages.
+
+Independent review is closed as PASS with no blocking findings (`docs/project-memory/BASE2026_SEARCH_V1_INDEPENDENT_REVIEW.md`). Next exact sequence: commit only the reviewed public-safe source/docs set; push and open a PR; wait for all available checks; merge; verify the merged SHA contains the exact reviewed code; deploy the already frozen ZIP by exact SHA with `-SkipPackage -SkipReindex`; run production contract, legacy-migration, alias, responsive browser, sitemap/data-hash, and rollback-readiness checks; then clean the branch/worktree and write the production closure record. Any scope, manifest or candidate-SHA drift reopens the review gate.
+
 ## Current Focus: Source Detail V2 production closure complete — 2026-07-13
 
 No further release action is pending. Exact release `base2026-source-detail-v2-admission1827-deploycontract-20260713-142944` is live at SHA-256 `a25f1a037572b6878ebc33951e6eec5ff4a89c86ad9c8ea80d3b59b41af6dd65`; transactional deploy and live contract/browser QA passed, rollback was not needed, Meilisearch was intentionally unchanged, and IndexNow accepted the 1,493 changed indexable Source Detail URLs with HTTP 200. Archive/noindex and future/private URLs were excluded from submission. Canonical closure: `docs/project-memory/BASE2026_SOURCE_DETAIL_V2_PRODUCTION_RELEASE_2026_07_13.md`.

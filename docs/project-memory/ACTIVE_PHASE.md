@@ -1,6 +1,10 @@
 # Active Phase
 
-Last updated: 2026-07-13
+Last updated: 2026-07-14
+
+## Current override — Search V1 option A release in progress
+
+Alex selected the grandfathered-baseline contract: new and changed Search V1 paths must emit `/knowledge/?...` query URLs, while the 4,183 byte-identical Source Detail V2 baseline files may retain their 10,340 inherited `#search?...` links until a separately verified regeneration. Runtime compatibility migrates inbound legacy hash bookmarks to canonical query URLs. Exact candidate: `base2026-search-v1-derived-20260714-002149.zip`, SHA-256 `a12f4c5fa2f2b9ab6ca0c1b40a1180e3fab3b93c4b2e78c9f250ec118bfc8b67`. Local gates pass and the fresh independent read-only review is PASS with no blocking findings. Scoped Git closure and exact-SHA production deployment/QA are the remaining sequence; any scope or artifact-binding drift reopens review. This release must not re-export data, reindex Meilisearch, submit IndexNow, mutate WordPress, or rewrite inherited baseline pages.
 
 ## Current override — Source Detail V2 production release closed
 
