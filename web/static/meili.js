@@ -156,56 +156,28 @@ function escapeHtml(value) {
     .replace(/'/g, "&#039;");
 }
 
-const safeHtmlTags = new Set([
+const safeHtmlTags = [
   "a", "article", "button", "details", "div", "g", "h1", "h2", "h3", "h4", "img", "label", "li", "mark", "p", "path", "section", "span", "strong", "summary", "svg", "ul",
-]);
-const safeHtmlAttributes = new Set([
+];
+const safeHtmlAttributes = [
   "alt", "class", "d", "focusable", "href", "loading", "referrerpolicy", "rel", "src", "tabindex", "target", "title", "type", "value", "viewbox",
-]);
-const safeHtmlLinkProtocols = new Set(["http:", "https:", "mailto:", "tel:"]);
-const safeHtmlMediaProtocols = new Set(["http:", "https:"]);
-
-function safeHtmlUrl(value, attributeName) {
-  const raw = String(value || "").trim();
-  if (!raw) return "";
-  try {
-    const parsed = new URL(raw, window.location.href);
-    const allowed = attributeName === "href" ? safeHtmlLinkProtocols : safeHtmlMediaProtocols;
-    return allowed.has(parsed.protocol) ? raw : "";
-  } catch {
-    return "";
-  }
-}
+];
 
 function safeHtmlFragment(html) {
-  const parsed = new DOMParser().parseFromString(String(html || ""), "text/html");
-  [...parsed.body.querySelectorAll("*")].forEach((element) => {
-    if (!safeHtmlTags.has(element.localName)) {
-      element.remove();
-      return;
-    }
-    [...element.attributes].forEach((attribute) => {
-      const name = attribute.name.toLowerCase();
-      const allowed = safeHtmlAttributes.has(name) || name.startsWith("aria-") || name.startsWith("data-");
-      if (!allowed) {
-        element.removeAttribute(attribute.name);
-        return;
-      }
-      if (name === "href" || name === "src") {
-        const safeValue = safeHtmlUrl(attribute.value, name);
-        if (safeValue) element.setAttribute(attribute.name, safeValue);
-        else element.removeAttribute(attribute.name);
-      }
-    });
-    if (element.localName === "a" && element.getAttribute("target") === "_blank") {
-      const rel = new Set((element.getAttribute("rel") || "").split(/\s+/).filter(Boolean));
-      rel.add("noopener");
-      rel.add("noreferrer");
-      element.setAttribute("rel", [...rel].join(" "));
-    }
+  if (!window.DOMPurify?.sanitize) throw new Error("DOMPurify is required for safe Search rendering.");
+  const fragment = window.DOMPurify.sanitize(String(html || ""), {
+    RETURN_DOM_FRAGMENT: true,
+    ALLOWED_TAGS: safeHtmlTags,
+    ALLOWED_ATTR: safeHtmlAttributes,
+    ALLOW_ARIA_ATTR: true,
+    ALLOW_DATA_ATTR: true,
   });
-  const fragment = document.createDocumentFragment();
-  [...parsed.body.childNodes].forEach((node) => fragment.append(document.importNode(node, true)));
+  fragment.querySelectorAll('a[target="_blank"]').forEach((element) => {
+    const rel = new Set((element.getAttribute("rel") || "").split(/\s+/).filter(Boolean));
+    rel.add("noopener");
+    rel.add("noreferrer");
+    element.setAttribute("rel", [...rel].join(" "));
+  });
   return fragment;
 }
 

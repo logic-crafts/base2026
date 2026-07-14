@@ -97,6 +97,18 @@ def transform(source: str) -> str:
         '          <section class="filter-facet"><h3>Year</h3><div id="year-refinement"></div></section>',
         1,
     )
+    if 'purify.min.js' not in html:
+        html, inserted = re.subn(
+            r'(?P<indent>[ \t]*)<script src="\./static/meili\.js\?v=[^"]+"></script>',
+            lambda match: (
+                f'{match.group("indent")}<script src="./static/purify.min.js?v=20260714-search-security"></script>\n'
+                f'{match.group(0)}'
+            ),
+            html,
+            count=1,
+        )
+        if inserted != 1:
+            raise ValueError('Could not locate the versioned meili.js script for DOMPurify ordering')
     missing_scripts = []
     if 'alex-v4-static-shell.js' not in html:
         missing_scripts.append(

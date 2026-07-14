@@ -40,6 +40,8 @@ def test_canonical_search_runtime_and_generated_links_use_query_string_routes() 
     assert "initialUiState: initialUiStateFromKnowledgeRoute(initialKnowledgeRoute)" in runtime
     assert "function safeHtmlFragment(html)" in runtime
     assert "function replaceSafeHtml(target, html)" in runtime
+    assert "window.DOMPurify.sanitize" in runtime
+    assert "new DOMParser" not in runtime
     assert ".innerHTML =" not in runtime
     assert 'button.append(document.createTextNode(term));' in runtime
     assert 'dismiss.textContent = "×";' in runtime
@@ -62,6 +64,7 @@ def test_canonical_search_runtime_and_generated_links_use_query_string_routes() 
     transformed = generator.transform(source)
     assert './#search?' not in transformed
     assert './?q=AI%20Overviews' in transformed
+    assert transformed.index("purify.min.js") < transformed.index("meili.js")
 
 
 def test_public_packager_uses_declared_build_root_for_search_overlay() -> None:

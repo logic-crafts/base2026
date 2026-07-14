@@ -40,6 +40,8 @@ ALLOWED_CHANGED = {
     "web/static/base2026-search-v1.css",
     "web/static/base2026-search-v3.js",
     "web/static/meili.js",
+    "web/static/purify.min.js",
+    "web/static/purify.min.js.LICENSE.txt",
 }
 REQUIRED_CHANGED = {
     "manifest.json",
@@ -51,6 +53,8 @@ REQUIRED_CHANGED = {
     "web/static/base2026-search-v1.css",
     "web/static/base2026-search-v3.js",
     "web/static/meili.js",
+    "web/static/purify.min.js",
+    "web/static/purify.min.js.LICENSE.txt",
 }
 REQUIRED_BASE_FILES = {
     "manifest.json",
@@ -67,6 +71,8 @@ SEARCH_ASSETS = (
     "base2026-search-v1.css",
     "base2026-search-v3.js",
     "meili.js",
+    "purify.min.js",
+    "purify.min.js.LICENSE.txt",
 )
 
 
@@ -119,6 +125,7 @@ def cache_bust_search_html(html: str, release_name: str) -> str:
         "base2026-search-v1.css",
         "cookie-consent.js",
         "meili.js",
+        "purify.min.js",
         "alex-v4-static-shell.js",
         "base2026-search-v3.js",
     )
@@ -265,6 +272,7 @@ def main() -> int:
             "web/static/base2026-search-v1.css",
             "web/static/base2026-search-v3.js",
             "web/static/meili.js",
+            "web/static/purify.min.js",
             "web/search/index.html",
         ):
             if required not in required_runtime:
