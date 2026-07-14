@@ -212,6 +212,7 @@ PUBLIC_SAFE_EXACT = {
     "tests/test_generate_base2026_sitemap.py",
     "tests/test_export_public_tiktok_admission.py",
     "tests/test_generate_public_pages_indexability.py",
+    "tests/test_root_llms_contract.py",
     "tests/test_tiktok_faithful_polish_local.py",
     "web/ARCHITECTURE.md",
     "web/KNOWLEDGE_UI_GUIDE.md",
