@@ -135,6 +135,31 @@ async function inspectCanonical(page, baseUrl, viewport, out, searchUpstreamBase
     };
   });
 
+  const htmlSafety = await page.evaluate(() => {
+    window.__base2026HtmlSafetyProbe = 0;
+    const target = document.createElement("div");
+    replaceSafeHtml(target, `
+      <script>window.__base2026HtmlSafetyProbe = 1<\/script>
+      <img src="" onerror="window.__base2026HtmlSafetyProbe = 2">
+      <a href="javascript:window.__base2026HtmlSafetyProbe = 3" target="_blank">unsafe</a>
+      <a href="./?q=safe" target="_blank">safe</a>
+    `);
+    document.body.append(target);
+    const unsafeLink = target.querySelector("a:first-of-type");
+    const safeLink = target.querySelector("a:last-of-type");
+    const result = {
+      probe: window.__base2026HtmlSafetyProbe,
+      script_present: Boolean(target.querySelector("script")),
+      inline_handler_present: Boolean(target.querySelector("[onerror]")),
+      unsafe_href_present: Boolean(unsafeLink?.getAttribute("href")),
+      safe_href: safeLink?.getAttribute("href") || "",
+      safe_rel: safeLink?.getAttribute("rel") || "",
+    };
+    target.remove();
+    delete window.__base2026HtmlSafetyProbe;
+    return result;
+  });
+
   const failures = [];
   if (response?.status() !== 200) failures.push(`canonical status ${response?.status()}`);
   if (!diagnostics.body_classes.includes("ay-alex-v4-static")) failures.push("ay-alex-v4-static body class missing");
@@ -149,10 +174,16 @@ async function inspectCanonical(page, baseUrl, viewport, out, searchUpstreamBase
   if (diagnostics.overflow_x) failures.push(`horizontal overflow ${diagnostics.scroll_width}>${diagnostics.client_width}`);
   if (sameOriginErrors.length) failures.push(`${sameOriginErrors.length} same-origin HTTP error(s)`);
   if (pageErrors.length) failures.push(`${pageErrors.length} page error(s)`);
+  if (htmlSafety.probe !== 0) failures.push(`HTML safety probe executed: ${htmlSafety.probe}`);
+  if (htmlSafety.script_present) failures.push("HTML safety script element survived");
+  if (htmlSafety.inline_handler_present) failures.push("HTML safety inline handler survived");
+  if (htmlSafety.unsafe_href_present) failures.push("HTML safety javascript: URL survived");
+  if (htmlSafety.safe_href !== "./?q=safe") failures.push(`HTML safety relative URL removed: ${htmlSafety.safe_href}`);
+  if (!htmlSafety.safe_rel.includes("noopener") || !htmlSafety.safe_rel.includes("noreferrer")) failures.push(`HTML safety rel=${htmlSafety.safe_rel}`);
 
   const screenshot = `search-v1--${viewport.id}.png`;
   await page.screenshot({ path: join(out, screenshot), fullPage: true });
-  const result = { viewport, status: response?.status() ?? null, diagnostics, same_origin_errors: sameOriginErrors, console_errors: consoleErrors, page_errors: pageErrors, screenshot, failures };
+  const result = { viewport, status: response?.status() ?? null, diagnostics, html_safety: htmlSafety, same_origin_errors: sameOriginErrors, console_errors: consoleErrors, page_errors: pageErrors, screenshot, failures };
   await page.unrouteAll({ behavior: "ignoreErrors" });
   await page.close();
   return result;

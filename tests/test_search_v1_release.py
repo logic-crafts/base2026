@@ -38,6 +38,11 @@ def test_canonical_search_runtime_and_generated_links_use_query_string_routes() 
     assert 'window.history.replaceState({}, "", nextUrl);' in runtime
     assert "function initialUiStateFromKnowledgeRoute(route = {})" in runtime
     assert "initialUiState: initialUiStateFromKnowledgeRoute(initialKnowledgeRoute)" in runtime
+    assert "function safeHtmlFragment(html)" in runtime
+    assert "function replaceSafeHtml(target, html)" in runtime
+    assert ".innerHTML =" not in runtime
+    assert "replaceSafeHtml(sourceDetailPanel, renderSourceDetailShell" in runtime
+    assert 'onerror="this.closest' not in runtime
 
     scripts_dir = root / "scripts"
     generator_path = scripts_dir / "generate-base2026-search-v1.py"

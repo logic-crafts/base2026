@@ -1,5 +1,19 @@
 # Prompt Log
 
+## 2026-07-14 — Search V1 corrective review closed on Sol/high
+
+User requested continued option-A Search V1 release closure after the exact post-hardening candidate had passed deterministic/local gates. A retained Terra review returned supporting `PASS`, but Base2026 final release judgment required Sol/high.
+
+Actions and evidence:
+
+- Ran an isolated Codex review with explicit `gpt-5.6-sol`, `reasoning_effort=high`, read-only sandbox, and restricted network.
+- Machine receipt session: `019f5f81-056e-70e1-82b0-9d1cb7785566`.
+- Exact candidate: `base2026-search-v1-derived-20260714-024003.zip`; SHA-256 `3261f235864a57c2c3f17f0ccd9588f24f888b21d5bf5c400ec089fe19311235`.
+- Final result: `VERDICT PASS`; blocking findings: none; `SAFE_TO_COMMIT YES`.
+- Reviewed scope remained exactly nine modified tracked files; the review made no repository mutation.
+- The installed Codex `review --uncommitted` parser rejected a custom prompt despite its help syntax; fail-forward incident `#1` recorded the bounded CLI defect, and equivalent read-only `codex exec` completed successfully.
+- No commit, push, merge, deploy, reindex, IndexNow, WordPress mutation, or inherited baseline rewrite occurred during review closure.
+
 ## 2026-07-08 — Public TikTok transcript polish batch 001 from 21:20 processed
 
 User asked to process only batch `12_knowledge-base/sources/tiktok/transcript-polish-batches/auto-creators-20260708-212035/batch-001.md`, create/update polished transcript and QA JSON outputs, use model tier `gpt-5.5`, preserve spoken meaning, and report processed/pass/needs-review counts.
@@ -7197,12 +7211,12 @@ Prompt: continue with Option A for the exact Search V1 candidate and close the i
 Actions:
 
 - Recorded Option A as an explicit release contract: new/changed Search V1 outbound paths must use query-string routing, while `10,340` links in `4,183` byte-identical immutable baseline files are grandfathered until a separately authorized family regeneration.
-- Re-ran focused and full tests, deterministic derivation, package validation, Source Detail contract, publication boundary, Search browser and deployment PlanOnly gates against `base2026-search-v1-derived-20260714-002149.zip`.
-- Ran a fresh independent read-only Codex review against the explicit Option A scope.
+- Re-ran focused and full tests, deterministic derivation, package validation, Source Detail contract, publication boundary, Search browser and deployment PlanOnly gates against pre-hardening candidate `base2026-search-v1-derived-20260714-002149.zip`; this artifact was later superseded by corrective runtime hardening.
+- Ran a pre-hardening independent read-only Codex review against the explicit Option A scope.
 
 Verification:
 
-- Exact candidate SHA-256 remained `a12f4c5fa2f2b9ab6ca0c1b40a1180e3fab3b93c4b2e78c9f250ec118bfc8b67`.
+- The then-current, now-superseded candidate SHA-256 was `a12f4c5fa2f2b9ab6ca0c1b40a1180e3fab3b93c4b2e78c9f250ec118bfc8b67`.
 - Local gates passed: focused `9/9`, full `55/55`, `9` changed paths, `4,183` unchanged files, `10,340` inherited legacy literals, `0` changed outbound legacy paths, browser/contract/package/publication gates PASS.
-- Independent final verdict: `PASS`; blocking findings: none; safe to proceed with scoped commit/PR and exact-SHA deployment using `-SkipPackage -SkipReindex`, with no IndexNow.
+- Historical pre-hardening verdict: `PASS`; it was superseded by subsequent corrective hardening and does not authorize commit, merge, or deployment of the replacement candidate.
 - No commit, push, merge or deployment had occurred at the time of this log entry.
