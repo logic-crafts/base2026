@@ -117,6 +117,18 @@ class AIRecommendsSolutionTests(unittest.TestCase):
         self.assertIn('name="robots" content="noindex,follow"', html)
         self.assertIn("Reviewed creator signals prove what the source said", html)
 
+    def test_solution_css_uses_services_calibrated_widths(self) -> None:
+        css = generator.css_text()
+        self.assertIn("max-width:1040px", css)
+        self.assertIn("width:min(100%,960px)", css)
+        self.assertIn("font-size:clamp(42px,4.35vw,56px)", css)
+        self.assertIn("font-size:clamp(34px,8.8vw,42px)", css)
+        self.assertIn("width:min(100% - 32px,520px)", css)
+        self.assertIn(".solution-decision-table thead{display:none}", css)
+        self.assertIn('td:nth-child(1)::before{content:"Signal"}', css)
+        self.assertIn('td:nth-child(2)::before{content:"Decision"}', css)
+        self.assertIn('td:nth-child(3)::before{content:"Measure"}', css)
+
 
 if __name__ == "__main__":
     unittest.main()
