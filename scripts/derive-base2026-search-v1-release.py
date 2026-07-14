@@ -241,10 +241,12 @@ def main() -> int:
 
         static_root = web_root / "static"
         static_root.mkdir(parents=True, exist_ok=True)
-        runtime_source = script_dir.parent / "web" / "static" / "meili.js"
-        if not runtime_source.is_file():
-            raise RuntimeError(f"Canonical Search runtime missing: {runtime_source}")
-        shutil.copy2(runtime_source, overlay / "meili.js")
+        canonical_static = script_dir.parent / "web" / "static"
+        for runtime_name in ("meili.js", "purify.min.js", "purify.min.js.LICENSE.txt"):
+            runtime_source = canonical_static / runtime_name
+            if not runtime_source.is_file():
+                raise RuntimeError(f"Canonical Search runtime missing: {runtime_source}")
+            shutil.copy2(runtime_source, overlay / runtime_name)
         for asset in SEARCH_ASSETS:
             source = overlay / asset
             if not source.is_file():
