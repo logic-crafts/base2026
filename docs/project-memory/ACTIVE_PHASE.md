@@ -1,6 +1,10 @@
 # Active Phase
 
-Last updated: 2026-07-13
+Last updated: 2026-07-14
+
+## Current override — Search V1 option A release in progress
+
+Alex selected the grandfathered-baseline contract: new and changed Search V1 paths must emit `/knowledge/?...` query URLs, while the 4,183 byte-identical Source Detail V2 baseline files may retain their 10,340 inherited `#search?...` links until a separately verified regeneration. Runtime compatibility migrates inbound legacy hash bookmarks to canonical query URLs. Corrective hardening removed every direct `.innerHTML =` sink from the changed Search runtime and added hostile-HTML browser probes. Exact candidate: `base2026-search-v1-derived-20260714-024003.zip`, SHA-256 `3261f235864a57c2c3f17f0ccd9588f24f888b21d5bf5c400ec089fe19311235`. Deterministic derivation, full tests, package/contract/browser gates and exact desktop/mobile visual QA pass. Final isolated `gpt-5.6-sol`/high read-only review returned `VERDICT PASS`, no blockers, and `SAFE_TO_COMMIT YES` for the exact candidate and nine-file scope. Its inherited `roadmap.js` observation is non-blocking because that file is byte-identical to `origin/main` and no attacker-controlled executable flow was found. Remaining sequence: final local gate rerun → scoped Git commit/push → green CI/CodeQL → merge → merged-SHA/artifact verification. Production deployment remains separately authorization-gated.
 
 ## Current override — Source Detail V2 production release closed
 

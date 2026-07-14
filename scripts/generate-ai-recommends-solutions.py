@@ -305,6 +305,35 @@ def css_text() -> str:
 @media(max-width:1024px){.solution-intent-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.solution-intent-grid article:nth-child(2){border-right:0}.solution-intent-grid article:nth-child(-n+2){border-bottom:1px solid var(--solution-line)}}
 @media(max-width:820px){.solution-hero,.solution-two-column,.solution-measurement__grid,.solution-evidence-grid,.solution-hub-grid,.solution-authority ul{grid-template-columns:1fr}.solution-hero__copy h1{font-size:clamp(34px,9vw,44px);overflow-wrap:normal;word-break:normal}.solution-verdict{transform:none}.solution-verdict p{margin-top:40px}.solution-step{grid-template-columns:46px 1fr}.solution-intent-grid{grid-template-columns:1fr}.solution-intent-grid article{border-right:0;border-bottom:1px solid var(--solution-line)}.solution-intent-grid article:last-child{border-bottom:0}.solution-decision-table{overflow-x:auto}.solution-decision-table table{min-width:720px}}
 @media(max-width:520px){.solution-hero__copy,.solution-verdict{border-radius:24px;padding:26px}.solution-hero__actions a,.solution-card-actions a{width:100%}.solution-hub-card,.solution-evidence-card{padding:24px}.solution-hub-card h2{margin-top:34px}.solution-next-action{border-radius:24px!important}.solution-step{padding:22px 0}.solution-step:hover{padding-left:0;padding-right:0}}
+/* Services-calibrated body contract: the global 1120px header remains wider than
+   the 1040px Solutions content, while the opening decision surface is 960px. */
+body.ay-alex-v4-static main.app-shell.solution-page{width:min(100% - 96px,1040px);max-width:1040px;padding-top:24px}
+.solution-page .solution-hero{width:min(100%,960px);margin:8px auto 0;grid-template-columns:minmax(0,1.58fr) minmax(270px,.62fr);gap:16px}
+.solution-page .solution-hero__copy,.solution-page .solution-verdict{border-radius:24px;box-shadow:0 14px 38px rgba(15,23,42,.035)}
+.solution-page .solution-hero__copy{padding:clamp(34px,4.2vw,52px)}
+.solution-page .solution-hero__copy h1{max-width:760px;font-size:clamp(42px,4.35vw,56px);line-height:.98;letter-spacing:-.047em}
+.solution-page .lead{max-width:700px;margin-top:18px;font-size:clamp(15px,1.25vw,17px);line-height:1.55}
+.solution-page .solution-verdict{padding:30px}
+.solution-page .solution-verdict p{margin-top:28px;font-size:16px;line-height:1.52}
+.solution-page .content-section{padding:52px 0}
+.solution-page .section-title-row{margin-bottom:24px}
+.solution-page .section-title-row h2{font-size:clamp(28px,3vw,42px);line-height:1.06;letter-spacing:-.035em}
+.solution-page .solution-intent-grid article{padding:22px}
+.solution-page .solution-intent-grid p{margin-top:18px;font-size:14px}
+.solution-page .solution-step{grid-template-columns:64px minmax(0,1fr);gap:20px;padding:24px 4px}
+.solution-page .solution-two-column,.solution-page .solution-measurement__grid{gap:16px}
+.solution-page .solution-two-column>div,.solution-page .solution-measurement__grid>div{padding:28px;border-radius:20px}
+.solution-page .solution-decision-table{border-radius:20px}
+.solution-page .solution-evidence-grid,.solution-page .solution-hub-grid{gap:16px}
+.solution-page .solution-evidence-card,.solution-page .solution-hub-card{padding:24px;border-radius:20px}
+.solution-page .solution-hub-card h2{margin:32px 0 12px;font-size:clamp(22px,2.15vw,29px);line-height:1.08}
+.solution-page .solution-hub-card__verdict{margin-top:16px;padding-top:14px}
+.solution-page .solution-next-action{padding:clamp(42px,5.3vw,58px)!important;border-radius:24px}
+.solution-page .solution-next-action h2{max-width:760px;font-size:clamp(30px,3.7vw,46px);line-height:1.03;letter-spacing:-.04em}
+.solution-page .solution-next-action p{max-width:660px;margin-top:18px;font-size:15px}
+@media(max-width:1024px){body.ay-alex-v4-static main.app-shell.solution-page{width:min(100% - 48px,860px)}.solution-page .solution-hero{width:100%}}
+@media(max-width:820px){.solution-page .solution-hero{grid-template-columns:1fr;gap:12px}.solution-page .solution-hero__copy{padding:30px 26px}.solution-page .solution-hero__copy h1{font-size:clamp(34px,8.8vw,42px);line-height:1}.solution-page .solution-verdict{padding:22px 26px;border-radius:20px}.solution-page .solution-verdict p{margin-top:14px}.solution-page .content-section{padding:42px 0}.solution-page .section-title-row h2{font-size:clamp(27px,7vw,36px)}.solution-page .solution-hub-card h2{margin-top:26px}}
+@media(max-width:720px){body.ay-alex-v4-static main.app-shell.solution-page{width:min(100% - 32px,520px)}.solution-page .solution-hero__copy{padding:26px 22px}.solution-page .solution-verdict{padding:20px 22px}.solution-page .solution-hero__actions{margin-top:22px}.solution-page .solution-next-action{padding:34px 22px!important}.solution-page .solution-next-action h2{font-size:clamp(28px,8.2vw,36px)}.solution-page .solution-decision-table{overflow:visible;border:0;background:transparent}.solution-page .solution-decision-table table,.solution-page .solution-decision-table tbody,.solution-page .solution-decision-table tr,.solution-page .solution-decision-table td{display:block;width:100%;min-width:0}.solution-page .solution-decision-table table{min-width:0}.solution-page .solution-decision-table thead{display:none}.solution-page .solution-decision-table tbody{display:grid;gap:12px}.solution-page .solution-decision-table tr{overflow:hidden;border:1px solid var(--solution-line);border-radius:16px;background:rgba(255,255,255,.7)}.solution-page .solution-decision-table td{padding:14px 16px;border:0;border-bottom:1px solid var(--solution-line)}.solution-page .solution-decision-table td:last-child{border-bottom:0}.solution-page .solution-decision-table td::before{display:block;margin-bottom:6px;color:var(--solution-muted);font:700 10px/1 var(--solution-mono);letter-spacing:.12em;text-transform:uppercase}.solution-page .solution-decision-table td:nth-child(1)::before{content:"Signal"}.solution-page .solution-decision-table td:nth-child(2)::before{content:"Decision"}.solution-page .solution-decision-table td:nth-child(3)::before{content:"Measure"}}
 """.strip() + "\n"
 
 

@@ -47,7 +47,7 @@ function creatorAvatar(handle, avatarUrl) {
   const label = `${stripHandle(handle || "creator")} profile`;
   const safeUrl = compactText(avatarUrl);
   if (safeUrl && (/^https?:\/\//i.test(safeUrl) || safeUrl.startsWith("/") || safeUrl.startsWith("./"))) {
-    return `<span class="avatar avatar--image"><img src="${escapeHtml(safeUrl)}" alt="${escapeHtml(label)}" loading="lazy" referrerpolicy="no-referrer" onerror="this.closest('.avatar').textContent='${escapeHtml(creatorInitial(handle))}'" /></span>`;
+    return `<span class="avatar avatar--image"><img src="${escapeHtml(safeUrl)}" alt="${escapeHtml(label)}" loading="lazy" referrerpolicy="no-referrer" /></span>`;
   }
   return `<span class="avatar" aria-hidden="true">${escapeHtml(creatorInitial(handle))}</span>`;
 }
@@ -154,6 +154,35 @@ function escapeHtml(value) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
+}
+
+const safeHtmlTags = [
+  "a", "article", "button", "details", "div", "g", "h1", "h2", "h3", "h4", "img", "label", "li", "mark", "p", "path", "section", "span", "strong", "summary", "svg", "ul",
+];
+const safeHtmlAttributes = [
+  "alt", "class", "d", "focusable", "href", "loading", "referrerpolicy", "rel", "src", "tabindex", "target", "title", "type", "value", "viewbox",
+];
+
+function safeHtmlFragment(html) {
+  if (!window.DOMPurify?.sanitize) throw new Error("DOMPurify is required for safe Search rendering.");
+  const fragment = window.DOMPurify.sanitize(String(html || ""), {
+    RETURN_DOM_FRAGMENT: true,
+    ALLOWED_TAGS: safeHtmlTags,
+    ALLOWED_ATTR: safeHtmlAttributes,
+    ALLOW_ARIA_ATTR: true,
+    ALLOW_DATA_ATTR: true,
+  });
+  fragment.querySelectorAll('a[target="_blank"]').forEach((element) => {
+    const rel = new Set((element.getAttribute("rel") || "").split(/\s+/).filter(Boolean));
+    rel.add("noopener");
+    rel.add("noreferrer");
+    element.setAttribute("rel", [...rel].join(" "));
+  });
+  return fragment;
+}
+
+function replaceSafeHtml(target, html) {
+  target.replaceChildren(safeHtmlFragment(html));
 }
 
 function limitFormattedWords(value, maxWords = 55) {
@@ -309,20 +338,29 @@ function workspaceRouteHref(patch = {}) {
     }
   });
   const query = params.toString();
-  return `./${query ? `#search?${query}` : ""}`;
+  return `./${query ? `?${query}` : ""}`;
 }
 
 function routeSearchParams() {
-  const params = new URLSearchParams(window.location.search);
-  const hash = window.location.hash || "";
-  if (hash.startsWith("#search?")) {
-    const hashParams = new URLSearchParams(hash.slice("#search?".length));
-    hashParams.forEach((value, key) => {
-      if (!params.has(key)) params.set(key, value);
-    });
-  }
-  return params;
+  return new URLSearchParams(window.location.search);
 }
+
+function migrateLegacyHashSearchRoute() {
+  const legacySearchPrefix = "#search?";
+  const hash = window.location.hash || "";
+  if (!hash.startsWith(legacySearchPrefix)) return false;
+  const params = routeSearchParams();
+  const legacyParams = new URLSearchParams(hash.slice(legacySearchPrefix.length));
+  legacyParams.forEach((value, key) => {
+    if (!params.has(key)) params.append(key, value);
+  });
+  const query = params.toString();
+  const nextUrl = `${window.location.pathname}${query ? `?${query}` : ""}`;
+  window.history.replaceState({}, "", nextUrl);
+  return true;
+}
+
+migrateLegacyHashSearchRoute();
 
 function getKnowledgeRouteState() {
   const params = routeSearchParams();
@@ -349,8 +387,9 @@ function setKnowledgeRouteState(patch = {}, options = {}) {
     }
   });
   const query = params.toString();
-  const nextUrl = `${window.location.pathname}${query ? `#search?${query}` : ""}`;
-  if (nextUrl === `${window.location.pathname}${window.location.hash}`) return;
+  const retainedHash = window.location.hash || "";
+  const nextUrl = `${window.location.pathname}${query ? `?${query}` : ""}${retainedHash}`;
+  if (nextUrl === `${window.location.pathname}${window.location.search}${window.location.hash}`) return;
   window.history[options.replace ? "replaceState" : "pushState"]({}, "", nextUrl);
 }
 
@@ -508,7 +547,7 @@ function renderAnalyticsStrip(state) {
   const topTopic = state.topTopics?.[0];
   const topCreator = state.topCreators?.[0];
   analyticsStrip.hidden = false;
-  analyticsStrip.innerHTML = `
+  replaceSafeHtml(analyticsStrip, `
     <a class="analytics-strip__item analytics-strip__item--link" href="./analytics.html">
       <span>Analytics</span>
       <strong>${formatCount(totals.source_records)} sources</strong>
@@ -523,7 +562,7 @@ function renderAnalyticsStrip(state) {
     </span>
     ${topTopic ? `<a class="analytics-strip__item analytics-strip__item--link" href="${topicRouteHref(topTopic.topic_id, topTopic.label)}" data-workspace-route data-route-topic="${escapeHtml(topTopic.topic_id)}" data-route-label="${escapeHtml(topTopic.label)}"><span>Top signal</span><strong>${escapeHtml(topTopic.label)}</strong></a>` : ""}
     ${topCreator ? `<a class="analytics-strip__item analytics-strip__item--link" href="${workspaceRouteHref({ creator: stripHandle(topCreator.handle || "") })}" data-workspace-route data-route-creator="${escapeHtml(stripHandle(topCreator.handle || ""))}"><span>Top creator</span><strong>${escapeHtml(topCreator.handle || "")}</strong></a>` : ""}
-  `;
+  `);
 }
 
 function creatorPageHref(hit) {
@@ -1124,34 +1163,34 @@ async function showSourceDetail(itemId, options = {}) {
   document.body.classList.add("source-detail-open");
   if (pushRoute && !applyingRouteState) setKnowledgeRouteState({ source: itemId });
   syncWorkspaceActiveState(getKnowledgeRouteState());
-  sourceDetailPanel.innerHTML = `
+  replaceSafeHtml(sourceDetailPanel, `
     <div class="source-detail-empty">
       <p class="eyebrow">Source detail</p>
       <h2>Loading source...</h2>
       <p>Fetching the public source record and related evidence.</p>
     </div>
-  `;
+  `);
   if (scroll) sourceDetailPanel.scrollIntoView({ block: "start", behavior: "smooth" });
   try {
     const doc = (await loadDocumentById(itemId)) || activeHit;
     if (!doc?.item_id) throw new Error("Source record not found.");
-    sourceDetailPanel.innerHTML = renderSourceDetailShell(doc, activeHit, [], [], true);
+    replaceSafeHtml(sourceDetailPanel, renderSourceDetailShell(doc, activeHit, [], [], true));
     const [relatedPassages, insights] = await Promise.all([
       loadRelatedPassages(doc).catch(() => []),
       loadPublicInsights(doc).catch(() => []),
     ]);
     if (selectedSourceId === itemId) {
-      sourceDetailPanel.innerHTML = renderSourceDetailShell(doc, activeHit, relatedPassages, insights, false);
+      replaceSafeHtml(sourceDetailPanel, renderSourceDetailShell(doc, activeHit, relatedPassages, insights, false));
     }
   } catch (error) {
-    sourceDetailPanel.innerHTML = `
+    replaceSafeHtml(sourceDetailPanel, `
       <div class="source-detail-empty">
         <button type="button" class="button-link source-detail-back" data-source-detail-back>Back to results</button>
         <p class="eyebrow">Source detail</p>
         <h2>Source not found in this public export</h2>
         <p>${escapeHtml(error.message || "The source may have been removed, unpublished, or not included in this release.")}</p>
       </div>
-    `;
+    `);
   }
 }
 
@@ -1207,13 +1246,19 @@ function syncPresetButtons(query) {
 function renderSelectedTerms(query) {
   if (!selectedTerms) return;
   const terms = splitQueryTerms(query);
-  if (!terms.length) {
-    selectedTerms.innerHTML = "";
-    return;
-  }
-  selectedTerms.innerHTML = terms
-    .map((term) => `<button type="button" class="selected-term" data-remove-term="${escapeHtml(term)}" aria-label="Remove ${escapeHtml(term)}">${escapeHtml(term)}<span>×</span></button>`)
-    .join("");
+  const buttons = terms.map((term) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "selected-term";
+    button.dataset.removeTerm = term;
+    button.setAttribute("aria-label", `Remove ${term}`);
+    button.append(document.createTextNode(term));
+    const dismiss = document.createElement("span");
+    dismiss.textContent = "×";
+    button.append(dismiss);
+    return button;
+  });
+  selectedTerms.replaceChildren(...buttons);
 }
 
 function hitTemplate(hit) {
@@ -1258,14 +1303,14 @@ function renderSearchSignal(renderOptions) {
     if (creator) creators.add(creator);
   });
   if (sourceIds.size < 5 || creators.size < 2) {
-    searchSignal.innerHTML = "";
+    searchSignal.replaceChildren();
     searchSignal.hidden = true;
     return;
   }
   const route = getKnowledgeRouteState();
   const query = compactText(search.helper?.state?.query || route.q || "");
   if (!query && !route.topic && !route.creator) {
-    searchSignal.innerHTML = "";
+    searchSignal.replaceChildren();
     searchSignal.hidden = true;
     return;
   }
@@ -1273,12 +1318,12 @@ function renderSearchSignal(renderOptions) {
   const actionLabel = route.topic ? "Compare creators for this topic" : "Explore topic signals";
   const signalSubject = query ? "this query appears" : "visible results appear";
   searchSignal.hidden = false;
-  searchSignal.innerHTML = `
+  replaceSafeHtml(searchSignal, `
     <div class="search-signal__row">
       <span>Current search signal: ${signalSubject} across <strong>${formatCount(creators.size)}</strong> creators and <strong>${formatCount(sourceIds.size)}</strong> source records.</span>
       <a class="button-link" href="${escapeHtml(actionHref)}">${escapeHtml(actionLabel)}</a>
     </div>
-  `;
+  `);
 }
 
 async function loadDocumentById(itemId) {
@@ -1322,9 +1367,23 @@ async function loadDocumentById(itemId) {
   return inspectLine(buffer);
 }
 
+function initialUiStateFromKnowledgeRoute(route = {}) {
+  const indexState = {};
+  const query = compactText(route.q || (!route.q && route.topic ? routeTopicLabel(route.topic) : ""));
+  if (query) indexState.query = query;
+  const refinementList = {};
+  if (route.creator) refinementList.handle = [`@${stripHandle(route.creator)}`];
+  if (route.year) refinementList.year = [route.year];
+  if (route.source_type) refinementList.source_type = [route.source_type];
+  if (Object.keys(refinementList).length) indexState.refinementList = refinementList;
+  return { [searchIndex]: indexState };
+}
+
+const initialKnowledgeRoute = getKnowledgeRouteState();
 const search = instantsearch({
   indexName: searchIndex,
   searchClient,
+  initialUiState: initialUiStateFromKnowledgeRoute(initialKnowledgeRoute),
 });
 
 search.addWidgets([
@@ -1432,7 +1491,7 @@ function applyKnowledgeRouteState(route = {}, options = {}) {
 
 search.start();
 
-applyKnowledgeRouteState(getKnowledgeRouteState(), { initial: true });
+applyKnowledgeRouteState(initialKnowledgeRoute, { initial: true });
 updateManifestCounters();
 loadAnalyticsData().then((state) => {
   renderAnalyticsStrip(state);

@@ -52,6 +52,13 @@ class SourceIndexabilityTests(unittest.TestCase):
         self.assertIn('name="robots" content="noindex,follow"', html)
         self.assertNotIn("Open in Search Workspace", html)
 
+    def test_workspace_links_use_canonical_query_string_route(self) -> None:
+        self.assertEqual(
+            pages.workspace_href(topic="internal-linking", q="Internal Linking"),
+            "../?topic=internal-linking&q=Internal+Linking",
+        )
+        self.assertNotIn("#search?", pages.workspace_href(source="tiktok-video-123"))
+
 
 if __name__ == "__main__":
     unittest.main()
