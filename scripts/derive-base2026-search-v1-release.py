@@ -223,6 +223,9 @@ def main() -> int:
                 str(overlay),
             ],
             check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
         )
 
         overlay_html = cache_bust_search_html(
@@ -232,6 +235,7 @@ def main() -> int:
             'body class="ay-alex-v4-static base2026-search-v1"',
             "./static/base2026-search-v1.css?v=",
             "./static/base2026-search-v3.js?v=",
+            "./static/purify.min.js?v=",
             'rel="canonical" href="https://aggressorbulkit.online/knowledge/"',
         )
         absent = [marker for marker in required_markers if marker not in overlay_html]
