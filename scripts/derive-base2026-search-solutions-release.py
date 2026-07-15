@@ -36,7 +36,7 @@ SOLUTION_ROUTES = (
     "solutions/answer-ready-service-page-checklist.html",
     "solutions/content-refresh-prioritization.html",
 )
-SOLUTION_PAYLOADS = (*SOLUTION_ROUTES, "static/ai-recommends-solutions.css")
+SOLUTION_PAYLOADS = (*SOLUTION_ROUTES, "static/ai-recommends-solutions.css", "static/ai-recommends-solutions.js")
 RECEIPT_NAME = "BASE2026_SEARCH_SOLUTIONS_DERIVATION.json"
 ALLOWED_CHANGED = {
     "manifest.json",
@@ -120,6 +120,7 @@ def cache_bust_html(html: str, release_name: str) -> str:
             "alex-v4-static-shell.css",
             "alex-v4-static-shell.js",
             "ai-recommends-solutions.css",
+            "ai-recommends-solutions.js",
         )
     )
     pattern = re.compile(rf'((?:href|src)="[^"]*(?:{assets}))\?v=[^"]*(")', re.IGNORECASE)
@@ -129,7 +130,7 @@ def cache_bust_html(html: str, release_name: str) -> str:
 def generated_payload_snapshot(root: Path, release_name: str) -> Dict[str, str]:
     result: Dict[str, str] = {}
     for rel in SOLUTION_PAYLOADS:
-        generated_rel = rel.removeprefix("static/") if rel == "static/ai-recommends-solutions.css" else rel
+        generated_rel = rel.removeprefix("static/") if rel.startswith("static/ai-recommends-solutions.") else rel
         source = root / generated_rel
         if not source.is_file():
             raise RuntimeError(f"Generated Solutions payload is missing: {source}")
@@ -263,9 +264,10 @@ def main() -> int:
                 cache_bust_html(source.read_text(encoding="utf-8"), args.release_name),
                 encoding="utf-8",
             )
-        css_target = web_root / "static/ai-recommends-solutions.css"
-        css_target.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copyfile(generated_roots[0] / "ai-recommends-solutions.css", css_target)
+        for asset_name in ("ai-recommends-solutions.css", "ai-recommends-solutions.js"):
+            asset_target = web_root / "static" / asset_name
+            asset_target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(generated_roots[0] / asset_name, asset_target)
 
         html_report = temp / "solutions-html-validation.json"
         subprocess.run(
