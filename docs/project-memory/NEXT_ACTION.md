@@ -1,5 +1,11 @@
 # Next Action
 
+## Current Focus: accepted Stitch Solutions implementation local candidate — 2026-07-15
+
+Implementation and immutable local release verification are complete. Canonical receipt: `/Users/alexyarosh/.hermes/knowledge/projects/topic-022-base2026/BASE2026_SOLUTIONS_STITCH_IMPLEMENTATION_LOCAL_CANDIDATE_2026-07-15.md`.
+
+Proceed through scoped commit, PR, green CI/security checks, merge and merged-SHA verification for the exact 10-file public-safe source/tests/docs set. The production deploy is a separate explicit public authorization boundary. If authorized, deploy the exact SHA-pinned R3 ZIP atomically and run live URL/visual/sitemap QA. Do not re-export data, reindex Meilisearch, submit IndexNow or mutate WordPress because this candidate changes no public corpus data.
+
 ## Current Focus: Search V1 option A corrective review and Git closure — 2026-07-14
 
 Alex explicitly selected option A. Corrective Search-runtime hardening produced exact candidate `base2026-search-v1-derived-20260714-024003.zip` at SHA-256 `3261f235864a57c2c3f17f0ccd9588f24f888b21d5bf5c400ec089fe19311235`. Canonical/new discovery links use `/knowledge/?q=...`; the 4,183 unchanged immutable-baseline files are grandfathered and may retain 10,340 inherited outbound `#search?...` links. Runtime must accept legacy inbound bookmarks and migrate them to query URLs. The changed Search runtime contains no direct DOM HTML assignment and the exact browser gate proves scripts and inline handlers do not execute. This release must not re-export public data, reindex Meilisearch, submit IndexNow, mutate WordPress, or rewrite inherited pages.

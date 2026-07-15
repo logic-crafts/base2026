@@ -1,5 +1,19 @@
 # Prompt Log
 
+## 2026-07-15 — accepted Stitch Solutions implementation recovered and verified locally
+
+Alex accepted the Stitch V1 visual direction and required the product to keep its own header/footer and canonical content. The source session implemented the shared generator but exhausted its tool-call budget before the final R3 browser-QA result. AgencyOS fail-forward incident `#36` resumed from that exact prerequisite.
+
+Actions and evidence:
+
+- Reconciled source session `20260708_080856_b4a5de07`, isolated worktree state, current `origin/main`, R3 manifest/package and prior R2 failure.
+- Verified exact base `d7349dda7b9d1d85ff5c2339325e5cd237fe02da` equals current `origin/main` after fetch.
+- Verified candidate `base2026-search-solutions-stitch-v1-preview-r3-20260715-094010`, ZIP SHA-256 `711b79b492bd4a70e38379878a39f5230f635dfa4458c08f079463122af2f6c7`; ZIP integrity PASS with 4,194 members.
+- Full repository suite: `52/52 PASS`; final R3 browser QA: `24/24 PASS` across Hub + five detail routes at 1440/1280/390/320; no overflow, demo copy, same-origin HTTP, console or page errors.
+- Exact R3 desktop 1440, mobile 390 and Hub 320 visual review: PASS with no release blocker.
+- Publication-boundary audit: all 10 tracked implementation/source/tests/docs files public-safe; no forbidden/review/secret findings.
+- Alex then required the assigned task to be finished end-to-end and every checkpoint to state whether action is required. Scoped Git/PR/CI closure is active; production deploy remains a separate explicit public side-effect boundary.
+
 ## 2026-07-14 — Search V1 corrective review closed on Sol/high
 
 User requested continued option-A Search V1 release closure after the exact post-hardening candidate had passed deterministic/local gates. A retained Terra review returned supporting `PASS`, but Base2026 final release judgment required Sol/high.

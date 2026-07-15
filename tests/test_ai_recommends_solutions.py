@@ -58,7 +58,7 @@ class AIRecommendsSolutionTests(unittest.TestCase):
             "risks": ["Risk one", "Risk two"],
             "kpis": ["KPI one", "KPI two", "KPI three"],
             "cadence": "Review after a stable window.",
-            "cta": {"label": "Apply", "href": "/knowledge/apply-research.html?solution=example"},
+            "cta": {"label": "Explore the evidence", "href": "/knowledge/?q=example"},
             "related_solution_slugs": ["another-solution"],
             "editorial": {
                 "status": "approved_local",
@@ -115,19 +115,78 @@ class AIRecommendsSolutionTests(unittest.TestCase):
         report["indexable"] = False
         html = generator.solution_page(self.solution, report)
         self.assertIn('name="robots" content="noindex,follow"', html)
-        self.assertIn("Reviewed creator signals prove what the source said", html)
+        self.assertIn("Reviewed creator signals show what each source said", html)
+        self.assertIn('class="content-section solution-fit"', html)
+        self.assertIn('data-copy-column="2"', html)
+        self.assertNotIn("solution-step__number", html)
+        self.assertIn('href="/knowledge/?q=example"', html)
+        self.assertNotIn('href="/knowledge/apply-research.html?solution=example"', html)
+        self.assertNotIn("apply-research.html", html)
 
-    def test_solution_css_uses_services_calibrated_widths(self) -> None:
+    def test_solution_css_implements_accepted_stitch_template(self) -> None:
         css = generator.css_text()
         self.assertIn("max-width:1040px", css)
-        self.assertIn("width:min(100%,960px)", css)
-        self.assertIn("font-size:clamp(42px,4.35vw,56px)", css)
-        self.assertIn("font-size:clamp(34px,8.8vw,42px)", css)
+        self.assertIn("grid-template-columns:repeat(4,minmax(0,1fr))", css)
+        self.assertIn(".solution-page .solution-step--critical", css)
+        self.assertIn(".solution-page .solution-operations", css)
+        self.assertIn(".solution-page .solution-evidence-row__detail-grid", css)
+        self.assertIn(".solution-page .solution-next-action", css)
         self.assertIn("width:min(100% - 32px,520px)", css)
-        self.assertIn(".solution-decision-table thead{display:none}", css)
-        self.assertIn('td:nth-child(1)::before{content:"Signal"}', css)
-        self.assertIn('td:nth-child(2)::before{content:"Decision"}', css)
-        self.assertIn('td:nth-child(3)::before{content:"Measure"}', css)
+        self.assertIn(".solution-page .solution-decision-table thead{display:none}", css)
+        self.assertIn(".solution-hub .solution-hero__copy h1{font-size:clamp(31px,9.6vw,40px)", css)
+        self.assertNotIn(".solution-step__number{color", css)
+
+    def test_stitch_template_renders_canonical_content_without_demo_copy(self) -> None:
+        report = validate_solution(self.solution, self.context)
+        html = generator.solution_page(self.solution, report)
+        canonical_values = [
+            self.solution["problem"],
+            self.solution["recommendation"],
+            self.solution["audience"],
+            self.solution["primary_query"],
+            self.solution["decision_scope"],
+            self.solution["why_now"],
+            self.solution["cadence"],
+            *[row["title"] for row in self.solution["playbook"]],
+            *[row["body"] for row in self.solution["playbook"]],
+            *self.solution["checklist"],
+            *self.solution["risks"],
+            *self.solution["kpis"],
+            *[row[key] for row in self.solution["decision_table"] for key in ("signal", "decision", "measure")],
+        ]
+        for value in canonical_values:
+            self.assertIn(value, html)
+        self.assertEqual(html.count('class="solution-evidence-row"'), 2)
+        self.assertIn('class="solution-step solution-step--critical"', html)
+        self.assertIn('class="content-section solution-operations"', html)
+        self.assertIn("Alex Yarosh", html)
+        self.assertNotIn("40% traffic increase", html)
+        self.assertNotIn("September 12, 2023", html)
+        self.assertNotIn("March 28, 2024", html)
+        self.assertNotIn("April 15, 2024", html)
+
+    def test_solution_column_copy_script_is_same_origin_static_asset(self) -> None:
+        report = validate_solution(self.solution, self.context)
+        html = generator.solution_page(self.solution, report)
+        script = generator.solution_js_text()
+        self.assertIn('../static/ai-recommends-solutions.js?v=', html)
+        self.assertIn('data-copy-column="2"', html)
+        self.assertIn('navigator.clipboard?.writeText', script)
+        self.assertIn('join("\\n")', script)
+        self.assertNotIn("http://", script)
+        self.assertNotIn("https://", script)
+
+    def test_solution_shell_explains_base2026_jobs_without_legacy_apply_link(self) -> None:
+        report = validate_solution(self.solution, self.context)
+        html = generator.solution_page(self.solution, report)
+        header = html.split("</header>", 1)[0]
+        self.assertIn("Search the library", header)
+        self.assertIn("Source Intelligence", header)
+        self.assertIn("Topics &amp; viewpoints", header)
+        self.assertIn("AI Recommends Solutions", header)
+        self.assertIn("Creators", header)
+        self.assertIn("Methodology", header)
+        self.assertNotIn("apply-research.html", header)
 
 
 if __name__ == "__main__":

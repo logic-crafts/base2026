@@ -119,8 +119,8 @@
       ],
       "cadence": "Establish a 28-day baseline where volume allows, review the controlled change after another comparable 28-day period, and repeat quarterly or when the business materially changes.",
       "cta": {
-        "label": "Apply this audit in Base2026",
-        "href": "/knowledge/apply-research.html?solution=google-business-profile-visibility-audit"
+        "label": "Explore GBP audit evidence",
+        "href": "/knowledge/?q=google+business+profile+audit"
       },
       "related_solution_slugs": [
         "answer-ready-service-page-checklist",
@@ -255,8 +255,8 @@
       ],
       "cadence": "Use 28-day versus prior comparable 28-day windows when seasonality and volume permit. Recheck after major SERP or site changes and avoid daily optimization from preliminary data.",
       "cta": {
-        "label": "Apply this workflow in Base2026",
-        "href": "/knowledge/apply-research.html?solution=search-console-high-impression-low-ctr"
+        "label": "Explore Search Console evidence",
+        "href": "/knowledge/?q=high+impression+low+ctr"
       },
       "related_solution_slugs": [
         "content-refresh-prioritization",
@@ -386,8 +386,8 @@
       ],
       "cadence": "Review first-party referral and Search Console layers monthly; run the fixed manual citation sample monthly or after major model/search changes; retain dated snapshots for trend comparison.",
       "cta": {
-        "label": "Apply this measurement model",
-        "href": "/knowledge/apply-research.html?solution=measure-ai-search-visibility"
+        "label": "Explore AI visibility evidence",
+        "href": "/knowledge/?q=ai+search+visibility+measurement"
       },
       "related_solution_slugs": [
         "answer-ready-service-page-checklist",
@@ -519,8 +519,8 @@
       ],
       "cadence": "Review after a meaningful traffic or lead sample, at least quarterly for core commercial pages, and whenever the service, pricing logic, evidence or eligibility changes.",
       "cta": {
-        "label": "Apply the page checklist",
-        "href": "/knowledge/apply-research.html?solution=answer-ready-service-page-checklist"
+        "label": "Explore service-page evidence",
+        "href": "/knowledge/?q=answer+ready+service+page"
       },
       "related_solution_slugs": [
         "search-console-high-impression-low-ctr",
@@ -652,8 +652,8 @@
       ],
       "cadence": "Review core commercial and high-opportunity pages quarterly, the broader inventory at least annually, and any page immediately when a material fact, product or eligibility rule changes.",
       "cta": {
-        "label": "Apply the refresh framework",
-        "href": "/knowledge/apply-research.html?solution=content-refresh-prioritization"
+        "label": "Explore content refresh evidence",
+        "href": "/knowledge/?q=content+refresh+prioritization"
       },
       "related_solution_slugs": [
         "search-console-high-impression-low-ctr",

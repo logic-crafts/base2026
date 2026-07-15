@@ -26,11 +26,11 @@ def header_html() -> str:
           </div>
           <a href="/ai-visibility-audit/">AI Visibility</a><a href="/pricing/">Pricing</a>
           <div class="ay-v2-nav-item ay-v2-has-mega ay-v2-base-trigger">
-            <a href="/knowledge/ai-visibility-pages/">Base2026</a>
+            <a href="/knowledge/">Base2026</a>
             <div class="ay-v2-mega ay-v2-base-mega" role="menu" aria-label="Base2026 menu">
               <div class="ay-v2-mega-grid">
-                <section><h3>Knowledge Base</h3><a href="/knowledge/"><strong>Base2026 Library</strong><span>Searchable evidence and research base.</span></a><a href="/knowledge/solutions/"><strong>AI Recommends</strong><span>Evidence-backed operating decisions.</span></a><a href="/knowledge/apply-research.html"><strong>Apply Research</strong><span>Turn findings into visibility fixes.</span></a></section>
-                <section><h3>Priority Playbooks</h3><a href="/knowledge/measuring-ai-visibility-without-query-click-data/"><strong>Measuring AI Visibility</strong><span>Measure impact without clean query data.</span></a><a href="/knowledge/ai-ready-business-documentation-for-service-pages/"><strong>AI-ready Documentation</strong><span>Service facts, proof, FAQs and trust signals.</span></a><a href="/knowledge/bing-ai-citations-for-local-service-businesses/"><strong>Bing / Copilot Citations</strong><span>Source footprint for AI answers.</span></a></section>
+                <section><h3>Research workspace</h3><a href="/knowledge/"><strong>Search the library</strong><span>Find sources, claims, creators and topics.</span></a><a href="/knowledge/sources/"><strong>Source Intelligence</strong><span>Read reviewed source text, exact claims and bounded actions.</span></a><a href="/knowledge/topics/"><strong>Topics &amp; viewpoints</strong><span>Synthesize evidence and compare creators inside one topic.</span></a></section>
+                <section><h3>Decision support</h3><a href="/knowledge/solutions/"><strong>AI Recommends Solutions</strong><span>Turn source evidence into bounded operating decisions.</span></a><a href="/knowledge/creators/"><strong>Creators</strong><span>Browse attributed expert source profiles.</span></a><a href="/knowledge/methodology.html"><strong>Methodology</strong><span>Review the evidence, editorial and publication rules.</span></a></section>
               </div>
               <form class="ay-v2-mega-search" method="get" action="/knowledge/" role="search"><label for="ay-v2-mega-search-input">Quick search</label><input id="ay-v2-mega-search-input" name="q" type="search" aria-label="Search Base2026"><button type="submit">Search</button></form>
             </div>
@@ -40,7 +40,7 @@ def header_html() -> str:
         <a class="ay-v2-header-cta" href="/ai-visibility-audit/">Check My AI Visibility</a>
         <button class="ay-v2-menu-toggle" type="button" aria-expanded="false" aria-controls="ay-v2-mobile-panel">Menu</button>
       </div>
-      <div class="ay-v2-mobile-panel" id="ay-v2-mobile-panel" hidden><a href="/services/">Services</a><a href="/ai-visibility-audit/">AI Visibility</a><a href="/pricing/">Pricing</a><a href="/knowledge/solutions/">AI Recommends</a><a href="/knowledge/">Base2026 Library</a><a href="/about/">About</a></div>
+      <div class="ay-v2-mobile-panel" id="ay-v2-mobile-panel" hidden><a href="/services/">Services</a><a href="/ai-visibility-audit/">AI Visibility</a><a href="/pricing/">Pricing</a><a href="/knowledge/">Search Base2026</a><a href="/knowledge/sources/">Source Intelligence</a><a href="/knowledge/topics/">Topics &amp; viewpoints</a><a href="/knowledge/solutions/">AI Recommends Solutions</a><a href="/knowledge/creators/">Creators</a><a href="/about/">About</a></div>
     </header>"""
 
 
