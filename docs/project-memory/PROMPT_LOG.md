@@ -1,5 +1,18 @@
 # Prompt Log
 
+## 2026-07-15 — Stitch V1 AI Recommends Solutions deployed and closed
+
+Alex explicitly authorized production deploy in source message `224273`. The exact R3 artifact was reconciled against merged PR #12 and deployed through the fail-closed atomic wrapper.
+
+Actions and evidence:
+
+- Verified PR #12 merged as `9a4670143acd615d0e832a855577b61367b89c4b` with successful JavaScript/TypeScript and Python CodeQL checks; branch and merged `origin/main` trees were identical.
+- Reverified exact ZIP SHA-256 `711b79b492bd4a70e38379878a39f5230f635dfa4458c08f079463122af2f6c7`, candidate-manifest SHA-256 `70f8943c3529b51960b302bedf918f369602cfc31d05b97eb1f2787d32bfc2d6`, ZIP integrity, generated payload hashes, targeted tests (`14 passed`), compile, diff and publication boundary.
+- PlanOnly preflight passed; atomic deploy switched `current` from `base2026-search-solutions-security-20260714-193405` to `base2026-search-solutions-stitch-v1-preview-r3-20260715-094010` with nginx configuration valid and rollback armed.
+- Mandatory live contract passed `1706/1706` exact 200/hash checks, `135/135` future/private 404, and clean 1,933-URL sitemap contract.
+- Source Detail browser gate passed `8/8`; Solutions-specific live browser/interaction gate passed `24/24` at 1440/1280/390/320; six Solutions HTML routes plus CSS/JS matched the package hashes `8/8`.
+- Manual live desktop visual inspection passed. Meilisearch, IndexNow, WordPress, corpus data and sitemap membership were deliberately unchanged.
+
 ## 2026-07-15 — accepted Stitch Solutions implementation recovered and verified locally
 
 Alex accepted the Stitch V1 visual direction and required the product to keep its own header/footer and canonical content. The source session implemented the shared generator but exhausted its tool-call budget before the final R3 browser-QA result. AgencyOS fail-forward incident `#36` resumed from that exact prerequisite.
