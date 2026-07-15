@@ -1,6 +1,10 @@
 # Project State
 
-Last updated: 2026-07-13
+Last updated: 2026-07-15
+
+## Current override — Stitch V1 AI Recommends Solutions deployed and live-verified
+
+Release `base2026-search-solutions-stitch-v1-preview-r3-20260715-094010` is active at `/var/www/base2026-knowledge/current`, bound to ZIP SHA-256 `711b79b492bd4a70e38379878a39f5230f635dfa4458c08f079463122af2f6c7`. Source merged through PR #12 as `9a4670143acd615d0e832a855577b61367b89c4b`. Atomic deploy and exact live contract passed: 1,706 HTTP 200 byte/hash checks, 135 future/private 404 checks, 1,933 sitemap URLs with no admission leaks, Source Detail browser gate `8/8`, and Solutions-specific browser/interaction gate `24/24` at 1440/1280/390/320. Exact live Solutions HTML/CSS/JS hashes match the immutable package `8/8`; manual live visual inspection passed. Rollback was armed and not needed. Meilisearch, IndexNow, WordPress, corpus data and sitemap membership were unchanged. Canonical record: `docs/project-memory/BASE2026_SOLUTIONS_STITCH_V1_PRODUCTION_RELEASE_2026_07_15.md`.
 
 ## Current override — Source Detail V2 deployed and live-verified
 
