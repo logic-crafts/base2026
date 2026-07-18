@@ -85,6 +85,7 @@ PAGE_MAP = {
 
 CONTACT_EMAIL = "offflinerpsy@gmail.com"
 STYLE_VERSION = "20260617-source-readability1"
+INTERIOR_VERSION = "20260718-base2026-interior-v1"
 FONT_LINK = "https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600;700&family=Geist:wght@400;500;600;700;800&display=swap"
 FAVICON_ASSET_PATH = "static/assets/alex-yarosh-favicon-32.png"
 APPLE_TOUCH_ASSET_PATH = "static/assets/alex-yarosh-apple-touch.png"
@@ -496,6 +497,24 @@ def page_shell(meta: dict[str, str], h1: str, body: str) -> str:
     contact_experience = ""
     script_tag = ""
     body_markup = body
+    is_apply_research = meta["slug"] == "apply-research.html"
+    font_markup = (
+        f'    <link rel="stylesheet" href="./static/vendor/geist-local.css?v={INTERIOR_VERSION}" '
+        'data-base2026-local-fonts="geist-manrope" />'
+        if is_apply_research
+        else (
+            '    <link rel="preconnect" href="https://fonts.googleapis.com" />\n'
+            '    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />\n'
+            f'    <link href="{FONT_LINK}" rel="stylesheet" />'
+        )
+    )
+    interior_markup = (
+        f'\n    <link rel="stylesheet" href="./static/base2026-interior-v1.css?v={INTERIOR_VERSION}" '
+        'data-base2026-interior="v1" />'
+        if is_apply_research
+        else ""
+    )
+    body_classes = ' class="b26-interior-v1 b26-interior-apply"' if is_apply_research else ""
     if page_class == "roadmap-page":
         roadmap_experience = """
       <section class="roadmap-experience" aria-labelledby="roadmap-experience-title">
@@ -631,12 +650,10 @@ def page_shell(meta: dict[str, str], h1: str, body: str) -> str:
     <title>{html.escape(page_title)}</title>
     <script type="application/ld+json">{json.dumps(schema, ensure_ascii=False)}</script>
 {favicon_links(".")}
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="{FONT_LINK}" rel="stylesheet" />
     <link rel="stylesheet" href="./static/styles.css?v={STYLE_VERSION}" />
+{font_markup}{interior_markup}
   </head>
-  <body>
+  <body{body_classes}>
     <a class="skip-link" href="#content">Skip to content</a>
     {site_header(".", current_nav)}
     <main id="content" class="app-shell content-page {page_class}">

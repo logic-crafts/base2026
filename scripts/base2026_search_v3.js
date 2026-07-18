@@ -1,4 +1,5 @@
 (() => {
+  const runtimeScript = document.currentScript;
   const root = document.querySelector('.base2026-search-v1');
   if (!root) return;
 
@@ -61,4 +62,10 @@
   window.addEventListener('resize', syncDrawerState);
   syncControls();
   syncDrawerState();
+  if (runtimeScript?.src && !document.querySelector('[data-base2026-solution-journey="runtime"]')) {
+    const journey = document.createElement('script');
+    journey.src = new URL('./base2026-solution-journey.js', runtimeScript.src).href;
+    journey.dataset.base2026SolutionJourney = 'runtime';
+    document.head.append(journey);
+  }
 })();

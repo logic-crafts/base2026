@@ -1116,7 +1116,7 @@ function renderSourceDetailShell(doc, matchedHit, relatedPassages = [], insights
       </section>
     `;
   return `
-    <div class="source-detail-head">
+    <div class="source-detail-head" data-source-item-id="${escapeHtml(doc.item_id || "")}" data-admission-class="normal_public_card">
       <div class="source-detail-nav-row">
         <button type="button" class="button-link source-detail-back" data-source-detail-back>Back to results</button>
         <p class="source-kicker">Public source</p>
@@ -1510,7 +1510,33 @@ presetButtons.forEach((button) => {
 });
 
 search.on("render", () => {
+  if (search.status !== "idle" || !search.helper.lastResults) return;
   const query = search.helper.state.query || "";
+  const queryTerms = compactText(query).split(/\s+/).filter(Boolean).length;
+  const queryLengthBucket = queryTerms === 0
+    ? "0_terms"
+    : queryTerms <= 2
+      ? "1_2_terms"
+      : queryTerms <= 5
+        ? "3_5_terms"
+        : "6_plus_terms";
+  const resultCount = Math.max(
+    Number(search.helper.lastResults.nbHits || 0),
+    document.querySelectorAll(".ais-Hits-item").length,
+  );
+  const resultCountBucket = resultCount === 0
+    ? "0"
+    : resultCount <= 10
+      ? "1_10"
+      : resultCount <= 50
+        ? "11_50"
+        : "51_plus";
+  document.dispatchEvent(new CustomEvent("base2026:search-results-available", {
+    detail: {
+      query_length_bucket: queryLengthBucket,
+      result_count_bucket: resultCountBucket,
+    },
+  }));
   syncPresetButtons(query);
   renderSelectedTerms(query);
   updateMobileFilterCount();

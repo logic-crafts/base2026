@@ -3,6 +3,8 @@ from __future__ import annotations
 import argparse
 import importlib.util
 import json
+import re
+import shutil
 from html import escape
 from pathlib import Path
 from typing import Any
@@ -18,11 +20,63 @@ public_pages = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(public_pages)
 
 STYLE_VERSION = "20260715-ai-recommends-solutions-stitch-v1"
+INTERIOR_VERSION = "20260718-base2026-interior-v1"
+ROOT = Path(__file__).resolve().parents[1]
+INTERIOR_CSS_PATH = ROOT / "web" / "static" / "base2026-interior-v1.css"
+LOCAL_FONT_ROOT = ROOT / "web" / "static" / "vendor"
 
 
 def write_text(path: Path, text: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text("\n".join(line.rstrip() for line in text.splitlines()) + "\n", encoding="utf-8")
+
+
+def local_shell_css_text() -> str:
+    rendered = re.sub(r"^@import\s+url\([^\n]+\);\s*", "", shell_css(), count=1)
+    if "fonts.googleapis.com" in rendered or "fonts.gstatic.com" in rendered:
+        raise ValueError("Solution shell CSS retains an external font dependency")
+    return rendered
+
+
+def copy_interior_assets(out: Path) -> None:
+    if not INTERIOR_CSS_PATH.is_file():
+        raise FileNotFoundError(INTERIOR_CSS_PATH)
+    target_css = out / INTERIOR_CSS_PATH.name
+    if target_css.resolve() != INTERIOR_CSS_PATH.resolve():
+        target_css.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(INTERIOR_CSS_PATH, target_css)
+    font_assets = sorted(
+        path for path in LOCAL_FONT_ROOT.iterdir()
+        if path.is_file() and path.name.startswith(("geist-", "manrope-"))
+    )
+    if not any(path.name == "geist-local.css" for path in font_assets):
+        raise ValueError("Solution local-font asset set is incomplete")
+    font_out = out / "vendor"
+    font_out.mkdir(parents=True, exist_ok=True)
+    for source in font_assets:
+        target = font_out / source.name
+        if target.resolve() != source.resolve():
+            shutil.copy2(source, target)
+
+
+def apply_solution_interior_contract(page: str) -> str:
+    body = '<body class="ay-alex-v4-static ay-stitch-home-v3 ay-stitch-home-v4">'
+    replacement = (
+        '<body class="ay-alex-v4-static ay-stitch-home-v3 ay-stitch-home-v4 '
+        'b26-interior-v1 b26-interior-solution">'
+    )
+    if page.count(body) != 1:
+        raise ValueError("Solution body-class contract drift")
+    page = page.replace(body, replacement, 1)
+    for external_font in (
+        '    <link rel="preconnect" href="https://fonts.googleapis.com" />\n',
+        '    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />\n',
+        f'    <link href="{public_pages.FONT_LINK}" rel="stylesheet" />\n',
+    ):
+        page = page.replace(external_font, "")
+    if "fonts.googleapis.com" in page or "fonts.gstatic.com" in page:
+        raise ValueError("Solution page retains an external font dependency")
+    return page
 
 
 def paragraphs(items: list[str], class_name: str = "") -> str:
@@ -141,6 +195,7 @@ def decision_table_html(rows: list[dict[str, Any]]) -> str:
 def solution_js_text() -> str:
     return """
 (() => {
+  const runtimeScript = document.currentScript;
   const copyText = async (text) => {
     if (navigator.clipboard?.writeText) {
       await navigator.clipboard.writeText(text);
@@ -176,6 +231,12 @@ def solution_js_text() -> str:
       if (status) status.textContent = `Copy failed. Select the ${heading.toLowerCase()} cells directly.`;
     }
   });
+  if (runtimeScript?.src && !document.querySelector('[data-base2026-solution-journey="runtime"]')) {
+    const journey = document.createElement("script");
+    journey.src = new URL("./base2026-solution-journey.js", runtimeScript.src).href;
+    journey.dataset.base2026SolutionJourney = "runtime";
+    document.head.append(journey);
+  }
 })();
 """.strip() + "\n"
 
@@ -202,7 +263,9 @@ def article_schema(solution: dict[str, Any], resolved: list[dict[str, Any]]) -> 
 def inject_solution_head(page: str, solution: dict[str, Any], resolved: list[dict[str, Any]]) -> str:
     schema = json.dumps(article_schema(solution, resolved), ensure_ascii=False).replace("</", "<\\/")
     extra = (
+        f'    <link rel="stylesheet" href="../static/vendor/geist-local.css?v={INTERIOR_VERSION}" data-base2026-local-fonts="geist-manrope" />\n'
         f'    <link rel="stylesheet" href="../static/ai-recommends-solutions.css?v={STYLE_VERSION}" />\n'
+        f'    <link rel="stylesheet" href="../static/base2026-interior-v1.css?v={INTERIOR_VERSION}" data-base2026-interior="v1" />\n'
         f'    <script src="../static/ai-recommends-solutions.js?v={STYLE_VERSION}" defer></script>\n'
         f'    <script type="application/ld+json">{schema}</script>\n'
     )
@@ -217,6 +280,15 @@ def solution_page(solution: dict[str, Any], report: dict[str, Any]) -> str:
         for slug in related
     )
     cta = solution.get("cta") or {}
+    bridge_html = ""
+    if report.get("indexable"):
+        bridge_html = (
+            '<a class="ay-button-secondary" href="../apply-research.html" '
+            'data-research-bridge="solution_to_apply_research" '
+            f'data-origin-id="{escape(str(solution.get("slug") or ""))}">Apply Research to a Business</a>'
+            '<p class="solution-next-action__boundary">Optional: use this bridge only when the public research needs business-specific diagnosis. '
+            'The Base2026 research path remains complete without a service request.</p>'
+        )
     body = f"""
       <section class="solution-hero">
         <p class="eyebrow">AI Recommends Solution</p>
@@ -297,7 +369,10 @@ def solution_page(solution: dict[str, Any], report: dict[str, Any]) -> str:
         <p class="eyebrow">Continue in Base2026</p>
         <h2>Open the evidence behind this decision.</h2>
         <p>Continue in the main Search workspace, inspect related source records, and refine the decision before implementation.</p>
-        <a class="ay-button" href="{escape(str(cta.get('href') or '/knowledge/'))}">{escape(str(cta.get('label') or 'Explore related evidence'))}</a>
+        <div class="solution-next-action__actions">
+          <a class="ay-button" href="{escape(str(cta.get('href') or '/knowledge/'))}">{escape(str(cta.get('label') or 'Explore related evidence'))}</a>
+          {bridge_html}
+        </div>
       </section>
       {f'<section class="content-section solution-related"><h2>Related solutions</h2><div class="topic-tags">{related_html}</div></section>' if related_html else ''}
     """
@@ -311,7 +386,9 @@ def solution_page(solution: dict[str, Any], report: dict[str, Any]) -> str:
         canonical_path=f"solutions/{solution['slug']}.html",
         main_class="app-shell content-page solution-page",
     )
-    return apply_alex_v4_shell(inject_solution_head(page, solution, resolved), relative_root="..")
+    return apply_solution_interior_contract(
+        inject_solution_head(apply_alex_v4_shell(page, relative_root=".."), solution, resolved)
+    )
 
 
 def hub_page(solutions: list[dict[str, Any]], reports_by_slug: dict[str, dict[str, Any]]) -> str:
@@ -360,12 +437,16 @@ def hub_page(solutions: list[dict[str, Any]], reports_by_slug: dict[str, dict[st
         canonical_path="solutions/",
         main_class="app-shell content-page solution-page solution-hub",
     )
+    page = apply_alex_v4_shell(page, relative_root="..")
     page = page.replace(
         "  </head>",
-        f'    <link rel="stylesheet" href="../static/ai-recommends-solutions.css?v={STYLE_VERSION}" />\n  </head>',
+        f'    <link rel="stylesheet" href="../static/vendor/geist-local.css?v={INTERIOR_VERSION}" data-base2026-local-fonts="geist-manrope" />\n'
+        f'    <link rel="stylesheet" href="../static/ai-recommends-solutions.css?v={STYLE_VERSION}" />\n'
+        f'    <link rel="stylesheet" href="../static/base2026-interior-v1.css?v={INTERIOR_VERSION}" data-base2026-interior="v1" />\n'
+        "  </head>",
         1,
     )
-    return apply_alex_v4_shell(page, relative_root="..")
+    return apply_solution_interior_contract(page)
 
 
 def _legacy_css_text() -> str:
@@ -583,7 +664,11 @@ body.ay-alex-v4-static main.app-shell.solution-page{width:min(100% - 96px,1040px
 .solution-page .solution-next-action .eyebrow{color:rgba(255,255,255,.56)}
 .solution-page .solution-next-action h2{max-width:760px;margin:0 auto;color:#fff;font:800 clamp(31px,3.8vw,46px)/1.03 Manrope,sans-serif;letter-spacing:-.042em;text-wrap:balance}
 .solution-page .solution-next-action p{max-width:650px;margin:18px auto 0;color:rgba(255,255,255,.68);font-size:14px;line-height:1.65}
-.solution-page .solution-next-action .ay-button{margin-top:26px;border-color:#fff;background:#fff;color:var(--solution-ink)}
+.solution-page .solution-next-action__actions{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:26px}
+.solution-page .solution-next-action .ay-button{margin-top:0;border-color:#fff;background:#fff;color:var(--solution-ink)}
+.solution-page .solution-next-action .ay-button-secondary{margin-top:0;border-color:rgba(255,255,255,.48);background:transparent;color:#fff}
+.solution-page .solution-next-action .ay-button-secondary:hover{border-color:#fff;background:rgba(255,255,255,.10);color:#fff}
+.solution-page .solution-next-action .solution-next-action__boundary{flex:0 0 100%;max-width:610px;margin:4px auto 0;color:rgba(255,255,255,.58);font-size:12px}
 .solution-page .solution-related{padding-top:34px}
 .solution-page .solution-related h2{font-size:26px}
 .solution-page .topic-tags{display:flex;flex-wrap:wrap;gap:9px;margin-top:18px}
@@ -666,7 +751,8 @@ def main() -> int:
 
     write_text(args.out / "ai-recommends-solutions.css", css_text())
     write_text(args.out / "ai-recommends-solutions.js", solution_js_text())
-    write_text(args.out / "alex-v4-static-shell.css", shell_css())
+    copy_interior_assets(args.out)
+    write_text(args.out / "alex-v4-static-shell.css", local_shell_css_text())
     write_text(args.out / "alex-v4-static-shell.js", shell_js())
     for solution in solutions:
         report = reports_by_slug[solution["slug"]]

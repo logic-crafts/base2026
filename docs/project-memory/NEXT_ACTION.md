@@ -1,5 +1,29 @@
 # Next Action
 
+## Current Focus: Phase 1 Base P4 Product Truth preview PASS — 2026-07-17
+
+Exact local preview: `base2026-phase1-base-p4-preview-20260717-145000`, ZIP SHA-256 `52d76e8ac1780fedf633e751ae65e03ae4be43f2f646330b72182ab3f7ce2450`. It is derived deterministically from the accepted Phase 0 ZIP. Search → Source → evidence action → approved evidence-bound Solution → optional Apply Research passed at mobile 390 and desktop 1440 with consent on/off. Product Truth validation is clean: consent-off emitted zero events; consent-on emitted the five declared events; the one-result fixture recorded `1_10`; attempted external requests and service submissions were zero. Production is unchanged.
+
+Next safe sequence:
+
+1. Review the Base P4 preview together with the personal-site pricing/form preview as one two-journey owner packet.
+2. Decide explicitly: promote the exact reviewed artifacts, request a bounded revision, or hold.
+3. If promotion is chosen, create a separate production release plan that binds the exact source diff and ZIP SHA and reruns live gates after authorization.
+
+Do not deploy, upload, re-export corpus data, reindex Meilisearch, submit IndexNow, mutate WordPress, send forms, or change sitemap admission/indexability/canonicals/redirects/prices/positioning without a separate explicit owner decision.
+
+## Current Focus: Phase 0 Base2026 P1 preview review — 2026-07-17
+
+Exact local preview: `base2026-phase0-p1-r6-preview-20260717-235500`, ZIP SHA-256 `6ad17478944ffb14883b117dc4579b3c5099ad03fbf15ddec5760ee9ffd87087`. Manifest validation is zero-issue, the package-wide JSON machine-local-path audit is 18/18 clean, and sitemap admission is exact at 1,734 URLs. The earlier `230500` artifact is superseded. Production is unchanged.
+
+Next safe sequence:
+
+1. Obtain a fresh independent diff/artifact review; the broad local suite, exact hash inventory and PlanOnly preflight already pass.
+2. Bind the reviewed source diff to this exact artifact, or derive a new artifact if anything changes.
+3. Stop for owner release-boundary approval and separate explicit production authorization.
+
+Do not deploy, upload, re-export corpus data, reindex Meilisearch, submit IndexNow, mutate WordPress, send forms, change indexability/canonicals/redirects, or treat captured R6 membership as owner approval.
+
 ## Current Focus: Stitch V1 AI Recommends Solutions release closed — 2026-07-15
 
 No further action is pending for this release. PR #12 merged as `9a4670143acd615d0e832a855577b61367b89c4b`; exact release `base2026-search-solutions-stitch-v1-preview-r3-20260715-094010` is live at ZIP SHA-256 `711b79b492bd4a70e38379878a39f5230f635dfa4458c08f079463122af2f6c7`. Atomic deploy, exact route/hash and sitemap contracts, Source Detail responsive gate, Solutions-specific `24/24` responsive/interaction gate, and manual live visual QA all passed. Meilisearch, IndexNow, WordPress, corpus data and sitemap membership remained unchanged. Canonical closure: `docs/project-memory/BASE2026_SOLUTIONS_STITCH_V1_PRODUCTION_RELEASE_2026_07_15.md`. Start any further Solutions product/content/visual change as a separate bounded cycle.

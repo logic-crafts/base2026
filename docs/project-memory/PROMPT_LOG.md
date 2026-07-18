@@ -1,5 +1,20 @@
 # Prompt Log
 
+## 2026-07-17 — Phase 1 Base P4 Product Truth preview completed
+
+Prompt: continue the Alex Site × Base2026 program from the accepted Phase 0 artifact and implement the Base product pilot: Search → Source → evidence-bound approved Solution → optional Apply Research, with consent-gated analytics, no raw query/PII/private data, desktop/mobile fixtures, and no production mutation or real form submission.
+
+Actions and evidence:
+
+- Added a five-Solution allowlist and deterministic registry derived only from exact reviewed source/claim mappings: five Solutions, 18 admitted Sources, 20 evidence edges.
+- Added Source-to-Solution discovery in Search panels and static Source routes, plus a visibly optional Apply Research bridge on approved Solution routes.
+- Added the five canonical Product Truth events with property allowlists and affirmative-consent gating. Base activation stays separate from the optional research-to-service assist.
+- Localized pinned InstantSearch, Meilisearch adapter, Geist, Geist Mono and Manrope dependencies for the pilot path; added recursive CSS dependency scanning and rejected active external requests in browser fixtures.
+- Derived exact candidate `base2026-phase1-base-p4-preview-20260717-145000`, ZIP SHA-256 `52d76e8ac1780fedf633e751ae65e03ae4be43f2f646330b72182ab3f7ce2450`.
+- Browser evidence r12 passed four full journeys and two static Source checks at 390/1440 with zero external requests, zero service submissions, zero no-consent events, and accurate `3_5_terms`/`1_10` search buckets.
+- Measurement validation passed 10 events against 1,493 admitted public Source IDs; full repository suite passed 128 tests; independent repeat derivation produced a byte-identical ZIP.
+- No deploy, upload, corpus re-export, Meilisearch reindex, IndexNow, WordPress mutation, real form submission, commit, push, or production change occurred.
+
 ## 2026-07-15 — Stitch V1 AI Recommends Solutions deployed and closed
 
 Alex explicitly authorized production deploy in source message `224273`. The exact R3 artifact was reconciled against merged PR #12 and deployed through the fail-closed atomic wrapper.
@@ -7247,3 +7262,25 @@ Verification:
 - Local gates passed: focused `9/9`, full `55/55`, `9` changed paths, `4,183` unchanged files, `10,340` inherited legacy literals, `0` changed outbound legacy paths, browser/contract/package/publication gates PASS.
 - Historical pre-hardening verdict: `PASS`; it was superseded by subsequent corrective hardening and does not authorize commit, merge, or deployment of the replacement candidate.
 - No commit, push, merge or deployment had occurred at the time of this log entry.
+
+## 2026-07-17 — Base2026 Phase 0 P1 manifest and sitemap preview
+
+Prompt: implement the bounded Base2026 Phase 0 P1 fixes in an isolated clean R6 preview: remove machine-local paths from public manifests, introduce structural path-leak rejection, migrate archive sitemap policy to excluded, and make sitemap admission exact and fail-closed. Do not re-export private data or mutate production.
+
+Actions:
+
+- Added versioned public dataset/page manifest schemas with exact key allowlists and a recursive pointer/reason-only private-path validator.
+- Wired manifest validation into export policy, package, deploy preflight and release-contract validation.
+- Replaced permissive sitemap discovery with exact Source Detail and frozen non-source admission, one-self-canonical/indexable enforcement, archive/future exclusion, and check-only comparison.
+- Migrated data-preserving package metadata to v4 and made immutable Source Detail candidate plus closure receipt mandatory.
+- Derived immutable preview `base2026-phase0-p1-r6-preview-20260717-230500` from the exact R6 ZIP without corpus re-export.
+
+Verification:
+
+- Public manifest validation: three manifests, `issue_count=0`; dataset mirrors byte-identical.
+- Sitemap write and check-only: 1,734 URLs in five children; 1,493 normal Source Detail + 241 frozen non-source; 199 archive/noindex and 135 future/private excluded; global exact admission true.
+- Exact preview ZIP SHA-256: `65605625ba3335e457627349ef72250685f2dab1b1fd3d4af6fca0daa4826a41`.
+- Full Python suite passed `115/115`; exact ZIP PlanOnly preflight returned `PLAN_ONLY_OK`; deterministic repeat derivation produced the same ZIP SHA; PowerShell parsing, ZIP integrity, diff check and publication-boundary audit passed.
+- No deploy, upload, corpus re-export, Meilisearch reindex, IndexNow, WordPress mutation, form submission, commit or push occurred.
+
+Supersession note (same Phase 0 cycle): the `230500` artifact and `65605625...` hash above are historical only. A package-wide follow-up found machine-local paths in inherited `SOURCE_DETAIL_V2_PACKAGE_VALIDATION.json`. The receipt was sanitized, a pointer-only audit across all package JSON was added, and deterministic replacement `base2026-phase0-p1-r6-preview-20260717-235500` was produced at SHA-256 `6ad17478944ffb14883b117dc4579b3c5099ad03fbf15ddec5760ee9ffd87087`; 18/18 JSON artifacts pass with zero machine-local/private-storage findings, full Python suite is 121/121, ZIP integrity and exact PlanOnly preflight pass. Only the replacement is current. Production remained unchanged.

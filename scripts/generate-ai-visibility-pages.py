@@ -4,7 +4,14 @@ import argparse
 import html
 import json
 import re
+import sys
 from pathlib import Path
+
+SCRIPT_DIR = Path(__file__).resolve().parent
+if str(SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPT_DIR))
+
+from public_manifest_contract import PUBLIC_PAGE_MANIFEST_SCHEMA, relative_public_route_issue
 
 STYLE_VERSION = "20260629-alex-money-template-v1"
 BASE_URL = "https://aggressorbulkit.online/knowledge/"
@@ -688,7 +695,11 @@ def main() -> None:
     city_pages = [item for item in pages if item.get("type") == "city_niche_ai_visibility_audit"]
     for page in pages:
         slug = page["slug"].strip("/")
-        target = out_dir / slug / "index.html"
+        route = f"{slug}/index.html"
+        route_problem = relative_public_route_issue(route)
+        if route_problem:
+            raise SystemExit(f"Unsafe public page slug: {route_problem}")
+        target = out_dir / route
         if page.get("type") == "main_ai_visibility_hub":
             page_niche = str(page.get("slug", "")).split("-")[0]
             matching_city_pages = [item for item in city_pages if page_niche and page_niche in str(item.get("niche", ""))]
@@ -705,13 +716,24 @@ def main() -> None:
                 ("Base2026 AI visibility hubs", hubs),
             ]
         write_text(target, page_html(page, noindex=should_noindex_page(page, indexable_run=args.indexable), related_groups=related_groups))
-        rendered.append(str(target))
+        rendered.append(route)
 
     index_target = out_dir / "ai-visibility-pages" / "index.html"
     write_text(index_target, index_html(pages, noindex=not args.indexable))
-    rendered.append(str(index_target))
+    rendered.append(index_target.relative_to(out_dir).as_posix())
 
-    write_text(out_dir / "manifest.json", json.dumps({"style_version": STYLE_VERSION, "pages": rendered}, indent=2))
+    write_text(
+        out_dir / "manifest.json",
+        json.dumps(
+            {
+                "schema": PUBLIC_PAGE_MANIFEST_SCHEMA,
+                "style_version": STYLE_VERSION,
+                "page_count": len(rendered),
+                "pages": rendered,
+            },
+            indent=2,
+        ),
+    )
     print(json.dumps({"pages": len(rendered), "out": str(out_dir), "indexable": bool(args.indexable)}, indent=2))
 
 

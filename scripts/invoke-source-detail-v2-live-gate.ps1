@@ -85,6 +85,7 @@ try {
       rendered_routes = $Contract.coverage.rendered_routes
       future_private_404 = $Contract.coverage.future_private_404
       sitemap_urls = $Contract.coverage.sitemap_urls
+      sitemap_exact_200_and_byte_hash = $Contract.coverage.sitemap_exact_200_and_byte_hash
       expected_route_digest = $Contract.route_hash_digests.expected
       actual_route_digest = $Contract.route_hash_digests.actual
     }

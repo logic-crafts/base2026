@@ -8,6 +8,7 @@ param(
 $ErrorActionPreference = "Stop"
 $Root = Resolve-Path (Join-Path $PSScriptRoot "..")
 Set-Location $Root
+$StaticSitemapAdmission = Resolve-Path "./contracts/base2026-sitemap-static-routes.json"
 
 function Assert-NativeSuccess {
   param([string]$Label)
@@ -168,7 +169,10 @@ Get-ChildItem -Path "./web/static" -Filter "indexnow-*.txt" -File -ErrorAction S
 }
 python3 ./scripts/check-public-content-readiness.py --data-root $ExportRoot --latest 1 --web-root $WebRoot --allow-generated-noindex --fail | Write-Output
 Assert-NativeSuccess "check-public-content-readiness-generated"
-python3 ./scripts/generate-base2026-sitemap.py --web-root $WebRoot | Write-Output
+python3 ./scripts/generate-base2026-sitemap.py `
+  --web-root $WebRoot `
+  --source-records (Join-Path $ExportRoot "source_records.jsonl") `
+  --static-admission-manifest $StaticSitemapAdmission | Write-Output
 Assert-NativeSuccess "generate-base2026-sitemap"
 
 $SearchV1Generator = Join-Path $PSScriptRoot "generate-base2026-search-v1.py"
@@ -243,6 +247,20 @@ Get-ChildItem -Path $WebRoot -Recurse -Filter "*.html" | ForEach-Object {
   }
   $PageHtml | Set-Content -Path $_.FullName -Encoding UTF8
 }
+
+python3 ./scripts/validate-public-manifests.py `
+  --dataset-manifest (Join-Path $ExportRoot "manifest.json") `
+  --dataset-manifest (Join-Path $StaticRoot "manifest.json") `
+  --dataset-manifest (Join-Path $DataRoot "manifest.json") `
+  --page-manifest (Join-Path $WebRoot "manifest.json") `
+  --web-root $WebRoot | Write-Output
+Assert-NativeSuccess "validate-public-manifests"
+python3 ./scripts/generate-base2026-sitemap.py `
+  --web-root $WebRoot `
+  --source-records (Join-Path $ExportRoot "source_records.jsonl") `
+  --static-admission-manifest $StaticSitemapAdmission `
+  --check-only | Write-Output
+Assert-NativeSuccess "validate-base2026-sitemap-contract"
 
 $Manifest = Get-Content (Join-Path $ExportRoot "manifest.json") -Raw
 $ReleaseInfo = @"

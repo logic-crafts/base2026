@@ -4,9 +4,16 @@ import argparse
 import json
 import re
 import sqlite3
+import sys
 from collections import Counter, defaultdict
 from datetime import datetime
 from pathlib import Path
+
+SCRIPT_DIR = Path(__file__).resolve().parent
+if str(SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPT_DIR))
+
+from public_manifest_contract import PUBLIC_DATASET_MANIFEST_SCHEMA
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -597,6 +604,7 @@ def main() -> int:
         write_jsonl(out / "topics.jsonl", topics)
         write_jsonl(out / "creators.jsonl", sorted(creators.values(), key=lambda x: x.get("handle") or ""))
         manifest = {
+            "schema": PUBLIC_DATASET_MANIFEST_SCHEMA,
             "created_at": datetime.now().isoformat(timespec="seconds"),
             "dataset": "base2026-public-tiktok",
             "scope": "public TikTok-only export",
@@ -608,10 +616,8 @@ def main() -> int:
             "topics": len(topics),
             "insight_cards": len(insight_cards),
             "public_insight_cards": sum(1 for row in insight_cards if row["public"]),
-            "source_admission_ledger": str(args.admission_ledger) if admission_active else "",
             "source_admission_active": admission_active,
             "source_admission_counts": dict(sorted(admission_counts.items())),
-            "source_db": str(DB),
             "include_full_transcripts": bool(args.include_full_transcripts),
             "auto_promote_insights": bool(args.auto_promote_insights),
             "insight_threshold": args.insight_threshold,

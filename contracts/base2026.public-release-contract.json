@@ -1,5 +1,5 @@
 {
-  "contract_version": 1,
+  "contract_version": 2,
   "release_lane": "public",
   "public_release": {
     "include_full_transcripts": false,
@@ -19,6 +19,22 @@
     ],
     "minimum_public_insight_retention_ratio": 0.8
   },
+  "public_manifest_contract": {
+    "dataset_schema": "base2026.public-dataset-manifest/v1",
+    "page_schema": "base2026.public-page-manifest/v1",
+    "exact_key_allowlists": true,
+    "reject_private_paths_recursively": true
+  },
+  "sitemap_contract": {
+    "schema": "base2026.sitemap-admission/v2",
+    "normal_public_card": "included_exactly",
+    "provenance_archive_noindex": "excluded",
+    "future_private_backlog": "excluded",
+    "static_routes": "frozen_exact_allowlist",
+    "require_http_200": true,
+    "require_indexable": true,
+    "require_exactly_one_self_canonical": true
+  },
   "public_invocation_scripts": [
     "scripts/package-public-release.ps1",
     "scripts/deploy-public-vps.ps1",
@@ -35,7 +51,9 @@
     "publication_boundary",
     "github_metadata",
     "mobile_visual_qa",
-    "public_release_contract"
+    "public_release_contract",
+    "public_manifest_contract",
+    "sitemap_admission_contract"
   ],
   "notes": [
     "Public releases publish attributed source records, reviewed public source text, source previews, topic pages, and explicitly reviewed public insight cards.",

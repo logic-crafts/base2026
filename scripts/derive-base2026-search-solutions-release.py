@@ -24,7 +24,7 @@ from pathlib import Path
 from typing import Dict
 
 SCHEMA = "base2026.search-solutions-derived-release/v1"
-PACKAGE_SCHEMA = "base2026.public-hotfix-from-export/v3"
+PACKAGE_SCHEMA = "base2026.public-hotfix-from-export/v4"
 RELEASE_RE = re.compile(r"^[A-Za-z0-9._-]+$")
 RELEASE_TIMESTAMP_RE = re.compile(r"(\d{8})-(\d{6})$")
 

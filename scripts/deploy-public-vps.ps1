@@ -125,6 +125,8 @@ try {
   }
 
   $CandidateManifestSha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $CandidateManifest).Hash.ToLowerInvariant()
+  $StaticSitemapAdmission = Resolve-RepoPath "contracts/base2026-sitemap-static-routes.json" $RepoRoot
+  $StaticSitemapAdmissionSha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $StaticSitemapAdmission).Hash.ToLowerInvariant()
   $PackagePreflightDir = Join-Path ([System.IO.Path]::GetTempPath()) ("base2026-package-preflight-" + [guid]::NewGuid().ToString("N"))
   $RequiredPackageFiles = @(
     "manifest.json",
@@ -132,6 +134,10 @@ try {
     "web/sources/index.html",
     "web/sitemap.xml",
     "web/static/styles.css",
+    "web/manifest.json",
+    "web/static/manifest.json",
+    "SOURCE_DETAIL_V2_CANDIDATE_MANIFEST.json",
+    "SITEMAP_STATIC_ADMISSION.json",
     "public-data/tiktok/manifest.json",
     "public-data/tiktok/source_records.jsonl"
   )
@@ -144,7 +150,7 @@ try {
       }
     }
     $PackageManifest = Get-Content -LiteralPath (Join-Path $PackagePreflightDir "manifest.json") -Raw | ConvertFrom-Json
-    if ($PackageManifest.schema -ne "base2026.public-hotfix-from-export/v3") {
+    if ($PackageManifest.schema -ne "base2026.public-hotfix-from-export/v4") {
       throw "Unsupported release package schema: $($PackageManifest.schema)"
     }
     if ($PackageManifest.release_name -ne $ReleaseName) {
@@ -156,9 +162,35 @@ try {
     if (-not $PackageManifest.source_detail.public_effect_verified_absent) {
       throw "Release package does not contain a positive public-effect exclusion binding."
     }
-    if ($PackageManifest.source_detail.archive_sitemap_policy -ne "included" -or $PackageManifest.source_detail.future_private_sitemap_policy -ne "excluded") {
+    if ($PackageManifest.source_detail.archive_sitemap_policy -ne "excluded" -or $PackageManifest.source_detail.future_private_sitemap_policy -ne "excluded") {
       throw "Release package sitemap policy is not the current Source Detail contract."
     }
+    if ($PackageManifest.source_detail.source_sitemap_admission -ne "exact" -or
+        $PackageManifest.sitemap_contract.schema -ne "base2026.sitemap-admission/v2" -or
+        $PackageManifest.sitemap_contract.static_admission_manifest_sha256 -ne $StaticSitemapAdmissionSha256 -or
+        $PackageManifest.sitemap_contract.static_admission_policy -ne "frozen_exact_allowlist" -or
+        $PackageManifest.sitemap_contract.source_admission_policy -ne "exact" -or
+        $PackageManifest.sitemap_contract.archive_noindex_policy -ne "excluded" -or
+        $PackageManifest.sitemap_contract.future_private_policy -ne "excluded" -or
+        -not $PackageManifest.sitemap_contract.global_exact_admission) {
+      throw "Release package does not bind the current exact sitemap admission contract."
+    }
+    $PackagedStaticAdmission = Join-Path $PackagePreflightDir "SITEMAP_STATIC_ADMISSION.json"
+    if ((Get-FileHash -Algorithm SHA256 -LiteralPath $PackagedStaticAdmission).Hash.ToLowerInvariant() -ne $StaticSitemapAdmissionSha256) {
+      throw "Packaged static sitemap admission does not match the reviewed contract."
+    }
+    python3 (Join-Path $RepoRoot "scripts/validate-public-manifests.py") `
+      --dataset-manifest (Join-Path $PackagePreflightDir "public-data/tiktok/manifest.json") `
+      --dataset-manifest (Join-Path $PackagePreflightDir "web/static/manifest.json") `
+      --page-manifest (Join-Path $PackagePreflightDir "web/manifest.json") `
+      --web-root (Join-Path $PackagePreflightDir "web") | Write-Output
+    Assert-LastExitCode "validate-public-manifests-package-preflight"
+    python3 (Join-Path $RepoRoot "scripts/generate-base2026-sitemap.py") `
+      --web-root (Join-Path $PackagePreflightDir "web") `
+      --source-detail-manifest (Join-Path $PackagePreflightDir "SOURCE_DETAIL_V2_CANDIDATE_MANIFEST.json") `
+      --static-admission-manifest $PackagedStaticAdmission `
+      --check-only | Write-Output
+    Assert-LastExitCode "validate-sitemap-package-preflight"
   } finally {
     Remove-Item -LiteralPath $PackagePreflightDir -Recurse -Force -ErrorAction SilentlyContinue
   }
@@ -253,6 +285,10 @@ test -f "$staging_dir/web/index.html"
 test -f "$staging_dir/web/sources/index.html"
 test -f "$staging_dir/web/sitemap.xml"
 test -f "$staging_dir/web/static/styles.css"
+test -f "$staging_dir/web/manifest.json"
+test -f "$staging_dir/web/static/manifest.json"
+test -f "$staging_dir/SOURCE_DETAIL_V2_CANDIDATE_MANIFEST.json"
+test -f "$staging_dir/SITEMAP_STATIC_ADMISSION.json"
 test -f "$staging_dir/public-data/tiktok/manifest.json"
 test -f "$staging_dir/public-data/tiktok/source_records.jsonl"
 ln -sfn "$base/shared/data" "$staging_dir/data"

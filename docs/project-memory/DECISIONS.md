@@ -1,5 +1,21 @@
 # Decisions
 
+## 2026-07-17 — Source-to-Solution discovery requires an exact reviewed evidence edge
+
+Decision: Base2026 may expose a Source-to-Solution path only when an explicitly allowlisted Solution contains an exact reviewed `source_id` + `claim_id` evidence tuple that resolves to an admitted normal-public Source route. Topic similarity, keyword overlap, creator authority, or author opinion alone must not create the edge. The UI must label the material as a reviewed creator signal and keep it separate from Base2026 synthesis and authoritative verification.
+
+Decision: Base product activation uses only the master event IDs `product_search_submitted`, `source_opened`, `evidence_actioned`, and `solution_opened`. `research_bridge_clicked` is an optional assist, not a service conversion. Events require affirmative stored analytics consent, accept only declared properties, and must not contain raw query/filter text, PII, full URLs/referrers, private source IDs, or private data. A rendered Apply Research page does not equal a request submission.
+
+Reason: Base2026 must remain a useful independent research product rather than a disguised agency landing page. Exact evidence edges make the research-to-decision path auditable; the separate optional bridge permits business-specific diagnosis without overstating creator claims or contaminating product activation with service funnel metrics.
+
+## 2026-07-17 — Public manifests are allowlisted and sitemap admission excludes noindex archives
+
+Decision: Base2026 public dataset manifests use `base2026.public-dataset-manifest/v1` and may contain only declared public fields. Machine-local source-ledger and database paths are forbidden. The AI visibility page manifest uses `base2026.public-page-manifest/v1` and stores normalized paths relative to the release `web/` root. Recursive public-manifest validation reports only a JSON pointer and stable reason code, never a rejected value.
+
+Decision: sitemap membership is the exact union of approved indexable Source Detail routes and a versioned static-route allowlist. Every admitted page must return a valid local file, be indexable, and have exactly one self-canonical. `provenance_archive_noindex` and `future_private_backlog` routes are excluded. For the immutable R6 Phase 0 preview this is 1,493 normal Source Detail + 241 frozen non-source = 1,734 URLs; 199 archive/noindex and 135 future/private routes are excluded.
+
+Reason: noindex archive URLs cannot satisfy the sitemap indexability contract, and permissive filesystem crawling cannot prove route admission. Exact versioned inputs make omissions, additions, canonical drift and local-path leakage fail closed. The frozen 241-route R6 cohort is a migration control plane, not owner approval for future public SEO changes.
+
 ## 2026-07-14 — Search V1 uses canonical query URLs with a grandfathered immutable legacy baseline
 
 Decision: Base2026 Search V1 canonical and newly generated discovery links use `/knowledge/?q=...` plus explicit query parameters. The outbound `#search?...` prohibition applies to Search V1 changed paths and to all new or regenerated generation paths. The immutable Source Detail V2 baseline is grandfathered: its 4,183 unchanged files may retain their 10,340 inherited outbound hash-search links until those page families are deliberately regenerated under a separately verified release. Runtime code must continue accepting an inbound `#search?...` bookmark and immediately migrate it to the canonical query URL with `history.replaceState`.

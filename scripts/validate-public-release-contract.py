@@ -6,6 +6,12 @@ import subprocess
 from pathlib import Path
 from typing import Any
 
+from public_manifest_contract import (
+    PUBLIC_DATASET_MANIFEST_SCHEMA,
+    PUBLIC_PAGE_MANIFEST_SCHEMA,
+    validate_public_dataset_manifest,
+)
+
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -52,6 +58,10 @@ def add_violation(violations: list[str], message: str) -> None:
 
 def validate_contract_shape(contract: dict[str, Any], violations: list[str]) -> None:
     public_release = contract.get("public_release") or {}
+    manifest_contract = contract.get("public_manifest_contract") or {}
+    sitemap_contract = contract.get("sitemap_contract") or {}
+    if contract.get("contract_version") != 2:
+        add_violation(violations, "public contract_version must be 2")
     if contract.get("release_lane") != "public":
         add_violation(violations, "contract release_lane must be public")
     if public_release.get("include_full_transcripts") is not False:
@@ -66,6 +76,25 @@ def validate_contract_shape(contract: dict[str, Any], violations: list[str]) -> 
         add_violation(violations, "public contract must allow approved/reviewed/public review statuses")
     if not required.issubset(methods):
         add_violation(violations, "public contract must allow approved/reviewed/public promotion methods")
+    if manifest_contract != {
+        "dataset_schema": PUBLIC_DATASET_MANIFEST_SCHEMA,
+        "page_schema": PUBLIC_PAGE_MANIFEST_SCHEMA,
+        "exact_key_allowlists": True,
+        "reject_private_paths_recursively": True,
+    }:
+        add_violation(violations, "public manifest contract is incomplete or unsupported")
+    expected_sitemap = {
+        "schema": "base2026.sitemap-admission/v2",
+        "normal_public_card": "included_exactly",
+        "provenance_archive_noindex": "excluded",
+        "future_private_backlog": "excluded",
+        "static_routes": "frozen_exact_allowlist",
+        "require_http_200": True,
+        "require_indexable": True,
+        "require_exactly_one_self_canonical": True,
+    }
+    if sitemap_contract != expected_sitemap:
+        add_violation(violations, "public sitemap admission contract is incomplete or unsupported")
 
 
 def validate_public_invocations(contract: dict[str, Any], violations: list[str]) -> None:
@@ -102,6 +131,11 @@ def validate_export_dir(contract: dict[str, Any], export_dir: Path, violations: 
         return
 
     manifest = read_json(manifest_path)
+    for manifest_issue in validate_public_dataset_manifest(manifest):
+        add_violation(
+            violations,
+            f"public dataset manifest {manifest_issue['pointer']}: {manifest_issue['reason']}",
+        )
     if manifest.get("include_full_transcripts") is not False:
         add_violation(violations, f"{export_dir} has include_full_transcripts enabled")
     if public_release.get("allow_implicit_auto_promote_insights") is False and manifest.get("auto_promote_insights"):

@@ -5,12 +5,16 @@ from dataclasses import dataclass, field
 from datetime import date
 from html import escape
 from pathlib import Path
+import argparse
 import json
+import re
 import shutil
 
 SITE = "https://aggressorbulkit.online"
 RELEASE = "alex-about-stitch-20260708a"
 OUT = Path(f"output/releases/{RELEASE}/web")
+ROOT = Path(__file__).resolve().parents[1]
+ROOT_SITEMAP_CONTRACT = ROOT / "contracts" / "alex-root-sitemap-routes.json"
 TODAY = date.today().isoformat()
 FONTS = "https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@500;600;700;800&family=Geist+Mono:wght@400;500;600;700&family=Geist:wght@400;500;600;700;800&display=swap"
 
@@ -61,6 +65,92 @@ class Page:
 
 def canonical(path: str) -> str:
     return SITE + ("/" if path == "/" else path)
+
+
+def load_root_sitemap_routes(
+    path: Path = ROOT_SITEMAP_CONTRACT,
+    *,
+    allow_preview_candidate: bool = False,
+) -> list[dict[str, str]]:
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    if set(payload) != {"schema", "source_registry", "routes"}:
+        raise ValueError(f"unexpected root sitemap contract keys: {sorted(set(payload) ^ {'schema', 'source_registry', 'routes'})}")
+    if payload.get("schema") != "alex-root-sitemap-routes/v2":
+        raise ValueError(f"unsupported root sitemap contract: {payload.get('schema')!r}")
+
+    source = payload.get("source_registry")
+    source_keys = {
+        "registry_id",
+        "schema_version",
+        "canonical_owner",
+        "canonical_source_path",
+        "source_sha256",
+        "observed_at",
+        "route_count",
+        "candidate_admission",
+        "owner_approved",
+        "production_change_authorized",
+    }
+    if not isinstance(source, dict) or set(source) != source_keys:
+        raise ValueError("root sitemap source registry metadata is invalid")
+    if (
+        source.get("registry_id") != "alex-personal-site-root-indexable-routes"
+        or source.get("schema_version") != "1.0.0"
+        or source.get("canonical_owner") != "alex-personal-site-wordpress"
+        or source.get("canonical_source_path") != "contracts/alex-root-route-registry.json"
+        or source.get("candidate_admission") is not True
+        or not re.fullmatch(r"[a-f0-9]{64}", str(source.get("source_sha256") or ""))
+    ):
+        raise ValueError("root sitemap source registry identity is invalid")
+    owner_authorized = source.get("owner_approved") is True and source.get("production_change_authorized") is True
+    if not owner_authorized and not allow_preview_candidate:
+        raise ValueError("root sitemap candidate is not owner-approved for production generation")
+
+    routes: list[dict[str, str]] = []
+    seen: set[str] = set()
+    for item in payload.get("routes") or []:
+        if set(item) != {"path", "priority", "owner"}:
+            raise ValueError(f"unexpected root sitemap route keys: {sorted(item)}")
+        route = str(item.get("path") or "")
+        priority = str(item.get("priority") or "")
+        owner = str(item.get("owner") or "")
+        if (
+            not route.startswith("/")
+            or route.startswith("//")
+            or (route != "/" and not route.endswith("/"))
+            or "?" in route
+            or "#" in route
+        ):
+            raise ValueError(f"invalid root sitemap route: {route!r}")
+        if route in seen:
+            raise ValueError(f"duplicate root sitemap route: {route}")
+        if owner != "wordpress":
+            raise ValueError(f"unsupported root sitemap owner for {route}: {owner!r}")
+        try:
+            priority_value = float(priority)
+        except ValueError as exc:
+            raise ValueError(f"invalid root sitemap priority for {route}: {priority!r}") from exc
+        if not 0 <= priority_value <= 1:
+            raise ValueError(f"missing root sitemap priority: {route}")
+        seen.add(route)
+        routes.append({"path": route, "priority": priority, "owner": owner})
+    if not routes:
+        raise ValueError("root sitemap contract is empty")
+    if source.get("route_count") != len(routes):
+        raise ValueError("root sitemap route count differs from its source registry mirror")
+    return routes
+
+
+def render_root_sitemap(routes: list[dict[str, str]], lastmod: str = TODAY) -> str:
+    rows = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
+    for item in routes:
+        rows.append(
+            f'<url><loc>{escape(canonical(item["path"]))}</loc>'
+            f'<lastmod>{escape(lastmod)}</lastmod><changefreq>weekly</changefreq>'
+            f'<priority>{escape(item["priority"])}</priority></url>'
+        )
+    rows.append('</urlset>')
+    return "\n".join(rows) + "\n"
 
 
 def attrs_current(href: str, current: str) -> str:
@@ -1911,6 +2001,16 @@ def write_page(page: Page) -> None:
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description="Generate the native Alex/Base2026 site preview.")
+    parser.add_argument(
+        "--allow-preview-candidate-root-sitemap",
+        action="store_true",
+        help="render the observed 24-route candidate before owner approval (preview only)",
+    )
+    args = parser.parse_args()
+    # Resolve the owner-governed root admission contract before any output is
+    # deleted or written. A non-approved candidate must fail without side effects.
+    sitemap_routes = load_root_sitemap_routes(allow_preview_candidate=args.allow_preview_candidate_root_sitemap)
     if OUT.exists():
         shutil.rmtree(OUT)
     (OUT / "alex-native").mkdir(parents=True, exist_ok=True)
@@ -1927,15 +2027,10 @@ def main() -> None:
             shutil.copy2(src, dst)
     for p in PAGES:
         write_page(p)
-    sitemap = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
-    for p in PAGES:
-        if p.include_sitemap and not p.robots.startswith("noindex"):
-            sitemap.append(f'<url><loc>{canonical(p.path)}</loc><lastmod>{TODAY}</lastmod><changefreq>weekly</changefreq><priority>{p.priority}</priority></url>')
-    sitemap.append('</urlset>')
-    (OUT / "sitemap.xml").write_text("\n".join(sitemap), encoding="utf-8")
+    (OUT / "sitemap.xml").write_text(render_root_sitemap(sitemap_routes), encoding="utf-8")
     (OUT / "robots.txt").write_text("User-agent: *\nDisallow: /wp-admin/\nAllow: /wp-admin/admin-post.php\n\nSitemap: https://aggressorbulkit.online/sitemap.xml\nSitemap: https://aggressorbulkit.online/knowledge/sitemap.xml\n", encoding="utf-8")
-    (OUT / "manifest.json").write_text(json.dumps({"release": RELEASE, "pages": len(PAGES), "sitemap_urls": sum(1 for p in PAGES if p.include_sitemap and not p.robots.startswith("noindex"))}, indent=2) + "\n", encoding="utf-8")
-    print(f"release={RELEASE} pages={len(PAGES)} sitemap_urls={sum(1 for p in PAGES if p.include_sitemap and not p.robots.startswith('noindex'))} out={OUT}")
+    (OUT / "manifest.json").write_text(json.dumps({"release": RELEASE, "pages": len(PAGES), "sitemap_urls": len(sitemap_routes)}, indent=2) + "\n", encoding="utf-8")
+    print(f"release={RELEASE} pages={len(PAGES)} sitemap_urls={len(sitemap_routes)} out={OUT}")
 
 
 if __name__ == "__main__":

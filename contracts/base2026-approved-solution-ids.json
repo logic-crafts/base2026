@@ -1,0 +1,26 @@
+{
+  "schema": "base2026.approved-solution-ids/v1",
+  "updated_at": "2026-07-17",
+  "solutions": [
+    {
+      "id": "answer-ready-service-page-checklist",
+      "route": "solutions/answer-ready-service-page-checklist.html"
+    },
+    {
+      "id": "content-refresh-prioritization",
+      "route": "solutions/content-refresh-prioritization.html"
+    },
+    {
+      "id": "google-business-profile-visibility-audit",
+      "route": "solutions/google-business-profile-visibility-audit.html"
+    },
+    {
+      "id": "measure-ai-search-visibility",
+      "route": "solutions/measure-ai-search-visibility.html"
+    },
+    {
+      "id": "search-console-high-impression-low-ctr",
+      "route": "solutions/search-console-high-impression-low-ctr.html"
+    }
+  ]
+}

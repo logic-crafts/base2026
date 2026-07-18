@@ -5,6 +5,8 @@ import json
 from pathlib import Path
 from typing import Any
 
+from public_manifest_contract import validate_public_dataset_manifest
+
 
 def read_jsonl(path: Path) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
@@ -30,6 +32,12 @@ def main() -> int:
     if not manifest_path.exists():
         fail(f"missing manifest: {manifest_path}")
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest_issues = validate_public_dataset_manifest(manifest)
+    if manifest_issues:
+        safe_summary = ", ".join(
+            f"{item['pointer']}:{item['reason']}" for item in manifest_issues[:20]
+        )
+        fail(f"public dataset manifest contract failed: {safe_summary}")
 
     source_records = read_jsonl(export_dir / "source_records.jsonl")
     passages = read_jsonl(export_dir / "passages.jsonl")

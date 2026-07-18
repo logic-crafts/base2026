@@ -1,6 +1,10 @@
 # Active Phase
 
-Last updated: 2026-07-15
+Last updated: 2026-07-17
+
+## Current override — Phase 0 release-contract stabilization in isolated preview
+
+The Base2026 P1 contract layer is implemented and an immutable local R6 derivative has passed manifest and exact-sitemap gates. The accepted preview contains no corpus re-export and no production mutation. Current scope is verification and independent review only: public manifest schemas/allowlists, pointer-only private-path rejection, package schema v4, exact source/static sitemap admission, archive/future exclusion, and evidence binding. Exact preview and commands are recorded in `docs/project-memory/BASE2026_PHASE0_P1_PREVIEW_2026_07_17.md`. Production remains authorization-gated.
 
 ## Current override — Stitch V1 AI Recommends Solutions production release closed
 

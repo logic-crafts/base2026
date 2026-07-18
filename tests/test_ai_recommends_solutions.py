@@ -131,6 +131,11 @@ class AIRecommendsSolutionTests(unittest.TestCase):
         self.assertIn(".solution-page .solution-operations", css)
         self.assertIn(".solution-page .solution-evidence-row__detail-grid", css)
         self.assertIn(".solution-page .solution-next-action", css)
+        self.assertIn(
+            ".solution-page .solution-next-action .ay-button-secondary{margin-top:0;"
+            "border-color:rgba(255,255,255,.48);background:transparent;color:#fff}",
+            css,
+        )
         self.assertIn("width:min(100% - 32px,520px)", css)
         self.assertIn(".solution-page .solution-decision-table thead{display:none}", css)
         self.assertIn(".solution-hub .solution-hero__copy h1{font-size:clamp(31px,9.6vw,40px)", css)
@@ -165,6 +170,18 @@ class AIRecommendsSolutionTests(unittest.TestCase):
         self.assertNotIn("March 28, 2024", html)
         self.assertNotIn("April 15, 2024", html)
 
+    def test_solution_generator_carries_permanent_interior_and_local_font_contract(self) -> None:
+        report = validate_solution(self.solution, self.context)
+        html = generator.solution_page(self.solution, report)
+        self.assertIn("b26-interior-v1 b26-interior-solution", html)
+        self.assertIn('../static/base2026-interior-v1.css?v=', html)
+        self.assertIn('../static/vendor/geist-local.css?v=', html)
+        self.assertNotIn("interior-token-pilot", html)
+        self.assertNotIn("fonts.googleapis.com", html)
+        self.assertNotIn("fonts.gstatic.com", html)
+        self.assertNotIn("fonts.googleapis.com", generator.local_shell_css_text())
+        self.assertLess(html.index("alex-v4-static-shell.css"), html.index("base2026-interior-v1.css"))
+
     def test_solution_column_copy_script_is_same_origin_static_asset(self) -> None:
         report = validate_solution(self.solution, self.context)
         html = generator.solution_page(self.solution, report)
@@ -187,6 +204,21 @@ class AIRecommendsSolutionTests(unittest.TestCase):
         self.assertIn("Creators", header)
         self.assertIn("Methodology", header)
         self.assertNotIn("apply-research.html", header)
+
+    def test_indexable_solution_exposes_optional_apply_research_after_primary_research_action(self) -> None:
+        report = validate_solution(self.solution, self.context)
+        self.assertTrue(report["indexable"], report["errors"])
+        html = generator.solution_page(self.solution, report)
+        primary = 'href="/knowledge/?q=example"'
+        bridge = 'href="../apply-research.html"'
+        self.assertIn(primary, html)
+        self.assertIn(bridge, html)
+        self.assertLess(html.index(primary), html.index(bridge))
+        self.assertIn('data-research-bridge="solution_to_apply_research"', html)
+        self.assertIn('data-origin-id="example-solution"', html)
+        self.assertIn("Apply Research to a Business", html)
+        self.assertIn("Optional: use this bridge only", html)
+        self.assertIn("research path remains complete without a service request", html)
 
 
 if __name__ == "__main__":

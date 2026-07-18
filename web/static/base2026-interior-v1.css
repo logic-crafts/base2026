@@ -1,0 +1,390 @@
+/*
+ * Base2026 interior design contract v1.
+ *
+ * Opt-in only: Source Detail, approved Solution detail pages, and Apply Research
+ * carry these semantic classes. The canonical /knowledge/ search product does
+ * not, so its accepted visual system remains byte-independent from this layer.
+ */
+
+body.b26-interior-v1 {
+  --b26-interior-canvas: #f7f4ee;
+  --b26-interior-ink: #0f172a;
+  --b26-interior-text: #263244;
+  --b26-interior-muted: #667085;
+  --b26-interior-line: rgba(15, 23, 42, .12);
+  --b26-interior-line-strong: rgba(15, 23, 42, .2);
+  --b26-interior-paper: #fff;
+  --b26-interior-soft: #efede7;
+  --b26-interior-control-radius: 8px;
+  --b26-interior-panel-radius: 14px;
+  background: var(--b26-interior-canvas);
+  color: var(--b26-interior-ink);
+  font-family: Geist, system-ui, sans-serif;
+}
+
+body.b26-interior-v1 main p,
+body.b26-interior-v1 main li,
+body.b26-interior-v1 main dd,
+body.b26-interior-v1 main td,
+body.b26-interior-v1 main th,
+body.b26-interior-v1 main summary {
+  font-family: Geist, system-ui, sans-serif;
+}
+
+body.b26-interior-v1 main h1,
+body.b26-interior-v1 main h2,
+body.b26-interior-v1 main h3 {
+  font-family: Manrope, Geist, system-ui, sans-serif;
+}
+
+/* Source record: keep the compact creator/provenance job, align only tokens. */
+body.b26-interior-source {
+  --b26-canvas: var(--b26-interior-canvas);
+  --b26-paper: var(--b26-interior-paper);
+  --b26-ink: var(--b26-interior-ink);
+  --b26-muted: var(--b26-interior-muted);
+  --b26-line: var(--b26-interior-line);
+}
+
+.b26-interior-source .b26-reading-copy,
+.b26-interior-source .b26-insight-actions ul,
+.b26-interior-source .b26-question-list summary,
+.b26-interior-source .b26-source-rail dd {
+  font-family: Geist, system-ui, sans-serif;
+}
+
+.b26-interior-source .b26-action {
+  min-height: 44px;
+  border-color: var(--b26-interior-line-strong);
+  border-radius: var(--b26-interior-control-radius);
+  box-shadow: none;
+}
+
+.b26-interior-source .b26-action:hover,
+.b26-interior-source .b26-action:focus-visible {
+  transform: none;
+  border-color: var(--b26-interior-ink);
+  box-shadow: none;
+}
+
+.b26-interior-source .b26-intelligence-panel,
+.b26-interior-source .b26-source-rail,
+.b26-interior-source .b26-question-list details {
+  border-color: var(--b26-interior-line);
+  border-radius: var(--b26-interior-panel-radius);
+  box-shadow: none;
+}
+
+.b26-interior-source .b26-insight {
+  border-radius: 10px;
+}
+
+.b26-interior-source .b26-insight:nth-child(even) {
+  background: var(--b26-interior-soft);
+}
+
+.b26-interior-source .b26-insight-topics a,
+.b26-interior-source .b26-rail-topics a,
+.b26-interior-source .b26-source-rail nav a {
+  border-radius: 7px;
+}
+
+/* Solution: preserve evidence-to-decision IA, reduce landing-page dominance. */
+body.b26-interior-solution .solution-page {
+  --solution-ink: var(--b26-interior-ink);
+  --solution-muted: var(--b26-interior-muted);
+  --solution-line: var(--b26-interior-line);
+  --solution-paper: var(--b26-interior-paper);
+  --solution-soft: var(--b26-interior-soft);
+  --solution-cream: var(--b26-interior-canvas);
+}
+
+.b26-interior-solution .solution-page > .solution-hero > h1 {
+  max-width: 820px;
+  font-size: clamp(40px, 4.35vw, 52px);
+  line-height: 1.02;
+  letter-spacing: -.045em;
+}
+
+.b26-interior-solution .solution-page .solution-hero__decision {
+  gap: 24px;
+  margin-top: 34px;
+}
+
+.b26-interior-solution .solution-page .solution-problem p,
+.b26-interior-solution .solution-page .solution-verdict p,
+.b26-interior-solution .solution-page .solution-step p,
+.b26-interior-solution .solution-page .solution-evidence-row__summary > p,
+.b26-interior-solution .solution-page .solution-next-action p {
+  font-family: Geist, system-ui, sans-serif;
+}
+
+.b26-interior-solution .solution-page .solution-verdict,
+.b26-interior-solution .solution-page .solution-fit__cards article,
+.b26-interior-solution .solution-page .solution-step--critical,
+.b26-interior-solution .solution-page .solution-completion-card,
+.b26-interior-solution .solution-page .solution-measurement-card,
+.b26-interior-solution .solution-page .solution-evidence-row,
+.b26-interior-solution .solution-page .solution-evidence-row__detail-grid,
+.b26-interior-solution .solution-page .solution-authority li,
+.b26-interior-solution .solution-page .solution-decision-table,
+.b26-interior-solution .solution-page .solution-next-action {
+  border-radius: var(--b26-interior-panel-radius);
+  box-shadow: none;
+}
+
+.b26-interior-solution .solution-page .solution-fit__cards article {
+  min-height: 0;
+  padding: 18px;
+}
+
+.b26-interior-solution .solution-page .solution-completion-card,
+.b26-interior-solution .solution-page .solution-measurement-card {
+  padding: 24px;
+}
+
+.b26-interior-solution .solution-page .solution-evidence-row {
+  padding: 20px;
+}
+
+.b26-interior-solution .solution-page .ay-button,
+.b26-interior-solution .solution-page .ay-button-secondary,
+.b26-interior-solution .solution-page .button-link,
+.b26-interior-solution .solution-page .solution-decision-copy button,
+.b26-interior-solution .solution-page .topic-chip {
+  min-height: 44px;
+  border-radius: var(--b26-interior-control-radius);
+  box-shadow: none;
+}
+
+.b26-interior-solution .solution-page .ay-button:hover,
+.b26-interior-solution .solution-page .ay-button-secondary:hover,
+.b26-interior-solution .solution-page .button-link:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.b26-interior-solution .solution-page .solution-next-action {
+  padding: 30px !important;
+  border-radius: var(--b26-interior-panel-radius) !important;
+  text-align: left;
+}
+
+.b26-interior-solution .solution-page .solution-next-action h2 {
+  max-width: 680px;
+  margin: 0;
+  font-size: clamp(28px, 3.1vw, 38px);
+  line-height: 1.05;
+}
+
+.b26-interior-solution .solution-page .solution-next-action p {
+  max-width: 650px;
+  margin-right: 0;
+  margin-left: 0;
+}
+
+.b26-interior-solution .solution-page .solution-next-action__bridge {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+  margin-top: 10px;
+}
+
+.b26-interior-solution .solution-page .solution-next-action__bridge .ay-button-secondary {
+  border-color: rgba(255, 255, 255, .42);
+  background: transparent;
+  color: #fff;
+}
+
+.b26-interior-solution .solution-page .solution-next-action__boundary {
+  flex: 1 1 360px;
+  margin: 0;
+  color: rgba(255, 255, 255, .66);
+  font-size: 12px;
+}
+
+/* Apply Research: keep the bridge explicit but visually subordinate to research. */
+body.b26-interior-apply {
+  --b26-canvas: var(--b26-interior-canvas);
+  --b26-paper: var(--b26-interior-paper);
+  --b26-ink: var(--b26-interior-ink);
+  --b26-text: var(--b26-interior-text);
+  --b26-muted: var(--b26-interior-muted);
+  --b26-line: var(--b26-interior-line);
+  --b26-line-strong: var(--b26-interior-line-strong);
+}
+
+.b26-interior-apply .b26-k-hero h1,
+.b26-interior-apply .page-hero h1 {
+  max-width: 780px;
+  font-size: clamp(38px, 4.1vw, 48px);
+  line-height: 1.02;
+  letter-spacing: -.045em;
+}
+
+.b26-interior-apply .b26-k-hero .lead,
+.b26-interior-apply .page-hero .lead,
+.b26-interior-apply .b26-k-document-body p,
+.b26-interior-apply .b26-k-document-body li {
+  font-family: Geist, system-ui, sans-serif;
+}
+
+.b26-interior-apply .hero-actions .ay-button,
+.b26-interior-apply .hero-actions .ay-button-secondary {
+  min-height: 44px;
+  border-radius: var(--b26-interior-control-radius);
+  box-shadow: none;
+}
+
+.b26-interior-apply .hero-actions .ay-button:hover,
+.b26-interior-apply .hero-actions .ay-button-secondary:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.b26-interior-apply .b26-k-local-nav a {
+  border-radius: 7px;
+}
+
+.b26-interior-apply .b26-k-document-rail {
+  border-radius: var(--b26-interior-panel-radius);
+  box-shadow: none;
+}
+
+.b26-interior-apply .b26-k-document-body .table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--b26-interior-line);
+  border-radius: var(--b26-interior-panel-radius);
+  background: rgba(255, 255, 255, .62);
+}
+
+.b26-interior-apply .b26-k-document-body .table-wrap table {
+  min-width: 640px;
+}
+
+.b26-interior-apply .b26-k-document-body .table-wrap th,
+.b26-interior-apply .b26-k-document-body .table-wrap td {
+  padding: 12px 14px;
+}
+
+/*
+ * Consent surface: three stable actions remain visible without a tall stacked
+ * overlay at 320/390px. Labels and consent behavior are unchanged.
+ */
+.b26-interior-v1 .cookie-banner {
+  width: min(calc(100% - 24px), 560px);
+  padding: 14px;
+}
+
+.b26-interior-v1 .cookie-actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  width: 100%;
+}
+
+.b26-interior-v1 .cookie-actions .ay-button,
+.b26-interior-v1 .cookie-actions .ay-button-secondary {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 7px 8px;
+  font-size: 12px;
+  line-height: 1.15;
+  white-space: normal;
+}
+
+.b26-interior-v1 .cookie-actions .ay-button:focus-visible,
+.b26-interior-v1 .cookie-actions .ay-button-secondary:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+@media (max-width: 720px) {
+  .b26-interior-solution .solution-page > .solution-hero > h1 {
+    font-size: clamp(32px, 9.6vw, 40px);
+    line-height: 1.02;
+  }
+
+  .b26-interior-solution .solution-page .solution-hero__decision {
+    gap: 12px;
+    margin-top: 28px;
+  }
+
+  .b26-interior-solution .solution-page .solution-verdict,
+  .b26-interior-solution .solution-page .solution-completion-card,
+  .b26-interior-solution .solution-page .solution-measurement-card,
+  .b26-interior-solution .solution-page .solution-evidence-row,
+  .b26-interior-solution .solution-page .solution-next-action {
+    padding: 20px !important;
+    border-radius: var(--b26-interior-panel-radius);
+  }
+
+  .b26-interior-solution .solution-page .solution-hero__actions a,
+  .b26-interior-solution .solution-page .solution-card-actions a {
+    width: auto;
+    flex: 1 1 180px;
+  }
+
+  .b26-interior-solution .solution-page .solution-next-action__bridge {
+    align-items: stretch;
+  }
+
+  .b26-interior-solution .solution-page .solution-next-action__bridge .ay-button-secondary {
+    flex: 0 1 auto;
+  }
+
+  .b26-interior-apply .b26-k-hero h1,
+  .b26-interior-apply .page-hero h1 {
+    font-size: 32px;
+    line-height: 1.04;
+  }
+
+  .b26-interior-apply .hero-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .b26-interior-apply .hero-actions .ay-button,
+  .b26-interior-apply .hero-actions .ay-button-secondary {
+    width: 100%;
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+}
+
+@media (max-width: 640px) {
+  .b26-interior-v1 .cookie-banner {
+    right: 12px;
+    bottom: max(12px, env(safe-area-inset-bottom));
+    left: 12px;
+    width: calc(100% - 24px);
+    max-height: calc(100dvh - 24px - env(safe-area-inset-bottom));
+    overflow: auto;
+  }
+}
+
+@media (max-width: 380px) {
+  .b26-interior-apply .hero-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .b26-interior-v1 .cookie-actions .ay-button,
+  .b26-interior-v1 .cookie-actions .ay-button-secondary {
+    padding-right: 5px;
+    padding-left: 5px;
+    font-size: 11px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.b26-interior-v1 *,
+  body.b26-interior-v1 *::before,
+  body.b26-interior-v1 *::after {
+    scroll-behavior: auto !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}

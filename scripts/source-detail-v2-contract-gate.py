@@ -19,6 +19,11 @@ from urllib.parse import urljoin, urlsplit
 USER_AGENT = "Base2026ReleaseGate/1.0"
 
 
+class NoRedirectHandler(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):  # noqa: ANN001, ANN201
+        return None
+
+
 def sha256_bytes(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
@@ -77,6 +82,68 @@ def check_future_route(base_url: str, route: str) -> dict:
     if status != 404:
         failures.append(f"status={status}, expected=404")
     return {"route": route, "status": status, "bytes": len(body), "failures": failures}
+
+
+def sitemap_file_route(route: str) -> str:
+    if route == "":
+        return "index.html"
+    if route.endswith("/"):
+        return route + "index.html"
+    return route
+
+
+def x_robots_blocks_indexing(values: list[str]) -> bool:
+    tokens = {
+        token.casefold()
+        for value in values
+        for token in re.split(r"[\s,;]+", value.strip())
+        if token
+    }
+    return bool(tokens & {"noindex", "none"})
+
+
+def check_sitemap_route(base_url: str, web_root: Path, route: str) -> dict:
+    local_route = sitemap_file_route(route)
+    local_path = expected_file(web_root, local_route)
+    failures: list[str] = []
+    if not local_path.is_file():
+        return {"route": route, "status": 0, "bytes": 0, "failures": ["local_target_missing"]}
+    expected = local_path.read_bytes()
+    request = urllib.request.Request(
+        urljoin(base_url, route), headers={"User-Agent": USER_AGENT, "Accept-Encoding": "identity"}
+    )
+    opener = urllib.request.build_opener(NoRedirectHandler())
+    x_robots: list[str] = []
+    try:
+        with opener.open(request, timeout=25) as response:
+            status = int(response.status)
+            x_robots = response.headers.get_all("X-Robots-Tag", [])
+            body = response.read()
+    except urllib.error.HTTPError as exc:
+        status = int(exc.code)
+        x_robots = exc.headers.get_all("X-Robots-Tag", []) if exc.headers else []
+        body = exc.read()
+    except Exception as exc:  # noqa: BLE001
+        status = 0
+        body = b""
+        failures.append(f"{type(exc).__name__}: {exc}")
+    actual_hash = sha256_bytes(body) if body else ""
+    expected_hash = sha256_bytes(expected)
+    if status != 200:
+        failures.append(f"status={status}, expected=200")
+    if status == 200 and actual_hash != expected_hash:
+        failures.append(f"sha256={actual_hash}, expected={expected_hash}")
+    if x_robots_blocks_indexing(x_robots):
+        failures.append("x_robots_tag_blocks_indexing")
+    return {
+        "route": route,
+        "status": status,
+        "bytes": len(body),
+        "actual_sha256": actual_hash,
+        "expected_sha256": expected_hash,
+        "x_robots_blocks_indexing": x_robots_blocks_indexing(x_robots),
+        "failures": failures,
+    }
 
 
 def digest_route_hashes(results: list[dict], hash_key: str) -> str:
@@ -148,26 +215,35 @@ def main() -> int:
     archive_route_set = set(archive_routes)
     forbidden_routes = set(future)
     sitemap_missing_normal = sorted(expected_normal_routes - sitemap_routes)
-    sitemap_missing_archive = sorted(archive_route_set - sitemap_routes)
+    sitemap_archive_present = sorted(archive_route_set & sitemap_routes)
     sitemap_forbidden_present = sorted(forbidden_routes & sitemap_routes)
     sitemap_failures: list[str] = []
     if sitemap_parse_error:
         sitemap_failures.append(sitemap_parse_error)
     if sitemap_missing_normal:
         sitemap_failures.append(f"missing_normal={len(sitemap_missing_normal)}")
-    if sitemap_missing_archive:
-        sitemap_failures.append(f"missing_archive_noindex={len(sitemap_missing_archive)}")
+    if sitemap_archive_present:
+        sitemap_failures.append(f"archive_noindex_present={len(sitemap_archive_present)}")
     if sitemap_forbidden_present:
         sitemap_failures.append(f"future_private_present={len(sitemap_forbidden_present)}")
+
+    sitemap_exact_results: list[dict] = []
+    if not sitemap_parse_error:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=max(1, args.workers)) as executor:
+            sitemap_exact_results = list(
+                executor.map(lambda route: check_sitemap_route(base_url, web_root, route), sorted(sitemap_routes))
+            )
+    sitemap_exact_failures = [item for item in sitemap_exact_results if item["failures"]]
 
     failures = {
         "exact_route_or_hash": exact_failures,
         "future_404": future_failures,
         "sitemap": sitemap_failures,
+        "sitemap_url_or_hash": sitemap_exact_failures,
     }
-    passed = not exact_failures and not future_failures and not sitemap_failures
+    passed = not exact_failures and not future_failures and not sitemap_failures and not sitemap_exact_failures
     report = {
-        "schema": "base2026.source-detail-v2-live-contract-gate/v3",
+        "schema": "base2026.source-detail-v2-live-contract-gate/v4",
         "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "base_url": base_url,
         "manifest": str(manifest_path),
@@ -179,6 +255,7 @@ def main() -> int:
             "archive_noindex": len(archive_routes),
             "future_private_404": len(future_results),
             "sitemap_urls": len(sitemap_routes),
+            "sitemap_exact_200_and_byte_hash": len(sitemap_exact_results),
         },
         "status_counts": {
             "exact": dict(Counter(str(item["status"]) for item in exact_results)),
@@ -191,8 +268,8 @@ def main() -> int:
         "sitemap": {
             "missing_normal_count": len(sitemap_missing_normal),
             "missing_normal_sample": sitemap_missing_normal[:20],
-            "missing_archive_noindex_count": len(sitemap_missing_archive),
-            "missing_archive_noindex_sample": sitemap_missing_archive[:20],
+            "archive_noindex_present_count": len(sitemap_archive_present),
+            "archive_noindex_present_sample": sitemap_archive_present[:20],
             "future_private_present_count": len(sitemap_forbidden_present),
             "future_private_present_sample": sitemap_forbidden_present[:20],
         },
@@ -204,7 +281,9 @@ def main() -> int:
     print(f"report={report_path}")
     print(f"exact_checks={len(exact_results)}")
     print(f"future_checks={len(future_results)}")
-    print(f"failures={len(exact_failures) + len(future_failures) + len(sitemap_failures)}")
+    print(
+        f"failures={len(exact_failures) + len(future_failures) + len(sitemap_failures) + len(sitemap_exact_failures)}"
+    )
     print(f"passed={str(passed).lower()}")
     return 0 if passed else 1
 

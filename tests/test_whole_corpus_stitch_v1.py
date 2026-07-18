@@ -54,13 +54,40 @@ def test_transform_installs_single_canonical_shell_and_design_assets() -> None:
     assert soup.select_one('script[src*="alex-v4-static-shell.js"]')
 
 
+def test_apply_research_retains_route_scoped_interior_contract_after_transform() -> None:
+    html = _page("app-shell content-page doc-page").replace(
+        "<head>",
+        '<head><link rel="preconnect" href="https://fonts.googleapis.com">'
+        '<link rel="stylesheet" href="./static/base2026-interior-v1.css?v=stale">',
+        1,
+    )
+    rendered, family = MODULE.transform_page(html, "apply-research.html")
+    soup = BeautifulSoup(rendered, "html.parser")
+    body = soup.body
+    assert family == "document"
+    assert body is not None
+    assert {"b26-interior-v1", "b26-interior-apply"}.issubset(set(body.get("class") or []))
+    assert not soup.select('link[href*="fonts.googleapis.com"], link[href*="fonts.gstatic.com"]')
+    assert len(soup.select('link[href*="vendor/geist-local.css"]')) == 1
+    assert len(soup.select('link[href*="base2026-interior-v1.css"]')) == 1
+    stylesheets = [str(link.get("href") or "") for link in soup.select('head link[rel="stylesheet"]')]
+    assert stylesheets.index(next(href for href in stylesheets if "base2026-knowledge-stitch" in href)) < stylesheets.index(next(href for href in stylesheets if "base2026-interior-v1" in href))
+
+
+def test_non_apply_document_does_not_receive_interior_contract() -> None:
+    rendered, _ = MODULE.transform_page(_page("app-shell content-page doc-page"), "methodology.html")
+    soup = BeautifulSoup(rendered, "html.parser")
+    assert "b26-interior-v1" not in set((soup.body or {}).get("class") or [])
+    assert not soup.select('link[href*="base2026-interior-v1.css"]')
+
+
 def test_finalize_release_metadata_rebinds_package_identity(tmp_path: Path) -> None:
     source = tmp_path / "base-release"
     output = tmp_path / "whole-corpus-preview-20260715-160000"
     source.mkdir()
     output.mkdir()
     source_manifest = {
-        "schema": "base2026.public-hotfix-from-export/v3",
+        "schema": "base2026.public-hotfix-from-export/v4",
         "release_name": "base-release",
         "required_runtime_files": ["web/index.html"],
     }

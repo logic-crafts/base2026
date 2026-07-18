@@ -32,6 +32,8 @@ from alex_v4_static_shell import (  # noqa: E402
 
 VERSION = "20260715-whole-corpus-stitch-v1-r4"
 CSS_NAME = "base2026-knowledge-stitch-v1.css"
+INTERIOR_CSS_NAME = "base2026-interior-v1.css"
+INTERIOR_VERSION = "20260718-base2026-interior-v1"
 DOC_NAMES = {
     "methodology.html", "roadmap.html", "story.html", "privacy.html",
     "source-policy.html", "support.html", "site-structure.html", "opt-out.html",
@@ -70,6 +72,7 @@ def finalize_release_metadata(source_root: Path, out_root: Path, manifest: dict[
         "web/static/alex-v4-static-shell.css",
         "web/static/alex-v4-static-shell.js",
         f"web/static/{CSS_NAME}",
+        f"web/static/{INTERIOR_CSS_NAME}",
     ):
         if required not in required_runtime:
             required_runtime.append(required)
@@ -353,7 +356,10 @@ def transform_page(source: str, rel: str) -> tuple[str, str]:
         if isinstance(footer_fragment, Tag):
             body.append(footer_fragment)
     family = family_for(rel, soup)
-    body["class"] = f"ay-alex-v4-static ay-stitch-home-v3 ay-stitch-home-v4 b26-knowledge-v1 b26-family-{family}"
+    body_classes = f"ay-alex-v4-static ay-stitch-home-v3 ay-stitch-home-v4 b26-knowledge-v1 b26-family-{family}"
+    if rel == "apply-research.html":
+        body_classes += " b26-interior-v1 b26-interior-apply"
+    body["class"] = body_classes
     add_classes(main, "app-shell", "b26-k-main", f"b26-k-{family}")
 
     head = soup.head
@@ -367,6 +373,28 @@ def transform_page(source: str, rel: str) -> tuple[str, str]:
         if not head.select_one('script[src*="alex-v4-static-shell.js"]'):
             shell_script = soup.new_tag("script", attrs={"src": f"/knowledge/static/alex-v4-static-shell.js?v={SHELL_VERSION}", "defer": ""})
             head.append(shell_script)
+        if rel == "apply-research.html":
+            for external_font in head.select(
+                'link[href*="fonts.googleapis.com"], link[href*="fonts.gstatic.com"]'
+            ):
+                external_font.decompose()
+            if not head.select_one('link[href*="vendor/geist-local.css"]'):
+                local_fonts = soup.new_tag(
+                    "link",
+                    rel="stylesheet",
+                    href=f"/knowledge/static/vendor/geist-local.css?v={INTERIOR_VERSION}",
+                )
+                local_fonts["data-base2026-local-fonts"] = "geist-manrope"
+                head.append(local_fonts)
+            for stale_interior in head.select(f'link[href*="{INTERIOR_CSS_NAME}"]'):
+                stale_interior.decompose()
+            interior_link = soup.new_tag(
+                "link",
+                rel="stylesheet",
+                href=f"/knowledge/static/{INTERIOR_CSS_NAME}?v={INTERIOR_VERSION}",
+            )
+            interior_link["data-base2026-interior"] = "v1"
+            head.append(interior_link)
 
     tag_family_components(main, family)
     if family == "document":
@@ -420,6 +448,11 @@ def main() -> int:
     (static_out / "alex-v4-static-shell.js").write_text(shell_js(), encoding="utf-8")
     css_source = SCRIPT_DIR / "base2026_knowledge_stitch_v1.css"
     (static_out / CSS_NAME).write_text(css_source.read_text(encoding="utf-8"), encoding="utf-8")
+    interior_css_source = SCRIPT_DIR.parent / "web" / "static" / INTERIOR_CSS_NAME
+    (static_out / INTERIOR_CSS_NAME).write_text(
+        interior_css_source.read_text(encoding="utf-8"),
+        encoding="utf-8",
+    )
 
     protected_drift = []
     for rel, expected in protected.items():
@@ -443,6 +476,7 @@ def main() -> int:
             "web/static/alex-v4-static-shell.css",
             "web/static/alex-v4-static-shell.js",
             f"web/static/{CSS_NAME}",
+            f"web/static/{INTERIOR_CSS_NAME}",
         ],
         "protected_drift": protected_drift,
     }

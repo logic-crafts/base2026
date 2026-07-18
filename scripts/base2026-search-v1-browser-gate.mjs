@@ -8,17 +8,19 @@ import { basename, join, resolve } from "node:path";
 const require = createRequire(import.meta.url);
 
 function parseArgs(argv) {
-  const options = { baseUrl: "", out: "", searchUpstreamBase: "" };
+  const options = { baseUrl: "", out: "", searchUpstreamBase: "", query: "automation" };
   for (let i = 0; i < argv.length; i += 1) {
     const arg = argv[i];
     if (arg === "--base-url") options.baseUrl = argv[++i];
     else if (arg === "--out") options.out = argv[++i];
     else if (arg === "--search-upstream-base") options.searchUpstreamBase = argv[++i];
+    else if (arg === "--query") options.query = argv[++i];
     else throw new Error(`Unknown option: ${arg}`);
   }
   if (!options.baseUrl || !options.out) throw new Error("--base-url and --out are required");
   options.baseUrl = options.baseUrl.endsWith("/") ? options.baseUrl : `${options.baseUrl}/`;
   options.out = resolve(options.out);
+  if (!/^[a-z0-9 -]{1,40}$/i.test(options.query)) throw new Error("--query must be a short public fixture string");
   return options;
 }
 
@@ -80,7 +82,7 @@ async function installSearchUpstream(page, baseUrl, searchUpstreamBase) {
   });
 }
 
-async function inspectCanonical(page, baseUrl, viewport, out, searchUpstreamBase) {
+async function inspectCanonical(page, baseUrl, viewport, out, searchUpstreamBase, query) {
   await installSearchUpstream(page, baseUrl, searchUpstreamBase);
   const sameOriginErrors = [];
   const consoleErrors = [];
@@ -96,12 +98,12 @@ async function inspectCanonical(page, baseUrl, viewport, out, searchUpstreamBase
     }
   });
 
-  const target = `${baseUrl}?q=automation`;
+  const target = `${baseUrl}?q=${encodeURIComponent(query)}`;
   const response = await page.goto(target, { waitUntil: "domcontentloaded", timeout: 30000 });
   await page.waitForSelector('.ais-SearchBox-input[aria-label="Search"]', { timeout: 15000 });
   await page.waitForFunction(
-    () => document.querySelector('.ais-SearchBox-input[aria-label="Search"]')?.value === "automation",
-    null,
+    (expected) => document.querySelector('.ais-SearchBox-input[aria-label="Search"]')?.value === expected,
+    query,
     { timeout: 15000 },
   );
   await page.waitForTimeout(1800);
@@ -169,7 +171,7 @@ async function inspectCanonical(page, baseUrl, viewport, out, searchUpstreamBase
   if (!diagnostics.styles.some((value) => value.includes("alex-v4-static-shell.css"))) failures.push("shell CSS missing");
   if (!diagnostics.styles.some((value) => value.includes("base2026-search-v1.css"))) failures.push("Search V1 CSS missing");
   if (!diagnostics.scripts.some((value) => value.includes("base2026-search-v3.js"))) failures.push("Search V3 JS missing");
-  if (diagnostics.query !== "automation") failures.push(`query=${diagnostics.query}`);
+  if (diagnostics.query !== query) failures.push(`query fixture mismatch`);
   if (diagnostics.result_items < 1) failures.push("no search results rendered");
   if (diagnostics.overflow_x) failures.push(`horizontal overflow ${diagnostics.scroll_width}>${diagnostics.client_width}`);
   if (sameOriginErrors.length) failures.push(`${sameOriginErrors.length} same-origin HTTP error(s)`);
@@ -189,18 +191,18 @@ async function inspectCanonical(page, baseUrl, viewport, out, searchUpstreamBase
   return result;
 }
 
-async function inspectAlias(page, baseUrl, aliasPath, searchUpstreamBase) {
+async function inspectAlias(page, baseUrl, aliasPath, searchUpstreamBase, query) {
   await installSearchUpstream(page, baseUrl, searchUpstreamBase);
-  const target = `${baseUrl}${aliasPath}?q=automation#alias-proof`;
+  const target = `${baseUrl}${aliasPath}?q=${encodeURIComponent(query)}#alias-proof`;
   const response = await page.goto(target, { waitUntil: "domcontentloaded", timeout: 30000 });
   await page.waitForURL(
     (url) =>
       url.pathname === new URL(baseUrl).pathname &&
-      url.searchParams.get("q") === "automation" &&
+      url.searchParams.get("q") === query &&
       url.hash === "#alias-proof",
     { timeout: 10000 },
   );
-  await page.waitForSelector(".ais-SearchBox-input", { timeout: 15000 });
+  await page.waitForSelector('.ais-SearchBox-input[aria-label="Search"]', { timeout: 15000 });
   const finalUrl = page.url();
   const bodyClass = await page.locator("body").getAttribute("class");
   const failures = [];
@@ -211,32 +213,32 @@ async function inspectAlias(page, baseUrl, aliasPath, searchUpstreamBase) {
   return result;
 }
 
-async function inspectLegacyHash(page, baseUrl, searchUpstreamBase) {
+async function inspectLegacyHash(page, baseUrl, searchUpstreamBase, expectedQuery) {
   await installSearchUpstream(page, baseUrl, searchUpstreamBase);
-  const target = `${baseUrl}#search?q=automation&creator=iamdandavies`;
+  const target = `${baseUrl}#search?q=${encodeURIComponent(expectedQuery)}&creator=iamdandavies`;
   const response = await page.goto(target, { waitUntil: "domcontentloaded", timeout: 30000 });
   await page.waitForURL(
     (url) =>
       url.pathname === new URL(baseUrl).pathname &&
-      url.searchParams.get("q") === "automation" &&
+      url.searchParams.get("q") === expectedQuery &&
       url.searchParams.get("creator") === "iamdandavies" &&
       url.hash === "",
     { timeout: 10000 },
   );
-  await page.waitForSelector(".ais-SearchBox-input", { timeout: 15000 });
+  await page.waitForSelector('.ais-SearchBox-input[aria-label="Search"]', { timeout: 15000 });
   await page.waitForFunction(
-    () => document.querySelector(".ais-SearchBox-input")?.value === "automation",
-    null,
+    (expected) => document.querySelector('.ais-SearchBox-input[aria-label="Search"]')?.value === expected,
+    expectedQuery,
     { timeout: 15000 },
   );
-  const query = await page.locator(".ais-SearchBox-input").inputValue();
+  const renderedQuery = await page.locator('.ais-SearchBox-input[aria-label="Search"]').inputValue();
   const finalUrl = page.url();
   const bodyClass = await page.locator("body").getAttribute("class");
   const failures = [];
   if (response?.status() !== 200) failures.push(`legacy hash status ${response?.status()}`);
   if (!bodyClass?.includes("base2026-search-v1")) failures.push("legacy hash did not land on Search V1");
-  if (query !== "automation") failures.push(`legacy hash query=${query}`);
-  const result = { entry_url: target, entry_status: response?.status() ?? null, final_url: finalUrl, query, body_class: bodyClass, failures };
+  if (renderedQuery !== expectedQuery) failures.push("legacy hash query fixture mismatch");
+  const result = { entry_url: target, entry_status: response?.status() ?? null, final_url: finalUrl, query: renderedQuery, body_class: bodyClass, failures };
   await page.unrouteAll({ behavior: "ignoreErrors" });
   await page.close();
   return result;
@@ -252,6 +254,7 @@ async function main() {
     generated_at: new Date().toISOString(),
     base_url: options.baseUrl,
     search_upstream_base: options.searchUpstreamBase || null,
+    fixture_query: options.query,
     results: [],
     aliases: [],
     legacy_hashes: [],
@@ -261,19 +264,19 @@ async function main() {
     for (const viewport of VIEWPORTS) {
       const context = await browser.newContext({ viewport: { width: viewport.width, height: viewport.height }, deviceScaleFactor: 1 });
       const page = await context.newPage();
-      const result = await inspectCanonical(page, options.baseUrl, viewport, options.out, options.searchUpstreamBase);
+      const result = await inspectCanonical(page, options.baseUrl, viewport, options.out, options.searchUpstreamBase, options.query);
       report.results.push(result);
       if (result.failures.length) report.failures.push({ viewport: viewport.id, failures: result.failures });
       for (const aliasPath of ["search/", "search.html"]) {
         const aliasPage = await context.newPage();
-        const alias = await inspectAlias(aliasPage, options.baseUrl, aliasPath, options.searchUpstreamBase);
+        const alias = await inspectAlias(aliasPage, options.baseUrl, aliasPath, options.searchUpstreamBase, options.query);
         report.aliases.push({ viewport: viewport.id, ...alias });
         if (alias.failures.length) {
           report.failures.push({ viewport: viewport.id, alias_path: aliasPath, alias_failures: alias.failures });
         }
       }
       const legacyHashPage = await context.newPage();
-      const legacyHash = await inspectLegacyHash(legacyHashPage, options.baseUrl, options.searchUpstreamBase);
+      const legacyHash = await inspectLegacyHash(legacyHashPage, options.baseUrl, options.searchUpstreamBase, options.query);
       report.legacy_hashes.push({ viewport: viewport.id, ...legacyHash });
       if (legacyHash.failures.length) {
         report.failures.push({ viewport: viewport.id, legacy_hash_failures: legacyHash.failures });

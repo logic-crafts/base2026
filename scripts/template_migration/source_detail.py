@@ -45,11 +45,20 @@ class SourceInsight(BaseModel):
     topics: tuple[SourceTopic, ...] = Field(min_length=1)
 
 
+class SourceSolution(BaseModel):
+    model_config = ConfigDict(frozen=True)
+    solution_id: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+    title: str = Field(min_length=1)
+    href: str = Field(pattern=r"^/knowledge/solutions/[a-z0-9-]+\.html$")
+    why_relevant: str = Field(min_length=1)
+
+
 class SourceDetailView(BaseModel):
     """Normalized typed view-model. Templates never read raw legacy DOM."""
 
     model_config = ConfigDict(frozen=True)
     route: str
+    item_id: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)+$")
     admission_state: AdmissionState
     language_code: str = Field(min_length=1)
     head_html: str
@@ -72,6 +81,7 @@ class SourceDetailView(BaseModel):
     source_html: str = Field(min_length=1)
     insights: tuple[SourceInsight, ...]
     questions: tuple[SourceQuestion, ...]
+    solutions: tuple[SourceSolution, ...]
     archive: bool
     schema_html: str
 
@@ -154,6 +164,7 @@ def adapt_source_detail(
     source: Path,
     route: str,
     expected_admission_state: AdmissionState | None = None,
+    solutions: tuple[SourceSolution, ...] = (),
 ) -> SourceDetailView:
     """Parse one frozen legacy source route into the strict V2 view-model.
 
@@ -163,6 +174,7 @@ def adapt_source_detail(
     """
     soup = BeautifulSoup(source.read_text(encoding="utf-8"), "html.parser")
     observed_admission = _admission_from_robots(soup)
+    item_id = Path(route).stem
     admission = expected_admission_state or observed_admission
     if admission == "future_private_backlog":
         raise ValueError(f"Future route {route} must never be adapted or rendered")
@@ -173,6 +185,10 @@ def adapt_source_detail(
 
     for legacy_css in soup.select('link[href*="static/styles.css"]'):
         legacy_css.decompose()
+    for external_font in soup.select(
+        'link[href*="fonts.googleapis.com"], link[href*="fonts.gstatic.com"]'
+    ):
+        external_font.decompose()
 
     hero = _required(soup.select_one(".source-page-hero"), ".source-page-hero")
     identity = _required(hero.select_one(".source-identity"), ".source-identity")
@@ -239,6 +255,7 @@ def adapt_source_detail(
 
     return SourceDetailView(
         route=route,
+        item_id=item_id,
         admission_state=admission,
         language_code=language_code,
         head_html=_inner(_required(soup.head, "<head>")),
@@ -261,6 +278,7 @@ def adapt_source_detail(
         source_html=_inner(source_text),
         insights=insights,
         questions=questions,
+        solutions=solutions if admission == "normal_public_card" else (),
         archive=admission == "provenance_archive_noindex",
         schema_html="".join(str(script) for script in soup.select('main script[type="application/ld+json"]')),
     )

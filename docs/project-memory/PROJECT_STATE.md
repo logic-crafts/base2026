@@ -1,6 +1,10 @@
 # Project State
 
-Last updated: 2026-07-15
+Last updated: 2026-07-17
+
+## Current override — Phase 0 P1 Base2026 immutable preview complete; production unchanged
+
+Exact local preview `base2026-phase0-p1-r6-preview-20260717-235500` is bound to ZIP SHA-256 `6ad17478944ffb14883b117dc4579b3c5099ad03fbf15ddec5760ee9ffd87087` and immutable R6 input SHA-256 `9e4d7277900649dd35a39d47838989ee8eaefe9b71a0b8d23731b3d39227eed3`. Public manifests are versioned and allowlisted; validation returns zero issues. The inherited Source Detail validation receipt is package-relative and a package-wide scan finds zero machine-local/private-storage shapes across all 18 JSON files. Sitemap admission is exact at 1,734 URLs: 1,493 normal Source Detail plus 241 frozen non-source, with 199 archive/noindex and 135 future/private excluded. The 1,933-URL R6 sitemap is retained only as historical production/audit evidence and fails the new gate with 199 unexpected URLs. The earlier `230500` preview is superseded. Package/deploy contracts are v4 and fail closed. This work did not deploy, re-export the corpus, reindex Meilisearch, submit IndexNow, mutate WordPress, send forms, commit, or push. Canonical packet: `docs/project-memory/BASE2026_PHASE0_P1_PREVIEW_2026_07_17.md`.
 
 ## Current override — Stitch V1 AI Recommends Solutions deployed and live-verified
 

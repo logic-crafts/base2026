@@ -1,0 +1,137 @@
+{
+  "schema": "alex-root-sitemap-routes/v2",
+  "source_registry": {
+    "registry_id": "alex-personal-site-root-indexable-routes",
+    "schema_version": "1.0.0",
+    "canonical_owner": "alex-personal-site-wordpress",
+    "canonical_source_path": "contracts/alex-root-route-registry.json",
+    "source_sha256": "2e88875dbd7b97558e941619d71e7ff80a7a45d93209b25b94fd5c46dc360c96",
+    "observed_at": "2026-07-18T06:44:10Z",
+    "route_count": 24,
+    "candidate_admission": true,
+    "owner_approved": true,
+    "production_change_authorized": true
+  },
+  "routes": [
+    {
+      "path": "/",
+      "priority": "1.0",
+      "owner": "wordpress"
+    },
+    {
+      "path": "/90-day-ai-search-visibility-sprint/",
+      "priority": "0.85",
+      "owner": "wordpress"
+    },
+    {
+      "path": "/about/",
+      "priority": "0.8",
+      "owner": "wordpress"
+    },
+    {
+      "path": "/ai-visibility-audit-for-dentists/",
+      "priority": "0.72",
+      "owner": "wordpress"
+    },
+    {
+      "path": "/ai-visibility-audit-for-hvac-companies/",
+      "priority": "0.72",
+      "owner": "wordpress"
+    },
+    {
+      "path": "/ai-visibility-audit-for-law-firms/",
+      "priority": "0.72",
+      "owner": "wordpress"
+    },
+    {
+      "path": "/ai-visibility-audit-for-plumbing-companies/",
+      "priority": "0.72",
+      "owner": "wordpress"
+    },
+    {
+      "path": "/ai-visibility-audit-for-roofing-companies/",
+      "priority": "0.72",
+      "owner": "wordpress"
+    },
+    {
+      "path": "/ai-visibility-audit/",
+      "priority": "0.95",
+      "owner": "wordpress"
+    },
+    {
+      "path": "/ai-visibility-diagnostic-audit/",
+      "priority": "0.75",
+      "owner": "wordpress"
+    },
+    {
+      "path": "/ai-visibility-source-footprint/",
+      "priority": "0.75",
+      "owner": "wordpress"
+    },
+    {
+      "path": "/answer-ready-service-pages/",
+      "priority": "0.75",
+      "owner": "wordpress"
+    },
+    {
+      "path": "/contact/",
+      "priority": "0.6",
+      "owner": "wordpress"
+    },
+    {
+      "path": "/entity-trust-source-intelligence/",
+      "priority": "0.75",
+      "owner": "wordpress"
+    },
+    {
+      "path": "/free-ai-visibility-snapshot/",
+      "priority": "0.9",
+      "owner": "wordpress"
+    },
+    {
+      "path": "/monthly-ai-visibility-growth/",
+      "priority": "0.85",
+      "owner": "wordpress"
+    },
+    {
+      "path": "/pricing/",
+      "priority": "0.9",
+      "owner": "wordpress"
+    },
+    {
+      "path": "/privacy-policy/",
+      "priority": "0.3",
+      "owner": "wordpress"
+    },
+    {
+      "path": "/sample-ai-visibility-snapshot/",
+      "priority": "0.75",
+      "owner": "wordpress"
+    },
+    {
+      "path": "/services/",
+      "priority": "0.9",
+      "owner": "wordpress"
+    },
+    {
+      "path": "/technical-seo-geo-foundation/",
+      "priority": "0.75",
+      "owner": "wordpress"
+    },
+    {
+      "path": "/what-is-ai-search-visibility/",
+      "priority": "0.65",
+      "owner": "wordpress"
+    },
+    {
+      "path": "/when-to-rebuild-website-for-seo/",
+      "priority": "0.65",
+      "owner": "wordpress"
+    },
+    {
+      "path": "/why-chatgpt-does-not-recommend-your-business/",
+      "priority": "0.65",
+      "owner": "wordpress"
+    }
+  ]
+}

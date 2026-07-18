@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import shutil
 import sys
 from collections import Counter
@@ -20,10 +21,10 @@ ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS = ROOT / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
-from template_migration.source_detail import adapt_source_detail, render_source_detail  # noqa: E402
+from template_migration.source_detail import SourceSolution, adapt_source_detail, render_source_detail  # noqa: E402
 from alex_v4_static_shell import shell_css, shell_js  # noqa: E402
 
-RENDERER_VERSION = "source-detail-v2-full-candidate-20260712"
+RENDERER_VERSION = "source-detail-v2-interior-v1-20260718"
 
 
 def sha256(path: Path) -> str:
@@ -62,7 +63,7 @@ def safe_candidate_out(path: Path) -> Path:
     return resolved
 
 
-def copy_static_assets(out: Path) -> dict[str, str]:
+def copy_static_assets(out: Path, solution_journey_registry: Path | None = None) -> dict[str, str]:
     """Copy the deployed static layout required by Source Detail documents.
 
     Legacy source documents reference shell icons as ``../static/assets/...``.
@@ -72,7 +73,11 @@ def copy_static_assets(out: Path) -> dict[str, str]:
     accidentally reading canonical output outside the candidate root.
     """
     static_out = out / "static"
-    shutil.copytree(ROOT / "web/static/static", static_out)
+    legacy_static_seed = ROOT / "web" / "static" / "static"
+    if legacy_static_seed.is_dir():
+        shutil.copytree(legacy_static_seed, static_out)
+    else:
+        static_out.mkdir(parents=True)
     source_assets = ROOT / "web/static/assets"
     if not source_assets.is_dir():
         raise FileNotFoundError(f"Canonical shell asset directory is missing: {source_assets}")
@@ -80,23 +85,84 @@ def copy_static_assets(out: Path) -> dict[str, str]:
     replacements = {
         "source-detail-v2.css": SCRIPTS / "base2026_source_detail_v2.css",
         "source-detail-v2.js": SCRIPTS / "base2026_source_detail_v2.js",
+        "base2026-interior-v1.css": ROOT / "web" / "static" / "base2026-interior-v1.css",
     }
     for name, source in replacements.items():
         shutil.copy2(source, static_out / name)
-    (static_out / "alex-v4-static-shell.css").write_text(shell_css(), encoding="utf-8")
+    vendor_source = ROOT / "web" / "static" / "vendor"
+    if not vendor_source.is_dir():
+        raise FileNotFoundError(f"Canonical local-font directory is missing: {vendor_source}")
+    font_assets = sorted(
+        path for path in vendor_source.iterdir()
+        if path.is_file() and path.name.startswith(("geist-", "manrope-"))
+    )
+    if not font_assets or not any(path.name == "geist-local.css" for path in font_assets):
+        raise ValueError("Canonical local-font asset set is incomplete")
+    (static_out / "vendor").mkdir(parents=True, exist_ok=True)
+    for source in font_assets:
+        shutil.copy2(source, static_out / "vendor" / source.name)
+    if solution_journey_registry is not None:
+        for name in ("base2026-solution-journey.js", "base2026-solution-journey.css"):
+            shutil.copy2(ROOT / "web" / "static" / name, static_out / name)
+        shutil.copy2(solution_journey_registry, static_out / "base2026-solution-journey.json")
+    local_shell_css = re.sub(
+        r"^@import\s+url\([^\n]+\);\s*",
+        "",
+        shell_css(),
+        count=1,
+    )
+    if "fonts.googleapis.com" in local_shell_css or "fonts.gstatic.com" in local_shell_css:
+        raise ValueError("Candidate shell CSS retains an external font dependency")
+    (static_out / "alex-v4-static-shell.css").write_text(local_shell_css, encoding="utf-8")
     (static_out / "alex-v4-static-shell.js").write_text(shell_js(), encoding="utf-8")
-    required = (
+    required = [
         "alex-v4-static-shell.css",
         "alex-v4-static-shell.js",
         "source-detail-v2.css",
         "source-detail-v2.js",
+        "base2026-interior-v1.css",
+        *[f"vendor/{path.name}" for path in font_assets],
         "assets/alex-yarosh-favicon-32.png",
         "assets/alex-yarosh-apple-touch.png",
-    )
+    ]
+    if solution_journey_registry is not None:
+        required.extend(
+            (
+                "base2026-solution-journey.js",
+                "base2026-solution-journey.css",
+                "base2026-solution-journey.json",
+            )
+        )
     missing = [name for name in required if not (static_out / name).is_file()]
     if missing:
         raise ValueError(f"Candidate static asset copy missing: {missing}")
     return {name: sha256(static_out / name) for name in required}
+
+
+def load_solution_mappings(path: Path | None) -> tuple[dict[str, tuple[SourceSolution, ...]], str]:
+    if path is None:
+        return {}, ""
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    if payload.get("schema") != "base2026.solution-journey-registry/v1":
+        raise ValueError("Unexpected Solution journey registry schema")
+    mappings: dict[str, tuple[SourceSolution, ...]] = {}
+    for row in payload.get("source_mappings") or []:
+        route = str(row.get("route") or "")
+        if not route.startswith("sources/") or not route.endswith(".html"):
+            raise ValueError(f"Invalid Solution journey source route: {route!r}")
+        solutions = tuple(
+            SourceSolution(
+                solution_id=str(solution.get("id") or ""),
+                title=str(solution.get("title") or ""),
+                href=str(solution.get("href") or ""),
+                why_relevant=str(solution.get("why_relevant") or ""),
+            )
+            for solution in row.get("solutions") or []
+        )
+        if not solutions or route in mappings:
+            raise ValueError(f"Invalid or duplicate Solution journey mapping: {route}")
+        mappings[route] = solutions
+    return mappings, sha256(path)
 
 
 def build(args: argparse.Namespace) -> dict[str, Any]:
@@ -104,6 +170,8 @@ def build(args: argparse.Namespace) -> dict[str, Any]:
     source_root = Path(args.source_root).resolve()
     out = safe_candidate_out(Path(args.out))
     rows = read_manifest(manifest_path)
+    registry_path = Path(args.solution_journey_registry).resolve() if args.solution_journey_registry else None
+    solution_mappings, registry_sha256 = load_solution_mappings(registry_path)
     expected = Counter((int(row["expected_status"]), str(row["admission_state"])) for row in rows)
     if expected[(200, "normal_public_card")] == 0 or expected[(200, "provenance_archive_noindex")] == 0:
         raise ValueError("Manifest must contain normal and archive Source Detail routes")
@@ -114,7 +182,7 @@ def build(args: argparse.Namespace) -> dict[str, Any]:
     rendered: list[dict[str, Any]] = []
     future: list[str] = []
     try:
-        assets = copy_static_assets(out)
+        assets = copy_static_assets(out, registry_path)
         for row in rows:
             route = str(row["route"])
             status = int(row["expected_status"])
@@ -132,7 +200,7 @@ def build(args: argparse.Namespace) -> dict[str, Any]:
                 raise ValueError(f"Invalid render admission for {route}: status={status}, state={admission}")
             if not source.is_file():
                 raise FileNotFoundError(f"Manifest 200 route is absent from canonical source: {route}")
-            view = adapt_source_detail(source, route, admission)  # type: ignore[arg-type]
+            view = adapt_source_detail(source, route, admission, solution_mappings.get(route, ()))  # type: ignore[arg-type]
             html = render_source_detail(view, RENDERER_VERSION)
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_text(html, encoding="utf-8")
@@ -155,6 +223,8 @@ def build(args: argparse.Namespace) -> dict[str, Any]:
             "route_manifest_sha256": sha256(manifest_path),
             "source_root": str(source_root.relative_to(ROOT)),
             "asset_sha256": assets,
+            "solution_journey_registry_sha256": registry_sha256,
+            "solution_journey_source_count": len(solution_mappings),
             "expected": {f"{status}:{state}": count for (status, state), count in sorted(expected.items())},
             "rendered": rendered,
             "future_private_not_emitted": future,
@@ -173,6 +243,7 @@ def main() -> int:
     parser.add_argument("--route-manifest", required=True)
     parser.add_argument("--source-root", default="web/static")
     parser.add_argument("--out", required=True)
+    parser.add_argument("--solution-journey-registry")
     args = parser.parse_args()
     result = build(args)
     print(json.dumps({"out": args.out, "rendered": len(result["rendered"]), "future_private_not_emitted": len(result["future_private_not_emitted"]), "expected": result["expected"]}, indent=2))
