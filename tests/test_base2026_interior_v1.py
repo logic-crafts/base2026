@@ -64,6 +64,14 @@ def test_source_detail_template_uses_shared_v2_design_and_local_fonts() -> None:
     assert "fonts.googleapis.com" not in rendered
 
 
+def test_source_detail_browser_gate_tracks_the_current_source_shell() -> None:
+    gate = (ROOT / "scripts" / "source-detail-v2-browser-gate.mjs").read_text(encoding="utf-8")
+
+    assert "ay-stitch-home-v4 body class missing" not in gate
+    for class_name in ("ayds-root", "ayds-mode-product", "b26-family-source", "b26-source-v2"):
+        assert f'"{class_name}"' in gate
+
+
 def test_source_candidate_asset_copier_carries_v2_css_and_local_font_dependencies(tmp_path: Path) -> None:
     module = load_module("source_detail_candidate_interior", SCRIPTS / "build-source-detail-v2-full-candidate.py")
     fake_root = tmp_path / "repo"

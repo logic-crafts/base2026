@@ -28,7 +28,7 @@ def sha256_bytes(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
 
-def fetch(url: str, timeout: int = 25, attempts: int = 2) -> tuple[int, bytes, str]:
+def fetch(url: str, timeout: int = 25, attempts: int = 4) -> tuple[int, bytes, str]:
     last_error = ""
     for attempt in range(attempts):
         request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, "Accept-Encoding": "identity"})
@@ -40,8 +40,31 @@ def fetch(url: str, timeout: int = 25, attempts: int = 2) -> tuple[int, bytes, s
         except Exception as exc:  # noqa: BLE001 - report exact network failure
             last_error = f"{type(exc).__name__}: {exc}"
             if attempt + 1 < attempts:
-                time.sleep(0.35 * (attempt + 1))
+                time.sleep(0.5 * (2**attempt))
     return 0, b"", last_error
+
+
+def fetch_no_redirect(
+    url: str, timeout: int = 25, attempts: int = 4
+) -> tuple[int, bytes, list[str], str]:
+    """Fetch one immutable route without following redirects and retain robots headers."""
+    last_error = ""
+    opener = urllib.request.build_opener(NoRedirectHandler())
+    for attempt in range(attempts):
+        request = urllib.request.Request(
+            url, headers={"User-Agent": USER_AGENT, "Accept-Encoding": "identity"}
+        )
+        try:
+            with opener.open(request, timeout=timeout) as response:
+                return int(response.status), response.read(), response.headers.get_all("X-Robots-Tag", []), ""
+        except urllib.error.HTTPError as exc:
+            headers = exc.headers.get_all("X-Robots-Tag", []) if exc.headers else []
+            return int(exc.code), exc.read(), headers, ""
+        except Exception as exc:  # noqa: BLE001 - report exact network failure
+            last_error = f"{type(exc).__name__}: {exc}"
+            if attempt + 1 < attempts:
+                time.sleep(0.5 * (2**attempt))
+    return 0, b"", [], last_error
 
 
 def expected_file(web_root: Path, relative_path: str) -> Path:
@@ -54,7 +77,7 @@ def expected_file(web_root: Path, relative_path: str) -> Path:
 def check_exact_route(base_url: str, web_root: Path, route: str) -> dict:
     local_path = expected_file(web_root, route)
     expected = local_path.read_bytes()
-    status, body, error = fetch(urljoin(base_url, route))
+    status, body, x_robots, error = fetch_no_redirect(urljoin(base_url, route))
     actual_hash = sha256_bytes(body) if body else ""
     expected_hash = sha256_bytes(expected)
     failures: list[str] = []
@@ -70,6 +93,7 @@ def check_exact_route(base_url: str, web_root: Path, route: str) -> dict:
         "bytes": len(body),
         "actual_sha256": actual_hash,
         "expected_sha256": expected_hash,
+        "x_robots_blocks_indexing": x_robots_blocks_indexing(x_robots),
         "failures": failures,
     }
 
@@ -109,24 +133,9 @@ def check_sitemap_route(base_url: str, web_root: Path, route: str) -> dict:
     if not local_path.is_file():
         return {"route": route, "status": 0, "bytes": 0, "failures": ["local_target_missing"]}
     expected = local_path.read_bytes()
-    request = urllib.request.Request(
-        urljoin(base_url, route), headers={"User-Agent": USER_AGENT, "Accept-Encoding": "identity"}
-    )
-    opener = urllib.request.build_opener(NoRedirectHandler())
-    x_robots: list[str] = []
-    try:
-        with opener.open(request, timeout=25) as response:
-            status = int(response.status)
-            x_robots = response.headers.get_all("X-Robots-Tag", [])
-            body = response.read()
-    except urllib.error.HTTPError as exc:
-        status = int(exc.code)
-        x_robots = exc.headers.get_all("X-Robots-Tag", []) if exc.headers else []
-        body = exc.read()
-    except Exception as exc:  # noqa: BLE001
-        status = 0
-        body = b""
-        failures.append(f"{type(exc).__name__}: {exc}")
+    status, body, x_robots, error = fetch_no_redirect(urljoin(base_url, route))
+    if error:
+        failures.append(error)
     actual_hash = sha256_bytes(body) if body else ""
     expected_hash = sha256_bytes(expected)
     if status != 200:
@@ -144,6 +153,28 @@ def check_sitemap_route(base_url: str, web_root: Path, route: str) -> dict:
         "x_robots_blocks_indexing": x_robots_blocks_indexing(x_robots),
         "failures": failures,
     }
+
+
+def sitemap_result_from_exact(route: str, exact_result: dict) -> dict:
+    """Reuse an already fetched exact route for the overlapping sitemap contract."""
+    blocks_indexing = bool(exact_result.get("x_robots_blocks_indexing"))
+    failures = list(exact_result["failures"])
+    if blocks_indexing:
+        failures.append("x_robots_tag_blocks_indexing")
+    return {
+        "route": route,
+        "status": exact_result["status"],
+        "bytes": exact_result["bytes"],
+        "actual_sha256": exact_result["actual_sha256"],
+        "expected_sha256": exact_result["expected_sha256"],
+        "x_robots_blocks_indexing": blocks_indexing,
+        "failures": failures,
+    }
+
+
+def reusable_exact_result(route: str, exact_by_route: dict[str, dict]) -> dict | None:
+    """Reuse only an identical HTTP route; local index-file aliases still need a live request."""
+    return exact_by_route.get(route)
 
 
 def digest_route_hashes(results: list[dict], hash_key: str) -> str:
@@ -229,10 +260,22 @@ def main() -> int:
 
     sitemap_exact_results: list[dict] = []
     if not sitemap_parse_error:
+        exact_by_route = {item["route"]: item for item in exact_results}
+        reused_results: dict[str, dict] = {}
+        remaining_routes: list[str] = []
+        for route in sorted(sitemap_routes):
+            exact_result = reusable_exact_result(route, exact_by_route)
+            if exact_result is None:
+                remaining_routes.append(route)
+            else:
+                reused_results[route] = sitemap_result_from_exact(route, exact_result)
         with concurrent.futures.ThreadPoolExecutor(max_workers=max(1, args.workers)) as executor:
-            sitemap_exact_results = list(
-                executor.map(lambda route: check_sitemap_route(base_url, web_root, route), sorted(sitemap_routes))
+            fetched_results = list(
+                executor.map(lambda route: check_sitemap_route(base_url, web_root, route), remaining_routes)
             )
+        sitemap_exact_results = sorted(
+            [*reused_results.values(), *fetched_results], key=lambda item: item["route"]
+        )
     sitemap_exact_failures = [item for item in sitemap_exact_results if item["failures"]]
 
     failures = {

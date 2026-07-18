@@ -68,6 +68,13 @@ const VIEWPORTS = [
   { id: "desktop-1440", width: 1440, height: 1000 },
 ];
 
+const REQUIRED_SOURCE_BODY_CLASSES = [
+  "ayds-root",
+  "ayds-mode-product",
+  "b26-family-source",
+  "b26-source-v2",
+];
+
 async function main() {
   const options = parseArgs(process.argv.slice(2));
   const manifest = JSON.parse(await readFile(options.manifest, "utf8"));
@@ -156,7 +163,10 @@ async function main() {
           if (!diagnostics.header_present) failures.push("canonical .ay-v2-header-shell missing");
           if (!diagnostics.footer_present) failures.push("canonical .ay-site-footer missing");
           if (!diagnostics.h1) failures.push("source H1 missing");
-          if (!diagnostics.body_classes.includes("ay-stitch-home-v4")) failures.push("ay-stitch-home-v4 body class missing");
+          const bodyClasses = new Set(diagnostics.body_classes.split(/\s+/).filter(Boolean));
+          for (const className of REQUIRED_SOURCE_BODY_CLASSES) {
+            if (!bodyClasses.has(className)) failures.push(`${className} body class missing`);
+          }
           if (diagnostics.admission_state !== sample.admission_state) failures.push(`admission state ${diagnostics.admission_state}, expected ${sample.admission_state}`);
           if (sample.admission_state === "provenance_archive_noindex" && !/noindex/i.test(diagnostics.robots)) failures.push("archive route lacks noindex");
           if (sample.admission_state === "normal_public_card" && /noindex/i.test(diagnostics.robots)) failures.push("normal route unexpectedly has noindex");
