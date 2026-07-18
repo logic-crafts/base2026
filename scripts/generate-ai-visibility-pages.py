@@ -12,10 +12,11 @@ if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
 from public_manifest_contract import PUBLIC_PAGE_MANIFEST_SCHEMA, relative_public_route_issue
+from alex_design_system_v2 import NON_SOURCE_DESIGN_VERSION
 from alex_v4_static_shell import footer_html as alex_footer_html
 from alex_v4_static_shell import header_html as alex_header_html
 
-STYLE_VERSION = "20260718-visual-reset-v2"
+STYLE_VERSION = NON_SOURCE_DESIGN_VERSION
 BASE_URL = "https://aggressorbulkit.online/knowledge/"
 SOCIAL_IMAGE = "https://aggressorbulkit.online/knowledge/static/assets/base2026-ai-visibility-card.png"
 DESIGN_SYSTEM_HREF = f"/knowledge/static/alex-design-system-v2.css?v={STYLE_VERSION}"

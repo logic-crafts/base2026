@@ -14,7 +14,9 @@ from pathlib import Path
 from bs4 import BeautifulSoup, Tag
 
 
-VERSION = "20260718-visual-reset-v2"
+NON_SOURCE_DESIGN_VERSION = "20260718-visual-reset-v2-r4"
+# Compatibility alias for the public generators that already import VERSION.
+VERSION = NON_SOURCE_DESIGN_VERSION
 ASSET_NAME = "alex-design-system-v2.css"
 
 DOC_NAMES = {
@@ -133,7 +135,14 @@ def _add_local_nav(soup: BeautifulSoup, main: Tag) -> None:
         return
     sections: list[tuple[str, str]] = []
     seen: set[str] = set()
-    for index, heading in enumerate(main.select("section h2"), start=1):
+    headings: list[Tag] = []
+    for section in main.find_all(["section", "details"], recursive=False):
+        heading = section.select_one(
+            ":scope > h2, :scope > .section-title-row h2, :scope > summary h2"
+        )
+        if isinstance(heading, Tag):
+            headings.append(heading)
+    for index, heading in enumerate(headings, start=1):
         label = " ".join(heading.get_text(" ", strip=True).split())
         if not label:
             continue
@@ -239,7 +248,9 @@ def _split_collection(
     collection.insert_after(details)
 
 
-def _collapse_section(soup: BeautifulSoup, section: Tag) -> None:
+def _collapse_section(
+    soup: BeautifulSoup, section: Tag, *, wrap_panel: bool = False
+) -> None:
     if section.name == "details" or "b26-k-disclosure--section" in _class_tokens(section):
         return
     heading_wrapper = section.select_one(":scope > .section-title-row")
@@ -254,6 +265,39 @@ def _collapse_section(soup: BeautifulSoup, section: Tag) -> None:
     )
     summary.append(heading.extract())
     section.insert(0, summary)
+    if wrap_panel:
+        _ensure_disclosure_panel(soup, section)
+
+
+def _ensure_disclosure_panel(soup: BeautifulSoup, disclosure: Tag) -> None:
+    """Give section disclosures one bounded content surface.
+
+    Older Visual Reset packages converted a ``content-section`` directly to a
+    ``details`` element.  The closed control then kept the full marketing
+    section padding and looked like an empty 300px card.  Wrapping everything
+    after ``summary`` makes the collapsed and expanded states independently
+    styleable and also repairs already-derived preview packages idempotently.
+    """
+
+    if disclosure.select_one(":scope > .b26-k-disclosure__panel"):
+        return
+    summary = disclosure.select_one(":scope > summary")
+    if not isinstance(summary, Tag):
+        return
+    panel = soup.new_tag(
+        "div",
+        attrs={
+            "class": (
+                "b26-k-disclosure__panel b26-k-disclosure__panel--section "
+                "ayds-disclosure__panel"
+            )
+        },
+    )
+    for child in list(disclosure.contents):
+        if child is summary:
+            continue
+        panel.append(child.extract())
+    disclosure.append(panel)
 
 
 def _compose_progressive_disclosure(soup: BeautifulSoup, main: Tag, family: str) -> None:
@@ -318,7 +362,12 @@ def _compose_progressive_disclosure(soup: BeautifulSoup, main: Tag, family: str)
                 else ""
             )
             if normalized in collapsible:
-                _collapse_section(soup, section)
+                _collapse_section(soup, section, wrap_panel=family == "topic")
+        if family == "topic":
+            for disclosure in main.select(
+                ":scope > details.b26-k-disclosure--section"
+            ):
+                _ensure_disclosure_panel(soup, disclosure)
 
 
 def apply_information_architecture(markup: str, route: str) -> str:
@@ -340,8 +389,14 @@ def apply_information_architecture(markup: str, route: str) -> str:
     if not isinstance(main, Tag):
         return apply_component_classes(markup)
     family = _family_for(route, soup)
+    if family in {"topic", "topic-index", "compare", "compare-index"}:
+        _add_classes(main, f"b26-k-family-{family}")
     if family == "document":
         _compose_document(soup, main)
-    _compose_progressive_disclosure(soup, main, family)
-    _add_local_nav(soup, main)
+    if family in {"topic", "topic-index"}:
+        _add_local_nav(soup, main)
+        _compose_progressive_disclosure(soup, main, family)
+    else:
+        _compose_progressive_disclosure(soup, main, family)
+        _add_local_nav(soup, main)
     return apply_component_classes(str(soup))

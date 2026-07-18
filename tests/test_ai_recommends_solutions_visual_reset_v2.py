@@ -9,7 +9,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 GENERATOR = ROOT / "scripts" / "generate-ai-recommends-solutions.py"
-DESIGN_SYSTEM_VERSION = "20260718-visual-reset-v2"
+DESIGN_SYSTEM_VERSION = "20260718-visual-reset-v2-r4"
 
 
 def write_jsonl(path: Path, rows: list[dict[str, object]]) -> None:

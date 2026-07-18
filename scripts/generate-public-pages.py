@@ -6,7 +6,7 @@ import re
 from collections import defaultdict
 from html import escape, unescape
 from pathlib import Path
-from urllib.parse import urlencode
+from urllib.parse import urlencode, urlsplit
 
 from alex_design_system_v2 import VERSION as STYLE_VERSION
 from alex_design_system_v2 import apply_component_classes, stylesheet_href
@@ -411,6 +411,43 @@ def sentence_excerpt(value: str, limit: int = 420, max_sentences: int = 3) -> st
     return f"{clipped or excerpt[: max(limit - 3, 0)].strip()}..."
 
 
+def clean_topic_attributed_excerpt(value: str, limit: int = 420, max_sentences: int = 2) -> str:
+    """Return only complete, sentence-led text suitable for an attributed Topic excerpt.
+
+    Public passage rows can begin at a chunk boundary.  Capitalizing those fragments
+    would make damaged text look authoritative, so incomplete/lowercase-leading rows
+    are withheld instead of repaired by guesswork.
+    """
+    text = strip_evidence_markup(value)
+    if not text:
+        return ""
+    sentences = re.findall(r"[^.!?]+[.!?]+(?:\s|$)|[^.!?]+$", text) or [text]
+    picked: list[str] = []
+    length = 0
+    for sentence in sentences:
+        clean = compact(sentence, 0).strip(" \t\r\n\"'\u201c\u201d\u2018\u2019-\u2013\u2014\u2026")
+        if not clean or not re.search(r"[.!?][\"'\u201d\u2019)]?$", clean):
+            continue
+        first_visible = re.search(r"[A-Za-z0-9@]", clean)
+        if not first_visible:
+            continue
+        first_character = clean[first_visible.start()]
+        if not first_character.isalpha() or not first_character.isupper():
+            continue
+        first_word = re.sub(r"^[^A-Za-z]+", "", clean).split(" ", 1)[0].casefold()
+        if first_word in {"and", "but", "because", "or", "so", "then", "these", "those"}:
+            continue
+        if len(clean) < 40 or len(clean.split()) < 7 or len(clean) > limit:
+            continue
+        if picked and length + len(clean) + 1 > limit:
+            break
+        picked.append(clean)
+        length += len(clean) + 1
+        if len(picked) >= max_sentences:
+            break
+    return " ".join(picked)
+
+
 def public_source_excerpt(source: dict, passages: list[dict]) -> str:
     for row in passages:
         body = unescape(row.get("body") or "").strip()
@@ -551,16 +588,59 @@ def source_answer_section(
     )
 
 
+def topic_creator_handles(
+    public_insights: list[dict],
+    related_sources: list[dict],
+    creator_rows: list[dict],
+) -> list[str]:
+    handles: dict[str, str] = {}
+    evidence_candidates = [
+        row.get("creator_handle") or row.get("handle") or ""
+        for row in [*public_insights, *related_sources]
+    ]
+    candidates = evidence_candidates or [
+        row.get("creator_handle") or row.get("handle") or "" for row in creator_rows
+    ]
+    for raw_handle in candidates:
+        handle = clean_handle(raw_handle, "")
+        key = handle.casefold()
+        if not key or key in {"creator", "unknown", "unknowncreator"}:
+            continue
+        handles.setdefault(key, handle)
+    return list(handles.values())
+
+
+def topic_scope_lead(label: str, definition: str, independent_creator_count: int) -> str:
+    if independent_creator_count == 1:
+        return (
+            f"An attributed evidence directory for one creator perspective about {label}. "
+            "It does not represent independent creator consensus."
+        )
+    if independent_creator_count == 0:
+        return (
+            f"An attributed evidence directory for public source records related to {label}. "
+            "No independent creator consensus is claimed."
+        )
+    return definition or f"Source-backed creator evidence related to {label}."
+
+
 def topic_answer_section(
     topic: dict,
     public_insights: list[dict],
     related_sources: list[dict],
     creator_rows: list[dict],
     signal_brief: dict | None,
+    independent_creator_count: int | None = None,
 ) -> str:
     topic_id = topic.get("topic_id") or slug(topic.get("topic") or "uncategorized")
     label = topic.get("topic") or topic_id.replace("-", " ").title()
-    definition = topic.get("definition") or f"Source-backed creator evidence related to {label}."
+    if independent_creator_count is None:
+        independent_creator_count = len(topic_creator_handles(public_insights, related_sources, creator_rows))
+    definition = topic_scope_lead(
+        label,
+        topic.get("definition") or "",
+        independent_creator_count,
+    )
     repeated_tactics = (signal_brief or {}).get("repeated_tactics") or []
     source_actions = (signal_brief or {}).get("source_backed_actions") or []
     creator_angles = (signal_brief or {}).get("creator_angles") or []
@@ -570,7 +650,9 @@ def topic_answer_section(
         for row in repeated_tactics[:3]
         if row.get("label")
     )
-    if not tactic_answer and top_claims:
+    if independent_creator_count < 2:
+        tactic_answer = "; ".join(top_claims[:3])
+    elif not tactic_answer and top_claims:
         tactic_answer = "; ".join(top_claims[:3])
     action_answer = "; ".join(
         compact(row.get("action") or "", 180)
@@ -583,28 +665,48 @@ def topic_answer_section(
         if row.get("main_angle")
     )
     source_count = topic.get("source_count") or len(related_sources)
-    creator_count = topic.get("creator_count") or len(creator_rows)
+    creator_count = independent_creator_count
     insight_count = topic.get("public_insight_count") or len(public_insights)
-    rows = [
-        (f"What does {label} mean in this evidence set?", definition),
-        (
-            f"What do creators repeatedly say about {label}?",
-            tactic_answer or f"Base2026 has public source records and insight cards connected to {label}, but repeated tactics are still being reviewed.",
-        ),
-        (
-            "What should an SEO or AI visibility operator inspect first?",
-            action_answer or (top_claims[0] if top_claims else definition),
-        ),
-        (
-            "How strong is the public evidence?",
-            f"This topic currently has {source_count} source records, {insight_count} public insight cards, and {creator_count} creators in the public Base2026 export.",
-        ),
-    ]
-    if creator_answer:
-        rows.insert(2, ("Which creator viewpoints are visible?", creator_answer))
+    if creator_count >= 2:
+        rows = [
+            (f"What does {label} mean in this evidence set?", definition),
+            (
+                f"What do creators repeatedly say about {label}?",
+                tactic_answer or f"Base2026 has public source records and insight cards connected to {label}, but repeated tactics are still being reviewed.",
+            ),
+            (
+                "What should an SEO or AI visibility operator inspect first?",
+                action_answer or (top_claims[0] if top_claims else definition),
+            ),
+            (
+                "How strong is the public evidence?",
+                f"This topic currently has {source_count} source records, {insight_count} public insight cards, and {creator_count} independent creator perspectives in the public Base2026 export.",
+            ),
+        ]
+        if creator_answer:
+            rows.insert(2, ("Which creator viewpoints are visible?", creator_answer))
+        helper = "Compact answers derived from public topic metadata, reviewed insight cards, and deterministic topic signal briefs."
+    else:
+        perspective_label = "one attributed creator perspective" if creator_count == 1 else "the currently attributed public evidence"
+        rows = [
+            (f"What does {label} mean in this evidence set?", definition),
+            (
+                f"What does the available creator perspective say about {label}?" if creator_count == 1 else f"What does the available evidence say about {label}?",
+                tactic_answer or definition,
+            ),
+            (
+                "What should an SEO or AI visibility operator inspect first?",
+                action_answer or (top_claims[0] if top_claims else definition),
+            ),
+            (
+                "What is the evidence scope?",
+                f"This directory currently contains {source_count} source records and {insight_count} public insight cards from {perspective_label}. Treat it as attributed evidence, not independent consensus.",
+            ),
+        ]
+        helper = "Compact answers from reviewed, attributed evidence. This page does not turn one creator opinion into independent consensus."
     return evidence_qa_section(
         "Questions this topic answers",
-        "Compact answers derived from public topic metadata, reviewed insight cards, and deterministic topic signal briefs.",
+        helper,
         rows,
     )
 
@@ -1555,6 +1657,56 @@ TOPIC_MONEY_BRIDGE_COPY: dict[str, dict[str, str]] = {
     },
 }
 
+TOPIC_QUERYLESS_AUDIT_PATH = "/ai-visibility-audit"
+TOPIC_APPLY_RESEARCH_PATH = "/knowledge/apply-research.html"
+
+
+def allowlisted_topic_context_id(topic_id: str) -> str:
+    candidate = slug(topic_id, "")
+    if not candidate or not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", candidate):
+        return ""
+    if PUBLISHED_TOPIC_IDS and candidate not in PUBLISHED_TOPIC_IDS:
+        return ""
+    return candidate
+
+
+def is_queryless_audit_action(href: str) -> bool:
+    parsed = urlsplit(str(href or "").strip())
+    return bool(
+        not parsed.scheme
+        and not parsed.netloc
+        and not parsed.query
+        and parsed.path.rstrip("/") == TOPIC_QUERYLESS_AUDIT_PATH
+    )
+
+
+def is_apply_research_action(href: str) -> bool:
+    parsed = urlsplit(str(href or "").strip())
+    return bool(
+        not parsed.scheme
+        and not parsed.netloc
+        and parsed.path.rstrip("/") == TOPIC_APPLY_RESEARCH_PATH.rstrip("/")
+    )
+
+
+def topic_contextual_research_link(topic_id: str, css_class: str = "ay-button") -> str:
+    context_id = allowlisted_topic_context_id(topic_id)
+    contextual_href = TOPIC_APPLY_RESEARCH_PATH
+    if context_id:
+        contextual_href += "?" + urlencode({"topic": context_id})
+    origin_id = context_id or "topic-evidence"
+    return (
+        f'<a class="{escape(css_class)}" href="{escape(contextual_href)}" '
+        'data-research-bridge="topic_to_apply_research" '
+        f'data-origin-id="{escape(origin_id)}">Apply this research</a>'
+    )
+
+
+def topic_bridge_action_link(topic_id: str, css_class: str, label: str, href: str) -> str:
+    if not is_queryless_audit_action(href):
+        return f'<a class="{escape(css_class)}" href="{escape(href)}">{escape(label)}</a>'
+    return topic_contextual_research_link(topic_id, css_class)
+
 
 def topic_answer_capsule_section(traffic: dict, label: str) -> str:
     capsule = traffic.get("answer_capsule") or {}
@@ -1633,25 +1785,59 @@ def topic_faq_section(traffic: dict, topic_id: str) -> tuple[str, str]:
     return html, f'<script type="application/ld+json">{json.dumps(schema, ensure_ascii=False)}</script>'
 
 
-def topic_money_bridge_section(topic_id: str, traffic: dict | None = None) -> str:
-    bridge = (traffic or {}).get("cta") or TOPIC_MONEY_BRIDGE_COPY.get(topic_id)
-    if not bridge:
-        return ""
+def topic_money_bridge_section(
+    topic_id: str,
+    traffic: dict | None = None,
+    label: str = "",
+) -> str:
+    configured_bridge = (traffic or {}).get("cta") or TOPIC_MONEY_BRIDGE_COPY.get(topic_id)
+    topic_label = compact(label or topic_id.replace("-", " "), 100)
+    bridge = configured_bridge or {
+        "title": "Take this topic into a real decision",
+        "body": (
+            f"Base2026 organizes attributed public evidence about {topic_label}; it does not diagnose your business. "
+            "Carry the topic into Apply Research to define the question, inspect fit, and decide what evidence to examine next."
+        ),
+    }
+    primary_action = topic_contextual_research_link(topic_id)
+    secondary_action = ""
+    if configured_bridge:
+        for prefix in ("primary", "secondary"):
+            action_label = str(configured_bridge.get(f"{prefix}_label") or "").strip()
+            action_href = str(configured_bridge.get(f"{prefix}_href") or "").strip()
+            if not action_label or not action_href:
+                continue
+            if is_queryless_audit_action(action_href) or is_apply_research_action(action_href):
+                continue
+            secondary_action = topic_bridge_action_link(
+                topic_id,
+                "ay-button-secondary",
+                action_label,
+                action_href,
+            )
+            break
+    secondary_markup = f"\n          {secondary_action}" if secondary_action else ""
     return f"""
-      <section class="content-section topic-traffic-cta" aria-labelledby="source-footprint-bridge-{escape(slug(topic_id))}">
-        <p class="eyebrow">Apply this evidence</p>
-        <h2 id="source-footprint-bridge-{escape(slug(topic_id))}">{escape(bridge['title'])}</h2>
-        <p class="section-helper">{escape(bridge['body'])}</p>
+      <section class="content-section topic-traffic-cta topic-contextual-bridge" data-topic-contextual-bridge="true" aria-labelledby="topic-research-bridge-{escape(slug(topic_id))}">
+        <p class="eyebrow">Research next step</p>
+        <h2 id="topic-research-bridge-{escape(slug(topic_id))}">{escape(bridge.get('title') or 'Take this topic into a real decision')}</h2>
+        <p class="section-helper">{escape(bridge.get('body') or 'Carry this attributed evidence into a business-specific research question before choosing an intervention.')}</p>
         <div class="hero-actions">
-          <a class="ay-button" href="{escape(bridge['primary_href'])}">{escape(bridge['primary_label'])}</a>
-          <a class="ay-button-secondary" href="{escape(bridge['secondary_href'])}">{escape(bridge['secondary_label'])}</a>
+          {primary_action}{secondary_markup}
         </div>
       </section>
     """
 
 
-def topic_signal_brief_section(brief: dict | None, topic_id: str, label: str) -> str:
-    if not brief or brief.get("status") != "strong":
+def topic_signal_brief_section(
+    brief: dict | None,
+    topic_id: str,
+    label: str,
+    independent_creator_count: int | None = None,
+) -> str:
+    if independent_creator_count is None:
+        independent_creator_count = int((brief or {}).get("creator_count") or 0)
+    if not brief or brief.get("status") != "strong" or independent_creator_count < 2:
         return ""
 
     creator_angles = brief.get("creator_angles") or []
@@ -1785,16 +1971,49 @@ def topic_page(
                 sources_by_id[str(key)] = row
     related_passages = [
         row for row in passages if topic_id in (row.get("topics") or [])
-    ][:10]
+    ]
     creator_rows = topic.get("top_creators") or []
+    creator_handles = topic_creator_handles(public_insights, related_sources, creator_rows)
+    independent_creator_count = len(creator_handles)
+    aggregate_creator_rows = {
+        clean_handle(row.get("creator_handle") or row.get("handle") or "", "").casefold(): row
+        for row in creator_rows
+        if clean_handle(row.get("creator_handle") or row.get("handle") or "", "")
+    }
+    scoped_creator_rows = []
+    for handle in creator_handles:
+        aggregate = aggregate_creator_rows.get(handle.casefold()) or {}
+        evidence_count = sum(
+            1
+            for row in public_insights
+            if clean_handle(row.get("creator_handle") or row.get("handle") or "", "").casefold()
+            == handle.casefold()
+        )
+        scoped_creator_rows.append(
+            {"handle": handle, "count": aggregate.get("count") or evidence_count}
+        )
+    signal_brief = (
+        signal_brief
+        if signal_brief
+        and signal_brief.get("status") == "strong"
+        and independent_creator_count >= 2
+        else None
+    )
+    is_strong_multi_creator_topic = bool(signal_brief)
+    scope_lead = topic_scope_lead(
+        label,
+        topic.get("definition") or "",
+        independent_creator_count,
+    )
     creator_html = "".join(
         f'<a class="topic-chip" href="{escape(creator_href(row.get("handle") or ""))}">{escape(display_handle(row.get("handle")))} · {escape(str(row.get("count") or 0))}</a>'
-        for row in creator_rows
+        for row in scoped_creator_rows
     )
     insight_html = "".join(
         card(
             row.get("claim_text") or label,
-            row.get("evidence_excerpt") or "",
+            clean_topic_attributed_excerpt(row.get("evidence_excerpt") or "", 360, 1)
+            or "Open the attributed source record to inspect the reviewed evidence behind this claim.",
             source_href(row),
             f"{display_handle(row.get('creator_handle'))} · {row.get('stance') or 'asserts'}",
         )
@@ -1803,19 +2022,29 @@ def topic_page(
     source_html = "".join(
         card(
             source_display_title(source),
-            source.get("excerpt") or "",
+            clean_topic_attributed_excerpt(source.get("source_summary_short") or "", 320, 1)
+            or clean_topic_attributed_excerpt(source.get("excerpt") or "", 320, 1)
+            or "Attributed public source record. Open it to inspect the reviewed source text and provenance.",
             source_href(source),
             f"{display_handle(source.get('creator_handle'))} · {source.get('published_date') or source.get('published_at') or ''}",
         )
         for source in related_sources[:12]
     )
     passage_cards = []
-    for row in related_passages[:6]:
-        source = sources_by_id.get(row.get("source_id") or "", {})
+    seen_passage_sources: set[str] = set()
+    for row in related_passages:
+        source_id = str(row.get("source_id") or "")
+        if not is_strong_multi_creator_topic or not source_id or source_id in seen_passage_sources:
+            continue
+        source = sources_by_id.get(source_id, {})
+        excerpt = clean_topic_attributed_excerpt(row.get("body") or "", 420, 1)
+        if not source or not excerpt:
+            continue
         handle = display_handle(source.get("creator_handle") or row.get("creator_handle") or row.get("handle"))
         title = source_display_title(source) if source else "Source record"
         href = source_href(source) if source else "#"
         date = source.get("published_date") or source.get("published_at") or row.get("published_date") or "No date"
+        seen_passage_sources.add(source_id)
         passage_cards.append(
             f"""
             <article class="passage-card passage-card--linked">
@@ -1824,17 +2053,30 @@ def topic_page(
                 <span>{escape(handle)}</span>
                 <span>{escape(date)}</span>
               </div>
-              <div class="passage-card__body">{paragraphize(row.get('body') or '', 1100, 2)}</div>
+              <div class="passage-card__body">{paragraphize(excerpt, 420, 1)}</div>
             </article>
             """
         )
+        if len(passage_cards) >= 6:
+            break
     passage_html = "".join(passage_cards)
+    passage_section = (
+        f"""
+      <section class="content-section">
+        <h2>Evidence Passages</h2>
+        <p class="section-helper">One complete public excerpt per source record. Chunk-boundary fragments are withheld.</p>
+        <div class="passage-stack">{passage_html}</div>
+      </section>
+        """
+        if passage_html and is_strong_multi_creator_topic
+        else ""
+    )
     faq_html, faq_schema = topic_faq_section(traffic, topic_id)
     schema = {
         "@context": "https://schema.org",
         "@type": "CollectionPage",
         "name": traffic.get("seo_title") or f"{label} creator evidence",
-        "description": compact(traffic.get("meta_description") or topic.get("definition") or "", 260),
+        "description": compact(traffic.get("meta_description") or scope_lead, 260),
         "about": label,
     }
     if signal_brief:
@@ -1855,7 +2097,14 @@ def topic_page(
             ],
         }
     seo_title = traffic.get("seo_title") or f"{label} creator evidence | Base2026"
-    seo_description = traffic.get("meta_description") or topic.get("definition") or f"Source-backed creator evidence and viewpoints related to {label}."
+    seo_description = traffic.get("meta_description") or scope_lead
+    compare_action = (
+        f'<a class="ay-button-secondary" href="../compare/{escape(slug(topic_id))}.html">Compare creator viewpoints</a>'
+        if independent_creator_count >= 2
+        else ""
+    )
+    creator_stat_label = "creator" if independent_creator_count == 1 else "creators"
+    creator_section_title = "Creator Perspective" if independent_creator_count == 1 else "Creator Perspectives"
     return page_shell(
         seo_title,
         f"""
@@ -1863,10 +2112,10 @@ def topic_page(
         <div class="topic-page-hero__main">
           <p class="eyebrow">Topic evidence page</p>
           <h1>{escape(label)}</h1>
-          <p class="lead">{escape(topic.get('definition') or f'Source-backed creator statements and evidence excerpts related to {label}.')}</p>
+          <p class="lead">{escape(scope_lead)}</p>
           <div class="hero-actions">
             <a class="ay-button" href="{escape(workspace_href(topic=topic_id, q=label))}">Open in Search Workspace</a>
-            <a class="ay-button-secondary" href="../compare/{escape(slug(topic_id))}.html">Compare creator viewpoints</a>
+            {compare_action}
             <a class="ay-button-secondary" href="../methodology.html">Methodology</a>
           </div>
         </div>
@@ -1875,18 +2124,17 @@ def topic_page(
           <div class="topic-stat-grid" aria-label="Topic evidence summary">
             <div><strong>{escape(str(topic.get('public_insight_count') or 0))}</strong><span>insight cards</span></div>
             <div><strong>{escape(str(topic.get('source_count') or len(related_sources)))}</strong><span>source records</span></div>
-            <div><strong>{escape(str(topic.get('creator_count') or len(creator_rows)))}</strong><span>creators</span></div>
+            <div><strong>{escape(str(independent_creator_count))}</strong><span>{escape(creator_stat_label)}</span></div>
           </div>
         </aside>
       </section>
       {topic_answer_capsule_section(traffic, label)}
-      {topic_signal_brief_section(signal_brief, topic_id, label)}
-      {topic_answer_section(topic, public_insights, related_sources, creator_rows, signal_brief)}
+      {topic_signal_brief_section(signal_brief, topic_id, label, independent_creator_count)}
+      {topic_answer_section(topic, public_insights, related_sources, scoped_creator_rows, signal_brief, independent_creator_count)}
       {topic_source_proof_section(traffic, sources_by_id)}
       {faq_html}
-      {topic_money_bridge_section(topic_id, traffic)}
       <section class="content-section">
-        <h2>Top Creators</h2>
+        <h2>{escape(creator_section_title)}</h2>
         <div class="topic-chip-list">{creator_html or '<p class="meta">No creator distribution available yet.</p>'}</div>
       </section>
       <section class="content-section">
@@ -1898,11 +2146,8 @@ def topic_page(
         <h2>Related Source Records</h2>
         <div class="card-grid">{source_html or '<p class="meta">No related source records available.</p>'}</div>
       </section>
-      <section class="content-section">
-        <h2>Evidence Passages</h2>
-        <p class="section-helper">Short public snippets grouped with their source record, creator, and date.</p>
-        <div class="passage-stack">{passage_html or '<p class="meta">No related passages available.</p>'}</div>
-      </section>
+      {passage_section}
+      {topic_money_bridge_section(topic_id, traffic, label)}
       <script type="application/ld+json">{json.dumps(schema, ensure_ascii=False)}</script>
       {faq_schema}
         """,
@@ -1919,6 +2164,8 @@ def compare_page(topic: dict, insights: list[dict]) -> str:
     public_insights = [
         row for row in insights if row.get("public") and (row.get("topic_id") or "") == topic_id
     ]
+    independent_creator_count = len(topic_creator_handles(public_insights, [], []))
+    has_independent_comparison = independent_creator_count >= 2
     by_creator: dict[str, list[dict]] = defaultdict(list)
     for insight in public_insights:
         by_creator[insight.get("creator_handle") or "Unknown creator"].append(insight)
@@ -1928,7 +2175,7 @@ def compare_page(topic: dict, insights: list[dict]) -> str:
             f"""
             <li>
               <p><strong>{escape(row.get('stance') or 'asserts')}</strong>: {escape(compact(row.get('claim_text') or '', 260))}</p>
-              <p class="meta">{escape(compact(row.get('evidence_excerpt') or '', 260))}</p>
+              <p class="meta">{escape(clean_topic_attributed_excerpt(row.get('evidence_excerpt') or '', 260, 1) or 'Open the attributed source record to inspect the reviewed evidence.')}</p>
               <a class="button-link" href="{escape(source_href(row))}">Source page</a>
             </li>
             """
@@ -1942,33 +2189,55 @@ def compare_page(topic: dict, insights: list[dict]) -> str:
             </article>
             """
         )
+    page_name = (
+        f"{label} creator viewpoint comparison"
+        if has_independent_comparison
+        else f"{label} attributed creator perspective"
+    )
+    eyebrow = "Creator viewpoint comparison" if has_independent_comparison else "Attributed creator perspective"
+    lead = (
+        "A deterministic grouping of public source-backed insight cards. This page compares what creators said without declaring a winner."
+        if has_independent_comparison
+        else "A deterministic grouping of reviewed public insight cards from one creator perspective. It is attributed evidence, not independent consensus."
+    )
+    section_heading = "Creator Viewpoints" if has_independent_comparison else "Creator Perspective"
+    workspace_link = (
+        workspace_href(compare=topic_id, topic=topic_id, q=label)
+        if has_independent_comparison
+        else workspace_href(topic=topic_id, q=label)
+    )
+    description = (
+        f"Compare source-backed creator viewpoints about {label}. Every viewpoint links back to Base2026 source evidence."
+        if has_independent_comparison
+        else f"Review one attributed creator perspective about {label}, with each insight linked to Base2026 source evidence."
+    )
     schema = {
         "@context": "https://schema.org",
         "@type": "CollectionPage",
-        "name": f"{label} creator viewpoint comparison",
+        "name": page_name,
         "about": label,
     }
     return page_shell(
-        f"{label} creator viewpoint comparison | Base2026",
+        f"{page_name} | Base2026",
         f"""
       <section class="page-hero">
-        <p class="eyebrow">Creator viewpoint comparison</p>
+        <p class="eyebrow">{escape(eyebrow)}</p>
         <h1>{escape(label)}</h1>
-        <p class="lead">A deterministic grouping of public source-backed insight cards. This page compares what creators said without declaring a winner.</p>
+        <p class="lead">{escape(lead)}</p>
         <div class="hero-actions">
-          <a class="ay-button" href="{escape(workspace_href(compare=topic_id, topic=topic_id, q=label))}">Open in Search Workspace</a>
+          <a class="ay-button" href="{escape(workspace_link)}">Open in Search Workspace</a>
           <a class="ay-button-secondary" href="../topics/{escape(slug(topic_id))}.html">Topic page</a>
         </div>
       </section>
       <section class="content-section">
-        <h2>Creator Viewpoints</h2>
+        <h2>{escape(section_heading)}</h2>
         <div class="comparison-grid">{''.join(creator_blocks) or '<p class="meta">No public creator viewpoints available yet.</p>'}</div>
       </section>
       <script type="application/ld+json">{json.dumps(schema, ensure_ascii=False)}</script>
         """,
         robots="index,follow" if is_indexable_topic(topic) else "noindex,follow",
         current="topics",
-        description=f"Compare source-backed creator viewpoints about {label}. Every viewpoint links back to Base2026 source evidence.",
+        description=description,
         canonical_path=f"compare/{slug(topic_id)}.html",
     )
 

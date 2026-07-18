@@ -4,7 +4,10 @@ import re
 from html import escape
 from pathlib import Path
 
-SHELL_VERSION = "20260718-visual-reset-v2"
+from alex_design_system_v2 import NON_SOURCE_DESIGN_VERSION
+
+
+SHELL_VERSION = NON_SOURCE_DESIGN_VERSION
 ROOT = Path(__file__).resolve().parents[1]
 LIVE_FOOTER_TEMPLATE = ROOT / "templates" / "shared" / "alex-home-v4-footer.html"
 DESIGN_SYSTEM_CSS = ROOT / "web" / "static" / "alex-design-system-v2.css"

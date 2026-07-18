@@ -39,7 +39,7 @@ def assert_one_design_system(page: str) -> None:
 
 
 def test_component_registry_is_versioned_and_idempotent() -> None:
-    assert VERSION == "20260718-visual-reset-v2"
+    assert VERSION == "20260718-visual-reset-v2-r4"
     source = '<main class="app-shell content-page"><a class="ay-button">Open</a></main>'
     once = apply_component_classes(source)
     twice = apply_component_classes(once)

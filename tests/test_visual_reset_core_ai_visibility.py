@@ -202,3 +202,16 @@ def test_ai_visibility_collection_preserves_search_hooks_and_product_mode() -> N
     assert "data-lab-count" in rendered
     assert rendered.count("<h1") == 1
     assert 'href="/knowledge/">Base2026</a>' in rendered
+
+
+def test_ai_visibility_lab_and_detail_geometry_match_accepted_site_scale() -> None:
+    css = (ROOT / "web" / "static" / "alex-design-system-v2.css").read_text(encoding="utf-8")
+
+    assert "padding: clamp(40px, 6vw, 72px) 0 clamp(48px, 6.5vw, 80px);" in css
+    assert "font: 800 clamp(40px, 4.5vw, 64px)/1 var(--ayds-font-body);" in css
+    assert "padding-top: clamp(38px, 5vw, 60px);" in css
+    assert "font: 800 clamp(42px, 5vw, 60px)/1 var(--ayds-font-body);" in css
+    assert ".b26-money-hero h1 { font-size: clamp(38px, 10.5vw, 48px); line-height: 1.02; }" in css
+    assert ".ai-pages-intro h1 { font-size: clamp(38px, 10.5vw, 46px); line-height: 1.02; }" in css
+    assert ".b26-money-hero { padding: 32px 0 48px; }" in css
+    assert ".ai-lab-search { grid-template-columns: 1fr; margin-top: 22px; padding: 18px; }" in css
