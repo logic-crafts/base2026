@@ -1,5 +1,21 @@
 # Prompt Log
 
+## 2026-07-18 — Base2026 non-Search V2 representative visual slice completed
+
+Prompt: migrate the generated non-Search Base2026 families to the opt-in B26 visual contract while protecting the accepted Search workspace, preserving data/metadata/admission contracts, using semantic B26 IDs, and producing only a bounded 1440px/390px representative candidate with focused tests and no commit or deploy.
+
+Actions and evidence:
+
+- Upgraded the Base UI contract to `1.1.0` and added explicit document/component visual opt-in helpers. Search still emits system identity only and remains outside the presentation scope.
+- Added one canonical compact Base product header/footer source for generated Topic, Creator, Compare, Analytics/resources and strict Source Detail routes. The product copy preserves Base2026 as independent research infrastructure, with at most one optional Apply Research bridge where context warrants it.
+- Assigned B26 roles semantically: B26-04 Source shell, B26-05 topic/resource cards, B26-06 creator/viewpoint cards, B26-07 metric summaries, B26-08 source boundary/provenance and B26-09 optional contextual bridge. Heroes are not mislabeled as cards.
+- Normalized the non-Search product canvas, typography, grids, cards, buttons and responsive behavior under the opt-in root only. Manual visual review caught and fixed inherited white button labels, an under-specific B26-09 dark-panel rule and an overly narrow single-card Compare layout.
+- Built deterministic five-route candidate `base2026-nonsearch-v2-representative-candidate-final`; its manifest SHA-256 is `cc9f19e5d0fcae3aa1402dac6e6f0bfee714797aa7674a64adbc10138169bc6e` and a same-input rebuild matched byte-for-byte. The optional `topic_signal_briefs.jsonl` state is explicitly bound as present+SHA or absent+null.
+- Browser evidence passed 15/15 route/viewport checks at 1440px, 390px and 320px with no overflow or browser/runtime errors. Mobile computed geometry proves 44px touch targets, uniform 44px icon controls with 18px glyphs and 1px borders, aligned share-control baselines, working menu interaction and reopenable cookie preferences. Manual 390px/320px review confirmed compact, readable composition.
+- Independent review found and the implementation fixed a mobile menu ID mismatch, missing persistent cookie control/runtime on strict Source routes, changed Logic Crafts LLC ownership attribution and incomplete optional-input binding. The strict full-candidate validator now SHA-locks and semantically validates the canonical Base product footer without weakening metadata/admission checks; Source renderer version was bumped.
+- Focused tests passed `58 passed, 3 skipped`; syntax checks and `git diff --check` passed.
+- Public candidate metadata, canonical/robots, route admission, source states and Search metadata/runtime remained unchanged. Public manifests use labels and hashes rather than absolute local paths. No production output, deploy, corpus rewrite, reindex, IndexNow or form submission occurred; the isolated commit is bounded to this reviewed source/test/docs slice.
+
 ## 2026-07-18 — Base2026 master rebuild Slice 1 foundation implemented
 
 Prompt: implement the first Base2026 rebuild slice in the isolated master-rebuild worktree: correct the two canonical Personal/Base navigation mappings, add a coherent versioned B26 token/shell/component asset layer, wire representative Search/Topic/Source generator paths, preserve all data/indexation/publication contracts, run focused tests, and do not deploy or commit.

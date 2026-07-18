@@ -10,7 +10,8 @@ from __future__ import annotations
 from html import escape
 
 
-SYSTEM_VERSION = "1.0.0"
+SYSTEM_VERSION = "1.1.0"
+VISUAL_VERSION = "v2"
 ASSET_DIRECTORY = "base2026"
 ASSET_FILES = ("tokens.css", "shell.css", "components.css")
 COMPONENT_IDS = frozenset(f"B26-{number:02d}" for number in range(1, 10))
@@ -49,6 +50,12 @@ def system_attributes(family: str) -> str:
     )
 
 
+def visual_root_attributes(family: str) -> str:
+    """Opt one non-Search document into the reviewed B26 presentation layer."""
+
+    return f'{system_attributes(family)} data-b26-visual-root="{VISUAL_VERSION}"'
+
+
 def component_attributes(component_id: str, variant: str = "") -> str:
     """Render a validated B26 component marker for fixture and corpus QA."""
 
@@ -61,6 +68,12 @@ def component_attributes(component_id: str, variant: str = "") -> str:
             raise ValueError(f"Invalid Base2026 component variant: {variant!r}")
         attributes.append(f'data-b26-variant="{escape(normalized)}"')
     return " ".join(attributes)
+
+
+def visual_component_attributes(component_id: str, variant: str = "") -> str:
+    """Opt one semantic B26 component into the reviewed presentation layer."""
+
+    return f'{component_attributes(component_id, variant)} data-b26-visual="{VISUAL_VERSION}"'
 
 
 def inject_stylesheet_contract(html: str, relative_root: str) -> str:

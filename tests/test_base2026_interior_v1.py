@@ -56,7 +56,17 @@ def source_view() -> SourceDetailView:
 
 def test_source_detail_template_uses_shared_v2_design_and_local_fonts() -> None:
     rendered = render_source_detail(source_view(), "fixture-v1")
-    assert '<body class="ayds-root ayds-mode-product b26-family-source b26-source-v2"' in rendered
+    for class_name in (
+        "ayds-root",
+        "ayds-mode-product",
+        "ay-alex-v4-static",
+        "ay-stitch-home-v3",
+        "ay-stitch-home-v4",
+        "b26-family-source",
+        "b26-source-v2",
+    ):
+        assert class_name in rendered
+    assert 'data-b26-visual-root="v2"' in rendered
     assert '../static/alex-design-system-v2.css?v=fixture-v1' in rendered
     assert 'data-alex-design-system="v2"' in rendered
     assert f'data-b26-system-version="{SYSTEM_VERSION}"' in rendered
@@ -105,6 +115,7 @@ def test_source_candidate_asset_copier_carries_v2_css_and_local_font_dependencie
         '@font-face{font-family:"Manrope";src:url("/knowledge/static/vendor/manrope-400.ttf")}\n',
         encoding="utf-8",
     )
+    (fake_static / "cookie-consent.js").write_text("// cookie fixture\n", encoding="utf-8")
     (fake_static / "base2026").mkdir()
     for asset in ASSET_FILES:
         (fake_static / "base2026" / asset).write_text(
@@ -118,6 +129,7 @@ def test_source_candidate_asset_copier_carries_v2_css_and_local_font_dependencie
 
     hashes = module.copy_static_assets(tmp_path / "candidate")
     assert "alex-design-system-v2.css" in hashes
+    assert "cookie-consent.js" in hashes
     for asset in ASSET_FILES:
         assert f"base2026/{asset}" in hashes
     assert "alex-v4-static-shell.js" in hashes

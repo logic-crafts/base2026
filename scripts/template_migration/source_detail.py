@@ -15,7 +15,7 @@ from urllib.parse import urlparse
 from bs4 import BeautifulSoup, Tag
 from pydantic import BaseModel, ConfigDict, Field
 
-from alex_v4_static_shell import footer_html, header_html
+from base2026_product_shell import footer_html, header_html
 from base2026_ui_system import SYSTEM_VERSION as B26_SYSTEM_VERSION
 from base2026_ui_system import stylesheet_tags as b26_stylesheet_tags
 from .jinja_env import environment

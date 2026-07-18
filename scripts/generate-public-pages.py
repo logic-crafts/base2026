@@ -11,8 +11,11 @@ from urllib.parse import urlencode, urlsplit
 from alex_design_system_v2 import VERSION as STYLE_VERSION
 from alex_design_system_v2 import apply_component_classes, stylesheet_href
 from alex_v4_static_shell import apply_alex_v4_shell
+from base2026_product_shell import footer_html as b26_product_footer_html
+from base2026_product_shell import header_html as b26_product_header_html
 from base2026_ui_system import stylesheet_tags as b26_stylesheet_tags
-from base2026_ui_system import system_attributes as b26_system_attributes
+from base2026_ui_system import visual_component_attributes as b26_visual_component_attributes
+from base2026_ui_system import visual_root_attributes as b26_visual_root_attributes
 
 CONTACT_EMAIL = "offflinerpsy@gmail.com"
 FAVICON_ASSET_PATH = "static/assets/alex-yarosh-favicon-32.png"
@@ -969,10 +972,10 @@ def page_shell(
     <link rel="stylesheet" href="{stylesheet_href(relative_root)}" data-alex-design-system="v2" />
 {b26_stylesheet_tags(relative_root)}
   </head>
-  <body class="ayds-root ayds-mode-product b26-family-{escape(current or 'general')}" {b26_system_attributes(current or 'general')}>
+  <body class="ayds-root ayds-mode-product b26-family-{escape(current or 'general')}" {b26_visual_root_attributes(current or 'general')}>
     <a class="skip-link" href="#content">Skip to content</a>
-    {site_header(relative_root, current)}
-    <main id="content" class="{escape(main_class)}">
+    {b26_product_header_html()}
+    <main id="content" class="{escape(main_class)}" data-b26-shell>
       {base2026_breadcrumbs(relative_root, title)}
       {body}
     </main>
@@ -1061,9 +1064,14 @@ def page_shell(
   </body>
 </html>
 """
-    return apply_component_classes(
-        apply_alex_v4_shell(page, relative_root=relative_root, mode="product")
+    page = re.sub(
+        r'<footer\b(?=[^>]*\bclass=["\'][^"\']*\bsite-footer\b[^"\']*["\'])[^>]*>.*?</footer>',
+        b26_product_footer_html(),
+        page,
+        count=1,
+        flags=re.I | re.S,
     )
+    return apply_component_classes(apply_alex_v4_shell(page, relative_root=relative_root, mode="product"))
 
 
 def card(
@@ -1079,12 +1087,7 @@ def card(
     if component_id:
         if component_id not in {f"B26-{number:02d}" for number in range(1, 10)}:
             raise ValueError(f"Unknown Base2026 component marker: {component_id}")
-        component_attributes = f' data-b26-component="{component_id}"'
-        if component_variant:
-            safe_variant = slug(component_variant)
-            if not safe_variant:
-                raise ValueError("Invalid Base2026 component variant")
-            component_attributes += f' data-b26-variant="{escape(safe_variant)}"'
+        component_attributes = f' {b26_visual_component_attributes(component_id, component_variant)}'
     return f"""
       <article class="intelligence-card"{component_attributes}>
         <h3>{escape(title)}</h3>
@@ -1211,7 +1214,7 @@ def creator_index_card(handle: str, creator: dict, source_count: int, public_ins
     insight_label = "public insight" if public_insight_count == 1 else "public insights"
     source_label = "source record" if source_count == 1 else "source records"
     return f"""
-      <article class="intelligence-card creator-index-card">
+      <article class="intelligence-card creator-index-card" {b26_visual_component_attributes("B26-06", "creator-card")}>
         <div class="creator-index-card__head">
           {avatar_html}
           <div>
@@ -1460,7 +1463,7 @@ def creator_page(handle: str, creator: dict, sources: list[dict], insights: list
         </div>
         <div class="source-hero-tools">
           {source_share_action_bar("Share creator profile", "creator profile")}
-          <div class="source-hero-meta" aria-label="Creator profile metadata">
+          <div class="source-hero-meta" {b26_visual_component_attributes("B26-07", "creator-metrics")} aria-label="Creator profile metadata">
             <span class="source-meta-chip"><strong>{len(sources)}</strong><span>records</span></span>
             <span class="source-meta-chip"><strong>{len(public_insights)}</strong><span>insights</span></span>
             <span class="source-meta-chip"><strong>{len(topics)}</strong><span>topics</span></span>
@@ -1838,7 +1841,7 @@ def topic_money_bridge_section(
             break
     secondary_markup = f"\n          {secondary_action}" if secondary_action else ""
     return f"""
-      <section class="content-section topic-traffic-cta topic-contextual-bridge" data-topic-contextual-bridge="true" data-b26-component="B26-09" data-b26-variant="topic-bridge" aria-labelledby="topic-research-bridge-{escape(slug(topic_id))}">
+      <section class="content-section topic-traffic-cta topic-contextual-bridge" data-topic-contextual-bridge="true" {b26_visual_component_attributes("B26-09", "topic-bridge")} aria-labelledby="topic-research-bridge-{escape(slug(topic_id))}">
         <p class="eyebrow">Research next step</p>
         <h2 id="topic-research-bridge-{escape(slug(topic_id))}">{escape(bridge.get('title') or 'Take this topic into a real decision')}</h2>
         <p class="section-helper">{escape(bridge.get('body') or 'Carry this attributed evidence into a business-specific research question before choosing an intervention.')}</p>
@@ -2141,7 +2144,7 @@ def topic_page(
         </div>
         <aside class="topic-page-hero__tools" aria-label="Topic page controls and summary">
           {inline_share_actions("Share topic page", "topic page")}
-          <div class="topic-stat-grid" data-b26-component="B26-07" data-b26-variant="topic-metrics" aria-label="Topic evidence summary">
+          <div class="topic-stat-grid" {b26_visual_component_attributes("B26-07", "topic-metrics")} aria-label="Topic evidence summary">
             <div><strong>{escape(str(topic.get('public_insight_count') or 0))}</strong><span>insight cards</span></div>
             <div><strong>{escape(str(topic.get('source_count') or len(related_sources)))}</strong><span>source records</span></div>
             <div><strong>{escape(str(independent_creator_count))}</strong><span>{escape(creator_stat_label)}</span></div>
@@ -2203,7 +2206,7 @@ def compare_page(topic: dict, insights: list[dict]) -> str:
         )
         creator_blocks.append(
             f"""
-            <article class="comparison-group">
+            <article class="comparison-group" {b26_visual_component_attributes("B26-06", "creator-viewpoint-card")}>
               <h3><a href="{escape(creator_href(handle))}">{escape(display_handle(handle))}</a></h3>
               <ul>{claim_rows}</ul>
             </article>
@@ -2336,7 +2339,7 @@ def analytics_page(analytics: dict) -> str:
         handle = row.get("handle") or "@creator"
         creator_cards.append(
             f"""
-            <article class="analytics-creator-card">
+            <article class="analytics-creator-card" {b26_visual_component_attributes("B26-06", "analytics-creator-card")}>
               {creator_avatar_markup(handle, row.get("avatar_url") or "", relative_root=".")}
               <div>
                 <h3>{escape(handle)}</h3>
@@ -2371,7 +2374,7 @@ def analytics_page(analytics: dict) -> str:
           <a class="ay-button-secondary" href="./topics/">Topics</a>
         </div>
       </section>
-      <section class="analytics-stat-grid" aria-label="Base2026 dataset totals">
+      <section class="analytics-stat-grid" {b26_visual_component_attributes("B26-07", "dataset-metrics")} aria-label="Base2026 dataset totals">
         {analytics_stat("source records", totals.get("source_records"))}
         {analytics_stat("searchable passages", totals.get("passages"))}
         {analytics_stat("public insight cards", totals.get("public_insight_cards"))}
@@ -2439,7 +2442,7 @@ def traffic_resources_page(topic_traffic_pages: dict, topics: list[dict]) -> str
         faq_count = len(cfg.get("faq") or [])
         proof_label = f"{proof_count} source proofs" if proof_count != 1 else "1 source proof"
         return f"""
-          <article class=\"traffic-resource-card\">
+          <article class=\"traffic-resource-card\" {b26_visual_component_attributes("B26-05", "topic-resource-card")}>
             <div>
               <p class=\"traffic-resource-card__meta\">{escape(proof_label)} · {faq_count} FAQs · indexable topic</p>
               <h3><a href=\"topics/{escape(slug(topic_id))}.html\">{escape(title)}</a></h3>
@@ -2509,7 +2512,7 @@ def traffic_resources_page(topic_traffic_pages: dict, topics: list[dict]) -> str
         </div>
       </section>
       <section class=\"content-section traffic-resource-summary\">
-        <div class=\"analytics-stat-grid\">
+        <div class=\"analytics-stat-grid\" {b26_visual_component_attributes("B26-07", "resource-metrics")}>
           {analytics_stat("library resources", len(topic_traffic_pages))}
           {analytics_stat("topic clusters", len(cluster_sections))}
           {analytics_stat("public evidence links", sum(len(v.get('proof_source_ids') or []) for v in topic_traffic_pages.values()))}
@@ -2517,7 +2520,7 @@ def traffic_resources_page(topic_traffic_pages: dict, topics: list[dict]) -> str
         </div>
       </section>
       {''.join(cluster_sections)}
-      <section class=\"content-section traffic-resource-cta\">
+      <section class=\"content-section traffic-resource-cta\" {b26_visual_component_attributes("B26-09", "resource-bridge")}>
         <p class=\"eyebrow\">From library to money pages</p>
         <h2>Use the library as support, not the primary sales path.</h2>
         <p>The main route for visitors is the AI Visibility Pages hub. This library stays indexable and useful for crawlers, researchers and internal linking, then routes qualified readers into the diagnostic/audit path.</p>

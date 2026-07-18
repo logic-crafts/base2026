@@ -5,12 +5,14 @@
 <link rel="stylesheet" href="../static/alex-design-system-v2.css?v={{ renderer_version }}" data-alex-design-system="v2">
 {{ b26_stylesheet_tags | safe }}
 </head>
-<body class="ayds-root ayds-mode-product b26-family-source b26-source-v2{% if view.archive %} b26-source-v2--archive{% endif %}" data-b26-system-version="{{ b26_system_version }}" data-b26-family="source" data-source-platform="{{ view.platform_key }}">
+<body class="ayds-root ayds-mode-product ay-alex-v4-static ay-stitch-home-v3 ay-stitch-home-v4 b26-family-source b26-source-v2{% if view.archive %} b26-source-v2--archive{% endif %}" data-b26-system-version="{{ b26_system_version }}" data-b26-family="source" data-b26-visual-root="v2" data-source-platform="{{ view.platform_key }}">
 <a class="skip-link" href="#content">Skip to content</a>
 {{ view.header_html | safe }}
 {% block content %}{% endblock %}
 {{ view.footer_html | safe }}
+{% include "shared/cookie_consent.html.j2" %}
 <script src="../static/alex-v4-static-shell.js?v={{ renderer_version }}" defer></script>
 <script src="../static/source-detail-v2.js?v={{ renderer_version }}" defer></script>
+<script src="../static/cookie-consent.js?v={{ renderer_version }}" defer></script>
 </body>
 </html>

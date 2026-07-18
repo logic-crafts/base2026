@@ -1,5 +1,27 @@
 # Next Action
 
+## Current Focus: Base2026 non-Search V2 representative slice ready for independent review — 2026-07-18
+
+The isolated branch `codex/base2026-master-rebuild-20260718` now has an opt-in Base2026 visual contract for generated non-Search product families. Topic hub/detail, Creator hub/detail, Compare, Analytics/resources and strict Source Detail share UI system `1.1.0`, semantic B26 component roles, a compact Base product header/footer and bounded contextual research bridges. The protected Search generator/runtime remains the visual control and has no `data-b26-visual-root` or `data-b26-visual` opt-in.
+
+Verified boundaries:
+
+- representative candidate `base2026-nonsearch-v2-representative-candidate-final` contains exactly five routes: Topic detail, Topics hub, Creator, normal Source Detail and Compare;
+- browser gate passed 15/15 checks at 1440px, 390px and 320px with H1 caps of 48px/36px, no horizontal overflow, 44px mobile touch targets, uniform 44px/18px secondary icon geometry, working mobile menu/cookie controls, compact product shell, required semantic B26 roles, no hero/card role collision and no more than one B26-09 bridge;
+- candidate manifest is deterministic at SHA-256 `cc9f19e5d0fcae3aa1402dac6e6f0bfee714797aa7674a64adbc10138169bc6e` when rebuilt from the same labeled inputs;
+- focused tests pass: `58 passed, 3 skipped`; canonical, robots, title, admission-state and Search-control fixtures remain unchanged;
+- strict Source Detail full-candidate validation is SHA-locked to the canonical Base product footer, preserves Logic Crafts LLC ownership and cookie controls, binds the new renderer version and carries the complete runtime asset set;
+- public manifests contain labels and hashes only, with no absolute local paths, PII, raw query text, private source data or timestamps;
+- production, public corpus output, Search runtime, sitemap admission, source states, Meilisearch and IndexNow are unchanged. The isolated source commit contains only this reviewed slice; no deploy occurred.
+
+Next safe action:
+
+1. Integrate the reviewed isolated commit into the parent release candidate and regenerate the bounded five-route artifact from the final integrated SHA.
+2. Build the full-corpus package only from the immutable admitted route manifest, accepted public export, current public Source root and the committed generator/validator versions; bind every input and output hash.
+3. Only after the combined personal-site/Base candidate passes owner visual review should release governance decide whether to commit and produce a production deployment packet.
+
+Do not migrate the protected Search visual/runtime in this slice, broaden to a corpus screenshot sweep, change metadata/admission/indexability, or deploy the representative artifact directly.
+
 ## Current Focus: Base2026 master rebuild Slice 1 foundation implemented — 2026-07-18
 
 The isolated branch `codex/base2026-master-rebuild-20260718` now contains the first bounded B26 foundation. Both canonical personal-site generators route the `Base2026` navigation label to `/knowledge/`. A versioned Base-only UI contract (`1.0.0`) now lives under `web/static/base2026/` with ordered tokens, shell and component assets. Search, generated Topic pages and strict Source Detail templates load the same asset version and expose stable identity markers, but presentation remains inactive without an explicit reviewed visual opt-in. Release and Source Detail candidate paths copy the complete asset set.

@@ -63,8 +63,10 @@ def test_public_family_shell_uses_product_mode_and_brand_root() -> None:
     body_classes = soup.body.get("class") or []
     assert body_classes.count("ayds-mode-product") == 1
     assert "ayds-mode-editorial" not in body_classes
-    assert soup.select_one('.ay-v2-base-trigger > a[href="/knowledge/"]')
-    assert soup.select_one('.ay-v2-base-mega a[href="/knowledge/ai-visibility-pages/"]')
+    assert soup.select_one('.b26-product-header__wordmark[href="/knowledge/"]')
+    assert soup.select_one('footer.b26-product-footer[data-b26-product-footer]')
+    assert soup.select_one('.b26-product-footer a[href="/knowledge/topics/"]')
+    assert not soup.select_one('.ay-v2-base-mega')
 
 
 def test_governance_shell_uses_editorial_mode_and_shared_form() -> None:

@@ -92,7 +92,7 @@ def test_b26_assets_are_versioned_presentation_only_contract() -> None:
     shell = (asset_root / "shell.css").read_text(encoding="utf-8")
     components = (asset_root / "components.css").read_text(encoding="utf-8")
     assert '[data-b26-visual-root="v2"]' in shell
-    assert '[data-b26-system-version="1.0.0"]' not in shell
+    assert f'[data-b26-system-version="{SYSTEM_VERSION}"]' not in shell
     assert '[data-b26-visual="v2"]' in components
     assert '[data-b26-component="B26-09"][data-b26-visual="v2"]' in components
     assert "background: var(--b26-color-ink-950)" in components
@@ -144,9 +144,9 @@ def test_topic_fixture_uses_compact_component_contract_without_route_contract_ch
     assert soup.body.get("data-b26-family") == "topics"
     assert soup.select_one('[data-b26-section="topic-detail-hero"]')
     assert not soup.select_one('[data-b26-component="B26-05"]')
-    assert soup.select_one('[data-b26-component="B26-07"][data-b26-variant="topic-metrics"]')
-    assert soup.select_one('[data-b26-component="B26-09"][data-b26-variant="topic-bridge"]')
-    assert not soup.select_one('[data-b26-visual="v2"]')
+    assert soup.body.get("data-b26-visual-root") == "v2"
+    assert soup.select_one('[data-b26-component="B26-07"][data-b26-variant="topic-metrics"][data-b26-visual="v2"]')
+    assert soup.select_one('[data-b26-component="B26-09"][data-b26-variant="topic-bridge"][data-b26-visual="v2"]')
     assert [link.get("data-b26-asset") for link in soup.select("link[data-b26-asset]")] == list(ASSET_FILES)
 
     topic_card = BeautifulSoup(
@@ -160,8 +160,7 @@ def test_topic_fixture_uses_compact_component_contract_without_route_contract_ch
         ),
         "html.parser",
     )
-    assert topic_card.select_one('[data-b26-component="B26-05"][data-b26-variant="topic-card"]')
-    assert not topic_card.select_one('[data-b26-visual="v2"]')
+    assert topic_card.select_one('[data-b26-component="B26-05"][data-b26-variant="topic-card"][data-b26-visual="v2"]')
 
 
 def test_source_detail_fixture_preserves_admission_metadata_and_loads_shared_assets() -> None:
@@ -206,7 +205,9 @@ def test_source_detail_fixture_preserves_admission_metadata_and_loads_shared_ass
     )
     assert soup.body and soup.body.get("data-b26-system-version") == SYSTEM_VERSION
     assert soup.body.get("data-b26-family") == "source"
-    assert soup.select_one('[data-b26-component="B26-04"][data-b26-variant="source-detail"]')
+    assert soup.body.get("data-b26-visual-root") == "v2"
+    assert soup.select_one('[data-b26-component="B26-04"][data-b26-variant="source-detail"][data-b26-visual="v2"]')
+    assert soup.select_one('[data-b26-component="B26-08"][data-b26-variant="archive-boundary"][data-b26-visual="v2"]')
     assert soup.select_one('[data-admission-state="provenance_archive_noindex"]')
     assert [link.get("data-b26-asset") for link in soup.select("link[data-b26-asset]")] == list(ASSET_FILES)
 

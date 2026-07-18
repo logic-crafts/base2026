@@ -23,7 +23,7 @@ sys.path.insert(0, str(SCRIPTS))
 from template_migration.source_detail import SourceSolution, adapt_source_detail, render_source_detail  # noqa: E402
 from alex_v4_static_shell import shell_js  # noqa: E402
 
-RENDERER_VERSION = "source-detail-v2-visual-reset-v2-20260718"
+RENDERER_VERSION = "source-detail-v2-b26-nonsearch-v2-20260718"
 
 
 def sha256(path: Path) -> str:
@@ -122,6 +122,7 @@ def copy_static_assets(out: Path, solution_journey_registry: Path | None = None)
     shutil.copytree(source_b26_system, static_out / "base2026", dirs_exist_ok=True)
     replacements = {
         "alex-design-system-v2.css": ROOT / "web" / "static" / "alex-design-system-v2.css",
+        "cookie-consent.js": ROOT / "web" / "static" / "cookie-consent.js",
         "source-detail-v2.js": SCRIPTS / "base2026_source_detail_v2.js",
     }
     for name, source in replacements.items():
@@ -139,6 +140,7 @@ def copy_static_assets(out: Path, solution_journey_registry: Path | None = None)
         "base2026/shell.css",
         "base2026/components.css",
         "alex-v4-static-shell.js",
+        "cookie-consent.js",
         "source-detail-v2.js",
         "assets/alex-yarosh-favicon-32.png",
         "assets/alex-yarosh-apple-touch.png",

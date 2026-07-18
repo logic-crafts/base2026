@@ -59,11 +59,11 @@ def test_all_non_source_generators_share_one_r4_design_version() -> None:
     assert ai_pages.DESIGN_SYSTEM_HREF.endswith(f"?v={R4_VERSION}")
 
 
-def test_source_renderer_version_remains_a_separate_unchanged_contract() -> None:
+def test_source_renderer_version_remains_a_separate_versioned_contract() -> None:
     source_renderer = assigned_string(
         SCRIPTS / "build-source-detail-v2-full-candidate.py", "RENDERER_VERSION"
     )
-    assert source_renderer == "source-detail-v2-visual-reset-v2-20260718"
+    assert source_renderer == "source-detail-v2-b26-nonsearch-v2-20260718"
     assert source_renderer != R4_VERSION
 
 
