@@ -10,7 +10,6 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import re
 import shutil
 import sys
 from collections import Counter
@@ -22,9 +21,9 @@ SCRIPTS = ROOT / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
 from template_migration.source_detail import SourceSolution, adapt_source_detail, render_source_detail  # noqa: E402
-from alex_v4_static_shell import shell_css, shell_js  # noqa: E402
+from alex_v4_static_shell import shell_js  # noqa: E402
 
-RENDERER_VERSION = "source-detail-v2-interior-v1-20260718"
+RENDERER_VERSION = "source-detail-v2-visual-reset-v2-20260718"
 
 
 def sha256(path: Path) -> str:
@@ -36,7 +35,38 @@ def sha256(path: Path) -> str:
 
 
 def read_manifest(path: Path) -> list[dict[str, Any]]:
-    rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
+    """Read either the route inventory or an accepted candidate manifest.
+
+    The latter is the safest input for a visual-only rebuild because it freezes
+    the exact 200/404 membership already admitted by the release without
+    importing private planning paths into the new public manifest.
+    """
+
+    raw = path.read_text(encoding="utf-8")
+    if path.suffix.lower() == ".json":
+        payload = json.loads(raw)
+        if payload.get("schema") != "base2026.source-detail-v2-full-candidate/v1":
+            raise ValueError("Unsupported Source Detail candidate manifest schema")
+        rows = [
+            {
+                "page_family": "source_detail",
+                "route": row["route"],
+                "expected_status": 200,
+                "admission_state": row["admission_state"],
+            }
+            for row in payload.get("rendered") or []
+        ]
+        rows.extend(
+            {
+                "page_family": "source_detail",
+                "route": route,
+                "expected_status": 404,
+                "admission_state": "future_private_backlog",
+            }
+            for route in payload.get("future_private_not_emitted") or []
+        )
+    else:
+        rows = [json.loads(line) for line in raw.splitlines() if line.strip()]
     source_rows = [row for row in rows if row.get("page_family") == "source_detail"]
     if not source_rows:
         raise ValueError("Route manifest has no source_detail rows")
@@ -82,54 +112,47 @@ def copy_static_assets(out: Path, solution_journey_registry: Path | None = None)
     if not source_assets.is_dir():
         raise FileNotFoundError(f"Canonical shell asset directory is missing: {source_assets}")
     shutil.copytree(source_assets, static_out / "assets", dirs_exist_ok=True)
+    source_vendor = ROOT / "web/static/vendor"
+    if not source_vendor.is_dir():
+        raise FileNotFoundError(f"Canonical local-font directory is missing: {source_vendor}")
+    shutil.copytree(source_vendor, static_out / "vendor", dirs_exist_ok=True)
     replacements = {
-        "source-detail-v2.css": SCRIPTS / "base2026_source_detail_v2.css",
+        "alex-design-system-v2.css": ROOT / "web" / "static" / "alex-design-system-v2.css",
         "source-detail-v2.js": SCRIPTS / "base2026_source_detail_v2.js",
-        "base2026-interior-v1.css": ROOT / "web" / "static" / "base2026-interior-v1.css",
     }
     for name, source in replacements.items():
         shutil.copy2(source, static_out / name)
-    vendor_source = ROOT / "web" / "static" / "vendor"
-    if not vendor_source.is_dir():
-        raise FileNotFoundError(f"Canonical local-font directory is missing: {vendor_source}")
-    font_assets = sorted(
-        path for path in vendor_source.iterdir()
-        if path.is_file() and path.name.startswith(("geist-", "manrope-"))
-    )
-    if not font_assets or not any(path.name == "geist-local.css" for path in font_assets):
-        raise ValueError("Canonical local-font asset set is incomplete")
-    (static_out / "vendor").mkdir(parents=True, exist_ok=True)
-    for source in font_assets:
-        shutil.copy2(source, static_out / "vendor" / source.name)
     if solution_journey_registry is not None:
-        for name in ("base2026-solution-journey.js", "base2026-solution-journey.css"):
-            shutil.copy2(ROOT / "web" / "static" / name, static_out / name)
+        shutil.copy2(
+            ROOT / "web" / "static" / "base2026-solution-journey.js",
+            static_out / "base2026-solution-journey.js",
+        )
         shutil.copy2(solution_journey_registry, static_out / "base2026-solution-journey.json")
-    local_shell_css = re.sub(
-        r"^@import\s+url\([^\n]+\);\s*",
-        "",
-        shell_css(),
-        count=1,
-    )
-    if "fonts.googleapis.com" in local_shell_css or "fonts.gstatic.com" in local_shell_css:
-        raise ValueError("Candidate shell CSS retains an external font dependency")
-    (static_out / "alex-v4-static-shell.css").write_text(local_shell_css, encoding="utf-8")
     (static_out / "alex-v4-static-shell.js").write_text(shell_js(), encoding="utf-8")
     required = [
-        "alex-v4-static-shell.css",
+        "alex-design-system-v2.css",
         "alex-v4-static-shell.js",
-        "source-detail-v2.css",
         "source-detail-v2.js",
-        "base2026-interior-v1.css",
-        *[f"vendor/{path.name}" for path in font_assets],
         "assets/alex-yarosh-favicon-32.png",
         "assets/alex-yarosh-apple-touch.png",
+        "vendor/manrope-400.ttf",
+        "vendor/manrope-500.ttf",
+        "vendor/manrope-600.ttf",
+        "vendor/manrope-700.ttf",
+        "vendor/manrope-800.ttf",
+        "vendor/geist-400.ttf",
+        "vendor/geist-500.ttf",
+        "vendor/geist-600.ttf",
+        "vendor/geist-700.ttf",
+        "vendor/geist-800.ttf",
+        "vendor/geist-mono-400.ttf",
+        "vendor/geist-mono-600.ttf",
+        "vendor/geist-mono-700.ttf",
     ]
     if solution_journey_registry is not None:
         required.extend(
             (
                 "base2026-solution-journey.js",
-                "base2026-solution-journey.css",
                 "base2026-solution-journey.json",
             )
         )
@@ -219,9 +242,9 @@ def build(args: argparse.Namespace) -> dict[str, Any]:
         result: dict[str, Any] = {
             "schema": "base2026.source-detail-v2-full-candidate/v1",
             "renderer_version": RENDERER_VERSION,
-            "route_manifest": str(manifest_path.relative_to(ROOT)),
+            "route_manifest": manifest_path.name,
             "route_manifest_sha256": sha256(manifest_path),
-            "source_root": str(source_root.relative_to(ROOT)),
+            "source_root": str(args.source_root_label),
             "asset_sha256": assets,
             "solution_journey_registry_sha256": registry_sha256,
             "solution_journey_source_count": len(solution_mappings),
@@ -242,6 +265,7 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--route-manifest", required=True)
     parser.add_argument("--source-root", default="web/static")
+    parser.add_argument("--source-root-label", default="frozen-public-web")
     parser.add_argument("--out", required=True)
     parser.add_argument("--solution-journey-registry")
     args = parser.parse_args()

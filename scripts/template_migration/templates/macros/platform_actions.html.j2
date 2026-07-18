@@ -11,5 +11,5 @@
 {%- endmacro %}
 
 {% macro platform_action(key, href, label, accessible_label) -%}
-<a class="b26-action b26-action--platform" href="{{ href }}" target="_blank" rel="noreferrer" aria-label="{{ accessible_label }}"><span class="b26-platform-mark" aria-hidden="true">{{ platform_icon(key) }}</span><span>{{ label }}</span></a>
+<a class="b26-action b26-action--platform ayds-btn ayds-btn--secondary" href="{{ href }}" target="_blank" rel="noreferrer" aria-label="{{ accessible_label }}"><span class="b26-platform-mark" aria-hidden="true">{{ platform_icon(key) }}</span><span>{{ label }}</span></a>
 {%- endmacro %}

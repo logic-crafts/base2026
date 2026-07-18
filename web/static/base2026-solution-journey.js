@@ -241,12 +241,12 @@
     );
   }
 
-  function loadStyles() {
-    const href = new URL("base2026-solution-journey.css", assetBase).href;
+  function loadAcceptedSearchBridgeStyles() {
+    if (!document.body.classList.contains("base2026-search-v1")) return;
     if (document.querySelector('[data-base2026-solution-journey="styles"]')) return;
     const link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = href;
+    link.href = new URL("base2026-solution-journey.css", assetBase).href;
     link.dataset.base2026SolutionJourney = "styles";
     document.head.append(link);
   }
@@ -314,9 +314,9 @@
     }
   });
 
-  loadStyles();
   const panel = document.querySelector("#source-detail-panel");
   if (panel) {
+    loadAcceptedSearchBridgeStyles();
     new MutationObserver(() => {
       const sourceNode = panel.querySelector("[data-source-item-id]");
       emitSourceOpened(sourceNode, true);

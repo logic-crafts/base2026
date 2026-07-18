@@ -114,32 +114,29 @@ class AIRecommendsSolutionTests(unittest.TestCase):
         report = validate_solution(self.solution, self.context)
         report["indexable"] = False
         html = generator.solution_page(self.solution, report)
+        main = html.split("<main", 1)[1].split("</main>", 1)[0]
         self.assertIn('name="robots" content="noindex,follow"', html)
         self.assertIn("Reviewed creator signals show what each source said", html)
-        self.assertIn('class="content-section solution-fit"', html)
+        self.assertIn('class="content-section solution-fit ayds-section"', html)
         self.assertIn('data-copy-column="2"', html)
         self.assertNotIn("solution-step__number", html)
         self.assertIn('href="/knowledge/?q=example"', html)
-        self.assertNotIn('href="/knowledge/apply-research.html?solution=example"', html)
-        self.assertNotIn("apply-research.html", html)
+        self.assertNotIn('data-research-bridge="solution_to_apply_research"', main)
+        self.assertNotIn('href="../apply-research.html"', main)
 
-    def test_solution_css_implements_accepted_stitch_template(self) -> None:
-        css = generator.css_text()
-        self.assertIn("max-width:1040px", css)
-        self.assertIn("grid-template-columns:repeat(4,minmax(0,1fr))", css)
-        self.assertIn(".solution-page .solution-step--critical", css)
-        self.assertIn(".solution-page .solution-operations", css)
-        self.assertIn(".solution-page .solution-evidence-row__detail-grid", css)
-        self.assertIn(".solution-page .solution-next-action", css)
-        self.assertIn(
-            ".solution-page .solution-next-action .ay-button-secondary{margin-top:0;"
-            "border-color:rgba(255,255,255,.48);background:transparent;color:#fff}",
-            css,
-        )
-        self.assertIn("width:min(100% - 32px,520px)", css)
-        self.assertIn(".solution-page .solution-decision-table thead{display:none}", css)
-        self.assertIn(".solution-hub .solution-hero__copy h1{font-size:clamp(31px,9.6vw,40px)", css)
-        self.assertNotIn(".solution-step__number{color", css)
+    def test_solution_css_implements_shared_v2_component_contract(self) -> None:
+        css = (ROOT / "web/static/alex-design-system-v2.css").read_text(encoding="utf-8")
+        self.assertIn("--ayds-color-canvas: #f4f1e9", css)
+        self.assertIn("--ayds-radius-card: 24px", css)
+        self.assertIn(".solution-step--critical", css)
+        self.assertIn(".solution-operations-grid", css)
+        self.assertIn(".solution-evidence-row__detail-grid", css)
+        self.assertIn(".solution-next-action", css)
+        self.assertIn(".solution-next-action__bridge .ay-button-secondary", css)
+        self.assertIn(".solution-decision-table", css)
+        self.assertIn(".solution-hub-grid", css)
+        self.assertNotIn("#d9730d", css.lower())
+        self.assertNotIn("fonts.googleapis.com", css)
 
     def test_stitch_template_renders_canonical_content_without_demo_copy(self) -> None:
         report = validate_solution(self.solution, self.context)
@@ -161,26 +158,28 @@ class AIRecommendsSolutionTests(unittest.TestCase):
         ]
         for value in canonical_values:
             self.assertIn(value, html)
-        self.assertEqual(html.count('class="solution-evidence-row"'), 2)
+        self.assertEqual(html.count('class="solution-evidence-row ayds-card ayds-card--data"'), 2)
         self.assertIn('class="solution-step solution-step--critical"', html)
-        self.assertIn('class="content-section solution-operations"', html)
+        self.assertIn('class="content-section solution-operations solution-operations-grid ayds-section"', html)
         self.assertIn("Alex Yarosh", html)
         self.assertNotIn("40% traffic increase", html)
         self.assertNotIn("September 12, 2023", html)
         self.assertNotIn("March 28, 2024", html)
         self.assertNotIn("April 15, 2024", html)
 
-    def test_solution_generator_carries_permanent_interior_and_local_font_contract(self) -> None:
+    def test_solution_generator_carries_shared_v2_and_local_font_contract(self) -> None:
         report = validate_solution(self.solution, self.context)
         html = generator.solution_page(self.solution, report)
-        self.assertIn("b26-interior-v1 b26-interior-solution", html)
-        self.assertIn('../static/base2026-interior-v1.css?v=', html)
-        self.assertIn('../static/vendor/geist-local.css?v=', html)
-        self.assertNotIn("interior-token-pilot", html)
+        css = (ROOT / "web/static/alex-design-system-v2.css").read_text(encoding="utf-8")
+        self.assertIn('class="ayds-root b26-family-solutions', html)
+        self.assertEqual(html.count('../static/alex-design-system-v2.css?v='), 1)
+        self.assertNotIn("base2026-interior-v1.css", html)
+        self.assertNotIn("ai-recommends-solutions.css", html)
         self.assertNotIn("fonts.googleapis.com", html)
         self.assertNotIn("fonts.gstatic.com", html)
-        self.assertNotIn("fonts.googleapis.com", generator.local_shell_css_text())
-        self.assertLess(html.index("alex-v4-static-shell.css"), html.index("base2026-interior-v1.css"))
+        self.assertIn('/knowledge/static/vendor/manrope-800.ttf', css)
+        self.assertIn('/knowledge/static/vendor/geist-700.ttf', css)
+        self.assertNotIn("fonts.googleapis.com", css)
 
     def test_solution_column_copy_script_is_same_origin_static_asset(self) -> None:
         report = validate_solution(self.solution, self.context)
@@ -193,7 +192,7 @@ class AIRecommendsSolutionTests(unittest.TestCase):
         self.assertNotIn("http://", script)
         self.assertNotIn("https://", script)
 
-    def test_solution_shell_explains_base2026_jobs_without_legacy_apply_link(self) -> None:
+    def test_solution_shell_explains_base2026_jobs_and_names_apply_research(self) -> None:
         report = validate_solution(self.solution, self.context)
         html = generator.solution_page(self.solution, report)
         header = html.split("</header>", 1)[0]
@@ -203,7 +202,7 @@ class AIRecommendsSolutionTests(unittest.TestCase):
         self.assertIn("AI Recommends Solutions", header)
         self.assertIn("Creators", header)
         self.assertIn("Methodology", header)
-        self.assertNotIn("apply-research.html", header)
+        self.assertIn("apply-research.html", header)
 
     def test_indexable_solution_exposes_optional_apply_research_after_primary_research_action(self) -> None:
         report = validate_solution(self.solution, self.context)

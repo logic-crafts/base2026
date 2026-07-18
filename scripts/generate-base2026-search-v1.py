@@ -8,7 +8,7 @@ import re
 import shutil
 from pathlib import Path
 
-from alex_v4_static_shell import footer_html, header_html, shell_css, shell_js
+from alex_v4_static_shell import footer_html, header_html, search_shell_css, shell_js
 
 
 RESEARCH_CONTEXT_HTML = '''      <section class="research-context" aria-labelledby="research-context-title">
@@ -138,7 +138,7 @@ def main() -> int:
     shutil.copytree(source_root, out)
     index = (source_root / 'index.html').read_text(encoding='utf-8')
     (out / 'index.html').write_text(transform(index), encoding='utf-8')
-    (out / 'alex-v4-static-shell.css').write_text(shell_css(), encoding='utf-8')
+    (out / 'alex-v4-static-shell.css').write_text(search_shell_css(), encoding='utf-8')
     (out / 'alex-v4-static-shell.js').write_text(shell_js(), encoding='utf-8')
     css_source = Path(__file__).with_name('base2026_search_v1.css')
     (out / 'base2026-search-v1.css').write_text(css_source.read_text(encoding='utf-8'), encoding='utf-8')

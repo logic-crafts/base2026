@@ -8,10 +8,11 @@ from html import escape, unescape
 from pathlib import Path
 from urllib.parse import urlencode
 
+from alex_design_system_v2 import VERSION as STYLE_VERSION
+from alex_design_system_v2 import apply_component_classes, stylesheet_href
+from alex_v4_static_shell import apply_alex_v4_shell
 
-STYLE_VERSION = "20260627-bing-cookie-compact-v1"
 CONTACT_EMAIL = "offflinerpsy@gmail.com"
-FONT_LINK = "https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600;700&family=Geist:wght@400;500;600;700;800&display=swap"
 FAVICON_ASSET_PATH = "static/assets/alex-yarosh-favicon-32.png"
 APPLE_TOUCH_ASSET_PATH = "static/assets/alex-yarosh-apple-touch.png"
 SOCIAL_IMAGE_URL = "https://aggressorbulkit.online/knowledge/static/assets/alex-yarosh-avatar.png"
@@ -36,7 +37,6 @@ FOOTER_LINKS = [
     ("Support", "../support.html"),
     ("Creator Correction / Removal", "../opt-out.html"),
 ]
-
 
 def favicon_links(relative_root: str) -> str:
     return "\n".join(
@@ -733,12 +733,8 @@ def base2026_dropdown(relative_root: str, current: str = "") -> str:
 
 
 def header_nav_links(relative_root: str, current: str = "") -> str:
-    project_links = []
-    for key, label, target in PROJECT_NAV_LINKS:
-        active = ' aria-current="page"' if key == current else ""
-        project_links.append(f'<a class="site-header__link" href="{escape(root_href(relative_root, target))}"{active}>{escape(label)}</a>')
     return (
-        "".join(project_links)
+        base2026_dropdown(relative_root, current)
         + '<span class="site-header__nav-divider" aria-hidden="true"></span>'
         + '<a class="site-header__link site-header__link--site" href="/services/">Services</a>'
         + '<a class="site-header__link site-header__link--site" href="/pricing/">Pricing</a>'
@@ -854,7 +850,7 @@ def page_shell(
             "url": "https://aggressorbulkit.online/knowledge/",
         },
     }
-    return f"""<!doctype html>
+    page = f"""<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -866,12 +862,9 @@ def page_shell(
     <title>{escape(title)}</title>
     <script type="application/ld+json">{json.dumps(schema, ensure_ascii=False)}</script>
 {favicon_links(relative_root)}
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="{FONT_LINK}" rel="stylesheet" />
-    <link rel="stylesheet" href="{relative_root}/static/styles.css?v={STYLE_VERSION}" />
+    <link rel="stylesheet" href="{stylesheet_href(relative_root)}" data-alex-design-system="v2" />
   </head>
-  <body>
+  <body class="ayds-root ayds-mode-product b26-family-{escape(current or 'general')}">
     <a class="skip-link" href="#content">Skip to content</a>
     {site_header(relative_root, current)}
     <main id="content" class="{escape(main_class)}">
@@ -963,6 +956,9 @@ def page_shell(
   </body>
 </html>
 """
+    return apply_component_classes(
+        apply_alex_v4_shell(page, relative_root=relative_root, mode="product")
+    )
 
 
 def card(title: str, text: str, href: str | None = None, meta: str = "") -> str:

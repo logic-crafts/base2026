@@ -123,6 +123,14 @@ $Html = [regex]::Replace($Html, $ConfigPattern, "`n$Config", 1)
 $Html | Set-Content -Path (Join-Path $WebRoot "index.html") -Encoding UTF8
 
 Copy-Item "./web/static/styles.css" (Join-Path $StaticRoot "styles.css") -Force
+Copy-Item "./web/static/alex-design-system-v2.css" (Join-Path $StaticRoot "alex-design-system-v2.css") -Force
+Copy-Item "./web/static/alex-v4-static-shell.js" (Join-Path $StaticRoot "alex-v4-static-shell.js") -Force
+Copy-Item "./web/static/base2026-solution-journey.js" (Join-Path $StaticRoot "base2026-solution-journey.js") -Force
+Copy-Item "./web/static/base2026-solution-journey.css" (Join-Path $StaticRoot "base2026-solution-journey.css") -Force
+if (Test-Path "./web/static/base2026-solution-journey.json") {
+  Copy-Item "./web/static/base2026-solution-journey.json" (Join-Path $StaticRoot "base2026-solution-journey.json") -Force
+}
+Copy-Item "./web/static/vendor" (Join-Path $StaticRoot "vendor") -Recurse -Force
 Copy-Item "./web/static/meili.js" (Join-Path $StaticRoot "meili.js") -Force
 Copy-Item "./web/static/cookie-consent.js" (Join-Path $StaticRoot "cookie-consent.js") -Force
 Copy-Item "./web/static/share-actions.js" (Join-Path $StaticRoot "share-actions.js") -Force
@@ -204,9 +212,8 @@ if (Test-Path "./data/base2026_ai_recommends_solutions_pilot.json") {
   Assert-NativeSuccess "validate-ai-recommends-solutions"
   python3 ./scripts/generate-ai-recommends-solutions.py --input $SolutionInput --data-root $ExportRoot --out $WebRoot --report $SolutionReport | Write-Output
   Assert-NativeSuccess "generate-ai-recommends-solutions"
-  Copy-Item (Join-Path $WebRoot "ai-recommends-solutions.css") (Join-Path $StaticRoot "ai-recommends-solutions.css") -Force
-  Copy-Item (Join-Path $WebRoot "alex-v4-static-shell.css") (Join-Path $StaticRoot "alex-v4-static-shell.css") -Force
-  Copy-Item (Join-Path $WebRoot "alex-v4-static-shell.js") (Join-Path $StaticRoot "alex-v4-static-shell.js") -Force
+  Copy-Item (Join-Path $WebRoot "ai-recommends-solutions.js") (Join-Path $StaticRoot "ai-recommends-solutions.js") -Force
+  Copy-Item "./web/static/alex-v4-static-shell.js" (Join-Path $StaticRoot "alex-v4-static-shell.js") -Force
   python3 ./scripts/validate-ai-recommends-html.py --out $WebRoot --generation-report $SolutionReport --report $SolutionHtmlReport | Write-Output
   Assert-NativeSuccess "validate-ai-recommends-html"
 }
@@ -263,6 +270,8 @@ Get-ChildItem -Path $CandidateStatic -Recurse -File | ForEach-Object {
   New-Item -ItemType Directory -Force -Path (Split-Path $TargetAsset -Parent) | Out-Null
   Copy-Item $_.FullName $TargetAsset -Force
 }
+python3 ./scripts/apply-alex-design-system-v2.py --web-root $WebRoot | Write-Output
+Assert-NativeSuccess "apply-alex-design-system-v2"
 python3 ./scripts/check-public-content-readiness.py --data-root $ExportRoot --latest 1 --web-root $WebRoot --allow-generated-noindex --fail | Write-Output
 Assert-NativeSuccess "check-public-content-readiness-generated"
 Get-ChildItem -Path "./web/static" -Filter "indexnow-*.txt" -File -ErrorAction SilentlyContinue | ForEach-Object {
@@ -281,10 +290,11 @@ Assert-NativeSuccess "generate-base2026-sitemap"
 
 $VersionedAssets = @(
   "styles.css",
-  "ai-recommends-solutions.css",
-  "alex-v4-static-shell.css",
+  "alex-design-system-v2.css",
+  "ai-recommends-solutions.js",
   "alex-v4-static-shell.js",
-  "source-detail-v2.css",
+  "base2026-solution-journey.js",
+  "base2026-solution-journey.css",
   "source-detail-v2.js",
   "meili.js",
   "cookie-consent.js",
@@ -395,6 +405,23 @@ $PackageManifest = [ordered]@{
     "web/sources/index.html",
     "web/sitemap.xml",
     "web/static/styles.css",
+    "web/static/alex-design-system-v2.css",
+    "web/static/alex-v4-static-shell.js",
+    "web/static/base2026-solution-journey.js",
+    "web/static/base2026-solution-journey.css",
+    "web/static/vendor/manrope-400.ttf",
+    "web/static/vendor/manrope-500.ttf",
+    "web/static/vendor/manrope-600.ttf",
+    "web/static/vendor/manrope-700.ttf",
+    "web/static/vendor/manrope-800.ttf",
+    "web/static/vendor/geist-400.ttf",
+    "web/static/vendor/geist-500.ttf",
+    "web/static/vendor/geist-600.ttf",
+    "web/static/vendor/geist-700.ttf",
+    "web/static/vendor/geist-800.ttf",
+    "web/static/vendor/geist-mono-400.ttf",
+    "web/static/vendor/geist-mono-600.ttf",
+    "web/static/vendor/geist-mono-700.ttf",
     "web/manifest.json",
     "web/static/manifest.json",
     "public-data/tiktok/manifest.json",

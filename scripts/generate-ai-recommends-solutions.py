@@ -4,12 +4,13 @@ import argparse
 import importlib.util
 import json
 import re
-import shutil
 from html import escape
 from pathlib import Path
 from typing import Any
 
-from alex_v4_static_shell import apply_alex_v4_shell, shell_css, shell_js
+from alex_design_system_v2 import VERSION as DESIGN_SYSTEM_VERSION
+from alex_design_system_v2 import apply_component_classes, stylesheet_href
+from alex_v4_static_shell import apply_alex_v4_shell, shell_js
 from base2026_ai_recommends_core import build_public_context, read_json, validate_payload
 
 PUBLIC_PAGES_PATH = Path(__file__).with_name("generate-public-pages.py")
@@ -19,64 +20,64 @@ if not SPEC or not SPEC.loader:
 public_pages = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(public_pages)
 
-STYLE_VERSION = "20260715-ai-recommends-solutions-stitch-v1"
-INTERIOR_VERSION = "20260718-base2026-interior-v1"
-ROOT = Path(__file__).resolve().parents[1]
-INTERIOR_CSS_PATH = ROOT / "web" / "static" / "base2026-interior-v1.css"
-LOCAL_FONT_ROOT = ROOT / "web" / "static" / "vendor"
-
 
 def write_text(path: Path, text: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text("\n".join(line.rstrip() for line in text.splitlines()) + "\n", encoding="utf-8")
 
 
-def local_shell_css_text() -> str:
-    rendered = re.sub(r"^@import\s+url\([^\n]+\);\s*", "", shell_css(), count=1)
-    if "fonts.googleapis.com" in rendered or "fonts.gstatic.com" in rendered:
-        raise ValueError("Solution shell CSS retains an external font dependency")
+LEGACY_STYLESHEET_RE = re.compile(
+    r"""<link\b[^>]*(?:
+        ai-recommends-solutions\.css
+        |base2026-interior-v1\.css
+        |alex-v4-static-shell\.css
+        |vendor/geist-local\.css
+        |fonts\.googleapis\.com
+        |fonts\.gstatic\.com
+    )[^>]*>""",
+    re.IGNORECASE | re.VERBOSE,
+)
+SHARED_STYLESHEET_RE = re.compile(
+    r"""<link\b[^>]*alex-design-system-v2\.css[^>]*>""",
+    re.IGNORECASE,
+)
+FORBIDDEN_PUBLIC_ASSET_MARKERS = (
+    "ai-recommends-solutions.css",
+    "base2026-interior-v1.css",
+    "alex-v4-static-shell.css",
+    "vendor/geist-local.css",
+    "fonts.googleapis.com",
+    "fonts.gstatic.com",
+)
+
+
+def apply_solution_design_system(page: str) -> str:
+    """Apply the canonical Alex shell and leave exactly one shared stylesheet."""
+
+    rendered = apply_alex_v4_shell(page, relative_root="..", mode="product")
+    rendered = SHARED_STYLESHEET_RE.sub("\n", rendered)
+    rendered = LEGACY_STYLESHEET_RE.sub("\n", rendered)
+    shared_link = (
+        f'    <link rel="stylesheet" href="{escape(stylesheet_href(".."))}" '
+        'data-alex-design-system="v2" />\n'
+    )
+    rendered, head_count = re.subn(
+        r"</head>",
+        lambda match: shared_link + match.group(0),
+        rendered,
+        count=1,
+        flags=re.IGNORECASE,
+    )
+    if head_count != 1:
+        raise ValueError("Solution page is missing a unique head boundary")
+    rendered = apply_component_classes(rendered)
+
+    leaked = [marker for marker in FORBIDDEN_PUBLIC_ASSET_MARKERS if marker in rendered]
+    if leaked:
+        raise ValueError(f"Solution page retains legacy public assets: {', '.join(leaked)}")
+    if rendered.count("alex-design-system-v2.css") != 1:
+        raise ValueError("Solution page must reference exactly one shared design-system stylesheet")
     return rendered
-
-
-def copy_interior_assets(out: Path) -> None:
-    if not INTERIOR_CSS_PATH.is_file():
-        raise FileNotFoundError(INTERIOR_CSS_PATH)
-    target_css = out / INTERIOR_CSS_PATH.name
-    if target_css.resolve() != INTERIOR_CSS_PATH.resolve():
-        target_css.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(INTERIOR_CSS_PATH, target_css)
-    font_assets = sorted(
-        path for path in LOCAL_FONT_ROOT.iterdir()
-        if path.is_file() and path.name.startswith(("geist-", "manrope-"))
-    )
-    if not any(path.name == "geist-local.css" for path in font_assets):
-        raise ValueError("Solution local-font asset set is incomplete")
-    font_out = out / "vendor"
-    font_out.mkdir(parents=True, exist_ok=True)
-    for source in font_assets:
-        target = font_out / source.name
-        if target.resolve() != source.resolve():
-            shutil.copy2(source, target)
-
-
-def apply_solution_interior_contract(page: str) -> str:
-    body = '<body class="ay-alex-v4-static ay-stitch-home-v3 ay-stitch-home-v4">'
-    replacement = (
-        '<body class="ay-alex-v4-static ay-stitch-home-v3 ay-stitch-home-v4 '
-        'b26-interior-v1 b26-interior-solution">'
-    )
-    if page.count(body) != 1:
-        raise ValueError("Solution body-class contract drift")
-    page = page.replace(body, replacement, 1)
-    for external_font in (
-        '    <link rel="preconnect" href="https://fonts.googleapis.com" />\n',
-        '    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />\n',
-        f'    <link href="{public_pages.FONT_LINK}" rel="stylesheet" />\n',
-    ):
-        page = page.replace(external_font, "")
-    if "fonts.googleapis.com" in page or "fonts.gstatic.com" in page:
-        raise ValueError("Solution page retains an external font dependency")
-    return page
 
 
 def paragraphs(items: list[str], class_name: str = "") -> str:
@@ -263,13 +264,19 @@ def article_schema(solution: dict[str, Any], resolved: list[dict[str, Any]]) -> 
 def inject_solution_head(page: str, solution: dict[str, Any], resolved: list[dict[str, Any]]) -> str:
     schema = json.dumps(article_schema(solution, resolved), ensure_ascii=False).replace("</", "<\\/")
     extra = (
-        f'    <link rel="stylesheet" href="../static/vendor/geist-local.css?v={INTERIOR_VERSION}" data-base2026-local-fonts="geist-manrope" />\n'
-        f'    <link rel="stylesheet" href="../static/ai-recommends-solutions.css?v={STYLE_VERSION}" />\n'
-        f'    <link rel="stylesheet" href="../static/base2026-interior-v1.css?v={INTERIOR_VERSION}" data-base2026-interior="v1" />\n'
-        f'    <script src="../static/ai-recommends-solutions.js?v={STYLE_VERSION}" defer></script>\n'
+        f'    <script src="../static/ai-recommends-solutions.js?v={DESIGN_SYSTEM_VERSION}" defer></script>\n'
         f'    <script type="application/ld+json">{schema}</script>\n'
     )
-    return page.replace("  </head>", extra + "  </head>", 1)
+    rendered, head_count = re.subn(
+        r"</head>",
+        lambda match: extra + match.group(0),
+        page,
+        count=1,
+        flags=re.IGNORECASE,
+    )
+    if head_count != 1:
+        raise ValueError("Solution page is missing a unique head boundary")
+    return rendered
 
 
 def solution_page(solution: dict[str, Any], report: dict[str, Any]) -> str:
@@ -291,22 +298,22 @@ def solution_page(solution: dict[str, Any], report: dict[str, Any]) -> str:
         )
     body = f"""
       <section class="solution-hero">
-        <p class="eyebrow">AI Recommends Solution</p>
-        <h1>{escape(str(solution.get('title') or ''))}</h1>
-        <div class="solution-hero__decision">
+        <div class="solution-hero__copy">
+          <p class="eyebrow">AI Recommends Solution</p>
+          <h1>{escape(str(solution.get('title') or ''))}</h1>
           <article class="solution-problem">
             <span>The problem</span>
             <p>{escape(str(solution.get('problem') or ''))}</p>
           </article>
-          <aside class="solution-verdict" aria-label="Base2026 recommendation">
-            <span>The recommendation</span>
-            <p>{escape(str(solution.get('recommendation') or ''))}</p>
-            <div class="solution-hero__actions">
-              <a class="ay-button" href="#playbook">Open the playbook</a>
-              <a class="ay-button-secondary" href="#evidence">Inspect the evidence</a>
-            </div>
-          </aside>
         </div>
+        <aside class="solution-verdict" aria-label="Base2026 recommendation">
+          <span>The recommendation</span>
+          <p>{escape(str(solution.get('recommendation') or ''))}</p>
+          <div class="solution-hero__actions">
+            <a class="ay-button" href="#playbook">Open the playbook</a>
+            <a class="ay-button-secondary" href="#evidence">Inspect the evidence</a>
+          </div>
+        </aside>
       </section>
 
       <section class="content-section solution-fit" id="decision" aria-labelledby="solution-fit-title">
@@ -329,7 +336,7 @@ def solution_page(solution: dict[str, Any], report: dict[str, Any]) -> str:
         {decision_table_html(solution.get('decision_table') or [])}
       </section>
 
-      <section class="content-section solution-operations" aria-label="Completion and measurement">
+      <section class="content-section solution-operations solution-operations-grid" aria-label="Completion and measurement">
         <article class="solution-completion-card">
           <h2>Completion gate</h2>
           <div class="solution-operations__group">
@@ -386,9 +393,7 @@ def solution_page(solution: dict[str, Any], report: dict[str, Any]) -> str:
         canonical_path=f"solutions/{solution['slug']}.html",
         main_class="app-shell content-page solution-page",
     )
-    return apply_solution_interior_contract(
-        inject_solution_head(apply_alex_v4_shell(page, relative_root=".."), solution, resolved)
-    )
+    return apply_solution_design_system(inject_solution_head(page, solution, resolved))
 
 
 def hub_page(solutions: list[dict[str, Any]], reports_by_slug: dict[str, dict[str, Any]]) -> str:
@@ -437,301 +442,8 @@ def hub_page(solutions: list[dict[str, Any]], reports_by_slug: dict[str, dict[st
         canonical_path="solutions/",
         main_class="app-shell content-page solution-page solution-hub",
     )
-    page = apply_alex_v4_shell(page, relative_root="..")
-    page = page.replace(
-        "  </head>",
-        f'    <link rel="stylesheet" href="../static/vendor/geist-local.css?v={INTERIOR_VERSION}" data-base2026-local-fonts="geist-manrope" />\n'
-        f'    <link rel="stylesheet" href="../static/ai-recommends-solutions.css?v={STYLE_VERSION}" />\n'
-        f'    <link rel="stylesheet" href="../static/base2026-interior-v1.css?v={INTERIOR_VERSION}" data-base2026-interior="v1" />\n'
-        "  </head>",
-        1,
-    )
-    return apply_solution_interior_contract(page)
+    return apply_solution_design_system(page)
 
-
-def _legacy_css_text() -> str:
-    return """
-.solution-page{--solution-ink:#0F172A;--solution-muted:#5f5e58;--solution-line:rgba(15,23,42,.10);--solution-paper:#fff;--solution-soft:#E5E2DA;--solution-cream:#F4F1E9;--solution-accent:#D9730D}
-.solution-page .eyebrow{margin:0 0 16px;color:rgba(15,23,42,.52);font:700 11px/1 Geist,Manrope,sans-serif;letter-spacing:.14em;text-transform:uppercase}.solution-page .lead{max-width:760px;margin:24px 0 0;color:rgba(15,23,42,.68);font:400 clamp(16px,1.45vw,20px)/1.6 Manrope,sans-serif}.solution-hero{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(300px,.55fr);gap:22px;align-items:stretch;margin:10px 0 0}.solution-hero__copy,.solution-verdict{border:1px solid var(--solution-line);border-radius:32px;background:rgba(255,255,255,.76);box-shadow:0 18px 54px rgba(15,23,42,.045)}.solution-hero__copy{padding:clamp(34px,5vw,70px)}.solution-hero__copy h1{max-width:920px;margin:0;color:var(--solution-ink);font:800 clamp(48px,6.1vw,84px)/.94 Manrope,sans-serif;letter-spacing:-.062em;text-wrap:balance}.solution-hero__actions,.solution-card-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:30px}.solution-page .ay-button,.solution-page .ay-button-secondary,.solution-page .button-link{position:relative;display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:13px 20px;border:1px solid transparent;border-radius:999px;overflow:hidden;font:700 11px/1 Geist,Manrope,sans-serif;letter-spacing:.1em;text-decoration:none;text-transform:uppercase;transition:transform .28s,box-shadow .28s,background .28s,border-color .28s}.solution-page .ay-button,.solution-page .button-link{background:var(--solution-ink);color:#fff}.solution-page .ay-button-secondary,.solution-page .button-link--quiet{border-color:var(--solution-line);background:transparent;color:var(--solution-ink)}.solution-page .ay-button:hover,.solution-page .button-link:hover{transform:translateY(-1px) scale(1.018);box-shadow:0 18px 40px rgba(15,23,42,.18)}.solution-page .ay-button-secondary:hover,.solution-page .button-link--quiet:hover{transform:translateY(-1px);background:#fff;border-color:rgba(15,23,42,.22);color:var(--solution-ink)}.solution-verdict{display:flex;flex-direction:column;justify-content:space-between;padding:clamp(30px,4vw,48px);background:var(--solution-ink);color:#fff;transform:rotate(.45deg)}.solution-verdict span,.solution-intent-grid span,.solution-hub-card__meta,.evidence-role{font:700 11px/1 Geist,Manrope,sans-serif;letter-spacing:.12em;text-transform:uppercase}.solution-verdict span{color:rgba(255,255,255,.56)}.solution-verdict p{margin:80px 0 0;color:#fff;font:700 clamp(20px,2.1vw,28px)/1.3 Manrope,sans-serif;letter-spacing:-.025em}
-.solution-intent-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;padding:0!important;border-top:1px solid var(--solution-line)!important;border-bottom:1px solid var(--solution-line)!important}.solution-intent-grid article{padding:28px;border-right:1px solid var(--solution-line);background:transparent}.solution-intent-grid article:last-child{border-right:0}.solution-intent-grid span{color:rgba(15,23,42,.46)}.solution-intent-grid p{margin:28px 0 0;color:rgba(15,23,42,.75);font-weight:600;line-height:1.55}
-.solution-steps{display:grid;gap:0;border-top:1px solid var(--solution-line)}.solution-step{display:grid;grid-template-columns:80px minmax(0,1fr);gap:24px;padding:28px 6px;border-bottom:1px solid var(--solution-line);transition:padding .25s,background .25s}.solution-step:hover{padding-left:18px;padding-right:18px;background:rgba(255,255,255,.48)}.solution-step__number{color:var(--solution-accent);font:700 13px Geist,sans-serif;letter-spacing:.1em}.solution-step h3{margin:0;font:800 20px/1.18 Manrope,sans-serif;letter-spacing:-.025em}.solution-step p{max-width:850px;margin:8px 0 0;color:rgba(15,23,42,.65);line-height:1.65}
-.solution-two-column,.solution-measurement__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}.solution-two-column>div,.solution-measurement__grid>div{padding:clamp(24px,3vw,38px);border:1px solid var(--solution-line);border-radius:26px;background:rgba(255,255,255,.58)}.solution-checklist,.solution-risk-list,.solution-measurement ul{margin:24px 0 0;padding:0;list-style:none}.solution-checklist li,.solution-risk-list li,.solution-measurement li{position:relative;margin:0;padding:13px 0 13px 24px;border-bottom:1px solid rgba(15,23,42,.07);color:rgba(15,23,42,.7);line-height:1.55}.solution-checklist li:before,.solution-measurement li:before{content:"✓";position:absolute;left:0;color:#137a48;font-weight:800}.solution-risk-list li:before{content:"—";position:absolute;left:0;color:#a46200;font-weight:800}
-.solution-decision-table{overflow:hidden;border:1px solid var(--solution-line);border-radius:26px;background:rgba(255,255,255,.64)}.solution-decision-table table{width:100%;border-collapse:collapse}.solution-decision-table th,.solution-decision-table td{padding:18px 20px;text-align:left;vertical-align:top;border-bottom:1px solid var(--solution-line)}.solution-decision-table th{background:rgba(229,226,218,.62);font:700 11px Geist,sans-serif;letter-spacing:.1em;text-transform:uppercase}.solution-decision-table td{color:rgba(15,23,42,.7);font-size:14px;line-height:1.55}.solution-decision-table tr:last-child td{border-bottom:0}
-.solution-evidence-grid,.solution-hub-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.solution-evidence-card,.solution-hub-card{position:relative;padding:30px;border:1px solid var(--solution-line);border-radius:26px;background:rgba(255,255,255,.56);overflow:hidden;transition:transform .28s,box-shadow .28s,background .28s}.solution-evidence-card:hover,.solution-hub-card:hover{transform:translateY(-4px);background:#fff;box-shadow:0 24px 64px rgba(15,23,42,.08)}.solution-evidence-card__meta,.solution-hub-card__meta{display:flex;flex-wrap:wrap;gap:10px 18px;color:rgba(15,23,42,.46)}.solution-hub-card h2{margin:50px 0 14px;font:800 clamp(23px,2.3vw,32px)/1.05 Manrope,sans-serif;letter-spacing:-.04em}.solution-hub-card h2 a{text-decoration:none}.solution-hub-card>p{color:rgba(15,23,42,.66);line-height:1.62}.solution-hub-card__verdict{margin-top:22px;padding-top:18px;border-top:1px solid var(--solution-line)}.solution-hub-card .button-link{margin-top:12px}.solution-evidence-card h3{margin:26px 0 12px;font:800 23px/1.1 Manrope,sans-serif;letter-spacing:-.03em}.solution-evidence-card blockquote{margin:20px 0;padding:18px 20px;border:0;border-left:3px solid var(--solution-accent);border-radius:0 14px 14px 0;background:var(--solution-soft);color:rgba(15,23,42,.72);line-height:1.6}.solution-evidence-card__claim{font-size:17px;font-weight:650;line-height:1.55}.section-intro{max-width:780px;color:rgba(15,23,42,.64);line-height:1.65}
-.solution-authority ul{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:26px 0 0;padding:0;list-style:none}.solution-authority li{padding:20px;border:1px solid var(--solution-line);border-radius:18px;background:rgba(255,255,255,.48)}.solution-authority li a{font-weight:750}.solution-authority li span{display:block;margin-top:8px;color:rgba(15,23,42,.58);font-size:13px;line-height:1.5}
-.solution-next-action{padding:clamp(48px,7vw,86px)!important;border-radius:34px;background:var(--solution-ink)!important;color:#fff;text-align:center;overflow:hidden}.solution-next-action .eyebrow{color:rgba(255,255,255,.56)}.solution-next-action h2{max-width:900px;margin:0 auto;color:#fff;font:800 clamp(34px,5vw,64px)/1 Manrope,sans-serif;letter-spacing:-.055em;text-wrap:balance}.solution-next-action p{max-width:720px;margin:22px auto 0;color:rgba(255,255,255,.68);font-size:17px;line-height:1.62}.solution-next-action .ay-button{margin-top:28px;background:#fff;color:var(--solution-ink)}.solution-page .topic-tags{display:flex;flex-wrap:wrap;gap:10px}.solution-page .topic-chip{padding:10px 14px;border:1px solid var(--solution-line);border-radius:999px;background:rgba(255,255,255,.52);font:700 11px Geist,sans-serif;letter-spacing:.08em;text-decoration:none;text-transform:uppercase}
-@media(max-width:1024px){.solution-intent-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.solution-intent-grid article:nth-child(2){border-right:0}.solution-intent-grid article:nth-child(-n+2){border-bottom:1px solid var(--solution-line)}}
-@media(max-width:820px){.solution-hero,.solution-two-column,.solution-measurement__grid,.solution-evidence-grid,.solution-hub-grid,.solution-authority ul{grid-template-columns:1fr}.solution-hero__copy h1{font-size:clamp(34px,9vw,44px);overflow-wrap:normal;word-break:normal}.solution-verdict{transform:none}.solution-verdict p{margin-top:40px}.solution-step{grid-template-columns:46px 1fr}.solution-intent-grid{grid-template-columns:1fr}.solution-intent-grid article{border-right:0;border-bottom:1px solid var(--solution-line)}.solution-intent-grid article:last-child{border-bottom:0}.solution-decision-table{overflow-x:auto}.solution-decision-table table{min-width:720px}}
-@media(max-width:520px){.solution-hero__copy,.solution-verdict{border-radius:24px;padding:26px}.solution-hero__actions a,.solution-card-actions a{width:100%}.solution-hub-card,.solution-evidence-card{padding:24px}.solution-hub-card h2{margin-top:34px}.solution-next-action{border-radius:24px!important}.solution-step{padding:22px 0}.solution-step:hover{padding-left:0;padding-right:0}}
-/* Services-calibrated body contract: the global 1120px header remains wider than
-   the 1040px Solutions content, while the opening decision surface is 960px. */
-body.ay-alex-v4-static main.app-shell.solution-page{width:min(100% - 96px,1040px);max-width:1040px;padding-top:24px}
-.solution-page .solution-hero{width:min(100%,960px);margin:8px auto 0;grid-template-columns:minmax(0,1.58fr) minmax(270px,.62fr);gap:16px}
-.solution-page .solution-hero__copy,.solution-page .solution-verdict{border-radius:24px;box-shadow:0 14px 38px rgba(15,23,42,.035)}
-.solution-page .solution-hero__copy{padding:clamp(34px,4.2vw,52px)}
-.solution-page .solution-hero__copy h1{max-width:760px;font-size:clamp(42px,4.35vw,56px);line-height:.98;letter-spacing:-.047em}
-.solution-page .lead{max-width:700px;margin-top:18px;font-size:clamp(15px,1.25vw,17px);line-height:1.55}
-.solution-page .solution-verdict{padding:30px}
-.solution-page .solution-verdict p{margin-top:28px;font-size:16px;line-height:1.52}
-.solution-page .content-section{padding:52px 0}
-.solution-page .section-title-row{margin-bottom:24px}
-.solution-page .section-title-row h2{font-size:clamp(28px,3vw,42px);line-height:1.06;letter-spacing:-.035em}
-.solution-page .solution-intent-grid article{padding:22px}
-.solution-page .solution-intent-grid p{margin-top:18px;font-size:14px}
-.solution-page .solution-step{grid-template-columns:64px minmax(0,1fr);gap:20px;padding:24px 4px}
-.solution-page .solution-two-column,.solution-page .solution-measurement__grid{gap:16px}
-.solution-page .solution-two-column>div,.solution-page .solution-measurement__grid>div{padding:28px;border-radius:20px}
-.solution-page .solution-decision-table{border-radius:20px}
-.solution-page .solution-evidence-grid,.solution-page .solution-hub-grid{gap:16px}
-.solution-page .solution-evidence-card,.solution-page .solution-hub-card{padding:24px;border-radius:20px}
-.solution-page .solution-hub-card h2{margin:32px 0 12px;font-size:clamp(22px,2.15vw,29px);line-height:1.08}
-.solution-page .solution-hub-card__verdict{margin-top:16px;padding-top:14px}
-.solution-page .solution-next-action{padding:clamp(42px,5.3vw,58px)!important;border-radius:24px}
-.solution-page .solution-next-action h2{max-width:760px;font-size:clamp(30px,3.7vw,46px);line-height:1.03;letter-spacing:-.04em}
-.solution-page .solution-next-action p{max-width:660px;margin-top:18px;font-size:15px}
-@media(max-width:1024px){body.ay-alex-v4-static main.app-shell.solution-page{width:min(100% - 48px,860px)}.solution-page .solution-hero{width:100%}}
-@media(max-width:820px){.solution-page .solution-hero{grid-template-columns:1fr;gap:12px}.solution-page .solution-hero__copy{padding:30px 26px}.solution-page .solution-hero__copy h1{font-size:clamp(34px,8.8vw,42px);line-height:1}.solution-page .solution-verdict{padding:22px 26px;border-radius:20px}.solution-page .solution-verdict p{margin-top:14px}.solution-page .content-section{padding:42px 0}.solution-page .section-title-row h2{font-size:clamp(27px,7vw,36px)}.solution-page .solution-hub-card h2{margin-top:26px}}
-@media(max-width:720px){body.ay-alex-v4-static main.app-shell.solution-page{width:min(100% - 32px,520px)}.solution-page .solution-hero__copy{padding:26px 22px}.solution-page .solution-verdict{padding:20px 22px}.solution-page .solution-hero__actions{margin-top:22px}.solution-page .solution-next-action{padding:34px 22px!important}.solution-page .solution-next-action h2{font-size:clamp(28px,8.2vw,36px)}.solution-page .solution-decision-table{overflow:visible;border:0;background:transparent}.solution-page .solution-decision-table table,.solution-page .solution-decision-table tbody,.solution-page .solution-decision-table tr,.solution-page .solution-decision-table td{display:block;width:100%;min-width:0}.solution-page .solution-decision-table table{min-width:0}.solution-page .solution-decision-table thead{display:none}.solution-page .solution-decision-table tbody{display:grid;gap:12px}.solution-page .solution-decision-table tr{overflow:hidden;border:1px solid var(--solution-line);border-radius:16px;background:rgba(255,255,255,.7)}.solution-page .solution-decision-table td{padding:14px 16px;border:0;border-bottom:1px solid var(--solution-line)}.solution-page .solution-decision-table td:last-child{border-bottom:0}.solution-page .solution-decision-table td::before{display:block;margin-bottom:6px;color:var(--solution-muted);font:700 10px/1 var(--solution-mono);letter-spacing:.12em;text-transform:uppercase}.solution-page .solution-decision-table td:nth-child(1)::before{content:"Signal"}.solution-page .solution-decision-table td:nth-child(2)::before{content:"Decision"}.solution-page .solution-decision-table td:nth-child(3)::before{content:"Measure"}}
-""".strip() + "\n"
-
-
-def css_text() -> str:
-    legacy = _legacy_css_text().replace(
-        ".solution-step__number{color:var(--solution-accent);font:700 13px Geist,sans-serif;letter-spacing:.1em}",
-        "",
-    )
-    closure = """
-/* Content Intelligence closure: Services-calibrated components, compact evidence,
-   no decorative sequence numbers, and explicit decision-column copy controls. */
-.solution-page .solution-fit{display:grid;grid-template-columns:minmax(0,.72fr) minmax(0,1.28fr);gap:64px;align-items:start;border-top:1px solid var(--solution-line);border-bottom:1px solid var(--solution-line)}
-.solution-page .solution-fit__copy h2{max-width:420px;margin:0;color:var(--solution-ink);font:800 clamp(30px,3.4vw,44px)/1.04 Manrope,sans-serif;letter-spacing:-.04em}
-.solution-page .solution-fit__copy>p:last-child{max-width:42ch;margin:20px 0 0;color:rgba(15,23,42,.66);font-size:16px;line-height:1.62}
-.solution-page .solution-fit__cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
-.solution-page .solution-fit__cards article{min-height:0;padding:24px;border:1px solid var(--solution-line);border-radius:24px;background:var(--solution-cream)}
-.solution-page .solution-fit__cards article:last-child{grid-column:1/-1}
-.solution-page .solution-fit__cards span{color:rgba(15,23,42,.48);font:750 11px/1 Geist,sans-serif;letter-spacing:.1em;text-transform:uppercase}
-.solution-page .solution-fit__cards p{margin:16px 0 0;color:rgba(15,23,42,.74);font-size:14.5px;font-weight:650;line-height:1.55}
-.solution-page .solution-steps{border-top:1px solid var(--solution-line)}
-.solution-page .solution-step{display:grid;grid-template-columns:minmax(180px,.48fr) minmax(0,1.52fr);gap:36px;padding:24px 4px;border-bottom:1px solid var(--solution-line);background:transparent;transition:none}
-.solution-page .solution-step:hover{padding-left:4px;padding-right:4px;background:transparent}
-.solution-page .solution-step h3{margin:0;font:800 18px/1.2 Manrope,sans-serif;letter-spacing:-.02em}
-.solution-page .solution-step p{max-width:720px;margin:0;color:rgba(15,23,42,.65);line-height:1.65}
-.solution-page .solution-decision-copy{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0 0 12px;color:rgba(15,23,42,.58);font-size:13px}
-.solution-page .solution-decision-copy button{min-height:36px;padding:9px 12px;border:1px solid var(--solution-line);border-radius:999px;background:#fff;color:var(--solution-ink);font:750 11px/1 Geist,sans-serif;letter-spacing:.04em;cursor:pointer}
-.solution-page .solution-decision-copy button:hover,.solution-page .solution-decision-copy button:focus-visible{border-color:rgba(15,23,42,.3);background:var(--solution-cream)}
-.solution-page .solution-copy-status{min-width:120px;color:#2e6848;font-weight:700}
-.solution-page .solution-decision-table th,.solution-page .solution-decision-table td{user-select:text;-webkit-user-select:text}
-.solution-page .solution-completion__grid{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(260px,.55fr);gap:24px;align-items:start}
-.solution-page .solution-completion__grid h3,.solution-page .solution-measurement__grid h3{margin:0;font:800 19px/1.2 Manrope,sans-serif;letter-spacing:-.02em}
-.solution-page .solution-checklist{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:28px;margin:18px 0 0;padding:0;list-style:none}
-.solution-page .solution-risk-list,.solution-page .solution-kpi-list{margin:18px 0 0;padding:0;list-style:none}
-.solution-page .solution-completion__grid aside{padding:24px;border:1px solid var(--solution-line);border-radius:20px;background:var(--solution-cream)}
-.solution-page .solution-checklist li,.solution-page .solution-risk-list li,.solution-page .solution-kpi-list li{position:relative;margin:0;padding:12px 0 12px 22px;border-bottom:1px solid rgba(15,23,42,.07);color:rgba(15,23,42,.68);line-height:1.52}
-.solution-page .solution-checklist li:before,.solution-page .solution-kpi-list li:before{content:"✓";position:absolute;left:0;color:#2e6848;font-weight:800}
-.solution-page .solution-risk-list li:before{content:"—";position:absolute;left:0;color:#8a5a16;font-weight:800}
-.solution-page .solution-measurement__grid{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(260px,.55fr);gap:24px;padding:24px 0;border-top:1px solid var(--solution-line);border-bottom:1px solid var(--solution-line)}
-.solution-page .solution-measurement__grid>div,.solution-page .solution-measurement__grid>aside{padding:0;border:0;border-radius:0;background:transparent}
-.solution-page .solution-measurement__grid aside{padding-left:24px;border-left:1px solid var(--solution-line)}
-.solution-page .solution-measurement__grid aside p{margin:18px 0 0;color:rgba(15,23,42,.68);line-height:1.6}
-.solution-page .solution-evidence-grid{display:grid;grid-template-columns:1fr;gap:12px}
-.solution-page .solution-evidence-row{padding:24px;border:1px solid var(--solution-line);border-radius:20px;background:rgba(255,255,255,.62)}
-.solution-page .solution-evidence-row__meta{display:flex;flex-wrap:wrap;gap:8px 16px;color:rgba(15,23,42,.46);font-size:12px}
-.solution-page .solution-evidence-row__summary{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(250px,.75fr);gap:32px;margin-top:18px;align-items:start}
-.solution-page .solution-evidence-row__topic{margin:0 0 8px;color:rgba(15,23,42,.48);font:750 11px/1 Geist,sans-serif;letter-spacing:.09em;text-transform:uppercase}
-.solution-page .solution-evidence-row h3{margin:0;color:var(--solution-ink);font:800 clamp(19px,2vw,25px)/1.16 Manrope,sans-serif;letter-spacing:-.025em}
-.solution-page .solution-evidence-row__summary>p{margin:0;color:rgba(15,23,42,.68);line-height:1.58}
-.solution-page .solution-evidence-row__summary>p strong,.solution-page .solution-evidence-row__summary>p span{display:block}
-.solution-page .solution-evidence-row__summary>p span{margin-top:8px}
-.solution-page .solution-evidence-row__details{margin-top:18px;border-top:1px solid var(--solution-line)}
-.solution-page .solution-evidence-row__details summary{padding:14px 0 0;color:rgba(15,23,42,.65);font-weight:750;cursor:pointer}
-.solution-page .solution-evidence-row__detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:16px;padding:18px;border-radius:14px;background:var(--solution-cream)}
-.solution-page .solution-evidence-row__detail-grid span{display:block;margin-bottom:8px;color:rgba(15,23,42,.48);font:750 10px/1 Geist,sans-serif;letter-spacing:.09em;text-transform:uppercase}
-.solution-page .solution-evidence-row__detail-grid blockquote,.solution-page .solution-evidence-row__detail-grid p{margin:0;padding:0;border:0;color:rgba(15,23,42,.72);font-style:normal;line-height:1.58}
-.solution-page .solution-evidence-row .solution-card-actions{margin-top:18px}
-.solution-page .solution-next-action{padding:44px!important}
-.solution-page .solution-next-action h2{font-size:clamp(30px,3.5vw,44px)}
-@media(max-width:820px){
-  .solution-page .solution-fit,.solution-page .solution-completion__grid,.solution-page .solution-measurement__grid{grid-template-columns:1fr;gap:28px}
-  .solution-page .solution-measurement__grid aside{padding:20px 0 0;border-left:0;border-top:1px solid var(--solution-line)}
-  .solution-page .solution-evidence-row__summary{grid-template-columns:1fr;gap:18px}
-}
-@media(max-width:720px){
-  .solution-page .solution-fit__cards,.solution-page .solution-checklist,.solution-page .solution-evidence-row__detail-grid{grid-template-columns:1fr}
-  .solution-page .solution-fit__cards article:last-child{grid-column:auto}
-  .solution-page .solution-step{grid-template-columns:1fr;gap:8px;padding:20px 0}
-  .solution-page .solution-decision-copy>span:first-child{width:100%}
-  .solution-page .solution-evidence-row{padding:20px}
-}
-""".strip()
-    stitch_template = r"""
-/* Stitch V1 accepted detail-page composition. The global Alex shell remains authoritative. */
-body.ay-alex-v4-static main.app-shell.solution-page{width:min(100% - 96px,1040px);max-width:1040px;padding:32px 0 96px}
-.solution-page{--solution-ink:#0F172A;--solution-muted:#5F5E58;--solution-line:rgba(15,23,42,.10);--solution-paper:#FFFFFF;--solution-soft:#E5E2DA;--solution-cream:#F4F1E9;--solution-accent:#D9730D}
-.solution-page .eyebrow{margin:0 0 16px;color:var(--solution-accent);font:750 11px/1 Geist,Manrope,sans-serif;letter-spacing:.12em;text-transform:uppercase}
-.solution-page .content-section{padding:52px 0}
-.solution-page .section-title-row{margin-bottom:24px}
-.solution-page .section-title-row h2,.solution-page>section>h2,.solution-related h2{margin:0;color:var(--solution-ink);font:800 clamp(28px,3vw,42px)/1.06 Manrope,sans-serif;letter-spacing:-.04em;text-wrap:balance}
-.solution-page .section-intro{max-width:720px;margin:-8px 0 28px;color:rgba(15,23,42,.62);font-size:15px;line-height:1.65}
-
-/* Hero: typographic title on canvas, then problem + contained recommendation. */
-.solution-page .solution-hero{display:block;width:100%;margin:8px 0 0}
-.solution-page .solution-hero>h1{max-width:900px;margin:0;color:var(--solution-ink);font:800 clamp(46px,5.7vw,68px)/1.01 Manrope,sans-serif;letter-spacing:-.052em;text-wrap:balance}
-.solution-page .solution-hero__decision{display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);gap:32px;align-items:start;margin-top:48px}
-.solution-page .solution-problem{padding:8px 8px 8px 0}
-.solution-page .solution-problem>span,.solution-page .solution-verdict>span,.solution-page .solution-operations__group>h3,.solution-page .solution-cadence>h3{display:block;margin:0;color:rgba(15,23,42,.52);font:750 11px/1 Geist,Manrope,sans-serif;letter-spacing:.08em;text-transform:uppercase}
-.solution-page .solution-problem p{margin:14px 0 0;color:rgba(15,23,42,.66);font-size:16px;line-height:1.68}
-.solution-page .solution-verdict{padding:30px;border:1px solid var(--solution-line);border-radius:24px;background:#fff;box-shadow:0 14px 38px rgba(15,23,42,.035);transform:none}
-.solution-page .solution-verdict p{margin:14px 0 0;color:rgba(15,23,42,.70);font-size:16px;line-height:1.6}
-.solution-page .solution-hero__actions,.solution-page .solution-card-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
-.solution-page .ay-button,.solution-page .ay-button-secondary,.solution-page .button-link{display:inline-flex;min-height:42px;align-items:center;justify-content:center;padding:11px 17px;border:1px solid var(--solution-line);border-radius:999px;font:750 11px/1 Geist,Manrope,sans-serif;letter-spacing:.05em;text-decoration:none;transition:transform .22s,background .22s,box-shadow .22s}
-.solution-page .ay-button{border-color:var(--solution-ink);background:var(--solution-ink);color:#fff}
-.solution-page .ay-button-secondary,.solution-page .button-link{background:#fff;color:var(--solution-ink)}
-.solution-page .button-link--quiet{background:transparent}
-.solution-page .ay-button:hover,.solution-page .ay-button-secondary:hover,.solution-page .button-link:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(15,23,42,.08)}
-
-/* Four-card fit ledger. */
-.solution-page .solution-fit{display:block;border:0}
-.solution-page .solution-fit>h2{max-width:740px;margin-bottom:30px}
-.solution-page .solution-fit__cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
-.solution-page .solution-fit__cards article,.solution-page .solution-fit__cards article:last-child{grid-column:auto;min-height:138px;padding:22px;border:1px solid var(--solution-line);border-radius:18px;background:#fff}
-.solution-page .solution-fit__cards span{color:rgba(15,23,42,.50);font:750 10px/1 Geist,Manrope,sans-serif;letter-spacing:.08em;text-transform:uppercase}
-.solution-page .solution-fit__cards p{margin:16px 0 0;color:rgba(15,23,42,.78);font-size:14px;font-weight:650;line-height:1.5}
-
-/* Editorial playbook; only the decision pivot becomes a contained card. */
-.solution-page .solution-steps{display:grid;gap:10px;border:0}
-.solution-page .solution-step{display:grid;grid-template-columns:minmax(210px,.46fr) minmax(0,1.54fr);gap:34px;align-items:center;padding:24px 20px;border:0;border-bottom:1px solid var(--solution-line);background:transparent;transition:none}
-.solution-page .solution-step:hover{padding:24px 20px;background:transparent}
-.solution-page .solution-step__title span{display:block;margin:0 0 9px;color:var(--solution-accent);font:750 10px/1 Geist,Manrope,sans-serif;letter-spacing:.09em;text-transform:uppercase}
-.solution-page .solution-step h3{margin:0;font:800 18px/1.2 Manrope,sans-serif;letter-spacing:-.025em}
-.solution-page .solution-step p{max-width:720px;margin:0;color:rgba(15,23,42,.64);font-size:14px;line-height:1.65}
-.solution-page .solution-step--critical{margin:2px 0;padding:26px 24px;border:1px solid var(--solution-line);border-radius:22px;background:#fff;box-shadow:0 12px 32px rgba(15,23,42,.035)}
-.solution-page .solution-step--critical:hover{padding:26px 24px;background:#fff}
-
-/* Decision ledger with optional per-column copy actions. */
-.solution-page .solution-decision-copy{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0 0 12px;color:rgba(15,23,42,.56);font-size:12px}
-.solution-page .solution-decision-copy button{min-height:34px;padding:8px 11px;border:1px solid var(--solution-line);border-radius:999px;background:#fff;color:var(--solution-ink);font:750 10px/1 Geist,Manrope,sans-serif;letter-spacing:.04em;cursor:pointer}
-.solution-page .solution-copy-status{min-width:110px;color:#2E6848;font-weight:700}
-.solution-page .solution-decision-table{overflow:hidden;border:1px solid var(--solution-line);border-radius:18px;background:#fff}
-.solution-page .solution-decision-table table{width:100%;border-collapse:collapse}
-.solution-page .solution-decision-table th,.solution-page .solution-decision-table td{padding:17px 18px;border:0;border-bottom:1px solid var(--solution-line);text-align:left;vertical-align:top;user-select:text;-webkit-user-select:text}
-.solution-page .solution-decision-table th+th,.solution-page .solution-decision-table td+td{border-left:1px solid var(--solution-line)}
-.solution-page .solution-decision-table th{background:rgba(15,23,42,.035);font:750 11px/1 Geist,Manrope,sans-serif;letter-spacing:.06em;text-transform:uppercase}
-.solution-page .solution-decision-table td{color:rgba(15,23,42,.68);font-size:13.5px;line-height:1.55}
-.solution-page .solution-decision-table tr:last-child td{border-bottom:0}
-
-/* Completion and measurement: the accepted two-card operational split. */
-.solution-page .solution-operations{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;align-items:stretch}
-.solution-page .solution-completion-card,.solution-page .solution-measurement-card{display:flex;min-width:0;flex-direction:column;padding:30px;border:1px solid var(--solution-line);border-radius:24px;background:#fff}
-.solution-page .solution-completion-card>h2,.solution-page .solution-measurement-card>h2{margin:0 0 26px;font:800 25px/1.12 Manrope,sans-serif;letter-spacing:-.035em}
-.solution-page .solution-operations__group{margin-top:0}
-.solution-page .solution-operations__group+.solution-operations__group{margin-top:24px}
-.solution-page .solution-operations__group--risk>h3{color:var(--solution-accent)}
-.solution-page .solution-checklist,.solution-page .solution-risk-list,.solution-page .solution-kpi-list{display:grid;gap:0;margin:14px 0 0;padding:0;list-style:none}
-.solution-page .solution-checklist{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:22px}
-.solution-page .solution-checklist li,.solution-page .solution-risk-list li,.solution-page .solution-kpi-list li{position:relative;margin:0;padding:10px 0 10px 21px;border-bottom:1px solid rgba(15,23,42,.07);color:rgba(15,23,42,.68);font-size:13px;line-height:1.45}
-.solution-page .solution-checklist li:before,.solution-page .solution-kpi-list li:before{content:"✓";position:absolute;left:0;color:#2E6848;font-weight:800}
-.solution-page .solution-risk-list li:before{content:"—";position:absolute;left:0;color:#8A5A16;font-weight:800}
-.solution-page .solution-cadence{margin-top:auto;padding:18px;border-radius:15px;background:rgba(15,23,42,.045)}
-.solution-page .solution-cadence p{margin:10px 0 0;color:rgba(15,23,42,.70);font-size:13px;line-height:1.55}
-
-/* Creator evidence and authority stay compact; exact excerpts remain inspectable. */
-.solution-page .solution-evidence-grid{display:grid;grid-template-columns:1fr;gap:10px}
-.solution-page .solution-evidence-row{padding:22px 24px;border:1px solid var(--solution-line);border-radius:18px;background:rgba(255,255,255,.76)}
-.solution-page .solution-evidence-row__meta{display:flex;flex-wrap:wrap;gap:7px 14px;color:rgba(15,23,42,.46);font-size:11px}
-.solution-page .evidence-role{font-weight:750}
-.solution-page .solution-evidence-row__summary{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(220px,.6fr);gap:30px;align-items:start;margin-top:16px}
-.solution-page .solution-evidence-row__topic{margin:0 0 7px;color:rgba(15,23,42,.50);font:750 10px/1 Geist,Manrope,sans-serif;letter-spacing:.08em;text-transform:uppercase}
-.solution-page .solution-evidence-row h3{margin:0;color:var(--solution-ink);font:800 clamp(18px,1.8vw,23px)/1.18 Manrope,sans-serif;letter-spacing:-.025em}
-.solution-page .solution-evidence-row__summary>p{margin:0;color:rgba(15,23,42,.66);font-size:13px;line-height:1.55}
-.solution-page .solution-evidence-row__summary>p strong,.solution-page .solution-evidence-row__summary>p span{display:block}
-.solution-page .solution-evidence-row__summary>p span{margin-top:7px}
-.solution-page .solution-evidence-row__details{margin-top:16px;border-top:1px solid var(--solution-line)}
-.solution-page .solution-evidence-row__details summary{padding:13px 0 0;color:rgba(15,23,42,.62);font-size:12px;font-weight:750;cursor:pointer}
-.solution-page .solution-evidence-row__detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:14px;padding:17px;border-radius:14px;background:var(--solution-cream)}
-.solution-page .solution-evidence-row__detail-grid span{display:block;margin-bottom:7px;color:rgba(15,23,42,.48);font:750 9px/1 Geist,Manrope,sans-serif;letter-spacing:.08em;text-transform:uppercase}
-.solution-page .solution-evidence-row__detail-grid blockquote,.solution-page .solution-evidence-row__detail-grid p{margin:0;padding:0;border:0;color:rgba(15,23,42,.70);font-size:13px;font-style:normal;line-height:1.55}
-.solution-page .solution-evidence-row .solution-card-actions{margin-top:15px}
-.solution-page .solution-authority{margin-top:52px}
-.solution-page .solution-authority>h3{margin:0;font:800 20px/1.2 Manrope,sans-serif;letter-spacing:-.025em}
-.solution-page .solution-authority>p{max-width:680px;margin:10px 0 20px;color:rgba(15,23,42,.60);font-size:13px;line-height:1.55}
-.solution-page .solution-authority ul{display:grid;grid-template-columns:1fr;gap:10px;margin:0;padding:0;list-style:none}
-.solution-page .solution-authority li{display:grid;grid-template-columns:minmax(210px,.72fr) minmax(0,1.28fr);gap:24px;align-items:center;padding:16px 18px;border:1px solid var(--solution-line);border-radius:14px;background:rgba(255,255,255,.62)}
-.solution-page .solution-authority li a{font-size:13px;font-weight:750;text-decoration:none}
-.solution-page .solution-authority li span{margin:0;color:rgba(15,23,42,.58);font-size:12px;line-height:1.5}
-
-/* Contained dark next action and quiet related links. */
-.solution-page .solution-next-action{padding:48px!important;border-radius:24px;background:var(--solution-ink)!important;color:#fff;text-align:center}
-.solution-page .solution-next-action .eyebrow{color:rgba(255,255,255,.56)}
-.solution-page .solution-next-action h2{max-width:760px;margin:0 auto;color:#fff;font:800 clamp(31px,3.8vw,46px)/1.03 Manrope,sans-serif;letter-spacing:-.042em;text-wrap:balance}
-.solution-page .solution-next-action p{max-width:650px;margin:18px auto 0;color:rgba(255,255,255,.68);font-size:14px;line-height:1.65}
-.solution-page .solution-next-action__actions{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:26px}
-.solution-page .solution-next-action .ay-button{margin-top:0;border-color:#fff;background:#fff;color:var(--solution-ink)}
-.solution-page .solution-next-action .ay-button-secondary{margin-top:0;border-color:rgba(255,255,255,.48);background:transparent;color:#fff}
-.solution-page .solution-next-action .ay-button-secondary:hover{border-color:#fff;background:rgba(255,255,255,.10);color:#fff}
-.solution-page .solution-next-action .solution-next-action__boundary{flex:0 0 100%;max-width:610px;margin:4px auto 0;color:rgba(255,255,255,.58);font-size:12px}
-.solution-page .solution-related{padding-top:34px}
-.solution-page .solution-related h2{font-size:26px}
-.solution-page .topic-tags{display:flex;flex-wrap:wrap;gap:9px;margin-top:18px}
-.solution-page .topic-chip{padding:10px 13px;border:1px solid var(--solution-line);border-radius:999px;background:#fff;font:750 10px/1 Geist,Manrope,sans-serif;letter-spacing:.06em;text-decoration:none;text-transform:uppercase}
-
-/* Keep the existing Hub family functional; the accepted Stitch template governs detail pages. */
-.solution-hub .solution-hero--hub{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(280px,.55fr);gap:18px}
-.solution-hub .solution-hero__copy,.solution-hub .solution-verdict{min-width:0;padding:34px;border:1px solid var(--solution-line);border-radius:24px;background:rgba(255,255,255,.76)}
-.solution-hub .solution-hero__copy h1{margin:0;font:800 clamp(44px,5.3vw,68px)/.98 Manrope,sans-serif;letter-spacing:-.052em}
-.solution-hub .solution-hero__copy .lead{margin:20px 0 0;color:rgba(15,23,42,.66);line-height:1.6}
-.solution-hub-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
-.solution-hub-card{padding:26px;border:1px solid var(--solution-line);border-radius:20px;background:rgba(255,255,255,.7)}
-.solution-hub-card__meta{display:flex;flex-wrap:wrap;gap:8px 16px;color:rgba(15,23,42,.46);font-size:12px}
-.solution-hub-card h2{margin:30px 0 12px;font:800 clamp(22px,2.1vw,29px)/1.08 Manrope,sans-serif;letter-spacing:-.035em}
-.solution-hub-card h2 a{text-decoration:none}
-.solution-hub-card>p{color:rgba(15,23,42,.65);font-size:14px;line-height:1.6}
-.solution-hub-card__verdict{padding-top:14px;border-top:1px solid var(--solution-line)}
-
-@media(max-width:1024px){
-  body.ay-alex-v4-static main.app-shell.solution-page{width:min(100% - 48px,860px)}
-  .solution-page .solution-fit__cards{grid-template-columns:repeat(2,minmax(0,1fr))}
-}
-@media(max-width:820px){
-  .solution-page .solution-hero__decision,.solution-page .solution-operations,.solution-page .solution-evidence-row__summary,.solution-hub .solution-hero--hub{grid-template-columns:minmax(0,1fr)}
-  .solution-page .solution-hero__decision{gap:18px;margin-top:34px}
-  .solution-page .solution-problem{padding:0}
-  .solution-page .solution-step{grid-template-columns:minmax(170px,.55fr) minmax(0,1.45fr);gap:24px}
-  .solution-page .solution-authority li{grid-template-columns:1fr;gap:7px}
-  .solution-hub-grid{grid-template-columns:1fr}
-}
-@media(max-width:720px){
-  body.ay-alex-v4-static main.app-shell.solution-page{width:min(100% - 32px,520px);padding-top:22px}
-  .solution-page .content-section{padding:40px 0}
-  .solution-page .solution-hero>h1{font-size:clamp(36px,10.6vw,46px);line-height:1.01;overflow-wrap:normal;word-break:normal}
-  .solution-hub .solution-hero__copy h1{font-size:clamp(31px,9.6vw,40px);line-height:1.02;overflow-wrap:normal;word-break:normal}
-  .solution-page .solution-verdict,.solution-page .solution-completion-card,.solution-page .solution-measurement-card{padding:24px 22px;border-radius:20px}
-  .solution-page .solution-hero__actions a,.solution-page .solution-card-actions a{width:100%}
-  .solution-page .solution-fit__cards,.solution-page .solution-checklist,.solution-page .solution-evidence-row__detail-grid{grid-template-columns:1fr}
-  .solution-page .solution-fit__cards article{min-height:0}
-  .solution-page .solution-step,.solution-page .solution-step:hover{grid-template-columns:1fr;gap:9px;padding:20px 0}
-  .solution-page .solution-step--critical,.solution-page .solution-step--critical:hover{padding:23px 20px}
-  .solution-page .solution-decision-copy>span:first-child{width:100%}
-  .solution-page .solution-decision-table{overflow:visible;border:0;background:transparent}
-  .solution-page .solution-decision-table table,.solution-page .solution-decision-table tbody,.solution-page .solution-decision-table tr,.solution-page .solution-decision-table td{display:block;width:100%;min-width:0}
-  .solution-page .solution-decision-table thead{display:none}
-  .solution-page .solution-decision-table tbody{display:grid;gap:10px}
-  .solution-page .solution-decision-table tr{overflow:hidden;border:1px solid var(--solution-line);border-radius:15px;background:#fff}
-  .solution-page .solution-decision-table td{padding:13px 15px;border:0;border-bottom:1px solid var(--solution-line)}
-  .solution-page .solution-decision-table td:last-child{border-bottom:0}
-  .solution-page .solution-decision-table td:before{display:block;margin-bottom:5px;color:rgba(15,23,42,.48);font:750 9px/1 Geist,Manrope,sans-serif;letter-spacing:.08em;text-transform:uppercase}
-  .solution-page .solution-decision-table td:nth-child(1):before{content:"Signal"}
-  .solution-page .solution-decision-table td:nth-child(2):before{content:"Decision"}
-  .solution-page .solution-decision-table td:nth-child(3):before{content:"Measure"}
-  .solution-page .solution-evidence-row{padding:20px}
-  .solution-page .solution-next-action{padding:36px 22px!important;border-radius:20px}
-  .solution-page .solution-next-action h2{font-size:clamp(29px,8.5vw,38px)}
-}
-@media(max-width:380px){
-  .solution-page .solution-hero>h1{font-size:clamp(32px,10.2vw,39px)}
-  .solution-page .solution-fit__cards article{padding:19px}
-}
-""".strip()
-    return legacy + "\n" + closure + "\n" + stitch_template + "\n"
 
 
 def main() -> int:
@@ -749,10 +461,7 @@ def main() -> int:
     reports_by_slug = {row["slug"]: row for row in internal_reports}
     solutions = payload["solutions"]
 
-    write_text(args.out / "ai-recommends-solutions.css", css_text())
     write_text(args.out / "ai-recommends-solutions.js", solution_js_text())
-    copy_interior_assets(args.out)
-    write_text(args.out / "alex-v4-static-shell.css", local_shell_css_text())
     write_text(args.out / "alex-v4-static-shell.js", shell_js())
     for solution in solutions:
         report = reports_by_slug[solution["slug"]]

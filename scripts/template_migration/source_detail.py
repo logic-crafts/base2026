@@ -183,8 +183,11 @@ def adapt_source_detail(
             f"Admission mismatch for {route}: manifest={admission}, robots={observed_admission}"
         )
 
-    for legacy_css in soup.select('link[href*="static/styles.css"]'):
-        legacy_css.decompose()
+    # The V2 renderer owns the complete visual surface.  Preserve metadata and
+    # scripts from the frozen route, but never carry a previous visual cascade
+    # into the new template.
+    for visual_css in soup.select('link[rel~="stylesheet"]'):
+        visual_css.decompose()
     for external_font in soup.select(
         'link[href*="fonts.googleapis.com"], link[href*="fonts.gstatic.com"]'
     ):

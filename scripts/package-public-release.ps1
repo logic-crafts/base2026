@@ -92,6 +92,14 @@ $Html = [regex]::Replace($Html, $ConfigPattern, "`n$Config", 1)
 $Html | Set-Content -Path (Join-Path $WebRoot "index.html") -Encoding UTF8
 
 Copy-Item "./web/static/styles.css" (Join-Path $StaticRoot "styles.css") -Force
+Copy-Item "./web/static/alex-design-system-v2.css" (Join-Path $StaticRoot "alex-design-system-v2.css") -Force
+Copy-Item "./web/static/alex-v4-static-shell.js" (Join-Path $StaticRoot "alex-v4-static-shell.js") -Force
+Copy-Item "./web/static/base2026-solution-journey.js" (Join-Path $StaticRoot "base2026-solution-journey.js") -Force
+Copy-Item "./web/static/base2026-solution-journey.css" (Join-Path $StaticRoot "base2026-solution-journey.css") -Force
+if (Test-Path "./web/static/base2026-solution-journey.json") {
+  Copy-Item "./web/static/base2026-solution-journey.json" (Join-Path $StaticRoot "base2026-solution-journey.json") -Force
+}
+Copy-Item "./web/static/vendor" (Join-Path $StaticRoot "vendor") -Recurse -Force
 Copy-Item "./web/static/meili.js" (Join-Path $StaticRoot "meili.js") -Force
 Copy-Item "./web/static/cookie-consent.js" (Join-Path $StaticRoot "cookie-consent.js") -Force
 Copy-Item "./web/static/share-actions.js" (Join-Path $StaticRoot "share-actions.js") -Force
@@ -156,12 +164,13 @@ if (Test-Path "./data/base2026_ai_recommends_solutions_pilot.json") {
   Assert-NativeSuccess "validate-ai-recommends-solutions"
   python3 ./scripts/generate-ai-recommends-solutions.py --input $SolutionInput --data-root $ExportRoot --out $WebRoot --report $SolutionReport | Write-Output
   Assert-NativeSuccess "generate-ai-recommends-solutions"
-  Copy-Item (Join-Path $WebRoot "ai-recommends-solutions.css") (Join-Path $StaticRoot "ai-recommends-solutions.css") -Force
-  Copy-Item (Join-Path $WebRoot "alex-v4-static-shell.css") (Join-Path $StaticRoot "alex-v4-static-shell.css") -Force
-  Copy-Item (Join-Path $WebRoot "alex-v4-static-shell.js") (Join-Path $StaticRoot "alex-v4-static-shell.js") -Force
+  Move-Item (Join-Path $WebRoot "ai-recommends-solutions.js") (Join-Path $StaticRoot "ai-recommends-solutions.js") -Force
+  Move-Item (Join-Path $WebRoot "alex-v4-static-shell.js") (Join-Path $StaticRoot "alex-v4-static-shell.js") -Force
   python3 ./scripts/validate-ai-recommends-html.py --out $WebRoot --generation-report $SolutionReport --report $SolutionHtmlReport | Write-Output
   Assert-NativeSuccess "validate-ai-recommends-html"
 }
+python3 ./scripts/apply-alex-design-system-v2.py --web-root $WebRoot | Write-Output
+Assert-NativeSuccess "apply-alex-design-system-v2"
 Get-ChildItem -Path "./web/static" -Filter "indexnow-*.txt" -File -ErrorAction SilentlyContinue | ForEach-Object {
   $Target = Join-Path $WebRoot $_.Name
   Copy-Item $_.FullName $Target -Force
@@ -225,9 +234,11 @@ Set-Content -LiteralPath (Join-Path $WebRoot "search.html") -Value $SearchAliasH
 # paths; the public package must give all of them the current release version.
 $VersionedAssets = @(
   "styles.css",
-  "ai-recommends-solutions.css",
-  "alex-v4-static-shell.css",
+  "alex-design-system-v2.css",
+  "ai-recommends-solutions.js",
   "alex-v4-static-shell.js",
+  "base2026-solution-journey.js",
+  "base2026-solution-journey.css",
   "base2026-search-v1.css",
   "base2026-search-v3.js",
   "meili.js",

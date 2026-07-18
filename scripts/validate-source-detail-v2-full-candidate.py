@@ -260,25 +260,26 @@ def validate_shared_footer_contract(candidate: Path, route: str) -> list[str]:
     if actual_signature != expected_signature:
         issues.append("shared footer semantic contract drift from SHA-locked live authority fixture")
 
-    css_path = candidate / "static" / "alex-v4-static-shell.css"
+    css_path = candidate / "static" / "alex-design-system-v2.css"
     css = css_path.read_text(encoding="utf-8") if css_path.is_file() else ""
     expected_css = (
-        "body.ay-alex-v4-static.ay-stitch-home-v3 .ay-site-footer{background:#fff!important;color:var(--stitch-ink)!important;padding:clamp(46px,6vw,72px) 20px 42px",
-        "body.ay-alex-v4-static.ay-stitch-home-v3 .ay-footer-grid{width:min(100%,1160px);margin:auto;grid-template-columns:minmax(450px,1.15fr) repeat(4,minmax(110px,.7fr))",
-        "body.ay-alex-v4-static .ay-site-footer .ay-actions .ay-button-base2026{border:1px solid var(--stitch-line);background:transparent;color:var(--stitch-ink);box-shadow:none}",
-        "body.ay-alex-v4-static.ay-stitch-home-v3 .ay-footer-socials{display:grid;gap:10px;margin-top:18px}",
-        "body.ay-alex-v4-static.ay-stitch-home-v3 .ay-social-link,body.ay-alex-v4-static.ay-stitch-home-v3 .ay-social-link--disabled{display:inline-flex;width:22px;height:22px;align-items:center;justify-content:center;border:0 solid rgba(15,23,42,.1);border-radius:0;background:rgba(244,241,233,.72)!important;color:var(--stitch-ink)!important",
-        "body.ay-alex-v4-static.ay-stitch-home-v3 .ay-social-link svg{width:20px;height:20px;fill:currentColor;flex:0 0 auto}",
-        "body.ay-alex-v4-static.ay-stitch-home-v3 .ay-social-link--disabled{cursor:default;opacity:.58;pointer-events:none}",
-        "body.ay-alex-v4-static.ay-stitch-home-v3 .ay-footer-link-button{appearance:none;display:inline-flex;min-height:24px;align-items:center;border:0;background:transparent;color:#f4f0e8",
-        "body.ay-alex-v4-static.ay-stitch-home-v3 .ay-footer-menu{display:grid;gap:7px;margin:0;padding:0;list-style:none}",
-        "body.ay-alex-v4-static.ay-stitch-home-v3 .ay-footer-bottom{width:min(100%,960px);margin:34px auto 0;padding:18px 0 0;border-top:1px solid rgba(255,255,255,.12)",
-        "@media(max-width:720px){body.ay-alex-v4-static.ay-stitch-home-v3 .ay-site-footer{padding-top:44px!important}body.ay-alex-v4-static.ay-stitch-home-v3 .ay-footer-grid{gap:30px!important}",
-        "body.ay-alex-v4-static.ay-stitch-home-v3 .ay-site-footer h2{max-width:none;margin:0 0 14px;font-family:Manrope,Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,\"Segoe UI\",sans-serif;font-size:clamp(22px,2.4vw,28px);font-weight:700;line-height:1.16;letter-spacing:normal}",
+        "--ayds-color-canvas: #f4f1e9",
+        "--ayds-color-ink: #0f172a",
+        "--ayds-radius-card: 24px",
+        "--ayds-radius-panel: 34px",
+        ".ay-site-footer,\n.site-footer",
+        "grid-template-columns: minmax(390px, 1.15fr) repeat(4, minmax(110px, .7fr))",
+        ".ay-footer-menu { display: grid; gap: 7px",
+        ".ay-footer-socials { display: grid; gap: 10px; margin-top: 18px; }",
+        ".ay-social-link svg { width: 20px; height: 20px; fill: currentColor; }",
+        ".ay-footer-bottom {",
+        "border-top: 1px solid var(--ayds-color-line)",
     )
     for required in expected_css:
         if required not in css:
             issues.append(f"shared footer missing live authority CSS: {required}")
+    if any(token in css.lower() for token in ("#c84f07", "#ef6b13", "#d9730d", "fonts.googleapis.com")):
+        issues.append("shared footer design asset retains forbidden legacy color/font dependency")
     return issues
 
 

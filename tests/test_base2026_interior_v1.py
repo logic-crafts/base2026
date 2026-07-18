@@ -53,16 +53,18 @@ def source_view() -> SourceDetailView:
     )
 
 
-def test_source_detail_template_carries_permanent_interior_and_local_fonts() -> None:
+def test_source_detail_template_uses_shared_v2_design_and_local_fonts() -> None:
     rendered = render_source_detail(source_view(), "fixture-v1")
-    assert "b26-interior-v1 b26-interior-source" in rendered
-    assert '../static/base2026-interior-v1.css?v=fixture-v1' in rendered
-    assert '../static/vendor/geist-local.css?v=fixture-v1' in rendered
+    assert '<body class="ayds-root ayds-mode-product b26-family-source b26-source-v2"' in rendered
+    assert '../static/alex-design-system-v2.css?v=fixture-v1' in rendered
+    assert 'data-alex-design-system="v2"' in rendered
+    assert "base2026-interior-v1.css" not in rendered
+    assert "geist-local.css" not in rendered
     assert "interior-token-pilot" not in rendered
     assert "fonts.googleapis.com" not in rendered
 
 
-def test_source_candidate_asset_copier_carries_css_and_local_font_dependencies(tmp_path: Path) -> None:
+def test_source_candidate_asset_copier_carries_v2_css_and_local_font_dependencies(tmp_path: Path) -> None:
     module = load_module("source_detail_candidate_interior", SCRIPTS / "build-source-detail-v2-full-candidate.py")
     fake_root = tmp_path / "repo"
     fake_scripts = fake_root / "scripts"
@@ -71,39 +73,61 @@ def test_source_candidate_asset_copier_carries_css_and_local_font_dependencies(t
     (fake_static / "assets/alex-yarosh-favicon-32.png").write_bytes(b"favicon")
     (fake_static / "assets/alex-yarosh-apple-touch.png").write_bytes(b"apple")
     (fake_static / "vendor").mkdir()
-    (fake_static / "vendor/geist-local.css").write_text("@font-face{}\n", encoding="utf-8")
-    (fake_static / "vendor/geist-400.ttf").write_bytes(b"geist")
-    (fake_static / "vendor/manrope-400.ttf").write_bytes(b"manrope")
-    (fake_static / "base2026-interior-v1.css").write_text("body.b26-interior-v1{}\n", encoding="utf-8")
+    for font_name in (
+        "manrope-400.ttf",
+        "manrope-500.ttf",
+        "manrope-600.ttf",
+        "manrope-700.ttf",
+        "manrope-800.ttf",
+        "geist-400.ttf",
+        "geist-500.ttf",
+        "geist-600.ttf",
+        "geist-700.ttf",
+        "geist-800.ttf",
+        "geist-mono-400.ttf",
+        "geist-mono-600.ttf",
+        "geist-mono-700.ttf",
+    ):
+        (fake_static / "vendor" / font_name).write_bytes(font_name.encode("ascii"))
+    (fake_static / "alex-design-system-v2.css").write_text(
+        '@font-face{font-family:"Manrope";src:url("/knowledge/static/vendor/manrope-400.ttf")}\n',
+        encoding="utf-8",
+    )
     fake_scripts.mkdir()
-    (fake_scripts / "base2026_source_detail_v2.css").write_text(".b26-source-v2{}\n", encoding="utf-8")
     (fake_scripts / "base2026_source_detail_v2.js").write_text("// fixture\n", encoding="utf-8")
     module.ROOT = fake_root
     module.SCRIPTS = fake_scripts
 
     hashes = module.copy_static_assets(tmp_path / "candidate")
-    assert "base2026-interior-v1.css" in hashes
-    assert "vendor/geist-local.css" in hashes
+    assert "alex-design-system-v2.css" in hashes
+    assert "alex-v4-static-shell.js" in hashes
+    assert "source-detail-v2.js" in hashes
     assert "vendor/geist-400.ttf" in hashes
     assert "vendor/manrope-400.ttf" in hashes
-    shell = (tmp_path / "candidate/static/alex-v4-static-shell.css").read_text(encoding="utf-8")
-    assert "fonts.googleapis.com" not in shell
+    assert "base2026-interior-v1.css" not in hashes
+    assert "vendor/geist-local.css" not in hashes
+    design_css = (tmp_path / "candidate/static/alex-design-system-v2.css").read_text(encoding="utf-8")
+    assert "fonts.googleapis.com" not in design_css
 
 
-def test_apply_research_generator_is_opted_in_but_other_info_pages_are_not() -> None:
+def test_info_pages_share_v2_editorial_mode_and_apply_research_keeps_family_marker() -> None:
     module = load_module("base2026_info_interior", SCRIPTS / "generate-info-pages.py")
     apply_html = module.page_shell(module.PAGE_MAP["09_APPLY_RESEARCH.md"], "Apply Base2026 Research", "<section>Body</section>")
-    assert '<body class="b26-interior-v1 b26-interior-apply">' in apply_html
-    assert './static/base2026-interior-v1.css?v=' in apply_html
-    assert './static/vendor/geist-local.css?v=' in apply_html
+    assert 'class="ayds-root b26-family-governance b26-family-apply-research ayds-mode-editorial' in apply_html
+    assert './static/alex-design-system-v2.css?v=' in apply_html
+    assert 'data-alex-design-system="v2"' in apply_html
+    assert "base2026-interior-v1.css" not in apply_html
+    assert "geist-local.css" not in apply_html
     assert "fonts.googleapis.com" not in apply_html
     assert "fonts.gstatic.com" not in apply_html
-    assert apply_html.index("static/styles.css") < apply_html.index("base2026-interior-v1.css")
 
     methodology_html = module.page_shell(module.PAGE_MAP["00_METHODOLOGY.md"], "Methodology", "<section>Body</section>")
-    assert "b26-interior-v1" not in methodology_html
+    assert 'class="ayds-root b26-family-governance ayds-mode-editorial' in methodology_html
+    assert "b26-family-apply-research" not in methodology_html
+    assert "alex-design-system-v2.css" in methodology_html
     assert "base2026-interior-v1.css" not in methodology_html
-    assert "fonts.googleapis.com" in methodology_html
+    assert "geist-local.css" not in methodology_html
+    assert "fonts.googleapis.com" not in methodology_html
 
 
 def test_base_main_is_not_opted_into_the_interior_contract() -> None:

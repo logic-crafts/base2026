@@ -4,9 +4,11 @@ import re
 from html import escape
 from pathlib import Path
 
-SHELL_VERSION = "20260713-alex-v4-static-footer-live-v3"
+SHELL_VERSION = "20260718-visual-reset-v2"
 ROOT = Path(__file__).resolve().parents[1]
 LIVE_FOOTER_TEMPLATE = ROOT / "templates" / "shared" / "alex-home-v4-footer.html"
+DESIGN_SYSTEM_CSS = ROOT / "web" / "static" / "alex-design-system-v2.css"
+SHELL_SCRIPT = ROOT / "web" / "static" / "alex-v4-static-shell.js"
 
 
 def header_html() -> str:
@@ -30,7 +32,7 @@ def header_html() -> str:
             <div class="ay-v2-mega ay-v2-base-mega" role="menu" aria-label="Base2026 menu">
               <div class="ay-v2-mega-grid">
                 <section><h3>Research workspace</h3><a href="/knowledge/"><strong>Search the library</strong><span>Find sources, claims, creators and topics.</span></a><a href="/knowledge/sources/"><strong>Source Intelligence</strong><span>Read reviewed source text, exact claims and bounded actions.</span></a><a href="/knowledge/topics/"><strong>Topics &amp; viewpoints</strong><span>Synthesize evidence and compare creators inside one topic.</span></a></section>
-                <section><h3>Decision support</h3><a href="/knowledge/solutions/"><strong>AI Recommends Solutions</strong><span>Turn source evidence into bounded operating decisions.</span></a><a href="/knowledge/creators/"><strong>Creators</strong><span>Browse attributed expert source profiles.</span></a><a href="/knowledge/methodology.html"><strong>Methodology</strong><span>Review the evidence, editorial and publication rules.</span></a></section>
+                <section><h3>Decision support</h3><a href="/knowledge/solutions/"><strong>AI Recommends Solutions</strong><span>Turn source evidence into bounded operating decisions.</span></a><a href="/knowledge/ai-visibility-pages/"><strong>AI Visibility Lab</strong><span>Inspect practical visibility questions and source-backed playbooks.</span></a><a href="/knowledge/creators/"><strong>Creators</strong><span>Browse attributed expert source profiles.</span></a><a href="/knowledge/methodology.html"><strong>Methodology</strong><span>Review the evidence, editorial and publication rules.</span></a></section>
               </div>
               <form class="ay-v2-mega-search" method="get" action="/knowledge/" role="search"><label for="ay-v2-mega-search-input">Quick search</label><input id="ay-v2-mega-search-input" name="q" type="search" aria-label="Search Base2026"><button type="submit">Search</button></form>
             </div>
@@ -40,56 +42,10 @@ def header_html() -> str:
         <a class="ay-v2-header-cta" href="/ai-visibility-audit/">Check My AI Visibility</a>
         <button class="ay-v2-menu-toggle" type="button" aria-expanded="false" aria-controls="ay-v2-mobile-panel">Menu</button>
       </div>
-      <div class="ay-v2-mobile-panel" id="ay-v2-mobile-panel" hidden><a href="/services/">Services</a><a href="/ai-visibility-audit/">AI Visibility</a><a href="/pricing/">Pricing</a><a href="/knowledge/">Search Base2026</a><a href="/knowledge/sources/">Source Intelligence</a><a href="/knowledge/topics/">Topics &amp; viewpoints</a><a href="/knowledge/solutions/">AI Recommends Solutions</a><a href="/knowledge/creators/">Creators</a><a href="/about/">About</a></div>
+      <div class="ay-v2-mobile-panel" id="ay-v2-mobile-panel" hidden><a href="/services/">Services</a><a href="/ai-visibility-audit/">AI Visibility</a><a href="/pricing/">Pricing</a><a href="/knowledge/">Search Base2026</a><a href="/knowledge/sources/">Source Intelligence</a><a href="/knowledge/topics/">Topics &amp; viewpoints</a><a href="/knowledge/solutions/">AI Recommends Solutions</a><a href="/knowledge/ai-visibility-pages/">AI Visibility Lab</a><a href="/knowledge/apply-research.html">Apply Research</a><a href="/knowledge/creators/">Creators</a><a href="/about/">About</a></div>
     </header>"""
 
 
-def _legacy_footer_html() -> str:
-    return """<footer class="ay-site-footer" aria-label="Site footer">
-      <div class="ay-wrap ay-footer-grid">
-        <section><p class="ay-eyebrow">AI Search Visibility</p><h2>Make your business easier to find, verify, and recommend</h2><p>We help local service businesses become easier to find, understand, verify, and recommend across Google, AI search, and modern discovery systems.</p><div class="ay-actions"><a class="ay-button" href="/ai-visibility-audit/" data-cta="get_my_free_roadmap">Get Free Snapshot</a><a class="ay-button-secondary" href="/pricing/">View Pricing</a><a class="ay-button ay-button-base2026" href="/knowledge/apply-research.html">Apply Base2026 Research</a></div><div class="ay-footer-socials" aria-label="Social profiles"><p class="ay-footer-socials__label">Socials</p><div class="ay-footer-socials__links"><a class="ay-social-link" href="https://x.com/AleksejAros" target="_blank" rel="me noopener noreferrer" aria-label="Alex Yarosh on X"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.9 2h3.3l-7.2 8.2L23.5 22h-6.7l-5.2-6.8L5.6 22H2.3l7.7-8.8L1.9 2h6.8l4.7 6.2L18.9 2Zm-1.2 17.9h1.8L7.7 4H5.8l11.9 15.9Z"/></svg></a><a class="ay-social-link" href="https://github.com/offflinerpsy" target="_blank" rel="me noopener noreferrer" aria-label="Alex Yarosh on GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5A11.5 11.5 0 0 0 8.36 22.9c.58.11.8-.25.8-.56v-2.02c-3.25.71-3.94-1.38-3.94-1.38-.53-1.35-1.3-1.71-1.3-1.71-1.06-.73.08-.72.08-.72 1.18.08 1.8 1.21 1.8 1.21 1.04 1.79 2.74 1.27 3.41.97.11-.76.41-1.27.74-1.56-2.59-.29-5.31-1.3-5.31-5.76 0-1.27.45-2.31 1.2-3.13-.12-.29-.52-1.48.12-3.09 0 0 .98-.31 3.21 1.19A11.08 11.08 0 0 1 12 5.96c.99 0 1.98.13 2.91.39 2.22-1.5 3.2-1.19 3.2-1.19.64 1.61.24 2.8.12 3.09.75.82 1.2 1.86 1.2 3.13 0 4.47-2.73 5.46-5.33 5.75.42.36.79 1.08.79 2.17v3.04c0 .31.21.68.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg></a></div></div></section>
-        <nav aria-label="Services"><h3>Services</h3><ul class="ay-footer-menu"><li><a href="/services/">Services hub</a></li><li><a href="/services/#local-seo">Source footprint</a></li><li><a href="/services/#content-strategy">Content engine</a></li><li><a href="/services/#analytics">Measurement stack</a></li></ul></nav>
-        <nav aria-label="Start Here"><h3>Start Here</h3><ul class="ay-footer-menu"><li><a href="/contact/">Contact</a></li><li><a href="/work/">Selected work</a></li><li><a href="/free-ai-marketing-tools/">Free AI tools</a></li></ul></nav>
-        <nav aria-label="Base2026"><h3>Base2026 pilot project</h3><p>Base2026 is my open pilot project for building a curated source base for AI recommendation engines.</p><ul class="ay-footer-menu"><li><a href="/knowledge/">Search the knowledge base</a></li><li><a href="/knowledge/roadmap.html">Base2026 Roadmap</a></li><li><a href="/knowledge/support.html">Support Base2026</a></li><li><a href="/knowledge/apply-research.html">Apply to participate</a></li><li><a href="/knowledge/api.html">API access</a></li><li><a href="/knowledge/topics.html">Browse topics</a></li><li><a href="/knowledge/creators.html">Explore creators</a></li><li><a href="/knowledge/methodology.html">Methodology</a></li></ul></nav>
-        <nav aria-label="Legal"><h3>Legal</h3><ul class="ay-footer-menu"><li><a href="/privacy-policy/">Privacy policy</a></li><li><button type="button" class="ay-footer-link-button" data-cookie-preferences="">Cookie Preferences</button></li><li><a href="/terms/">Terms</a></li></ul></nav>
-      </div><div class="ay-footer-bottom"><span>© 2026 Alex Yarosh — AI marketing specialist. Independent consultant working in AI-enabled SEO and content systems.</span></div>
-    </footer>"""
-
-
-def _obsolete_footer_html() -> str:
-    """Return the captured current-live WordPress footer authority.
-
-    Keep this markup portable and deterministic.  The absolute production
-    URLs are intentional: the strict visual/semantic parity gate compares
-    the live footer's literal navigation contract, not merely resolved URLs.
-    """
-    return """<footer class="ay-site-footer" aria-label="Site footer">
-      <div class="ay-wrap ay-footer-grid">
-        <section>
-          <p class="ay-eyebrow">AI Marketing Systems</p>
-          <h2>Make your business easier to find, verify, and recommend</h2>
-          <p></p>
-          <div class="ay-actions">
-            <a class="ay-button" href="https://aggressorbulkit.online/ai-visibility-audit/">AI Visibility Diagnostic</a>
-            <a class="ay-button-secondary" href="https://aggressorbulkit.online/contact/">Get in Touch</a>
-            <a class="ay-button ay-button-base2026" href="https://aggressorbulkit.online/knowledge/apply-research.html">Apply for Base2026</a>
-          </div>
-          <div class="ay-footer-socials" aria-label="Social profiles">
-            <p class="ay-footer-socials__label">Socials</p>
-            <div class="ay-footer-socials__links">
-              <a class="ay-social-link" href="https://x.com/AleksejAros" target="_blank" rel="me noopener noreferrer" aria-label="Alex Yarosh on X" title="Alex Yarosh on X"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.9 2h3.3l-7.2 8.2L23.5 22h-6.7l-5.2-6.8L5.6 22H2.3l7.7-8.8L1.9 2h6.8l4.7 6.2L18.9 2Zm-1.2 17.9h1.8L7.7 4H5.8l11.9 15.9Z"/></svg></a>
-              <a class="ay-social-link" href="https://github.com/offflinerpsy" target="_blank" rel="me noopener noreferrer" aria-label="Alex Yarosh on GitHub" title="Alex Yarosh on GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .7C5.7.7.7 5.8.7 12.1c0 5 3.2 9.2 7.7 10.7.6.1.8-.2.8-.6v-2.2c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.2 1.7 1.2 1 1.7 2.6 1.2 3.2.9.1-.7.4-1.2.7-1.5-2.5-.3-5.1-1.3-5.1-5.6 0-1.2.4-2.2 1.1-3-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.1 1.1.9-.3 1.9-.4 2.8-.4s1.9.1 2.8.4c2.1-1.5 3.1-1.1 3.1-1.1.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3 0 4.4-2.6 5.3-5.1 5.6.4.4.8 1.1.8 2.1v3.1c0 .4.2.7.8.6 4.5-1.5 7.7-5.7 7.7-10.7C23.3 5.8 18.3.7 12 .7Z"/></svg></a>
-              <span class="ay-social-link ay-social-link--disabled" aria-label="TikTok profile coming soon" title="TikTok profile coming soon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.2 2h3.2c.2 1.7 1.2 3.2 2.7 4.1.8.5 1.7.8 2.7.8v3.3c-1.9 0-3.8-.6-5.3-1.7v7.1a6.8 6.8 0 1 1-5.9-6.8v3.4a3.5 3.5 0 1 0 2.6 3.4V2Z"/></svg></span>
-            </div>
-          </div>
-        </section>
-        <nav aria-label="Services"><h3>Services</h3><ul class="ay-footer-menu"><li><a href="https://aggressorbulkit.online/ai-visibility-audit/">AI Visibility Diagnostic</a></li><li><a href="https://aggressorbulkit.online/ai-growth-strategy-roadmap/">AI Growth Strategy Roadmap</a></li><li><a href="https://aggressorbulkit.online/digital-authority-optimization/">Digital Authority Optimization</a></li><li><a href="https://aggressorbulkit.online/ai-citation-readiness/">AI Citation Readiness</a></li><li><a href="https://aggressorbulkit.online/ai-first-brand-positioning/">AI-First Brand Positioning</a></li><li><a href="https://aggressorbulkit.online/custom-ai-marketing-systems/">Custom AI Marketing Systems</a></li></ul></nav>
-        <nav aria-label="Start Here"><h3>Start Here</h3><ul class="ay-footer-menu"><li><a href="https://aggressorbulkit.online/ai-visibility-audit/">AI Visibility Diagnostic</a></li><li><a href="https://aggressorbulkit.online/work/">Case Studies</a></li><li><a href="https://aggressorbulkit.online/about/">About Me</a></li><li><a href="https://aggressorbulkit.online/pricing/">Pricing</a></li><li><a href="https://aggressorbulkit.online/contact/">Contact</a></li></ul></nav>
-        <nav aria-label="Base2026"><h3>Base2026 pilot project</h3><p>Base2026 is my open pilot project for building a curated source base for AI recommendation engines.</p><ul class="ay-footer-menu"><li><a href="https://aggressorbulkit.online/knowledge/">Search the knowledge base</a></li><li><a href="https://aggressorbulkit.online/knowledge/roadmap.html">Base2026 Roadmap</a></li><li><a href="https://aggressorbulkit.online/knowledge/support.html">Support Base2026</a></li><li><a href="https://aggressorbulkit.online/knowledge/apply-research.html">Apply to participate</a></li><li><a href="https://aggressorbulkit.online/knowledge/api.html">API access</a></li><li><a href="https://aggressorbulkit.online/knowledge/topics.html">Browse topics</a></li><li><a href="https://aggressorbulkit.online/knowledge/creators.html">Explore creators</a></li><li><a href="https://aggressorbulkit.online/knowledge/methodology.html">Methodology</a></li></ul></nav>
-        <nav aria-label="Legal"><h3>Legal</h3><ul class="ay-footer-menu"><li><a href="https://aggressorbulkit.online/privacy-policy/">Privacy Policy</a></li><li><button type="button" class="ay-footer-link-button" data-cookie-preferences>Cookie Preferences</button></li></ul></nav>
-      </div>
-      <div class="ay-footer-bottom"><span>© 2026 Alex Yarosh. Independent AI marketing specialist.</span></div>
-    </footer>"""
 
 
 def footer_html() -> str:
@@ -103,34 +59,87 @@ def footer_html() -> str:
     return f'<footer class="ay-site-footer" aria-label="Site footer">\n{inner}\n</footer>'
 
 
-def apply_alex_v4_shell(page: str, relative_root: str = "..") -> str:
-    page = re.sub(r'<header class="site-header">.*?</header>', header_html(), page, count=1, flags=re.S)
-    page = re.sub(r'<footer class="site-footer">.*?</footer>', footer_html(), page, count=1, flags=re.S)
-    page = page.replace("<body>", '<body class="ay-alex-v4-static ay-stitch-home-v3 ay-stitch-home-v4">', 1)
-    assets = (
-        f'    <link rel="stylesheet" href="{escape(relative_root)}/static/alex-v4-static-shell.css?v={SHELL_VERSION}" />\n'
-        f'    <script src="{escape(relative_root)}/static/alex-v4-static-shell.js?v={SHELL_VERSION}" defer></script>\n'
-    )
-    return page.replace("  </head>", assets + "  </head>", 1)
+def apply_alex_v4_shell(page: str, relative_root: str = "..", mode: str = "editorial") -> str:
+    normalized_mode = mode.strip().lower()
+    if normalized_mode not in {"editorial", "product"}:
+        raise ValueError("Alex Design System mode must be 'editorial' or 'product'.")
+
+    legacy_header = r'<header\b(?=[^>]*\bclass=["\'][^"\']*\bsite-header\b[^"\']*["\'])[^>]*>.*?</header>'
+    legacy_footer = r'<footer\b(?=[^>]*\bclass=["\'][^"\']*\bsite-footer\b[^"\']*["\'])[^>]*>.*?</footer>'
+    canonical_header = r'<header\b(?=[^>]*\bclass=["\'][^"\']*\bay-v2-header\b[^"\']*["\'])'
+    canonical_footer = r'<footer\b(?=[^>]*\bclass=["\'][^"\']*\bay-site-footer\b[^"\']*["\'])'
+
+    if not re.search(canonical_header, page, flags=re.I):
+        page, header_replacements = re.subn(legacy_header, header_html(), page, count=1, flags=re.I | re.S)
+        if header_replacements == 0:
+            skip_link = r'(<a\b(?=[^>]*\bclass=["\'][^"\']*\bskip-link\b[^"\']*["\'])[^>]*>.*?</a>)'
+            page, skip_replacements = re.subn(
+                skip_link,
+                lambda match: f"{match.group(1)}\n    {header_html()}",
+                page,
+                count=1,
+                flags=re.I | re.S,
+            )
+            if skip_replacements == 0:
+                page = re.sub(
+                    r'(<body\b[^>]*>)',
+                    lambda match: f"{match.group(1)}\n    {header_html()}",
+                    page,
+                    count=1,
+                    flags=re.I,
+                )
+
+    if not re.search(canonical_footer, page, flags=re.I):
+        page, footer_replacements = re.subn(legacy_footer, footer_html(), page, count=1, flags=re.I | re.S)
+        if footer_replacements == 0 and not re.search(r"<footer\b", page, flags=re.I):
+            page = re.sub(
+                r"</body>",
+                lambda match: f"    {footer_html()}\n{match.group(0)}",
+                page,
+                count=1,
+                flags=re.I,
+            )
+
+    body_classes = f"ayds-root ayds-mode-{normalized_mode} ay-alex-v4-static ay-stitch-home-v3 ay-stitch-home-v4"
+    if re.search(r"<body\b[^>]*\bclass=", page, flags=re.I):
+        page = re.sub(
+            r'(<body\b[^>]*\bclass=["\'])([^"\']*)(["\'])',
+            lambda match: (
+                f"{match.group(1)}"
+                + " ".join(
+                    dict.fromkeys(
+                        (
+                            *(token for token in match.group(2).split() if not token.startswith("ayds-mode-")),
+                            *body_classes.split(),
+                        )
+                    )
+                )
+                + f"{match.group(3)}"
+            ),
+            page,
+            count=1,
+            flags=re.I,
+        )
+    else:
+        page = re.sub(r"<body\b", f'<body class="{body_classes}"', page, count=1, flags=re.I)
+    assets = ""
+    if "alex-design-system-v2.css" not in page:
+        assets += f'    <link rel="stylesheet" href="{escape(relative_root)}/static/alex-design-system-v2.css?v={SHELL_VERSION}" />\n'
+    if "alex-v4-static-shell.js" not in page:
+        assets += f'    <script src="{escape(relative_root)}/static/alex-v4-static-shell.js?v={SHELL_VERSION}" defer></script>\n'
+    if assets:
+        page = re.sub(r"</head>", lambda match: f"{assets}{match.group(0)}", page, count=1, flags=re.I)
+    return page
 
 
 def shell_js() -> str:
-    return """(() => {
-  const body = document.body;
-  const button = document.querySelector('.ay-v2-menu-toggle');
-  const panel = document.getElementById('ay-v2-mobile-panel');
-  const sync = () => body.classList.toggle('ay-v2-condensed', window.scrollY > 44);
-  sync();
-  window.addEventListener('scroll', sync, { passive: true });
-  if (!button || !panel) return;
-  const setOpen = (open) => { panel.toggleAttribute('hidden', !open); button.setAttribute('aria-expanded', open ? 'true' : 'false'); body.classList.toggle('ay-v2-menu-open', open); };
-  button.addEventListener('click', () => setOpen(panel.hasAttribute('hidden')));
-  panel.addEventListener('click', event => { if (event.target.closest('a')) setOpen(false); });
-  document.addEventListener('keydown', event => { if (event.key === 'Escape') setOpen(false); });
-})();\n"""
+    """Return the single versioned shell script used by compatibility builders."""
+    return SHELL_SCRIPT.read_text(encoding="utf-8")
 
 
-def shell_css() -> str:
+
+
+def search_shell_css() -> str:
     return r"""@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
 body.ay-alex-v4-static{--stitch-cream:#F4F1E9;--stitch-paper:#fff;--stitch-ink:#0F172A;--stitch-muted:#5f5e58;--stitch-soft:#E5E2DA;--stitch-line:rgba(15,23,42,.10);margin:0;background:var(--stitch-cream);color:var(--stitch-ink);font-family:Manrope,Inter,ui-sans-serif,system-ui,sans-serif;padding-top:100px}
 body.ay-alex-v4-static *{box-sizing:border-box} body.ay-alex-v4-static a{color:inherit}
@@ -195,3 +204,8 @@ body.ay-alex-v4-static.ay-stitch-home-v3 .ay-footer-bottom{width:min(100%,960px)
 @media(max-width:360px){body.ay-alex-v4-static.ay-stitch-home-v3 .ay-site-footer .ay-actions{width:100%!important;max-width:100%!important}body.ay-alex-v4-static.ay-stitch-home-v3 .ay-site-footer .ay-actions a{width:100%!important;max-width:100%!important;box-sizing:border-box!important;white-space:normal!important}}
 @media(prefers-reduced-motion:reduce){.ay-alex-v4-static *,.ay-alex-v4-static *::before,.ay-alex-v4-static *::after{transition:none!important;animation:none!important}}
 """
+
+
+def shell_css() -> str:
+    """Return the general Visual Reset V2 design asset for legacy callers."""
+    return DESIGN_SYSTEM_CSS.read_text(encoding="utf-8")
