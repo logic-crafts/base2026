@@ -1,5 +1,19 @@
 # Prompt Log
 
+## 2026-07-18 — Base2026 master rebuild Slice 1 foundation implemented
+
+Prompt: implement the first Base2026 rebuild slice in the isolated master-rebuild worktree: correct the two canonical Personal/Base navigation mappings, add a coherent versioned B26 token/shell/component asset layer, wire representative Search/Topic/Source generator paths, preserve all data/indexation/publication contracts, run focused tests, and do not deploy or commit.
+
+Actions and evidence:
+
+- Changed the `Base2026` navigation target from `/knowledge/ai-visibility-pages/` to the product root `/knowledge/` in both canonical personal-site generators; AI Visibility Pages remains a subordinate research family.
+- Added `scripts/base2026_ui_system.py` as the strict asset/version/component-marker contract and added `web/static/base2026/{tokens,shell,components}.css` at system version `1.0.0`.
+- Wired the shared assets and document/component markers into Search V1 generation, generated Topic pages, strict Source Detail rendering, Source Detail candidate asset copying, and both package paths.
+- Added focused fixtures for navigation, Search B26-01/02/03/04/07/08, real Topic Card B26-05, Topic metrics/bridge B26-07/09, archive Source Detail B26-04, canonical/robots preservation, asset copying, and presentation-only boundary scanning.
+- Updated existing visual/source fixture expectations to validate the ordered legacy-to-B26 migration contract instead of assuming a single stylesheet forever.
+- Independent review blocked the first token/cascade draft because it drifted from Design DNA and changed accepted Search computed styles. The corrected contract uses canonical tokens and explicit `data-b26-visual` activation; Search emits identity markers only. Corrective Chromium comparison at 1440/390 matched HEAD, focused tests passed, publication-boundary audit found no forbidden/secret findings, and `git diff --check` passed.
+- No corpus/public-data/contracts/sitemap-admission/source-state change, production deploy, Meilisearch reindex, IndexNow submission, form action, commit or push occurred.
+
 ## 2026-07-17 — Phase 1 Base P4 Product Truth preview completed
 
 Prompt: continue the Alex Site × Base2026 program from the accepted Phase 0 artifact and implement the Base product pilot: Search → Source → evidence-bound approved Solution → optional Apply Research, with consent-gated analytics, no raw query/PII/private data, desktop/mobile fixtures, and no production mutation or real form submission.

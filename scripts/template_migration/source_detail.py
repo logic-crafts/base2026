@@ -16,6 +16,8 @@ from bs4 import BeautifulSoup, Tag
 from pydantic import BaseModel, ConfigDict, Field
 
 from alex_v4_static_shell import footer_html, header_html
+from base2026_ui_system import SYSTEM_VERSION as B26_SYSTEM_VERSION
+from base2026_ui_system import stylesheet_tags as b26_stylesheet_tags
 from .jinja_env import environment
 
 AdmissionState = Literal[
@@ -291,4 +293,6 @@ def render_source_detail(view: SourceDetailView, renderer_version: str) -> str:
     return environment().get_template("families/source_detail.html.j2").render(
         view=view,
         renderer_version=renderer_version,
+        b26_system_version=B26_SYSTEM_VERSION,
+        b26_stylesheet_tags=b26_stylesheet_tags(".."),
     )

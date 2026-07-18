@@ -124,6 +124,7 @@ $Html | Set-Content -Path (Join-Path $WebRoot "index.html") -Encoding UTF8
 
 Copy-Item "./web/static/styles.css" (Join-Path $StaticRoot "styles.css") -Force
 Copy-Item "./web/static/alex-design-system-v2.css" (Join-Path $StaticRoot "alex-design-system-v2.css") -Force
+Copy-Item "./web/static/base2026" (Join-Path $StaticRoot "base2026") -Recurse -Force
 Copy-Item "./web/static/alex-v4-static-shell.js" (Join-Path $StaticRoot "alex-v4-static-shell.js") -Force
 Copy-Item "./web/static/base2026-solution-journey.js" (Join-Path $StaticRoot "base2026-solution-journey.js") -Force
 Copy-Item "./web/static/base2026-solution-journey.css" (Join-Path $StaticRoot "base2026-solution-journey.css") -Force
@@ -406,6 +407,9 @@ $PackageManifest = [ordered]@{
     "web/sitemap.xml",
     "web/static/styles.css",
     "web/static/alex-design-system-v2.css",
+    "web/static/base2026/tokens.css",
+    "web/static/base2026/shell.css",
+    "web/static/base2026/components.css",
     "web/static/alex-v4-static-shell.js",
     "web/static/base2026-solution-journey.js",
     "web/static/base2026-solution-journey.css",

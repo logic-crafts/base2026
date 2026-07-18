@@ -3,8 +3,9 @@
 <head>
 {{ view.head_html | safe }}
 <link rel="stylesheet" href="../static/alex-design-system-v2.css?v={{ renderer_version }}" data-alex-design-system="v2">
+{{ b26_stylesheet_tags | safe }}
 </head>
-<body class="ayds-root ayds-mode-product b26-family-source b26-source-v2{% if view.archive %} b26-source-v2--archive{% endif %}" data-source-platform="{{ view.platform_key }}">
+<body class="ayds-root ayds-mode-product b26-family-source b26-source-v2{% if view.archive %} b26-source-v2--archive{% endif %}" data-b26-system-version="{{ b26_system_version }}" data-b26-family="source" data-source-platform="{{ view.platform_key }}">
 <a class="skip-link" href="#content">Skip to content</a>
 {{ view.header_html | safe }}
 {% block content %}{% endblock %}

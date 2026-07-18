@@ -1,5 +1,23 @@
 # Next Action
 
+## Current Focus: Base2026 master rebuild Slice 1 foundation implemented — 2026-07-18
+
+The isolated branch `codex/base2026-master-rebuild-20260718` now contains the first bounded B26 foundation. Both canonical personal-site generators route the `Base2026` navigation label to `/knowledge/`. A versioned Base-only UI contract (`1.0.0`) now lives under `web/static/base2026/` with ordered tokens, shell and component assets. Search, generated Topic pages and strict Source Detail templates load the same asset version and expose stable identity markers, but presentation remains inactive without an explicit reviewed visual opt-in. Release and Source Detail candidate paths copy the complete asset set.
+
+Verified boundaries:
+
+- no `data/`, `public-data/`, `contracts/`, private knowledge, sitemap-admission or generated output path changed;
+- representative Search, Topic and archive Source Detail fixtures preserve robots and canonical metadata;
+- publication-boundary audit reports zero forbidden paths and zero secret findings;
+- focused Search/Topic/Source/package/visual-reset tests pass;
+- production, Meilisearch, IndexNow, corpus data and public source states are unchanged.
+
+Next safe action:
+
+1. Keep the accepted Search workspace protected and activate the visual contract on one bounded non-Search family first.
+2. Build a representative Topic/Creator candidate and review 1440px/390px behavior before applying the component composition across those families.
+3. Keep route, canonical, robots, sitemap admission, public manifest and source-state contracts frozen throughout this visual phase; migrate Search only in its own later proof-backed slice.
+
 ## Current Focus: Phase 1 Base P4 Product Truth preview PASS — 2026-07-17
 
 Exact local preview: `base2026-phase1-base-p4-preview-20260717-145000`, ZIP SHA-256 `52d76e8ac1780fedf633e751ae65e03ae4be43f2f646330b72182ab3f7ce2450`. It is derived deterministically from the accepted Phase 0 ZIP. Search → Source → evidence action → approved evidence-bound Solution → optional Apply Research passed at mobile 390 and desktop 1440 with consent on/off. Product Truth validation is clean: consent-off emitted zero events; consent-on emitted the five declared events; the one-result fixture recorded `1_10`; attempted external requests and service submissions were zero. Production is unchanged.

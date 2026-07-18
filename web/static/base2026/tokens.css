@@ -1,0 +1,61 @@
+/* Base2026 UI system v1.0.0 — primitives, semantic tokens, component tokens. */
+:root {
+  --b26-system-version: "1.0.0";
+
+  --b26-color-ink-950: #0f172a;
+  --b26-color-ink-800: #0f172a;
+  --b26-color-slate-600: #5f5e58;
+  --b26-color-slate-400: #5f5e58;
+  --b26-color-cream-100: #f4f1e9;
+  --b26-color-paper: #ffffff;
+  --b26-color-white: #ffffff;
+  --b26-color-surface-soft: #e5e2da;
+  --b26-color-evidence-accent: #d9730d;
+
+  --b26-text-primary: var(--b26-color-ink-950);
+  --b26-text-secondary: var(--b26-color-slate-600);
+  --b26-surface-canvas: var(--b26-color-cream-100);
+  --b26-surface-paper: var(--b26-color-paper);
+  --b26-surface-raised: var(--b26-color-white);
+  --b26-border-subtle: rgba(15, 23, 42, 0.10);
+  --b26-border-strong: rgba(15, 23, 42, 0.28);
+  --b26-interactive-primary: var(--b26-color-ink-950);
+  --b26-focus-ring: rgba(15, 23, 42, 0.24);
+
+  --b26-font-heading: "Manrope", "Geist", system-ui, sans-serif;
+  --b26-font-body: "Manrope", "Geist", system-ui, sans-serif;
+  --b26-font-label: "Geist", system-ui, sans-serif;
+  --b26-font-mono: "Geist Mono", ui-monospace, monospace;
+  --b26-type-label: 0.75rem;
+  --b26-type-small: 0.875rem;
+  --b26-type-body: 1rem;
+  --b26-type-lead: clamp(1.0625rem, 1rem + 0.24vw, 1.1875rem);
+  --b26-type-h3: clamp(1.125rem, 1.04rem + 0.35vw, 1.375rem);
+  --b26-type-h2: clamp(1.5rem, 1.28rem + 0.9vw, 2rem);
+  --b26-type-h1: clamp(2.25rem, 1.95rem + 1.25vw, 3rem);
+  --b26-line-body: 1.62;
+  --b26-line-heading: 1.08;
+
+  --b26-space-1: 0.25rem;
+  --b26-space-2: 0.5rem;
+  --b26-space-3: 0.75rem;
+  --b26-space-4: 1rem;
+  --b26-space-5: 1.25rem;
+  --b26-space-6: 1.5rem;
+  --b26-space-8: 2rem;
+  --b26-space-10: 2.5rem;
+  --b26-space-12: 3rem;
+  --b26-space-16: 4rem;
+
+  --b26-radius-control: 8px;
+  --b26-radius-nested: 12px;
+  --b26-radius-row: 18px;
+  --b26-radius-card: 24px;
+  --b26-radius-panel-mobile: 28px;
+  --b26-radius-panel: 34px;
+  --b26-radius-pill: 999px;
+  --b26-shadow-card: 0 18px 54px rgba(15, 23, 42, 0.045);
+  --b26-shadow-focus: 0 0 0 4px var(--b26-focus-ring);
+  --b26-content-width: 1180px;
+  --b26-reading-width: 74ch;
+}

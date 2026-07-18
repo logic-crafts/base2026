@@ -31,7 +31,7 @@ NAV = [
     ("/services/", "Services"),
     ("/ai-visibility-audit/", "AI Visibility"),
     ("/pricing/", "Pricing"),
-    ("/knowledge/ai-visibility-pages/", "Base2026"),
+    ("/knowledge/", "Base2026"),
     ("/about/", "About"),
 ]
 

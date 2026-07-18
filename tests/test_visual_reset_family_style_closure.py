@@ -12,6 +12,8 @@ ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS = ROOT / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
+from base2026_ui_system import ASSET_FILES, SYSTEM_VERSION  # noqa: E402
+
 
 def load_script(name: str, filename: str):
     spec = importlib.util.spec_from_file_location(name, SCRIPTS / filename)
@@ -34,9 +36,13 @@ def class_tokens(markup: str) -> set[str]:
 def assert_single_v2_stylesheet(markup: str) -> None:
     soup = BeautifulSoup(markup, "html.parser")
     hrefs = [str(node.get("href") or "") for node in soup.select('link[rel~="stylesheet"]')]
-    assert len(hrefs) == 1
+    assert len(hrefs) in {1, 1 + len(ASSET_FILES)}
     assert "alex-design-system-v2.css" in hrefs[0]
     assert "styles.css" not in hrefs[0]
+    if len(hrefs) > 1:
+        assert [href.rsplit("/", 1)[-1] for href in hrefs[1:]] == [
+            f"{asset}?v={SYSTEM_VERSION}" for asset in ASSET_FILES
+        ]
     assert "fonts.googleapis.com" not in markup
 
 

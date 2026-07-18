@@ -11,6 +11,8 @@ from urllib.parse import urlencode, urlsplit
 from alex_design_system_v2 import VERSION as STYLE_VERSION
 from alex_design_system_v2 import apply_component_classes, stylesheet_href
 from alex_v4_static_shell import apply_alex_v4_shell
+from base2026_ui_system import stylesheet_tags as b26_stylesheet_tags
+from base2026_ui_system import system_attributes as b26_system_attributes
 
 CONTACT_EMAIL = "offflinerpsy@gmail.com"
 FAVICON_ASSET_PATH = "static/assets/alex-yarosh-favicon-32.png"
@@ -965,8 +967,9 @@ def page_shell(
     <script type="application/ld+json">{json.dumps(schema, ensure_ascii=False)}</script>
 {favicon_links(relative_root)}
     <link rel="stylesheet" href="{stylesheet_href(relative_root)}" data-alex-design-system="v2" />
+{b26_stylesheet_tags(relative_root)}
   </head>
-  <body class="ayds-root ayds-mode-product b26-family-{escape(current or 'general')}">
+  <body class="ayds-root ayds-mode-product b26-family-{escape(current or 'general')}" {b26_system_attributes(current or 'general')}>
     <a class="skip-link" href="#content">Skip to content</a>
     {site_header(relative_root, current)}
     <main id="content" class="{escape(main_class)}">
@@ -1063,10 +1066,27 @@ def page_shell(
     )
 
 
-def card(title: str, text: str, href: str | None = None, meta: str = "") -> str:
+def card(
+    title: str,
+    text: str,
+    href: str | None = None,
+    meta: str = "",
+    component_id: str = "",
+    component_variant: str = "",
+) -> str:
     link = f'<a class="button-link" href="{escape(href)}">Open</a>' if href else ""
+    component_attributes = ""
+    if component_id:
+        if component_id not in {f"B26-{number:02d}" for number in range(1, 10)}:
+            raise ValueError(f"Unknown Base2026 component marker: {component_id}")
+        component_attributes = f' data-b26-component="{component_id}"'
+        if component_variant:
+            safe_variant = slug(component_variant)
+            if not safe_variant:
+                raise ValueError("Invalid Base2026 component variant")
+            component_attributes += f' data-b26-variant="{escape(safe_variant)}"'
     return f"""
-      <article class="intelligence-card">
+      <article class="intelligence-card"{component_attributes}>
         <h3>{escape(title)}</h3>
         {f'<p class="meta">{escape(meta)}</p>' if meta else ''}
         <p>{escape(compact(text, 360))}</p>
@@ -1818,7 +1838,7 @@ def topic_money_bridge_section(
             break
     secondary_markup = f"\n          {secondary_action}" if secondary_action else ""
     return f"""
-      <section class="content-section topic-traffic-cta topic-contextual-bridge" data-topic-contextual-bridge="true" aria-labelledby="topic-research-bridge-{escape(slug(topic_id))}">
+      <section class="content-section topic-traffic-cta topic-contextual-bridge" data-topic-contextual-bridge="true" data-b26-component="B26-09" data-b26-variant="topic-bridge" aria-labelledby="topic-research-bridge-{escape(slug(topic_id))}">
         <p class="eyebrow">Research next step</p>
         <h2 id="topic-research-bridge-{escape(slug(topic_id))}">{escape(bridge.get('title') or 'Take this topic into a real decision')}</h2>
         <p class="section-helper">{escape(bridge.get('body') or 'Carry this attributed evidence into a business-specific research question before choosing an intervention.')}</p>
@@ -2108,7 +2128,7 @@ def topic_page(
     return page_shell(
         seo_title,
         f"""
-      <section class="page-hero topic-page-hero">
+      <section class="page-hero topic-page-hero" data-b26-section="topic-detail-hero">
         <div class="topic-page-hero__main">
           <p class="eyebrow">Topic evidence page</p>
           <h1>{escape(label)}</h1>
@@ -2121,7 +2141,7 @@ def topic_page(
         </div>
         <aside class="topic-page-hero__tools" aria-label="Topic page controls and summary">
           {inline_share_actions("Share topic page", "topic page")}
-          <div class="topic-stat-grid" aria-label="Topic evidence summary">
+          <div class="topic-stat-grid" data-b26-component="B26-07" data-b26-variant="topic-metrics" aria-label="Topic evidence summary">
             <div><strong>{escape(str(topic.get('public_insight_count') or 0))}</strong><span>insight cards</span></div>
             <div><strong>{escape(str(topic.get('source_count') or len(related_sources)))}</strong><span>source records</span></div>
             <div><strong>{escape(str(independent_creator_count))}</strong><span>{escape(creator_stat_label)}</span></div>
@@ -2622,6 +2642,8 @@ def main() -> int:
                 topic.get("definition") or "",
                 f"{slug(topic_id)}.html",
                 meta,
+                component_id="B26-05",
+                component_variant="topic-card",
             )
         )
 

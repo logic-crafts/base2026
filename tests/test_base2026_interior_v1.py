@@ -11,6 +11,7 @@ if str(SCRIPTS) not in sys.path:
     sys.path.insert(0, str(SCRIPTS))
 
 from template_migration.source_detail import SourceDetailView, render_source_detail  # noqa: E402
+from base2026_ui_system import ASSET_FILES, SYSTEM_VERSION  # noqa: E402
 
 
 def load_module(name: str, path: Path):
@@ -58,6 +59,9 @@ def test_source_detail_template_uses_shared_v2_design_and_local_fonts() -> None:
     assert '<body class="ayds-root ayds-mode-product b26-family-source b26-source-v2"' in rendered
     assert '../static/alex-design-system-v2.css?v=fixture-v1' in rendered
     assert 'data-alex-design-system="v2"' in rendered
+    assert f'data-b26-system-version="{SYSTEM_VERSION}"' in rendered
+    for asset in ASSET_FILES:
+        assert f'../static/base2026/{asset}?v={SYSTEM_VERSION}' in rendered
     assert "base2026-interior-v1.css" not in rendered
     assert "geist-local.css" not in rendered
     assert "interior-token-pilot" not in rendered
@@ -101,6 +105,12 @@ def test_source_candidate_asset_copier_carries_v2_css_and_local_font_dependencie
         '@font-face{font-family:"Manrope";src:url("/knowledge/static/vendor/manrope-400.ttf")}\n',
         encoding="utf-8",
     )
+    (fake_static / "base2026").mkdir()
+    for asset in ASSET_FILES:
+        (fake_static / "base2026" / asset).write_text(
+            f"/* Base2026 UI system v{SYSTEM_VERSION} fixture */\n",
+            encoding="utf-8",
+        )
     fake_scripts.mkdir()
     (fake_scripts / "base2026_source_detail_v2.js").write_text("// fixture\n", encoding="utf-8")
     module.ROOT = fake_root
@@ -108,6 +118,8 @@ def test_source_candidate_asset_copier_carries_v2_css_and_local_font_dependencie
 
     hashes = module.copy_static_assets(tmp_path / "candidate")
     assert "alex-design-system-v2.css" in hashes
+    for asset in ASSET_FILES:
+        assert f"base2026/{asset}" in hashes
     assert "alex-v4-static-shell.js" in hashes
     assert "source-detail-v2.js" in hashes
     assert "vendor/geist-400.ttf" in hashes

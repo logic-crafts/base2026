@@ -1,0 +1,58 @@
+/* Base2026 UI system v1.0.0 — compact product-shell foundation. */
+[data-b26-visual-root="v2"] {
+  color: var(--b26-text-primary);
+  background-color: var(--b26-surface-canvas);
+  font-family: var(--b26-font-body);
+  font-size: var(--b26-type-body);
+  line-height: var(--b26-line-body);
+  text-rendering: optimizeLegibility;
+}
+
+[data-b26-visual-root="v2"],
+[data-b26-visual-root="v2"] *,
+[data-b26-visual-root="v2"] *::before,
+[data-b26-visual-root="v2"] *::after {
+  box-sizing: border-box;
+}
+
+[data-b26-visual-root="v2"] :is(h1, h2, h3) {
+  color: var(--b26-text-primary);
+  font-family: var(--b26-font-heading);
+  line-height: var(--b26-line-heading);
+  letter-spacing: -0.025em;
+}
+
+[data-b26-visual-root="v2"] :is(.eyebrow, [data-b26-label]) {
+  font-family: var(--b26-font-label);
+  font-size: var(--b26-type-label);
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+[data-b26-visual-root="v2"] :is(button, input, select, textarea) {
+  font: inherit;
+}
+
+[data-b26-visual-root="v2"] :is(a, button, input, select, textarea, summary):focus-visible {
+  border-radius: var(--b26-radius-control);
+  outline: 2px solid var(--b26-color-ink-950);
+  outline-offset: 3px;
+  box-shadow: var(--b26-shadow-focus);
+}
+
+[data-b26-visual-root="v2"] [data-b26-shell] {
+  width: min(calc(100% - 2rem), var(--b26-content-width));
+  margin-inline: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-b26-visual-root="v2"] *,
+  [data-b26-visual-root="v2"] *::before,
+  [data-b26-visual-root="v2"] *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

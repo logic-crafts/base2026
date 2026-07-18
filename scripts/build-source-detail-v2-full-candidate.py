@@ -116,6 +116,10 @@ def copy_static_assets(out: Path, solution_journey_registry: Path | None = None)
     if not source_vendor.is_dir():
         raise FileNotFoundError(f"Canonical local-font directory is missing: {source_vendor}")
     shutil.copytree(source_vendor, static_out / "vendor", dirs_exist_ok=True)
+    source_b26_system = ROOT / "web/static/base2026"
+    if not source_b26_system.is_dir():
+        raise FileNotFoundError(f"Canonical Base2026 UI-system directory is missing: {source_b26_system}")
+    shutil.copytree(source_b26_system, static_out / "base2026", dirs_exist_ok=True)
     replacements = {
         "alex-design-system-v2.css": ROOT / "web" / "static" / "alex-design-system-v2.css",
         "source-detail-v2.js": SCRIPTS / "base2026_source_detail_v2.js",
@@ -131,6 +135,9 @@ def copy_static_assets(out: Path, solution_journey_registry: Path | None = None)
     (static_out / "alex-v4-static-shell.js").write_text(shell_js(), encoding="utf-8")
     required = [
         "alex-design-system-v2.css",
+        "base2026/tokens.css",
+        "base2026/shell.css",
+        "base2026/components.css",
         "alex-v4-static-shell.js",
         "source-detail-v2.js",
         "assets/alex-yarosh-favicon-32.png",

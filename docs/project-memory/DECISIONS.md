@@ -1,5 +1,11 @@
 # Decisions
 
+## 2026-07-18 — Version the Base2026 product UI as a separate B26 asset contract
+
+Decision: Base2026 product surfaces use an ordered Base-only asset contract under `web/static/base2026/`: `tokens.css`, then `shell.css`, then `components.css`. Version `1.0.0` is exposed through `data-b26-system-version`; reusable surfaces expose stable `data-b26-component="B26-01"` through `B26-09` identity markers. Presentation is inactive unless a reviewed migration explicitly adds `data-b26-visual="v2"` or `data-b26-visual-root="v2"`. The existing `alex-design-system-v2.css` remains the compatibility owner while families migrate.
+
+Reason: Search, Source Detail, Solutions and legacy generated families currently render through separate stacks. Versioned semantic identity plus an explicit visual gate lets each stack converge without changing routes, data, canonicals, robots, sitemap admission or source states. It also prevents a late shared stylesheet from silently overriding the accepted Search workspace before that family has its own reviewed migration.
+
 ## 2026-07-17 — Source-to-Solution discovery requires an exact reviewed evidence edge
 
 Decision: Base2026 may expose a Source-to-Solution path only when an explicitly allowlisted Solution contains an exact reviewed `source_id` + `claim_id` evidence tuple that resolves to an admitted normal-public Source route. Topic similarity, keyword overlap, creator authority, or author opinion alone must not create the edge. The UI must label the material as a reviewed creator signal and keep it separate from Base2026 synthesis and authoritative verification.

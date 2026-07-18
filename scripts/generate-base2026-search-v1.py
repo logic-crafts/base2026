@@ -9,6 +9,7 @@ import shutil
 from pathlib import Path
 
 from alex_v4_static_shell import footer_html, header_html, search_shell_css, shell_js
+from base2026_ui_system import inject_stylesheet_contract, system_attributes
 
 
 RESEARCH_CONTEXT_HTML = '''      <section class="research-context" aria-labelledby="research-context-title">
@@ -41,7 +42,7 @@ def transform(source: str) -> str:
     html = re.sub(r'<footer class="site-footer">.*?</footer>', footer_html(), html, count=1, flags=re.S)
     html = re.sub(
         r'<body(?:\s+class="[^"]*")?>',
-        '<body class="ay-alex-v4-static base2026-search-v1">',
+        f'<body class="ay-alex-v4-static base2026-search-v1" {system_attributes("search")}>',
         html,
         count=1,
     )
@@ -75,6 +76,7 @@ def transform(source: str) -> str:
         )
         if inserted != 1:
             raise ValueError('Could not locate the versioned Base2026 styles.css link')
+    html = inject_stylesheet_contract(html, ".")
 
     if 'search-command__heading' not in html:
         html = html.replace(
@@ -120,6 +122,36 @@ def transform(source: str) -> str:
         )
     if missing_scripts:
         html = html.replace('</body>', '\n'.join(missing_scripts) + '\n  </body>', 1)
+    component_markers = (
+        (
+            '<section class="search-command" aria-label="Knowledge search">',
+            '<section class="search-command" data-b26-component="B26-01" data-b26-variant="search-console" aria-label="Knowledge search">',
+        ),
+        (
+            '<aside id="mobile-filter-panel" class="filter-panel meili-filters">',
+            '<aside id="mobile-filter-panel" class="filter-panel meili-filters" data-b26-component="B26-02" data-b26-variant="filter-drawer">',
+        ),
+        (
+            '<section class="results-panel meili-results">',
+            '<section class="results-panel meili-results" data-b26-component="B26-03" data-b26-variant="result-list">',
+        ),
+        (
+            '<aside id="source-detail-panel" class="source-detail-panel" aria-live="polite">',
+            '<aside id="source-detail-panel" class="source-detail-panel" data-b26-component="B26-04" data-b26-variant="selected-source" aria-live="polite">',
+        ),
+        (
+            '<div class="hero-card workspace-stat-card" aria-label="Dataset summary">',
+            '<div class="hero-card workspace-stat-card" data-b26-component="B26-07" data-b26-variant="dataset-metrics" aria-label="Dataset summary">',
+        ),
+        (
+            '<section class="research-context" aria-labelledby="research-context-title">',
+            '<section class="research-context" data-b26-component="B26-08" data-b26-variant="public-boundary" aria-labelledby="research-context-title">',
+        ),
+    )
+    for before, after in component_markers:
+        if html.count(before) != 1:
+            raise ValueError(f'Could not attach Base2026 component marker: {before}')
+        html = html.replace(before, after, 1)
     if './#search?' in html:
         raise ValueError('Legacy hash-based Search route remains after transform')
     return html

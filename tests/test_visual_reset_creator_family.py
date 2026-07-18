@@ -12,6 +12,8 @@ ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS = ROOT / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
+from base2026_ui_system import ASSET_FILES, SYSTEM_VERSION  # noqa: E402
+
 
 def load_generator():
     spec = importlib.util.spec_from_file_location(
@@ -59,9 +61,12 @@ def test_creator_profile_identity_tools_and_metrics_are_visual_reset_components(
     ]
 
     stylesheets = [str(node.get("href") or "") for node in soup.select('link[rel~="stylesheet"]')]
-    assert len(stylesheets) == 1
+    assert len(stylesheets) == 1 + len(ASSET_FILES)
     assert "alex-design-system-v2.css" in stylesheets[0]
     assert "styles.css" not in stylesheets[0]
+    assert stylesheets[1:] == [
+        f"../static/base2026/{asset}?v={SYSTEM_VERSION}" for asset in ASSET_FILES
+    ]
     assert soup.select_one('link[rel="canonical"]')["href"].endswith(
         "/knowledge/creators/neilpatel.html"
     )

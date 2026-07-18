@@ -1,7 +1,7 @@
 {% extends "base_page.html.j2" %}
 {% from "macros/platform_actions.html.j2" import platform_action %}
 {% block content %}
-<main id="content" class="b26-source-shell ayds-page ayds-main ayds-content" data-admission-state="{{ view.admission_state }}" data-source-item-id="{{ view.item_id }}">
+<main id="content" class="b26-source-shell ayds-page ayds-main ayds-content" data-b26-component="B26-04" data-b26-variant="source-detail" data-admission-state="{{ view.admission_state }}" data-source-item-id="{{ view.item_id }}">
   <nav class="b26-arrival-nav ayds-breadcrumbs" aria-label="Breadcrumb and return navigation">
     <ol><li><a href="../">Base2026</a></li>{% if view.search_link %}<li><a href="{{ view.search_link }}">Search results</a></li>{% endif %}<li aria-current="page">{{ view.handle }}</li></ol>
     {% if view.search_link %}<a class="b26-back-link" href="{{ view.search_link }}" data-back-to-results>← Back to results</a>{% endif %}
