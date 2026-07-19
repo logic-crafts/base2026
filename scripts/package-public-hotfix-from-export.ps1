@@ -6,6 +6,7 @@ param(
   [string]$MeiliKey = "",
   [string]$SourceDetailCandidate = "",
   [string]$SourceAdmissionClosureReceipt = "",
+  [string]$SourceAdmissionLedger = "./12_knowledge-base/sources/tiktok/source-admission.jsonl",
   [string]$SourceDetailSourceRoot = "./web/static",
   [string]$SourceExportLabel = "accepted-public-export",
   [string]$SourceDetailSourceLabel = "accepted-public-source-root",
@@ -270,7 +271,7 @@ if ($SourceAdmissionClosureReceiptJson.schema -eq "base2026.source-admission-pub
     $SourceAdmissionClosureReceiptJson.public_export_manifest_sha256 -ne $SourceExportManifestSha256) {
   throw "Source admission closure receipt is stale for the selected public export."
 }
-$SourceAdmissionLedgerPath = Resolve-Path "./12_knowledge-base/sources/tiktok/source-admission.jsonl"
+$SourceAdmissionLedgerPath = Resolve-Path $SourceAdmissionLedger
 $SourceAdmissionLedgerSha256 = (Get-FileHash -Algorithm SHA256 $SourceAdmissionLedgerPath).Hash.ToLowerInvariant()
 if ($SourceAdmissionClosureReceiptJson.ledger_new_sha256 -ne $SourceAdmissionLedgerSha256) {
   throw "Source admission closure receipt is stale for the current ledger."

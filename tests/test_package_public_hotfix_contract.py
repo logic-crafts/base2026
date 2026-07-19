@@ -49,10 +49,12 @@ def test_deploy_preflight_uses_its_defined_native_exit_helper() -> None:
 def test_hotfix_packager_uses_generic_closure_and_explicit_source_root() -> None:
     source = SCRIPT.read_text(encoding="utf-8")
     assert "SourceDetailSourceRoot" in source
+    assert "SourceAdmissionLedger" in source
     assert "all_future_private_identifiers_absent_from_all_public_export_files" in source
     assert "base2026.source-admission-public-closure/v2" in source
     assert "AllowLegacySourceAdmissionClosureReceipt" in source
     assert "public_export_manifest_sha256" in source
     assert "public_effect_verification_field" in source
     assert "--source-root $ResolvedSourceDetailSourceRoot" in source
+    assert '$SourceAdmissionLedgerPath = Resolve-Path $SourceAdmissionLedger' in source
     assert "Source export: $SourceExport" not in source
