@@ -1,4 +1,4 @@
-/* Base2026 UI system v1.1.0 — B26-01…B26-09 component foundation. */
+/* Base2026 UI system v1.1.1 — B26-01…B26-09 component foundation. */
 [data-b26-component][data-b26-visual="v2"] {
   --b26-component-border: var(--b26-border-subtle);
   color: var(--b26-text-primary);

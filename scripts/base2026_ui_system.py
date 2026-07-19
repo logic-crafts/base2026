@@ -10,7 +10,7 @@ from __future__ import annotations
 from html import escape
 
 
-SYSTEM_VERSION = "1.1.0"
+SYSTEM_VERSION = "1.1.1"
 VISUAL_VERSION = "v2"
 ASSET_DIRECTORY = "base2026"
 ASSET_FILES = ("tokens.css", "shell.css", "components.css")

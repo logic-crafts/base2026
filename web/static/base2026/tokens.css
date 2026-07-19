@@ -1,6 +1,6 @@
-/* Base2026 UI system v1.1.0 — primitives, semantic tokens, component tokens. */
+/* Base2026 UI system v1.1.1 — primitives, semantic tokens, component tokens. */
 :root {
-  --b26-system-version: "1.1.0";
+  --b26-system-version: "1.1.1";
 
   --b26-color-ink-950: #0f172a;
   --b26-color-ink-800: #0f172a;

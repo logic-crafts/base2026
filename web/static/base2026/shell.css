@@ -1,4 +1,4 @@
-/* Base2026 UI system v1.1.0 — compact product-shell foundation. */
+/* Base2026 UI system v1.1.1 — compact product-shell foundation. */
 [data-b26-visual-root="v2"] {
   color: var(--b26-text-primary);
   background-color: var(--b26-surface-canvas);
@@ -107,6 +107,17 @@ body.b26-source-v2[data-b26-visual-root="v2"] h1 {
   text-wrap: balance;
 }
 
+/* Indexable Base product families share one reading-scale H1 contract.  These
+ * families use specialized hero class names, so include them explicitly
+ * instead of letting the older poster-size compatibility rules win. */
+body.ay-alex-v4-static[data-b26-visual-root="v2"] :is(.ai-pages-intro, .b26-money-hero, .solution-hero__copy) h1 {
+  max-width: 22ch;
+  font-size: var(--b26-type-h1) !important;
+  line-height: var(--b26-line-heading) !important;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
 body.ay-alex-v4-static[data-b26-visual-root="v2"] :is(.page-hero, .topic-page-hero, .analytics-hero) .lead {
   max-width: var(--b26-reading-width);
   margin: 0;
@@ -123,6 +134,24 @@ body.ay-alex-v4-static[data-b26-visual-root="v2"] .content-section {
   border-radius: 0;
   background: transparent;
   box-shadow: none;
+}
+
+/* The Solutions trust boundary is intentionally a dark evidence warning.
+ * Restore its semantic panel after the generic content-section reset. */
+body.ay-alex-v4-static[data-b26-visual-root="v2"] .content-section.solution-next-action {
+  padding: var(--b26-space-10);
+  border: 0;
+  border-radius: var(--b26-radius-panel);
+  background: var(--b26-color-ink-950);
+  color: var(--b26-color-paper);
+}
+
+body.ay-alex-v4-static[data-b26-visual-root="v2"] .content-section.solution-next-action :is(h2, p, .eyebrow) {
+  color: var(--b26-color-paper);
+}
+
+body.ay-alex-v4-static[data-b26-visual-root="v2"] .content-section.solution-next-action p {
+  color: rgba(255, 255, 255, .72);
 }
 
 body.ay-alex-v4-static[data-b26-visual-root="v2"] .content-section > h2,
@@ -516,6 +545,11 @@ body.ay-alex-v4-static.ay-stitch-home-v3[data-b26-visual-root="v2"] .b26-product
     font-size: var(--b26-type-h1-mobile) !important;
   }
 
+  body.ay-alex-v4-static[data-b26-visual-root="v2"] :is(.ai-pages-intro, .b26-money-hero, .solution-hero__copy) h1 {
+    max-width: 18ch;
+    font-size: var(--b26-type-h1-mobile) !important;
+  }
+
   body.ay-alex-v4-static[data-b26-visual-root="v2"] .content-section {
     padding: var(--b26-space-8) 0;
   }
@@ -556,6 +590,9 @@ body.ay-alex-v4-static.ay-stitch-home-v3[data-b26-visual-root="v2"] .b26-product
   }
 
   body.ay-alex-v4-static[data-b26-visual-root="v2"] .b26-k-family-topic-index .intelligence-card[data-b26-variant="topic-card"] .meta {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

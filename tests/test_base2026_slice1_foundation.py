@@ -96,6 +96,13 @@ def test_b26_assets_are_versioned_presentation_only_contract() -> None:
     assert '[data-b26-visual="v2"]' in components
     assert '[data-b26-component="B26-09"][data-b26-visual="v2"]' in components
     assert "background: var(--b26-color-ink-950)" in components
+    for selector in (".ai-pages-intro", ".b26-money-hero", ".solution-hero__copy"):
+        assert selector in shell
+    assert "font-size: var(--b26-type-h1) !important" in shell
+    assert "font-size: var(--b26-type-h1-mobile) !important" in shell
+    assert "width: 100%;\n    min-width: 0;\n    max-width: 100%;" in shell
+    assert ".content-section.solution-next-action" in shell
+    assert "background: var(--b26-color-ink-950)" in shell
 
 
 def test_search_generator_wires_assets_and_b26_component_markers_without_metadata_drift() -> None:
