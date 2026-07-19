@@ -6,7 +6,10 @@ Use Base2026 to study public patterns. Use Alex Yarosh's audit workflow to diagn
 
 This page explains where the public research layer ends and where business-specific SEO/GEO/AEO work begins.
 
-[Search the Library](/knowledge/) [Browse AI Visibility Pages](/knowledge/ai-visibility-pages/) [Check My AI Visibility](/ai-visibility-audit/) [View Services](/services/)
+Research navigation:
+
+- [Search the Library](/knowledge/)
+- [Browse AI Visibility Pages](/knowledge/ai-visibility-pages/)
 
 ## What Base2026 can do
 
@@ -41,33 +44,23 @@ Use this bridge when a business owner, founder, marketing lead or SEO operator w
 
 ### If visibility gaps are unclear
 
-Start with the free AI Visibility Snapshot. It gives a first read on whether the business is visible, understandable and competitive across search and AI-powered discovery.
-
-[Get the Free AI Visibility Snapshot](/ai-visibility-audit/)
+The first business-specific step is a compact visibility check: establish whether the business can be found, understood and compared across search and AI-powered discovery before prescribing implementation.
 
 ### If the business needs a deeper roadmap
 
-Request the AI Visibility Diagnostic Audit before investing in SEO, content, citations or a redesign.
-
-[Request the AI Visibility Diagnostic Audit](/ai-visibility-diagnostic-audit/)
+A deeper diagnostic is appropriate before investing in SEO, content, citations or a redesign. It should turn the public patterns into a business-specific sequence, not another generic checklist.
 
 ### If technical blockers are already likely
 
-Review the Technical SEO & GEO Foundation page to understand crawl, indexation, schema, canonical, internal-link and page-structure work.
-
-[Review Technical SEO & GEO Foundation](/technical-seo-geo-foundation/)
+The implementation scope may need crawl, indexation, schema, canonical, internal-link and page-structure work. Confirm those blockers in the business-specific diagnosis before choosing the implementation layer.
 
 ### If service pages are weak
 
-Review Answer-Ready Service Pages to see how service definitions, buyer questions, FAQs, proof, local context and conversion paths can be rebuilt.
-
-[Review Answer-Ready Service Pages](/answer-ready-service-pages/)
+The implementation scope may need clearer service definitions, buyer questions, FAQs, proof, local context and conversion paths. The evidence should determine which pages deserve rebuilding.
 
 ### If the business is hard to verify
 
-Review Entity, Trust & Source Intelligence to strengthen business-entity clarity, citations, profiles, reviews, proof pages, source signals and schema.
-
-[Review Entity, Trust & Source Intelligence](/entity-trust-source-intelligence/)
+The implementation scope may need stronger business-entity clarity, citations, profiles, reviews, proof pages, source signals and schema. Verify the missing trust layer before recommending more publishing.
 
 ## How the research maps to business work
 
@@ -125,8 +118,6 @@ No. Keep private business materials, credentials, transcripts, lead data and cli
 
 If the business problem is unclear, start with the free AI Visibility Snapshot. If the business needs a deeper roadmap, request the AI Visibility Diagnostic Audit.
 
-## Start with public research, then diagnose the business
+## Keep the decision boundary clear
 
-Base2026 can show the pattern. Alex Yarosh's audit workflow can diagnose the business.
-
-[Search Base2026](/knowledge/) [Check My AI Visibility](/ai-visibility-audit/) [Request Diagnostic Audit](/ai-visibility-diagnostic-audit/)
+Stay in Base2026 when the task is to inspect public evidence. Use the single handoff below only when the question becomes specific to one business, market and competitive set.

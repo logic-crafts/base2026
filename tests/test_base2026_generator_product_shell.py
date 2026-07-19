@@ -122,6 +122,13 @@ def test_info_route_shell_metadata_and_single_handoff_policy(
         if str(anchor.get("href") or "") in SERVICE_ROUTES
     ]
     assert service_links == (["/ai-visibility-audit/"] if source_name == "09_APPLY_RESEARCH.md" else [])
+    if source_name == "09_APPLY_RESEARCH.md":
+        text = soup.get_text(" ", strip=True)
+        assert "Check My AI Visibility View Services" not in text
+        assert "Search Base2026 Check My AI Visibility Request Diagnostic Audit" not in text
+        assert soup.select_one('main ul a[href="/knowledge/"]')
+        assert soup.select_one('main ul a[href="/knowledge/ai-visibility-pages/"]')
+        assert text.count("Start the visibility check") == 1
     assert not soup.select_one('form[action="/wp-admin/admin-post.php"]')
 
 
