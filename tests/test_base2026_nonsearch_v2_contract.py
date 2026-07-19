@@ -249,15 +249,43 @@ def test_strict_source_detail_has_one_public_boundary_and_preserves_admission_me
     assert validator.validate_shared_footer_contract(tmp_path, view.route) == []
 
 
-def test_nonsearch_generator_fails_closed_on_direct_personal_offer_link() -> None:
+@pytest.mark.parametrize(
+    "href",
+    (
+        "/pricing/",
+        "https://aggressorbulkit.online/pricing/",
+        "//aggressorbulkit.online/services/",
+        "../../../pricing/",
+        "..\\..\\pricing/",
+        "https://aggressorbulkit.online./pricing/",
+        "%2e%2e/%2e%2e/%2e%2e/pricing/",
+        "..%2f..%2f..%2fpricing/",
+    ),
+)
+def test_nonsearch_generator_fails_closed_on_direct_personal_offer_link(href: str) -> None:
     module = generator()
     with pytest.raises(ValueError, match="bypasses Apply Research"):
         module.index_page(
             "Unsafe fixture",
             "A direct package jump must never survive Base generation.",
-            '<article><a href="/pricing/">View pricing</a></article>',
+            f'<article><a href="{href}">View pricing</a></article>',
             current="topics",
         )
+
+
+def test_nonsearch_generator_allows_relative_base_and_external_source_links() -> None:
+    module = generator()
+    rendered = module.index_page(
+        "Safe fixture",
+        "Base and attributed external navigation remain available.",
+        (
+            '<article><a href="../methodology.html">Methodology</a>'
+            '<a href="https://www.tiktok.com/@fixture/video/123">Original source</a></article>'
+        ),
+        current="topics",
+    )
+    assert 'href="../methodology.html"' in rendered
+    assert 'href="https://www.tiktok.com/@fixture/video/123"' in rendered
 
 
 def test_search_stays_visual_control_and_keeps_exact_metadata() -> None:

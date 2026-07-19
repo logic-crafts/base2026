@@ -2,11 +2,12 @@ from __future__ import annotations
 
 import argparse
 import json
+import posixpath
 import re
 from collections import defaultdict
 from html import escape, unescape
 from pathlib import Path
-from urllib.parse import urlencode, urlsplit
+from urllib.parse import unquote, urlencode, urljoin, urlsplit
 
 from bs4 import BeautifulSoup, Tag
 
@@ -1076,11 +1077,14 @@ def page_shell(
     rendered = apply_component_classes(
         apply_alex_v4_shell(page, relative_root=relative_root, mode="product")
     )
-    validate_nonsearch_research_boundary(rendered, canonical_path or title)
+    validate_nonsearch_research_boundary(
+        rendered,
+        canonical or "https://aggressorbulkit.online/knowledge/",
+    )
     return rendered
 
 
-def validate_nonsearch_research_boundary(markup: str, route_label: str) -> None:
+def validate_nonsearch_research_boundary(markup: str, route_canonical: str) -> None:
     """Fail closed if a generated Base page bypasses Apply Research.
 
     Header/footer trust links are owned by the product shell.  Inside ``main``
@@ -1092,36 +1096,58 @@ def validate_nonsearch_research_boundary(markup: str, route_label: str) -> None:
     soup = BeautifulSoup(markup, "html.parser")
     main = soup.select_one("main")
     if not isinstance(main, Tag):
-        raise ValueError(f"Base2026 route lacks <main>: {route_label}")
+        raise ValueError(f"Base2026 route lacks <main>: {route_canonical}")
+
+    def resolve_href(href: str) -> tuple[str, str, str]:
+        parsed = urlsplit(urljoin(route_canonical, href))
+        decoded_path = unquote(parsed.path).replace("\\", "/")
+        normalized_path = posixpath.normpath(decoded_path or "/")
+        if not normalized_path.startswith("/"):
+            normalized_path = "/" + normalized_path
+        return (
+            parsed.scheme.lower(),
+            (parsed.hostname or "").lower().rstrip("."),
+            normalized_path,
+        )
+
     direct_personal: list[str] = []
     for anchor in main.select("a[href]"):
         href = str(anchor.get("href") or "").strip()
-        parsed = urlsplit(href)
-        if parsed.scheme or parsed.netloc or not parsed.path.startswith("/"):
+        if "\\" in href:
+            direct_personal.append(href)
             continue
-        if parsed.path == "/knowledge" or parsed.path.startswith("/knowledge/"):
+        scheme, hostname, path = resolve_href(href)
+        if scheme not in {"http", "https"}:
+            continue
+        if hostname != "aggressorbulkit.online":
+            continue
+        if path == "/knowledge" or path.startswith("/knowledge/"):
             continue
         direct_personal.append(href)
     if direct_personal:
         raise ValueError(
-            f"Base2026 route bypasses Apply Research ({route_label}): "
+            f"Base2026 route bypasses Apply Research ({route_canonical}): "
             + ", ".join(sorted(set(direct_personal)))
         )
     bridges = main.select('[data-b26-component="B26-09"]')
     if len(bridges) > 1:
-        raise ValueError(f"Base2026 route has duplicate B26-09 bridges: {route_label}")
+        raise ValueError(f"Base2026 route has duplicate B26-09 bridges: {route_canonical}")
     apply_links = [
         anchor
-        for anchor in main.select('a[href^="/knowledge/apply-research.html"]')
-        if urlsplit(str(anchor.get("href") or "")).path
-        == "/knowledge/apply-research.html"
+        for anchor in main.select("a[href]")
+        if (
+            "\\" not in (href := str(anchor.get("href") or ""))
+            and (resolved := resolve_href(href))[0] in {"http", "https"}
+            and resolved[1] == "aggressorbulkit.online"
+            and resolved[2] == "/knowledge/apply-research.html"
+        )
     ]
     if len(apply_links) > 1:
-        raise ValueError(f"Base2026 route has duplicate Apply Research links: {route_label}")
+        raise ValueError(f"Base2026 route has duplicate Apply Research links: {route_canonical}")
     if apply_links and not apply_links[0].find_parent(
         attrs={"data-b26-component": "B26-09"}
     ):
-        raise ValueError(f"Apply Research link is outside B26-09: {route_label}")
+        raise ValueError(f"Apply Research link is outside B26-09: {route_canonical}")
 
 
 def card(

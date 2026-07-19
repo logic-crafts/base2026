@@ -55,6 +55,37 @@ def read_jsonl(path: Path) -> list[dict[str, Any]]:
     return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
 
 
+def read_base_rows(path: Path) -> list[dict[str, Any]]:
+    """Read a frozen JSONL inventory or an accepted candidate manifest."""
+
+    if path.suffix.lower() != ".json":
+        return read_jsonl(path)
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    if payload.get("schema") != "base2026.source-detail-v2-full-candidate/v1":
+        raise ValueError("Unsupported Source Detail candidate manifest schema")
+    rows = [
+        {
+            "page_family": "source_detail",
+            "route": row["route"],
+            "expected_status": 200,
+            "admission_state": row["admission_state"],
+        }
+        for row in payload.get("rendered") or []
+    ]
+    rows.extend(
+        {
+            "page_family": "source_detail",
+            "route": route,
+            "expected_status": 404,
+            "admission_state": FUTURE_STATE,
+        }
+        for route in payload.get("future_private_not_emitted") or []
+    )
+    if not rows:
+        raise ValueError("Accepted Source Detail candidate manifest is empty")
+    return rows
+
+
 def require_planning_output(path: Path) -> Path:
     resolved = path.resolve()
     planning = (ROOT / ".planning").resolve()
@@ -84,7 +115,7 @@ def future_row(item_id: str) -> dict[str, Any]:
 
 
 def refresh(base_manifest: Path, ledger: Path, out: Path, summary: Path) -> dict[str, Any]:
-    rows = read_jsonl(base_manifest)
+    rows = read_base_rows(base_manifest)
     ledger_rows = read_jsonl(ledger)
     if not rows or not ledger_rows:
         raise ValueError("Base manifest and admission ledger must both be non-empty")

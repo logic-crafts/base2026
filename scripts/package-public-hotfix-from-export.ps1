@@ -5,7 +5,11 @@ param(
   [string]$MeiliIndex = "base2026_public_tiktok",
   [string]$MeiliKey = "",
   [string]$SourceDetailCandidate = "",
-  [string]$SourceAdmissionClosureReceipt = ""
+  [string]$SourceAdmissionClosureReceipt = "",
+  [string]$SourceDetailSourceRoot = "./web/static",
+  [string]$SourceExportLabel = "accepted-public-export",
+  [string]$SourceDetailSourceLabel = "accepted-public-source-root",
+  [switch]$AllowLegacySourceAdmissionClosureReceipt
 )
 
 $ErrorActionPreference = "Stop"
@@ -39,6 +43,15 @@ if ([string]::IsNullOrWhiteSpace($SourceAdmissionClosureReceipt)) {
 }
 
 $SourceExport = Resolve-Path $SourceExportRoot
+$ResolvedSourceDetailSourceRoot = Resolve-Path $SourceDetailSourceRoot
+if (-not (Test-Path $ResolvedSourceDetailSourceRoot -PathType Container)) {
+  throw "SourceDetailSourceRoot must resolve to a directory."
+}
+foreach ($Label in @($SourceExportLabel, $SourceDetailSourceLabel)) {
+  if ($Label -notmatch '^[A-Za-z0-9._-]+$') {
+    throw "Public input labels may contain only letters, numbers, dot, underscore, and dash."
+  }
+}
 $CacheBust = ($ReleaseName -replace '[^A-Za-z0-9._-]', '-')
 
 $RequiredExportFiles = @("manifest.json", "documents.jsonl", "source_records.jsonl", "passages.jsonl", "creators.jsonl")
@@ -237,10 +250,26 @@ $SourceAdmissionClosureReceiptJson = Get-Content $ResolvedSourceAdmissionClosure
 if ($SourceAdmissionClosureReceiptJson.status -ne "PASS") {
   throw "Source admission closure receipt is not PASS."
 }
-if (-not $SourceAdmissionClosureReceiptJson.verification.all_13_absent_from_all_public_export_files) {
+$GenericClosure = $SourceAdmissionClosureReceiptJson.verification.all_future_private_identifiers_absent_from_all_public_export_files
+$LegacyClosure = $SourceAdmissionClosureReceiptJson.verification.all_13_absent_from_all_public_export_files
+if ($SourceAdmissionClosureReceiptJson.schema -eq "base2026.source-admission-public-closure/v2") {
+  $PublicEffectVerifiedAbsent = [bool]$GenericClosure
+  $PublicEffectVerificationField = "all_future_private_identifiers_absent_from_all_public_export_files"
+} elseif ($AllowLegacySourceAdmissionClosureReceipt -and $null -ne $LegacyClosure) {
+  $PublicEffectVerifiedAbsent = [bool]$LegacyClosure
+  $PublicEffectVerificationField = "all_13_absent_from_all_public_export_files"
+} else {
+  throw "Source admission closure receipt must use schema base2026.source-admission-public-closure/v2. Legacy compatibility requires -AllowLegacySourceAdmissionClosureReceipt."
+}
+if (-not $PublicEffectVerifiedAbsent) {
   throw "Source admission closure receipt does not prove the new future/private records are absent from every public export artifact."
 }
 $SourceDetailCandidateManifestJson = Get-Content $CandidateManifest -Raw | ConvertFrom-Json
+$SourceExportManifestSha256 = (Get-FileHash -Algorithm SHA256 (Join-Path $SourceExport "manifest.json")).Hash.ToLowerInvariant()
+if ($SourceAdmissionClosureReceiptJson.schema -eq "base2026.source-admission-public-closure/v2" -and
+    $SourceAdmissionClosureReceiptJson.public_export_manifest_sha256 -ne $SourceExportManifestSha256) {
+  throw "Source admission closure receipt is stale for the selected public export."
+}
 $SourceAdmissionLedgerPath = Resolve-Path "./12_knowledge-base/sources/tiktok/source-admission.jsonl"
 $SourceAdmissionLedgerSha256 = (Get-FileHash -Algorithm SHA256 $SourceAdmissionLedgerPath).Hash.ToLowerInvariant()
 if ($SourceAdmissionClosureReceiptJson.ledger_new_sha256 -ne $SourceAdmissionLedgerSha256) {
@@ -252,7 +281,7 @@ if ($SourceDetailCandidateManifestJson.expected.'200:normal_public_card' -ne $So
   throw "Source Detail candidate counts are not bound to the source admission closure receipt."
 }
 
-python3 ./scripts/validate-source-detail-v2-full-candidate.py --candidate $ResolvedSourceDetailCandidate --source-root ./web/static | Write-Output
+python3 ./scripts/validate-source-detail-v2-full-candidate.py --candidate $ResolvedSourceDetailCandidate --source-root $ResolvedSourceDetailSourceRoot | Write-Output
 Assert-NativeSuccess "validate-source-detail-v2-full-candidate-before-package"
 
 $ReleaseSources = Join-Path $WebRoot "sources"
@@ -330,7 +359,7 @@ python3 @SitemapArgs --check-only | Write-Output
 Assert-NativeSuccess "validate-base2026-sitemap-contract"
 
 $SourceDetailPackageReport = Join-Path $BuildRoot "source-detail-v2-package-validation.json"
-python3 ./scripts/validate-source-detail-v2-release-package.py --candidate $ResolvedSourceDetailCandidate --web-root $WebRoot --report $SourceDetailPackageReport | Write-Output
+python3 ./scripts/validate-source-detail-v2-release-package.py --candidate $ResolvedSourceDetailCandidate --candidate-label source-detail-candidate --web-root $WebRoot --web-root-label web --report $SourceDetailPackageReport | Write-Output
 Assert-NativeSuccess "validate-source-detail-v2-release-package"
 Copy-Item (Join-Path $ResolvedSourceDetailCandidate "candidate-manifest.json") (Join-Path $ReleaseRoot "SOURCE_DETAIL_V2_CANDIDATE_MANIFEST.json") -Force
 Copy-Item $SourceDetailPackageReport (Join-Path $ReleaseRoot "SOURCE_DETAIL_V2_PACKAGE_VALIDATION.json") -Force
@@ -340,7 +369,8 @@ $Manifest = Get-Content (Join-Path $ExportRoot "manifest.json") -Raw
 $CandidateManifestHash = (Get-FileHash -Algorithm SHA256 (Join-Path $ResolvedSourceDetailCandidate "candidate-manifest.json")).Hash.ToLowerInvariant()
 $SourceDetailScope = @"
 - Overlay the validated immutable Source Detail V2 candidate.
-- Source Detail V2 candidate: $ResolvedSourceDetailCandidate
+- Source Detail V2 candidate label: source-detail-candidate
+- Canonical Source Detail input label: $SourceDetailSourceLabel
 - Source Detail V2 candidate manifest SHA-256: $CandidateManifestHash
 "@
 $ReleaseInfo = @"
@@ -349,7 +379,7 @@ Release: $ReleaseName
 Created: $(Get-Date -Format "yyyy-MM-dd HH:mm:ss")
 Meili URL: $MeiliUrl
 Meili index: $MeiliIndex
-Source export: $SourceExport
+Source export label: $SourceExportLabel
 
 Hotfix scope:
 - Preserve existing public export membership and counts.
@@ -377,7 +407,9 @@ $SourceDetailPackageContract = [ordered]@{
     provenance_archive_noindex = [int]$SourceDetailCandidateManifestJson.expected.'200:provenance_archive_noindex'
     future_private_backlog = [int]$SourceDetailCandidateManifestJson.expected.'404:future_private_backlog'
   }
-  public_effect_verified_absent = [bool]$SourceAdmissionClosureReceiptJson.verification.all_13_absent_from_all_public_export_files
+  public_effect_verified_absent = $PublicEffectVerifiedAbsent
+  public_effect_verification_field = $PublicEffectVerificationField
+  source_root_label = $SourceDetailSourceLabel
   archive_sitemap_policy = "excluded"
   future_private_sitemap_policy = "excluded"
   source_sitemap_admission = "exact"

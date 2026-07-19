@@ -40,7 +40,9 @@ def normalized_html(path: Path) -> str:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--candidate", required=True, type=Path)
+    parser.add_argument("--candidate-label", default="source-detail-candidate")
     parser.add_argument("--web-root", required=True, type=Path)
+    parser.add_argument("--web-root-label", default="web")
     parser.add_argument("--report", type=Path)
     return parser.parse_args()
 
@@ -120,9 +122,9 @@ def main() -> int:
 
     report = {
         "schema": "base2026.source-detail-v2-release-package-validation/v1",
-        "candidate": str(candidate),
+        "candidate": args.candidate_label,
         "candidate_manifest_sha256": sha256(manifest_path),
-        "web_root": str(web_root),
+        "web_root": args.web_root_label,
         "rendered_expected": len(rendered),
         "candidate_detail_files": len(candidate_files),
         "staged_detail_files": len(staged_files),
