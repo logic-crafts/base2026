@@ -26,6 +26,7 @@ APPLE_TOUCH_ASSET_PATH = "static/assets/alex-yarosh-apple-touch.png"
 SOCIAL_IMAGE_URL = "https://aggressorbulkit.online/knowledge/static/assets/alex-yarosh-avatar.png"
 SOCIAL_IMAGE_ALT = "Alex Yarosh profile photo"
 TWITTER_SITE = "@AleksejAros"
+OWNED_PUBLIC_HOSTS = {"aggressorbulkit.online", "www.aggressorbulkit.online"}
 PROJECT_NAV_LINKS = [
     ("search", "Search", ""),
     ("analytics", "Analytics", "analytics.html"),
@@ -1119,7 +1120,7 @@ def validate_nonsearch_research_boundary(markup: str, route_canonical: str) -> N
         scheme, hostname, path = resolve_href(href)
         if scheme not in {"http", "https"}:
             continue
-        if hostname != "aggressorbulkit.online":
+        if hostname not in OWNED_PUBLIC_HOSTS:
             continue
         if path == "/knowledge" or path.startswith("/knowledge/"):
             continue
@@ -1138,7 +1139,7 @@ def validate_nonsearch_research_boundary(markup: str, route_canonical: str) -> N
         if (
             "\\" not in (href := str(anchor.get("href") or ""))
             and (resolved := resolve_href(href))[0] in {"http", "https"}
-            and resolved[1] == "aggressorbulkit.online"
+            and resolved[1] in OWNED_PUBLIC_HOSTS
             and resolved[2] == "/knowledge/apply-research.html"
         )
     ]

@@ -258,6 +258,7 @@ def test_strict_source_detail_has_one_public_boundary_and_preserves_admission_me
         "../../../pricing/",
         "..\\..\\pricing/",
         "https://aggressorbulkit.online./pricing/",
+        "https://www.aggressorbulkit.online/pricing/",
         "%2e%2e/%2e%2e/%2e%2e/pricing/",
         "..%2f..%2f..%2fpricing/",
     ),
@@ -280,11 +281,13 @@ def test_nonsearch_generator_allows_relative_base_and_external_source_links() ->
         "Base and attributed external navigation remain available.",
         (
             '<article><a href="../methodology.html">Methodology</a>'
+            '<a href="https://www.aggressorbulkit.online/knowledge/source-policy.html">Source policy</a>'
             '<a href="https://www.tiktok.com/@fixture/video/123">Original source</a></article>'
         ),
         current="topics",
     )
     assert 'href="../methodology.html"' in rendered
+    assert 'href="https://www.aggressorbulkit.online/knowledge/source-policy.html"' in rendered
     assert 'href="https://www.tiktok.com/@fixture/video/123"' in rendered
 
 
