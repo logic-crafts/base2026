@@ -50,6 +50,9 @@ def test_hotfix_packager_uses_generic_closure_and_explicit_source_root() -> None
     source = SCRIPT.read_text(encoding="utf-8")
     assert "SourceDetailSourceRoot" in source
     assert "SourceAdmissionLedger" in source
+    assert "ProtectedSearchRoot" in source
+    assert "verify-base2026-search-preservation.py" in source
+    assert "SEARCH_SEMANTIC_ORACLE.json" in source
     assert "all_future_private_identifiers_absent_from_all_public_export_files" in source
     assert "base2026.source-admission-public-closure/v2" in source
     assert "AllowLegacySourceAdmissionClosureReceipt" in source
@@ -67,6 +70,7 @@ def test_hotfix_packager_normalizes_generator_pages_before_immutable_source_over
     source = SCRIPT.read_text(encoding="utf-8")
 
     normalize = 'python3 ./scripts/apply-alex-design-system-v2.py --web-root $WebRoot'
+    search_overlay = 'Copy-Item $SearchSource $SearchTarget -Force'
     overlay = '$CandidateSourceFiles | Copy-Item -Destination $ReleaseSources -Force'
     assert source.count(normalize) == 1
-    assert source.index(normalize) < source.index(overlay)
+    assert source.index(normalize) < source.index(search_overlay) < source.index(overlay)

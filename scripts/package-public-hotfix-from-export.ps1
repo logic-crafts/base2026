@@ -8,8 +8,10 @@ param(
   [string]$SourceAdmissionClosureReceipt = "",
   [string]$SourceAdmissionLedger = "./12_knowledge-base/sources/tiktok/source-admission.jsonl",
   [string]$SourceDetailSourceRoot = "./web/static",
+  [string]$ProtectedSearchRoot = "",
   [string]$SourceExportLabel = "accepted-public-export",
   [string]$SourceDetailSourceLabel = "accepted-public-source-root",
+  [string]$ProtectedSearchLabel = "accepted-search-root",
   [switch]$AllowLegacySourceAdmissionClosureReceipt
 )
 
@@ -17,6 +19,7 @@ $ErrorActionPreference = "Stop"
 $Root = Resolve-Path (Join-Path $PSScriptRoot "..")
 Set-Location $Root
 $StaticSitemapAdmission = Resolve-Path "./contracts/base2026-sitemap-static-routes.json"
+$ProtectedSearchContract = Resolve-Path "./contracts/base2026-search-protected-files.json"
 
 function Assert-NativeSuccess {
   param([string]$Label)
@@ -42,13 +45,25 @@ if ([string]::IsNullOrWhiteSpace($SourceDetailCandidate)) {
 if ([string]::IsNullOrWhiteSpace($SourceAdmissionClosureReceipt)) {
   throw "SourceAdmissionClosureReceipt is mandatory for the v4 data-preserving hotfix contract."
 }
+if ([string]::IsNullOrWhiteSpace($ProtectedSearchRoot)) {
+  throw "ProtectedSearchRoot is mandatory for the v4 Search-preserving hotfix contract."
+}
 
 $SourceExport = Resolve-Path $SourceExportRoot
 $ResolvedSourceDetailSourceRoot = Resolve-Path $SourceDetailSourceRoot
+$ResolvedProtectedSearchRoot = Resolve-Path $ProtectedSearchRoot
 if (-not (Test-Path $ResolvedSourceDetailSourceRoot -PathType Container)) {
   throw "SourceDetailSourceRoot must resolve to a directory."
 }
-foreach ($Label in @($SourceExportLabel, $SourceDetailSourceLabel)) {
+if (-not (Test-Path $ResolvedProtectedSearchRoot -PathType Container)) {
+  throw "ProtectedSearchRoot must resolve to a directory."
+}
+$ProtectedSearchContractJson = Get-Content $ProtectedSearchContract -Raw | ConvertFrom-Json
+if ($ProtectedSearchContractJson.schema -ne "base2026.search-protected-files/v1" -or $ProtectedSearchContractJson.files.Count -eq 0) {
+  throw "Protected Search contract is invalid."
+}
+$ProtectedSearchFiles = @($ProtectedSearchContractJson.files)
+foreach ($Label in @($SourceExportLabel, $SourceDetailSourceLabel, $ProtectedSearchLabel)) {
   if ($Label -notmatch '^[A-Za-z0-9._-]+$') {
     throw "Public input labels may contain only letters, numbers, dot, underscore, and dash."
   }
@@ -292,6 +307,16 @@ Assert-NativeSuccess "validate-source-detail-v2-full-candidate-before-package"
 python3 ./scripts/apply-alex-design-system-v2.py --web-root $WebRoot | Write-Output
 Assert-NativeSuccess "apply-alex-design-system-v2"
 
+foreach ($RelativeSearchFile in $ProtectedSearchFiles) {
+  $SearchSource = Join-Path $ResolvedProtectedSearchRoot $RelativeSearchFile
+  if (-not (Test-Path $SearchSource -PathType Leaf)) {
+    throw "Protected Search input is incomplete: $RelativeSearchFile"
+  }
+  $SearchTarget = Join-Path $WebRoot $RelativeSearchFile
+  New-Item -ItemType Directory -Force -Path (Split-Path $SearchTarget -Parent) | Out-Null
+  Copy-Item $SearchSource $SearchTarget -Force
+}
+
 $ReleaseSources = Join-Path $WebRoot "sources"
 $CandidateSourceFiles = @(Get-ChildItem -Path $CandidateSources -Filter "tiktok-video-*.html" -File -Force)
 $CandidateNames = @($CandidateSourceFiles | ForEach-Object { $_.Name } | Sort-Object)
@@ -365,12 +390,24 @@ Assert-NativeSuccess "validate-public-manifests"
 python3 @SitemapArgs --check-only | Write-Output
 Assert-NativeSuccess "validate-base2026-sitemap-contract"
 
+$SearchOracleReport = Join-Path $BuildRoot "search-semantic-oracle.json"
+python3 ./scripts/verify-base2026-search-preservation.py `
+  --contract $ProtectedSearchContract `
+  --source-root $ResolvedProtectedSearchRoot `
+  --staged-root $WebRoot `
+  --source-label $ProtectedSearchLabel `
+  --staged-label web `
+  --report $SearchOracleReport | Write-Output
+Assert-NativeSuccess "verify-base2026-search-preservation"
+$SearchOracleJson = Get-Content $SearchOracleReport -Raw | ConvertFrom-Json
+
 $SourceDetailPackageReport = Join-Path $BuildRoot "source-detail-v2-package-validation.json"
 python3 ./scripts/validate-source-detail-v2-release-package.py --candidate $ResolvedSourceDetailCandidate --candidate-label source-detail-candidate --web-root $WebRoot --web-root-label web --report $SourceDetailPackageReport | Write-Output
 Assert-NativeSuccess "validate-source-detail-v2-release-package"
 Copy-Item (Join-Path $ResolvedSourceDetailCandidate "candidate-manifest.json") (Join-Path $ReleaseRoot "SOURCE_DETAIL_V2_CANDIDATE_MANIFEST.json") -Force
 Copy-Item $SourceDetailPackageReport (Join-Path $ReleaseRoot "SOURCE_DETAIL_V2_PACKAGE_VALIDATION.json") -Force
 Copy-Item $StaticSitemapAdmission (Join-Path $ReleaseRoot "SITEMAP_STATIC_ADMISSION.json") -Force
+Copy-Item $SearchOracleReport (Join-Path $ReleaseRoot "SEARCH_SEMANTIC_ORACLE.json") -Force
 
 $Manifest = Get-Content (Join-Path $ExportRoot "manifest.json") -Raw
 $CandidateManifestHash = (Get-FileHash -Algorithm SHA256 (Join-Path $ResolvedSourceDetailCandidate "candidate-manifest.json")).Hash.ToLowerInvariant()
@@ -436,9 +473,18 @@ $PackageManifest = [ordered]@{
     future_private_policy = "excluded"
     global_exact_admission = $true
   }
+  search_protection = [ordered]@{
+    schema = "base2026.search-semantic-oracle/v1"
+    protected_search_root_label = $ProtectedSearchLabel
+    protected_file_count = [int]$SearchOracleJson.protected_file_count
+    search_oracle_sha256 = $SearchOracleJson.search_oracle_sha256
+    cache_bust_query_values_normalized = $true
+    semantic_oracle_match = ($SearchOracleJson.status -eq "PASS")
+  }
   required_contract_files = @(
     "SOURCE_DETAIL_V2_CANDIDATE_MANIFEST.json",
-    "SITEMAP_STATIC_ADMISSION.json"
+    "SITEMAP_STATIC_ADMISSION.json",
+    "SEARCH_SEMANTIC_ORACLE.json"
   )
   required_runtime_files = @(
     "web/index.html",
@@ -469,7 +515,7 @@ $PackageManifest = [ordered]@{
     "web/static/manifest.json",
     "public-data/tiktok/manifest.json",
     "public-data/tiktok/source_records.jsonl"
-  )
+  ) + @($ProtectedSearchFiles | ForEach-Object { "web/$_" })
 }
 $PackageManifest | ConvertTo-Json -Depth 8 | Set-Content -Path (Join-Path $ReleaseRoot "manifest.json") -Encoding UTF8
 

@@ -1,0 +1,25 @@
+{
+  "schema": "base2026.search-protected-files/v1",
+  "policy": "Preserve the accepted Search workspace exactly; only release cache-bust query values may change in HTML.",
+  "files": [
+    "index.html",
+    "search.html",
+    "search/index.html",
+    "static/alex-v4-static-shell-p4-local.css",
+    "static/alex-v4-static-shell.js",
+    "static/assets/alex-yarosh-apple-touch.png",
+    "static/assets/alex-yarosh-favicon-32.png",
+    "static/base2026-search-v1.css",
+    "static/base2026-search-v3.js",
+    "static/cookie-consent.js",
+    "static/meili.js",
+    "static/purify.min.js",
+    "static/purify.min.js.LICENSE.txt",
+    "static/share-actions.js",
+    "static/styles.css",
+    "static/vendor/geist-local.css",
+    "static/vendor/instant-meilisearch-1.0.0.min.js",
+    "static/vendor/instantsearch-4.106.0.min.js",
+    "static/vendor/instantsearch-reset-8.16.2.min.css"
+  ]
+}
