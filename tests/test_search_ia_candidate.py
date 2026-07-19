@@ -39,6 +39,7 @@ def test_search_ia_derivative_is_bounded_and_idempotent_for_css() -> None:
     assert "min-width:44px" in css
     assert "min-height:44px" in css
     assert "display:inline-flex!important" in css
+    assert "main :is(button,input:not([type=hidden]),select,textarea)" in css
     assert module.derive_css(css) == css
 
 
@@ -57,7 +58,7 @@ def test_all_protected_search_entrypoints_have_zero_persistent_apply_after_deriv
         assert all(handoff not in derived for handoff in module.DIRECT_PERSONAL_HANDOFFS), relative
 
     assert total_removed == 1
-    assert direct_handoffs_removed == 2
+    assert direct_handoffs_removed == len(module.DIRECT_PERSONAL_HANDOFFS)
 
 
 def test_derivative_preserves_honest_apply_research_bridge() -> None:
@@ -70,5 +71,5 @@ def test_derivative_preserves_honest_apply_research_bridge() -> None:
     derived, persistent_removed, handoffs_removed = module.derive_entrypoint(source)
 
     assert persistent_removed == 0
-    assert handoffs_removed == 2
+    assert handoffs_removed == len(module.DIRECT_PERSONAL_HANDOFFS)
     assert '<a href="./apply-research.html">Apply research</a>' in derived

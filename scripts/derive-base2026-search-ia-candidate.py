@@ -13,6 +13,7 @@ HEADER_APPLY_LINK = (
     '<span>Turn findings into visibility fixes.</span></a>'
 )
 DIRECT_PERSONAL_HANDOFFS = (
+    '<a href="/about/">Alex Yarosh</a>',
     '<a href="/ai-visibility-audit/">Check AI visibility</a>',
     '<a href="/ai-visibility-diagnostic-audit/">Diagnostic audit</a>',
 )
@@ -20,7 +21,9 @@ MENU_TARGET_RULE = (
     "\n/* Base2026 Search IA review: the protected mobile control is a real 44px target. */\n"
     "@media(max-width:1024px){body.ay-alex-v4-static .ay-v2-menu-toggle{"
     "display:inline-flex!important;min-width:44px!important;min-height:44px!important;"
-    "align-items:center;justify-content:center;padding:0 12px}}\n"
+    "align-items:center;justify-content:center;padding:0 12px}"
+    "body.ay-alex-v4-static main :is(button,input:not([type=hidden]),select,textarea){"
+    "min-width:44px!important;min-height:44px!important}}\n"
 )
 
 SEARCH_ENTRYPOINTS = frozenset({"index.html", "search.html", "search/index.html"})
@@ -112,7 +115,7 @@ def main() -> int:
         )
     if direct_personal_handoffs_removed != len(DIRECT_PERSONAL_HANDOFFS):
         raise SystemExit(
-            "Search IA source drift: expected exactly two direct personal audit handoffs "
+            "Search IA source drift: unexpected direct personal handoff count "
             f"across Search entrypoints, found {direct_personal_handoffs_removed}"
         )
 
@@ -124,7 +127,7 @@ def main() -> int:
         "candidate_oracle_sha256": tree_oracle(candidate_entries),
         "changes": {
             "persistent_apply_research_header_links_removed": persistent_apply_removed,
-            "direct_personal_audit_handoffs_removed": direct_personal_handoffs_removed,
+            "direct_personal_handoffs_removed": direct_personal_handoffs_removed,
             "apply_research_bridge_preserved": True,
             "mobile_menu_min_target_px": 44,
             "search_runtime_or_data_changed": False,
