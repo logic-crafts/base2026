@@ -22,13 +22,15 @@ def test_search_ia_derivative_is_bounded_and_idempotent_for_css() -> None:
     module = load_module()
     html = f"<header>{module.HEADER_APPLY_LINK}<a href='/knowledge/'>Search</a></header>"
 
-    derived, removed = module.derive_entrypoint(html)
+    derived, removed, handoffs_removed = module.derive_entrypoint(html)
     assert removed == 1
+    assert handoffs_removed == 0
     assert "apply-research" not in derived
     assert "Search" in derived
-    unchanged, removed = module.derive_entrypoint(derived)
+    unchanged, removed, handoffs_removed = module.derive_entrypoint(derived)
     assert unchanged == derived
     assert removed == 0
+    assert handoffs_removed == 0
 
     with pytest.raises(ValueError, match="contract drift"):
         module.derive_entrypoint(html + module.HEADER_APPLY_LINK)
@@ -44,11 +46,29 @@ def test_all_protected_search_entrypoints_have_zero_persistent_apply_after_deriv
     module = load_module()
     source_root = ROOT / ".planning" / "master-rebuild-production-source-20260718" / "web"
     total_removed = 0
+    direct_handoffs_removed = 0
 
     for relative in sorted(module.SEARCH_ENTRYPOINTS):
         source = (source_root / relative).read_text(encoding="utf-8")
-        derived, removed = module.derive_entrypoint(source)
+        derived, removed, removed_handoffs = module.derive_entrypoint(source)
         total_removed += removed
+        direct_handoffs_removed += removed_handoffs
         assert module.HEADER_APPLY_LINK not in derived, relative
+        assert all(handoff not in derived for handoff in module.DIRECT_PERSONAL_HANDOFFS), relative
 
     assert total_removed == 1
+    assert direct_handoffs_removed == 2
+
+
+def test_derivative_preserves_honest_apply_research_bridge() -> None:
+    module = load_module()
+    source = (
+        '<a href="./apply-research.html">Apply research</a>'
+        + "".join(module.DIRECT_PERSONAL_HANDOFFS)
+    )
+
+    derived, persistent_removed, handoffs_removed = module.derive_entrypoint(source)
+
+    assert persistent_removed == 0
+    assert handoffs_removed == 2
+    assert '<a href="./apply-research.html">Apply research</a>' in derived

@@ -12,6 +12,10 @@ HEADER_APPLY_LINK = (
     '<a href="/knowledge/apply-research.html"><strong>Apply Research</strong>'
     '<span>Turn findings into visibility fixes.</span></a>'
 )
+DIRECT_PERSONAL_HANDOFFS = (
+    '<a href="/ai-visibility-audit/">Check AI visibility</a>',
+    '<a href="/ai-visibility-diagnostic-audit/">Diagnostic audit</a>',
+)
 MENU_TARGET_RULE = (
     "\n/* Base2026 Search IA review: the protected mobile control is a real 44px target. */\n"
     "@media(max-width:1024px){body.ay-alex-v4-static .ay-v2-menu-toggle{"
@@ -36,15 +40,24 @@ def tree_oracle(files: list[tuple[str, bytes]]) -> str:
     return digest.hexdigest()
 
 
-def derive_entrypoint(source: str) -> tuple[str, int]:
-    """Remove only the persistent header link and reject duplicates or residue."""
+def derive_entrypoint(source: str) -> tuple[str, int, int]:
+    """Remove persistent/direct commercial links while preserving the Apply bridge."""
     count = source.count(HEADER_APPLY_LINK)
     if count > 1:
         raise ValueError("Search header Apply Research link contract drift")
     derived = source.replace(HEADER_APPLY_LINK, "", 1)
     if HEADER_APPLY_LINK in derived:
         raise ValueError("Search header Apply Research link remains")
-    return derived, count
+    direct_removed = 0
+    for handoff in DIRECT_PERSONAL_HANDOFFS:
+        handoff_count = derived.count(handoff)
+        if handoff_count > 1:
+            raise ValueError("Search direct personal handoff contract drift")
+        derived = derived.replace(handoff, "", 1)
+        direct_removed += handoff_count
+        if handoff in derived:
+            raise ValueError("Search direct personal handoff remains")
+    return derived, count, direct_removed
 
 
 def derive_css(source: str) -> str:
@@ -68,6 +81,7 @@ def main() -> int:
     source_entries: list[tuple[str, bytes]] = []
     candidate_entries: list[tuple[str, bytes]] = []
     persistent_apply_removed = 0
+    direct_personal_handoffs_removed = 0
     args.out.mkdir(parents=True)
     for relative in files:
         source = args.source_root / relative
@@ -78,8 +92,9 @@ def main() -> int:
         raw = source.read_bytes()
         source_entries.append((relative, raw))
         if relative in SEARCH_ENTRYPOINTS:
-            derived, removed = derive_entrypoint(raw.decode("utf-8"))
+            derived, removed, handoffs_removed = derive_entrypoint(raw.decode("utf-8"))
             persistent_apply_removed += removed
+            direct_personal_handoffs_removed += handoffs_removed
             output = derived.encode("utf-8")
             target.write_bytes(output)
         elif relative == "static/alex-v4-static-shell-p4-local.css":
@@ -95,6 +110,11 @@ def main() -> int:
             "Search IA source drift: expected exactly one persistent header Apply Research link "
             f"across Search entrypoints, found {persistent_apply_removed}"
         )
+    if direct_personal_handoffs_removed != len(DIRECT_PERSONAL_HANDOFFS):
+        raise SystemExit(
+            "Search IA source drift: expected exactly two direct personal audit handoffs "
+            f"across Search entrypoints, found {direct_personal_handoffs_removed}"
+        )
 
     manifest = {
         "schema": "base2026.search-ia-candidate/v1",
@@ -104,6 +124,8 @@ def main() -> int:
         "candidate_oracle_sha256": tree_oracle(candidate_entries),
         "changes": {
             "persistent_apply_research_header_links_removed": persistent_apply_removed,
+            "direct_personal_audit_handoffs_removed": direct_personal_handoffs_removed,
+            "apply_research_bridge_preserved": True,
             "mobile_menu_min_target_px": 44,
             "search_runtime_or_data_changed": False,
         },
@@ -114,7 +136,8 @@ def main() -> int:
     )
     print(
         f"protected_files={len(files)} candidate_oracle_sha256={manifest['candidate_oracle_sha256']} "
-        f"persistent_apply_removed={persistent_apply_removed} menu_target_px=44"
+        f"persistent_apply_removed={persistent_apply_removed} "
+        f"direct_personal_handoffs_removed={direct_personal_handoffs_removed} menu_target_px=44"
     )
     return 0
 

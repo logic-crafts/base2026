@@ -1,6 +1,6 @@
 {
   "schema": "base2026.search-protected-files/v1",
-  "policy": "Preserve the reviewed Search workspace derivative exactly: persistent Apply Research is removed from the header mega-navigation and the mobile Menu target is at least 44px; only release cache-bust query values may then change in HTML.",
+  "policy": "Preserve the reviewed Search workspace derivative exactly: persistent Apply Research is removed from the header mega-navigation, direct personal audit handoffs are removed from the Search workspace, the honest Apply Research bridge remains, and the mobile Menu target is at least 44px; only release cache-bust query values may then change in HTML.",
   "files": [
     "index.html",
     "search.html",
