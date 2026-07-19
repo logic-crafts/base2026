@@ -81,14 +81,18 @@ def test_governance_roadmap_and_support_component_selectors_are_closed() -> None
         "support-experience__intro",
         "support-lanes",
         "support-flow",
+    }
+    assert roadmap_classes <= class_tokens(rendered["roadmap.html"])
+    assert support_classes <= class_tokens(rendered["support.html"])
+    assert not {
         "base-contact-section",
         "base-contact-copy",
         "base-contact-form",
         "base-contact-form__full",
         "contact-email-link",
-    }
-    assert roadmap_classes <= class_tokens(rendered["roadmap.html"])
-    assert support_classes <= class_tokens(rendered["support.html"])
+    } & class_tokens(rendered["support.html"])
+    assert "Use the contact form below" not in rendered["support.html"]
+    assert 'href="mailto:offflinerpsy@gmail.com"' in rendered["support.html"]
 
     roadmap_js = (ROOT / "web/static/roadmap.js").read_text(encoding="utf-8")
     dynamic_roadmap_classes = {

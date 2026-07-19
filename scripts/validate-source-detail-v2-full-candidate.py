@@ -23,7 +23,7 @@ from bs4 import BeautifulSoup, Tag
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS = ROOT / "scripts"
 BASE_PRODUCT_FOOTER_TEMPLATE = ROOT / "templates" / "shared" / "base2026-product-footer.html"
-BASE_PRODUCT_FOOTER_TEMPLATE_SHA256 = "eedfc40b0ec59c5085703e5ba1d9fa0627d8ba0eb65a6ba998e18af2684046c6"
+BASE_PRODUCT_FOOTER_TEMPLATE_SHA256 = "31785636250a8afdd3b2dfe831ec5d11ae9141433547334e562431ba611779a7"
 sys.path.insert(0, str(SCRIPTS))
 from template_migration.source_detail import adapt_source_detail  # noqa: E402
 

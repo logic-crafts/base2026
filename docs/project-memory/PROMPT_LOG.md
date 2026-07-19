@@ -7314,3 +7314,24 @@ Verification:
 - No deploy, upload, corpus re-export, Meilisearch reindex, IndexNow, WordPress mutation, form submission, commit or push occurred.
 
 Supersession note (same Phase 0 cycle): the `230500` artifact and `65605625...` hash above are historical only. A package-wide follow-up found machine-local paths in inherited `SOURCE_DETAIL_V2_PACKAGE_VALIDATION.json`. The receipt was sanitized, a pointer-only audit across all package JSON was added, and deterministic replacement `base2026-phase0-p1-r6-preview-20260717-235500` was produced at SHA-256 `6ad17478944ffb14883b117dc4579b3c5099ad03fbf15ddec5760ee9ffd87087`; 18/18 JSON artifacts pass with zero machine-local/private-storage findings, full Python suite is 121/121, ZIP integrity and exact PlanOnly preflight pass. Only the replacement is current. Production remained unchanged.
+
+## 2026-07-18 — Base2026 Non-Search V2 visual and product-boundary P1
+
+Prompt: replace the mixed legacy/commercial presentation around the accepted Base2026 Search page with the compact Alex V4-derived research-product shell, fix the concrete mobile density defects, and prevent generator families from reintroducing personal-site sales navigation or repeated CTAs. Keep Search and production untouched.
+
+Actions:
+
+- Compacted Topics hub and Creator cards, normalized Topic stats, Source mobile handle/spacing and nested density, reduced Base mobile footer height, and restored a 19px Topic information glyph inside a transparent 44px target.
+- Corrected screenshot hygiene and the representative candidate's information architecture so screenshots use the same DOM transformation as packaging.
+- Migrated Info, AI Visibility, and Solution generators to the shared Base2026 product header/footer with the explicit route-level CTA policy.
+- Added a generated-output boundary that rejects direct non-`/knowledge/` personal-site links from Base2026 main content, permits no more than one contextual `B26-09`, and requires its optional Apply Research link to stay inside that bridge.
+- Removed duplicate Source Detail shell-runtime ownership.
+- Added regression tests for product-shell generator output, direct-offer rejection, CTA counts, and single runtime ownership.
+
+Verification:
+
+- Representative candidate: `.planning/nonsearch-v2-p1-final5-20260718`.
+- Browser evidence: `.planning/nonsearch-v2-p1-final5-evidence-r6-20260718`, `15/15` route/viewport checks. Top PNGs are captured before any scroll/menu/dialog interaction; the screenshot-only fixed-layer flatten is removed before the runtime sticky-header interaction check.
+- Full accepted-snapshot public-page generation completed with 1,692 sources, 1,162 topics, 1,162 compare pages, and 17 creator pages, proving the output-level research boundary across that corpus.
+- Focused and adjacent suite: `74 passed, 2 skipped`; Python compile, Node syntax check, and `git diff --check` passed.
+- No deploy, Search mutation, corpus re-export, Meilisearch reindex, IndexNow call, form submission, or indexability change occurred.

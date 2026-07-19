@@ -1713,3 +1713,21 @@ On the next resume, read only:
 5. this file
 
 Then run a bounded `git status`. Do not reread the full project-memory bundle unless a concrete gate fails.
+
+## 2026-07-18 — Non-Search V2 visual P1 and research-boundary closure
+
+Current verified preview state:
+
+- Topics hub, Topic detail, Creator, Source detail, and Compare representatives now use the compact Base2026 product shell across desktop, 390px, and 320px viewports.
+- Topic/Creator cards, Source handle and nested spacing, Topic stats, the 19px info glyph inside a 44px target, and the Base mobile footer are covered by the browser gate.
+- Info, AI Visibility, and Solution generators use the Base2026 product header/footer and route-level CTA policy. Governance/support routes contain no service bridge; research-bearing pages allow at most one contextual `B26-09`; only Apply Research may hand off directly once to `/ai-visibility-audit/`.
+- `generate-public-pages.py` rejects direct personal-site offer links inside generated Base2026 main content and enforces the contextual Apply Research boundary.
+- Source Detail owns one shell runtime script; duplicate legacy runtime loading is removed.
+- Exact local evidence: `.planning/nonsearch-v2-p1-final5-20260718` and `.planning/nonsearch-v2-p1-final5-evidence-r6-20260718`; browser gate `15/15`; focused/adjacent tests `74 passed, 2 skipped`; compile, Node syntax, and `git diff --check` pass.
+- Production, Search, Meilisearch, IndexNow, forms, and indexability were not changed.
+
+Next safe action:
+
+1. Commit and push this verified visual/product-boundary scope on `codex/base2026-master-rebuild-20260718`.
+2. Resume the full data-preserving candidate packager: bind the accepted production snapshot, generic future-private closure receipt, exact admission ledger, and `SourceDetailSourceRoot`; produce PlanOnly evidence only.
+3. Do not deploy or reindex from the packager lane until the parent release owner completes the combined candidate review.

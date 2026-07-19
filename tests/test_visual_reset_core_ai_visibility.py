@@ -173,14 +173,20 @@ def test_every_master_ai_visibility_page_renders_only_the_v2_system() -> None:
         assert "/knowledge/static/styles.css" not in rendered
         assert "fonts.googleapis.com" not in rendered
         assert 'class="ayds-root ayds-mode-editorial' in rendered
+        assert 'data-b26-visual-root="v2"' in rendered
+        assert rendered.count("data-b26-product-header") == 1
+        assert rendered.count("data-b26-product-footer") == 1
         assert 'class="b26-money-hero ayds-hero"' in rendered
-        assert 'class="b26-contact-layout ay-contact-layout ay-contact-layout-compact ayds-contact"' in rendered
-        assert 'name="action" value="ay_general_inquiry"' in rendered
-        assert 'name="ay_name"' in rendered
-        assert 'name="ay_email"' in rendered
-        assert 'name="ay_website"' in rendered
-        assert 'name="ay_message"' in rendered
-        assert 'data-cta="booking_click_base2026_ai_visibility"' in rendered
+        assert rendered.count('data-b26-component="B26-09"') == 1
+        assert rendered.count('href="/knowledge/apply-research.html"') == 1
+        assert "ay-v2-mega" not in rendered
+        assert "Send a message" not in rendered
+        assert "Prefer a call" not in rendered
+        assert 'action="/wp-admin/admin-post.php"' not in rendered
+        assert 'href="/ai-visibility-audit/"' not in rendered
+        assert 'href="/ai-visibility-diagnostic-audit/"' not in rendered
+        assert 'href="/services/"' not in rendered
+        assert 'href="/pricing/"' not in rendered
         assert rendered.count("<h1") == 1
         assert f'<link rel="canonical" href="{expected_canonical}"' in rendered
         assert 'meta name="robots" content="index,follow"' in rendered
@@ -196,6 +202,13 @@ def test_ai_visibility_collection_preserves_search_hooks_and_product_mode() -> N
     assert "/knowledge/static/styles.css" not in rendered
     assert "fonts.googleapis.com" not in rendered
     assert 'class="ayds-root ayds-mode-product' in rendered
+    assert 'data-b26-visual-root="v2"' in rendered
+    assert rendered.count("data-b26-product-header") == 1
+    assert rendered.count("data-b26-product-footer") == 1
+    assert rendered.count('data-b26-component="B26-09"') == 1
+    assert rendered.count('href="/knowledge/apply-research.html"') == 1
+    assert "ay-v2-mega" not in rendered
+    assert 'action="/wp-admin/admin-post.php"' not in rendered
     assert 'id="ai-lab-search-input"' in rendered
     assert "data-lab-card" in rendered
     assert "data-lab-grid" in rendered

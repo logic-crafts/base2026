@@ -69,7 +69,7 @@ def test_public_family_shell_uses_product_mode_and_brand_root() -> None:
     assert not soup.select_one('.ay-v2-base-mega')
 
 
-def test_governance_shell_uses_editorial_mode_and_shared_form() -> None:
+def test_governance_shell_uses_editorial_mode_and_base_product_boundary() -> None:
     module = load_script("base_info_visual_reset", "generate-info-pages.py")
     meta = dict(module.PAGE_MAP["05_SUPPORT_PAGE.md"])
     page = module.page_shell(meta, "Support Base2026", '<section class="doc-section"><h2>Support</h2></section>')
@@ -78,8 +78,12 @@ def test_governance_shell_uses_editorial_mode_and_shared_form() -> None:
     body_classes = soup.body.get("class") or []
     assert body_classes.count("ayds-mode-editorial") == 1
     assert "ayds-mode-product" not in body_classes
-    assert soup.select_one("form.ayds-form .ayds-field")
-    assert soup.select_one('button.ayds-btn--primary[type="submit"]')
+    assert soup.body.get("data-b26-visual-root") == "v2"
+    assert soup.select_one("header.b26-product-header[data-b26-product-header]")
+    assert soup.select_one("footer.b26-product-footer[data-b26-product-footer]")
+    assert not soup.select_one(".ay-v2-mega")
+    assert not soup.select_one('form[action="/wp-admin/admin-post.php"]')
+    assert not soup.select_one('[data-b26-component="B26-09"]')
 
 
 def test_source_template_has_one_visual_authority() -> None:

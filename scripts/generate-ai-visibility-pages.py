@@ -13,8 +13,11 @@ if str(SCRIPT_DIR) not in sys.path:
 
 from public_manifest_contract import PUBLIC_PAGE_MANIFEST_SCHEMA, relative_public_route_issue
 from alex_design_system_v2 import NON_SOURCE_DESIGN_VERSION
-from alex_v4_static_shell import footer_html as alex_footer_html
-from alex_v4_static_shell import header_html as alex_header_html
+from base2026_product_shell import footer_html as b26_product_footer_html
+from base2026_product_shell import header_html as b26_product_header_html
+from base2026_ui_system import stylesheet_tags as b26_stylesheet_tags
+from base2026_ui_system import visual_component_attributes as b26_visual_component_attributes
+from base2026_ui_system import visual_root_attributes as b26_visual_root_attributes
 
 STYLE_VERSION = NON_SOURCE_DESIGN_VERSION
 BASE_URL = "https://aggressorbulkit.online/knowledge/"
@@ -155,37 +158,6 @@ def social_meta(*, title: str, description: str, canonical: str, og_type: str = 
     <meta name="twitter:image" content="{image_e}" />"""
 
 
-def contact_section() -> str:
-    return """
-      <section class="b26-contact-section ayds-section ayds-contact-section" aria-label="Contact Alex Yarosh">
-        <div class="b26-contact-layout ay-contact-layout ay-contact-layout-compact ayds-contact">
-          <div class="b26-card b26-contact-form-card ay-card ay-contact-form-card ayds-card">
-            <h2>Send a message</h2>
-            <p>For partnerships, technical questions, Base2026, or non-audit requests, use this form.</p>
-            <form class="b26-form ay-form ay-general-form" method="post" action="/wp-admin/admin-post.php">
-              <input type="hidden" name="action" value="ay_general_inquiry" />
-              <label class="ayds-field">Name<input name="ay_name" autocomplete="name" placeholder="Enter your name" required /></label>
-              <label class="ayds-field">Email<input type="email" name="ay_email" autocomplete="email" placeholder="name@company.com" required /></label>
-              <label class="ayds-field">Website <span class="ay-optional-text">optional</span><input type="url" name="ay_website" inputmode="url" autocomplete="url" placeholder="https://example.com" /></label>
-              <label class="ayds-field">Your message<textarea name="ay_message" placeholder="What should we talk about?" required></textarea></label>
-              <button class="ayds-btn ayds-btn--primary" type="submit">Send Message</button>
-            </form>
-          </div>
-          <aside class="b26-card b26-contact-side ay-card ay-contact-side ay-calendar-card ayds-card">
-            <h2>Prefer a call?</h2>
-            <p>Send the business context, website URL, and what you want to improve first. If a call is useful, I will send the right Google Calendar slot.</p>
-            <div class="b26-calendar-booking-card ay-calendar-booking-card">
-              <p class="eyebrow ay-eyebrow ayds-eyebrow">Google Calendar</p>
-              <h3>Book a short visibility call.</h3>
-              <p>Pick a time if you want to talk through the business, website, and visibility problem directly.</p>
-              <a class="ay-button ay-button-small ayds-btn ayds-btn--primary ayds-btn--small" href="https://calendar.app.google/Cg2Hx6pgM5HH7K6T8" target="_blank" rel="noopener" data-cta="booking_click_base2026_ai_visibility">Open calendar</a>
-            </div>
-            <p class="ay-small">For full SEO, GEO, AEO, or AI visibility help, start with the free snapshot so the right details are captured.</p>
-          </aside>
-        </div>
-      </section>"""
-
-
 def cookie_banner_html() -> str:
     """Preserve the existing consent hooks while using the shared controls."""
     return """
@@ -294,10 +266,6 @@ def money_hero_section(page: dict, display_title: str, intro_html: str) -> str:
           <h1>{html.escape(display_title)}</h1>
           <p class="b26-money-hero__lead ayds-lead">{subcopy}</p>
           <div class="b26-money-hero__intro">{intro_html}</div>
-          <div class="b26-money-hero__actions ayds-actions">
-            <a class="ay-button ayds-btn ayds-btn--primary" href="/ai-visibility-audit/">Check My AI Visibility</a>
-            <a class="ay-button-secondary ayds-btn ayds-btn--secondary" href="/pricing/">View Pricing</a>
-          </div>
         </div>
         <aside class="b26-money-hero__panel ayds-card ayds-card--dark" aria-label="Visibility diagnostic panel">
           <p class="eyebrow ayds-eyebrow">Diagnostic panel</p>
@@ -342,11 +310,6 @@ def offer_fit_section(page: dict) -> str:
 <section class="content-section ayds-section b26-money-offer"><div><p class="eyebrow ayds-eyebrow">Offer fit</p><h2>Use this page when the business needs clarity before spend.</h2><p>This is for {html.escape(theme['audience'])} that need a better public footprint before buying more ads, citations, SEO content or redesign work.</p></div><ul><li>Good fit: unclear service pages, weak proof, poor AI/search understanding, thin internal links.</li><li>Not a fit: secret data, guaranteed rankings, fake authority, or publishing unreviewed source material.</li><li>Next step: start with a visibility snapshot, then route deeper issues into a diagnostic audit.</li></ul></section>"""
 
 
-def money_final_cta() -> str:
-    return """
-<section class="content-section ayds-section b26-money-final-cta ayds-card ayds-card--dark"><p class="eyebrow ayds-eyebrow">Next step</p><h2>Turn the page into a visibility system, not another SEO article.</h2><p>Send the site, market and service category. The first useful output is a clear visibility roadmap: what to fix, what to build, and what to measure.</p><div class="b26-money-final-cta__actions ayds-actions"><a class="ay-button ayds-btn ayds-btn--primary" href="/ai-visibility-audit/">Get My Free Roadmap</a><a class="ay-button-secondary ayds-btn ayds-btn--secondary" href="/ai-visibility-diagnostic-audit/">Request Diagnostic Audit</a><a class="ay-button-secondary ayds-btn ayds-btn--secondary" href="/pricing/">View Pricing</a></div></section>"""
-
-
 def render_content_sections(sections: list[tuple[str, str]]) -> str:
     return "\n".join(
         f'<section class="content-section ayds-section"><h2>{html.escape(heading)}</h2>{markdown_to_html(body)}</section>'
@@ -381,18 +344,14 @@ def boundary_section() -> str:
 <section class="content-section ayds-section"><h2>What this page is not</h2><ul><li>not a guarantee of rankings or AI mentions;</li><li>not a private analytics vault;</li><li>not a lead database;</li><li>not a replacement for a business-specific audit;</li><li>not a place to upload credentials, customer lists or confidential documents;</li><li>not generic SEO content pretending to be proof.</li></ul><p>Base2026 remains the public research layer. Alex Yarosh's site remains the conversion, audit and service layer.</p></section>"""
 
 
-def final_cta() -> str:
-    return """
-<section class="content-section ayds-section"><h2>Start with the first useful visibility check</h2><p>If the business is not easy to find, understand, verify or recommend, start with a free AI Visibility Snapshot. If the issue is deeper, move into a Diagnostic Audit before spending on more SEO pages, ads, citations or redesign work.</p><div class="ayds-actions"><a class="ayds-btn ayds-btn--primary" href="/ai-visibility-audit/">Check My AI Visibility</a><a class="ayds-btn ayds-btn--secondary" href="/ai-visibility-diagnostic-audit/">Request Diagnostic Audit</a><a class="ayds-btn ayds-btn--secondary" href="/pricing/">View Pricing</a></div></section>"""
-
-
-def owner_bridge() -> str:
-    """Keep the accepted owner message as a quiet research-to-service bridge."""
-    return """
-<aside class="ai-lab-owner-bridge ayds-card ayds-card--dark" aria-label="Apply the research">
-  <p class="ayds-eyebrow">Start with your visibility check.</p>
-  <p class="ai-lab-owner-bridge__statement"><span>YOU’RE ALREADY PAYING.</span><span>MAKE IT AN INVESTMENT.</span><span>DO SOMETHING BOLD - WITH ME.</span></p>
-</aside>"""
+def contextual_research_bridge() -> str:
+    return f"""
+<section class="content-section ayds-section b26-research-bridge" {b26_visual_component_attributes('B26-09', 'apply-research-bridge')}>
+  <p class="eyebrow ayds-eyebrow">Apply this research</p>
+  <h2>Use the public evidence before making a business-specific decision.</h2>
+  <p>Continue to Apply Research only when the question needs the website, market and competitive context. The research path remains complete without a service request.</p>
+  <a class="ay-button ayds-btn ayds-btn--primary" href="/knowledge/apply-research.html">Apply this research</a>
+</section>"""
 
 
 def should_noindex_page(page: dict, *, indexable_run: bool) -> bool:
@@ -433,12 +392,13 @@ def page_html(page: dict, *, noindex: bool, related_groups: list[tuple[str, list
     <link rel="icon" type="image/png" sizes="32x32" href="/knowledge/static/assets/alex-yarosh-favicon-32.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/knowledge/static/assets/alex-yarosh-apple-touch.png" />
     <link rel="stylesheet" href="{DESIGN_SYSTEM_HREF}" />
+{b26_stylesheet_tags('/knowledge')}
     <script src="{SHELL_SCRIPT_HREF}" defer></script>
   </head>
-  <body class="ayds-root ayds-mode-editorial ay-alex-v4-static ay-stitch-home-v3 ay-stitch-home-v4">
+  <body class="ayds-root ayds-mode-editorial ay-alex-v4-static ay-stitch-home-v3 ay-stitch-home-v4 b26-family-ai-visibility" {b26_visual_root_attributes('ai-visibility')}>
     <a class="skip-link" href="#content">Skip to content</a>
-{alex_header_html()}
-    <main id="content" class="app-shell content-page doc-page ai-visibility-page ayds-page">
+{b26_product_header_html()}
+    <main id="content" class="app-shell content-page doc-page ai-visibility-page ayds-page" data-b26-shell>
       <nav class="breadcrumbs ayds-breadcrumbs" aria-label="Breadcrumb"><a href="/knowledge/">Base2026</a><span aria-hidden="true">/</span><a href="/knowledge/ai-visibility-pages/">AI Visibility Lab</a><span aria-hidden="true">/</span><span aria-current="page">{html.escape(title)}</span></nav>
       {money_hero_section(page, display_title, intro_html)}
       {diagnostic_strip(page)}
@@ -450,10 +410,9 @@ def page_html(page: dict, *, noindex: bool, related_groups: list[tuple[str, list
       {offer_fit_section(page)}
       {boundary_section()}
       {related_html}
-      {money_final_cta()}
-      {contact_section()}
+      {contextual_research_bridge()}
     </main>
-{alex_footer_html()}
+{b26_product_footer_html()}
 {cookie_banner_html()}
   </body>
 </html>"""
@@ -505,12 +464,13 @@ def index_html(pages: list[dict], *, noindex: bool) -> str:
     <script type="application/ld+json">{schema}</script>
     <link rel="icon" type="image/png" sizes="32x32" href="/knowledge/static/assets/alex-yarosh-favicon-32.png" />
     <link rel="stylesheet" href="{DESIGN_SYSTEM_HREF}" />
+{b26_stylesheet_tags('/knowledge')}
     <script src="{SHELL_SCRIPT_HREF}" defer></script>
   </head>
-  <body class="ayds-root ayds-mode-product ay-alex-v4-static ay-stitch-home-v3 ay-stitch-home-v4">
+  <body class="ayds-root ayds-mode-product ay-alex-v4-static ay-stitch-home-v3 ay-stitch-home-v4 b26-family-ai-visibility" {b26_visual_root_attributes('ai-visibility')}>
     <a class="skip-link" href="#content">Skip to content</a>
-{alex_header_html()}
-    <main id="content" class="app-shell content-page doc-page ai-visibility-page ayds-page">
+{b26_product_header_html()}
+    <main id="content" class="app-shell content-page doc-page ai-visibility-page ayds-page" data-b26-shell>
       <nav class="breadcrumbs ayds-breadcrumbs" aria-label="Breadcrumb"><a href="/knowledge/">Base2026</a><span aria-hidden="true">/</span><span aria-current="page">AI Visibility Lab</span></nav>
       <section class="content-section ayds-section ayds-hero ai-pages-intro ai-lab-intro"><p class="eyebrow ayds-eyebrow">AI visibility lab</p><h1>AI Visibility Lab</h1><p class="ayds-lead">A searchable Base2026 playbook of practical questions, answers, source-backed findings and ready-to-use visibility workflows for local service businesses. This is where the strongest Base2026 AI-search research is organized for humans: marketers, founders, operators and business owners who need clear next steps.</p><div class="ai-lab-search ayds-card ayds-card--data" role="search"><label for="ai-lab-search-input">Search the lab</label><input id="ai-lab-search-input" type="search" placeholder="Search Bing, ChatGPT, roofing, reviews, service pages…" autocomplete="off" /><p><span data-lab-count>{len(hubs) + len(city_pages)}</span> lab entries visible</p></div></section>
       <section class="content-section ayds-section ai-pages-directory"><div class="ai-pages-section-head"><p class="eyebrow ayds-eyebrow">Best of Base2026</p><h2>Core AI visibility playbooks</h2><p>Commercial, practical pages grouped as lab cards: questions people actually ask, problems businesses actually face, and workflows that connect research to action.</p></div><div class="ai-pages-grid ai-pages-grid-main ayds-grid" data-lab-grid="main">{card_grid(hubs)}</div></section>
@@ -518,11 +478,9 @@ def index_html(pages: list[dict], *, noindex: bool) -> str:
       <section class="content-section ayds-section ai-pages-directory"><div class="ai-pages-section-head"><p class="eyebrow ayds-eyebrow">Market experiments</p><h2>City and niche AI visibility questions</h2><p>Local-intent lab entries stay discoverable for research and QA, while indexation is controlled until each market has enough unique local evidence.</p></div><div class="ai-pages-grid ai-pages-grid-compact ayds-grid" data-lab-grid="city">{card_grid(city_pages)}</div></section>
       {workflow_section()}
       {boundary_section()}
-      {final_cta()}
-      {owner_bridge()}
-      {contact_section()}
+      {contextual_research_bridge()}
     </main>
-{alex_footer_html()}
+{b26_product_footer_html()}
 {cookie_banner_html()}
   <script>
     (() => {{

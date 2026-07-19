@@ -22,6 +22,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS = ROOT / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
+from alex_design_system_v2 import apply_information_architecture  # noqa: E402
 from template_migration.source_detail import adapt_source_detail, render_source_detail  # noqa: E402
 
 
@@ -220,6 +221,11 @@ def build(args: argparse.Namespace) -> dict[str, object]:
     asset_hashes = copy_assets(site)
     route_rows = []
     for route, html in sorted(rendered.items()):
+        # The release packager applies the accepted information-architecture
+        # transform after generation.  Representative visual QA must exercise
+        # that same DOM (local navigation and bounded disclosures), otherwise
+        # Topics and Creator screenshots materially overstate page density.
+        html = apply_information_architecture(html, route)
         target = site / route
         generator.write_text(target, html)
         soup = BeautifulSoup(target.read_text(encoding="utf-8"), "html.parser")

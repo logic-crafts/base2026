@@ -122,7 +122,7 @@ class AIRecommendsSolutionTests(unittest.TestCase):
         self.assertNotIn("solution-step__number", html)
         self.assertIn('href="/knowledge/?q=example"', html)
         self.assertNotIn('data-research-bridge="solution_to_apply_research"', main)
-        self.assertNotIn('href="../apply-research.html"', main)
+        self.assertNotIn('href="/knowledge/apply-research.html"', main)
 
     def test_solution_css_implements_shared_v2_component_contract(self) -> None:
         css = (ROOT / "web/static/alex-design-system-v2.css").read_text(encoding="utf-8")
@@ -192,30 +192,40 @@ class AIRecommendsSolutionTests(unittest.TestCase):
         self.assertNotIn("http://", script)
         self.assertNotIn("https://", script)
 
-    def test_solution_shell_explains_base2026_jobs_and_names_apply_research(self) -> None:
+    def test_solution_shell_uses_compact_base_product_navigation(self) -> None:
         report = validate_solution(self.solution, self.context)
         html = generator.solution_page(self.solution, report)
         header = html.split("</header>", 1)[0]
-        self.assertIn("Search the library", header)
-        self.assertIn("Source Intelligence", header)
-        self.assertIn("Topics &amp; viewpoints", header)
-        self.assertIn("AI Recommends Solutions", header)
-        self.assertIn("Creators", header)
-        self.assertIn("Methodology", header)
-        self.assertIn("apply-research.html", header)
+        self.assertIn("data-b26-product-header", header)
+        self.assertIn('href="/knowledge/">Search</a>', header)
+        self.assertIn('href="/knowledge/topics/">Topics</a>', header)
+        self.assertIn('href="/knowledge/creators/">Creators</a>', header)
+        self.assertIn('href="/knowledge/solutions/">Solutions</a>', header)
+        self.assertIn('href="/knowledge/methodology.html">Methodology</a>', header)
+        self.assertNotIn("ay-v2-mega", header)
+        self.assertNotIn("apply-research.html", header)
 
     def test_indexable_solution_exposes_optional_apply_research_after_primary_research_action(self) -> None:
         report = validate_solution(self.solution, self.context)
         self.assertTrue(report["indexable"], report["errors"])
         html = generator.solution_page(self.solution, report)
         primary = 'href="/knowledge/?q=example"'
-        bridge = 'href="../apply-research.html"'
+        bridge = 'href="/knowledge/apply-research.html"'
         self.assertIn(primary, html)
         self.assertIn(bridge, html)
         self.assertLess(html.index(primary), html.index(bridge))
         self.assertIn('data-research-bridge="solution_to_apply_research"', html)
         self.assertIn('data-origin-id="example-solution"', html)
-        self.assertIn("Apply Research to a Business", html)
+        self.assertIn("Apply this research", html)
+        self.assertEqual(html.count('data-b26-component="B26-09"'), 1)
+        self.assertEqual(html.count(bridge), 1)
+        for forbidden in (
+            'href="/ai-visibility-audit/"',
+            'href="/ai-visibility-diagnostic-audit/"',
+            'href="/services/"',
+            'href="/pricing/"',
+        ):
+            self.assertNotIn(forbidden, html)
         self.assertIn("Optional: use this bridge only", html)
         self.assertIn("research path remains complete without a service request", html)
 

@@ -8,6 +8,8 @@ from html import escape, unescape
 from pathlib import Path
 from urllib.parse import urlencode, urlsplit
 
+from bs4 import BeautifulSoup, Tag
+
 from alex_design_system_v2 import VERSION as STYLE_VERSION
 from alex_design_system_v2 import apply_component_classes, stylesheet_href
 from alex_v4_static_shell import apply_alex_v4_shell
@@ -1071,7 +1073,55 @@ def page_shell(
         count=1,
         flags=re.I | re.S,
     )
-    return apply_component_classes(apply_alex_v4_shell(page, relative_root=relative_root, mode="product"))
+    rendered = apply_component_classes(
+        apply_alex_v4_shell(page, relative_root=relative_root, mode="product")
+    )
+    validate_nonsearch_research_boundary(rendered, canonical_path or title)
+    return rendered
+
+
+def validate_nonsearch_research_boundary(markup: str, route_label: str) -> None:
+    """Fail closed if a generated Base page bypasses Apply Research.
+
+    Header/footer trust links are owned by the product shell.  Inside ``main``
+    a Base route may navigate within ``/knowledge/``, use relative evidence
+    links, or open an attributed external source.  It must never jump directly
+    into a Personal-site offer, package, audit or service page.
+    """
+
+    soup = BeautifulSoup(markup, "html.parser")
+    main = soup.select_one("main")
+    if not isinstance(main, Tag):
+        raise ValueError(f"Base2026 route lacks <main>: {route_label}")
+    direct_personal: list[str] = []
+    for anchor in main.select("a[href]"):
+        href = str(anchor.get("href") or "").strip()
+        parsed = urlsplit(href)
+        if parsed.scheme or parsed.netloc or not parsed.path.startswith("/"):
+            continue
+        if parsed.path == "/knowledge" or parsed.path.startswith("/knowledge/"):
+            continue
+        direct_personal.append(href)
+    if direct_personal:
+        raise ValueError(
+            f"Base2026 route bypasses Apply Research ({route_label}): "
+            + ", ".join(sorted(set(direct_personal)))
+        )
+    bridges = main.select('[data-b26-component="B26-09"]')
+    if len(bridges) > 1:
+        raise ValueError(f"Base2026 route has duplicate B26-09 bridges: {route_label}")
+    apply_links = [
+        anchor
+        for anchor in main.select('a[href^="/knowledge/apply-research.html"]')
+        if urlsplit(str(anchor.get("href") or "")).path
+        == "/knowledge/apply-research.html"
+    ]
+    if len(apply_links) > 1:
+        raise ValueError(f"Base2026 route has duplicate Apply Research links: {route_label}")
+    if apply_links and not apply_links[0].find_parent(
+        attrs={"data-b26-component": "B26-09"}
+    ):
+        raise ValueError(f"Apply Research link is outside B26-09: {route_label}")
 
 
 def card(
@@ -1726,8 +1776,8 @@ def topic_contextual_research_link(topic_id: str, css_class: str = "ay-button") 
 
 
 def topic_bridge_action_link(topic_id: str, css_class: str, label: str, href: str) -> str:
-    if not is_queryless_audit_action(href):
-        return f'<a class="{escape(css_class)}" href="{escape(href)}">{escape(label)}</a>'
+    # Compatibility entry point for older traffic configs.  Every former
+    # package/service action now terminates at the same contextual Base bridge.
     return topic_contextual_research_link(topic_id, css_class)
 
 
@@ -1823,30 +1873,13 @@ def topic_money_bridge_section(
         ),
     }
     primary_action = topic_contextual_research_link(topic_id)
-    secondary_action = ""
-    if configured_bridge:
-        for prefix in ("primary", "secondary"):
-            action_label = str(configured_bridge.get(f"{prefix}_label") or "").strip()
-            action_href = str(configured_bridge.get(f"{prefix}_href") or "").strip()
-            if not action_label or not action_href:
-                continue
-            if is_queryless_audit_action(action_href) or is_apply_research_action(action_href):
-                continue
-            secondary_action = topic_bridge_action_link(
-                topic_id,
-                "ay-button-secondary",
-                action_label,
-                action_href,
-            )
-            break
-    secondary_markup = f"\n          {secondary_action}" if secondary_action else ""
     return f"""
       <section class="content-section topic-traffic-cta topic-contextual-bridge" data-topic-contextual-bridge="true" {b26_visual_component_attributes("B26-09", "topic-bridge")} aria-labelledby="topic-research-bridge-{escape(slug(topic_id))}">
         <p class="eyebrow">Research next step</p>
         <h2 id="topic-research-bridge-{escape(slug(topic_id))}">{escape(bridge.get('title') or 'Take this topic into a real decision')}</h2>
         <p class="section-helper">{escape(bridge.get('body') or 'Carry this attributed evidence into a business-specific research question before choosing an intervention.')}</p>
         <div class="hero-actions">
-          {primary_action}{secondary_markup}
+          {primary_action}
         </div>
       </section>
     """
@@ -2508,7 +2541,7 @@ def traffic_resources_page(topic_traffic_pages: dict, topics: list[dict]) -> str
         <p class=\"lead\">This library is the deeper evidence layer behind the main AI Visibility Pages hub. It keeps crawlable topic clusters, proof references, FAQs and internal links organized without competing with the primary visitor path.</p>
         <div class=\"hero-actions\">
           <a class=\"ay-button\" href=\"/knowledge/ai-visibility-pages/\">Open AI Visibility Pages</a>
-          <a class=\"ay-button-secondary\" href=\"/ai-visibility-audit/\">Get a free AI Visibility Snapshot</a>
+          <a class=\"ay-button-secondary\" href=\"/knowledge/topics/\">Browse evidence topics</a>
         </div>
       </section>
       <section class=\"content-section traffic-resource-summary\">
@@ -2521,12 +2554,12 @@ def traffic_resources_page(topic_traffic_pages: dict, topics: list[dict]) -> str
       </section>
       {''.join(cluster_sections)}
       <section class=\"content-section traffic-resource-cta\" {b26_visual_component_attributes("B26-09", "resource-bridge")}>
-        <p class=\"eyebrow\">From library to money pages</p>
-        <h2>Use the library as support, not the primary sales path.</h2>
-        <p>The main route for visitors is the AI Visibility Pages hub. This library stays indexable and useful for crawlers, researchers and internal linking, then routes qualified readers into the diagnostic/audit path.</p>
+        <p class=\"eyebrow\">Apply this research</p>
+        <h2>Carry public evidence into one bounded business question.</h2>
+        <p>The library remains useful on its own. Move to Apply Research only when the website, market and competitive context need to be examined together.</p>
         <div class=\"hero-actions\">
           <a class=\"ay-button\" href=\"/knowledge/ai-visibility-pages/\">Go to AI Visibility Pages</a>
-          <a class=\"ay-button-secondary\" href=\"/ai-visibility-diagnostic-audit/\">Run diagnostic audit</a>
+          <a class=\"ay-button-secondary\" href=\"/knowledge/apply-research.html\" data-research-bridge=\"library_to_apply_research\" data-origin-id=\"ai-visibility-library\">Apply this research</a>
         </div>
       </section>
     """

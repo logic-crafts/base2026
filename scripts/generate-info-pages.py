@@ -9,6 +9,11 @@ from pathlib import Path
 from alex_design_system_v2 import VERSION as STYLE_VERSION
 from alex_design_system_v2 import apply_component_classes, stylesheet_href
 from alex_v4_static_shell import apply_alex_v4_shell
+from base2026_product_shell import footer_html as b26_product_footer_html
+from base2026_product_shell import header_html as b26_product_header_html
+from base2026_ui_system import stylesheet_tags as b26_stylesheet_tags
+from base2026_ui_system import visual_component_attributes as b26_visual_component_attributes
+from base2026_ui_system import visual_root_attributes as b26_visual_root_attributes
 
 PAGE_MAP = {
     "00_METHODOLOGY.md": {
@@ -86,42 +91,17 @@ PAGE_MAP = {
 }
 
 
-CONTACT_EMAIL = "offflinerpsy@gmail.com"
 FAVICON_ASSET_PATH = "static/assets/alex-yarosh-favicon-32.png"
 APPLE_TOUCH_ASSET_PATH = "static/assets/alex-yarosh-apple-touch.png"
 SOCIAL_IMAGE_URL = "https://aggressorbulkit.online/knowledge/static/assets/alex-yarosh-avatar.png"
 SOCIAL_IMAGE_ALT = "Alex Yarosh profile photo"
 TWITTER_SITE = "@AleksejAros"
 
-PROJECT_NAV_LINKS = [
-    ("search", "Search", ""),
-    ("analytics", "Analytics", "analytics.html"),
-    ("api", "API", "api.html"),
-    ("apply", "Apply Research", "apply-research.html"),
-    ("ai_visibility_pages", "AI Visibility Pages", "ai-visibility-pages/"),
-    ("topics", "Topics", "topics/"),
-    ("creators", "Creators", "creators/"),
-    ("methodology", "Methodology", "methodology.html"),
-]
-
-
 def write_text(path: Path, text: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     text = "\n".join(line.rstrip() for line in text.splitlines()) + "\n"
     with path.open("w", encoding="utf-8", newline="\n") as handle:
         handle.write(text)
-
-FOOTER_LINKS = [
-    ("Roadmap", "./roadmap.html"),
-    ("Methodology", "./methodology.html"),
-    ("API & AI access", "./api.html"),
-    ("Apply research", "./apply-research.html"),
-    ("Source policy", "./source-policy.html"),
-    ("Privacy", "./privacy.html"),
-    ("Support", "./support.html"),
-    ("Creator Correction / Removal", "./opt-out.html"),
-]
-
 
 def favicon_links(relative_root: str = ".") -> str:
     return "\n".join(
@@ -168,11 +148,6 @@ def normalize_copy(value: str) -> str:
     return value
 
 
-def root_href(relative_root: str, target: str) -> str:
-    root = relative_root.rstrip("/")
-    return f"{root}/{target.lstrip('/')}"
-
-
 def nav_key_for_slug(slug_value: str) -> str:
     if slug_value == "roadmap.html":
         return "roadmap"
@@ -185,70 +160,6 @@ def nav_key_for_slug(slug_value: str) -> str:
     if slug_value == "apply-research.html":
         return "apply"
     return ""
-
-
-def base2026_dropdown(relative_root: str = ".", current: str = "") -> str:
-    links = []
-    for key, label, target in PROJECT_NAV_LINKS:
-        active = ' aria-current="page"' if key == current else ""
-        links.append(f'<a href="{html.escape(root_href(relative_root, target))}"{active}>{html.escape(label)}</a>')
-    return f"""
-          <div class="site-header__base">
-            <a class="site-header__link site-header__link--base2026" href="{html.escape(root_href(relative_root, ''))}" aria-haspopup="true">Base2026</a>
-            <div class="site-header__base-menu" aria-label="Base2026 navigation">
-              <span>Base2026 Library</span>
-              {''.join(links)}
-            </div>
-          </div>
-"""
-
-
-def header_nav_links(relative_root: str = ".", current: str = "") -> str:
-    return (
-        base2026_dropdown(relative_root, current)
-        + '<span class="site-header__nav-divider" aria-hidden="true"></span>'
-        + '<a class="site-header__link site-header__link--site" href="/services/">Services</a>'
-        + '<a class="site-header__link site-header__link--site" href="/pricing/">Pricing</a>'
-        + '<a class="site-header__link site-header__link--site" href="/about/">About</a>'
-    )
-
-
-def mobile_base2026_links(relative_root: str = ".", current: str = "") -> str:
-    links = []
-    for key, label, target in PROJECT_NAV_LINKS:
-        active = ' aria-current="page"' if key == current else ""
-        links.append(f'<a href="{html.escape(root_href(relative_root, target))}"{active}>{html.escape(label)}</a>')
-    return "".join(links)
-
-
-def site_header(relative_root: str = ".", current: str = "") -> str:
-    return f"""
-    <header class="site-header">
-      <div class="site-header__bar">
-        <a class="site-header__brand" href="/"><span class="site-header__avatar" aria-hidden="true"></span><span>Alex Yarosh</span></a>
-        <nav class="site-header__nav" aria-label="Base2026 navigation">
-          {header_nav_links(relative_root, current)}
-        </nav>
-        <a class="site-header__cta" href="/ai-visibility-audit/">Check My AI Visibility</a>
-        <details class="site-header__mobile-menu">
-          <summary aria-label="Open navigation"><span></span><span></span><span></span></summary>
-          <div class="site-header__mobile-panel">
-            <nav aria-label="Mobile navigation">
-              <details class="site-header__mobile-base" open>
-                <summary>Base2026</summary>
-                <div>{mobile_base2026_links(relative_root, current)}</div>
-              </details>
-              <strong class="mobile-menu-label">Alex Yarosh</strong>
-              <a href="/services/">Services</a>
-              <a href="/pricing/">Pricing</a>
-              <a href="/about/">About</a>
-              <a class="site-header__mobile-cta" href="/ai-visibility-audit/">Check My AI Visibility</a>
-            </nav>
-          </div>
-        </details>
-      </div>
-    </header>
-"""
 
 
 def base2026_breadcrumbs(title: str) -> str:
@@ -427,40 +338,33 @@ def cookie_consent_markup() -> str:
 	"""
 
 
-def contact_form_markup(kind: str) -> str:
-    subject = "Base2026 support request" if kind == "support" else "Base2026 roadmap feedback"
-    intro = (
-        "Send a correction, support note, sponsorship question, or source suggestion."
-        if kind == "support"
-        else "Send roadmap feedback, phase corrections, or a proposal for the next public build step."
+COMMERCIAL_LINK_RE = re.compile(
+    r'<a\b[^>]*\bhref=["\'](?:/ai-visibility-audit/|/ai-visibility-diagnostic-audit/|/services/|/pricing/)["\'][^>]*>(?P<label>.*?)</a>',
+    flags=re.IGNORECASE | re.DOTALL,
+)
+OPTIONAL_APPLY_RESEARCH_ROUTES = {"methodology.html", "story.html"}
+
+
+def remove_commercial_links(markup: str) -> str:
+    """Keep research copy while removing direct service jumps from Base pages."""
+
+    return COMMERCIAL_LINK_RE.sub(lambda match: match.group("label"), markup)
+
+
+def contextual_research_bridge(*, apply_route: bool) -> str:
+    href = "/ai-visibility-audit/" if apply_route else "/knowledge/apply-research.html"
+    label = "Start the visibility check" if apply_route else "Apply this research"
+    context = (
+        "This is the single optional handoff from public research to a business-specific visibility check."
+        if apply_route
+        else "Keep the evidence public; move to Apply Research only when the question becomes business-specific."
     )
     return f"""
-      <section class="base-contact-section" aria-labelledby="base-contact-title">
-        <div class="base-contact-copy">
-          <p class="eyebrow">Contact</p>
-          <h2 id="base-contact-title">Send the message.</h2>
-          <p>{html.escape(intro)}</p>
-          <a class="contact-email-link" href="mailto:{CONTACT_EMAIL}">{CONTACT_EMAIL}</a>
-        </div>
-        <form class="base-contact-form" action="mailto:{CONTACT_EMAIL}?subject={html.escape(subject).replace(' ', '%20')}" method="post" enctype="text/plain">
-          <label class="ayds-field">
-            <span>Your name</span>
-            <input name="name" autocomplete="name" placeholder="Your name" />
-          </label>
-          <label class="ayds-field">
-            <span>Email</span>
-            <input name="email" type="email" autocomplete="email" placeholder="you@example.com" required />
-          </label>
-          <label class="ayds-field">
-            <span>Website or source URL</span>
-            <input name="website_or_source" type="url" placeholder="https://example.com" />
-          </label>
-          <label class="base-contact-form__full ayds-field">
-            <span>Your message</span>
-            <textarea name="message" rows="6" placeholder="What should we talk about?" required></textarea>
-          </label>
-          <button class="ay-button" type="submit">Send Message</button>
-        </form>
+      <section class="content-section b26-research-bridge" {b26_visual_component_attributes('B26-09', 'apply-research-bridge')}>
+        <p class="eyebrow">Apply this research</p>
+        <h2>Move from public evidence to one bounded next step.</h2>
+        <p>{html.escape(context)}</p>
+        <a class="ay-button" href="{href}">{label}</a>
       </section>
 """
 
@@ -487,10 +391,8 @@ def page_shell(meta: dict[str, str], h1: str, body: str) -> str:
             "url": "https://aggressorbulkit.online/knowledge/",
         },
     }
-    footer_links = "\n".join(f'<a href="{href}">{label}</a>' for label, href in FOOTER_LINKS)
     roadmap_experience = ""
     support_experience = ""
-    contact_experience = ""
     script_tag = ""
     body_markup = body
     is_apply_research = meta["slug"] == "apply-research.html"
@@ -584,7 +486,6 @@ def page_shell(meta: dict[str, str], h1: str, body: str) -> str:
 """
         body_markup = f'<section class="roadmap-fallback" aria-label="Roadmap fallback details">{body}</section>'
         script_tag = f'\n    <script src="./static/roadmap.js?v={STYLE_VERSION}" defer></script>'
-        contact_experience = contact_form_markup("roadmap")
     if page_class == "support-page":
         support_experience = """
       <section class="support-experience" aria-labelledby="support-experience-title">
@@ -619,7 +520,12 @@ def page_shell(meta: dict[str, str], h1: str, body: str) -> str:
         </div>
       </section>
 """
-        contact_experience = contact_form_markup("support")
+    body_markup = remove_commercial_links(body_markup)
+    if page_class == "support-page":
+        body_markup = body_markup.replace("Use the contact form below or email ", "Email ")
+    research_bridge = ""
+    if is_apply_research or meta["slug"] in OPTIONAL_APPLY_RESEARCH_ROUTES:
+        research_bridge = contextual_research_bridge(apply_route=is_apply_research)
     page = f"""<!doctype html>
 <html lang="en">
   <head>
@@ -633,104 +539,29 @@ def page_shell(meta: dict[str, str], h1: str, body: str) -> str:
     <script type="application/ld+json">{json.dumps(schema, ensure_ascii=False)}</script>
 {favicon_links(".")}
     <link rel="stylesheet" href="{stylesheet_href('.')}" data-alex-design-system="v2" />
+{b26_stylesheet_tags('/knowledge')}
   </head>
-  <body class="{body_classes}">
+  <body class="{body_classes}" {b26_visual_root_attributes('governance')}>
     <a class="skip-link" href="#content">Skip to content</a>
-    {site_header(".", current_nav)}
-    <main id="content" class="app-shell content-page {page_class}">
+    {b26_product_header_html()}
+    <main id="content" class="app-shell content-page {page_class}" data-b26-shell>
       {base2026_breadcrumbs(title)}
       <section class="page-hero">
         <p class="eyebrow">{html.escape(eyebrow)}</p>
         <h1>{html.escape(normalize_copy(h1 or title))}</h1>
         <p class="lead">{html.escape(lead)}</p>
         <div class="hero-actions">
-          <a class="ay-button{' is-current' if current_nav == 'search' else ''}" href="./"{' aria-current="page"' if current_nav == 'search' else ''}>Search the library</a>
-          <a class="ay-button-secondary{' is-current' if current_nav == 'apply' else ''}" href="./apply-research.html"{' aria-current="page"' if current_nav == 'apply' else ''}>Apply research</a>
-          <a class="ay-button-secondary{' is-current' if current_nav == 'roadmap' else ''}" href="./roadmap.html"{' aria-current="page"' if current_nav == 'roadmap' else ''}>Roadmap</a>
-          <a class="ay-button-secondary{' is-current' if current_nav == 'support' else ''}" href="./support.html"{' aria-current="page"' if current_nav == 'support' else ''}>Support</a>
+          <a class="ay-button{' is-current' if current_nav == 'search' else ''}" href="/knowledge/"{' aria-current="page"' if current_nav == 'search' else ''}>Search the library</a>
+          <a class="ay-button-secondary{' is-current' if current_nav == 'roadmap' else ''}" href="/knowledge/roadmap.html"{' aria-current="page"' if current_nav == 'roadmap' else ''}>Roadmap</a>
+          <a class="ay-button-secondary{' is-current' if current_nav == 'support' else ''}" href="/knowledge/support.html"{' aria-current="page"' if current_nav == 'support' else ''}>Support</a>
         </div>
       </section>
       {roadmap_experience}
       {support_experience}
       {body_markup}
-      {contact_experience}
+      {research_bridge}
     </main>
-    <footer class="site-footer">
-      <div class="ay-wrap ay-footer-grid">
-        <section>
-          <p class="eyebrow">AI Search Visibility</p>
-          <h2>Search visibility for local service businesses</h2>
-          <p>We help local service businesses improve visibility across Google, ChatGPT, Gemini, Perplexity and AI-powered search through SEO, GEO, AEO, content, schema and trust signals.</p>
-          <div class="ay-actions">
-            <a class="ay-button" href="/ai-visibility-audit/">Get My Free Roadmap</a>
-            <a class="ay-button-secondary" href="/pricing/">View Pricing</a>
-            <a class="ay-button ay-button-base2026" href="/knowledge/">Base2026</a>
-          </div>
-          <div class="ay-footer-socials" aria-label="Social profiles">
-            <p class="ay-footer-socials__label">Socials</p>
-            <div class="ay-footer-socials__links">
-              <a class="ay-social-link" href="https://x.com/AleksejAros" target="_blank" rel="me noopener noreferrer" aria-label="Alex Yarosh on X" title="X">
-                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.9 2h3.3l-7.2 8.2L23.5 22h-6.7l-5.2-6.8L5.6 22H2.3l7.7-8.8L1.9 2h6.8l4.7 6.2L18.9 2Zm-1.2 17.9h1.8L7.7 4H5.8l11.9 15.9Z"/></svg>
-              </a>
-              <span class="ay-social-link ay-social-link--disabled" aria-label="TikTok profile coming soon" title="TikTok profile coming soon">
-                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12.5 2c1.2 0 2.4 0 3.6-.1.1 1.5.6 2.9 1.7 4 1.1 1 2.5 1.5 4 1.7v3.8c-1.4 0-2.7-.3-4-.9-.5-.2-1-.5-1.5-.9v7.7c-.1 1.3-.5 2.6-1.3 3.7-1.2 1.8-3.3 3-5.5 3-1.3.1-2.7-.3-3.8-1-1.9-1.1-3.2-3.2-3.4-5.4v-1.4c.2-1.8 1-3.5 2.4-4.7 1.5-1.4 3.7-2 5.8-1.6v4.2c-.9-.3-2-.2-2.8.3-.6.4-1 1-1.3 1.7-.2.5-.1 1-.1 1.5.2 1.5 1.7 2.8 3.3 2.7 1 0 2-.6 2.6-1.5.2-.3.4-.6.4-1 .1-1.7.1-3.4.1-5.1V2Z"/></svg>
-              </span>
-              <a class="ay-social-link" href="https://github.com/offflinerpsy" target="_blank" rel="me noopener noreferrer" aria-label="Alex Yarosh on GitHub" title="GitHub">
-                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .5A11.5 11.5 0 0 0 8.36 22.9c.58.11.8-.25.8-.56v-2.02c-3.25.71-3.94-1.38-3.94-1.38-.53-1.35-1.3-1.71-1.3-1.71-1.06-.73.08-.72.08-.72 1.18.08 1.8 1.21 1.8 1.21 1.04 1.79 2.74 1.27 3.41.97.11-.76.41-1.27.74-1.56-2.59-.29-5.31-1.3-5.31-5.76 0-1.27.45-2.31 1.2-3.13-.12-.29-.52-1.48.12-3.09 0 0 .98-.31 3.21 1.19A11.08 11.08 0 0 1 12 5.96c.99 0 1.98.13 2.91.39 2.22-1.5 3.2-1.19 3.2-1.19.64 1.61.24 2.8.12 3.09.75.82 1.2 1.86 1.2 3.13 0 4.47-2.73 5.46-5.33 5.75.42.36.79 1.08.79 2.17v3.04c0 .31.21.68.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg>
-              </a>
-            </div>
-          </div>
-        </section>
-        <nav aria-label="Footer services">
-          <h3>Services</h3>
-          <ul class="ay-footer-menu">
-            <li><a href="/ai-visibility-diagnostic-audit/">AI Visibility Diagnostic Audit</a></li>
-            <li><a href="/technical-seo-geo-foundation/">Technical SEO &amp; GEO Foundation</a></li>
-            <li><a href="/answer-ready-service-pages/">Answer-Ready Service Pages</a></li>
-            <li><a href="/entity-trust-source-intelligence/">Entity, Trust &amp; Source Intelligence</a></li>
-            <li><a href="/services/#local-seo">Local SEO &amp; Citations</a></li>
-            <li><a href="/services/#monitoring">AI Visibility Monitoring</a></li>
-          </ul>
-        </nav>
-        <nav aria-label="Footer start here">
-          <h3>Start Here</h3>
-          <ul class="ay-footer-menu">
-            <li><a href="/services/">Services</a></li>
-            <li><a href="/pricing/">Pricing</a></li>
-            <li><a href="/#how-it-works">Process / How It Works</a></li>
-            <li><a href="/ai-visibility-audit/">Free AI Visibility Snapshot</a></li>
-          </ul>
-        </nav>
-        <nav aria-label="Footer Base2026">
-          <h3>Base2026 Pilot Project</h3>
-          <p>Independent experimental startup product: a searchable knowledge base for short-form expert video.</p>
-          <ul class="ay-footer-menu">
-            <li><a href="./">Search Base2026</a></li>
-            <li><a href="./api.html">API &amp; AI access</a></li>
-            <li><a href="./apply-research.html">Apply research</a></li>
-            <li><a href="./roadmap.html">Roadmap</a></li>
-            <li><a href="./topics/">Topics</a></li>
-            <li><a href="./creators/">Creators</a></li>
-            <li><a href="./story.html">Project Story</a></li>
-            <li><a href="./methodology.html">Methodology</a></li>
-            <li><a href="./support.html">Support</a></li>
-          </ul>
-        </nav>
-        <nav aria-label="Footer legal and trust">
-          <h3>Legal &amp; Trust</h3>
-          <ul class="ay-footer-menu">
-            <li><a href="/privacy-policy/">Privacy Policy</a></li>
-            <li><button type="button" class="footer-link-button" data-cookie-preferences>Cookie Preferences</button></li>
-            <li><a href="./source-policy.html">Source &amp; Content Policy</a></li>
-            <li><a href="./opt-out.html">Creator Correction / Removal</a></li>
-            <li><a href="mailto:{CONTACT_EMAIL}">{CONTACT_EMAIL}</a></li>
-          </ul>
-        </nav>
-      </div>
-      <div class="ay-footer-bottom">
-        <span>&copy; 2026 Logic Crafts LLC, Kyrgyzstan. Base2026 was created by Alex Yarosh as an independent experimental startup product. It is not a marketing agency and not a marketing-services offering.</span>
-      </div>
-    </footer>
+    {b26_product_footer_html()}
     {cookie_consent_markup()}
     {script_tag}
   </body>

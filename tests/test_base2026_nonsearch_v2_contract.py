@@ -4,6 +4,7 @@ import importlib.util
 import sys
 from pathlib import Path
 
+import pytest
 from bs4 import BeautifulSoup
 
 
@@ -54,6 +55,12 @@ def assert_product_shell(soup: BeautifulSoup) -> None:
     assert "Logic Crafts LLC, Kyrgyzstan" in soup.select_one("footer").get_text(" ", strip=True)
     assert not soup.select_one("footer .ay-footer-grid")
     assert len(soup.select('[data-b26-component="B26-09"]')) <= 1
+    assert not soup.select_one('header a[href="/knowledge/apply-research.html"]')
+    assert not soup.select_one('footer a[href="/knowledge/apply-research.html"]')
+    for anchor in soup.select(
+        "header[data-b26-product-header] a[href], footer[data-b26-product-footer] a[href]"
+    ):
+        assert str(anchor.get("href") or "").startswith("/")
 
 
 def topic_fixture() -> dict:
@@ -173,6 +180,11 @@ def test_creator_analytics_and_resources_use_semantic_cards_and_metrics() -> Non
     assert resources_soup.select_one('[data-b26-component="B26-05"][data-b26-variant="topic-resource-card"]')
     assert resources_soup.select_one('[data-b26-component="B26-07"][data-b26-variant="resource-metrics"]')
     assert resources_soup.select_one('[data-b26-component="B26-09"][data-b26-variant="resource-bridge"]')
+    assert len(resources_soup.select('main a[href^="/knowledge/apply-research.html"]')) == 1
+    assert not resources_soup.select(
+        'main a[href^="/services/"], main a[href^="/pricing/"], '
+        'main a[href^="/ai-visibility-audit/"], main a[href^="/ai-visibility-diagnostic-audit/"]'
+    )
 
 
 def test_strict_source_detail_has_one_public_boundary_and_preserves_admission_metadata(tmp_path: Path) -> None:
@@ -235,6 +247,17 @@ def test_strict_source_detail_has_one_public_boundary_and_preserves_admission_me
     validator = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(validator)
     assert validator.validate_shared_footer_contract(tmp_path, view.route) == []
+
+
+def test_nonsearch_generator_fails_closed_on_direct_personal_offer_link() -> None:
+    module = generator()
+    with pytest.raises(ValueError, match="bypasses Apply Research"):
+        module.index_page(
+            "Unsafe fixture",
+            "A direct package jump must never survive Base generation.",
+            '<article><a href="/pricing/">View pricing</a></article>',
+            current="topics",
+        )
 
 
 def test_search_stays_visual_control_and_keeps_exact_metadata() -> None:

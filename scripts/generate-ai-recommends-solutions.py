@@ -12,6 +12,9 @@ from alex_design_system_v2 import VERSION as DESIGN_SYSTEM_VERSION
 from alex_design_system_v2 import apply_component_classes, stylesheet_href
 from alex_v4_static_shell import apply_alex_v4_shell, shell_js
 from base2026_ai_recommends_core import build_public_context, read_json, validate_payload
+from base2026_product_shell import footer_html as b26_product_footer_html
+from base2026_product_shell import header_html as b26_product_header_html
+from base2026_ui_system import visual_component_attributes as b26_visual_component_attributes
 
 PUBLIC_PAGES_PATH = Path(__file__).with_name("generate-public-pages.py")
 SPEC = importlib.util.spec_from_file_location("base2026_public_pages", PUBLIC_PAGES_PATH)
@@ -41,6 +44,14 @@ SHARED_STYLESHEET_RE = re.compile(
     r"""<link\b[^>]*alex-design-system-v2\.css[^>]*>""",
     re.IGNORECASE,
 )
+CANONICAL_HEADER_RE = re.compile(
+    r'<header\b(?=[^>]*\bclass=["\'][^"\']*\bay-v2-header\b[^"\']*["\'])[^>]*>.*?</header>',
+    re.IGNORECASE | re.DOTALL,
+)
+CANONICAL_FOOTER_RE = re.compile(
+    r'<footer\b(?=[^>]*\bclass=["\'][^"\']*\bay-site-footer\b[^"\']*["\'])[^>]*>.*?</footer>',
+    re.IGNORECASE | re.DOTALL,
+)
 FORBIDDEN_PUBLIC_ASSET_MARKERS = (
     "ai-recommends-solutions.css",
     "base2026-interior-v1.css",
@@ -52,9 +63,17 @@ FORBIDDEN_PUBLIC_ASSET_MARKERS = (
 
 
 def apply_solution_design_system(page: str) -> str:
-    """Apply the canonical Alex shell and leave exactly one shared stylesheet."""
+    """Apply shared runtime assets while enforcing the Base product shell."""
 
     rendered = apply_alex_v4_shell(page, relative_root="..", mode="product")
+    rendered, header_count = CANONICAL_HEADER_RE.subn(
+        lambda _match: b26_product_header_html(), rendered, count=1
+    )
+    rendered, footer_count = CANONICAL_FOOTER_RE.subn(
+        lambda _match: b26_product_footer_html(), rendered, count=1
+    )
+    if header_count != 1 or footer_count != 1:
+        raise ValueError("Solution page is missing a unique Base product shell boundary")
     rendered = SHARED_STYLESHEET_RE.sub("\n", rendered)
     rendered = LEGACY_STYLESHEET_RE.sub("\n", rendered)
     shared_link = (
@@ -77,6 +96,8 @@ def apply_solution_design_system(page: str) -> str:
         raise ValueError(f"Solution page retains legacy public assets: {', '.join(leaked)}")
     if rendered.count("alex-design-system-v2.css") != 1:
         raise ValueError("Solution page must reference exactly one shared design-system stylesheet")
+    if rendered.count("data-b26-product-header") != 1 or rendered.count("data-b26-product-footer") != 1:
+        raise ValueError("Solution page must contain exactly one canonical Base product header and footer")
     return rendered
 
 
@@ -290,9 +311,9 @@ def solution_page(solution: dict[str, Any], report: dict[str, Any]) -> str:
     bridge_html = ""
     if report.get("indexable"):
         bridge_html = (
-            '<a class="ay-button-secondary" href="../apply-research.html" '
+            '<a class="ay-button-secondary" href="/knowledge/apply-research.html" '
             'data-research-bridge="solution_to_apply_research" '
-            f'data-origin-id="{escape(str(solution.get("slug") or ""))}">Apply Research to a Business</a>'
+            f'data-origin-id="{escape(str(solution.get("slug") or ""))}">Apply this research</a>'
             '<p class="solution-next-action__boundary">Optional: use this bridge only when the public research needs business-specific diagnosis. '
             'The Base2026 research path remains complete without a service request.</p>'
         )
@@ -372,7 +393,7 @@ def solution_page(solution: dict[str, Any], report: dict[str, Any]) -> str:
         </div>
       </section>
 
-      <section class="content-section solution-next-action">
+      <section class="content-section solution-next-action" {b26_visual_component_attributes('B26-09', 'solution-research-bridge')}>
         <p class="eyebrow">Continue in Base2026</p>
         <h2>Open the evidence behind this decision.</h2>
         <p>Continue in the main Search workspace, inspect related source records, and refine the decision before implementation.</p>

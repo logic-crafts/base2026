@@ -194,6 +194,16 @@ def adapt_source_detail(
         'link[href*="fonts.googleapis.com"], link[href*="fonts.gstatic.com"]'
     ):
         external_font.decompose()
+    # The strict V2 base template owns these runtime hooks.  Legacy pages may
+    # already include the shell script in <head>; carrying it forward would
+    # register the mobile-menu handler twice and make one click toggle open and
+    # immediately closed.
+    for owned_script in soup.select(
+        'head script[src*="alex-v4-static-shell.js"], '
+        'head script[src*="cookie-consent.js"], '
+        'head script[src*="source-detail-v2.js"]'
+    ):
+        owned_script.decompose()
 
     hero = _required(soup.select_one(".source-page-hero"), ".source-page-hero")
     identity = _required(hero.select_one(".source-identity"), ".source-identity")

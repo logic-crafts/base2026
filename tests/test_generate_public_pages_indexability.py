@@ -226,7 +226,7 @@ class TopicSemanticContractTests(unittest.TestCase):
         self.assertIn("Compare source-backed creator viewpoints", compare_html)
         self.assertIn("?compare=content-repurposing", compare_html)
 
-    def test_topic_bridge_routes_only_queryless_audit_action_to_contextual_research(self) -> None:
+    def test_topic_bridge_routes_every_offer_action_to_one_contextual_research_link(self) -> None:
         bridge = {
             "title": "Apply this evidence honestly",
             "body": "Use the research context before selecting a commercial package.",
@@ -248,10 +248,8 @@ class TopicSemanticContractTests(unittest.TestCase):
         self.assertIn('data-origin-id="content-repurposing"', html)
         self.assertIn(">Apply this research</a>", html)
         self.assertNotIn(">Start an audit</a>", html)
-        self.assertIn(
-            'href="/ai-visibility-audit/?offer=diagnostic_audit">Request Diagnostic Audit</a>',
-            html,
-        )
+        self.assertNotIn("/ai-visibility-audit/", html)
+        self.assertNotIn("Request Diagnostic Audit", html)
 
         sources = [self.source("source:alpha", "tjrobertson52")]
         insights = [self.insight("source:alpha", "tjrobertson52", "one")]
@@ -264,7 +262,8 @@ class TopicSemanticContractTests(unittest.TestCase):
         )
         self.assertEqual(rendered.count('data-topic-contextual-bridge="true"'), 1)
         self.assertEqual(rendered.count('data-research-bridge="topic_to_apply_research"'), 1)
-        self.assertEqual(rendered.count("Request Diagnostic Audit</a>"), 1)
+        self.assertNotIn("Request Diagnostic Audit</a>", rendered)
+        self.assertNotIn("/ai-visibility-audit/", rendered)
 
     def test_default_topic_page_ends_with_one_contextual_research_bridge(self) -> None:
         sources = [self.source("source:alpha", "tjrobertson52")]

@@ -1,9 +1,6 @@
 from __future__ import annotations
 
-import importlib.util
-import json
 import os
-import sys
 from pathlib import Path
 
 import pytest
@@ -11,19 +8,6 @@ from bs4 import BeautifulSoup
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SCRIPTS = ROOT / "scripts"
-sys.path.insert(0, str(SCRIPTS))
-
-
-def load_generator():
-    spec = importlib.util.spec_from_file_location(
-        "topic_contextual_bridge_corpus", SCRIPTS / "generate-public-pages.py"
-    )
-    assert spec and spec.loader
-    module = importlib.util.module_from_spec(spec)
-    sys.modules[spec.name] = module
-    spec.loader.exec_module(module)
-    return module
 
 
 @pytest.fixture
@@ -44,15 +28,6 @@ def section_heading(section) -> str:
 def test_frozen_corpus_has_exactly_one_contextual_bridge_per_public_topic(
     topic_corpus_web_root: Path,
 ) -> None:
-    generator = load_generator()
-    config = json.loads(
-        (ROOT / "data" / "base2026_topic_traffic_pages.json").read_text(
-            encoding="utf-8"
-        )
-    )
-    explicitly_configured = {
-        topic_id for topic_id, row in config.items() if (row or {}).get("cta")
-    } | set(generator.TOPIC_MONEY_BRIDGE_COPY)
     pages = sorted(
         path
         for path in (topic_corpus_web_root / "topics").glob("*.html")
@@ -86,6 +61,4 @@ def test_frozen_corpus_has_exactly_one_contextual_bridge_per_public_topic(
         ]
         assert evidence_indexes and max(evidence_indexes) < bridge_index, topic_id
 
-        secondary = bridges[0].select(".hero-actions > .ay-button-secondary")
-        if secondary:
-            assert topic_id in explicitly_configured, topic_id
+        assert not bridges[0].select(".hero-actions > .ay-button-secondary"), topic_id
