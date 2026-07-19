@@ -286,16 +286,17 @@ python3 ./scripts/validate-source-detail-v2-full-candidate.py --candidate $Resol
 Assert-NativeSuccess "validate-source-detail-v2-full-candidate-before-package"
 
 $ReleaseSources = Join-Path $WebRoot "sources"
-$CandidateNames = @(Get-ChildItem -Path $CandidateSources -Filter "tiktok-video-*.html" -File | ForEach-Object { $_.Name } | Sort-Object)
+$CandidateSourceFiles = @(Get-ChildItem -Path $CandidateSources -Filter "tiktok-video-*.html" -File -Force)
+$CandidateNames = @($CandidateSourceFiles | ForEach-Object { $_.Name } | Sort-Object)
 $ReleaseNames = @(Get-ChildItem -Path $ReleaseSources -Filter "tiktok-video-*.html" -File | ForEach-Object { $_.Name } | Sort-Object)
 $SourceNameDiff = @(Compare-Object -ReferenceObject $CandidateNames -DifferenceObject $ReleaseNames)
 if ($SourceNameDiff.Count -ne 0) {
   $DiffPreview = ($SourceNameDiff | Select-Object -First 20 | Out-String)
   throw "Source Detail V2 candidate/release route membership differs before overlay:`n$DiffPreview"
 }
-Copy-Item (Join-Path $CandidateSources "tiktok-video-*.html") $ReleaseSources -Force
+$CandidateSourceFiles | Copy-Item -Destination $ReleaseSources -Force
 
-Get-ChildItem -Path $CandidateStatic -Recurse -File | ForEach-Object {
+Get-ChildItem -Path $CandidateStatic -Recurse -File -Force | ForEach-Object {
   $RelativeAsset = [System.IO.Path]::GetRelativePath($CandidateStatic, $_.FullName)
   $TargetAsset = Join-Path $StaticRoot $RelativeAsset
   New-Item -ItemType Directory -Force -Path (Split-Path $TargetAsset -Parent) | Out-Null

@@ -57,4 +57,7 @@ def test_hotfix_packager_uses_generic_closure_and_explicit_source_root() -> None
     assert "public_effect_verification_field" in source
     assert "--source-root $ResolvedSourceDetailSourceRoot" in source
     assert '$SourceAdmissionLedgerPath = Resolve-Path $SourceAdmissionLedger' in source
+    assert '$CandidateSourceFiles = @(Get-ChildItem -Path $CandidateSources -Filter "tiktok-video-*.html" -File -Force)' in source
+    assert '$CandidateSourceFiles | Copy-Item -Destination $ReleaseSources -Force' in source
+    assert 'Get-ChildItem -Path $CandidateStatic -Recurse -File -Force' in source
     assert "Source export: $SourceExport" not in source
