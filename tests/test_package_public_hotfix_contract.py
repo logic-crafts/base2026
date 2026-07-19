@@ -74,3 +74,11 @@ def test_hotfix_packager_normalizes_generator_pages_before_immutable_source_over
     overlay = '$CandidateSourceFiles | Copy-Item -Destination $ReleaseSources -Force'
     assert source.count(normalize) == 1
     assert source.index(normalize) < source.index(search_overlay) < source.index(overlay)
+
+
+def test_release_cache_bust_preserves_immutable_source_detail_candidate_html() -> None:
+    source = SCRIPT.read_text(encoding="utf-8")
+
+    assert '$IsImmutableSourceDetail = $_.DirectoryName -eq $ReleaseSources' in source
+    assert '$_.Name -like "tiktok-video-*.html"' in source
+    assert "if (-not $IsImmutableSourceDetail)" in source

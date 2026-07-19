@@ -364,20 +364,23 @@ $VersionedAssets = @(
   "roadmap.js"
 )
 Get-ChildItem -Path $WebRoot -Recurse -Filter "*.html" | ForEach-Object {
-  $PageHtml = Get-Content -Path $_.FullName -Raw
-  foreach ($Asset in $VersionedAssets) {
-    $EscapedAsset = [regex]::Escape($Asset)
-    $AssetPattern = "(?i)(href|src)=`"([^`"]*static/$EscapedAsset)\?v=[^`"]*`""
-    $PageHtml = [regex]::Replace($PageHtml, $AssetPattern, {
-      param($Match)
-      $Match.Groups[1].Value + '="' + $Match.Groups[2].Value + "?v=$CacheBust" + '"'
-    })
+  $IsImmutableSourceDetail = $_.DirectoryName -eq $ReleaseSources -and $_.Name -like "tiktok-video-*.html"
+  if (-not $IsImmutableSourceDetail) {
+    $PageHtml = Get-Content -Path $_.FullName -Raw
+    foreach ($Asset in $VersionedAssets) {
+      $EscapedAsset = [regex]::Escape($Asset)
+      $AssetPattern = "(?i)(href|src)=`"([^`"]*static/$EscapedAsset)\?v=[^`"]*`""
+      $PageHtml = [regex]::Replace($PageHtml, $AssetPattern, {
+        param($Match)
+        $Match.Groups[1].Value + '="' + $Match.Groups[2].Value + "?v=$CacheBust" + '"'
+      })
+    }
+    [System.IO.File]::WriteAllText(
+      $_.FullName,
+      $PageHtml,
+      [System.Text.UTF8Encoding]::new($false)
+    )
   }
-  [System.IO.File]::WriteAllText(
-    $_.FullName,
-    $PageHtml,
-    [System.Text.UTF8Encoding]::new($false)
-  )
 }
 
 python3 ./scripts/validate-public-manifests.py `
