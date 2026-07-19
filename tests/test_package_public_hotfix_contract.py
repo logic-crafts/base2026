@@ -61,3 +61,12 @@ def test_hotfix_packager_uses_generic_closure_and_explicit_source_root() -> None
     assert '$CandidateSourceFiles | Copy-Item -Destination $ReleaseSources -Force' in source
     assert 'Get-ChildItem -Path $CandidateStatic -Recurse -File -Force' in source
     assert "Source export: $SourceExport" not in source
+
+
+def test_hotfix_packager_normalizes_generator_pages_before_immutable_source_overlay() -> None:
+    source = SCRIPT.read_text(encoding="utf-8")
+
+    normalize = 'python3 ./scripts/apply-alex-design-system-v2.py --web-root $WebRoot'
+    overlay = '$CandidateSourceFiles | Copy-Item -Destination $ReleaseSources -Force'
+    assert source.count(normalize) == 1
+    assert source.index(normalize) < source.index(overlay)

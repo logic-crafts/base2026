@@ -285,6 +285,13 @@ if ($SourceDetailCandidateManifestJson.expected.'200:normal_public_card' -ne $So
 python3 ./scripts/validate-source-detail-v2-full-candidate.py --candidate $ResolvedSourceDetailCandidate --source-root $ResolvedSourceDetailSourceRoot | Write-Output
 Assert-NativeSuccess "validate-source-detail-v2-full-candidate-before-package"
 
+# Normalize generator-owned pages before overlaying the already validated,
+# immutable Source Detail candidate. Running this transform after the overlay
+# would mutate every candidate page and break the candidate/package hash
+# contract for changes unrelated to the approved cache-bust.
+python3 ./scripts/apply-alex-design-system-v2.py --web-root $WebRoot | Write-Output
+Assert-NativeSuccess "apply-alex-design-system-v2"
+
 $ReleaseSources = Join-Path $WebRoot "sources"
 $CandidateSourceFiles = @(Get-ChildItem -Path $CandidateSources -Filter "tiktok-video-*.html" -File -Force)
 $CandidateNames = @($CandidateSourceFiles | ForEach-Object { $_.Name } | Sort-Object)
@@ -302,8 +309,6 @@ Get-ChildItem -Path $CandidateStatic -Recurse -File -Force | ForEach-Object {
   New-Item -ItemType Directory -Force -Path (Split-Path $TargetAsset -Parent) | Out-Null
   Copy-Item $_.FullName $TargetAsset -Force
 }
-python3 ./scripts/apply-alex-design-system-v2.py --web-root $WebRoot | Write-Output
-Assert-NativeSuccess "apply-alex-design-system-v2"
 python3 ./scripts/check-public-content-readiness.py --data-root $ExportRoot --latest 1 --web-root $WebRoot --allow-generated-noindex --fail | Write-Output
 Assert-NativeSuccess "check-public-content-readiness-generated"
 Get-ChildItem -Path "./web/static" -Filter "indexnow-*.txt" -File -ErrorAction SilentlyContinue | ForEach-Object {
