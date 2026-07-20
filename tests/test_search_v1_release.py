@@ -61,6 +61,7 @@ def test_canonical_search_runtime_and_generated_links_use_query_string_routes() 
     finally:
         sys.path.remove(str(scripts_dir))
     source = (root / "web" / "static" / "index.html").read_text(encoding="utf-8")
+    assert source.index("purify.min.js") < source.index("meili.js")
     transformed = generator.transform(source)
     assert './#search?' not in transformed
     assert './?q=AI%20Overviews' in transformed
