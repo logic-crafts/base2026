@@ -27,7 +27,12 @@ def normalized_fragment(markup: str) -> str:
 def sync(web_root: Path, footer: str, *, check: bool = False) -> dict[str, int]:
     """Validate then optionally replace the unique footer on every HTML file."""
 
-    pages = sorted(web_root.rglob("*.html"))
+    all_html = sorted(web_root.rglob("*.html"))
+    # macOS AppleDouble metadata can accompany a transfer as `._page.html`.
+    # It is not public content and must neither be admitted nor block the real
+    # release corpus.
+    pages = [page for page in all_html if not page.name.startswith("._")]
+    skipped_metadata = len(all_html) - len(pages)
     if not pages:
         raise ValueError(f"No HTML pages found below {web_root}")
 
@@ -57,7 +62,12 @@ def sync(web_root: Path, footer: str, *, check: bool = False) -> dict[str, int]:
         for page, rendered in updates:
             page.write_text(rendered, encoding="utf-8", errors="surrogateescape")
 
-    return {"pages": len(pages), "changed": len(updates), "invalid": 0}
+    return {
+        "pages": len(pages),
+        "changed": len(updates),
+        "invalid": 0,
+        "skipped_metadata": skipped_metadata,
+    }
 
 
 def main() -> int:
@@ -86,13 +96,14 @@ def main() -> int:
     if args.check and result["changed"]:
         print(
             "global_footer_release_sync=drift "
-            f"pages={result['pages']} changed={result['changed']} invalid=0",
+            f"pages={result['pages']} changed={result['changed']} invalid=0 skipped_metadata={result['skipped_metadata']}",
             file=sys.stderr,
         )
         return 3
     print(
         "global_footer_release_sync=ok "
-        f"pages={result['pages']} changed={result['changed']} invalid=0 check={str(args.check).lower()}"
+        f"pages={result['pages']} changed={result['changed']} invalid=0 "
+        f"skipped_metadata={result['skipped_metadata']} check={str(args.check).lower()}"
     )
     return 0
 

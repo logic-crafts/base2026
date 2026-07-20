@@ -28,7 +28,7 @@ def test_sync_replaces_every_unique_footer_without_touching_content(tmp_path: Pa
 
     result = module.sync(web, FOOTER)
 
-    assert result == {"pages": 2, "changed": 2, "invalid": 0}
+    assert result == {"pages": 2, "changed": 2, "invalid": 0, "skipped_metadata": 0}
     assert first.read_text(encoding="utf-8") == '<main>Search</main>' + FOOTER
     assert second.read_text(encoding="utf-8") == '<main>Evidence</main>' + FOOTER
 
@@ -62,6 +62,18 @@ def test_sync_preserves_legacy_non_utf8_document_bytes(tmp_path: Path) -> None:
 
     result = module.sync(web, FOOTER)
 
-    assert result == {"pages": 1, "changed": 1, "invalid": 0}
+    assert result == {"pages": 1, "changed": 1, "invalid": 0, "skipped_metadata": 0}
     assert b"\xa3 historical byte" in page.read_bytes()
     assert FOOTER.encode("utf-8") in page.read_bytes()
+
+
+def test_sync_skips_mac_metadata_without_relaxing_real_page_admission(tmp_path: Path) -> None:
+    module = load_module()
+    web = tmp_path / "web"
+    web.mkdir()
+    (web / "page.html").write_text('<main>Page</main><footer>old</footer>', encoding="utf-8")
+    (web / "._page.html").write_bytes(b"AppleDouble metadata")
+
+    result = module.sync(web, FOOTER)
+
+    assert result == {"pages": 1, "changed": 1, "invalid": 0, "skipped_metadata": 1}
