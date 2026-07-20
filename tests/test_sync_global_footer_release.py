@@ -51,3 +51,17 @@ def test_sync_is_an_atomic_stop_gate_for_missing_or_duplicate_footers(tmp_path: 
         raise AssertionError("missing footer must block the entire release")
 
     assert valid.read_text(encoding="utf-8") == before
+
+
+def test_sync_preserves_legacy_non_utf8_document_bytes(tmp_path: Path) -> None:
+    module = load_module()
+    web = tmp_path / "web"
+    web.mkdir()
+    page = web / "legacy.html"
+    page.write_bytes(b'<main>\xa3 historical byte</main><footer class="old">old</footer>')
+
+    result = module.sync(web, FOOTER)
+
+    assert result == {"pages": 1, "changed": 1, "invalid": 0}
+    assert b"\xa3 historical byte" in page.read_bytes()
+    assert FOOTER.encode("utf-8") in page.read_bytes()

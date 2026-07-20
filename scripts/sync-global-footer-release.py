@@ -34,7 +34,10 @@ def sync(web_root: Path, footer: str, *, check: bool = False) -> dict[str, int]:
     updates: list[tuple[Path, str]] = []
     invalid: list[str] = []
     for page in pages:
-        source = page.read_text(encoding="utf-8")
+        # A small number of historical admitted documents carry legacy bytes in
+        # otherwise valid HTML. Surrogate escaping preserves those bytes exactly
+        # while allowing the structural footer replacement to stay UTF-8.
+        source = page.read_text(encoding="utf-8", errors="surrogateescape")
         footer_count = len(FOOTER_RE.findall(source))
         if footer_count != 1:
             invalid.append(f"{page.relative_to(web_root)} ({footer_count} footers)")
@@ -52,7 +55,7 @@ def sync(web_root: Path, footer: str, *, check: bool = False) -> dict[str, int]:
 
     if not check:
         for page, rendered in updates:
-            page.write_text(rendered, encoding="utf-8")
+            page.write_text(rendered, encoding="utf-8", errors="surrogateescape")
 
     return {"pages": len(pages), "changed": len(updates), "invalid": 0}
 
