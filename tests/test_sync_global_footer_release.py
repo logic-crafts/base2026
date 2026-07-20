@@ -28,7 +28,13 @@ def test_sync_replaces_every_unique_footer_without_touching_content(tmp_path: Pa
 
     result = module.sync(web, FOOTER)
 
-    assert result == {"pages": 2, "changed": 2, "invalid": 0, "skipped_metadata": 0}
+    assert result == {
+        "pages": 2,
+        "changed": 2,
+        "invalid": 0,
+        "skipped_metadata": 0,
+        "skipped_redirects": 0,
+    }
     assert first.read_text(encoding="utf-8") == '<main>Search</main>' + FOOTER
     assert second.read_text(encoding="utf-8") == '<main>Evidence</main>' + FOOTER
 
@@ -62,7 +68,13 @@ def test_sync_preserves_legacy_non_utf8_document_bytes(tmp_path: Path) -> None:
 
     result = module.sync(web, FOOTER)
 
-    assert result == {"pages": 1, "changed": 1, "invalid": 0, "skipped_metadata": 0}
+    assert result == {
+        "pages": 1,
+        "changed": 1,
+        "invalid": 0,
+        "skipped_metadata": 0,
+        "skipped_redirects": 0,
+    }
     assert b"\xa3 historical byte" in page.read_bytes()
     assert FOOTER.encode("utf-8") in page.read_bytes()
 
@@ -76,4 +88,46 @@ def test_sync_skips_mac_metadata_without_relaxing_real_page_admission(tmp_path: 
 
     result = module.sync(web, FOOTER)
 
-    assert result == {"pages": 1, "changed": 1, "invalid": 0, "skipped_metadata": 1}
+    assert result == {
+        "pages": 1,
+        "changed": 1,
+        "invalid": 0,
+        "skipped_metadata": 1,
+        "skipped_redirects": 0,
+    }
+
+
+def test_sync_allows_only_the_noindex_search_redirect_without_a_footer(tmp_path: Path) -> None:
+    module = load_module()
+    web = tmp_path / "web"
+    web.mkdir()
+    (web / "search.html").write_text(
+        """<meta name="robots" content="noindex,follow">
+        <script>location.replace('/knowledge/' + location.search)</script>""",
+        encoding="utf-8",
+    )
+    (web / "page.html").write_text('<main>Page</main><footer>old</footer>', encoding="utf-8")
+
+    result = module.sync(web, FOOTER)
+
+    assert result == {
+        "pages": 2,
+        "changed": 1,
+        "invalid": 0,
+        "skipped_metadata": 0,
+        "skipped_redirects": 1,
+    }
+
+
+def test_sync_does_not_allow_an_arbitrary_noindex_page_without_a_footer(tmp_path: Path) -> None:
+    module = load_module()
+    web = tmp_path / "web"
+    web.mkdir()
+    (web / "hidden.html").write_text('<meta name="robots" content="noindex"><main>Hidden</main>', encoding="utf-8")
+
+    try:
+        module.sync(web, FOOTER)
+    except ValueError as error:
+        assert "hidden.html (0 footers)" in str(error)
+    else:  # pragma: no cover - assertion clarity
+        raise AssertionError("arbitrary noindex pages must remain blocked")

@@ -16,12 +16,20 @@ from pathlib import Path
 
 
 FOOTER_RE = re.compile(r"<footer\b[^>]*>.*?</footer>", re.IGNORECASE | re.DOTALL)
+NOINDEX_RE = re.compile(r'<meta\b[^>]*\bname=["\']robots["\'][^>]*\bcontent=["\'][^"\']*\bnoindex\b', re.IGNORECASE)
+REDIRECT_RE = re.compile(r"location\.replace\(\s*['\"]/knowledge/", re.IGNORECASE)
 
 
 def normalized_fragment(markup: str) -> str:
     """Compare the generated footer semantically without formatting churn."""
 
     return re.sub(r">\s+<", "><", markup.strip())
+
+
+def is_noindex_search_redirect(source: str) -> bool:
+    """Allow only the historic noindex `/knowledge/search` redirect shell."""
+
+    return bool(NOINDEX_RE.search(source) and REDIRECT_RE.search(source))
 
 
 def sync(web_root: Path, footer: str, *, check: bool = False) -> dict[str, int]:
@@ -38,12 +46,16 @@ def sync(web_root: Path, footer: str, *, check: bool = False) -> dict[str, int]:
 
     updates: list[tuple[Path, str]] = []
     invalid: list[str] = []
+    skipped_redirects = 0
     for page in pages:
         # A small number of historical admitted documents carry legacy bytes in
         # otherwise valid HTML. Surrogate escaping preserves those bytes exactly
         # while allowing the structural footer replacement to stay UTF-8.
         source = page.read_text(encoding="utf-8", errors="surrogateescape")
         footer_count = len(FOOTER_RE.findall(source))
+        if footer_count == 0 and is_noindex_search_redirect(source):
+            skipped_redirects += 1
+            continue
         if footer_count != 1:
             invalid.append(f"{page.relative_to(web_root)} ({footer_count} footers)")
             continue
@@ -67,6 +79,7 @@ def sync(web_root: Path, footer: str, *, check: bool = False) -> dict[str, int]:
         "changed": len(updates),
         "invalid": 0,
         "skipped_metadata": skipped_metadata,
+        "skipped_redirects": skipped_redirects,
     }
 
 
@@ -96,14 +109,16 @@ def main() -> int:
     if args.check and result["changed"]:
         print(
             "global_footer_release_sync=drift "
-            f"pages={result['pages']} changed={result['changed']} invalid=0 skipped_metadata={result['skipped_metadata']}",
+            f"pages={result['pages']} changed={result['changed']} invalid=0 "
+            f"skipped_metadata={result['skipped_metadata']} skipped_redirects={result['skipped_redirects']}",
             file=sys.stderr,
         )
         return 3
     print(
         "global_footer_release_sync=ok "
         f"pages={result['pages']} changed={result['changed']} invalid=0 "
-        f"skipped_metadata={result['skipped_metadata']} check={str(args.check).lower()}"
+        f"skipped_metadata={result['skipped_metadata']} skipped_redirects={result['skipped_redirects']} "
+        f"check={str(args.check).lower()}"
     )
     return 0
 
