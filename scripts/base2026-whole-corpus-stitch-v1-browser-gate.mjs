@@ -63,7 +63,7 @@ const SAMPLES = [
   { family: "topic-index", route: "topics/index.html", required: ".b26-k-directory-grid", minDisclosures: 1, maxVisibleRepeated: 12 },
   { family: "creator-index", route: "creators/index.html", required: ".b26-k-directory-grid", minDisclosures: 1, maxVisibleRepeated: 12 },
   { family: "source-index", route: "sources/index.html", required: ".b26-k-directory-grid", minDisclosures: 1, maxVisibleRepeated: 12 },
-  { family: "document", route: "methodology.html", required: ".b26-k-document-layout" },
+  { family: "document", route: "methodology.html", required: ".b26-k-document-body", documentContext: true, noDocumentRail: true },
   { family: "ai-visibility", route: "ai-visibility-pages/index.html", required: ".b26-k-reading-page", minDisclosures: 2, maxVisibleRepeated: 12 },
   { family: "ai-visibility", route: "ai-visibility-audit-for-local-service-businesses/index.html", required: ".b26-money-hero" },
   { family: "article", route: "roadmap-dataviz-test.html", required: "main.b26-k-article" },
@@ -118,7 +118,7 @@ async function main() {
           await page.waitForLoadState("networkidle", { timeout: 10000 }).catch(() => {});
           await page.waitForTimeout(350);
 
-          diagnostics = await page.evaluate(({ family, required, width, height }) => {
+          diagnostics = await page.evaluate(({ family, required, documentContext, noDocumentRail, width, height }) => {
             const header = document.querySelector("header.ay-v2-header");
             const headerShell = document.querySelector(".ay-v2-header-shell");
             const main = document.querySelector("main.b26-k-main");
@@ -157,6 +157,8 @@ async function main() {
               main_classes: main?.className || "",
               canonical_shell: Boolean(header && headerShell && footer),
               required_component: Boolean(requiredNode),
+              document_context: !documentContext || Boolean(document.querySelector(".page-hero .hero-actions .b26-k-document-context[role='note']")),
+              document_rail_absent: !noDocumentRail || !document.querySelector(".b26-k-document-rail,.ayds-document-rail,.b26-k-document-layout,.ayds-document-layout"),
               legacy_shell_count: document.querySelectorAll("header.site-header,footer.site-footer").length,
               knowledge_css: [...document.styleSheets].some((sheet) => sheet.href?.includes("base2026-knowledge-stitch-v1.css")),
               client_width: document.documentElement.clientWidth,
@@ -179,7 +181,7 @@ async function main() {
               cookie_background: bannerStyle?.backgroundColor || "",
               cookie_title_color: titleStyle?.color || "",
             };
-          }, { family: sample.family, required: sample.required, width: viewport.width, height: viewport.height });
+          }, { family: sample.family, required: sample.required, documentContext: Boolean(sample.documentContext), noDocumentRail: Boolean(sample.noDocumentRail), width: viewport.width, height: viewport.height });
 
           if (status !== 200) failures.push(`document status ${status}, expected 200`);
           if (!diagnostics.canonical_shell) failures.push("canonical header/footer shell missing");
@@ -187,6 +189,8 @@ async function main() {
           if (!diagnostics.body_classes.includes(`b26-family-${sample.family}`)) failures.push(`family class b26-family-${sample.family} missing`);
           if (!diagnostics.main_classes.includes("b26-k-main")) failures.push("b26-k-main class missing");
           if (!diagnostics.required_component) failures.push(`required component ${sample.required} missing`);
+          if (!diagnostics.document_context) failures.push("document context is not placed in hero actions");
+          if (!diagnostics.document_rail_absent) failures.push("legacy document rail/layout remains");
           if (diagnostics.legacy_shell_count) failures.push(`${diagnostics.legacy_shell_count} legacy shell node(s) remain`);
           if (!diagnostics.knowledge_css) failures.push("whole-corpus Stitch stylesheet not loaded");
           if (diagnostics.overflow_x) failures.push(`horizontal overflow ${diagnostics.scroll_width}>${diagnostics.client_width}`);

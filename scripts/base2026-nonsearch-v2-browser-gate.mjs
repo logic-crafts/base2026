@@ -118,7 +118,7 @@ async function main() {
             animation: none !important;
             will-change: auto !important;
           }
-          header[data-ay-v2-header] :is(.ay-v2-brand, .b26-product-header__wordmark, .ay-v2-menu-toggle) {
+          header[data-ay-v2-header] :is(.ay-v2-brand, .ay-v2-menu-toggle) {
             max-width: none !important;
             overflow: visible !important;
             visibility: visible !important;
@@ -135,8 +135,9 @@ async function main() {
         const diagnostics = await page.evaluate(({ required, forbiddenHero }) => {
           const root = document.body;
           const h1 = document.querySelector("main h1");
-          const header = document.querySelector("header.b26-product-header");
-          const footer = document.querySelector("footer.b26-product-footer");
+          const header = document.querySelector("header[data-ay-v2-header]");
+          const contextNav = document.querySelector("nav[data-b26-context-nav]");
+          const footer = document.querySelector('footer.ay-site-footer:has([data-footer-contract="personal-v1"])');
           const components = [...document.querySelectorAll("[data-b26-component]")].map((node) => node.getAttribute("data-b26-component"));
           const rootStyle = root ? getComputedStyle(root) : null;
           const h1Style = h1 ? getComputedStyle(h1) : null;
@@ -208,8 +209,9 @@ async function main() {
             headerHeight: header?.getBoundingClientRect().height || 0,
             footerHeight: footer?.getBoundingClientRect().height || 0,
             footerBackground: footerStyle?.backgroundColor || "",
-            productHeader: Boolean(header),
-            productFooter: Boolean(footer),
+            globalHeader: Boolean(header),
+            contextNav: Boolean(contextNav),
+            globalFooter: Boolean(footer),
             components,
             missingComponents: required.filter((id) => !components.includes(id)),
             bridgeCount: document.querySelectorAll('[data-b26-component="B26-09"]').length,
@@ -268,7 +270,7 @@ async function main() {
         diagnostics.cookiePreferencesOpened = (await preferencesDialog.getAttribute("open")) !== null;
         await page.locator("[data-cookie-close]").click();
         diagnostics.stickyHeader = await page.evaluate(async () => {
-          const header = document.querySelector("header.b26-product-header");
+          const header = document.querySelector("header[data-ay-v2-header]");
           if (!header) return { position: "", top: 0, visible: false };
           document.documentElement.style.scrollBehavior = "auto";
           document.body.style.scrollBehavior = "auto";
@@ -287,7 +289,7 @@ async function main() {
         const failures = [];
         if (response?.status() !== 200) failures.push(`status=${response?.status() ?? "none"}`);
         if (diagnostics.visualRoot !== "v2") failures.push("missing visual root opt-in");
-        if (!diagnostics.productHeader || !diagnostics.productFooter) failures.push("missing compact product shell");
+        if (!diagnostics.globalHeader || !diagnostics.contextNav || !diagnostics.globalFooter) failures.push("missing unified global shell or Base context navigation");
         if (!diagnostics.h1Text) failures.push("missing h1");
         if (diagnostics.h1FontSize > viewport.h1Max + 0.01) failures.push(`h1=${diagnostics.h1FontSize}px > ${viewport.h1Max}px`);
         if (diagnostics.scrollWidth > diagnostics.viewportWidth + 1) failures.push(`overflow=${diagnostics.scrollWidth - diagnostics.viewportWidth}px`);
@@ -354,14 +356,14 @@ async function main() {
             };
           };
           return {
-            brand: metric(".b26-product-header .ay-v2-brand"),
-            wordmark: metric(".b26-product-header__wordmark"),
-            menu: metric(".b26-product-header .ay-v2-menu-toggle"),
+            brand: metric("header[data-ay-v2-header] .ay-v2-brand"),
+            contextProduct: metric(".b26-context-nav__product"),
+            menu: metric("header[data-ay-v2-header] .ay-v2-menu-toggle"),
           };
         });
         if (diagnostics.screenshotScrollY > 1) failures.push(`screenshot scrollY=${diagnostics.screenshotScrollY}px`);
         if (!diagnostics.cleanHeader.brand.visible || diagnostics.cleanHeader.brand.opacity < 0.99 || diagnostics.cleanHeader.brand.text !== "Alex Yarosh") failures.push(`clean header brand=${JSON.stringify(diagnostics.cleanHeader.brand)}`);
-        if (!diagnostics.cleanHeader.wordmark.visible || diagnostics.cleanHeader.wordmark.opacity < 0.99 || diagnostics.cleanHeader.wordmark.text !== "Base2026") failures.push(`clean header wordmark=${JSON.stringify(diagnostics.cleanHeader.wordmark)}`);
+        if (!diagnostics.cleanHeader.contextProduct.visible || diagnostics.cleanHeader.contextProduct.opacity < 0.99 || diagnostics.cleanHeader.contextProduct.text !== "Base2026") failures.push(`clean context product=${JSON.stringify(diagnostics.cleanHeader.contextProduct)}`);
         if (viewport.width <= 768 && (!diagnostics.cleanHeader.menu.visible || diagnostics.cleanHeader.menu.opacity < 0.99 || diagnostics.cleanHeader.menu.text.toLowerCase() !== "menu")) failures.push(`clean header menu=${JSON.stringify(diagnostics.cleanHeader.menu)}`);
         await page.addStyleTag({ content: `
           header[data-ay-v2-header] { position: absolute !important; top: 0 !important; }

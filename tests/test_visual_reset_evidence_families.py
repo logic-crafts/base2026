@@ -63,10 +63,11 @@ def test_public_family_shell_uses_product_mode_and_brand_root() -> None:
     body_classes = soup.body.get("class") or []
     assert body_classes.count("ayds-mode-product") == 1
     assert "ayds-mode-editorial" not in body_classes
-    assert soup.select_one('.b26-product-header__wordmark[href="/knowledge/"]')
-    assert soup.select_one('footer.b26-product-footer[data-b26-product-footer]')
-    assert soup.select_one('.b26-product-footer a[href="/knowledge/topics/"]')
-    assert not soup.select_one('.ay-v2-base-mega')
+    assert soup.select_one('header.ay-v2-header[data-ay-v2-header]')
+    assert soup.select_one('.b26-context-nav__product[href="/knowledge/"]')
+    assert soup.select_one('footer.ay-site-footer [data-footer-contract="personal-v1"]')
+    assert soup.select_one('footer a[href="/knowledge/"]')
+    assert soup.select_one('.ay-v2-mega[aria-label="Research menu"]')
 
 
 def test_governance_shell_uses_editorial_mode_and_base_product_boundary() -> None:
@@ -79,9 +80,10 @@ def test_governance_shell_uses_editorial_mode_and_base_product_boundary() -> Non
     assert body_classes.count("ayds-mode-editorial") == 1
     assert "ayds-mode-product" not in body_classes
     assert soup.body.get("data-b26-visual-root") == "v2"
-    assert soup.select_one("header.b26-product-header[data-b26-product-header]")
-    assert soup.select_one("footer.b26-product-footer[data-b26-product-footer]")
-    assert not soup.select_one(".ay-v2-mega")
+    assert soup.select_one("header.ay-v2-header[data-ay-v2-header]")
+    assert soup.select_one("nav[data-b26-context-nav]")
+    assert soup.select_one('footer.ay-site-footer [data-footer-contract="personal-v1"]')
+    assert soup.select_one(".ay-v2-mega")
     assert not soup.select_one('form[action="/wp-admin/admin-post.php"]')
     assert not soup.select_one('[data-b26-component="B26-09"]')
 

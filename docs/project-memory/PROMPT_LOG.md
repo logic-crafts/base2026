@@ -7335,3 +7335,9 @@ Verification:
 - Full accepted-snapshot public-page generation completed with 1,692 sources, 1,162 topics, 1,162 compare pages, and 17 creator pages, proving the output-level research boundary across that corpus.
 - Focused and adjacent suite: `74 passed, 2 skipped`; Python compile, Node syntax check, and `git diff --check` passed.
 - No deploy, Search mutation, corpus re-export, Meilisearch reindex, IndexNow call, form submission, or indexability change occurred.
+
+## 2026-07-20 — Alex/Home shell unification and controlled release
+
+Prompt: restore one global Home-derived header/footer across Base2026, keep Base as an independent research product, remove the Roadmap document rail, preserve public content/SEO admissions, and release only after compact desktop/mobile review.
+
+Result: exact candidate `base2026-shell-unified-current-home-r5-20260720T173458Z` is live. Full-corpus invariant checks found 4,131 HTML and zero content/SEO/manifest drift. Live Search, evidence and Roadmap checks passed at 1440 and 390 widths; no form, reindex or IndexNow action occurred.

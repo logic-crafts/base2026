@@ -172,15 +172,20 @@ def test_solutions_generator_uses_only_shared_visual_contract(tmp_path: Path) ->
         )
         assert 'data-alex-design-system="v2"' in page
         assert page.count("alex-v4-static-shell.js") == 1
-        assert 'class="ay-v2-header b26-product-header"' in page
-        assert 'class="ay-site-footer b26-product-footer"' in page
-        assert page.count("data-b26-product-header") == 1
-        assert page.count("data-b26-product-footer") == 1
+        assert 'class="ay-v2-header"' in page
+        assert 'data-footer-contract="personal-v1"' in page
+        assert page.count("data-ay-v2-header") == 1
+        assert page.count("data-b26-context-nav") == 1
+        assert page.count('data-footer-contract="personal-v1"') == 1
+        assert "b26-product-header" not in page
+        assert "b26-product-footer" not in page
         assert 'data-b26-visual-root="v2"' in page
         assert page.count('data-b26-component="B26-09"') <= 1
         header = page.split("</header>", 1)[0]
-        assert "ay-v2-mega" not in header
-        assert "apply-research.html" not in header
+        assert "ay-v2-mega" in header
+        assert 'href="/research/"' in header
+        assert 'href="/knowledge/"' in header
+        assert 'href="/pricing/"' in header
         for shell_href in (
             "/knowledge/",
             "/knowledge/topics/",
@@ -188,7 +193,7 @@ def test_solutions_generator_uses_only_shared_visual_contract(tmp_path: Path) ->
             "/knowledge/solutions/",
             "/knowledge/methodology.html",
         ):
-            assert f'href="{shell_href}"' in header
+            assert f'href="{shell_href}"' in page
         assert "ayds-root" in page
         assert "ayds-mode-product" in page
         for forbidden in (
@@ -247,9 +252,11 @@ def test_solutions_generator_uses_only_shared_visual_contract(tmp_path: Path) ->
     assert 'data-research-bridge="solution_to_apply_research"' in detail
     assert 'data-origin-id="fixture-solution"' in detail
     assert detail.count('data-b26-component="B26-09"') == 1
-    assert detail.count('href="/knowledge/apply-research.html"') == 1
+    detail_main = detail.split("<main", 1)[1].split("</main>", 1)[0]
+    assert detail_main.count('href="/knowledge/apply-research.html"') == 1
     assert hub.count('data-b26-component="B26-09"') == 0
-    assert 'href="/knowledge/apply-research.html"' not in hub
+    hub_main = hub.split("<main", 1)[1].split("</main>", 1)[0]
+    assert 'href="/knowledge/apply-research.html"' not in hub_main
     assert (
         f'../static/ai-recommends-solutions.js?v={DESIGN_SYSTEM_VERSION}'
         in detail

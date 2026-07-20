@@ -192,18 +192,25 @@ class AIRecommendsSolutionTests(unittest.TestCase):
         self.assertNotIn("http://", script)
         self.assertNotIn("https://", script)
 
-    def test_solution_shell_uses_compact_base_product_navigation(self) -> None:
+    def test_solution_shell_uses_global_header_and_base_context_navigation(self) -> None:
         report = validate_solution(self.solution, self.context)
         html = generator.solution_page(self.solution, report)
         header = html.split("</header>", 1)[0]
-        self.assertIn("data-b26-product-header", header)
-        self.assertIn('href="/knowledge/">Search</a>', header)
-        self.assertIn('href="/knowledge/topics/">Topics</a>', header)
-        self.assertIn('href="/knowledge/creators/">Creators</a>', header)
-        self.assertIn('href="/knowledge/solutions/">Solutions</a>', header)
-        self.assertIn('href="/knowledge/methodology.html">Methodology</a>', header)
-        self.assertNotIn("ay-v2-mega", header)
-        self.assertNotIn("apply-research.html", header)
+        shell = html.split("<main", 1)[0]
+        self.assertIn("data-ay-v2-header", header)
+        self.assertIn("data-b26-context-nav", shell)
+        self.assertIn('href="/knowledge/">Search</a>', shell)
+        self.assertIn("ay-v2-mega", header)
+        self.assertIn('href="/research/"', header)
+        self.assertIn('href="/knowledge/"', header)
+        self.assertIn('href="/pricing/"', header)
+        for href in (
+            "/knowledge/topics/",
+            "/knowledge/creators/",
+            "/knowledge/solutions/",
+            "/knowledge/methodology.html",
+        ):
+            self.assertIn(f'href="{href}"', shell)
 
     def test_indexable_solution_exposes_optional_apply_research_after_primary_research_action(self) -> None:
         report = validate_solution(self.solution, self.context)
@@ -213,19 +220,20 @@ class AIRecommendsSolutionTests(unittest.TestCase):
         bridge = 'href="/knowledge/apply-research.html"'
         self.assertIn(primary, html)
         self.assertIn(bridge, html)
-        self.assertLess(html.index(primary), html.index(bridge))
+        main = html.split("<main", 1)[1].split("</main>", 1)[0]
+        self.assertLess(main.index(primary), main.index(bridge))
         self.assertIn('data-research-bridge="solution_to_apply_research"', html)
         self.assertIn('data-origin-id="example-solution"', html)
         self.assertIn("Apply this research", html)
         self.assertEqual(html.count('data-b26-component="B26-09"'), 1)
-        self.assertEqual(html.count(bridge), 1)
+        self.assertEqual(main.count(bridge), 1)
         for forbidden in (
             'href="/ai-visibility-audit/"',
             'href="/ai-visibility-diagnostic-audit/"',
             'href="/services/"',
             'href="/pricing/"',
         ):
-            self.assertNotIn(forbidden, html)
+            self.assertNotIn(forbidden, main)
         self.assertIn("Optional: use this bridge only", html)
         self.assertIn("research path remains complete without a service request", html)
 

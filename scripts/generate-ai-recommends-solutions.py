@@ -63,17 +63,21 @@ FORBIDDEN_PUBLIC_ASSET_MARKERS = (
 
 
 def apply_solution_design_system(page: str) -> str:
-    """Apply shared runtime assets while enforcing the Base product shell."""
+    """Apply shared runtime assets while enforcing the unified Base shell."""
 
     rendered = apply_alex_v4_shell(page, relative_root="..", mode="product")
-    rendered, header_count = CANONICAL_HEADER_RE.subn(
-        lambda _match: b26_product_header_html(), rendered, count=1
-    )
-    rendered, footer_count = CANONICAL_FOOTER_RE.subn(
-        lambda _match: b26_product_footer_html(), rendered, count=1
-    )
-    if header_count != 1 or footer_count != 1:
-        raise ValueError("Solution page is missing a unique Base product shell boundary")
+    # `generate-public-pages.py` already emits the unified shell.  Only
+    # retrofit a missing context nav for legacy input; replacing an already
+    # unified header would append a second Base nav immediately after it.
+    if "data-b26-context-nav" not in rendered:
+        rendered, header_count = CANONICAL_HEADER_RE.subn(
+            lambda _match: b26_product_header_html(), rendered, count=1
+        )
+        rendered, footer_count = CANONICAL_FOOTER_RE.subn(
+            lambda _match: b26_product_footer_html(), rendered, count=1
+        )
+        if header_count != 1 or footer_count != 1:
+            raise ValueError("Solution page is missing a unique shared shell boundary")
     rendered = SHARED_STYLESHEET_RE.sub("\n", rendered)
     rendered = LEGACY_STYLESHEET_RE.sub("\n", rendered)
     shared_link = (
@@ -96,8 +100,12 @@ def apply_solution_design_system(page: str) -> str:
         raise ValueError(f"Solution page retains legacy public assets: {', '.join(leaked)}")
     if rendered.count("alex-design-system-v2.css") != 1:
         raise ValueError("Solution page must reference exactly one shared design-system stylesheet")
-    if rendered.count("data-b26-product-header") != 1 or rendered.count("data-b26-product-footer") != 1:
-        raise ValueError("Solution page must contain exactly one canonical Base product header and footer")
+    if (
+        rendered.count("data-ay-v2-header") != 1
+        or rendered.count("data-b26-context-nav") != 1
+        or rendered.count('data-footer-contract="personal-v1"') != 1
+    ):
+        raise ValueError("Solution page must contain one global shell and one Base context nav")
     return rendered
 
 

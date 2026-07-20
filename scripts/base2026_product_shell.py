@@ -1,18 +1,20 @@
-"""Canonical compact shell for Base2026 research-product routes.
+"""Canonical shell composition for Base2026 research-product routes.
 
-The full Alex commercial footer remains owned by the personal site.  Base2026
-uses these two static templates so generator families and strict Source Detail
-cannot drift into separate navigation or conversion systems.
+The Alex Home V4 header and footer are the sole site-level shell. Base2026
+adds its research IA below that header as compact context navigation, rather
+than shipping a second product header or a competing product footer.
 """
 
 from __future__ import annotations
 
 from pathlib import Path
 
+from alex_v4_static_shell import footer_html as global_footer_html
+from alex_v4_static_shell import header_html as global_header_html
+
 
 ROOT = Path(__file__).resolve().parents[1]
-HEADER_TEMPLATE = ROOT / "templates/shared/base2026-product-header.html"
-FOOTER_TEMPLATE = ROOT / "templates/shared/base2026-product-footer.html"
+CONTEXT_NAV_TEMPLATE = ROOT / "templates/shared/base2026-context-nav.html"
 
 
 def _template(path: Path) -> str:
@@ -22,9 +24,19 @@ def _template(path: Path) -> str:
     return markup
 
 
+def context_nav_html() -> str:
+    """Render Base2026's local research IA beneath the global header."""
+
+    return _template(CONTEXT_NAV_TEMPLATE)
+
+
 def header_html() -> str:
-    return _template(HEADER_TEMPLATE)
+    """Render one exact Alex Home V4 header plus Base2026 context nav."""
+
+    return f"{global_header_html()}\n{context_nav_html()}"
 
 
 def footer_html() -> str:
-    return _template(FOOTER_TEMPLATE)
+    """Render the one global Alex Home V4 footer."""
+
+    return global_footer_html()

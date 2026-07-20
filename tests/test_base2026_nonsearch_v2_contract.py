@@ -45,22 +45,22 @@ def metadata(html: str) -> tuple[str, str, str, str]:
 
 def assert_product_shell(soup: BeautifulSoup) -> None:
     assert soup.body and soup.body.get("data-b26-visual-root") == "v2"
-    assert soup.select_one("header.b26-product-header[data-b26-product-header]")
-    assert soup.select_one("footer.b26-product-footer[data-b26-product-footer]")
+    assert soup.select_one("header.ay-v2-header[data-ay-v2-header]")
+    assert soup.select_one("nav[data-b26-context-nav]")
+    assert soup.select_one('footer.ay-site-footer [data-footer-contract="personal-v1"]')
+    assert not soup.select_one(".b26-product-header")
+    assert not soup.select_one(".b26-product-footer")
     assert soup.select_one('#ay-v2-mobile-panel')
     assert soup.select_one('[aria-controls="ay-v2-mobile-panel"]')
     assert soup.select_one('footer [data-cookie-preferences]')
     assert soup.select_one('[data-cookie-dialog]')
     assert soup.select_one('script[src*="cookie-consent.js"]')
-    assert "Logic Crafts LLC, Kyrgyzstan" in soup.select_one("footer").get_text(" ", strip=True)
+    assert "Independent consultant serving US local service businesses remotely." in soup.select_one("footer").get_text(" ", strip=True)
     assert soup.select_one("footer .ay-footer-grid")
-    assert len(soup.select("footer .ay-footer-menu")) == 4
+    assert len(soup.select("footer .ay-footer-menu")) == 3
     assert len(soup.select('[data-b26-component="B26-09"]')) <= 1
-    assert not soup.select_one('header a[href="/knowledge/apply-research.html"]')
     assert not soup.select_one('footer a[href="/knowledge/apply-research.html"]')
-    for anchor in soup.select(
-        "header[data-b26-product-header] a[href], footer[data-b26-product-footer] a[href]"
-    ):
+    for anchor in soup.select("nav[data-b26-context-nav] a[href]"):
         assert str(anchor.get("href") or "").startswith("/")
 
 
@@ -240,6 +240,9 @@ def test_strict_source_detail_has_one_public_boundary_and_preserves_admission_me
     candidate_css = tmp_path / "static/base2026/shell.css"
     candidate_css.parent.mkdir(parents=True)
     candidate_css.write_bytes((ROOT / "web/static/base2026/shell.css").read_bytes())
+    (candidate_css.parent / "context-nav.css").write_bytes(
+        (ROOT / "web/static/base2026/context-nav.css").read_bytes()
+    )
     spec = importlib.util.spec_from_file_location(
         "base2026_nonsearch_v2_source_validator",
         SCRIPTS / "validate-source-detail-v2-full-candidate.py",

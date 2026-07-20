@@ -1731,3 +1731,18 @@ Next safe action:
 1. Commit and push this verified visual/product-boundary scope on `codex/base2026-master-rebuild-20260718`.
 2. Resume the full data-preserving candidate packager: bind the accepted production snapshot, generic future-private closure receipt, exact admission ledger, and `SourceDetailSourceRoot`; produce PlanOnly evidence only.
 3. Do not deploy or reindex from the packager lane until the parent release owner completes the combined candidate review.
+
+## 2026-07-20 — Unified Alex/Home shell production closure
+
+Completed:
+
+- Deployed the exact presentation-only candidate `base2026-shell-unified-current-home-r5-20260720T173458Z` through a new immutable release and atomic `current` symlink switch.
+- All 4,131 HTML pages now use one current Alex Home header/footer plus one Base2026 context nav; Roadmap has no left rail and six equal phase controls.
+- Preserved every `<main>` payload, canonical/robots tag, sitemap, manifest and public-data artifact; Meilisearch and IndexNow were not touched.
+- Live desktop/mobile checks passed on Search, an evidence page and Roadmap with no horizontal overflow; the global footer matches the current Home contract.
+- Rollback remains `/var/www/base2026-knowledge/releases/base2026-canonical-search-visual-restore-v2-20260720`.
+
+Next safe action:
+
+1. Begin the separate Hermes/Base2026 pipeline recovery audit from scheduler truth and read-only backlog state.
+2. Do not publish or reindex any recovered intake until the review/admission gates pass.

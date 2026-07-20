@@ -58,20 +58,26 @@ def metadata(markup: str) -> tuple[str, str, str]:
 def assert_product_shell(markup: str) -> BeautifulSoup:
     soup = BeautifulSoup(markup, "html.parser")
     assert soup.body and soup.body.get("data-b26-visual-root") == "v2"
-    header = soup.select_one("header.b26-product-header[data-b26-product-header]")
-    footer = soup.select_one("footer.b26-product-footer[data-b26-product-footer]")
+    header = soup.select_one("header.ay-v2-header[data-ay-v2-header]")
+    context_nav = soup.select_one("nav[data-b26-context-nav]")
+    footer = soup.select_one("footer.ay-site-footer")
     assert header and footer
-    assert len(soup.select("header[data-b26-product-header]")) == 1
-    assert len(soup.select("footer[data-b26-product-footer]")) == 1
-    assert not header.select_one(".ay-v2-mega")
-    assert not header.select_one('a[href="/knowledge/apply-research.html"]')
+    assert context_nav
+    assert len(soup.select("header[data-ay-v2-header]")) == 1
+    assert len(soup.select("nav[data-b26-context-nav]")) == 1
+    assert len(soup.select('footer [data-footer-contract="personal-v1"]')) == 1
+    assert not soup.select_one(".b26-product-header")
+    assert not soup.select_one(".b26-product-footer")
+    assert header.select_one(".ay-v2-mega")
     assert not footer.select_one('a[href="/knowledge/apply-research.html"]')
-    for anchor in [*header.select("a[href]"), *footer.select("a[href]")]:
+    for anchor in context_nav.select("a[href]"):
         assert str(anchor.get("href") or "").startswith("/")
-    for route in SERVICE_ROUTES:
-        assert not header.select_one(f'a[href="{route}"]')
-        assert not footer.select_one(f'a[href="{route}"]')
     assert footer.select_one('a[href="/about/"]')
+    assert [node.get_text(" ", strip=True) for node in footer.select("h3")] == [
+        "Start Here",
+        "Research",
+        "Trust",
+    ]
     return soup
 
 
@@ -112,7 +118,8 @@ def test_info_route_shell_metadata_and_single_handoff_policy(
     assert len(bridges) == bridge_count
     if target:
         assert bridges[0].select_one(f'a[href="{target}"]')
-    assert len(soup.select('a[href="/knowledge/apply-research.html"]')) == (
+    main = soup.select_one("main")
+    assert main and len(main.select('a[href="/knowledge/apply-research.html"]')) == (
         1 if source_name in {"00_METHODOLOGY.md", "02_PROJECT_STORY.md"} else 0
     )
 
@@ -123,7 +130,7 @@ def test_info_route_shell_metadata_and_single_handoff_policy(
     ]
     assert service_links == (["/ai-visibility-audit/"] if source_name == "09_APPLY_RESEARCH.md" else [])
     if source_name == "09_APPLY_RESEARCH.md":
-        text = soup.get_text(" ", strip=True)
+        text = main.get_text(" ", strip=True)
         assert "Check My AI Visibility View Services" not in text
         assert "Search Base2026 Check My AI Visibility Request Diagnostic Audit" not in text
         assert soup.select_one('main ul a[href="/knowledge/"]')
@@ -183,10 +190,11 @@ def test_ai_visibility_generators_preserve_content_and_use_one_absolute_bridge(c
     assert metadata(rendered) == expected
     assert preserved in soup.get_text(" ", strip=True)
     assert len(soup.select('[data-b26-component="B26-09"]')) == 1
-    assert len(soup.select('a[href="/knowledge/apply-research.html"]')) == 1
-    assert not soup.select_one('form[action="/wp-admin/admin-post.php"]')
+    main = soup.select_one("main")
+    assert main and len(main.select('a[href="/knowledge/apply-research.html"]')) == 1
+    assert not main.select_one('form[action="/wp-admin/admin-post.php"]')
     for route in SERVICE_ROUTES:
-        assert not soup.select_one(f'a[href="{route}"]')
+        assert not main.select_one(f'a[href="{route}"]')
 
 
 def solution_fixture() -> dict[str, object]:
@@ -225,7 +233,8 @@ def test_solution_generator_uses_one_absolute_optional_bridge_and_preserves_meta
     )
     assert "Preserved fixture problem." in soup.get_text(" ", strip=True)
     assert len(soup.select('[data-b26-component="B26-09"]')) == 1
-    assert len(soup.select('a[href="/knowledge/apply-research.html"]')) == 1
+    main = soup.select_one("main")
+    assert main and len(main.select('a[href="/knowledge/apply-research.html"]')) == 1
     assert soup.select_one('a[href="/knowledge/?q=fixture"]')
     for route in SERVICE_ROUTES:
-        assert not soup.select_one(f'a[href="{route}"]')
+        assert not main.select_one(f'a[href="{route}"]')

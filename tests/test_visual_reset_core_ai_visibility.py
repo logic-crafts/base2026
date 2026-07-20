@@ -6,6 +6,8 @@ import json
 from pathlib import Path
 import sys
 
+from bs4 import BeautifulSoup
+
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS = ROOT / "scripts"
@@ -103,13 +105,15 @@ def test_design_system_covers_source_and_solution_compatibility_contracts() -> N
         assert selector in css
 
 
-def test_shared_shell_has_canonical_base_destination_named_lab_child_and_is_idempotent() -> None:
+def test_shared_shell_matches_current_home_navigation_and_is_idempotent() -> None:
     from alex_v4_static_shell import apply_alex_v4_shell, header_html, search_shell_css, shell_css
 
     header = header_html()
-    assert '<a href="/knowledge/">Base2026</a>' in header
-    assert '<a href="/knowledge/ai-visibility-pages/"><strong>AI Visibility Lab</strong>' in header
-    assert '/knowledge/ai-visibility-pages/">AI Visibility Lab</a>' in header
+    assert '<a href="/services/">Services</a>' in header
+    assert '<a href="/research/">Research</a>' in header
+    assert '<a href="/knowledge/"><strong>Base2026 Library</strong>' in header
+    assert '<a href="/pricing/">Pricing</a>' in header
+    assert '>Get Free Snapshot</a>' in header
     assert "fonts.googleapis.com" not in shell_css()
     assert hashlib.sha256(search_shell_css().encode()).hexdigest() == "aadd0996560916b0cd530e7ce9e329a6138470eae19412bfc0e98db73d8925eb"
 
@@ -174,19 +178,18 @@ def test_every_master_ai_visibility_page_renders_only_the_v2_system() -> None:
         assert "fonts.googleapis.com" not in rendered
         assert 'class="ayds-root ayds-mode-editorial' in rendered
         assert 'data-b26-visual-root="v2"' in rendered
-        assert rendered.count("data-b26-product-header") == 1
-        assert rendered.count("data-b26-product-footer") == 1
+        assert rendered.count("data-ay-v2-header") == 1
+        assert rendered.count("data-b26-context-nav") == 1
+        assert rendered.count('data-footer-contract="personal-v1"') == 1
         assert 'class="b26-money-hero ayds-hero"' in rendered
         assert rendered.count('data-b26-component="B26-09"') == 1
-        assert rendered.count('href="/knowledge/apply-research.html"') == 1
-        assert "ay-v2-mega" not in rendered
-        assert "Send a message" not in rendered
-        assert "Prefer a call" not in rendered
-        assert 'action="/wp-admin/admin-post.php"' not in rendered
-        assert 'href="/ai-visibility-audit/"' not in rendered
-        assert 'href="/ai-visibility-diagnostic-audit/"' not in rendered
-        assert 'href="/services/"' not in rendered
-        assert 'href="/pricing/"' not in rendered
+        main = BeautifulSoup(rendered, "html.parser").select_one("main")
+        assert main and len(main.select('a[href="/knowledge/apply-research.html"]')) == 1
+        assert 'action="/wp-admin/admin-post.php"' not in str(main)
+        assert not main.select('a[href="/ai-visibility-audit/"]')
+        assert not main.select('a[href="/ai-visibility-diagnostic-audit/"]')
+        assert not main.select('a[href="/services/"]')
+        assert not main.select('a[href="/pricing/"]')
         assert rendered.count("<h1") == 1
         assert f'<link rel="canonical" href="{expected_canonical}"' in rendered
         assert 'meta name="robots" content="index,follow"' in rendered
@@ -203,12 +206,13 @@ def test_ai_visibility_collection_preserves_search_hooks_and_product_mode() -> N
     assert "fonts.googleapis.com" not in rendered
     assert 'class="ayds-root ayds-mode-product' in rendered
     assert 'data-b26-visual-root="v2"' in rendered
-    assert rendered.count("data-b26-product-header") == 1
-    assert rendered.count("data-b26-product-footer") == 1
+    assert rendered.count("data-ay-v2-header") == 1
+    assert rendered.count("data-b26-context-nav") == 1
+    assert rendered.count('data-footer-contract="personal-v1"') == 1
     assert rendered.count('data-b26-component="B26-09"') == 1
-    assert rendered.count('href="/knowledge/apply-research.html"') == 1
-    assert "ay-v2-mega" not in rendered
-    assert 'action="/wp-admin/admin-post.php"' not in rendered
+    main = BeautifulSoup(rendered, "html.parser").select_one("main")
+    assert main and len(main.select('a[href="/knowledge/apply-research.html"]')) == 1
+    assert 'action="/wp-admin/admin-post.php"' not in str(main)
     assert 'id="ai-lab-search-input"' in rendered
     assert "data-lab-card" in rendered
     assert "data-lab-grid" in rendered

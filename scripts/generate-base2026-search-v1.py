@@ -8,7 +8,8 @@ import re
 import shutil
 from pathlib import Path
 
-from alex_v4_static_shell import footer_html, header_html, search_shell_css, shell_js
+from alex_v4_static_shell import footer_html, search_shell_css, shell_js
+from base2026_product_shell import header_html
 from base2026_ui_system import inject_stylesheet_contract, system_attributes
 
 
@@ -38,8 +39,11 @@ RESEARCH_CONTEXT_HTML = '''      <section class="research-context" aria-labelled
 
 def transform(source: str) -> str:
     html = source
-    html = re.sub(r'<header class="site-header">.*?</header>', header_html(), html, count=1, flags=re.S)
-    html = re.sub(r'<footer class="site-footer">.*?</footer>', footer_html(), html, count=1, flags=re.S)
+    # Search is the Base2026 entrypoint, not an exception to the shared shell.
+    # Historic packages used both `site-header` and `ay-v2-header`, so replace
+    # the single existing boundary instead of relying on one legacy class name.
+    html = re.sub(r"<header\\b[^>]*>.*?</header>", header_html(), html, count=1, flags=re.S | re.I)
+    html = re.sub(r"<footer\\b[^>]*>.*?</footer>", footer_html(), html, count=1, flags=re.S | re.I)
     html = re.sub(
         r'<body(?:\s+class="[^"]*")?>',
         f'<body class="ay-alex-v4-static base2026-search-v1" {system_attributes("search")}>',

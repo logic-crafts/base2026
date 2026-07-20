@@ -9,7 +9,6 @@ assets, or Source Detail content/link/schema drift.
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import posixpath
 import re
@@ -22,9 +21,8 @@ from bs4 import BeautifulSoup, Tag
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS = ROOT / "scripts"
-BASE_PRODUCT_FOOTER_TEMPLATE = ROOT / "templates" / "shared" / "base2026-product-footer.html"
-BASE_PRODUCT_FOOTER_TEMPLATE_SHA256 = "5c916bb052d89c3841375cdd255cc5909e74cb996ddf3b1b493f7ab28a5a2453"
 sys.path.insert(0, str(SCRIPTS))
+from alex_v4_static_shell import footer_html  # noqa: E402
 from template_migration.source_detail import adapt_source_detail  # noqa: E402
 
 
@@ -171,95 +169,42 @@ def validate_assets(candidate: Path, html_path: Path) -> list[str]:
 
 
 def validate_shared_footer_contract(candidate: Path, route: str) -> list[str]:
-    """Fail closed if Source Detail drifts from the compact Base product footer.
+    """Fail closed if a source page drifts from the one global V4 footer.
 
-    The personal-site commercial footer and the Base2026 research-product
-    footer have distinct jobs. Check the Base footer's exact canonical markup,
-    ownership, navigation, cookie control and responsive CSS without requiring
-    a live network request during candidate validation.
+    Base2026 keeps its product context in the compact nav below the header;
+    the site boundary itself is the exact Home V4 header/footer contract.
     """
     issues: list[str] = []
-    fixture_bytes = BASE_PRODUCT_FOOTER_TEMPLATE.read_bytes()
-    fixture_digest = hashlib.sha256(fixture_bytes).hexdigest()
-    expected_markup = fixture_bytes.decode("utf-8").strip()
-    if fixture_digest != BASE_PRODUCT_FOOTER_TEMPLATE_SHA256:
-        return [f"Base product footer authority fixture hash drift: {fixture_digest}"]
+    expected_markup = footer_html().strip()
 
     page = candidate / route
     page_html = page.read_text(encoding="utf-8")
     raw_footer = re.search(
-        r'(<footer\b(?=[^>]*\bdata-b26-product-footer\b)[^>]*>.*?</footer>)',
+        r'(<footer\b(?=[^>]*\bclass=["\'][^"\']*\bay-site-footer\b[^"\']*["\'])[^>]*>.*?</footer>)',
         page_html,
         flags=re.S,
     )
     if raw_footer is None:
-        return ["shared footer missing canonical [data-b26-product-footer]"]
+        return ["shared footer missing canonical [data-footer-contract=personal-v1]"]
     if raw_footer.group(1).strip() != expected_markup:
-        issues.append("shared footer raw DOM drift from SHA-locked Base product authority fixture")
+        issues.append("shared footer raw DOM drift from global Home V4 authority")
 
     soup = BeautifulSoup(page_html, "html.parser")
-    footer = soup.select_one("footer.ay-site-footer.b26-product-footer[data-b26-product-footer]")
-    if not isinstance(footer, Tag):
-        return ["shared footer missing canonical Base product classes/marker"]
-    expected_soup = BeautifulSoup(expected_markup, "html.parser")
-    expected_footer = expected_soup.select_one("footer.ay-site-footer.b26-product-footer[data-b26-product-footer]")
-    if not isinstance(expected_footer, Tag):
-        return ["Base product footer authority fixture is not parseable"]
-
-    def semantic_signature(node: Tag) -> dict[str, Any]:
-        node_grid = node.select_one(":scope > .b26-product-footer__grid[data-b26-shell]")
-        if not isinstance(node_grid, Tag):
-            return {"grid": None}
-        lead = node_grid.find("section", class_="b26-product-footer__identity", recursive=False)
-        navs: list[tuple[str, str, list[tuple[str, str]]]] = []
-        for nav in node_grid.find_all("nav", recursive=False):
-            entries: list[tuple[str, str]] = []
-            for control in nav.find_all(["a", "button"]):
-                target = (
-                    "cookie-preferences"
-                    if control.name == "button" and control.has_attr("data-cookie-preferences")
-                    else attr(control, "href")
-                )
-                entries.append((text(control), target))
-            navs.append((attr(nav, "aria-label"), text(nav.select_one("h3")), entries))
-        return {
-            "grid": True,
-            "root_classes": tuple(node.get("class") or ()),
-            "root_label": attr(node, "aria-label"),
-            "identity_class": tuple(lead.get("class") or ()) if isinstance(lead, Tag) else None,
-            "eyebrow": text(lead.select_one(".eyebrow")) if isinstance(lead, Tag) else "",
-            "heading": text(lead.select_one("h2")) if isinstance(lead, Tag) else "",
-            "body": text(next((child for child in lead.find_all("p", recursive=False) if "eyebrow" not in (child.get("class") or [])), None)) if isinstance(lead, Tag) else "",
-            "navs": navs,
-            "cookie_controls": len(node.select("[data-cookie-preferences]")),
-            "bottom": text(node.select_one(":scope > .b26-product-footer__bottom[data-b26-shell]")),
-        }
-
-    expected_signature = semantic_signature(expected_footer)
-    actual_signature = semantic_signature(footer)
-    if expected_signature.get("grid") is None:
-        return ["Base product footer authority fixture missing canonical global grid"]
-    if actual_signature.get("grid") is None:
-        issues.append("shared footer missing canonical global grid")
-    if actual_signature != expected_signature:
-        issues.append("shared footer semantic contract drift from SHA-locked Base product authority fixture")
-
-    css_path = candidate / "static" / "base2026" / "shell.css"
-    css = css_path.read_text(encoding="utf-8") if css_path.is_file() else ""
-    expected_css = (
-        '[data-b26-visual-root="v2"] .b26-product-footer',
-        ".b26-product-footer__grid {",
-        "grid-template-columns: minmax(390px, 1.15fr) repeat(4, minmax(110px, .7fr));",
-        ".b26-product-footer__link-button {",
-        ".b26-product-footer__bottom {",
-        "background: var(--ayds-color-paper) !important;",
-        "@media (max-width: 48rem)",
-    )
-    for required in expected_css:
-        if required not in css:
-            issues.append(f"shared footer missing Base product authority CSS: {required}")
-    if any(token in css.lower() for token in ("#c84f07", "#ef6b13", "#d9730d", "fonts.googleapis.com")):
-        issues.append("shared footer design asset retains forbidden legacy color/font dependency")
+    footer = soup.select_one("footer.ay-site-footer")
+    if not isinstance(footer, Tag) or not footer.select_one('[data-footer-contract="personal-v1"]'):
+        return ["shared footer missing canonical global classes/marker"]
+    if soup.select_one(".b26-product-footer"):
+        issues.append("legacy Base-only footer remains beside global footer")
+    if not footer.select_one("[data-cookie-preferences]"):
+        issues.append("global footer missing cookie-preferences control")
+    if len(footer.select("nav.ay-footer-menu, nav .ay-footer-menu")) < 3:
+        issues.append("global footer missing required navigation groups")
+    if not soup.select_one("header[data-ay-v2-header]"):
+        issues.append("global header missing")
+    if not soup.select_one("nav[data-b26-context-nav]"):
+        issues.append("Base2026 context navigation missing")
+    if not (candidate / "static" / "base2026" / "context-nav.css").is_file():
+        issues.append("Base2026 context-navigation stylesheet missing")
     return issues
 
 

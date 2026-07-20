@@ -136,6 +136,10 @@ body.ay-alex-v4-static[data-b26-visual-root="v2"] .content-section {
   box-shadow: none;
 }
 
+body.ay-alex-v4-static[data-b26-visual-root="v2"] .content-section :is(li, code) {
+  overflow-wrap: anywhere;
+}
+
 /* The Solutions trust boundary is intentionally a dark evidence warning.
  * Restore its semantic panel after the generic content-section reset. */
 body.ay-alex-v4-static[data-b26-visual-root="v2"] .content-section.solution-next-action {

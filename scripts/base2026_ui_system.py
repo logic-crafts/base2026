@@ -10,10 +10,10 @@ from __future__ import annotations
 from html import escape
 
 
-SYSTEM_VERSION = "1.1.4"
+SYSTEM_VERSION = "1.1.5"
 VISUAL_VERSION = "v2"
 ASSET_DIRECTORY = "base2026"
-ASSET_FILES = ("tokens.css", "shell.css", "components.css")
+ASSET_FILES = ("tokens.css", "shell.css", "components.css", "context-nav.css")
 COMPONENT_IDS = frozenset(f"B26-{number:02d}" for number in range(1, 10))
 
 

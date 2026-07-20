@@ -9,44 +9,14 @@ from alex_design_system_v2 import NON_SOURCE_DESIGN_VERSION
 
 SHELL_VERSION = NON_SOURCE_DESIGN_VERSION
 ROOT = Path(__file__).resolve().parents[1]
+LIVE_HEADER_TEMPLATE = ROOT / "templates" / "shared" / "alex-home-v4-header.html"
 LIVE_FOOTER_TEMPLATE = ROOT / "templates" / "shared" / "alex-home-v4-footer.html"
 DESIGN_SYSTEM_CSS = ROOT / "web" / "static" / "alex-design-system-v2.css"
 SHELL_SCRIPT = ROOT / "web" / "static" / "alex-v4-static-shell.js"
 
 
 def header_html() -> str:
-    return """<header class="ay-v2-header" data-ay-v2-header aria-label="Alex Yarosh primary header">
-      <div class="ay-v2-header-shell">
-        <a class="ay-v2-brand" href="/" aria-label="Alex Yarosh home">Alex Yarosh</a>
-        <nav class="ay-v2-nav" aria-label="Primary navigation">
-          <div class="ay-v2-nav-item ay-v2-has-mega">
-            <a href="/services/">Services</a>
-            <div class="ay-v2-mega" role="menu" aria-label="Services menu">
-              <div class="ay-v2-mega-grid">
-                <section><h3>Core Services</h3><a href="/ai-visibility-diagnostic-audit/"><strong>Diagnostic Audit</strong><span>Find the weak layer before spending on more work.</span></a><a href="/technical-seo-geo-foundation/"><strong>Technical SEO &amp; GEO</strong><span>Fix crawlability, indexation, canonicals and schema.</span></a></section>
-                <section><h3>Strategic Growth</h3><a href="/answer-ready-service-pages/"><strong>Answer-ready Pages</strong><span>Turn vague pages into decision-stage answers.</span></a><a href="/entity-trust-source-intelligence/"><strong>Entity Intelligence</strong><span>Strengthen citations, reviews and public footprint.</span></a></section>
-              </div>
-              <a class="ay-v2-mega-all" href="/services/">View all services <span aria-hidden="true">→</span></a>
-            </div>
-          </div>
-          <a href="/ai-visibility-audit/">AI Visibility</a><a href="/pricing/">Pricing</a>
-          <div class="ay-v2-nav-item ay-v2-has-mega ay-v2-base-trigger">
-            <a href="/knowledge/">Base2026</a>
-            <div class="ay-v2-mega ay-v2-base-mega" role="menu" aria-label="Base2026 menu">
-              <div class="ay-v2-mega-grid">
-                <section><h3>Research workspace</h3><a href="/knowledge/"><strong>Search the library</strong><span>Find sources, claims, creators and topics.</span></a><a href="/knowledge/sources/"><strong>Source Intelligence</strong><span>Read reviewed source text, exact claims and bounded actions.</span></a><a href="/knowledge/topics/"><strong>Topics &amp; viewpoints</strong><span>Synthesize evidence and compare creators inside one topic.</span></a></section>
-                <section><h3>Decision support</h3><a href="/knowledge/solutions/"><strong>AI Recommends Solutions</strong><span>Turn source evidence into bounded operating decisions.</span></a><a href="/knowledge/ai-visibility-pages/"><strong>AI Visibility Lab</strong><span>Inspect practical visibility questions and source-backed playbooks.</span></a><a href="/knowledge/creators/"><strong>Creators</strong><span>Browse attributed expert source profiles.</span></a><a href="/knowledge/methodology.html"><strong>Methodology</strong><span>Review the evidence, editorial and publication rules.</span></a></section>
-              </div>
-              <form class="ay-v2-mega-search" method="get" action="/knowledge/" role="search"><label for="ay-v2-mega-search-input">Quick search</label><input id="ay-v2-mega-search-input" name="q" type="search" aria-label="Search Base2026"><button type="submit">Search</button></form>
-            </div>
-          </div>
-          <a href="/about/">About</a>
-        </nav>
-        <a class="ay-v2-header-cta" href="/ai-visibility-audit/">Check My AI Visibility</a>
-        <button class="ay-v2-menu-toggle" type="button" aria-expanded="false" aria-controls="ay-v2-mobile-panel">Menu</button>
-      </div>
-      <div class="ay-v2-mobile-panel" id="ay-v2-mobile-panel" hidden><a href="/services/">Services</a><a href="/ai-visibility-audit/">AI Visibility</a><a href="/pricing/">Pricing</a><a href="/knowledge/">Search Base2026</a><a href="/knowledge/sources/">Source Intelligence</a><a href="/knowledge/topics/">Topics &amp; viewpoints</a><a href="/knowledge/solutions/">AI Recommends Solutions</a><a href="/knowledge/ai-visibility-pages/">AI Visibility Lab</a><a href="/knowledge/apply-research.html">Apply Research</a><a href="/knowledge/creators/">Creators</a><a href="/about/">About</a></div>
-    </header>"""
+    return LIVE_HEADER_TEMPLATE.read_text(encoding="utf-8").strip()
 
 
 
