@@ -53,7 +53,10 @@ def apply_v2_shell(page: str, route: str) -> str:
     current V2 pages and the accepted Search workspace remain byte-stable.
     """
 
-    if LEGACY_STYLESHEET_FRAGMENT not in page:
+    if (
+        LEGACY_STYLESHEET_FRAGMENT not in page
+        and "ai-recommends-solutions.css" not in page
+    ):
         return page
     soup = BeautifulSoup(page, "html.parser")
     if not isinstance(soup.head, Tag) or not isinstance(soup.body, Tag):
@@ -64,6 +67,11 @@ def apply_v2_shell(page: str, route: str) -> str:
         return page
 
     for legacy in soup.head.select(f'link[href*="{LEGACY_STYLESHEET_FRAGMENT}"]'):
+        legacy.decompose()
+    # The V2 Solutions renderer intentionally absorbed this one-off stylesheet
+    # into the shared design system. Keeping a stale link here produces a 404
+    # and lets an obsolete cascade compete with the approved shell.
+    for legacy in soup.head.select('link[href*="ai-recommends-solutions.css"]'):
         legacy.decompose()
     for font in soup.head.select('link[href*="fonts.googleapis.com"], link[href*="fonts.gstatic.com"]'):
         font.decompose()

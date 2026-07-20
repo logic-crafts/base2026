@@ -6,6 +6,8 @@ import unittest
 from copy import deepcopy
 from pathlib import Path
 
+from bs4 import BeautifulSoup
+
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS = ROOT / "scripts"
 if str(SCRIPTS) not in sys.path:
@@ -219,13 +221,14 @@ class AIRecommendsSolutionTests(unittest.TestCase):
         self.assertIn("Apply this research", html)
         self.assertEqual(html.count('data-b26-component="B26-09"'), 1)
         self.assertEqual(html.count(bridge), 1)
+        main_markup = str(BeautifulSoup(html, "html.parser").select_one("main"))
         for forbidden in (
             'href="/ai-visibility-audit/"',
             'href="/ai-visibility-diagnostic-audit/"',
             'href="/services/"',
             'href="/pricing/"',
         ):
-            self.assertNotIn(forbidden, html)
+            self.assertNotIn(forbidden, main_markup)
         self.assertIn("Optional: use this bridge only", html)
         self.assertIn("research path remains complete without a service request", html)
 

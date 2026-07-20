@@ -43,6 +43,7 @@ def test_legacy_shell_upgrade_replaces_only_shell_contract(tmp_path: Path) -> No
     module = load_module()
     legacy = """<!doctype html><html><head>
     <link rel="stylesheet" href="./static/styles.css?v=legacy">
+    <link rel="stylesheet" href="./static/ai-recommends-solutions.css?v=legacy">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist">
     </head><body class="old"><header class="site-header">old nav</header>
     <main class="app-shell"><h1>Analytics</h1><section>Reviewed data stays here.</section></main>
@@ -51,6 +52,7 @@ def test_legacy_shell_upgrade_replaces_only_shell_contract(tmp_path: Path) -> No
     rendered = module.apply_global_footer(module.apply_v2_shell(legacy, "analytics.html"))
 
     assert "static/styles.css" not in rendered
+    assert "ai-recommends-solutions.css" not in rendered
     assert "fonts.googleapis.com" not in rendered
     assert rendered.count('data-alex-design-system="v2"') == 1
     assert rendered.count('data-b26-asset="') == 3
