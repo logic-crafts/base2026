@@ -12,9 +12,18 @@ from __future__ import annotations
 
 import argparse
 import re
+import sys
 from pathlib import Path
 
 from bs4 import BeautifulSoup, Tag
+
+# This file is both a CLI entrypoint and an importable release guard.  A normal
+# ``python scripts/...`` invocation adds this directory to ``sys.path``, while
+# isolated contract tests intentionally do not.  Keep sibling release modules
+# resolvable in both modes rather than requiring a caller-specific PYTHONPATH.
+SCRIPT_DIR = Path(__file__).resolve().parent
+if str(SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPT_DIR))
 
 from alex_design_system_v2 import apply_information_architecture
 from base2026_product_shell import footer_html, header_html
