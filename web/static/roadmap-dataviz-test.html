@@ -1,123 +1,155 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="A noindex Base2026 roadmap visualization prototype used to test roadmap data and interaction patterns before production promotion." />
-    <meta name="robots" content="noindex,follow" />
-    <link rel="canonical" href="https://aggressorbulkit.online/knowledge/roadmap-dataviz-test.html" />
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="Base2026 Roadmap Data Visualization Test" />
-    <meta property="og:description" content="A noindex prototype for testing Base2026 roadmap visualization patterns." />
-    <meta property="og:url" content="https://aggressorbulkit.online/knowledge/roadmap-dataviz-test.html" />
-    <title>Base2026 Roadmap Data Visualization Test</title>
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Base2026 Roadmap Data Visualization Test","description":"A noindex Base2026 roadmap visualization prototype used to test roadmap data and interaction patterns before production promotion.","url":"https://aggressorbulkit.online/knowledge/roadmap-dataviz-test.html","isPartOf":{"@type":"WebSite","name":"Base2026","url":"https://aggressorbulkit.online/knowledge/"}}</script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="./roadmap-dataviz-test.css" />
-  </head>
-  <body>
-    <a class="skip-link" href="#roadmap-workspace">Skip to roadmap</a>
-    <main id="roadmap-workspace" class="viz-shell">
-      <section class="viz-hero" aria-labelledby="roadmap-title">
-        <div>
-          <p class="viz-kicker">Base2026 product roadmap</p>
-          <h1 id="roadmap-title">A public sequence for turning video knowledge into a trusted research layer.</h1>
-          <p class="viz-lede">This test page reframes the original roadmap markdown as a product maturity map: trust first, then ingestion, AI processing, creator controls, analytics, and monetization.</p>
-        </div>
-        <aside class="source-card" aria-label="Roadmap source">
-          <span>Source file</span>
-          <strong>docs/public-pages/01_ROADMAP.md</strong>
-          <p>Production roadmap is not changed by this prototype.</p>
-        </aside>
-      </section>
-
-      <section class="summary-strip" aria-label="Roadmap summary">
-        <article>
-          <span>Now</span>
-          <strong>Public Trust Foundation</strong>
-        </article>
-        <article>
-          <span>Next</span>
-          <strong>Content Ingestion Pipeline</strong>
-        </article>
-        <article>
-          <span>Later</span>
-          <strong>AI Knowledge Layer, Creator Controls, Analytics, Monetization</strong>
-        </article>
-      </section>
-
-      <section class="control-strip" aria-label="Roadmap controls">
-        <div id="phase-tabs" class="phase-tabs"></div>
-        <div class="view-note">Click a phase to inspect purpose, status, and milestone sequence.</div>
-      </section>
-
-      <section class="viz-grid">
-        <article class="panel panel-wide" aria-labelledby="map-title">
-          <div class="panel-head">
-            <p class="viz-kicker">Sequence</p>
-            <h2 id="map-title">Roadmap flow</h2>
-          </div>
-          <div id="roadmap-flow" class="flow-canvas"></div>
-        </article>
-
-        <article class="panel" aria-labelledby="phase-title">
-          <div class="panel-head">
-            <p class="viz-kicker">Selected phase</p>
-            <h2 id="phase-title">Phase detail</h2>
-          </div>
-          <div id="phase-detail"></div>
-        </article>
-
-        <article class="panel" aria-labelledby="load-title">
-          <div class="panel-head">
-            <p class="viz-kicker">Milestones</p>
-            <h2 id="load-title">Phase density</h2>
-          </div>
-          <div id="workload-chart" class="bar-stack"></div>
-        </article>
-
-        <article class="panel panel-wide" aria-labelledby="funding-title">
-          <div class="panel-head">
-            <p class="viz-kicker">Funding logic</p>
-            <h2 id="funding-title">What support unlocks</h2>
-          </div>
-          <div id="funding-grid" class="funding-grid"></div>
-        </article>
-
-        <article class="panel panel-wide" aria-labelledby="priority-title">
-          <div class="panel-head">
-            <p class="viz-kicker">Execution order</p>
-            <h2 id="priority-title">Now / Next / Later</h2>
-          </div>
-          <div id="priority-stack" class="priority-stack"></div>
-        </article>
-
-        <article class="panel panel-wide proof-panel" aria-labelledby="proof-title">
-          <div class="panel-head">
-            <p class="viz-kicker">Roadmap logic</p>
-            <h2 id="proof-title">What this roadmap proves</h2>
-          </div>
-          <p>This roadmap is not a list of promised features. It is a public development sequence: first transparency and governance, then ingestion, AI processing, creator controls, analytics, and monetization. Each layer makes the next one safer and more useful.</p>
-        </article>
-      </section>
-
-      <noscript>
-        <section class="panel panel-wide noscript-roadmap" aria-labelledby="noscript-title">
-          <h2 id="noscript-title">Roadmap phases</h2>
-          <ol>
-            <li>Public Trust Foundation</li>
-            <li>Content Ingestion Pipeline</li>
-            <li>AI Knowledge Layer</li>
-            <li>Creator and Rights Controls</li>
-            <li>Analytics and Public Signals</li>
-            <li>Monetization Layer</li>
-          </ol>
-        </section>
-      </noscript>
-    </main>
-    <script src="./roadmap-dataviz-test.js" defer></script>
-  <footer class="site-footer"><div class="ay-footer-bottom"><span>&copy; 2026 Logic Crafts LLC, Kyrgyzstan. Base2026 was created by Alex Yarosh as an independent experimental startup product. It is not a marketing agency and not a marketing-services offering.</span></div></footer>
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="A noindex Base2026 roadmap visualization prototype used to test roadmap data and interaction patterns before production promotion." name="description"/>
+<meta content="noindex,follow" name="robots"/>
+<link href="https://aggressorbulkit.online/knowledge/roadmap-dataviz-test.html" rel="canonical"/>
+<meta content="website" property="og:type"/>
+<meta content="Base2026 Roadmap Data Visualization Test" property="og:title"/>
+<meta content="A noindex prototype for testing Base2026 roadmap visualization patterns." property="og:description"/>
+<meta content="https://aggressorbulkit.online/knowledge/roadmap-dataviz-test.html" property="og:url"/>
+<title>Base2026 Roadmap Data Visualization Test</title>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Base2026 Roadmap Data Visualization Test","description":"A noindex Base2026 roadmap visualization prototype used to test roadmap data and interaction patterns before production promotion.","url":"https://aggressorbulkit.online/knowledge/roadmap-dataviz-test.html","isPartOf":{"@type":"WebSite","name":"Base2026","url":"https://aggressorbulkit.online/knowledge/"}}</script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400..900;1,400..900&amp;display=swap" rel="stylesheet"/>
+<link href="./roadmap-dataviz-test.css" rel="stylesheet"/>
+</head>
+<body>
+<a class="skip-link" href="#roadmap-workspace">Skip to roadmap</a>
+<main class="viz-shell" id="roadmap-workspace">
+<section aria-labelledby="roadmap-title" class="viz-hero">
+<div>
+<p class="viz-kicker">Base2026 product roadmap</p>
+<h1 id="roadmap-title">A public sequence for turning video knowledge into a trusted research layer.</h1>
+<p class="viz-lede">This test page reframes the original roadmap markdown as a product maturity map: trust first, then ingestion, AI processing, creator controls, analytics, and monetization.</p>
+</div>
+<aside aria-label="Roadmap source" class="source-card">
+<span>Source file</span>
+<strong>docs/public-pages/01_ROADMAP.md</strong>
+<p>Production roadmap is not changed by this prototype.</p>
+</aside>
+</section>
+<section aria-label="Roadmap summary" class="summary-strip">
+<article>
+<span>Now</span>
+<strong>Public Trust Foundation</strong>
+</article>
+<article>
+<span>Next</span>
+<strong>Content Ingestion Pipeline</strong>
+</article>
+<article>
+<span>Later</span>
+<strong>AI Knowledge Layer, Creator Controls, Analytics, Monetization</strong>
+</article>
+</section>
+<section aria-label="Roadmap controls" class="control-strip">
+<div class="phase-tabs" id="phase-tabs"></div>
+<div class="view-note">Click a phase to inspect purpose, status, and milestone sequence.</div>
+</section>
+<section class="viz-grid">
+<article aria-labelledby="map-title" class="panel panel-wide">
+<div class="panel-head">
+<p class="viz-kicker">Sequence</p>
+<h2 id="map-title">Roadmap flow</h2>
+</div>
+<div class="flow-canvas" id="roadmap-flow"></div>
+</article>
+<article aria-labelledby="phase-title" class="panel">
+<div class="panel-head">
+<p class="viz-kicker">Selected phase</p>
+<h2 id="phase-title">Phase detail</h2>
+</div>
+<div id="phase-detail"></div>
+</article>
+<article aria-labelledby="load-title" class="panel">
+<div class="panel-head">
+<p class="viz-kicker">Milestones</p>
+<h2 id="load-title">Phase density</h2>
+</div>
+<div class="bar-stack" id="workload-chart"></div>
+</article>
+<article aria-labelledby="funding-title" class="panel panel-wide">
+<div class="panel-head">
+<p class="viz-kicker">Funding logic</p>
+<h2 id="funding-title">What support unlocks</h2>
+</div>
+<div class="funding-grid" id="funding-grid"></div>
+</article>
+<article aria-labelledby="priority-title" class="panel panel-wide">
+<div class="panel-head">
+<p class="viz-kicker">Execution order</p>
+<h2 id="priority-title">Now / Next / Later</h2>
+</div>
+<div class="priority-stack" id="priority-stack"></div>
+</article>
+<article aria-labelledby="proof-title" class="panel panel-wide proof-panel">
+<div class="panel-head">
+<p class="viz-kicker">Roadmap logic</p>
+<h2 id="proof-title">What this roadmap proves</h2>
+</div>
+<p>This roadmap is not a list of promised features. It is a public development sequence: first transparency and governance, then ingestion, AI processing, creator controls, analytics, and monetization. Each layer makes the next one safer and more useful.</p>
+</article>
+</section>
+<noscript>
+<section aria-labelledby="noscript-title" class="panel panel-wide noscript-roadmap">
+<h2 id="noscript-title">Roadmap phases</h2>
+<ol>
+<li>Public Trust Foundation</li>
+<li>Content Ingestion Pipeline</li>
+<li>AI Knowledge Layer</li>
+<li>Creator and Rights Controls</li>
+<li>Analytics and Public Signals</li>
+<li>Monetization Layer</li>
+</ol>
+</section>
+</noscript>
+</main>
+<script defer="" src="./roadmap-dataviz-test.js"></script>
+<footer class="ay-site-footer" data-footer-contract="personal-v1" aria-label="Site footer">
+<div class="ay-wrap ay-footer-grid">
+  <section class="ay-footer-brand" aria-label="Alex Yarosh">
+    <p class="ay-footer-brand__name">Alex Yarosh</p>
+    <h2>AI Search Visibility Consultant</h2>
+    <p>I show local service businesses why Google and AI recommend competitors — and what to fix first.</p>
+  </section>
+  <nav aria-label="Footer Start Here">
+    <h3>Start Here</h3>
+    <ul class="ay-footer-menu">
+      <li><a href="/ai-visibility-audit/?offer=snapshot_free#audit-offer-request">Get Free Snapshot</a></li>
+      <li><a href="/services/">Services</a></li>
+      <li><a href="/pricing/">Pricing</a></li>
+      <li><a href="/about/">About</a></li>
+      <li><a href="/contact/">Contact</a></li>
+    </ul>
+  </nav>
+  <nav aria-label="Footer Research">
+    <h3>Research</h3>
+    <ul class="ay-footer-menu">
+      <li><a href="/research/recommendation-gap/">The Recommendation Gap</a></li>
+      <li><a href="/results/">Results &amp; Case Notes</a></li>
+      <li><a href="/insights/">Insights</a></li>
+      <li><a href="/knowledge/">Base2026 Library</a></li>
+      <li><a href="/knowledge/methodology.html">Methodology</a></li>
+    </ul>
+  </nav>
+  <nav aria-label="Footer Trust">
+    <h3>Trust</h3>
+    <ul class="ay-footer-menu">
+      <li><a href="/privacy-policy/">Privacy Policy</a></li>
+      <li><a href="/knowledge/source-policy.html">Source &amp; Content Policy</a></li>
+      <li><a href="/knowledge/opt-out.html">Creator Correction / Removal</a></li>
+      <li><button class="ay-footer-link-button" type="button" data-cookie-preferences>Cookie Preferences</button></li>
+    </ul>
+  </nav>
+</div>
+<div class="ay-footer-bottom">
+  <span>© 2026 Alex Yarosh. Independent consultant serving US local service businesses remotely.</span>
+</div>
+</footer>
 </body>
 </html>

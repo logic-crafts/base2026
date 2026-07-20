@@ -175,7 +175,7 @@ def test_every_master_ai_visibility_page_renders_only_the_v2_system() -> None:
         assert 'class="ayds-root ayds-mode-editorial' in rendered
         assert 'data-b26-visual-root="v2"' in rendered
         assert rendered.count("data-b26-product-header") == 1
-        assert rendered.count("data-b26-product-footer") == 1
+        assert rendered.count('data-footer-contract="personal-v1"') == 1
         assert 'class="b26-money-hero ayds-hero"' in rendered
         assert rendered.count('data-b26-component="B26-09"') == 1
         assert rendered.count('href="/knowledge/apply-research.html"') == 1
@@ -185,8 +185,9 @@ def test_every_master_ai_visibility_page_renders_only_the_v2_system() -> None:
         assert 'action="/wp-admin/admin-post.php"' not in rendered
         assert 'href="/ai-visibility-audit/"' not in rendered
         assert 'href="/ai-visibility-diagnostic-audit/"' not in rendered
-        assert 'href="/services/"' not in rendered
-        assert 'href="/pricing/"' not in rendered
+        main_markup = rendered.split("</main>", 1)[0]
+        assert 'href="/services/"' not in main_markup
+        assert 'href="/pricing/"' not in main_markup
         assert rendered.count("<h1") == 1
         assert f'<link rel="canonical" href="{expected_canonical}"' in rendered
         assert 'meta name="robots" content="index,follow"' in rendered
@@ -204,7 +205,7 @@ def test_ai_visibility_collection_preserves_search_hooks_and_product_mode() -> N
     assert 'class="ayds-root ayds-mode-product' in rendered
     assert 'data-b26-visual-root="v2"' in rendered
     assert rendered.count("data-b26-product-header") == 1
-    assert rendered.count("data-b26-product-footer") == 1
+    assert rendered.count('data-footer-contract="personal-v1"') == 1
     assert rendered.count('data-b26-component="B26-09"') == 1
     assert rendered.count('href="/knowledge/apply-research.html"') == 1
     assert "ay-v2-mega" not in rendered

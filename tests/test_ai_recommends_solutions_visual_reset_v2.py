@@ -173,9 +173,9 @@ def test_solutions_generator_uses_only_shared_visual_contract(tmp_path: Path) ->
         assert 'data-alex-design-system="v2"' in page
         assert page.count("alex-v4-static-shell.js") == 1
         assert 'class="ay-v2-header b26-product-header"' in page
-        assert 'class="ay-site-footer b26-product-footer"' in page
+        assert 'class="ay-site-footer" data-footer-contract="personal-v1"' in page
         assert page.count("data-b26-product-header") == 1
-        assert page.count("data-b26-product-footer") == 1
+        assert page.count('data-footer-contract="personal-v1"') == 1
         assert 'data-b26-visual-root="v2"' in page
         assert page.count('data-b26-component="B26-09"') <= 1
         header = page.split("</header>", 1)[0]

@@ -64,8 +64,8 @@ def test_public_family_shell_uses_product_mode_and_brand_root() -> None:
     assert body_classes.count("ayds-mode-product") == 1
     assert "ayds-mode-editorial" not in body_classes
     assert soup.select_one('.b26-product-header__wordmark[href="/knowledge/"]')
-    assert soup.select_one('footer.b26-product-footer[data-b26-product-footer]')
-    assert soup.select_one('.b26-product-footer a[href="/knowledge/topics/"]')
+    assert soup.select_one('footer.ay-site-footer[data-footer-contract="personal-v1"]')
+    assert soup.select_one('footer a[href="/knowledge/"]')
     assert not soup.select_one('.ay-v2-base-mega')
 
 
@@ -80,7 +80,7 @@ def test_governance_shell_uses_editorial_mode_and_base_product_boundary() -> Non
     assert "ayds-mode-product" not in body_classes
     assert soup.body.get("data-b26-visual-root") == "v2"
     assert soup.select_one("header.b26-product-header[data-b26-product-header]")
-    assert soup.select_one("footer.b26-product-footer[data-b26-product-footer]")
+    assert soup.select_one('footer.ay-site-footer[data-footer-contract="personal-v1"]')
     assert not soup.select_one(".ay-v2-mega")
     assert not soup.select_one('form[action="/wp-admin/admin-post.php"]')
     assert not soup.select_one('[data-b26-component="B26-09"]')

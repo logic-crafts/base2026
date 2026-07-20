@@ -1,18 +1,19 @@
 """Canonical compact shell for Base2026 research-product routes.
 
-The full Alex commercial footer remains owned by the personal site.  Base2026
-uses these two static templates so generator families and strict Source Detail
-cannot drift into separate navigation or conversion systems.
+Base2026 keeps its own product header, while the footer is rendered from the
+same frozen global Alex template used by the search entrypoint. That makes the
+footer a shared system surface rather than a second Base-only variation.
 """
 
 from __future__ import annotations
 
 from pathlib import Path
 
+from alex_v4_static_shell import footer_html as global_footer_html
+
 
 ROOT = Path(__file__).resolve().parents[1]
 HEADER_TEMPLATE = ROOT / "templates/shared/base2026-product-header.html"
-FOOTER_TEMPLATE = ROOT / "templates/shared/base2026-product-footer.html"
 
 
 def _template(path: Path) -> str:
@@ -27,4 +28,4 @@ def header_html() -> str:
 
 
 def footer_html() -> str:
-    return _template(FOOTER_TEMPLATE)
+    return global_footer_html()

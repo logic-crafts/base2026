@@ -59,7 +59,7 @@ def footer_html() -> str:
     template prevents legacy/current function-selection regressions.
     """
     inner = LIVE_FOOTER_TEMPLATE.read_text(encoding="utf-8").strip()
-    return f'<footer class="ay-site-footer" aria-label="Site footer">\n{inner}\n</footer>'
+    return f'<footer class="ay-site-footer" data-footer-contract="personal-v1" aria-label="Site footer">\n{inner}\n</footer>'
 
 
 def apply_alex_v4_shell(page: str, relative_root: str = "..", mode: str = "editorial") -> str:

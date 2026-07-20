@@ -136,7 +136,7 @@ async function main() {
           const root = document.body;
           const h1 = document.querySelector("main h1");
           const header = document.querySelector("header.b26-product-header");
-          const footer = document.querySelector("footer.b26-product-footer");
+          const footer = document.querySelector('footer.ay-site-footer[data-footer-contract="personal-v1"]');
           const components = [...document.querySelectorAll("[data-b26-component]")].map((node) => node.getAttribute("data-b26-component"));
           const rootStyle = root ? getComputedStyle(root) : null;
           const h1Style = h1 ? getComputedStyle(h1) : null;

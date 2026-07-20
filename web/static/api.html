@@ -72,61 +72,46 @@
 <span class="b26-k-document-context" role="note">Base2026 document</span></div>
 </section>
 <article class="b26-k-document-body ayds-document-body"><section class="content-section ayds-section"><p>Base2026 is built to be useful to humans and AI agents without forcing either one to scrape the visual interface. The public site exposes a small read-only data layer with the same public boundary as the website: reviewed source records, public passages, creator/topic metadata, and source-backed intelligence only.</p><p>Private research vaults, raw captions, raw ASR, media files, credentials, logs, and unreviewed pipeline artifacts are not part of the public API surface.</p></section><section class="content-section ayds-section"><h2>Public entry points</h2><ul><li>Human search workspace: <code>/knowledge/</code></li><li>Agent-readable context file: <code>/knowledge/llms.txt</code></li><li>Public data dictionary: <code>/knowledge/data-dictionary.json</code></li><li>Public API index: <code>/knowledge/api-index.json</code></li><li>Public sitemap: <code>/knowledge/sitemap.xml</code></li><li>Research-to-audit bridge: <code>/knowledge/apply-research.html</code></li></ul></section><section class="content-section ayds-section"><h2>Static public data</h2><p>These files are safe read-only exports for external tools, notebooks, audits, and AI workflows.</p><ul><li><code>/knowledge/static/manifest.json</code> - release counts and public export metadata.</li><li><code>/knowledge/static/documents.jsonl</code> - source-level search documents and public source records.</li><li><code>/knowledge/static/passages.jsonl</code> - searchable public evidence passages linked to source records.</li><li><code>/knowledge/static/insight_cards.jsonl</code> - reviewed public source-backed insight cards.</li><li><code>/knowledge/static/topic_signal_briefs.jsonl</code> - deterministic summaries for strong topics.</li><li><code>/knowledge/data-dictionary.json</code> - field descriptions and public/private boundary notes.</li></ul></section><section class="content-section ayds-section"><h2>Search endpoint</h2><p>The public UI searches through a server-side Meilisearch proxy:</p><p><code>POST /knowledge-search/multi-search</code></p><p>The proxy injects the public search key server-side. Do not call Meilisearch directly and do not expect private data, raw captions, or write access. External integrations should prefer the static JSONL files unless they need live search ranking.</p></section><section class="content-section ayds-section"><h2>AI usage</h2><p>AI agents can use Base2026 as a source-backed research layer by reading <code>/knowledge/llms.txt</code>, then using the data dictionary and public JSONL files. When citing Base2026, prefer canonical source, topic, creator, or comparison pages rather than copying raw rows.</p><p>For business-specific implementation, use <code>/knowledge/apply-research.html</code> as the public bridge from Base2026 source intelligence to Alex Yarosh's AI Visibility Snapshot, Diagnostic Audit, and service workflow.</p><p>Good use cases:</p><ul><li>find creators who discuss a topic;</li><li>compare repeated tactics across creators;</li><li>inspect source-backed SEO/GEO/AEO claims;</li><li>build internal research notebooks from public records;</li><li>cite a canonical Base2026 source page with original creator attribution.</li></ul><p>Not supported:</p><ul><li>raw transcript harvesting;</li><li>creator impersonation;</li><li>private lead or admin data access;</li><li>writes, corrections, or moderation through public endpoints;</li><li>replacing the original creator channel.</li></ul></section><section class="content-section ayds-section"><h2>Future MCP contract</h2><p>The planned MCP layer should remain read-only at first:</p><ul><li>search sources by query and filters;</li><li>get one source by item ID;</li><li>get one topic by topic ID;</li><li>list creators with filters;</li><li>compare creator viewpoints for one topic.</li></ul><p>Every tool response must preserve attribution, canonical URLs, original source links, and public/private policy flags.</p></section></article>
-
-
-
-
-
 </main>
-<footer aria-label="Base2026 footer" class="ay-site-footer b26-product-footer" data-b26-product-footer="">
-<div class="ay-wrap ay-footer-grid b26-product-footer__grid" data-b26-shell="">
-<section aria-label="Base2026" class="ay-footer-brand b26-product-footer__identity">
-<p class="ay-eyebrow eyebrow ayds-eyebrow">Base2026</p>
-<h2>Public evidence, with attribution.</h2>
-<p>Search reviewed sources, topics and creator viewpoints. Evidence first; services stay optional.</p>
-<div aria-label="Base2026 actions" class="ay-actions ayds-actions">
-<a class="ay-button ayds-btn ayds-btn--primary" href="/knowledge/">Search the library</a>
-<a class="ay-button-secondary ayds-btn ayds-btn--secondary" href="/knowledge/methodology.html">Read methodology</a>
+<footer class="ay-site-footer" data-footer-contract="personal-v1" aria-label="Site footer">
+<div class="ay-wrap ay-footer-grid">
+  <section class="ay-footer-brand" aria-label="Alex Yarosh">
+    <p class="ay-footer-brand__name">Alex Yarosh</p>
+    <h2>AI Search Visibility Consultant</h2>
+    <p>I show local service businesses why Google and AI recommend competitors — and what to fix first.</p>
+  </section>
+  <nav aria-label="Footer Start Here">
+    <h3>Start Here</h3>
+    <ul class="ay-footer-menu">
+      <li><a href="/ai-visibility-audit/?offer=snapshot_free#audit-offer-request">Get Free Snapshot</a></li>
+      <li><a href="/services/">Services</a></li>
+      <li><a href="/pricing/">Pricing</a></li>
+      <li><a href="/about/">About</a></li>
+      <li><a href="/contact/">Contact</a></li>
+    </ul>
+  </nav>
+  <nav aria-label="Footer Research">
+    <h3>Research</h3>
+    <ul class="ay-footer-menu">
+      <li><a href="/research/recommendation-gap/">The Recommendation Gap</a></li>
+      <li><a href="/results/">Results &amp; Case Notes</a></li>
+      <li><a href="/insights/">Insights</a></li>
+      <li><a href="/knowledge/">Base2026 Library</a></li>
+      <li><a href="/knowledge/methodology.html">Methodology</a></li>
+    </ul>
+  </nav>
+  <nav aria-label="Footer Trust">
+    <h3>Trust</h3>
+    <ul class="ay-footer-menu">
+      <li><a href="/privacy-policy/">Privacy Policy</a></li>
+      <li><a href="/knowledge/source-policy.html">Source &amp; Content Policy</a></li>
+      <li><a href="/knowledge/opt-out.html">Creator Correction / Removal</a></li>
+      <li><button class="ay-footer-link-button" type="button" data-cookie-preferences>Cookie Preferences</button></li>
+    </ul>
+  </nav>
 </div>
-</section>
-<nav aria-label="Base2026 browse links">
-<h3>Browse</h3>
-<ul class="ay-footer-menu">
-<li><a href="/knowledge/">Search</a></li>
-<li><a href="/knowledge/topics/">Topics</a></li>
-<li><a href="/knowledge/creators/">Creators</a></li>
-<li><a href="/knowledge/solutions/">Solutions</a></li>
-</ul>
-</nav>
-<nav aria-label="Base2026 research links">
-<h3>Research</h3>
-<ul class="ay-footer-menu">
-<li><a href="/knowledge/analytics.html">Analytics</a></li>
-<li><a href="/knowledge/methodology.html">Methodology</a></li>
-<li><a href="/knowledge/api.html">API &amp; AI access</a></li>
-</ul>
-</nav>
-<nav aria-label="Base2026 trust links">
-<h3>Trust</h3>
-<ul class="ay-footer-menu">
-<li><a href="/knowledge/source-policy.html">Source policy</a></li>
-<li><a href="/knowledge/opt-out.html">Correction or removal</a></li>
-<li><a href="/privacy-policy/">Privacy</a></li>
-<li><button class="ay-footer-link-button b26-product-footer__link-button" data-cookie-preferences="" type="button">Cookie preferences</button></li>
-<li><a href="/about/">About Alex</a></li>
-</ul>
-</nav>
-<nav aria-label="Base2026 project links">
-<h3>Base2026</h3>
-<ul class="ay-footer-menu">
-<li><a href="/knowledge/roadmap.html">Roadmap</a></li>
-<li><a href="/knowledge/support.html">Support</a></li>
-<li><a href="/knowledge/story.html">Project story</a></li>
-</ul>
-</nav>
-</div>
-<div class="ay-footer-bottom b26-product-footer__bottom" data-b26-shell="">
-<span>© 2026 Logic Crafts LLC, Kyrgyzstan. Base2026 is Alex Yarosh’s independent experimental research product, not a marketing agency or service.</span>
+<div class="ay-footer-bottom">
+  <span>© 2026 Alex Yarosh. Independent consultant serving US local service businesses remotely.</span>
 </div>
 </footer>
 <section aria-label="Cookie preferences" class="cookie-banner ayds-card ayds-card--feature" data-cookie-banner="" hidden="">

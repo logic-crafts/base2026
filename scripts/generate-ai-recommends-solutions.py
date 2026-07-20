@@ -96,8 +96,8 @@ def apply_solution_design_system(page: str) -> str:
         raise ValueError(f"Solution page retains legacy public assets: {', '.join(leaked)}")
     if rendered.count("alex-design-system-v2.css") != 1:
         raise ValueError("Solution page must reference exactly one shared design-system stylesheet")
-    if rendered.count("data-b26-product-header") != 1 or rendered.count("data-b26-product-footer") != 1:
-        raise ValueError("Solution page must contain exactly one canonical Base product header and footer")
+    if rendered.count("data-b26-product-header") != 1 or rendered.count('data-footer-contract="personal-v1"') != 1:
+        raise ValueError("Solution page must contain exactly one Base product header and global footer")
     return rendered
 
 

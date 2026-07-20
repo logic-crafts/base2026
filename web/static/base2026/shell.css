@@ -758,3 +758,66 @@ body.ay-alex-v4-static.ay-stitch-home-v3[data-b26-visual-root="v2"] .roadmap-pag
     margin-top: 24px;
   }
 }
+
+/* Global personal-footer contract. Base2026 keeps its own product header and
+   research routes, but every public family shares the accepted Alex footer
+   geometry, hierarchy and mobile behaviour. */
+body.ay-alex-v4-static.ay-stitch-home-v3[data-b26-visual-root="v2"] .ay-site-footer[data-footer-contract="personal-v1"] {
+  padding: 72px 20px 42px !important;
+  background: #fff !important;
+  color: #0f172a !important;
+  box-shadow: inset 0 1px 0 rgb(127 127 127 / 18%);
+}
+body.ay-alex-v4-static.ay-stitch-home-v3[data-b26-visual-root="v2"] .ay-site-footer[data-footer-contract="personal-v1"] .ay-footer-grid {
+  grid-template-columns: minmax(18rem, 1.3fr) repeat(3, minmax(9rem, .7fr));
+  gap: clamp(24px, 4vw, 54px);
+  align-items: start;
+}
+body.ay-alex-v4-static.ay-stitch-home-v3[data-b26-visual-root="v2"] .ay-site-footer[data-footer-contract="personal-v1"] .ay-footer-brand h2 {
+  max-width: 24rem;
+  margin: 0 0 12px;
+  font-size: 18px;
+  line-height: 1.25;
+}
+body.ay-alex-v4-static.ay-stitch-home-v3[data-b26-visual-root="v2"] .ay-site-footer[data-footer-contract="personal-v1"] .ay-footer-brand__name {
+  margin: 0 0 8px;
+  font-family: var(--ayds-font-ui);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+}
+body.ay-alex-v4-static.ay-stitch-home-v3[data-b26-visual-root="v2"] .ay-site-footer[data-footer-contract="personal-v1"] .ay-footer-brand > p:last-child {
+  max-width: 29rem;
+  margin-bottom: 0;
+}
+body.ay-alex-v4-static.ay-stitch-home-v3[data-b26-visual-root="v2"] .ay-site-footer[data-footer-contract="personal-v1"] .ay-footer-menu {
+  margin: 0;
+}
+body.ay-alex-v4-static.ay-stitch-home-v3[data-b26-visual-root="v2"] .ay-site-footer[data-footer-contract="personal-v1"] .ay-footer-bottom {
+  width: min(100%, 1160px);
+  margin: 34px auto 0;
+  padding-top: 20px;
+  border-top: 1px solid rgb(127 127 127 / 18%);
+}
+
+@media (max-width: 900px) {
+  body.ay-alex-v4-static.ay-stitch-home-v3[data-b26-visual-root="v2"] .ay-site-footer[data-footer-contract="personal-v1"] .ay-footer-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  body.ay-alex-v4-static.ay-stitch-home-v3[data-b26-visual-root="v2"] .ay-site-footer[data-footer-contract="personal-v1"] .ay-footer-brand {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 620px) {
+  body.ay-alex-v4-static.ay-stitch-home-v3[data-b26-visual-root="v2"] .ay-site-footer[data-footer-contract="personal-v1"] {
+    padding: 48px 20px 38px !important;
+  }
+  body.ay-alex-v4-static.ay-stitch-home-v3[data-b26-visual-root="v2"] .ay-site-footer[data-footer-contract="personal-v1"] .ay-footer-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  body.ay-alex-v4-static.ay-stitch-home-v3[data-b26-visual-root="v2"] .ay-site-footer[data-footer-contract="personal-v1"] .ay-footer-brand {
+    grid-column: auto;
+  }
+}

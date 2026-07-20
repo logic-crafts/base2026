@@ -46,20 +46,20 @@ def metadata(html: str) -> tuple[str, str, str, str]:
 def assert_product_shell(soup: BeautifulSoup) -> None:
     assert soup.body and soup.body.get("data-b26-visual-root") == "v2"
     assert soup.select_one("header.b26-product-header[data-b26-product-header]")
-    assert soup.select_one("footer.b26-product-footer[data-b26-product-footer]")
+    assert soup.select_one('footer.ay-site-footer[data-footer-contract="personal-v1"]')
     assert soup.select_one('#ay-v2-mobile-panel')
     assert soup.select_one('[aria-controls="ay-v2-mobile-panel"]')
     assert soup.select_one('footer [data-cookie-preferences]')
     assert soup.select_one('[data-cookie-dialog]')
     assert soup.select_one('script[src*="cookie-consent.js"]')
-    assert "Logic Crafts LLC, Kyrgyzstan" in soup.select_one("footer").get_text(" ", strip=True)
+    assert "Independent consultant serving US local service businesses remotely" in soup.select_one("footer").get_text(" ", strip=True)
     assert soup.select_one("footer .ay-footer-grid")
-    assert len(soup.select("footer .ay-footer-menu")) == 4
+    assert len(soup.select("footer .ay-footer-menu")) == 3
     assert len(soup.select('[data-b26-component="B26-09"]')) <= 1
     assert not soup.select_one('header a[href="/knowledge/apply-research.html"]')
     assert not soup.select_one('footer a[href="/knowledge/apply-research.html"]')
     for anchor in soup.select(
-        "header[data-b26-product-header] a[href], footer[data-b26-product-footer] a[href]"
+        'header[data-b26-product-header] a[href], footer[data-footer-contract="personal-v1"] a[href]'
     ):
         assert str(anchor.get("href") or "").startswith("/")
 
