@@ -23,7 +23,7 @@ sys.path.insert(0, str(SCRIPTS))
 from template_migration.source_detail import SourceSolution, adapt_source_detail, render_source_detail  # noqa: E402
 from alex_v4_static_shell import shell_js  # noqa: E402
 
-RENDERER_VERSION = "source-detail-v2-b26-nonsearch-v2-20260718"
+RENDERER_VERSION = "source-detail-v2-global-footer-roadmap-v6-20260720"
 
 
 def sha256(path: Path) -> str:

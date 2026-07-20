@@ -23,7 +23,7 @@ from bs4 import BeautifulSoup, Tag
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS = ROOT / "scripts"
 BASE_PRODUCT_FOOTER_TEMPLATE = ROOT / "templates" / "shared" / "base2026-product-footer.html"
-BASE_PRODUCT_FOOTER_TEMPLATE_SHA256 = "31785636250a8afdd3b2dfe831ec5d11ae9141433547334e562431ba611779a7"
+BASE_PRODUCT_FOOTER_TEMPLATE_SHA256 = "5c916bb052d89c3841375cdd255cc5909e74cb996ddf3b1b493f7ab28a5a2453"
 sys.path.insert(0, str(SCRIPTS))
 from template_migration.source_detail import adapt_source_detail  # noqa: E402
 
@@ -214,7 +214,7 @@ def validate_shared_footer_contract(candidate: Path, route: str) -> list[str]:
         navs: list[tuple[str, str, list[tuple[str, str]]]] = []
         for nav in node_grid.find_all("nav", recursive=False):
             entries: list[tuple[str, str]] = []
-            for control in nav.find_all(["a", "button"], recursive=False):
+            for control in nav.find_all(["a", "button"]):
                 target = (
                     "cookie-preferences"
                     if control.name == "button" and control.has_attr("data-cookie-preferences")
@@ -238,9 +238,9 @@ def validate_shared_footer_contract(candidate: Path, route: str) -> list[str]:
     expected_signature = semantic_signature(expected_footer)
     actual_signature = semantic_signature(footer)
     if expected_signature.get("grid") is None:
-        return ["Base product footer authority fixture missing canonical compact grid"]
+        return ["Base product footer authority fixture missing canonical global grid"]
     if actual_signature.get("grid") is None:
-        issues.append("shared footer missing canonical Base product grid")
+        issues.append("shared footer missing canonical global grid")
     if actual_signature != expected_signature:
         issues.append("shared footer semantic contract drift from SHA-locked Base product authority fixture")
 
@@ -249,10 +249,10 @@ def validate_shared_footer_contract(candidate: Path, route: str) -> list[str]:
     expected_css = (
         '[data-b26-visual-root="v2"] .b26-product-footer',
         ".b26-product-footer__grid {",
-        "grid-template-columns: minmax(18rem, 1.5fr) repeat(3, minmax(8rem, 1fr));",
+        "grid-template-columns: minmax(390px, 1.15fr) repeat(4, minmax(110px, .7fr));",
         ".b26-product-footer__link-button {",
         ".b26-product-footer__bottom {",
-        "background: var(--b26-color-ink-950) !important;",
+        "background: var(--ayds-color-paper) !important;",
         "@media (max-width: 48rem)",
     )
     for required in expected_css:

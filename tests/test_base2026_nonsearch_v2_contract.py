@@ -53,7 +53,8 @@ def assert_product_shell(soup: BeautifulSoup) -> None:
     assert soup.select_one('[data-cookie-dialog]')
     assert soup.select_one('script[src*="cookie-consent.js"]')
     assert "Logic Crafts LLC, Kyrgyzstan" in soup.select_one("footer").get_text(" ", strip=True)
-    assert not soup.select_one("footer .ay-footer-grid")
+    assert soup.select_one("footer .ay-footer-grid")
+    assert len(soup.select("footer .ay-footer-menu")) == 4
     assert len(soup.select('[data-b26-component="B26-09"]')) <= 1
     assert not soup.select_one('header a[href="/knowledge/apply-research.html"]')
     assert not soup.select_one('footer a[href="/knowledge/apply-research.html"]')

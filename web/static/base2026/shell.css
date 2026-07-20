@@ -415,86 +415,43 @@ body.ay-alex-v4-static.ay-stitch-home-v3[data-b26-visual-root="v2"] .b26-product
   border-radius: var(--b26-radius-control);
 }
 
-/* Compact research-product footer; it keeps useful links without a sales block. */
+/* Base2026 uses the global V4 footer geometry and token set. Its copy stays
+   research-specific, but it must never become a second visual footer system. */
 body.ay-alex-v4-static.ay-stitch-home-v3[data-b26-visual-root="v2"] .b26-product-footer {
-  padding: var(--b26-space-10) 0 var(--b26-space-6) !important;
-  border: 0;
-  background: var(--b26-color-ink-950) !important;
-  color: var(--b26-color-white) !important;
-  box-shadow: none;
+  padding: clamp(46px, 6vw, 72px) 20px 42px !important;
+  background: var(--ayds-color-paper) !important;
+  color: var(--ayds-color-ink) !important;
+  box-shadow: inset 0 1px 0 var(--ayds-color-line);
 }
 
 .b26-product-footer__grid {
   display: grid;
-  grid-template-columns: minmax(18rem, 1.5fr) repeat(3, minmax(8rem, 1fr));
-  gap: var(--b26-space-8);
+  grid-template-columns: minmax(390px, 1.15fr) repeat(4, minmax(110px, .7fr));
+  gap: clamp(18px, 1.8vw, 28px);
 }
 
 .b26-product-footer__identity {
-  max-width: 32rem;
-}
-
-body.ay-alex-v4-static.ay-stitch-home-v3[data-b26-visual-root="v2"] .b26-product-footer :is(h2, h3, p, a, button) {
-  color: var(--b26-color-white) !important;
-}
-
-body.ay-alex-v4-static.ay-stitch-home-v3[data-b26-visual-root="v2"] .b26-product-footer h2 {
-  margin: var(--b26-space-3) 0;
-  font-size: var(--b26-type-h3);
-}
-
-body.ay-alex-v4-static.ay-stitch-home-v3[data-b26-visual-root="v2"] .b26-product-footer p {
-  margin: 0;
-  opacity: 0.72;
-  font-size: var(--b26-type-small);
-}
-
-body.ay-alex-v4-static.ay-stitch-home-v3[data-b26-visual-root="v2"] .b26-product-footer nav {
-  display: grid;
-  align-content: start;
-  gap: var(--b26-space-2);
-}
-
-body.ay-alex-v4-static.ay-stitch-home-v3[data-b26-visual-root="v2"] .b26-product-footer nav h3 {
-  margin: 0 0 var(--b26-space-2);
-  opacity: 0.62;
-  font-family: var(--b26-font-label) !important;
-  font-size: var(--b26-type-label);
-}
-
-body.ay-alex-v4-static.ay-stitch-home-v3[data-b26-visual-root="v2"] .b26-product-footer nav a {
-  padding: var(--b26-space-1) 0;
-  opacity: 0.82;
-  font-size: var(--b26-type-small);
-  text-decoration: none;
+  min-width: 0;
 }
 
 body.ay-alex-v4-static.ay-stitch-home-v3[data-b26-visual-root="v2"] .b26-product-footer__link-button {
-  width: fit-content;
-  margin: 0;
-  padding: var(--b26-space-1) 0;
-  border: 0;
-  background: transparent;
-  opacity: 0.82;
-  font: inherit;
-  font-size: var(--b26-type-small);
-  text-align: left;
-  cursor: pointer;
+  color: var(--ayds-color-muted) !important;
 }
 
 body.ay-alex-v4-static.ay-stitch-home-v3[data-b26-visual-root="v2"] .b26-product-footer__link-button:hover {
-  opacity: 1;
+  color: var(--ayds-color-ink) !important;
   text-decoration: underline;
-  text-underline-offset: 0.25em;
+  text-underline-offset: 4px;
 }
 
 .b26-product-footer__bottom {
-  margin-top: var(--b26-space-8);
-  padding-top: var(--b26-space-4);
-  border-top: 1px solid var(--b26-border-strong);
-  opacity: 0.62;
-  font-family: var(--b26-font-mono);
-  font-size: var(--b26-type-label);
+  width: min(100%, 960px);
+  margin: 34px auto 0;
+  padding: 18px 0 0;
+  border-top: 1px solid var(--ayds-color-line);
+  color: var(--ayds-color-muted);
+  font-size: 13px;
+  line-height: 1.5;
 }
 
 @media (max-width: 64rem) {
@@ -515,13 +472,8 @@ body.ay-alex-v4-static.ay-stitch-home-v3[data-b26-visual-root="v2"] .b26-product
     display: block;
   }
 
-  .b26-product-footer__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .b26-product-footer__identity {
-    grid-column: 1 / -1;
-  }
+  .b26-product-footer__grid { grid-template-columns: minmax(360px, 1.15fr) repeat(2, minmax(135px, .75fr)); gap: 28px; }
+  .b26-product-footer__identity { grid-row: span 2; }
 }
 
 @media (max-width: 48rem) {
@@ -740,47 +692,69 @@ body.ay-alex-v4-static.ay-stitch-home-v3[data-b26-visual-root="v2"] .b26-product
     min-height: 44px;
   }
 
+  .b26-product-footer__grid { grid-template-columns: 1fr; gap: 30px; }
+  .b26-product-footer__identity { grid-row: auto; }
+  .b26-product-footer__bottom { margin-top: 40px; }
+}
+
+/* The roadmap is a wide, interactive operating map, not a narrow document.
+   Keep all six phases in the first row at desktop sizes; the note gets its own
+   row so it cannot consume the phase controls' width. */
+body.ay-alex-v4-static.ay-stitch-home-v3[data-b26-visual-root="v2"] .roadmap-page .control-strip {
+  grid-template-columns: minmax(0, 1fr);
+}
+body.ay-alex-v4-static.ay-stitch-home-v3[data-b26-visual-root="v2"] .roadmap-page .view-note {
+  justify-self: end;
+  max-width: 42rem;
+}
+
+.b26-k-document-context {
+  display: inline-flex;
+  min-height: 42px;
+  padding: 11px 15px;
+  align-items: center;
+  border: 1px solid var(--ayds-color-line-strong);
+  border-radius: var(--ayds-radius-pill);
+  background: transparent;
+  color: var(--ayds-color-muted);
+  font: 700 10px/1 var(--ayds-font-ui);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+@media (max-width: 720px) {
+  .b26-k-document-context { width: 100%; justify-content: center; }
+
+  /* Retain the global footer's typography and hierarchy, but use a compact,
+     balanced two-column mobile ledger so Base2026 does not waste a full screen
+     per link group. Every footer control remains a real 44px touch target. */
+  body.ay-alex-v4-static.ay-stitch-home-v3[data-b26-visual-root="v2"] .b26-product-footer .b26-product-footer__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px 18px;
+  }
   body.ay-alex-v4-static.ay-stitch-home-v3[data-b26-visual-root="v2"] .b26-product-footer {
-    padding: var(--b26-space-4) 0 var(--b26-space-2) !important;
+    padding: 36px 20px 32px !important;
   }
-
-  .b26-product-footer__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--b26-space-3) var(--b26-space-4);
-  }
-
-  .b26-product-footer__identity {
+  body.ay-alex-v4-static.ay-stitch-home-v3[data-b26-visual-root="v2"] .b26-product-footer .b26-product-footer__identity {
     grid-column: 1 / -1;
   }
-
-  body.ay-alex-v4-static.ay-stitch-home-v3[data-b26-visual-root="v2"] .b26-product-footer nav {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 0;
+  body.ay-alex-v4-static.ay-stitch-home-v3[data-b26-visual-root="v2"] .b26-product-footer .ay-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    max-width: none;
+    margin-top: 12px;
   }
-
-  body.ay-alex-v4-static.ay-stitch-home-v3[data-b26-visual-root="v2"] .b26-product-footer nav:last-of-type {
-    grid-column: 1 / -1;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: var(--b26-space-4);
-  }
-
-  body.ay-alex-v4-static.ay-stitch-home-v3[data-b26-visual-root="v2"] .b26-product-footer nav h3 {
-    grid-column: 1 / -1;
-    margin-bottom: 0;
-  }
-
-  body.ay-alex-v4-static.ay-stitch-home-v3[data-b26-visual-root="v2"] .b26-product-footer nav :is(a, button) {
-    display: flex;
-    min-width: 0;
+  body.ay-alex-v4-static.ay-stitch-home-v3[data-b26-visual-root="v2"] .b26-product-footer .ay-actions a,
+  body.ay-alex-v4-static.ay-stitch-home-v3[data-b26-visual-root="v2"] .b26-product-footer .ay-footer-menu :is(a, button) {
+    display: inline-flex;
+    min-width: 44px;
     min-height: 44px;
     align-items: center;
-    font-size: 12px;
-    line-height: 1.25;
   }
-
-  .b26-product-footer__bottom {
-    margin-top: var(--b26-space-3);
-    padding-top: var(--b26-space-3);
-    line-height: 1.35;
+  body.ay-alex-v4-static.ay-stitch-home-v3[data-b26-visual-root="v2"] .b26-product-footer .ay-footer-menu {
+    gap: 0;
+  }
+  body.ay-alex-v4-static.ay-stitch-home-v3[data-b26-visual-root="v2"] .b26-product-footer__bottom {
+    margin-top: 24px;
   }
 }

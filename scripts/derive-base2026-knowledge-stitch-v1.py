@@ -182,7 +182,9 @@ def add_local_nav(soup: BeautifulSoup, main: Tag, family: str) -> None:
         main.insert(0, nav)
 
 
-def compose_document(soup: BeautifulSoup, main: Tag) -> None:
+def compose_document(soup: BeautifulSoup, main: Tag, route: str) -> None:
+    if Path(route).name == "roadmap.html":
+        return
     if main.select_one(".b26-k-document-layout"):
         return
     sections = [node for node in main.find_all("section", recursive=False) if "page-hero" not in (node.get("class") or [])]
@@ -398,7 +400,7 @@ def transform_page(source: str, rel: str) -> tuple[str, str]:
 
     tag_family_components(main, family)
     if family == "document":
-        compose_document(soup, main)
+        compose_document(soup, main, rel)
     compose_progressive_disclosure(soup, main, family)
     add_local_nav(soup, main, family)
     if header_count != 1 and not soup.select_one("header.ay-v2-header"):

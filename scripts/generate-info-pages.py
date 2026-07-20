@@ -554,6 +554,7 @@ def page_shell(meta: dict[str, str], h1: str, body: str) -> str:
           <a class="ay-button{' is-current' if current_nav == 'search' else ''}" href="/knowledge/"{' aria-current="page"' if current_nav == 'search' else ''}>Search the library</a>
           <a class="ay-button-secondary{' is-current' if current_nav == 'roadmap' else ''}" href="/knowledge/roadmap.html"{' aria-current="page"' if current_nav == 'roadmap' else ''}>Roadmap</a>
           <a class="ay-button-secondary{' is-current' if current_nav == 'support' else ''}" href="/knowledge/support.html"{' aria-current="page"' if current_nav == 'support' else ''}>Support</a>
+          {'<span class="b26-k-document-context" role="note">Base2026 document</span>' if page_class == 'roadmap-page' else ''}
         </div>
       </section>
       {roadmap_experience}

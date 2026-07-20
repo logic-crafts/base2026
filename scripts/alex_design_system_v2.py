@@ -172,7 +172,11 @@ def _add_local_nav(soup: BeautifulSoup, main: Tag) -> None:
         main.insert(0, nav)
 
 
-def _compose_document(soup: BeautifulSoup, main: Tag) -> None:
+def _compose_document(soup: BeautifulSoup, main: Tag, route: str) -> None:
+    # Roadmap is an interactive six-phase map. A document rail steals the
+    # horizontal space that makes both its controls and sequence readable.
+    if Path(route).name == "roadmap.html":
+        return
     if main.select_one(".b26-k-document-layout"):
         return
     sections = [
@@ -371,7 +375,7 @@ def _compose_progressive_disclosure(soup: BeautifulSoup, main: Tag, family: str)
 
 
 def apply_information_architecture(markup: str, route: str) -> str:
-    """Restore the accepted TOC, document rail and disclosures without legacy CSS.
+    """Restore the accepted TOC, document composition and disclosures without legacy CSS.
 
     The accepted Phase 5 package added these semantic controls after generation.
     Visual Reset V2 keeps them as first-class shared components so regeneration
@@ -392,7 +396,7 @@ def apply_information_architecture(markup: str, route: str) -> str:
     if family in {"topic", "topic-index", "compare", "compare-index"}:
         _add_classes(main, f"b26-k-family-{family}")
     if family == "document":
-        _compose_document(soup, main)
+        _compose_document(soup, main, route)
     if family in {"topic", "topic-index"}:
         _add_local_nav(soup, main)
         _compose_progressive_disclosure(soup, main, family)

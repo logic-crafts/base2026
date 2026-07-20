@@ -14,12 +14,13 @@ const ROUTES = [
   { id: "creator", route: "creators/neilpatel.html", required: ["B26-07"], forbiddenHero: "B26-06" },
   { id: "source", route: "sources/tiktok-video-7388244947352210734.html", required: ["B26-04", "B26-08"] },
   { id: "compare", route: "compare/content-repurposing.html", required: ["B26-06"], forbiddenHero: "B26-06" },
+  { id: "roadmap", route: "roadmap.html", required: [], footerMax: 1180 },
 ];
 
 const VIEWPORTS = [
-  { id: "desktop-1440", width: 1440, height: 1000, h1Max: 48, footerMax: 420 },
-  { id: "mobile-390", width: 390, height: 844, h1Max: 36.1, footerMax: 600 },
-  { id: "mobile-320", width: 320, height: 720, h1Max: 36.1, footerMax: 600 },
+  { id: "desktop-1440", width: 1440, height: 1000, h1Max: 48, footerMax: 500 },
+  { id: "mobile-390", width: 390, height: 844, h1Max: 36.1, footerMax: 980 },
+  { id: "mobile-320", width: 320, height: 720, h1Max: 36.1, footerMax: 980 },
 ];
 
 
@@ -193,6 +194,9 @@ async function main() {
           const sourceText = document.querySelector("#source-text");
           const sourceActionsRect = sourceActions?.getBoundingClientRect();
           const sourceTextRect = sourceText?.getBoundingClientRect();
+          const footerStyle = footer ? getComputedStyle(footer) : null;
+          const phaseTabs = [...document.querySelectorAll(".roadmap-page .phase-tab")].filter(visible);
+          const sequenceSteps = [...document.querySelectorAll(".roadmap-page .sequence-step")].filter(visible);
           return {
             visualRoot: root?.getAttribute("data-b26-visual-root") || "",
             background: rootStyle?.backgroundColor || "",
@@ -203,6 +207,7 @@ async function main() {
             scrollWidth: document.documentElement.scrollWidth,
             headerHeight: header?.getBoundingClientRect().height || 0,
             footerHeight: footer?.getBoundingClientRect().height || 0,
+            footerBackground: footerStyle?.backgroundColor || "",
             productHeader: Boolean(header),
             productFooter: Boolean(footer),
             components,
@@ -236,6 +241,11 @@ async function main() {
             forbiddenHeroMatch: forbiddenHero
               ? Boolean(document.querySelector(`.page-hero[data-b26-component="${forbiddenHero}"], .topic-page-hero[data-b26-component="${forbiddenHero}"], .creator-page-hero[data-b26-component="${forbiddenHero}"]`))
               : false,
+            documentRail: Boolean(document.querySelector(".roadmap-page .b26-k-document-rail, .roadmap-page .ayds-document-rail")),
+            documentContext: Boolean(document.querySelector(".roadmap-page .b26-k-document-context[role='note']")),
+            phaseTabCount: phaseTabs.length,
+            phaseTabMinWidth: phaseTabs.length ? Math.min(...phaseTabs.map((node) => node.getBoundingClientRect().width)) : 0,
+            sequenceStepCount: sequenceSteps.length,
           };
         }, { required: route.required, forbiddenHero: route.forbiddenHero || "" });
         diagnostics.mobileMenuOpened = null;
@@ -282,7 +292,9 @@ async function main() {
         if (diagnostics.h1FontSize > viewport.h1Max + 0.01) failures.push(`h1=${diagnostics.h1FontSize}px > ${viewport.h1Max}px`);
         if (diagnostics.scrollWidth > diagnostics.viewportWidth + 1) failures.push(`overflow=${diagnostics.scrollWidth - diagnostics.viewportWidth}px`);
         if (diagnostics.headerHeight > 84) failures.push(`header=${diagnostics.headerHeight}px`);
-        if (diagnostics.footerHeight > viewport.footerMax) failures.push(`footer=${diagnostics.footerHeight}px > ${viewport.footerMax}px`);
+        const footerMax = route.footerMax || viewport.footerMax;
+        if (diagnostics.footerHeight > footerMax) failures.push(`footer=${diagnostics.footerHeight}px > ${footerMax}px`);
+        if (diagnostics.footerBackground !== "rgb(255, 255, 255)") failures.push(`footer background=${diagnostics.footerBackground}`);
         if (diagnostics.missingComponents.length) failures.push(`missing=${diagnostics.missingComponents.join(",")}`);
         if (diagnostics.bridgeCount > 1) failures.push(`bridges=${diagnostics.bridgeCount}`);
         if (diagnostics.forbiddenHeroMatch) failures.push("card component ID assigned to hero");
@@ -303,6 +315,11 @@ async function main() {
         if (viewport.width <= 768 && route.id === "creator" && (diagnostics.creatorCardMedianHeight < 230 || diagnostics.creatorCardMedianHeight > 320 || diagnostics.creatorCardMaxHeight > 330)) failures.push(`creator card heights median=${diagnostics.creatorCardMedianHeight}px max=${diagnostics.creatorCardMaxHeight}px`);
         if (viewport.width <= 768 && route.id === "source" && (diagnostics.sourceHandleFontSize < 20.5 || diagnostics.sourceHandleFontSize > 24.5 || diagnostics.sourceHandleLines > 1)) failures.push(`source handle font=${diagnostics.sourceHandleFontSize}px lines=${diagnostics.sourceHandleLines}`);
         if (viewport.width <= 768 && route.id === "source" && (diagnostics.sourceActionsToTextGap < 0 || diagnostics.sourceActionsToTextGap > 50)) failures.push(`source actions-to-text gap=${diagnostics.sourceActionsToTextGap}px`);
+        if (route.id === "roadmap" && diagnostics.documentRail) failures.push("roadmap document rail present");
+        if (route.id === "roadmap" && !diagnostics.documentContext) failures.push("roadmap document context missing");
+        if (route.id === "roadmap" && viewport.width > 768 && diagnostics.phaseTabCount !== 6) failures.push(`roadmap phase tabs=${diagnostics.phaseTabCount}`);
+        if (route.id === "roadmap" && viewport.width > 768 && diagnostics.phaseTabMinWidth < 120) failures.push(`roadmap phase tab width=${diagnostics.phaseTabMinWidth}px`);
+        if (route.id === "roadmap" && diagnostics.sequenceStepCount !== 6) failures.push(`roadmap sequence steps=${diagnostics.sequenceStepCount}`);
         if (!diagnostics.stickyHeader.visible || !["fixed", "sticky"].includes(diagnostics.stickyHeader.position) || Math.abs(diagnostics.stickyHeader.top) > 16) failures.push(`sticky header=${JSON.stringify(diagnostics.stickyHeader)}`);
         if (!diagnostics.cookiePreferencesOpened) failures.push("cookie preferences interaction failed");
         failures.push(...consoleErrors.map((value) => `console:${value}`));

@@ -13,6 +13,7 @@ SCRIPTS = ROOT / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
 from base2026_ui_system import ASSET_FILES, SYSTEM_VERSION  # noqa: E402
+from alex_design_system_v2 import apply_information_architecture  # noqa: E402
 
 
 def load_script(name: str, filename: str):
@@ -118,6 +119,15 @@ def test_governance_roadmap_and_support_component_selectors_are_closed() -> None
         assert f".{class_name}" in css, f"missing shared selector for {class_name}"
     for class_name in dynamic_roadmap_classes:
         assert class_name in roadmap_js, f"fixture drift: roadmap.js no longer emits {class_name}"
+
+    roadmap = apply_information_architecture(rendered["roadmap.html"], "roadmap.html")
+    methodology = apply_information_architecture(rendered["methodology.html"], "methodology.html")
+    roadmap_soup = BeautifulSoup(roadmap, "html.parser")
+    methodology_soup = BeautifulSoup(methodology, "html.parser")
+    assert roadmap_soup.select_one(".b26-k-document-layout") is None
+    assert roadmap_soup.select_one(".b26-k-document-rail") is None
+    assert roadmap_soup.select_one(".b26-k-document-context[role='note']")
+    assert methodology_soup.select_one(".b26-k-document-layout")
 
 
 def test_traffic_resource_hub_and_topic_support_components_are_closed() -> None:
