@@ -14,11 +14,97 @@ import argparse
 import re
 from pathlib import Path
 
+from bs4 import BeautifulSoup, Tag
+
 from alex_design_system_v2 import apply_information_architecture
-from base2026_product_shell import footer_html
+from base2026_product_shell import footer_html, header_html
+from base2026_ui_system import SYSTEM_VERSION
 
 
 CANONICAL_FOOTER_RE = re.compile(r"<footer\b[^>]*>.*?</footer>", re.IGNORECASE | re.DOTALL)
+LEGACY_STYLESHEET_FRAGMENT = "static/styles.css"
+
+
+def family_for_legacy_route(route: str) -> str:
+    if route.startswith("solutions/") or "/solutions/" in route:
+        return "solutions"
+    if route == "analytics.html":
+        return "analytics"
+    if route == "ai-visibility-resources.html":
+        return "ai-visibility"
+    return "general"
+
+
+def _class_tokens(node: Tag) -> list[str]:
+    value = node.get("class") or []
+    return value.split() if isinstance(value, str) else [str(item) for item in value]
+
+
+def _merge_classes(node: Tag, *classes: str) -> None:
+    node["class"] = " ".join(dict.fromkeys([*_class_tokens(node), *classes]))
+
+
+def apply_v2_shell(page: str, route: str) -> str:
+    """Migrate a legacy static shell without touching its page-specific content.
+
+    The historic Analytics, resource-hub and Solution exports already contain
+    the reviewed content, but retained an old stylesheet/header shell. This
+    narrow pass is deliberately activated only by that old stylesheet marker;
+    current V2 pages and the accepted Search workspace remain byte-stable.
+    """
+
+    if LEGACY_STYLESHEET_FRAGMENT not in page:
+        return page
+    soup = BeautifulSoup(page, "html.parser")
+    if not isinstance(soup.head, Tag) or not isinstance(soup.body, Tag):
+        return page
+    body = soup.body
+    main = soup.select_one("main")
+    if not isinstance(main, Tag):
+        return page
+
+    for legacy in soup.head.select(f'link[href*="{LEGACY_STYLESHEET_FRAGMENT}"]'):
+        legacy.decompose()
+    for font in soup.head.select('link[href*="fonts.googleapis.com"], link[href*="fonts.gstatic.com"]'):
+        font.decompose()
+    for existing in soup.head.select('link[data-alex-design-system], link[data-b26-asset], script[src*="alex-v4-static-shell.js"]'):
+        existing.decompose()
+
+    assets = [
+        ('link rel="stylesheet" data-alex-design-system="v2" href="/knowledge/static/alex-design-system-v2.css?v=20260718-visual-reset-v2-r4"',),
+        (f'link rel="stylesheet" data-b26-asset="tokens.css" data-b26-system-version="{SYSTEM_VERSION}" href="/knowledge/static/base2026/tokens.css?v={SYSTEM_VERSION}"',),
+        (f'link rel="stylesheet" data-b26-asset="shell.css" data-b26-system-version="{SYSTEM_VERSION}" href="/knowledge/static/base2026/shell.css?v={SYSTEM_VERSION}"',),
+        (f'link rel="stylesheet" data-b26-asset="components.css" data-b26-system-version="{SYSTEM_VERSION}" href="/knowledge/static/base2026/components.css?v={SYSTEM_VERSION}"',),
+        ('script defer src="/knowledge/static/alex-v4-static-shell.js?v=20260718-visual-reset-v2-r4"',),
+    ]
+    for (fragment,) in assets:
+        tag = BeautifulSoup(f"<{fragment} />", "html.parser").find()
+        assert isinstance(tag, Tag)
+        soup.head.append(tag)
+
+    existing_header = soup.select_one("header")
+    replacement_header = BeautifulSoup(header_html(), "html.parser").select_one("header")
+    assert isinstance(replacement_header, Tag)
+    if isinstance(existing_header, Tag):
+        existing_header.replace_with(replacement_header)
+    else:
+        body.insert(0, replacement_header)
+
+    family = family_for_legacy_route(route)
+    _merge_classes(
+        body,
+        "ayds-root",
+        "ayds-mode-editorial",
+        "ay-alex-v4-static",
+        "ay-stitch-home-v3",
+        "ay-stitch-home-v4",
+        f"b26-family-{family}",
+    )
+    body["data-b26-system-version"] = SYSTEM_VERSION
+    body["data-b26-family"] = family
+    body["data-b26-visual-root"] = "v2"
+    main["data-b26-shell"] = ""
+    return str(soup)
 
 
 def apply_global_footer(page: str) -> str:
@@ -50,7 +136,9 @@ def apply_to_web_root(
             continue
         scanned += 1
         source = page.read_text(encoding="utf-8")
-        rendered = apply_global_footer(apply_information_architecture(source, route))
+        rendered = apply_global_footer(
+            apply_information_architecture(apply_v2_shell(source, route), route)
+        )
         if rendered != source:
             page.write_text(rendered, encoding="utf-8")
             changed += 1
@@ -58,7 +146,7 @@ def apply_to_web_root(
     if include_search_footer:
         search_root = root / "index.html"
         source = search_root.read_text(encoding="utf-8")
-        rendered = apply_global_footer(source)
+        rendered = apply_global_footer(apply_v2_shell(source, "index.html"))
         if rendered != source:
             search_root.write_text(rendered, encoding="utf-8")
             search_root_changed = 1
@@ -89,7 +177,7 @@ def main() -> int:
     )
     print(
         f"visual_reset_v2_scanned={result['scanned']} "
-        f"changed={result['changed']} search_root_changed=0"
+        f"changed={result['changed']} search_root_changed={result['search_root_changed']}"
     )
     return 0
 
