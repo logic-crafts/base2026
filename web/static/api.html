@@ -1,171 +1,163 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Public read-only files and agent-readable entry points for using Base2026 as an attributed source intelligence library." />
-    <meta name="robots" content="index,follow" />
-    <link rel="canonical" href="https://aggressorbulkit.online/knowledge/api.html" />
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Base2026" />
-    <meta property="og:locale" content="en_US" />
-    <meta property="og:title" content="Base2026 API &amp; AI Access | Base2026" />
-    <meta property="og:description" content="Public read-only files and agent-readable entry points for using Base2026 as an attributed source intelligence library." />
-    <meta property="og:url" content="https://aggressorbulkit.online/knowledge/api.html" />
-    <meta property="og:image" content="https://aggressorbulkit.online/knowledge/static/assets/alex-yarosh-avatar.png" />
-    <meta property="og:image:alt" content="Alex Yarosh profile photo" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@AleksejAros" />
-    <meta name="twitter:title" content="Base2026 API &amp; AI Access | Base2026" />
-    <meta name="twitter:description" content="Public read-only files and agent-readable entry points for using Base2026 as an attributed source intelligence library." />
-    <meta name="twitter:image" content="https://aggressorbulkit.online/knowledge/static/assets/alex-yarosh-avatar.png" />
-    <title>Base2026 API &amp; AI Access | Base2026</title>
-    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebPage", "name": "Base2026 API & AI Access | Base2026", "description": "Public read-only files and agent-readable entry points for using Base2026 as an attributed source intelligence library.", "url": "https://aggressorbulkit.online/knowledge/api.html", "isPartOf": {"@type": "WebSite", "name": "Base2026", "url": "https://aggressorbulkit.online/knowledge/"}}</script>
-    <link rel="icon" type="image/png" sizes="32x32" href="./static/assets/alex-yarosh-favicon-32.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="./static/assets/alex-yarosh-apple-touch.png" />
-    <link rel="stylesheet" href="./static/alex-design-system-v2.css?v=20260718-visual-reset-v2-r4" data-alex-design-system="v2" />
-    <link rel="stylesheet" href="/knowledge/static/base2026/tokens.css?v=1.1.4" data-b26-asset="tokens.css" data-b26-system-version="1.1.4" />
-    <link rel="stylesheet" href="/knowledge/static/base2026/shell.css?v=1.1.4" data-b26-asset="shell.css" data-b26-system-version="1.1.4" />
-    <link rel="stylesheet" href="/knowledge/static/base2026/components.css?v=1.1.4" data-b26-asset="components.css" data-b26-system-version="1.1.4" />
-      <script src="./static/alex-v4-static-shell.js?v=20260718-visual-reset-v2-r4" defer></script>
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="Public read-only files and agent-readable entry points for using Base2026 as an attributed source intelligence library." name="description"/>
+<meta content="index,follow" name="robots"/>
+<link href="https://aggressorbulkit.online/knowledge/api.html" rel="canonical"/>
+<meta content="website" property="og:type"/>
+<meta content="Base2026" property="og:site_name"/>
+<meta content="en_US" property="og:locale"/>
+<meta content="Base2026 API &amp; AI Access | Base2026" property="og:title"/>
+<meta content="Public read-only files and agent-readable entry points for using Base2026 as an attributed source intelligence library." property="og:description"/>
+<meta content="https://aggressorbulkit.online/knowledge/api.html" property="og:url"/>
+<meta content="https://aggressorbulkit.online/knowledge/static/assets/alex-yarosh-avatar.png" property="og:image"/>
+<meta content="Alex Yarosh profile photo" property="og:image:alt"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="@AleksejAros" name="twitter:site"/>
+<meta content="Base2026 API &amp; AI Access | Base2026" name="twitter:title"/>
+<meta content="Public read-only files and agent-readable entry points for using Base2026 as an attributed source intelligence library." name="twitter:description"/>
+<meta content="https://aggressorbulkit.online/knowledge/static/assets/alex-yarosh-avatar.png" name="twitter:image"/>
+<title>Base2026 API &amp; AI Access | Base2026</title>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebPage", "name": "Base2026 API & AI Access | Base2026", "description": "Public read-only files and agent-readable entry points for using Base2026 as an attributed source intelligence library.", "url": "https://aggressorbulkit.online/knowledge/api.html", "isPartOf": {"@type": "WebSite", "name": "Base2026", "url": "https://aggressorbulkit.online/knowledge/"}}</script>
+<link href="./static/assets/alex-yarosh-favicon-32.png" rel="icon" sizes="32x32" type="image/png"/>
+<link href="./static/assets/alex-yarosh-apple-touch.png" rel="apple-touch-icon" sizes="180x180"/>
+<link data-alex-design-system="v2" href="./static/alex-design-system-v2.css?v=20260718-visual-reset-v2-r4" rel="stylesheet"/>
+<link data-b26-asset="tokens.css" data-b26-system-version="1.1.4" href="/knowledge/static/base2026/tokens.css?v=1.1.4" rel="stylesheet"/>
+<link data-b26-asset="shell.css" data-b26-system-version="1.1.4" href="/knowledge/static/base2026/shell.css?v=1.1.4" rel="stylesheet"/>
+<link data-b26-asset="components.css" data-b26-system-version="1.1.4" href="/knowledge/static/base2026/components.css?v=1.1.4" rel="stylesheet"/>
+<script defer="" src="./static/alex-v4-static-shell.js?v=20260718-visual-reset-v2-r4"></script>
 </head>
-  <body class="ayds-root b26-family-governance ayds-mode-editorial ay-alex-v4-static ay-stitch-home-v3 ay-stitch-home-v4" data-b26-system-version="1.1.4" data-b26-family="governance" data-b26-visual-root="v2">
-    <a class="skip-link" href="#content">Skip to content</a>
-    <header class="ay-v2-header b26-product-header" data-ay-v2-header data-b26-product-header aria-label="Base2026 product navigation">
-  <div class="ay-v2-header-shell b26-product-header__shell">
-    <div class="b26-product-header__identity">
-      <a class="ay-v2-brand" href="/" aria-label="Alex Yarosh home">Alex Yarosh</a>
-      <a class="b26-product-header__wordmark" href="/knowledge/">Base2026</a>
-    </div>
-    <nav class="ay-v2-nav b26-product-header__nav" aria-label="Base2026 navigation">
-      <a href="/knowledge/">Search</a>
-      <a href="/knowledge/topics/">Topics</a>
-      <a href="/knowledge/creators/">Creators</a>
-      <a href="/knowledge/solutions/">Solutions</a>
-      <a href="/knowledge/methodology.html">Methodology</a>
-    </nav>
-    <button class="ay-v2-menu-toggle" type="button" aria-expanded="false" aria-controls="ay-v2-mobile-panel">Menu</button>
-  </div>
-  <div class="ay-v2-mobile-panel b26-product-header__mobile" id="ay-v2-mobile-panel" hidden>
-    <a href="/knowledge/">Search</a>
-    <a href="/knowledge/topics/">Topics</a>
-    <a href="/knowledge/creators/">Creators</a>
-    <a href="/knowledge/solutions/">Solutions</a>
-    <a href="/knowledge/methodology.html">Methodology</a>
-  </div>
+<body class="ayds-root b26-family-governance ayds-mode-editorial ay-alex-v4-static ay-stitch-home-v3 ay-stitch-home-v4" data-b26-family="governance" data-b26-system-version="1.1.4" data-b26-visual-root="v2">
+<a class="skip-link" href="#content">Skip to content</a>
+<header aria-label="Base2026 product navigation" class="ay-v2-header b26-product-header" data-ay-v2-header="" data-b26-product-header="">
+<div class="ay-v2-header-shell b26-product-header__shell">
+<div class="b26-product-header__identity">
+<a aria-label="Alex Yarosh home" class="ay-v2-brand" href="/">Alex Yarosh</a>
+<a class="b26-product-header__wordmark" href="/knowledge/">Base2026</a>
+</div>
+<nav aria-label="Base2026 navigation" class="ay-v2-nav b26-product-header__nav">
+<a href="/knowledge/">Search</a>
+<a href="/knowledge/topics/">Topics</a>
+<a href="/knowledge/creators/">Creators</a>
+<a href="/knowledge/solutions/">Solutions</a>
+<a href="/knowledge/methodology.html">Methodology</a>
+</nav>
+<button aria-controls="ay-v2-mobile-panel" aria-expanded="false" class="ay-v2-menu-toggle" type="button">Menu</button>
+</div>
+<div class="ay-v2-mobile-panel b26-product-header__mobile" hidden="" id="ay-v2-mobile-panel">
+<a href="/knowledge/">Search</a>
+<a href="/knowledge/topics/">Topics</a>
+<a href="/knowledge/creators/">Creators</a>
+<a href="/knowledge/solutions/">Solutions</a>
+<a href="/knowledge/methodology.html">Methodology</a>
+</div>
 </header>
-    <main id="content" class="app-shell content-page doc-page ayds-page ayds-main ayds-content" data-b26-shell>
-
-      <nav class="breadcrumbs ayds-breadcrumbs" aria-label="Breadcrumb">
-        <a href="./">Base2026</a>
-        <span aria-hidden="true">/</span>
-        <span aria-current="page">Base2026 API &amp; AI Access</span>
-      </nav>
-
-      <section class="page-hero ayds-hero">
-        <p class="eyebrow ayds-eyebrow">AI and API access</p>
-        <h1>Base2026 API &amp; AI Access</h1>
-        <p class="lead ayds-lead">Public read-only files and agent-readable entry points for using Base2026 as an attributed source intelligence library.</p>
-        <div class="hero-actions ayds-actions">
-          <a class="ay-button ayds-btn ayds-btn--primary" href="/knowledge/">Search the library</a>
-          <a class="ay-button-secondary ayds-btn ayds-btn--secondary" href="/knowledge/roadmap.html">Roadmap</a>
-          <a class="ay-button-secondary ayds-btn ayds-btn--secondary" href="/knowledge/support.html">Support</a>
-
-        </div>
-      </section>
+<main class="app-shell content-page doc-page ayds-page ayds-main ayds-content" data-b26-shell="" id="content">
+<nav aria-label="Breadcrumb" class="breadcrumbs ayds-breadcrumbs">
+<a href="./">Base2026</a>
+<span aria-hidden="true">/</span>
+<span aria-current="page">Base2026 API &amp; AI Access</span>
+</nav>
+<section class="page-hero ayds-hero">
+<p class="eyebrow ayds-eyebrow">AI and API access</p>
+<h1>Base2026 API &amp; AI Access</h1>
+<p class="lead ayds-lead">Public read-only files and agent-readable entry points for using Base2026 as an attributed source intelligence library.</p>
+<div class="hero-actions ayds-actions">
+<a class="ay-button ayds-btn ayds-btn--primary" href="/knowledge/">Search the library</a>
+<a class="ay-button-secondary ayds-btn ayds-btn--secondary" href="/knowledge/roadmap.html">Roadmap</a>
+<a class="ay-button-secondary ayds-btn ayds-btn--secondary" href="/knowledge/support.html">Support</a>
+<span class="b26-k-document-context" role="note">Base2026 document</span></div>
+</section>
+<article class="b26-k-document-body ayds-document-body"><section class="content-section ayds-section"><p>Base2026 is built to be useful to humans and AI agents without forcing either one to scrape the visual interface. The public site exposes a small read-only data layer with the same public boundary as the website: reviewed source records, public passages, creator/topic metadata, and source-backed intelligence only.</p><p>Private research vaults, raw captions, raw ASR, media files, credentials, logs, and unreviewed pipeline artifacts are not part of the public API surface.</p></section><section class="content-section ayds-section"><h2>Public entry points</h2><ul><li>Human search workspace: <code>/knowledge/</code></li><li>Agent-readable context file: <code>/knowledge/llms.txt</code></li><li>Public data dictionary: <code>/knowledge/data-dictionary.json</code></li><li>Public API index: <code>/knowledge/api-index.json</code></li><li>Public sitemap: <code>/knowledge/sitemap.xml</code></li><li>Research-to-audit bridge: <code>/knowledge/apply-research.html</code></li></ul></section><section class="content-section ayds-section"><h2>Static public data</h2><p>These files are safe read-only exports for external tools, notebooks, audits, and AI workflows.</p><ul><li><code>/knowledge/static/manifest.json</code> - release counts and public export metadata.</li><li><code>/knowledge/static/documents.jsonl</code> - source-level search documents and public source records.</li><li><code>/knowledge/static/passages.jsonl</code> - searchable public evidence passages linked to source records.</li><li><code>/knowledge/static/insight_cards.jsonl</code> - reviewed public source-backed insight cards.</li><li><code>/knowledge/static/topic_signal_briefs.jsonl</code> - deterministic summaries for strong topics.</li><li><code>/knowledge/data-dictionary.json</code> - field descriptions and public/private boundary notes.</li></ul></section><section class="content-section ayds-section"><h2>Search endpoint</h2><p>The public UI searches through a server-side Meilisearch proxy:</p><p><code>POST /knowledge-search/multi-search</code></p><p>The proxy injects the public search key server-side. Do not call Meilisearch directly and do not expect private data, raw captions, or write access. External integrations should prefer the static JSONL files unless they need live search ranking.</p></section><section class="content-section ayds-section"><h2>AI usage</h2><p>AI agents can use Base2026 as a source-backed research layer by reading <code>/knowledge/llms.txt</code>, then using the data dictionary and public JSONL files. When citing Base2026, prefer canonical source, topic, creator, or comparison pages rather than copying raw rows.</p><p>For business-specific implementation, use <code>/knowledge/apply-research.html</code> as the public bridge from Base2026 source intelligence to Alex Yarosh's AI Visibility Snapshot, Diagnostic Audit, and service workflow.</p><p>Good use cases:</p><ul><li>find creators who discuss a topic;</li><li>compare repeated tactics across creators;</li><li>inspect source-backed SEO/GEO/AEO claims;</li><li>build internal research notebooks from public records;</li><li>cite a canonical Base2026 source page with original creator attribution.</li></ul><p>Not supported:</p><ul><li>raw transcript harvesting;</li><li>creator impersonation;</li><li>private lead or admin data access;</li><li>writes, corrections, or moderation through public endpoints;</li><li>replacing the original creator channel.</li></ul></section><section class="content-section ayds-section"><h2>Future MCP contract</h2><p>The planned MCP layer should remain read-only at first:</p><ul><li>search sources by query and filters;</li><li>get one source by item ID;</li><li>get one topic by topic ID;</li><li>list creators with filters;</li><li>compare creator viewpoints for one topic.</li></ul><p>Every tool response must preserve attribution, canonical URLs, original source links, and public/private policy flags.</p></section></article>
 
 
-      <section class="content-section ayds-section"><p>Base2026 is built to be useful to humans and AI agents without forcing either one to scrape the visual interface. The public site exposes a small read-only data layer with the same public boundary as the website: reviewed source records, public passages, creator/topic metadata, and source-backed intelligence only.</p><p>Private research vaults, raw captions, raw ASR, media files, credentials, logs, and unreviewed pipeline artifacts are not part of the public API surface.</p></section>
-<section class="content-section ayds-section"><h2>Public entry points</h2><ul><li>Human search workspace: <code>/knowledge/</code></li><li>Agent-readable context file: <code>/knowledge/llms.txt</code></li><li>Public data dictionary: <code>/knowledge/data-dictionary.json</code></li><li>Public API index: <code>/knowledge/api-index.json</code></li><li>Public sitemap: <code>/knowledge/sitemap.xml</code></li><li>Research-to-audit bridge: <code>/knowledge/apply-research.html</code></li></ul></section>
-<section class="content-section ayds-section"><h2>Static public data</h2><p>These files are safe read-only exports for external tools, notebooks, audits, and AI workflows.</p><ul><li><code>/knowledge/static/manifest.json</code> - release counts and public export metadata.</li><li><code>/knowledge/static/documents.jsonl</code> - source-level search documents and public source records.</li><li><code>/knowledge/static/passages.jsonl</code> - searchable public evidence passages linked to source records.</li><li><code>/knowledge/static/insight_cards.jsonl</code> - reviewed public source-backed insight cards.</li><li><code>/knowledge/static/topic_signal_briefs.jsonl</code> - deterministic summaries for strong topics.</li><li><code>/knowledge/data-dictionary.json</code> - field descriptions and public/private boundary notes.</li></ul></section>
-<section class="content-section ayds-section"><h2>Search endpoint</h2><p>The public UI searches through a server-side Meilisearch proxy:</p><p><code>POST /knowledge-search/multi-search</code></p><p>The proxy injects the public search key server-side. Do not call Meilisearch directly and do not expect private data, raw captions, or write access. External integrations should prefer the static JSONL files unless they need live search ranking.</p></section>
-<section class="content-section ayds-section"><h2>AI usage</h2><p>AI agents can use Base2026 as a source-backed research layer by reading <code>/knowledge/llms.txt</code>, then using the data dictionary and public JSONL files. When citing Base2026, prefer canonical source, topic, creator, or comparison pages rather than copying raw rows.</p><p>For business-specific implementation, use <code>/knowledge/apply-research.html</code> as the public bridge from Base2026 source intelligence to Alex Yarosh&#x27;s AI Visibility Snapshot, Diagnostic Audit, and service workflow.</p><p>Good use cases:</p><ul><li>find creators who discuss a topic;</li><li>compare repeated tactics across creators;</li><li>inspect source-backed SEO/GEO/AEO claims;</li><li>build internal research notebooks from public records;</li><li>cite a canonical Base2026 source page with original creator attribution.</li></ul><p>Not supported:</p><ul><li>raw transcript harvesting;</li><li>creator impersonation;</li><li>private lead or admin data access;</li><li>writes, corrections, or moderation through public endpoints;</li><li>replacing the original creator channel.</li></ul></section>
-<section class="content-section ayds-section"><h2>Future MCP contract</h2><p>The planned MCP layer should remain read-only at first:</p><ul><li>search sources by query and filters;</li><li>get one source by item ID;</li><li>get one topic by topic ID;</li><li>list creators with filters;</li><li>compare creator viewpoints for one topic.</li></ul><p>Every tool response must preserve attribution, canonical URLs, original source links, and public/private policy flags.</p></section>
 
-    </main>
-    <footer class="ay-site-footer b26-product-footer" data-b26-product-footer aria-label="Base2026 footer">
-  <div class="ay-wrap ay-footer-grid b26-product-footer__grid" data-b26-shell>
-    <section class="ay-footer-brand b26-product-footer__identity" aria-label="Base2026">
-      <p class="ay-eyebrow eyebrow ayds-eyebrow">Base2026</p>
-      <h2>Public evidence, with attribution.</h2>
-      <p>Search reviewed sources, topics and creator viewpoints. Evidence first; services stay optional.</p>
-      <div class="ay-actions ayds-actions" aria-label="Base2026 actions">
-        <a class="ay-button ayds-btn ayds-btn--primary" href="/knowledge/">Search the library</a>
-        <a class="ay-button-secondary ayds-btn ayds-btn--secondary" href="/knowledge/methodology.html">Read methodology</a>
-      </div>
-    </section>
-    <nav aria-label="Base2026 browse links">
-      <h3>Browse</h3>
-      <ul class="ay-footer-menu">
-        <li><a href="/knowledge/">Search</a></li>
-        <li><a href="/knowledge/topics/">Topics</a></li>
-        <li><a href="/knowledge/creators/">Creators</a></li>
-        <li><a href="/knowledge/solutions/">Solutions</a></li>
-      </ul>
-    </nav>
-    <nav aria-label="Base2026 research links">
-      <h3>Research</h3>
-      <ul class="ay-footer-menu">
-        <li><a href="/knowledge/analytics.html">Analytics</a></li>
-        <li><a href="/knowledge/methodology.html">Methodology</a></li>
-        <li><a href="/knowledge/api.html">API &amp; AI access</a></li>
-      </ul>
-    </nav>
-    <nav aria-label="Base2026 trust links">
-      <h3>Trust</h3>
-      <ul class="ay-footer-menu">
-        <li><a href="/knowledge/source-policy.html">Source policy</a></li>
-        <li><a href="/knowledge/opt-out.html">Correction or removal</a></li>
-        <li><a href="/privacy-policy/">Privacy</a></li>
-        <li><button class="ay-footer-link-button b26-product-footer__link-button" type="button" data-cookie-preferences>Cookie preferences</button></li>
-        <li><a href="/about/">About Alex</a></li>
-      </ul>
-    </nav>
-    <nav aria-label="Base2026 project links">
-      <h3>Base2026</h3>
-      <ul class="ay-footer-menu">
-        <li><a href="/knowledge/roadmap.html">Roadmap</a></li>
-        <li><a href="/knowledge/support.html">Support</a></li>
-        <li><a href="/knowledge/story.html">Project story</a></li>
-      </ul>
-    </nav>
-  </div>
-  <div class="ay-footer-bottom b26-product-footer__bottom" data-b26-shell>
-    <span>&copy; 2026 Logic Crafts LLC, Kyrgyzstan. Base2026 is Alex Yarosh&rsquo;s independent experimental research product, not a marketing agency or service.</span>
-  </div>
+
+
+</main>
+<footer aria-label="Base2026 footer" class="ay-site-footer b26-product-footer" data-b26-product-footer="">
+<div class="ay-wrap ay-footer-grid b26-product-footer__grid" data-b26-shell="">
+<section aria-label="Base2026" class="ay-footer-brand b26-product-footer__identity">
+<p class="ay-eyebrow eyebrow ayds-eyebrow">Base2026</p>
+<h2>Public evidence, with attribution.</h2>
+<p>Search reviewed sources, topics and creator viewpoints. Evidence first; services stay optional.</p>
+<div aria-label="Base2026 actions" class="ay-actions ayds-actions">
+<a class="ay-button ayds-btn ayds-btn--primary" href="/knowledge/">Search the library</a>
+<a class="ay-button-secondary ayds-btn ayds-btn--secondary" href="/knowledge/methodology.html">Read methodology</a>
+</div>
+</section>
+<nav aria-label="Base2026 browse links">
+<h3>Browse</h3>
+<ul class="ay-footer-menu">
+<li><a href="/knowledge/">Search</a></li>
+<li><a href="/knowledge/topics/">Topics</a></li>
+<li><a href="/knowledge/creators/">Creators</a></li>
+<li><a href="/knowledge/solutions/">Solutions</a></li>
+</ul>
+</nav>
+<nav aria-label="Base2026 research links">
+<h3>Research</h3>
+<ul class="ay-footer-menu">
+<li><a href="/knowledge/analytics.html">Analytics</a></li>
+<li><a href="/knowledge/methodology.html">Methodology</a></li>
+<li><a href="/knowledge/api.html">API &amp; AI access</a></li>
+</ul>
+</nav>
+<nav aria-label="Base2026 trust links">
+<h3>Trust</h3>
+<ul class="ay-footer-menu">
+<li><a href="/knowledge/source-policy.html">Source policy</a></li>
+<li><a href="/knowledge/opt-out.html">Correction or removal</a></li>
+<li><a href="/privacy-policy/">Privacy</a></li>
+<li><button class="ay-footer-link-button b26-product-footer__link-button" data-cookie-preferences="" type="button">Cookie preferences</button></li>
+<li><a href="/about/">About Alex</a></li>
+</ul>
+</nav>
+<nav aria-label="Base2026 project links">
+<h3>Base2026</h3>
+<ul class="ay-footer-menu">
+<li><a href="/knowledge/roadmap.html">Roadmap</a></li>
+<li><a href="/knowledge/support.html">Support</a></li>
+<li><a href="/knowledge/story.html">Project story</a></li>
+</ul>
+</nav>
+</div>
+<div class="ay-footer-bottom b26-product-footer__bottom" data-b26-shell="">
+<span>© 2026 Logic Crafts LLC, Kyrgyzstan. Base2026 is Alex Yarosh’s independent experimental research product, not a marketing agency or service.</span>
+</div>
 </footer>
-
-    <section class="cookie-banner ayds-card ayds-card--feature" data-cookie-banner hidden aria-label="Cookie preferences">
-      <div>
-        <h2>Cookie preferences</h2>
-        <p>We use necessary cookies to run the site and optional cookies to understand what pages are useful. You can accept all, reject non-essential cookies, or manage preferences.</p>
-      </div>
-      <div class="cookie-actions">
-        <button type="button" class="ay-button ayds-btn ayds-btn--primary" data-cookie-accept>Accept All</button>
-        <button type="button" class="ay-button-secondary ayds-btn ayds-btn--secondary" data-cookie-reject>Reject Non-Essential</button>
-        <button type="button" class="ay-button-secondary ayds-btn ayds-btn--secondary" data-cookie-manage>Manage Preferences</button>
-      </div>
-    </section>
-    <dialog class="cookie-dialog ayds-card ayds-card--feature" data-cookie-dialog aria-label="Manage cookie preferences">
-      <form method="dialog">
-        <div class="cookie-dialog-head">
-          <p class="eyebrow ayds-eyebrow">Privacy controls</p>
-          <h2>Manage cookie preferences</h2>
-          <p>Necessary cookies are always active because they keep the site working. Analytics and marketing cookies are optional and will only run if you allow them.</p>
-        </div>
-        <div class="cookie-options">
-          <label><input type="checkbox" checked disabled> Necessary <span>Always on. Required for site operation, security, forms, and preference storage.</span></label>
-          <label><input type="checkbox" data-cookie-analytics> Analytics <span>Optional. Not currently active. Reserved for privacy-friendly page usefulness analytics.</span></label>
-          <label><input type="checkbox" data-cookie-marketing> Marketing <span>Optional. Not currently active. Reserved for future pixels only if explicitly enabled.</span></label>
-        </div>
-        <div class="cookie-actions">
-          <button type="button" class="ay-button ayds-btn ayds-btn--primary" data-cookie-save>Save Preferences</button>
-          <button type="button" class="ay-button-secondary ayds-btn ayds-btn--secondary" data-cookie-close>Close</button>
-        </div>
-      </form>
-    </dialog>
-    <script src="./static/cookie-consent.js?v=20260718-visual-reset-v2-r4" defer></script>
-
-
-  </body>
+<section aria-label="Cookie preferences" class="cookie-banner ayds-card ayds-card--feature" data-cookie-banner="" hidden="">
+<div>
+<h2>Cookie preferences</h2>
+<p>We use necessary cookies to run the site and optional cookies to understand what pages are useful. You can accept all, reject non-essential cookies, or manage preferences.</p>
+</div>
+<div class="cookie-actions">
+<button class="ay-button ayds-btn ayds-btn--primary" data-cookie-accept="" type="button">Accept All</button>
+<button class="ay-button-secondary ayds-btn ayds-btn--secondary" data-cookie-reject="" type="button">Reject Non-Essential</button>
+<button class="ay-button-secondary ayds-btn ayds-btn--secondary" data-cookie-manage="" type="button">Manage Preferences</button>
+</div>
+</section>
+<dialog aria-label="Manage cookie preferences" class="cookie-dialog ayds-card ayds-card--feature" data-cookie-dialog="">
+<form method="dialog">
+<div class="cookie-dialog-head">
+<p class="eyebrow ayds-eyebrow">Privacy controls</p>
+<h2>Manage cookie preferences</h2>
+<p>Necessary cookies are always active because they keep the site working. Analytics and marketing cookies are optional and will only run if you allow them.</p>
+</div>
+<div class="cookie-options">
+<label><input checked="" disabled="" type="checkbox"/> Necessary <span>Always on. Required for site operation, security, forms, and preference storage.</span></label>
+<label><input data-cookie-analytics="" type="checkbox"/> Analytics <span>Optional. Not currently active. Reserved for privacy-friendly page usefulness analytics.</span></label>
+<label><input data-cookie-marketing="" type="checkbox"/> Marketing <span>Optional. Not currently active. Reserved for future pixels only if explicitly enabled.</span></label>
+</div>
+<div class="cookie-actions">
+<button class="ay-button ayds-btn ayds-btn--primary" data-cookie-save="" type="button">Save Preferences</button>
+<button class="ay-button-secondary ayds-btn ayds-btn--secondary" data-cookie-close="" type="button">Close</button>
+</div>
+</form>
+</dialog>
+<script defer="" src="./static/cookie-consent.js?v=20260718-visual-reset-v2-r4"></script>
+</body>
 </html>

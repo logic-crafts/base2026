@@ -1,184 +1,176 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="A working map for the public Base2026 website and future agent handoffs." />
-    <meta name="robots" content="index,follow" />
-    <link rel="canonical" href="https://aggressorbulkit.online/knowledge/site-structure.html" />
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Base2026" />
-    <meta property="og:locale" content="en_US" />
-    <meta property="og:title" content="Recommended Site Structure | Base2026" />
-    <meta property="og:description" content="A working map for the public Base2026 website and future agent handoffs." />
-    <meta property="og:url" content="https://aggressorbulkit.online/knowledge/site-structure.html" />
-    <meta property="og:image" content="https://aggressorbulkit.online/knowledge/static/assets/alex-yarosh-avatar.png" />
-    <meta property="og:image:alt" content="Alex Yarosh profile photo" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@AleksejAros" />
-    <meta name="twitter:title" content="Recommended Site Structure | Base2026" />
-    <meta name="twitter:description" content="A working map for the public Base2026 website and future agent handoffs." />
-    <meta name="twitter:image" content="https://aggressorbulkit.online/knowledge/static/assets/alex-yarosh-avatar.png" />
-    <title>Recommended Site Structure | Base2026</title>
-    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebPage", "name": "Recommended Site Structure | Base2026", "description": "A working map for the public Base2026 website and future agent handoffs.", "url": "https://aggressorbulkit.online/knowledge/site-structure.html", "isPartOf": {"@type": "WebSite", "name": "Base2026", "url": "https://aggressorbulkit.online/knowledge/"}}</script>
-    <link rel="icon" type="image/png" sizes="32x32" href="./static/assets/alex-yarosh-favicon-32.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="./static/assets/alex-yarosh-apple-touch.png" />
-    <link rel="stylesheet" href="./static/alex-design-system-v2.css?v=20260718-visual-reset-v2-r4" data-alex-design-system="v2" />
-    <link rel="stylesheet" href="/knowledge/static/base2026/tokens.css?v=1.1.4" data-b26-asset="tokens.css" data-b26-system-version="1.1.4" />
-    <link rel="stylesheet" href="/knowledge/static/base2026/shell.css?v=1.1.4" data-b26-asset="shell.css" data-b26-system-version="1.1.4" />
-    <link rel="stylesheet" href="/knowledge/static/base2026/components.css?v=1.1.4" data-b26-asset="components.css" data-b26-system-version="1.1.4" />
-      <script src="./static/alex-v4-static-shell.js?v=20260718-visual-reset-v2-r4" defer></script>
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="A working map for the public Base2026 website and future agent handoffs." name="description"/>
+<meta content="index,follow" name="robots"/>
+<link href="https://aggressorbulkit.online/knowledge/site-structure.html" rel="canonical"/>
+<meta content="website" property="og:type"/>
+<meta content="Base2026" property="og:site_name"/>
+<meta content="en_US" property="og:locale"/>
+<meta content="Recommended Site Structure | Base2026" property="og:title"/>
+<meta content="A working map for the public Base2026 website and future agent handoffs." property="og:description"/>
+<meta content="https://aggressorbulkit.online/knowledge/site-structure.html" property="og:url"/>
+<meta content="https://aggressorbulkit.online/knowledge/static/assets/alex-yarosh-avatar.png" property="og:image"/>
+<meta content="Alex Yarosh profile photo" property="og:image:alt"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="@AleksejAros" name="twitter:site"/>
+<meta content="Recommended Site Structure | Base2026" name="twitter:title"/>
+<meta content="A working map for the public Base2026 website and future agent handoffs." name="twitter:description"/>
+<meta content="https://aggressorbulkit.online/knowledge/static/assets/alex-yarosh-avatar.png" name="twitter:image"/>
+<title>Recommended Site Structure | Base2026</title>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebPage", "name": "Recommended Site Structure | Base2026", "description": "A working map for the public Base2026 website and future agent handoffs.", "url": "https://aggressorbulkit.online/knowledge/site-structure.html", "isPartOf": {"@type": "WebSite", "name": "Base2026", "url": "https://aggressorbulkit.online/knowledge/"}}</script>
+<link href="./static/assets/alex-yarosh-favicon-32.png" rel="icon" sizes="32x32" type="image/png"/>
+<link href="./static/assets/alex-yarosh-apple-touch.png" rel="apple-touch-icon" sizes="180x180"/>
+<link data-alex-design-system="v2" href="./static/alex-design-system-v2.css?v=20260718-visual-reset-v2-r4" rel="stylesheet"/>
+<link data-b26-asset="tokens.css" data-b26-system-version="1.1.4" href="/knowledge/static/base2026/tokens.css?v=1.1.4" rel="stylesheet"/>
+<link data-b26-asset="shell.css" data-b26-system-version="1.1.4" href="/knowledge/static/base2026/shell.css?v=1.1.4" rel="stylesheet"/>
+<link data-b26-asset="components.css" data-b26-system-version="1.1.4" href="/knowledge/static/base2026/components.css?v=1.1.4" rel="stylesheet"/>
+<script defer="" src="./static/alex-v4-static-shell.js?v=20260718-visual-reset-v2-r4"></script>
 </head>
-  <body class="ayds-root b26-family-governance ayds-mode-editorial ay-alex-v4-static ay-stitch-home-v3 ay-stitch-home-v4" data-b26-system-version="1.1.4" data-b26-family="governance" data-b26-visual-root="v2">
-    <a class="skip-link" href="#content">Skip to content</a>
-    <header class="ay-v2-header b26-product-header" data-ay-v2-header data-b26-product-header aria-label="Base2026 product navigation">
-  <div class="ay-v2-header-shell b26-product-header__shell">
-    <div class="b26-product-header__identity">
-      <a class="ay-v2-brand" href="/" aria-label="Alex Yarosh home">Alex Yarosh</a>
-      <a class="b26-product-header__wordmark" href="/knowledge/">Base2026</a>
-    </div>
-    <nav class="ay-v2-nav b26-product-header__nav" aria-label="Base2026 navigation">
-      <a href="/knowledge/">Search</a>
-      <a href="/knowledge/topics/">Topics</a>
-      <a href="/knowledge/creators/">Creators</a>
-      <a href="/knowledge/solutions/">Solutions</a>
-      <a href="/knowledge/methodology.html">Methodology</a>
-    </nav>
-    <button class="ay-v2-menu-toggle" type="button" aria-expanded="false" aria-controls="ay-v2-mobile-panel">Menu</button>
-  </div>
-  <div class="ay-v2-mobile-panel b26-product-header__mobile" id="ay-v2-mobile-panel" hidden>
-    <a href="/knowledge/">Search</a>
-    <a href="/knowledge/topics/">Topics</a>
-    <a href="/knowledge/creators/">Creators</a>
-    <a href="/knowledge/solutions/">Solutions</a>
-    <a href="/knowledge/methodology.html">Methodology</a>
-  </div>
+<body class="ayds-root b26-family-governance ayds-mode-editorial ay-alex-v4-static ay-stitch-home-v3 ay-stitch-home-v4" data-b26-family="governance" data-b26-system-version="1.1.4" data-b26-visual-root="v2">
+<a class="skip-link" href="#content">Skip to content</a>
+<header aria-label="Base2026 product navigation" class="ay-v2-header b26-product-header" data-ay-v2-header="" data-b26-product-header="">
+<div class="ay-v2-header-shell b26-product-header__shell">
+<div class="b26-product-header__identity">
+<a aria-label="Alex Yarosh home" class="ay-v2-brand" href="/">Alex Yarosh</a>
+<a class="b26-product-header__wordmark" href="/knowledge/">Base2026</a>
+</div>
+<nav aria-label="Base2026 navigation" class="ay-v2-nav b26-product-header__nav">
+<a href="/knowledge/">Search</a>
+<a href="/knowledge/topics/">Topics</a>
+<a href="/knowledge/creators/">Creators</a>
+<a href="/knowledge/solutions/">Solutions</a>
+<a href="/knowledge/methodology.html">Methodology</a>
+</nav>
+<button aria-controls="ay-v2-mobile-panel" aria-expanded="false" class="ay-v2-menu-toggle" type="button">Menu</button>
+</div>
+<div class="ay-v2-mobile-panel b26-product-header__mobile" hidden="" id="ay-v2-mobile-panel">
+<a href="/knowledge/">Search</a>
+<a href="/knowledge/topics/">Topics</a>
+<a href="/knowledge/creators/">Creators</a>
+<a href="/knowledge/solutions/">Solutions</a>
+<a href="/knowledge/methodology.html">Methodology</a>
+</div>
 </header>
-    <main id="content" class="app-shell content-page doc-page ayds-page ayds-main ayds-content" data-b26-shell>
-
-      <nav class="breadcrumbs ayds-breadcrumbs" aria-label="Breadcrumb">
-        <a href="./">Base2026</a>
-        <span aria-hidden="true">/</span>
-        <span aria-current="page">Recommended Site Structure</span>
-      </nav>
-
-      <section class="page-hero ayds-hero">
-        <p class="eyebrow ayds-eyebrow">Site structure</p>
-        <h1>Base2026 Recommended Site Structure</h1>
-        <p class="lead ayds-lead">A working map for the public Base2026 website and future agent handoffs.</p>
-        <div class="hero-actions ayds-actions">
-          <a class="ay-button ayds-btn ayds-btn--primary" href="/knowledge/">Search the library</a>
-          <a class="ay-button-secondary ayds-btn ayds-btn--secondary" href="/knowledge/roadmap.html">Roadmap</a>
-          <a class="ay-button-secondary ayds-btn ayds-btn--secondary" href="/knowledge/support.html">Support</a>
-
-        </div>
-      </section>
+<main class="app-shell content-page doc-page ayds-page ayds-main ayds-content" data-b26-shell="" id="content">
+<nav aria-label="Breadcrumb" class="breadcrumbs ayds-breadcrumbs">
+<a href="./">Base2026</a>
+<span aria-hidden="true">/</span>
+<span aria-current="page">Recommended Site Structure</span>
+</nav>
+<section class="page-hero ayds-hero">
+<p class="eyebrow ayds-eyebrow">Site structure</p>
+<h1>Base2026 Recommended Site Structure</h1>
+<p class="lead ayds-lead">A working map for the public Base2026 website and future agent handoffs.</p>
+<div class="hero-actions ayds-actions">
+<a class="ay-button ayds-btn ayds-btn--primary" href="/knowledge/">Search the library</a>
+<a class="ay-button-secondary ayds-btn ayds-btn--secondary" href="/knowledge/roadmap.html">Roadmap</a>
+<a class="ay-button-secondary ayds-btn ayds-btn--secondary" href="/knowledge/support.html">Support</a>
+<span class="b26-k-document-context" role="note">Base2026 document</span></div>
+</section>
+<article class="b26-k-document-body ayds-document-body"><section class="content-section ayds-section"><h2>Main navigation</h2><p>Recommended top-level navigation:</p><ul><li>Search</li><li>Topics</li><li>Creators</li><li>Roadmap</li><li>About</li><li>Support</li></ul><p>Footer links:</p><ul><li>Project Story</li><li>Source &amp; Content Policy</li><li>Privacy Policy</li><li>Creator Correction / Removal</li><li>GitHub</li><li>Contact</li></ul></section><section class="content-section ayds-section"><h2>Core pages</h2></section><section class="content-section ayds-section"><h2>1. Home</h2><p>Purpose: explain the project in 10 seconds and push users to search/support.</p><p>Sections:</p><ul><li>Hero</li><li>Headline: "Search what experts actually said in short-form videos."</li><li>Subheadline: "Base2026 turns public short-form expert videos into attributed, searchable knowledge records."</li><li>CTA: Search the database</li><li>Secondary CTA: Support the roadmap</li></ul><ul><li>What it does</li><li>Converts public short-form expert content into searchable records.</li><li>Preserves source attribution.</li><li>Helps marketers and researchers find useful insights faster.</li></ul><ul><li>Why it matters</li><li>Feeds are not knowledge bases.</li><li>Useful advice disappears quickly.</li><li>Search should work across creators, topics, and platforms.</li></ul><ul><li>Current status</li><li>Public MVP is live.</li><li>Local transcription pipeline is being improved.</li><li>AI-assisted search is planned.</li></ul><ul><li>Support block</li><li>"Help fund transcription, storage, and smarter search."</li></ul></section><section class="content-section ayds-section"><h2>2. Search page</h2><p>Purpose: main product experience.</p><p>Features:</p><ul><li>Search input.</li><li>Filters:</li><li>platform;</li><li>creator;</li><li>topic;</li><li>date;</li><li>transcript source;</li><li>reviewed/unreviewed.</li><li>Results cards.</li><li>Source links.</li><li>Transcript preview.</li><li>Quality flags.</li></ul></section><section class="content-section ayds-section"><h2>3. Record page</h2><p>Purpose: one source record.</p><p>Recommended fields:</p><ul><li>Title/generated descriptor.</li><li>Creator.</li><li>Platform.</li><li>Original source URL.</li><li>Date.</li><li>Topics.</li><li>Transcript/source status.</li><li>Excerpt or transcript section.</li><li>Related records.</li><li>Correction/removal link.</li></ul><p>Important: do not present the record as an original article. Make attribution visible.</p></section><section class="content-section ayds-section"><h2>4. Topic pages</h2><p>Purpose: SEO/GEO-friendly pages with actual added value.</p><p>Example URLs:</p><ul><li><code>/topics/tiktok-seo</code></li><li><code>/topics/instagram-reels-hooks</code></li><li><code>/topics/local-seo</code></li><li><code>/topics/smm-strategy</code></li></ul><p>Sections:</p><ul><li>Topic overview.</li><li>Top related records.</li><li>What creators are saying.</li><li>Repeated patterns.</li><li>Contradictions/uncertainties.</li><li>Source-linked records.</li><li>Search within topic.</li></ul><p>This is better than publishing thousands of raw transcript pages.</p></section><section class="content-section ayds-section"><h2>5. Creator pages</h2><p>Purpose: attribution and discovery.</p><p>Sections:</p><ul><li>Creator handle/name.</li><li>Platform links.</li><li>Topics commonly discussed.</li><li>Indexed records.</li><li>Original source links.</li><li>Correction/removal link.</li><li>Optional creator note if claimed/approved.</li></ul></section><section class="content-section ayds-section"><h2>6. Roadmap page</h2><p>Purpose: explain why funding is needed.</p><p>Sections:</p><ul><li>Current status.</li><li>Phase 1 - public MVP stabilization.</li><li>Phase 2 - reliable transcription pipeline.</li><li>Phase 3 - smart search.</li><li>Phase 4 - platform expansion.</li><li>Phase 5 - creator-friendly tools.</li><li>Phase 6 - research/intelligence product.</li><li>Funding priorities.</li></ul></section><section class="content-section ayds-section"><h2>7. Support page</h2><p>Purpose: collect donations/support.</p><p>Sections:</p><ul><li>Why support matters.</li><li>What funding pays for.</li><li>Current priorities.</li><li>Roadmap summary.</li><li>Ways to help.</li><li>Donation/sponsor buttons.</li></ul></section><section class="content-section ayds-section"><h2>8. About page</h2><p>Purpose: concise project explanation.</p><p>Sections:</p><ul><li>What Base2026 is.</li><li>Who it is for.</li><li>What problem it solves.</li><li>What it is not.</li><li>Current status.</li><li>Link to full project story.</li></ul></section><section class="content-section ayds-section"><h2>9. Project Story page</h2><p>Purpose: founder narrative.</p><p>Use <code>02_PROJECT_STORY.md</code>.</p></section><section class="content-section ayds-section"><h2>10. Source &amp; Content Policy page</h2><p>Purpose: show good faith and reduce creator/platform concerns.</p><p>Use <code>04_SOURCE_AND_CONTENT_POLICY.md</code>.</p></section><section class="content-section ayds-section"><h2>11. Privacy Policy page</h2><p>Purpose: basic legal/privacy compliance.</p><p>Use <code>03_PRIVACY_POLICY.md</code>.</p></section><section class="content-section ayds-section"><h2>12. Creator Correction / Removal page</h2><p>Purpose: give creators a direct control channel.</p><p>Recommended text:</p></section><section class="content-section ayds-section"><h2>Creator Correction / Removal</h2><p>Base2026 is built around attribution and source transparency.</p><p>If you are a creator and believe a record is inaccurate, misattributed, outdated, or should not be included, you can request correction or removal.</p><p>Send correction or removal requests to <a href="mailto:offflinerpsy@gmail.com">offflinerpsy@gmail.com</a>.</p><p>Please include:</p><ul><li>your creator handle;</li><li>the Base2026 record URL;</li><li>the original source URL if available;</li><li>what should be corrected or removed;</li><li>a contact email;</li><li>verification information if needed.</li></ul><p>Reasonable requests will be reviewed in good faith. If a record is removed, the source may be added to a suppression list to avoid re-import.</p><p>Base2026 is independent and is not affiliated with TikTok, Instagram, Meta, ByteDance, or any creator unless explicitly stated.</p></section><section class="content-section ayds-section"><h2>Implementation notes for IDE/agent</h2></section><section class="content-section ayds-section"><h2>Page generation</h2><p>Create static Markdown-driven pages or CMS pages for:</p><ul><li><code>/roadmap</code></li><li><code>/project-story</code></li><li><code>/privacy-policy</code></li><li><code>/source-content-policy</code></li><li><code>/support</code></li><li><code>/creator-correction-removal</code></li></ul></section><section class="content-section ayds-section"><h2>UI requirements</h2><ul><li>Keep pages readable.</li><li>Use clear headings.</li><li>Add support CTA on Roadmap and Project Story.</li><li>Add correction/removal link in footer and record pages.</li><li>Add source disclaimer in footer.</li></ul></section><section class="content-section ayds-section"><h2>Footer disclaimer</h2><p>Suggested footer text:</p><p>&gt; Base2026 is an independent research and discovery project. Records are based on public short-form content and are provided with attribution for search and research purposes. Creators may request correction or removal at <a href="mailto:offflinerpsy@gmail.com">offflinerpsy@gmail.com</a>.</p></section></article>
 
 
-      <section class="content-section ayds-section"><h2>Main navigation</h2><p>Recommended top-level navigation:</p><ul><li>Search</li><li>Topics</li><li>Creators</li><li>Roadmap</li><li>About</li><li>Support</li></ul><p>Footer links:</p><ul><li>Project Story</li><li>Source &amp; Content Policy</li><li>Privacy Policy</li><li>Creator Correction / Removal</li><li>GitHub</li><li>Contact</li></ul></section>
-<section class="content-section ayds-section"><h2>Core pages</h2></section>
-<section class="content-section ayds-section"><h2>1. Home</h2><p>Purpose: explain the project in 10 seconds and push users to search/support.</p><p>Sections:</p><ul><li>Hero</li><li>Headline: &quot;Search what experts actually said in short-form videos.&quot;</li><li>Subheadline: &quot;Base2026 turns public short-form expert videos into attributed, searchable knowledge records.&quot;</li><li>CTA: Search the database</li><li>Secondary CTA: Support the roadmap</li></ul><ul><li>What it does</li><li>Converts public short-form expert content into searchable records.</li><li>Preserves source attribution.</li><li>Helps marketers and researchers find useful insights faster.</li></ul><ul><li>Why it matters</li><li>Feeds are not knowledge bases.</li><li>Useful advice disappears quickly.</li><li>Search should work across creators, topics, and platforms.</li></ul><ul><li>Current status</li><li>Public MVP is live.</li><li>Local transcription pipeline is being improved.</li><li>AI-assisted search is planned.</li></ul><ul><li>Support block</li><li>&quot;Help fund transcription, storage, and smarter search.&quot;</li></ul></section>
-<section class="content-section ayds-section"><h2>2. Search page</h2><p>Purpose: main product experience.</p><p>Features:</p><ul><li>Search input.</li><li>Filters:</li><li>platform;</li><li>creator;</li><li>topic;</li><li>date;</li><li>transcript source;</li><li>reviewed/unreviewed.</li><li>Results cards.</li><li>Source links.</li><li>Transcript preview.</li><li>Quality flags.</li></ul></section>
-<section class="content-section ayds-section"><h2>3. Record page</h2><p>Purpose: one source record.</p><p>Recommended fields:</p><ul><li>Title/generated descriptor.</li><li>Creator.</li><li>Platform.</li><li>Original source URL.</li><li>Date.</li><li>Topics.</li><li>Transcript/source status.</li><li>Excerpt or transcript section.</li><li>Related records.</li><li>Correction/removal link.</li></ul><p>Important: do not present the record as an original article. Make attribution visible.</p></section>
-<section class="content-section ayds-section"><h2>4. Topic pages</h2><p>Purpose: SEO/GEO-friendly pages with actual added value.</p><p>Example URLs:</p><ul><li><code>/topics/tiktok-seo</code></li><li><code>/topics/instagram-reels-hooks</code></li><li><code>/topics/local-seo</code></li><li><code>/topics/smm-strategy</code></li></ul><p>Sections:</p><ul><li>Topic overview.</li><li>Top related records.</li><li>What creators are saying.</li><li>Repeated patterns.</li><li>Contradictions/uncertainties.</li><li>Source-linked records.</li><li>Search within topic.</li></ul><p>This is better than publishing thousands of raw transcript pages.</p></section>
-<section class="content-section ayds-section"><h2>5. Creator pages</h2><p>Purpose: attribution and discovery.</p><p>Sections:</p><ul><li>Creator handle/name.</li><li>Platform links.</li><li>Topics commonly discussed.</li><li>Indexed records.</li><li>Original source links.</li><li>Correction/removal link.</li><li>Optional creator note if claimed/approved.</li></ul></section>
-<section class="content-section ayds-section"><h2>6. Roadmap page</h2><p>Purpose: explain why funding is needed.</p><p>Sections:</p><ul><li>Current status.</li><li>Phase 1 - public MVP stabilization.</li><li>Phase 2 - reliable transcription pipeline.</li><li>Phase 3 - smart search.</li><li>Phase 4 - platform expansion.</li><li>Phase 5 - creator-friendly tools.</li><li>Phase 6 - research/intelligence product.</li><li>Funding priorities.</li></ul></section>
-<section class="content-section ayds-section"><h2>7. Support page</h2><p>Purpose: collect donations/support.</p><p>Sections:</p><ul><li>Why support matters.</li><li>What funding pays for.</li><li>Current priorities.</li><li>Roadmap summary.</li><li>Ways to help.</li><li>Donation/sponsor buttons.</li></ul></section>
-<section class="content-section ayds-section"><h2>8. About page</h2><p>Purpose: concise project explanation.</p><p>Sections:</p><ul><li>What Base2026 is.</li><li>Who it is for.</li><li>What problem it solves.</li><li>What it is not.</li><li>Current status.</li><li>Link to full project story.</li></ul></section>
-<section class="content-section ayds-section"><h2>9. Project Story page</h2><p>Purpose: founder narrative.</p><p>Use <code>02_PROJECT_STORY.md</code>.</p></section>
-<section class="content-section ayds-section"><h2>10. Source &amp; Content Policy page</h2><p>Purpose: show good faith and reduce creator/platform concerns.</p><p>Use <code>04_SOURCE_AND_CONTENT_POLICY.md</code>.</p></section>
-<section class="content-section ayds-section"><h2>11. Privacy Policy page</h2><p>Purpose: basic legal/privacy compliance.</p><p>Use <code>03_PRIVACY_POLICY.md</code>.</p></section>
-<section class="content-section ayds-section"><h2>12. Creator Correction / Removal page</h2><p>Purpose: give creators a direct control channel.</p><p>Recommended text:</p></section>
-<section class="content-section ayds-section"><h2>Creator Correction / Removal</h2><p>Base2026 is built around attribution and source transparency.</p><p>If you are a creator and believe a record is inaccurate, misattributed, outdated, or should not be included, you can request correction or removal.</p><p>Send correction or removal requests to <a href="mailto:offflinerpsy@gmail.com">offflinerpsy@gmail.com</a>.</p><p>Please include:</p><ul><li>your creator handle;</li><li>the Base2026 record URL;</li><li>the original source URL if available;</li><li>what should be corrected or removed;</li><li>a contact email;</li><li>verification information if needed.</li></ul><p>Reasonable requests will be reviewed in good faith. If a record is removed, the source may be added to a suppression list to avoid re-import.</p><p>Base2026 is independent and is not affiliated with TikTok, Instagram, Meta, ByteDance, or any creator unless explicitly stated.</p></section>
-<section class="content-section ayds-section"><h2>Implementation notes for IDE/agent</h2></section>
-<section class="content-section ayds-section"><h2>Page generation</h2><p>Create static Markdown-driven pages or CMS pages for:</p><ul><li><code>/roadmap</code></li><li><code>/project-story</code></li><li><code>/privacy-policy</code></li><li><code>/source-content-policy</code></li><li><code>/support</code></li><li><code>/creator-correction-removal</code></li></ul></section>
-<section class="content-section ayds-section"><h2>UI requirements</h2><ul><li>Keep pages readable.</li><li>Use clear headings.</li><li>Add support CTA on Roadmap and Project Story.</li><li>Add correction/removal link in footer and record pages.</li><li>Add source disclaimer in footer.</li></ul></section>
-<section class="content-section ayds-section"><h2>Footer disclaimer</h2><p>Suggested footer text:</p><p>&gt; Base2026 is an independent research and discovery project. Records are based on public short-form content and are provided with attribution for search and research purposes. Creators may request correction or removal at <a href="mailto:offflinerpsy@gmail.com">offflinerpsy@gmail.com</a>.</p></section>
 
-    </main>
-    <footer class="ay-site-footer b26-product-footer" data-b26-product-footer aria-label="Base2026 footer">
-  <div class="ay-wrap ay-footer-grid b26-product-footer__grid" data-b26-shell>
-    <section class="ay-footer-brand b26-product-footer__identity" aria-label="Base2026">
-      <p class="ay-eyebrow eyebrow ayds-eyebrow">Base2026</p>
-      <h2>Public evidence, with attribution.</h2>
-      <p>Search reviewed sources, topics and creator viewpoints. Evidence first; services stay optional.</p>
-      <div class="ay-actions ayds-actions" aria-label="Base2026 actions">
-        <a class="ay-button ayds-btn ayds-btn--primary" href="/knowledge/">Search the library</a>
-        <a class="ay-button-secondary ayds-btn ayds-btn--secondary" href="/knowledge/methodology.html">Read methodology</a>
-      </div>
-    </section>
-    <nav aria-label="Base2026 browse links">
-      <h3>Browse</h3>
-      <ul class="ay-footer-menu">
-        <li><a href="/knowledge/">Search</a></li>
-        <li><a href="/knowledge/topics/">Topics</a></li>
-        <li><a href="/knowledge/creators/">Creators</a></li>
-        <li><a href="/knowledge/solutions/">Solutions</a></li>
-      </ul>
-    </nav>
-    <nav aria-label="Base2026 research links">
-      <h3>Research</h3>
-      <ul class="ay-footer-menu">
-        <li><a href="/knowledge/analytics.html">Analytics</a></li>
-        <li><a href="/knowledge/methodology.html">Methodology</a></li>
-        <li><a href="/knowledge/api.html">API &amp; AI access</a></li>
-      </ul>
-    </nav>
-    <nav aria-label="Base2026 trust links">
-      <h3>Trust</h3>
-      <ul class="ay-footer-menu">
-        <li><a href="/knowledge/source-policy.html">Source policy</a></li>
-        <li><a href="/knowledge/opt-out.html">Correction or removal</a></li>
-        <li><a href="/privacy-policy/">Privacy</a></li>
-        <li><button class="ay-footer-link-button b26-product-footer__link-button" type="button" data-cookie-preferences>Cookie preferences</button></li>
-        <li><a href="/about/">About Alex</a></li>
-      </ul>
-    </nav>
-    <nav aria-label="Base2026 project links">
-      <h3>Base2026</h3>
-      <ul class="ay-footer-menu">
-        <li><a href="/knowledge/roadmap.html">Roadmap</a></li>
-        <li><a href="/knowledge/support.html">Support</a></li>
-        <li><a href="/knowledge/story.html">Project story</a></li>
-      </ul>
-    </nav>
-  </div>
-  <div class="ay-footer-bottom b26-product-footer__bottom" data-b26-shell>
-    <span>&copy; 2026 Logic Crafts LLC, Kyrgyzstan. Base2026 is Alex Yarosh&rsquo;s independent experimental research product, not a marketing agency or service.</span>
-  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</main>
+<footer aria-label="Base2026 footer" class="ay-site-footer b26-product-footer" data-b26-product-footer="">
+<div class="ay-wrap ay-footer-grid b26-product-footer__grid" data-b26-shell="">
+<section aria-label="Base2026" class="ay-footer-brand b26-product-footer__identity">
+<p class="ay-eyebrow eyebrow ayds-eyebrow">Base2026</p>
+<h2>Public evidence, with attribution.</h2>
+<p>Search reviewed sources, topics and creator viewpoints. Evidence first; services stay optional.</p>
+<div aria-label="Base2026 actions" class="ay-actions ayds-actions">
+<a class="ay-button ayds-btn ayds-btn--primary" href="/knowledge/">Search the library</a>
+<a class="ay-button-secondary ayds-btn ayds-btn--secondary" href="/knowledge/methodology.html">Read methodology</a>
+</div>
+</section>
+<nav aria-label="Base2026 browse links">
+<h3>Browse</h3>
+<ul class="ay-footer-menu">
+<li><a href="/knowledge/">Search</a></li>
+<li><a href="/knowledge/topics/">Topics</a></li>
+<li><a href="/knowledge/creators/">Creators</a></li>
+<li><a href="/knowledge/solutions/">Solutions</a></li>
+</ul>
+</nav>
+<nav aria-label="Base2026 research links">
+<h3>Research</h3>
+<ul class="ay-footer-menu">
+<li><a href="/knowledge/analytics.html">Analytics</a></li>
+<li><a href="/knowledge/methodology.html">Methodology</a></li>
+<li><a href="/knowledge/api.html">API &amp; AI access</a></li>
+</ul>
+</nav>
+<nav aria-label="Base2026 trust links">
+<h3>Trust</h3>
+<ul class="ay-footer-menu">
+<li><a href="/knowledge/source-policy.html">Source policy</a></li>
+<li><a href="/knowledge/opt-out.html">Correction or removal</a></li>
+<li><a href="/privacy-policy/">Privacy</a></li>
+<li><button class="ay-footer-link-button b26-product-footer__link-button" data-cookie-preferences="" type="button">Cookie preferences</button></li>
+<li><a href="/about/">About Alex</a></li>
+</ul>
+</nav>
+<nav aria-label="Base2026 project links">
+<h3>Base2026</h3>
+<ul class="ay-footer-menu">
+<li><a href="/knowledge/roadmap.html">Roadmap</a></li>
+<li><a href="/knowledge/support.html">Support</a></li>
+<li><a href="/knowledge/story.html">Project story</a></li>
+</ul>
+</nav>
+</div>
+<div class="ay-footer-bottom b26-product-footer__bottom" data-b26-shell="">
+<span>© 2026 Logic Crafts LLC, Kyrgyzstan. Base2026 is Alex Yarosh’s independent experimental research product, not a marketing agency or service.</span>
+</div>
 </footer>
-
-    <section class="cookie-banner ayds-card ayds-card--feature" data-cookie-banner hidden aria-label="Cookie preferences">
-      <div>
-        <h2>Cookie preferences</h2>
-        <p>We use necessary cookies to run the site and optional cookies to understand what pages are useful. You can accept all, reject non-essential cookies, or manage preferences.</p>
-      </div>
-      <div class="cookie-actions">
-        <button type="button" class="ay-button ayds-btn ayds-btn--primary" data-cookie-accept>Accept All</button>
-        <button type="button" class="ay-button-secondary ayds-btn ayds-btn--secondary" data-cookie-reject>Reject Non-Essential</button>
-        <button type="button" class="ay-button-secondary ayds-btn ayds-btn--secondary" data-cookie-manage>Manage Preferences</button>
-      </div>
-    </section>
-    <dialog class="cookie-dialog ayds-card ayds-card--feature" data-cookie-dialog aria-label="Manage cookie preferences">
-      <form method="dialog">
-        <div class="cookie-dialog-head">
-          <p class="eyebrow ayds-eyebrow">Privacy controls</p>
-          <h2>Manage cookie preferences</h2>
-          <p>Necessary cookies are always active because they keep the site working. Analytics and marketing cookies are optional and will only run if you allow them.</p>
-        </div>
-        <div class="cookie-options">
-          <label><input type="checkbox" checked disabled> Necessary <span>Always on. Required for site operation, security, forms, and preference storage.</span></label>
-          <label><input type="checkbox" data-cookie-analytics> Analytics <span>Optional. Not currently active. Reserved for privacy-friendly page usefulness analytics.</span></label>
-          <label><input type="checkbox" data-cookie-marketing> Marketing <span>Optional. Not currently active. Reserved for future pixels only if explicitly enabled.</span></label>
-        </div>
-        <div class="cookie-actions">
-          <button type="button" class="ay-button ayds-btn ayds-btn--primary" data-cookie-save>Save Preferences</button>
-          <button type="button" class="ay-button-secondary ayds-btn ayds-btn--secondary" data-cookie-close>Close</button>
-        </div>
-      </form>
-    </dialog>
-    <script src="./static/cookie-consent.js?v=20260718-visual-reset-v2-r4" defer></script>
-
-
-  </body>
+<section aria-label="Cookie preferences" class="cookie-banner ayds-card ayds-card--feature" data-cookie-banner="" hidden="">
+<div>
+<h2>Cookie preferences</h2>
+<p>We use necessary cookies to run the site and optional cookies to understand what pages are useful. You can accept all, reject non-essential cookies, or manage preferences.</p>
+</div>
+<div class="cookie-actions">
+<button class="ay-button ayds-btn ayds-btn--primary" data-cookie-accept="" type="button">Accept All</button>
+<button class="ay-button-secondary ayds-btn ayds-btn--secondary" data-cookie-reject="" type="button">Reject Non-Essential</button>
+<button class="ay-button-secondary ayds-btn ayds-btn--secondary" data-cookie-manage="" type="button">Manage Preferences</button>
+</div>
+</section>
+<dialog aria-label="Manage cookie preferences" class="cookie-dialog ayds-card ayds-card--feature" data-cookie-dialog="">
+<form method="dialog">
+<div class="cookie-dialog-head">
+<p class="eyebrow ayds-eyebrow">Privacy controls</p>
+<h2>Manage cookie preferences</h2>
+<p>Necessary cookies are always active because they keep the site working. Analytics and marketing cookies are optional and will only run if you allow them.</p>
+</div>
+<div class="cookie-options">
+<label><input checked="" disabled="" type="checkbox"/> Necessary <span>Always on. Required for site operation, security, forms, and preference storage.</span></label>
+<label><input data-cookie-analytics="" type="checkbox"/> Analytics <span>Optional. Not currently active. Reserved for privacy-friendly page usefulness analytics.</span></label>
+<label><input data-cookie-marketing="" type="checkbox"/> Marketing <span>Optional. Not currently active. Reserved for future pixels only if explicitly enabled.</span></label>
+</div>
+<div class="cookie-actions">
+<button class="ay-button ayds-btn ayds-btn--primary" data-cookie-save="" type="button">Save Preferences</button>
+<button class="ay-button-secondary ayds-btn ayds-btn--secondary" data-cookie-close="" type="button">Close</button>
+</div>
+</form>
+</dialog>
+<script defer="" src="./static/cookie-consent.js?v=20260718-visual-reset-v2-r4"></script>
+</body>
 </html>

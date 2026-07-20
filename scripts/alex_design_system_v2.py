@@ -173,11 +173,42 @@ def _add_local_nav(soup: BeautifulSoup, main: Tag) -> None:
 
 
 def _compose_document(soup: BeautifulSoup, main: Tag, route: str) -> None:
-    # Roadmap is an interactive six-phase map. A document rail steals the
-    # horizontal space that makes both its controls and sequence readable.
+    """Keep document context in the hero and the reading field unobstructed.
+
+    The former two-column rail reduced the useful width of long-form documents
+    and made the governance family look like a separate product. Context is a
+    small, useful label, but it belongs beside the existing document actions,
+    not in a permanent column that competes with the content.
+
+    The unwrapping branch is intentional: this pass also repairs already-built
+    pages, so regenerating a package cannot preserve a legacy rail by accident.
+    """
+
+    hero = main.select_one(".page-hero, .b26-money-hero, .ai-pages-intro, .b26-about-hero")
+    if isinstance(hero, Tag) and not hero.select_one(".b26-k-document-context[role='note']"):
+        actions = hero.select_one(":scope > .hero-actions, :scope > .ayds-actions")
+        if not isinstance(actions, Tag):
+            actions = soup.new_tag("div", attrs={"class": "hero-actions ayds-actions"})
+            hero.append(actions)
+        context = soup.new_tag(
+            "span", attrs={"class": "b26-k-document-context", "role": "note"}
+        )
+        context.string = "Base2026 document"
+        actions.append(context)
+
+    for layout in list(main.select(".b26-k-document-layout, .ayds-document-layout")):
+        body = layout.select_one(":scope > .b26-k-document-body, :scope > .ayds-document-body")
+        if isinstance(body, Tag):
+            for child in list(body.children):
+                if isinstance(child, Tag):
+                    layout.insert_before(child.extract())
+        layout.decompose()
+
+    # Roadmap uses its own interactive composition; it receives the same hero
+    # context above but never receives a reading-field wrapper.
     if Path(route).name == "roadmap.html":
         return
-    if main.select_one(".b26-k-document-layout"):
+    if main.select_one(":scope > .b26-k-document-body, :scope > .ayds-document-body"):
         return
     sections = [
         node
@@ -186,28 +217,10 @@ def _compose_document(soup: BeautifulSoup, main: Tag, route: str) -> None:
     ]
     if not sections:
         return
-    layout = soup.new_tag(
-        "div", attrs={"class": "b26-k-document-layout ayds-document-layout"}
-    )
-    rail = soup.new_tag(
-        "aside",
-        attrs={
-            "class": "b26-k-document-rail ayds-document-rail ayds-card ayds-card--data",
-            "aria-label": "Document context",
-        },
-    )
-    rail_label = soup.new_tag("p", attrs={"class": "ayds-eyebrow"})
-    rail_label.string = "Base2026 document"
-    rail.append(rail_label)
-    rail_text = soup.new_tag("p")
-    rail_text.string = "Public methodology, governance and operating context."
-    rail.append(rail_text)
     article = soup.new_tag(
         "article", attrs={"class": "b26-k-document-body ayds-document-body"}
     )
-    sections[0].insert_before(layout)
-    layout.append(rail)
-    layout.append(article)
+    sections[0].insert_before(article)
     for section in sections:
         article.append(section.extract())
 

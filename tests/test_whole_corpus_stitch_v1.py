@@ -81,6 +81,21 @@ def test_non_apply_document_does_not_receive_interior_contract() -> None:
     assert not soup.select('link[href*="base2026-interior-v1.css"]')
 
 
+def test_document_composition_uses_hero_context_without_a_rail() -> None:
+    legacy = _page("app-shell content-page doc-page").replace(
+        '<section class="content-section"><h2>Evidence</h2><p>Body.</p></section>',
+        '<div class="b26-k-document-layout"><aside class="b26-k-document-rail">Old rail</aside>'
+        '<article class="b26-k-document-body"><section class="content-section"><h2>Evidence</h2><p>Body.</p></section></article></div>',
+    )
+    rendered, family = MODULE.transform_page(legacy, "methodology.html")
+    soup = BeautifulSoup(rendered, "html.parser")
+
+    assert family == "document"
+    assert not soup.select(".b26-k-document-layout, .b26-k-document-rail")
+    assert soup.select_one("main > article.b26-k-document-body")
+    assert soup.select_one(".ai-pages-intro .hero-actions .b26-k-document-context[role='note']")
+
+
 def test_finalize_release_metadata_rebinds_package_identity(tmp_path: Path) -> None:
     source = tmp_path / "base-release"
     output = tmp_path / "whole-corpus-preview-20260715-160000"

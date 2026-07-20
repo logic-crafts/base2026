@@ -127,7 +127,10 @@ def test_governance_roadmap_and_support_component_selectors_are_closed() -> None
     assert roadmap_soup.select_one(".b26-k-document-layout") is None
     assert roadmap_soup.select_one(".b26-k-document-rail") is None
     assert roadmap_soup.select_one(".b26-k-document-context[role='note']")
-    assert methodology_soup.select_one(".b26-k-document-layout")
+    assert methodology_soup.select_one(".b26-k-document-layout") is None
+    assert methodology_soup.select_one(".b26-k-document-rail") is None
+    assert methodology_soup.select_one(".page-hero .hero-actions .b26-k-document-context[role='note']")
+    assert methodology_soup.select_one("main > article.b26-k-document-body")
 
 
 def test_traffic_resource_hub_and_topic_support_components_are_closed() -> None:

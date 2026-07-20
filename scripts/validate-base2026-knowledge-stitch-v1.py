@@ -39,7 +39,7 @@ def main_contract(html: str) -> dict[str, object]:
     main = soup.select_one("main")
     if not isinstance(main, Tag):
         return {"main": False}
-    for injected in main.select(".b26-k-local-nav,.b26-k-document-rail,[data-b26-injected-text]"):
+    for injected in main.select(".b26-k-local-nav,.b26-k-document-context,[data-b26-injected-text]"):
         injected.decompose()
     forms = []
     for form in main.select("form"):
