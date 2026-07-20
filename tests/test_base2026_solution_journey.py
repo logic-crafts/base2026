@@ -135,6 +135,17 @@ def test_runtime_value_domains_fail_closed_in_node_fixture() -> None:
     assert json.loads(completed.stdout) == {"valid": 5, "rejected": 14, "consent_gate": True}
 
 
+def test_approved_static_solution_pages_keep_the_semantic_apply_research_contract() -> None:
+    contract = json.loads((ROOT / "contracts/base2026-approved-solution-ids.json").read_text(encoding="utf-8"))
+    for row in contract["solutions"]:
+        solution_id = row["id"]
+        page = ROOT / "web" / "static" / row["route"]
+        rendered = page.read_text(encoding="utf-8")
+        assert rendered.count('data-research-bridge="solution_to_apply_research"') == 1
+        assert f'data-origin-id="{solution_id}"' in rendered
+        assert rendered.count("base2026-solution-journey.js") == 1
+
+
 def test_source_overlay_preserves_robots_and_canonical(tmp_path: Path) -> None:
     module_path = SCRIPTS / "derive-base2026-phase1-base-p4-preview.py"
     spec = importlib.util.spec_from_file_location("phase1_base_p4", module_path)
