@@ -1,0 +1,10 @@
+[Unit]
+Description=Run Base2026 privacy-safe Nginx daily aggregate after rotation
+
+[Timer]
+OnCalendar=*-*-* 00:10:00
+Persistent=true
+Unit=base2026-nginx-privacy-aggregate.service
+
+[Install]
+WantedBy=timers.target

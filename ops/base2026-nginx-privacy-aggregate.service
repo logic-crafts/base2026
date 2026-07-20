@@ -1,0 +1,10 @@
+[Unit]
+Description=Base2026 privacy-safe Nginx daily aggregate
+After=logrotate.service
+
+[Service]
+Type=oneshot
+User=root
+Group=root
+UMask=0077
+ExecStart=/bin/bash -c '/usr/local/sbin/base2026-aggregate-nginx-privacy-safe --input /var/log/nginx/access.log.1 --out /var/lib/base2026-metrics/nginx-daily/access-logrotate-$(date +%%F).csv'
