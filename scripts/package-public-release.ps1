@@ -102,6 +102,7 @@ if (Test-Path "./web/static/base2026-solution-journey.json") {
 }
 Copy-Item "./web/static/vendor" (Join-Path $StaticRoot "vendor") -Recurse -Force
 Copy-Item "./web/static/meili.js" (Join-Path $StaticRoot "meili.js") -Force
+Copy-Item "./web/static/purify.min.js" (Join-Path $StaticRoot "purify.min.js") -Force
 Copy-Item "./web/static/cookie-consent.js" (Join-Path $StaticRoot "cookie-consent.js") -Force
 Copy-Item "./web/static/share-actions.js" (Join-Path $StaticRoot "share-actions.js") -Force
 if (Test-Path "./web/static/roadmap.js") {
@@ -208,6 +209,15 @@ foreach ($AssetName in $SearchV1Assets) {
 }
 Remove-Item $SearchV1OverlayRoot -Recurse -Force
 
+# Product Truth depends on a precise runtime order in the canonical Search
+# workspace and a semantic, tracked bridge on each approved Solution page.
+# Enforce that invariant on the generated release output—not by hand in a
+# deploy session—before the release is packaged.
+python3 ./scripts/apply-base2026-product-truth-runtime.py `
+  --web-root $WebRoot `
+  --contract ./contracts/base2026-approved-solution-ids.json | Write-Output
+Assert-NativeSuccess "apply-base2026-product-truth-runtime"
+
 # Keep legacy/bookmarked search URLs usable without creating a second crawlable
 # search surface. JavaScript preserves query/hash state; the no-script fallback
 # returns visitors to the canonical Base2026 workspace.
@@ -243,6 +253,7 @@ $VersionedAssets = @(
   "base2026-search-v1.css",
   "base2026-search-v3.js",
   "meili.js",
+  "purify.min.js",
   "cookie-consent.js",
   "share-actions.js",
   "roadmap.js"
@@ -259,6 +270,12 @@ Get-ChildItem -Path $WebRoot -Recurse -Filter "*.html" | ForEach-Object {
   }
   $PageHtml | Set-Content -Path $_.FullName -Encoding UTF8
 }
+
+python3 ./scripts/apply-base2026-product-truth-runtime.py `
+  --web-root $WebRoot `
+  --contract ./contracts/base2026-approved-solution-ids.json `
+  --check-only | Write-Output
+Assert-NativeSuccess "validate-base2026-product-truth-runtime"
 
 python3 ./scripts/validate-public-manifests.py `
   --dataset-manifest (Join-Path $ExportRoot "manifest.json") `

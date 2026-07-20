@@ -52,6 +52,7 @@ def test_packagers_and_deploy_preflight_close_v2_runtime_dependencies() -> None:
         "web/static/alex-v4-static-shell.js",
         "web/static/base2026-solution-journey.js",
         "web/static/base2026-solution-journey.css",
+        "web/static/purify.min.js",
         "web/static/vendor/manrope-800.ttf",
         "web/static/vendor/geist-800.ttf",
         "web/static/vendor/geist-mono-700.ttf",

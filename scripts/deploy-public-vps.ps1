@@ -138,6 +138,7 @@ try {
     "web/static/alex-v4-static-shell.js",
     "web/static/base2026-solution-journey.js",
     "web/static/base2026-solution-journey.css",
+    "web/static/purify.min.js",
     "web/static/vendor/manrope-400.ttf",
     "web/static/vendor/manrope-500.ttf",
     "web/static/vendor/manrope-600.ttf",
@@ -302,6 +303,7 @@ test -f "$staging_dir/web/index.html"
 test -f "$staging_dir/web/sources/index.html"
 test -f "$staging_dir/web/sitemap.xml"
 test -f "$staging_dir/web/static/styles.css"
+test -f "$staging_dir/web/static/purify.min.js"
 test -f "$staging_dir/web/manifest.json"
 test -f "$staging_dir/web/static/manifest.json"
 test -f "$staging_dir/SOURCE_DETAIL_V2_CANDIDATE_MANIFEST.json"

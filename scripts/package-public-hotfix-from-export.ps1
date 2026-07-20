@@ -162,6 +162,7 @@ if (Test-Path "./web/static/base2026-solution-journey.json") {
 }
 Copy-Item "./web/static/vendor" (Join-Path $StaticRoot "vendor") -Recurse -Force
 Copy-Item "./web/static/meili.js" (Join-Path $StaticRoot "meili.js") -Force
+Copy-Item "./web/static/purify.min.js" (Join-Path $StaticRoot "purify.min.js") -Force
 Copy-Item "./web/static/cookie-consent.js" (Join-Path $StaticRoot "cookie-consent.js") -Force
 Copy-Item "./web/static/share-actions.js" (Join-Path $StaticRoot "share-actions.js") -Force
 if (Test-Path "./web/static/roadmap.js") {
@@ -359,6 +360,7 @@ $VersionedAssets = @(
   "base2026-solution-journey.css",
   "source-detail-v2.js",
   "meili.js",
+  "purify.min.js",
   "cookie-consent.js",
   "share-actions.js",
   "roadmap.js"
@@ -382,6 +384,14 @@ Get-ChildItem -Path $WebRoot -Recurse -Filter "*.html" | ForEach-Object {
     )
   }
 }
+
+# The hotfix flow protects its supplied Search workspace byte-for-byte. It
+# therefore validates (rather than rewrites) the same Product Truth invariant.
+python3 ./scripts/apply-base2026-product-truth-runtime.py `
+  --web-root $WebRoot `
+  --contract ./contracts/base2026-approved-solution-ids.json `
+  --check-only | Write-Output
+Assert-NativeSuccess "validate-base2026-product-truth-runtime"
 
 python3 ./scripts/validate-public-manifests.py `
   --dataset-manifest (Join-Path $ExportRoot "manifest.json") `
@@ -501,6 +511,7 @@ $PackageManifest = [ordered]@{
     "web/static/alex-v4-static-shell.js",
     "web/static/base2026-solution-journey.js",
     "web/static/base2026-solution-journey.css",
+    "web/static/purify.min.js",
     "web/static/vendor/manrope-400.ttf",
     "web/static/vendor/manrope-500.ttf",
     "web/static/vendor/manrope-600.ttf",

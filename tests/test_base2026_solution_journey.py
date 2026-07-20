@@ -146,6 +146,49 @@ def test_approved_static_solution_pages_keep_the_semantic_apply_research_contrac
         assert rendered.count("base2026-solution-journey.js") == 1
 
 
+def test_release_runtime_overlay_is_idempotent_and_fail_closed(tmp_path: Path) -> None:
+    module_path = SCRIPTS / "apply-base2026-product-truth-runtime.py"
+    spec = importlib.util.spec_from_file_location("base2026_product_truth_overlay", module_path)
+    assert spec and spec.loader
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+
+    solution_ids = ["example-one", "example-two"]
+    web = tmp_path / "web"
+    solutions = web / "solutions"
+    solutions.mkdir(parents=True)
+    (web / "index.html").write_text(
+        '<html><body><script src="./static/meili.js?v=old"></script></body></html>',
+        encoding="utf-8",
+    )
+    for solution_id in solution_ids:
+        (solutions / f"{solution_id}.html").write_text(
+            '<html><body><main class="solution-page"></main>'
+            f'<a href="/knowledge/apply-research.html?solution={solution_id}">Apply</a>'
+            '</body></html>',
+            encoding="utf-8",
+        )
+
+    first = module.apply_runtime_contract(web, solution_ids, check_only=False)
+    assert first["status"] == "PASS"
+    assert set(first["changed"]) == {
+        "index.html",
+        "solutions/example-one.html",
+        "solutions/example-two.html",
+    }
+    second = module.apply_runtime_contract(web, solution_ids, check_only=False)
+    assert second["changed"] == []
+    checked = module.apply_runtime_contract(web, solution_ids, check_only=True)
+    assert checked["status"] == "PASS"
+
+    broken = (solutions / "example-two.html").read_text(encoding="utf-8").replace(
+        'data-origin-id="example-two"', 'data-origin-id="wrong"'
+    )
+    (solutions / "example-two.html").write_text(broken, encoding="utf-8")
+    with pytest.raises(ValueError, match="origin_id_missing"):
+        module.apply_runtime_contract(web, solution_ids, check_only=True)
+
+
 def test_source_overlay_preserves_robots_and_canonical(tmp_path: Path) -> None:
     module_path = SCRIPTS / "derive-base2026-phase1-base-p4-preview.py"
     spec = importlib.util.spec_from_file_location("phase1_base_p4", module_path)

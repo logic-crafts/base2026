@@ -75,5 +75,7 @@ def test_public_packager_uses_declared_build_root_for_search_overlay() -> None:
 
     assert '$BuildRoot = Join-Path $Root "output\\release-build\\$ReleaseName"' in packager
     assert '$SearchV1OverlayRoot = Join-Path $BuildRoot "_base2026-search-v1-overlay"' in packager
+    assert "apply-base2026-product-truth-runtime.py" in packager
+    assert '"./web/static/purify.min.js"' in packager
     assert "$StagingRoot" not in packager
     assert 'http-equiv="refresh"' not in packager
