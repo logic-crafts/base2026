@@ -216,6 +216,19 @@ New-Item -ItemType Directory -Force -Path $SearchAliasDir | Out-Null
 Set-Content -LiteralPath (Join-Path $SearchAliasDir "index.html") -Value $SearchAliasHtml -Encoding utf8
 Set-Content -LiteralPath (Join-Path $WebRoot "search.html") -Value $SearchAliasHtml -Encoding utf8
 
+# One post-generation seam owns the shared WordPress Personal header/footer.
+# It also performs the full-corpus shell/body/SEO/analytics preservation gate.
+$WordPressShellReport = Join-Path $BuildRoot "wordpress-personal-shell-report.json"
+$ShellSkipPages = @("search.html", "search/index.html")
+$ExpectedShellPages = @(
+  Get-ChildItem -Path $WebRoot -Recurse -File -Filter "*.html" | Where-Object {
+    $RelativeShellPage = [System.IO.Path]::GetRelativePath($WebRoot, $_.FullName).Replace("\\", "/")
+    $RelativeShellPage -notin $ShellSkipPages
+  }
+).Count
+python3 ./scripts/normalize-wordpress-v4-shell-release.py --release-root $ReleaseRoot --expected-pages $ExpectedShellPages --asset-version $CacheBust --report $WordPressShellReport | Write-Output
+Assert-NativeSuccess "normalize-wordpress-v4-shell-release"
+
 # Normalize generated asset cache-busts after every generator has written HTML.
 # Source/topic pages use ../static/... paths, while root pages use ./static/...
 # paths; the public package must give all of them the current release version.

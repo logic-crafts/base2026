@@ -1,0 +1,27 @@
+{
+  "contract": "wordpress-personal-v4-shell",
+  "header": {
+    "source_repo": "logic-crafts/base2026",
+    "source_commit": "1f65bfcde",
+    "source_path": "templates/shared/alex-home-v4-header.html",
+    "sha256": "4f02626276b505e3f2377488e93af413aad75c373b3770976414239e997a763d"
+  },
+  "footer": {
+    "source_repo": "base2026-migration/geo",
+    "source_commit": "ad4ea26ef1dc94e99b37548776b8b899f6dcfcef",
+    "source_path": "wp-theme/alex-yarosh/functions.php#ay_render_site_footer_once",
+    "render": "home_url=>https://aggressorbulkit.online; AY_CONTACT_EMAIL=>offflinerpsy@gmail.com; year=>2026; outer footer removed",
+    "sha256": "32f230a203efc4707e2e0de2f38c5ce81bac8c2f639e7ba0f8002b150dfefaff"
+  },
+  "forbidden": [
+    "data-footer-contract=\"personal-v1\"",
+    "compact Personal/Research registry footer"
+  ],
+  "required_footer": {
+    "columns": 5,
+    "navs": 4,
+    "actions": 3,
+    "social_blocks": 1
+  },
+  "public_mutation_allowed": false
+}
