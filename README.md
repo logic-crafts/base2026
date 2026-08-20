@@ -1,246 +1,118 @@
-# Base2026 Video Source Intelligence
+# Base2026
 
-Base2026 is a local-first, public-facing source intelligence system for short-form expert videos.
+Base2026 is an open-source public-source intelligence layer for short-form expert video. It turns public videos into attributed, searchable evidence that people and AI systems can inspect, compare and cite.
 
-The current public demo focuses on TikTok creators talking about SEO, GEO, AEO, AI search visibility, schema, keyword research, Google, Bing, and related topics.
+Built and maintained by solo founder Alex Yarosh.
 
-Live demo: <https://aggressorbulkit.online/knowledge/>
+- Product: <https://base2026.dev/>
+- Search workspace: <https://base2026.dev/workspace/>
+- Methodology: <https://base2026.dev/methodology>
+- Public roadmap: <https://base2026.dev/roadmap>
+- Support: <https://base2026.dev/support>
+- Partnerships: <https://base2026.dev/partner>
 
-## Project Identity and Ownership
+## Why Base2026 exists
 
-Base2026 is an independent experimental startup product created by Alex Yarosh. Ownership and rights belong to Logic Crafts LLC, Kyrgyzstan. Base2026 is not a marketing agency, does not represent marketing agency services, and should not be evaluated as a marketing-services business. It is a productized public source-intelligence and knowledge-base system for short-form expert video.
+Useful expert knowledge is increasingly published in short-form video, but it is difficult to search, verify and cite. Platform feeds are optimized for viewing, not research. Search engines and AI agents often lose the original speaker, timestamp and context.
 
-Public API and AI access: <https://aggressorbulkit.online/knowledge/api.html>
+Base2026 creates a public evidence layer that keeps those connections visible.
 
-## Public API & AI Access
+## What the product does
 
-Base2026 is built to be useful to humans and agents. The public site exposes a
-read-only, public-safe API surface so AI tools, scripts, researchers, and search
-systems can inspect the library without scraping the visual UI.
+- discovers public expert sources in SEO, GEO, AEO, AI search and adjacent fields;
+- converts reviewed public source material into searchable passages;
+- preserves creator attribution, original-source links and evidence context;
+- generates source, creator, topic and comparison pages;
+- exposes public-safe machine-readable files for scripts and AI agents;
+- provides a Cloudflare Worker search API backed by D1 FTS5;
+- documents methodology, corrections, opt-out and publication boundaries.
 
-Start here:
+The current release is a working public prototype with 2,095 indexed public passage documents and thousands of generated evidence pages. These numbers describe the current dataset, not users, revenue or commercial traction.
 
-- API overview: <https://aggressorbulkit.online/knowledge/api.html>
-- Machine-readable API index: <https://aggressorbulkit.online/knowledge/api-index.json>
-- Agent context file: <https://aggressorbulkit.online/knowledge/llms.txt>
-- Data dictionary: <https://aggressorbulkit.online/knowledge/data-dictionary.json>
-- Public documents JSONL: <https://aggressorbulkit.online/knowledge/static/documents.jsonl>
-- Public passages JSONL: <https://aggressorbulkit.online/knowledge/static/passages.jsonl>
-- Public insight cards JSONL: <https://aggressorbulkit.online/knowledge/static/insight_cards.jsonl>
+## Who it is for
 
-The API surface is intentionally public-only. It does not expose raw captions,
-raw ASR, media files, private QA notes, local databases, credentials, logs, or
-unreviewed pipeline artifacts.
+- researchers checking what public experts actually said;
+- marketers and founders comparing source-backed tactics;
+- journalists and educators looking for attributable evidence;
+- developers building search, analysis or agent workflows;
+- creators who need clear attribution, correction and opt-out paths.
 
-## What It Does
-
-- converts public creator videos into searchable English source text and evidence passages;
-- keeps raw captions, raw ASR output, media, private QA notes, and unreviewed transcripts local/private;
-- can expose reviewed polished public source text/transcript as a source-record reading surface where policy allows;
-- exports public-safe source records, passages, insight cards, topics, and creator metadata;
-- indexes searchable passages with Meilisearch;
-- serves a static read-only web UI under `/knowledge/`;
-- generates creator, source, topic, and comparison pages from public JSONL.
-- exposes agent-readable public entry points (`/knowledge/llms.txt`, `/knowledge/data-dictionary.json`, `/knowledge/api-index.json`) so AI tools can inspect the public library without scraping the visual UI.
-
-The public site is designed for source discovery, attribution, comparison, citation, and searchable source reading. It is not a video re-hosting platform and not a raw transcript dump.
-
-## Current Status
-
-Latest deployed release: `base2026-source-intelligence-contract-ay54-20260619`.
-
-Current public export:
-
-- 1,476 source records;
-- 2,016 searchable passages;
-- 1,631 insight cards;
-- 1,060 public insight cards;
-- 1,522 topics;
-- 1,008 public topics;
-- 10 creator profiles.
-
-Recent readiness checks:
-
-- public export policy: current live release uses reviewed public source text where policy allows and continues to forbid raw/unreviewed transcript dumps;
-- newest-source readiness: latest public sources must have reviewed topics or Source Intelligence before release;
-- publication boundary audit: passing with `forbidden=0` and `secret_findings=0` in the current launch-readiness pass;
-- GitHub metadata validation: passing for the public repository metadata, homepage, license, and topics;
-- live SEO crawl gate: passed on 500 crawled pages with 0 P0 bad links and 0 crawled error pages;
-- mobile visual QA: passed 78 public UI checks with 0 failures.
-
-## Current Public Shape
-
-Public pages:
-
-- `/knowledge/`
-- `/knowledge/creators/{handle}.html`
-- `/knowledge/sources/{item_id}.html`
-- `/knowledge/topics/{topic_id}.html`
-- `/knowledge/compare/{topic_id}.html`
-- `/knowledge/roadmap.html`
-- `/knowledge/story.html`
-- `/knowledge/methodology.html`
-- `/knowledge/privacy.html`
-- `/knowledge/source-policy.html`
-- `/knowledge/support.html`
-- `/knowledge/site-structure.html`
-- `/knowledge/opt-out.html`
-
-Public data files generated locally:
-
-- `source_records.jsonl`
-- `passages.jsonl`
-- `insight_cards.jsonl`
-- `topics.jsonl`
-- `creators.jsonl`
-- `manifest.json`
-
-Compatibility files:
-
-- `documents.jsonl`
-- `chunks.jsonl`
-
-Agent-readable public files:
-
-- `/knowledge/llms.txt`
-- `/knowledge/api.html`
-- `/knowledge/api-index.json`
-- `/knowledge/data-dictionary.json`
-
-The public search UI also uses a server-side Meilisearch proxy at `/knowledge-search/multi-search`. The proxy is read-only and injects the public search key server-side; integrations should prefer static JSONL for bulk/offline analysis.
-
-Generated public data and release archives are deploy artifacts, not GitHub source.
-
-## Public Boundary
-
-Do not commit or publish:
-
-- private research folders;
-- local SQLite databases;
-- raw captions;
-- ASR audio/video;
-- cookies, tokens, API keys, SSH keys;
-- generated release zips;
-- generated `public-data/`;
-- local Meilisearch data;
-- logs.
-
-Raw captions, raw ASR, media, private QA notes, and unreviewed transcripts are private/local. Reviewed polished public source text may be shown where policy allows. Public source pages and source detail must show attribution, original links, source context, methodology, and correction/opt-out paths.
-
-## What This Repository Is For
-
-This repository is intended to show the public-safe system layer:
-
-- data contracts for public source records, passages, insight cards, topics, and creator metadata;
-- static page generation for search, creator, source, topic, comparison, roadmap, methodology, policy, support, and correction/removal pages;
-- local worker scripts for export, validation, indexing, packaging, and deployment;
-- project memory and runbooks for repeatable operation;
-- open-source issue templates and contribution paths.
-
-Private research data, raw platform material, local databases, and deploy archives are intentionally excluded.
-
-## Architecture
+## How it works
 
 ```text
-creator registry
-  -> local intake / captions / ASR
-  -> transcript cleanup and QA
-  -> passage chunking
-  -> topic and insight extraction
-  -> public JSONL export
-  -> static page generation
-  -> Meilisearch passage index
-  -> read-only public UI under /knowledge/
+public source discovery
+  -> local/private intake and review
+  -> evidence and attribution checks
+  -> public-safe passage export
+  -> static evidence pages
+  -> Cloudflare Workers + D1 FTS5 search
 ```
 
-No live LLM call is required during public search.
+No live LLM call is required to search the public library. Raw captions, raw ASR, media, private QA notes and unreviewed material stay outside the public release.
 
-## Local Commands
+## Open-source architecture
 
-Export public TikTok data:
+- `scripts/build-base2026-cloudflare-release.py` builds the startup-only static release and fails closed on personal-site or WordPress-form leakage.
+- `templates/base2026-*` contains the public startup shell, homepage and Support/Partner/About/Privacy pages.
+- `cloudflare/base2026-worker/` contains the D1 search API, private proposal endpoints, migrations and tests.
+- `cloudflare/base2026-www-redirect/` redirects the `www` hostname to the canonical apex domain.
+- `scripts/audit-publication-boundary.py` checks the repository publication boundary.
+
+Generated website trees, public export artifacts, local databases and deployment archives are not committed.
+
+## Trust and privacy
+
+Base2026 is not a video re-hosting platform and not a raw transcript dump. Public pages are designed around attribution, provenance, correction and removal.
+
+Support and Partner forms:
+
+- accept structured proposals only—no file uploads or credentials;
+- validate exact origin, field limits, consent, timing and a bot honeypot;
+- store proposals in a private D1 database separate from public search;
+- do not store IP addresses or user-agent strings;
+- remove untouched new proposals after 90 days.
+
+See the live [privacy notice](https://base2026.dev/privacy) and [source policy](https://base2026.dev/source-policy).
+
+## Local verification
+
+Python release tests:
 
 ```bash
-python3 scripts/export-public-tiktok.py
-python3 scripts/check-public-export-policy.py public-data/tiktok
+python3 -m pytest tests/test_build_base2026_cloudflare_release.py -q
 ```
 
-Do not use implicit public-card promotion for GitHub or public release preparation. Public insight cards should come from reviewed source-backed rows, not from one-off export flags.
-
-Index passages into Meilisearch:
+Worker tests:
 
 ```bash
-python3 scripts/meili-index-public.py --index base2026_public_tiktok
+cd cloudflare/base2026-worker
+npm ci
+npm run typecheck
+npm test
+npm run import:dry-run
+npm run wrangler:dry-run
 ```
 
-Package a public release:
+Build a new, non-overwriting candidate from an existing public web artifact:
 
 ```bash
-pwsh -NoProfile -ExecutionPolicy Bypass -File ./scripts/package-public-release.ps1 -ReleaseName <release-name>
+python3 scripts/build-base2026-cloudflare-release.py \
+  --source-web output/cloudflare-migration/source-web \
+  --out output/cloudflare-migration/candidate-web-<release-id>
 ```
 
-Current public packages can include reviewed public source text where policy allows. Do not use `-IncludeFullTranscripts` or `--auto-promote-insights` for public deploys; raw captions, raw ASR, media, private QA, and unreviewed transcripts stay private.
-
-Deploy to the VPS:
-
-```bash
-pwsh -NoProfile -ExecutionPolicy Bypass -File ./scripts/deploy-public-vps.ps1 -ReleaseName <release-name>
-```
-
-Audit before staging for GitHub:
+Run the publication audit before staging:
 
 ```bash
 python3 scripts/audit-publication-boundary.py
-python3 scripts/validate-github-metadata.py
-pwsh -NoProfile -ExecutionPolicy Bypass -File ./scripts/preflight-github-launch.ps1 -SkipExportPolicy -SkipLiveCheck
 ```
 
-## Project Docs
+## Roadmap
 
-- [Roadmap](ROADMAP.md)
-- [Changelog](CHANGELOG.md)
-- [Governance](GOVERNANCE.md)
-- [Contributing](CONTRIBUTING.md)
-- [Security](SECURITY.md)
-- [Code of Conduct](CODE_OF_CONDUCT.md)
-- Funding links are declared in `.github/FUNDING.yml` when public sponsorship accounts are ready.
+Current priorities are search quality, provenance and creator-rights workflows, API documentation, accessibility, more public-safe tests and carefully reviewed source expansion. See [ROADMAP.md](ROADMAP.md) or the [live roadmap](https://base2026.dev/roadmap).
 
-## Project Control
+## Contributing and security
 
-Agents and maintainers should start from repo files, not chat memory.
+Contributions that improve public-safe code, source quality, accessibility, documentation and correction workflows are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md), [GOVERNANCE.md](GOVERNANCE.md) and the [Code of Conduct](CODE_OF_CONDUCT.md).
 
-Read first:
-
-- `AGENTS.md`
-- `docs/project-memory/ACTIVE_PHASE.md`
-- `docs/project-memory/NEXT_ACTION.md`
-- `docs/project-memory/STATUS_BOARD.csv`
-- `docs/project-memory/PUBLICATION_BOUNDARY.md`
-- `docs/GIT_PUBLICATION_AUDIT.md`
-
-## About the Maintainer
-
-Base2026 is created and maintained by [Alex Yarosh](https://aggressorbulkit.online/about/), an independent AI Search Visibility consultant working across SEO, GEO, AEO, local search, entity/trust signals, and public source intelligence.
-
-Alex is building Base2026 as an independent pilot project for studying how public expert knowledge can become searchable, attributable, and useful to both humans and AI systems.
-
-- Website: <https://aggressorbulkit.online/>
-- Live Base2026 demo: <https://aggressorbulkit.online/knowledge/>
-- Contact: <offflinerpsy@gmail.com>
-
-## Contribution Areas
-
-Useful contributions include:
-
-- extractor adapters for additional public short-form platforms;
-- caption and ASR quality benchmarks;
-- safer public export validators;
-- Meilisearch ranking and faceting improvements;
-- static page, schema, sitemap, and accessibility improvements;
-- creator correction/removal workflow improvements;
-- documentation that makes local operation easier.
-
-Please do not submit raw third-party captions, unreviewed transcripts, media files, cookies, credentials, or private research exports.
-
-## License
-
-Repository code and documentation are licensed under Apache-2.0. Third-party creator videos, platform captions, and original source content are not relicensed by this repository.
+Base2026 is licensed under [Apache-2.0](LICENSE).

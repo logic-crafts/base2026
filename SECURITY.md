@@ -1,44 +1,41 @@
 # Security Policy
 
-Base2026 is pre-release. The public demo is read-only; ingestion and transcript processing are local maintainer workflows.
+Base2026 is a public prototype. The deployed product serves a public read-only evidence library and accepts structured Support/Partner proposals. Source ingestion and review remain maintainer-controlled workflows.
 
 ## Reporting
 
-Report security issues privately to the maintainer before public disclosure.
+Report security issues privately through the repository's security reporting channel. Do not include credentials, private datasets or sensitive personal information in public issues or in the website forms.
 
-## Current Supported Surface
+## Supported public surface
 
-Supported:
+- static product and evidence pages on `base2026.dev`;
+- read-only search endpoints backed by D1 FTS5;
+- public-safe JSONL and metadata files;
+- validated Support and Partner proposal endpoints.
 
-- static public UI under `/knowledge/`;
-- generated creator, source, topic, and compare pages;
-- Meilisearch search proxy for public search requests;
-- local export, packaging, and deploy scripts.
+There are no public source-ingestion, transcript-refresh, database-admin, media-upload or hosted-transcription endpoints.
 
-Not supported:
+## Required controls
 
-- public ingestion endpoints;
-- public transcript refresh endpoints;
-- unauthenticated Meilisearch admin API;
-- hosted transcription jobs;
-- public upload of creator data.
+- no secrets in source code or generated artifacts;
+- public search data and private proposals use separate D1 databases;
+- proposal endpoints validate exact origin, content type, field limits, consent, elapsed time and a honeypot;
+- proposal storage excludes IP addresses and user-agent strings;
+- untouched new proposals expire after 90 days;
+- public releases exclude raw captions, raw ASR, media, private QA, local databases, logs and unreviewed material;
+- the release builder fails closed on personal-site shell, WordPress-form and retired-route markers;
+- a publication-boundary audit is required before staging for GitHub.
 
-## Required Controls
+## Verification
 
-- no secrets in source code;
-- Meilisearch master key stays server-side;
-- browser traffic uses a search-only proxy/key;
-- public release artifacts are excerpt-only by default;
-- full third-party transcripts stay private/local unless explicitly gated or reviewed;
-- generated exports, local databases, logs, media, cookies, and release zips are excluded from GitHub;
-- run a publication-boundary audit before staging files for GitHub.
+```bash
+python3 -m pytest tests/test_build_base2026_cloudflare_release.py -q
+python3 scripts/audit-publication-boundary.py
 
-## Pre-Publication Checks
-
-```powershell
-git status --short --branch
-python -m py_compile scripts\export-public-tiktok.py scripts\check-public-export-policy.py scripts\generate-public-pages.py scripts\meili-index-public.py
-node --check web\static\meili.js
-python .\scripts\check-public-export-policy.py .\public-data\tiktok
-python .\scripts\audit-publication-boundary.py
+cd cloudflare/base2026-worker
+npm ci
+npm run typecheck
+npm test
+npm run import:dry-run
+npm run wrangler:dry-run
 ```

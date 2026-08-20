@@ -1,38 +1,50 @@
 # Contributing
 
-Base2026 is pre-release. Contributions should improve the public-safe code, docs, UI, data model, deployment flow, or local ingestion pipeline.
+Base2026 welcomes focused contributions to its public-safe code, product UI, search, data contracts, source-quality checks, accessibility, documentation and creator correction/removal workflows.
 
-## Before You Start
+## Before you start
 
 Read:
 
 - `AGENTS.md`
 - `docs/project-memory/PUBLICATION_BOUNDARY.md`
 - `docs/GIT_PUBLICATION_AUDIT.md`
-- `docs/project-memory/NEXT_ACTION.md`
+- `SECURITY.md`
+- `ROADMAP.md`
 
-## Public Boundary
+For a substantial change, open an issue describing the user problem, affected data/rights boundary and how success will be verified.
 
-Do not add private research data, raw captions, media, generated exports, local databases, logs, cookies, tokens, API keys, SSH keys, or release archives.
+## Public boundary
 
-Generated folders such as `public-data/` and `output/` are deploy artifacts, not source.
+Do not add private research, raw captions, raw ASR, media, generated exports, local databases, logs, cookies, tokens, keys, credentials or deployment archives.
 
-## Development Checks
+`public-data/`, `output/`, local D1 state, Wrangler state and `node_modules/` are generated or local artifacts—not repository source.
 
-Run the smallest checks that match the change:
+Do not submit confidential material through GitHub issues or the live Support/Partner forms.
 
-```powershell
-python -m py_compile scripts\export-public-tiktok.py scripts\check-public-export-policy.py scripts\generate-public-pages.py scripts\meili-index-public.py
-node --check web\static\meili.js
-python .\scripts\check-public-export-policy.py .\public-data\tiktok
+## Development checks
+
+Run the smallest relevant checks. For startup release or Worker changes, use:
+
+```bash
+python3 -m pytest tests/test_build_base2026_cloudflare_release.py -q
+python3 scripts/audit-publication-boundary.py
+
+cd cloudflare/base2026-worker
+npm ci
+npm run typecheck
+npm test
+npm run import:dry-run
+npm run wrangler:dry-run
 ```
 
-For UI work, verify a rendered page and capture evidence when layout or interaction changes.
+For UI changes, verify representative desktop and mobile viewports, keyboard behavior, horizontal overflow and the browser console.
 
-## Pull Request Expectations
+## Pull request expectations
 
-- explain the user-facing change;
-- list verification commands;
-- call out any public/private data boundary risk;
-- avoid broad refactors unless needed;
-- keep docs and project memory current when workflow changes.
+- explain the user-facing outcome;
+- list exact verification commands and results;
+- call out public/private data or creator-rights risk;
+- keep changes focused and reviewable;
+- update docs when architecture, behavior or boundaries change;
+- never include generated release trees or unrelated local changes.

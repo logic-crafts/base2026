@@ -1,105 +1,53 @@
-# Roadmap
+# Base2026 Roadmap
 
-Base2026 is a public source-intelligence system for short-form expert videos.
+Base2026 is a working public prototype at <https://base2026.dev/>. This roadmap describes product outcomes, not fundraising or traction claims.
 
-It is already live as a searchable public demo at <https://aggressorbulkit.online/knowledge/>. This roadmap describes what exists now, what is being hardened next, and what is intentionally not in scope.
+## Now: independent public prototype
 
-## Now: working public prototype
+- startup-only product surface on Cloudflare Workers Static Assets;
+- D1 FTS5 search across 2,095 public passage documents;
+- public source, creator, topic and comparison pages;
+- methodology, source policy, correction, opt-out and privacy documentation;
+- public-safe JSONL and agent-readable discovery files;
+- dedicated Support and Partner proposal paths;
+- release tests that fail closed on private or personal-site leakage.
 
-The current public product includes:
+## Next: trust and source quality
 
-- searchable TikTok source records for SEO, GEO, AEO, AI search, local search, schema, and creator-led marketing topics;
-- reviewed public source text where policy allows;
-- source-backed insight cards;
-- topic, source, creator, and comparison pages;
-- a static public API/AI surface through JSONL and metadata files;
-- a read-only Meilisearch proxy for live search;
-- public methodology, source policy, correction/removal, support, and roadmap pages;
-- local validation gates for publication safety.
+- make provenance and evidence boundaries easier to inspect;
+- improve correction, removal and creator-rights workflows;
+- expand public-safe fixtures for release and Worker tests;
+- tighten source-quality labels without implying creator endorsement;
+- document dataset changes and limitations more clearly.
 
-Current live public export:
+## Next: search and developer access
 
-- 1,476 source records;
-- 2,016 searchable passages;
-- 1,631 insight cards;
-- 1,060 public insight cards;
-- 1,522 topics;
-- 1,008 public topics;
-- 10 creator profiles.
+- improve topic grouping, facets and ranking;
+- publish stable examples for the public API and static datasets;
+- keep `llms.txt`, the API index and data dictionary aligned with releases;
+- improve accessibility, keyboard behavior and mobile QA coverage;
+- add clearer recipes for research and agent workflows.
 
-## Next: trust and release hardening
+## Later: carefully reviewed expansion
 
-Near-term work focuses on making the public system safer, clearer, and easier to operate.
+- additional public short-form sources where rights and attribution can be handled safely;
+- stronger provenance labels and public quality benchmarks;
+- reusable adapters for public-safe source ingestion;
+- optional private research adapters that cannot leak into public exports.
 
-Planned improvements:
+## Intentionally out of scope
 
-- keep newest-source readiness strict so a fresh source cannot ship as a plain text page with no reviewed topics or Source Intelligence;
-- improve the source-review queue for held local-caption and weak-ASR rows;
-- make release gates easier to run and understand for contributors;
-- keep public API documentation aligned with the deployed JSONL fields;
-- improve issue templates for correction/removal, bugs, and feature requests;
-- add more public-safe fixtures for validators and static page tests.
-
-## Next: useful public search experience
-
-Public UI and data improvements planned next:
-
-- better topic clustering for local SEO, AI visibility, and service-business use cases;
-- clearer source pages with stronger attribution and less repeated evidence;
-- richer creator pages that help users understand the public source slice without overstating endorsement;
-- improved comparison pages for repeated claims, opposing views, and practical tactics;
-- better social preview cards and metadata for public source/topic pages;
-- more accessible navigation and mobile QA coverage.
-
-## Next: public data and agent workflows
-
-Base2026 is designed to be useful to AI tools without scraping the UI.
-
-Planned API/agent improvements:
-
-- keep `llms.txt`, `api-index.json`, and `data-dictionary.json` current with every release;
-- document common recipes for local SEO research, AI-search visibility analysis, and topic discovery;
-- add examples for reading `documents.jsonl`, `passages.jsonl`, `insight_cards.jsonl`, and topic signal briefs;
-- publish clearer compatibility notes for scripts and agents that consume the static public files.
-
-## Later: platform and source expansion
-
-Base2026 currently focuses on a public TikTok source slice. Expansion should be careful and review-gated.
-
-Possible future work:
-
-- additional short-form platforms where public access and attribution can be handled safely;
-- stronger creator correction/removal tooling;
-- source-quality scoring and provenance labels;
-- public benchmarks for transcript/source-text quality;
-- optional local adapters for private research workflows that never leak into public exports.
-
-## Not in scope
-
-Base2026 is not trying to become:
+Base2026 is not:
 
 - a video re-hosting platform;
-- a raw caption or raw ASR dump;
+- a raw caption or ASR dump;
 - a private-data search engine;
-- a way to bypass platform rights, creator attribution, or removal requests;
-- a system that publishes unreviewed third-party transcripts by default.
+- a mechanism for bypassing platform rights or creator requests;
+- a marketing-services funnel;
+- a system that publishes unreviewed third-party material by default.
 
-## Funding use
+## How support is used
 
-If Base2026 receives grants, credits, or sponsorship, the priority is practical infrastructure and trust work:
+Infrastructure credits, tooling access, mentorship and open-source collaboration are used for hosting, search, storage, accessibility, validation, documentation and creator-rights work. Base2026 does not claim outside funding unless it has actually been received and publicly documented.
 
-- hosting, search, and storage costs;
-- safer ingestion and review tooling;
-- accessibility, SEO, and public documentation;
-- public validation fixtures and tests;
-- source-quality review and creator-rights workflows.
-
-## How to propose roadmap changes
-
-Open a GitHub issue and explain:
-
-- the user or maintainer problem;
-- why it fits Base2026;
-- what data or rights boundary it touches;
-- how success should be verified;
-- what should remain private or out of scope.
+Propose support at <https://base2026.dev/support> or a collaboration at <https://base2026.dev/partner>.
