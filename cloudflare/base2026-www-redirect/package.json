@@ -1,0 +1,12 @@
+{
+  "name": "base2026-www-redirect",
+  "private": true,
+  "scripts": {
+    "check": "wrangler types --check && tsc --noEmit && wrangler deploy --dry-run"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.9.0",
+    "wrangler": "4.124.0"
+  }
+}

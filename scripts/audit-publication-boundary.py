@@ -67,8 +67,12 @@ FORBIDDEN_PATTERNS = [
 PUBLIC_SAFE_PREFIXES = {
     ".github/ISSUE_TEMPLATE/",
     "10_agent-instructions/",
+    "cloudflare/base2026-worker/",
+    "cloudflare/base2026-www-redirect/",
     "contracts/",
     "docs/",
+    "static/brand/",
+    "templates/base2026-",
     "tests/fixtures/public-export-leaky/",
     "tests/fixtures/public-export-valid/",
 }
@@ -109,6 +113,7 @@ PUBLIC_SAFE_EXACT = {
     "scripts/base2026-tiktok-repair-queue.py",
     "scripts/base2026_ai_recommends_core.py",
     "scripts/audit-publication-boundary.py",
+    "scripts/build-base2026-cloudflare-release.py",
     "scripts/base2026-whole-corpus-stitch-v1-browser-gate.mjs",
     "scripts/base2026_knowledge_stitch_v1.css",
     "scripts/derive-base2026-knowledge-stitch-v1.py",
@@ -213,6 +218,7 @@ PUBLIC_SAFE_EXACT = {
     "tests/test_base2026_tiktok_pipeline_v2.py",
     "tests/test_base2026_tiktok_repair_queue.py",
     "tests/test_build_kb_reviewed_candidate_replay.py",
+    "tests/test_build_base2026_cloudflare_release.py",
     "tests/test_check_public_content_readiness.py",
     "tests/test_generate_base2026_sitemap.py",
     "tests/test_export_public_tiktok_admission.py",
@@ -224,6 +230,7 @@ PUBLIC_SAFE_EXACT = {
     "web/README.md",
     "web/UI_AUDIT.md",
     "web/server.py",
+    "static/base2026-mark.svg",
 }
 
 SECRET_PATTERNS = [

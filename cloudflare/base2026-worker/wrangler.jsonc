@@ -1,0 +1,43 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "base2026",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-08-19",
+  "compatibility_flags": ["nodejs_compat"],
+  "routes": [
+    {
+      "pattern": "base2026.dev",
+      "custom_domain": true
+    }
+  ],
+  "assets": {
+    "binding": "ASSETS",
+    "directory": "../../output/cloudflare-migration/candidate-web",
+    "run_worker_first": [
+      "/api/*",
+      "/knowledge-search/*",
+      "/search",
+      "/search/*",
+      "/search.html",
+      "/meili.html"
+    ]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "base2026-public-search",
+      "database_id": "ac034130-4169-43c2-9a17-4b72d05457b0",
+      "migrations_dir": "migrations"
+    },
+    {
+      "binding": "INBOX_DB",
+      "database_name": "base2026-inbox",
+      "database_id": "542a77ef-da00-4522-8b7a-3d78fc646c72",
+      "migrations_dir": "migrations-inbox"
+    }
+  ],
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  }
+}
