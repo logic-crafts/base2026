@@ -10,6 +10,8 @@ Date: 2026-06-06
 - `README.md`
 - `SECURITY.md`
 - `docs/`
+- `docs/BASE2026_CLOUDFLARE_PIPELINE_CANONICAL_OPERATING_MANUAL.md` after the
+  exact staged diff passes redaction and secret review
 - `scripts/`
 - `scripts/tiktok-source-review-audit.py`
 - `web/static/` source shell files, shared assets, public info pages, API metadata, and runtime JS/CSS
@@ -46,6 +48,15 @@ Date: 2026-06-06
 - imported roadmap/support source ZIPs such as `docs/*_roadmap_pack.zip`
 - `config/tiktok-intake-queue*.json`
 - `config/release-target*.json`
+- `cloudflare/base2026-pipeline-control/` until a separate source-publication
+  audit explicitly admits each file
+- live operational receipts that expose private Worker hosts, account/database
+  identifiers, Container image identifiers, signed requests, or raw D1/R2 rows
+
+Non-secret Worker roles, binding names, table/state contracts, schedules,
+fail-closed gates, and redacted deployment snapshots may be documented in the
+canonical operating manual. This does not admit the private implementation or
+its generated artifacts to Git.
 
 ## First Commit Shape
 

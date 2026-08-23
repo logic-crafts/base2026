@@ -30,6 +30,8 @@ Base2026 has two layers:
 - `config/creator-profiles.json`
 - public-safe examples under `config/`, such as `config/creators.example.json`
 - public-safe generator source data under `data/`, such as `data/ai_visibility_pages_batch01.json`, after private absolute paths and unreviewed source material are removed
+- the redacted canonical Cloudflare pipeline manual at
+  `docs/BASE2026_CLOUDFLARE_PIPELINE_CANONICAL_OPERATING_MANUAL.md`
 
 ## Do not commit
 
@@ -47,6 +49,10 @@ Base2026 has two layers:
 - TikTok intake queues and release target configs under `config/`
 - Meilisearch local data
 - private client workspaces
+- `cloudflare/base2026-pipeline-control/` until a separate file-by-file source
+  publication review admits it
+- private Worker hostnames, account/database identifiers, Container image
+  identifiers, signed requests, raw D1/R2 rows, and operational tail output
 
 ## Deployable but not committed
 
@@ -85,3 +91,17 @@ Then compare staged candidates against:
 
 - `docs/GIT_PUBLICATION_AUDIT.md`
 - this file
+
+## Canonical Cloudflare pipeline documentation boundary
+
+The public manual may name Worker roles, Cloudflare product classes, binding
+names, state tables, schedules, gates, and non-secret versioned contracts so
+future agents can understand the complete architecture. It must not contain
+secret values, a private control endpoint, account/database IDs, raw artifacts,
+signed headers, provider responses, private packet contents, or operational
+logs.
+
+The manual documents the production system; it does not make the private
+control-plane source public-safe. A fresh public clone can therefore be behind
+the live Worker, and an agent must reconcile source and migrations before any
+deployment.

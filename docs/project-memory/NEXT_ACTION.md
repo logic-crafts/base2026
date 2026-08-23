@@ -1,5 +1,18 @@
 # Next Action
 
+## Current Focus: canonical Cloudflare pipeline manual published — 2026-08-23
+
+Use `docs/BASE2026_CLOUDFLARE_PIPELINE_CANONICAL_OPERATING_MANUAL.md` as the
+mandatory architecture and operating reference. Before any pipeline deploy,
+reconcile the protected operational source and migration state with the live
+Workers; the public GitHub baseline is not assumed to contain the complete live
+private control plane or the latest public projection delta.
+
+Next runtime action: observe the 2026-08-24 10:00 UTC discovery cycle, record
+discovered/fresh/duplicate/admitted/failed counts, verify budget and hard-hold
+state, then confirm any resulting public projection through both D1 and live
+search. Do not mutate the pipeline merely because the cycle is a valid no-op.
+
 ## Current Focus: Stitch V1 AI Recommends Solutions release closed — 2026-07-15
 
 No further action is pending for this release. PR #12 merged as `9a4670143acd615d0e832a855577b61367b89c4b`; exact release `base2026-search-solutions-stitch-v1-preview-r3-20260715-094010` is live at ZIP SHA-256 `711b79b492bd4a70e38379878a39f5230f635dfa4458c08f079463122af2f6c7`. Atomic deploy, exact route/hash and sitemap contracts, Source Detail responsive gate, Solutions-specific `24/24` responsive/interaction gate, and manual live visual QA all passed. Meilisearch, IndexNow, WordPress, corpus data and sitemap membership remained unchanged. Canonical closure: `docs/project-memory/BASE2026_SOLUTIONS_STITCH_V1_PRODUCTION_RELEASE_2026_07_15.md`. Start any further Solutions product/content/visual change as a separate bounded cycle.

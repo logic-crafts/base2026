@@ -1,5 +1,20 @@
 # Phases
 
+## Phase 12 — Automatic Cloudflare-only publication
+
+Purpose: discover and acquire new TikTok sources in Cloudflare, keep raw
+material private, and automatically project only policy-eligible excerpt cards
+through an exact private-to-public RPC contract. Status: live and verified on
+2026-08-23. Broad release, local adapter, automated ChatGPT Web, AI Gateway, and
+paid fallback remain off. Canonical reference:
+`docs/BASE2026_CLOUDFLARE_PIPELINE_CANONICAL_OPERATING_MANUAL.md`.
+
+## Phase 9 — Independent domain and Cloudflare hosting
+
+Purpose: serve Base2026 independently at `base2026.dev` through Workers Static
+Assets and public D1 FTS5, with `www` redirected to the apex and legacy
+VPS/Meilisearch retained only as rollback infrastructure. Status: live.
+
 ## Phase 0 — Repo hygiene and publication boundary
 
 Purpose: make the repo safe to inspect and commit. Allowed: `.gitignore`, audits, memory docs. Forbidden: pushing, publishing private folders. Done: public/private boundary is explicit and verified.

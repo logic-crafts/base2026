@@ -1,5 +1,17 @@
 # Deployment Runbook
 
+## Current Cloudflare authority
+
+For the live Base2026 domain, public Worker, private TikTok pipeline,
+service-binding projection, D1 migrations, verification, and rollback, follow
+`docs/BASE2026_CLOUDFLARE_PIPELINE_CANONICAL_OPERATING_MANUAL.md` first. The
+VPS/nginx instructions below are retained for legacy rollback and historical
+releases; they are not the active Base2026 search/publication path.
+
+Never deploy the public Worker from a stale public clone. First reconcile the
+live projection RPC module and migration state, then use the contract-compatible
+public-before-private deployment order in the canonical manual.
+
 Current public path:
 
 - Root URL: `https://aggressorbulkit.online/`

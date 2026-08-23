@@ -20,6 +20,15 @@ For deployment or automation tasks, also read:
 - `docs/project-memory/DEPLOYMENT_RUNBOOK.md`
 - `docs/project-memory/HERMES_RUNBOOK.md`
 
+For any Cloudflare, TikTok pipeline, cloud acquisition, Workers AI, or
+automatic-publication task, also read:
+
+- `docs/BASE2026_CLOUDFLARE_PIPELINE_CANONICAL_OPERATING_MANUAL.md`
+
+That manual is the canonical architecture and operating reference. Older
+pipeline architecture notes are historical receipts. Recheck live Cloudflare
+deployments and D1 state before using any dated counter or version ID.
+
 For public UI tasks, also read:
 
 - `docs/project-memory/VISUAL_SYSTEM_CONTRACT.md`

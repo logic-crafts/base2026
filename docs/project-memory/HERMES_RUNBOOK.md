@@ -1,5 +1,18 @@
 # Hermes Runbook
 
+## Current production boundary — 2026-08-23
+
+Hermes/local LaunchAgents are no longer a production dependency for the daily
+TikTok pipeline. Cloudflare owns scheduled discovery, capture, private storage,
+Workers AI, durable reconciliation, automatic excerpt-card projection, and
+verification. The local adapter is disabled and retained only as rollback
+material. ChatGPT is manual owner-initiated fallback only.
+
+For current runtime operations use
+`docs/BASE2026_CLOUDFLARE_PIPELINE_CANONICAL_OPERATING_MANUAL.md`. The local
+cycle below is historical/rollback guidance and must not be re-enabled merely
+because it remains documented.
+
 Hermes should become the maintainer automation agent for TikTok refresh.
 
 ## Intended cycle

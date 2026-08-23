@@ -4,6 +4,27 @@ All notable public-facing changes to Base2026 are summarized here.
 
 Base2026 is early, so this changelog focuses on useful release milestones rather than every internal pipeline run.
 
+## 2026-08-23 — Canonical Cloudflare pipeline operating manual
+
+### Changed
+
+- Added one authoritative manual for the cloud-only TikTok discovery,
+  acquisition, Workers AI, private import, automatic excerpt-card projection,
+  public D1 FTS5, monitoring, and rollback path.
+- Added mandatory manual links to the agent contract and public README.
+- Documented the source-synchronization boundary between the public repository
+  and the protected production control-plane checkout.
+- Strengthened Git/publication rules so architecture can be documented without
+  admitting private Worker source, artifacts, endpoints, identifiers, or logs.
+
+### Verified
+
+- Live health and read-only D1 checks confirmed 2,136 public documents, 1,557
+  distinct videos, 33 applied projections, 44 projected cards, and zero public
+  full transcripts at the dated snapshot.
+- Private migrations were current and the automatic-publication policy had no
+  hard hold.
+
 ## 2026-06-19 — Source Intelligence contract release
 
 Live release: `base2026-source-intelligence-contract-ay54-20260619`

@@ -1,5 +1,26 @@
 # Prompt Log
 
+## 2026-08-23 — canonical Cloudflare pipeline manual and GitHub authority
+
+Alex requested one unmistakable GitHub instruction covering every Base2026
+Worker, Cloudflare resource, relationship, data flow, gate, failure path,
+rollback rule, and distinctive technology so future agents cannot confuse the
+system.
+
+Actions and evidence:
+
+- Inventoried the public Worker, redirect Worker, private control Worker,
+  service-binding RPC, D1/R2/Queues/Workflow, Browser, Container, Workers AI,
+  Cron, retention, authentication, and automatic-publication contracts.
+- Rechecked live Worker versions, private migration closure, public/private D1
+  counts, policy hard-hold state, and public/private health read-only.
+- Added the canonical manual and mandatory pointers in `AGENTS.md` and
+  `README.md`.
+- Documented the public/private source-synchronization boundary and strengthened
+  Git staging exclusions for the protected control plane.
+- Prepared the change in a clean docs-only worktree; no dirty pipeline source,
+  raw artifact, secret, log, local database, or media file was included.
+
 ## 2026-07-15 — Stitch V1 AI Recommends Solutions deployed and closed
 
 Alex explicitly authorized production deploy in source message `224273`. The exact R3 artifact was reconciled against merged PR #12 and deployed through the fail-closed atomic wrapper.

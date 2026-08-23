@@ -27,7 +27,7 @@ Base2026 creates a public evidence layer that keeps those connections visible.
 - provides a Cloudflare Worker search API backed by D1 FTS5;
 - documents methodology, corrections, opt-out and publication boundaries.
 
-The current release is a working public prototype with 2,095 indexed public passage documents and thousands of generated evidence pages. These numbers describe the current dataset, not users, revenue or commercial traction.
+The current release is a working public prototype. The 2026-08-23 verified snapshot contained 2,136 indexed public documents across 1,557 distinct videos. These numbers describe a dated dataset snapshot, not users, revenue or commercial traction.
 
 ## Who it is for
 
@@ -40,12 +40,13 @@ The current release is a working public prototype with 2,095 indexed public pass
 ## How it works
 
 ```text
-public source discovery
-  -> local/private intake and review
-  -> evidence and attribution checks
-  -> public-safe passage export
-  -> static evidence pages
-  -> Cloudflare Workers + D1 FTS5 search
+Cloudflare discovery
+  -> private D1/R2 intake and dedupe
+  -> private Container audio capture
+  -> Workers AI transcription and evidence guard
+  -> deterministic private packets and import
+  -> policy-bound excerpt-card projection
+  -> public Worker + D1 FTS5 search
 ```
 
 No live LLM call is required to search the public library. Raw captions, raw ASR, media, private QA notes and unreviewed material stay outside the public release.
@@ -57,8 +58,14 @@ No live LLM call is required to search the public library. Raw captions, raw ASR
 - `cloudflare/base2026-worker/` contains the D1 search API, private proposal endpoints, migrations and tests.
 - `cloudflare/base2026-www-redirect/` redirects the `www` hostname to the canonical apex domain.
 - `scripts/audit-publication-boundary.py` checks the repository publication boundary.
+- [`docs/BASE2026_CLOUDFLARE_PIPELINE_CANONICAL_OPERATING_MANUAL.md`](docs/BASE2026_CLOUDFLARE_PIPELINE_CANONICAL_OPERATING_MANUAL.md) is the mandatory architecture, data-flow, security, operations and rollback reference for the cloud-only TikTok pipeline.
 
 Generated website trees, public export artifacts, local databases and deployment archives are not committed.
+
+The live private control plane and the latest public projection delta are
+maintained in a protected operational checkout and may be ahead of public
+`main`. The canonical manual records this source-synchronization boundary so a
+fresh clone is never mistaken for a complete production deployment source.
 
 ## Trust and privacy
 

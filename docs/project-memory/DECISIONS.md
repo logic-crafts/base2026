@@ -1,5 +1,18 @@
 # Decisions
 
+## 2026-08-23 — Use one canonical Cloudflare pipeline operating manual
+
+All Cloudflare/TikTok pipeline agents must start from
+`docs/BASE2026_CLOUDFLARE_PIPELINE_CANONICAL_OPERATING_MANUAL.md`. It owns the
+architecture, resource relationships, public/private boundary, state model,
+gates, deployment order, rollback, and anti-confusion rules. Older architecture
+files remain historical receipts, and live Cloudflare/D1 readbacks remain the
+authority for volatile state.
+
+The public repository documents the complete operating model without
+automatically publishing the protected private Worker source. Source
+synchronization is a separate, file-by-file publication decision.
+
 ## 2026-07-14 — Search V1 uses canonical query URLs with a grandfathered immutable legacy baseline
 
 Decision: Base2026 Search V1 canonical and newly generated discovery links use `/knowledge/?q=...` plus explicit query parameters. The outbound `#search?...` prohibition applies to Search V1 changed paths and to all new or regenerated generation paths. The immutable Source Detail V2 baseline is grandfathered: its 4,183 unchanged files may retain their 10,340 inherited outbound hash-search links until those page families are deliberately regenerated under a separately verified release. Runtime code must continue accepting an inbound `#search?...` bookmark and immediately migrate it to the canonical query URL with `history.replaceState`.
