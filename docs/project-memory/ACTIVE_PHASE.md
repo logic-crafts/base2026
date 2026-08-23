@@ -1,6 +1,18 @@
 # Active Phase
 
-Last updated: 2026-07-15
+Last updated: 2026-08-23
+
+## Current override — Phase 12 automatic Cloudflare-only publication is live
+
+Cloudflare discovery, acquisition, private processing, deterministic import,
+policy-bound excerpt-card projection, and public D1 verification are the active
+production path. The Mac adapter is disabled and ChatGPT remains a manual-only
+optional courier. The canonical operating reference is
+`docs/BASE2026_CLOUDFLARE_PIPELINE_CANONICAL_OPERATING_MANUAL.md`.
+
+The active observation task is the first complete post-release daily discovery
+cycle at 2026-08-24 10:00 UTC. A no-op is valid when no fresh sources exist;
+weak, failed, or privacy-risk material must remain private.
 
 ## Current override — Stitch V1 AI Recommends Solutions production release closed
 

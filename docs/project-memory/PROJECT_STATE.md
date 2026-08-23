@@ -1,6 +1,21 @@
 # Project State
 
-Last updated: 2026-07-15
+Last updated: 2026-08-23
+
+## Current override — canonical Cloudflare-only pipeline live and documented
+
+The daily TikTok pipeline no longer depends on the MacBook. Cloudflare owns
+discovery, private capture/storage, Workers AI, durable state, bounded automatic
+excerpt-card projection, and public D1 FTS5 verification. Broad release remains
+off; the narrow machine-policy lane is live and fail-closed. At the verified
+2026-08-23 snapshot, public D1 contained 2,136 documents across 1,557 videos,
+33 applied projections, 44 projected cards, and zero public full transcripts.
+
+The authoritative architecture, source-synchronization warning, resource map,
+state contracts, operations, rollback, and agent rules are in
+`docs/BASE2026_CLOUDFLARE_PIPELINE_CANONICAL_OPERATING_MANUAL.md`. Older
+pipeline notes and the VPS/Meilisearch sections below are historical. Recheck
+live Worker/D1 state before any production claim or mutation.
 
 ## Current override — Stitch V1 AI Recommends Solutions deployed and live-verified
 
