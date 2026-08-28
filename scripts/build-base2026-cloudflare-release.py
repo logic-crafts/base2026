@@ -49,11 +49,13 @@ DEFAULT_SUPPORT_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-support.html"
 DEFAULT_PARTNER_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-partner.html"
 DEFAULT_PRIVACY_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-privacy.html"
 DEFAULT_ABOUT_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-about.html"
+DEFAULT_FOUNDER_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-founder.html"
 DEFAULT_APPLY_RESEARCH_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-apply-research.html"
 DEFAULT_AI_VISIBILITY_RESOURCES_TEMPLATE = (
     PROJECT_ROOT / "templates" / "base2026-ai-visibility-resources.html"
 )
 DEFAULT_FORMS_SCRIPT = PROJECT_ROOT / "templates" / "base2026-forms.js"
+DEFAULT_EVIDENCE_BRIEF_SCRIPT = PROJECT_ROOT / "templates" / "base2026-evidence-brief.js"
 DEFAULT_ROADMAP_SCRIPT = PROJECT_ROOT / "web" / "static" / "roadmap.js"
 DEFAULT_GITHUB_ICON = PROJECT_ROOT / "static" / "brand" / "github.svg"
 DEFAULT_X_ICON = PROJECT_ROOT / "static" / "brand" / "x.svg"
@@ -771,6 +773,7 @@ HUB_SITEMAP_ROUTES = (
     "/roadmap",
     "/api",
     "/about",
+    "/founder",
     "/privacy",
     "/partner",
     "/apply-research",
@@ -799,6 +802,7 @@ schema, content structure and entity trust.
 - Methodology: https://base2026.dev/methodology
 - Roadmap: https://base2026.dev/roadmap
 - API and AI access: https://base2026.dev/api
+- Founder and selected work: https://base2026.dev/founder
 - Source policy: https://base2026.dev/source-policy
 - Creator correction or removal: https://base2026.dev/opt-out
 - Current D1 projection sitemap: https://base2026.dev/sitemap-dynamic.xml
@@ -825,6 +829,7 @@ site or a private client workspace.
 - Creator index: https://base2026.dev/creators/
 - Source index: https://base2026.dev/sources/
 - Methodology: https://base2026.dev/methodology
+- Founder and selected work: https://base2026.dev/founder
 - Apply research: https://base2026.dev/apply-research
 - API and AI access: https://base2026.dev/api
 
@@ -908,14 +913,14 @@ def _rewrite_public_api_docs(relative_path: Path, text: str) -> str:
             if "server-side Meilisearch proxy" in text or "injects the public search key" in text:
                 raise ReleaseBuildError("api.html contains an unhandled legacy search-proxy contract")
         text = text.replace(old, new)
-        old_ai_handoff = (
-            "<p>For business-specific implementation, use <code>/apply-research.html</code> as the public bridge from Base2026 source intelligence to Alex Yarosh&#x27;s AI Visibility Snapshot, Diagnostic Audit, and service workflow.</p>"
+        old_ai_handoff = re.compile(
+            r"<p>For business-specific implementation, use <code>/apply-research(?:\.html)?</code> as the public bridge from Base2026 source intelligence to Alex Yarosh&#x27;s AI Visibility Snapshot, Diagnostic Audit, and service workflow\.</p>"
         )
         new_ai_handoff = (
             "<p>Use <code>/apply-research.html</code> to understand the public research boundary and how to turn source evidence into an independent review question. Base2026 does not accept private client material or provide a private audit workflow.</p>"
         )
-        text = text.replace(old_ai_handoff, new_ai_handoff)
-        if old_ai_handoff in text or "service workflow.</p>" in text:
+        text = old_ai_handoff.sub(new_ai_handoff, text)
+        if old_ai_handoff.search(text) or "service workflow.</p>" in text:
             raise ReleaseBuildError("api.html retains an unhandled personal-commercial handoff")
         return text
 
@@ -1630,6 +1635,7 @@ def build_release(
             write_generated_public_file("static/base2026-startup-shell.css", startup_shell_css)
             write_generated_public_file("static/base2026-core.css", core_css)
             write_generated_public_file("static/base2026-forms.js", DEFAULT_FORMS_SCRIPT.read_bytes())
+            write_generated_public_file("static/base2026-evidence-brief.js", DEFAULT_EVIDENCE_BRIEF_SCRIPT.read_bytes())
             write_generated_public_file("static/roadmap.js", DEFAULT_ROADMAP_SCRIPT.read_bytes())
             write_generated_public_file("static/brand/github.svg", DEFAULT_GITHUB_ICON.read_bytes())
             write_generated_public_file("static/brand/x.svg", DEFAULT_X_ICON.read_bytes())
@@ -1656,6 +1662,14 @@ def build_release(
                 "about.html",
                 _render_startup_page(
                     DEFAULT_ABOUT_TEMPLATE.read_text(encoding="utf-8"), startup_header, startup_footer
+                ),
+            )
+            write_generated_public_file(
+                "founder.html",
+                _render_startup_page(
+                    DEFAULT_FOUNDER_TEMPLATE.read_text(encoding="utf-8"),
+                    startup_header,
+                    startup_footer,
                 ),
             )
             write_generated_public_file(

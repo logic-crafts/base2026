@@ -12,7 +12,16 @@ Never deploy the public Worker from a stale public clone. First reconcile the
 live projection RPC module and migration state, then use the contract-compatible
 public-before-private deployment order in the canonical manual.
 
-Current public path:
+Current Workers Static Assets release:
+
+- Domain: `https://base2026.dev/`
+- Public Worker: `35a2ee9e-1d95-45c4-b971-26f19183d732`
+- Immediate rollback: `dcbeb2e9-27af-4d45-b510-fdaaea055f4a`
+- Artifact tree SHA-256:
+  `af3641c48f0ff59a7686c623835c07fab39b7b0e5908f6a9d12290cb8e212a52`
+- Canonical source repository: `https://github.com/offflinerpsy/base2026`
+
+Legacy VPS rollback path:
 
 - Root URL: `https://aggressorbulkit.online/`
 - Base2026 URL: `https://aggressorbulkit.online/knowledge/`

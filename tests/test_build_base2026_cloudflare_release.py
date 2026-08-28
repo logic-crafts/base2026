@@ -190,9 +190,11 @@ def test_startup_homepage_overlay_preserves_search_as_workspace(tmp_path: Path) 
     assert (output / "partner.html").is_file()
     assert (output / "privacy.html").is_file()
     assert (output / "about.html").is_file()
+    assert (output / "founder.html").is_file()
     assert (output / "apply-research.html").is_file()
     assert (output / "ai-visibility-resources.html").is_file()
     assert (output / "static" / "base2026-forms.js").is_file()
+    assert (output / "static" / "base2026-evidence-brief.js").read_bytes() == builder.DEFAULT_EVIDENCE_BRIEF_SCRIPT.read_bytes()
     assert (output / "static" / "roadmap.js").read_bytes() == builder.DEFAULT_ROADMAP_SCRIPT.read_bytes()
     assert (output / "static" / "brand" / "github.svg").is_file()
     assert (output / "static" / "base2026-mark.svg").is_file()
@@ -203,11 +205,37 @@ def test_startup_homepage_overlay_preserves_search_as_workspace(tmp_path: Path) 
     support = (output / "support.html").read_text(encoding="utf-8")
     assert '<link rel="canonical" href="https://base2026.dev/support">' in support
     assert 'href="/roadmap"' in support
+    founder = (output / "founder.html").read_text(encoding="utf-8")
+    assert '<link rel="canonical" href="https://base2026.dev/founder">' in founder
+    assert "Alex Yarosh builds the systems behind ambitious digital work." in founder
+    assert 'href="/founder"' in rendered_homepage
+    assert "Maharani" not in founder
+    assert "Primavera" not in founder
     assert receipt["verification"]["personal_site_origin_markers_remaining"] == 0
     assert receipt["replacements"]["html_urls_to_extensionless"] > 0
     assert receipt["verification"]["redirecting_html_canonical_markers_remaining"] == 0
     assert receipt["verification"]["redirecting_html_sitemap_markers_remaining"] == 0
-    assert receipt["artifact"]["file_count"] == 29
+    assert receipt["artifact"]["file_count"] == 31
+
+
+def test_startup_homepage_exposes_product_first_evidence_brief_search() -> None:
+    homepage = (ROOT / "templates" / "base2026-startup-homepage.html").read_text(encoding="utf-8")
+
+    assert "Ask what SEO and AI-search practitioners actually said." in homepage
+    assert 'action="/workspace/"' in homepage
+    assert 'method="get"' in homepage
+    assert 'name="q"' in homepage
+    assert "Get evidence brief" in homepage
+    assert "Get a source-backed evidence brief in seconds." in homepage
+    assert homepage.count('class="b26-button--primary"') >= 1
+    assert homepage.count('class="b26-suggested-queries"') == 1
+    assert homepage.count('href="/workspace/?q=') == 3
+    assert 'id="evidence-brief-result"' in homepage
+    assert '/static/base2026-evidence-brief.js' in homepage
+    runtime = (ROOT / "templates" / "base2026-evidence-brief.js").read_text(encoding="utf-8")
+    assert 'fetch(`/api/evidence-brief/v2?q=${encodeURIComponent(question)}`' in runtime
+    assert "textContent" in runtime
+    assert "innerHTML" not in runtime
 
 
 def test_startup_shell_injects_a_missing_legacy_header() -> None:
@@ -304,6 +332,13 @@ def test_public_ai_docs_are_rewritten_to_the_base2026_only_contract() -> None:
     )
     assert "business-specific AI visibility audit" not in api_index
     assert "cloudflare_worker_d1_fts5" in api_index
+
+    extensionless_api = builder._rewrite_public_api_docs(
+        Path("api.html"),
+        "<p>For business-specific implementation, use <code>/apply-research</code> as the public bridge from Base2026 source intelligence to Alex Yarosh&#x27;s AI Visibility Snapshot, Diagnostic Audit, and service workflow.</p>",
+    )
+    assert "service workflow" not in extensionless_api
+    assert "independent review question" in extensionless_api
 
 
 def test_legacy_styles_are_normalized_at_the_release_boundary() -> None:

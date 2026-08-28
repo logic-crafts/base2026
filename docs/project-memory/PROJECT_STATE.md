@@ -1,6 +1,19 @@
 # Project State
 
-## 2026-08-28 product visibility/GitHub checkpoint
+## 2026-08-28 Evidence Brief V2 / homepage / personal GitHub checkpoint
+
+- Live public Worker: `35a2ee9e-1d95-45c4-b971-26f19183d732`.
+- Immediate rollback: `dcbeb2e9-27af-4d45-b510-fdaaea055f4a`.
+- Artifact tree SHA-256:
+  `af3641c48f0ff59a7686c623835c07fab39b7b0e5908f6a9d12290cb8e212a52`.
+- Live public D1: 2,170 documents, 1,572 distinct sources, 48 public evidence
+  routes and zero public full third-party transcripts.
+- Evidence Brief V2 is additive; the unversioned V1 endpoint remains intact.
+- Desktop/mobile, keyboard, reduced-motion and no-JS QA passed.
+- Canonical public repository: `https://github.com/offflinerpsy/base2026`.
+- Private capture code, raw media and operational state remain excluded.
+
+## 2026-08-28 product visibility/GitHub foundation checkpoint
 
 - Live public Worker: `3f5a6687-4eb8-4ba5-9610-7fe2533282ba`.
 - Immediate rollback: `63d1f529-47ff-46ba-baeb-db77f6e80fc6`.
@@ -214,8 +227,8 @@ Current local repo state:
 
 - current checked-out branch on this MacBook: `codex/base2026-launch-next`
 - GitHub default branch: `main`
-- GitHub public repository: `https://github.com/logic-crafts/base2026`
-- GitHub organization/company account: `logic-crafts` (`https://github.com/orgs/logic-crafts/repositories`); the repo was moved there because startup/registration flows often require a company/org identity. Local `origin` on this Mac is now `https://github.com/logic-crafts/base2026.git`.
+- Historical GitHub repository at this checkpoint: `https://github.com/logic-crafts/base2026`; superseded on 2026-08-28 by `https://github.com/offflinerpsy/base2026`.
+- Historical organization account: `logic-crafts`. Current local `origin` and canonical public repository are personal `offflinerpsy/base2026`; `logiccrafts-legacy` is retained only for history.
 - working branch `codex/github-publication-staging` also exists on GitHub as the original publication staging branch
 - first public-safe commit exists
 - Hermes reliability pass completed: WebUI scheduled task repaired, GPT-5.4 worker script added, false ASR backlog closed

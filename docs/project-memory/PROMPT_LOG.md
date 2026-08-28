@@ -1,5 +1,22 @@
 # Prompt Log
 
+## 2026-08-28 — Evidence Brief V2, homepage motion and personal GitHub release
+
+Owner requested a coordinated homepage polish without disturbing the parallel
+Founder/Profile contour, a safe personal-GitHub migration, and complete public
+release. Work was reviewed against `origin/main`; only the public Worker/API,
+homepage/profile templates, deterministic builder, artifact policy, tests and
+canonical status updates were admitted. Private pipeline-control code, raw
+media, D1/R2 operations, generated output and unrelated dirty files were
+excluded.
+
+Production verification: Worker `35a2ee9e-1d95-45c4-b971-26f19183d732`,
+rollback `dcbeb2e9-27af-4d45-b510-fdaaea055f4a`, artifact tree SHA-256
+`af3641c48f0ff59a7686c623835c07fab39b7b0e5908f6a9d12290cb8e212a52`.
+Live V2 returned five attributable findings; V1/health stayed available;
+desktop/mobile, keyboard, reduced-motion and no-JS QA passed. Canonical GitHub
+is `https://github.com/offflinerpsy/base2026`.
+
 ## 2026-08-28 — GitHub, roadmap, positioning and visibility release
 
 Owner requested a complete GitHub cleanup with commit/push, a roadmap aligned

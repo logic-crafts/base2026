@@ -1,5 +1,19 @@
 # Decisions
 
+## 2026-08-28 — Evidence Brief V2, restrained motion and personal GitHub
+
+- Preserve the approved blue-white `b26-independent-v1` visual authority.
+- Use bounded progressive enhancement only: one coalesced scroll listener, one
+  observer, finite motion, readable no-JS output and complete reduced-motion
+  fallback. No parallax, hover scaling or infinite decorative loops.
+- Keep `/api/evidence-brief/v2` additive and preserve unversioned V1.
+- Explain homepage counters literally: documents, distinct sources, public
+  evidence routes, and zero published full third-party transcripts.
+- Canonical public repository is `https://github.com/offflinerpsy/base2026`;
+  the former LogicCrafts repository is legacy history, not current authority.
+- Never publish the separate private capture Worker, raw media, transcripts,
+  secrets, operational logs or generated release artifacts.
+
 ## 2026-08-28 — Base2026 category, design authority and research spending
 
 - Position Base2026 as an **open video research engine** and **source-first
@@ -123,9 +137,9 @@ Decision: canonical Base2026 search/discovery URLs should be `/knowledge/` plus 
 
 Reason: GSC/Ahrefs already surfaced duplicate/canonical noise around `/knowledge/index.html` and query-state search routes. Hash state preserves user navigation without asking crawlers to spend budget on filter/query combinations that canonicalize back to the search root.
 
-## 2026-06-23 — Use Logic Crafts organization as GitHub home
+## 2026-06-23 — Historical Logic Crafts GitHub home (superseded 2026-08-28)
 
-Decision: treat `logic-crafts` as the current company GitHub organization for Base2026 and related Alex/company startup assets. Base2026 canonical GitHub URL is `https://github.com/logic-crafts/base2026`; local `origin` should point to `https://github.com/logic-crafts/base2026.git`.
+Historical decision: use `logic-crafts` as the company GitHub organization for Base2026 and related startup assets. This was superseded on 2026-08-28; the canonical repository and local `origin` are now `https://github.com/offflinerpsy/base2026`.
 
 Reason: Alex registered a company/org GitHub account because startup/application flows often request a company identity, and the project/repositories were moved there while keeping access effectively the same.
 

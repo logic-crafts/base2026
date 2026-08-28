@@ -5,6 +5,7 @@ Base2026 is an open-source video research engine and source-first evidence libra
 Built and maintained by solo founder Alex Yarosh.
 
 - Product: <https://base2026.dev/>
+- Repository: <https://github.com/offflinerpsy/base2026>
 - Search workspace: <https://base2026.dev/workspace/>
 - Methodology: <https://base2026.dev/methodology>
 - Public roadmap: <https://base2026.dev/roadmap>
@@ -31,6 +32,16 @@ The current release is a working public prototype. The 2026-08-28 live D1
 snapshot contained 2,150 search documents across 1,563 distinct videos, with
 39 automatic public projections applied. These are dated database dimensions,
 not users, revenue, universal coverage or commercial traction.
+
+## Build reproducibility boundary
+
+This repository contains the public Worker, templates, deterministic release
+builder, tests and publication checks. A production static release additionally
+requires an already-reviewed public `--source-web` artifact. That generated
+corpus is intentionally excluded from Git because it is a deployable data
+artifact, not source code. A clean clone can reproduce the software tests and
+Worker dry-run, but must not claim byte-for-byte reproduction of a live release
+without the exact reviewed source artifact and its recorded tree hash.
 
 ## Who it is for
 

@@ -19,6 +19,20 @@ const MAX_LIMIT = 100;
 const MAX_OFFSET = 10_000;
 const MAX_FACET_VALUES = 100;
 const DEFAULT_LIMIT = 20;
+const EVIDENCE_BRIEF_CANDIDATE_LIMIT = 24;
+const EVIDENCE_BRIEF_SOURCE_LIMIT = 6;
+const EVIDENCE_BRIEF_V2_CANDIDATE_LIMIT = 60;
+const EVIDENCE_BRIEF_V2_SOURCE_LIMIT = 5;
+const EVIDENCE_BRIEF_V2_CREATOR_LIMIT = 2;
+const MIN_EVIDENCE_BRIEF_QUERY_LENGTH = 3;
+const EVIDENCE_BRIEF_VERSION = "base2026.evidence-brief.v2";
+const EVIDENCE_BRIEF_RANKING_VERSION = "d1-fts5-bm25-and-v2";
+const EVIDENCE_BRIEF_STOP_WORDS = new Set([
+  "a", "about", "an", "and", "are", "as", "at", "be", "by", "do", "does", "expert", "experts", "for",
+  "from", "how", "in", "is", "measure", "measuring", "of", "on", "or", "practitioner", "practitioners",
+  "prioritize", "prioritise", "recommend", "recommended", "recommending", "saying", "says", "should", "support",
+  "the", "to", "use", "using", "what", "when", "where", "which", "who", "why", "with",
+]);
 const FORM_ORIGIN = "https://base2026.dev";
 const FORM_CONSENT_VERSION = "2026-08-20";
 const MIN_FORM_COMPLETION_MS = 1_200;
@@ -225,6 +239,36 @@ interface SearchRow {
   full_transcript_public: number;
 }
 
+interface EvidenceBriefCandidate {
+  id: string;
+  source_id: string;
+  video_id: string;
+  title: string;
+  body: string;
+  creator_handle: string;
+  creator_display_name: string;
+  source_url: string;
+  published_date: string;
+  topics_json: string;
+  topic_labels_json: string;
+  full_transcript_public: number;
+  admission_state: string;
+  claim_text: string | null;
+  evidence_excerpt: string | null;
+  evidence_start_seconds: number | null;
+  evidence_end_seconds: number | null;
+}
+
+interface EvidenceBriefCountRow {
+  matched_records: number;
+}
+
+interface EvidenceCorpusWatermarkRow {
+  document_count: number;
+  source_count: number;
+  latest_captured_at: string | null;
+}
+
 interface ProjectedSourcePageRow {
   video_id: string;
   source_id: string;
@@ -257,12 +301,14 @@ class RequestError extends Error {
   readonly status: number;
   readonly code: string;
   readonly details?: Record<string, unknown>;
+  readonly allow?: string;
 
-  constructor(status: number, code: string, message: string, details?: Record<string, unknown>) {
+  constructor(status: number, code: string, message: string, details?: Record<string, unknown>, allow?: string) {
     super(message);
     this.status = status;
     this.code = code;
     this.details = details;
+    this.allow = allow;
   }
 }
 
@@ -283,12 +329,12 @@ function errorResponse(error: RequestError): Response {
       },
     },
     error.status,
-    error.code === "METHOD_NOT_ALLOWED" ? { Allow: "GET, POST" } : undefined,
+    error.code === "METHOD_NOT_ALLOWED" ? { Allow: error.allow ?? "GET, POST" } : undefined,
   );
 }
 
-function methodError(method: string): RequestError {
-  return new RequestError(405, "METHOD_NOT_ALLOWED", `method ${method} is not allowed`);
+function methodError(method: string, allow = "GET, POST"): RequestError {
+  return new RequestError(405, "METHOD_NOT_ALLOWED", `method ${method} is not allowed`, undefined, allow);
 }
 
 function contentTypeIsJson(request: Request): boolean {
@@ -896,9 +942,8 @@ function renderProjectedSourcePage(videoId: string, rows: ProjectedSourcePageRow
 <meta property="og:image" content="${SOCIAL_IMAGE_URL}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Base2026 public-source intelligence">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${escapeHtml(title)}"><meta name="twitter:description" content="${escapeHtml(description)}"><meta name="twitter:image" content="${SOCIAL_IMAGE_URL}"><meta name="twitter:image:alt" content="Base2026 public-source intelligence">
 <script type="application/ld+json">${jsonLd}</script>
-<link rel="stylesheet" href="/static/base2026-core.css?v=20260820-b26v1">
-<style>:root{color-scheme:light}*{box-sizing:border-box}body{margin:0;background:var(--b26-canvas,#f7f9fc);color:var(--b26-ink,#0b1736);font:16px/1.65 Manrope,Arial,sans-serif}a{color:inherit}.shell{max-width:1040px;margin:auto;padding:24px}.nav{display:flex;gap:18px;align-items:center;padding:8px 0 38px}.brand{font-weight:900;text-decoration:none}.nav a:not(.brand){color:var(--b26-muted,#526177)}.hero{max-width:860px;padding:42px 0}.eyebrow,.topic,.time{font-family:"Geist Mono",monospace;font-size:13px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--b26-muted,#526177)}h1{font-size:clamp(38px,7vw,72px);line-height:1.03;letter-spacing:-.04em;margin:.2em 0}.lede{font-size:19px;color:var(--b26-muted,#526177)}.cards{display:grid;gap:18px}.card{background:var(--b26-surface,#fff);border:1px solid var(--b26-line,#dce5f0);border-radius:16px;padding:clamp(24px,5vw,44px)}.card h2{font-size:clamp(24px,4vw,36px);line-height:1.15}.card h3{margin-top:28px}blockquote{margin:24px 0;padding-left:18px;border-left:4px solid var(--b26-accent,#315eea);font-size:18px}.source{margin:34px 0;padding:28px;border:1px solid var(--b26-line,#dce5f0);border-radius:16px}.actions{display:flex;flex-wrap:wrap;gap:12px;margin:28px 0 60px}.actions a{padding:11px 18px;border:1px solid var(--b26-dark-cta,#10213f);border-radius:10px;text-decoration:none;font-weight:800}.actions a:first-child{background:var(--b26-dark-cta,#10213f);color:#fff}@media(max-width:620px){.nav{flex-wrap:wrap}.shell{padding:18px}}</style></head>
-<body class="b26-projected-source"><main class="shell"><nav class="nav" aria-label="Primary"><a class="brand" href="/">Base2026</a><a href="/workspace/">Search</a><a href="/topics/">Topics</a><a href="/methodology">Methodology</a></nav>
+<style>:root{color-scheme:light;--ink:#111820;--muted:#5d6670;--line:#dce1e5;--paper:#f8f7f2;--accent:#ff5a36}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.65 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}a{color:inherit}.shell{max-width:1040px;margin:auto;padding:24px}.nav{display:flex;gap:18px;align-items:center;padding:8px 0 38px}.brand{font-weight:900;text-decoration:none}.nav a:not(.brand){color:var(--muted)}.hero{max-width:860px;padding:42px 0}.eyebrow,.topic,.time{font-size:13px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}h1{font-size:clamp(38px,7vw,72px);line-height:1.03;letter-spacing:-.04em;margin:.2em 0}.lede{font-size:19px;color:var(--muted)}.cards{display:grid;gap:18px}.card{background:#fff;border:1px solid var(--line);border-radius:22px;padding:clamp(24px,5vw,44px)}.card h2{font-size:clamp(24px,4vw,36px);line-height:1.15}.card h3{margin-top:28px}blockquote{margin:24px 0;padding-left:18px;border-left:4px solid var(--accent);font-size:18px}.source{margin:34px 0;padding:28px;border:1px solid var(--line);border-radius:18px}.actions{display:flex;flex-wrap:wrap;gap:12px;margin:28px 0 60px}.actions a{padding:11px 18px;border:1px solid var(--ink);border-radius:999px;text-decoration:none;font-weight:800}.actions a:first-child{background:var(--ink);color:#fff}@media(max-width:620px){.nav{flex-wrap:wrap}.shell{padding:18px}}</style></head>
+<body><main class="shell"><nav class="nav" aria-label="Primary"><a class="brand" href="/">Base2026</a><a href="/workspace/">Search</a><a href="/topics/">Topics</a><a href="/methodology">Methodology</a></nav>
 <header class="hero"><p class="eyebrow">Public source record · ${escapeHtml(creator)}</p><h1>${escapeHtml(title)}</h1><p class="lede">Source-backed excerpt cards generated by the Base2026 public evidence pipeline. The original creator remains the canonical source.</p></header>
 <section class="cards" aria-label="Public evidence cards">${cards}</section>
 <section class="source"><h2>Source and attribution</h2><p>Creator: <strong>${escapeHtml(creator)}</strong>${first.published_date ? ` · Published ${escapeHtml(first.published_date)}` : ""}</p>${sourceUrl ? `<p><a href="${escapeHtml(sourceUrl)}" rel="nofollow noopener noreferrer">Open the original TikTok video</a></p>` : ""}<p>Base2026 publishes short evidence excerpts, not raw media or a full private transcript. See the <a href="/methodology">methodology</a> and <a href="/opt-out">correction policy</a>.</p></section>
@@ -1331,6 +1376,304 @@ async function handleSearch(request: Request, env: EnvWithBindings): Promise<Res
   return jsonResponse({ results });
 }
 
+function briefString(value: unknown): string {
+  return typeof value === "string" ? value.trim() : "";
+}
+
+function briefStringList(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+  return value.filter((item): item is string => typeof item === "string").map((item) => item.trim()).filter(Boolean);
+}
+
+function evidenceBriefSourceKey(hit: Record<string, unknown>): string {
+  return briefString(hit.video_id) || briefString(hit.source_id) || briefString(hit.id);
+}
+
+async function handleEvidenceBrief(request: Request, env: EnvWithBindings, url: URL): Promise<Response> {
+  if (request.method !== "GET") throw methodError(request.method);
+  if (!env.DB) throw new RequestError(503, "DB_NOT_CONFIGURED", "D1 search database is unavailable");
+  const queryText = ensureString(url.searchParams.get("q") ?? "", "q", MAX_QUERY_LENGTH).trim();
+  if (queryText.length < MIN_EVIDENCE_BRIEF_QUERY_LENGTH) {
+    throw new RequestError(
+      400,
+      "QUERY_TOO_SHORT",
+      `q must contain at least ${MIN_EVIDENCE_BRIEF_QUERY_LENGTH} characters`,
+    );
+  }
+  const searchQuery = parseTikTokQuery({
+    q: queryText,
+    limit: EVIDENCE_BRIEF_CANDIDATE_LIMIT,
+    attributesToRetrieve: [
+      "id", "source_id", "video_id", "title", "body", "creator_handle", "creator_display_name",
+      "source_url", "published_date", "topics", "topic_labels",
+    ],
+    attributesToHighlight: [],
+    attributesToCrop: ["body:70"],
+  }, INDEX_UID);
+  const searchResult = await executeSearch(env, searchQuery);
+  const hits = Array.isArray(searchResult.hits)
+    ? searchResult.hits as Array<Record<string, unknown>>
+    : [];
+  const uniqueHits: Array<Record<string, unknown>> = [];
+  const seenSources = new Set<string>();
+  for (const hit of hits) {
+    const sourceKey = evidenceBriefSourceKey(hit);
+    if (!sourceKey || seenSources.has(sourceKey)) continue;
+    seenSources.add(sourceKey);
+    uniqueHits.push(hit);
+  }
+  const selectedHits = uniqueHits.slice(0, EVIDENCE_BRIEF_SOURCE_LIMIT);
+  const topicCounts = new Map<string, number>();
+  for (const hit of uniqueHits) {
+    const labels = briefStringList(hit.topic_labels);
+    const topics = labels.length ? labels : briefStringList(hit.topics);
+    for (const topic of new Set(topics)) topicCounts.set(topic, (topicCounts.get(topic) ?? 0) + 1);
+  }
+  const topTopics = [...topicCounts.entries()]
+    .sort((left, right) => right[1] - left[1] || left[0].localeCompare(right[0]))
+    .slice(0, 8)
+    .map(([label, sourceCount]) => ({ label, sourceCount }));
+  const creators = new Set(
+    selectedHits
+      .map((hit) => briefString(hit.creator_handle) || briefString(hit.creator_display_name))
+      .filter(Boolean),
+  );
+  const newestPublishedDate = selectedHits
+    .map((hit) => briefString(hit.published_date))
+    .filter(Boolean)
+    .sort()
+    .at(-1) ?? "";
+  const evidence = selectedHits.map((hit) => {
+    const videoId = briefString(hit.video_id);
+    return {
+      id: briefString(hit.id),
+      sourceId: briefString(hit.source_id),
+      videoId,
+      title: truncateText(briefString(hit.title) || "Public expert-video evidence", 180),
+      excerpt: truncateText(briefString(hit.body), 480),
+      creator: briefString(hit.creator_handle) || briefString(hit.creator_display_name),
+      publishedDate: briefString(hit.published_date),
+      topics: briefStringList(hit.topic_labels).length ? briefStringList(hit.topic_labels) : briefStringList(hit.topics),
+      sourceUrl: safePublicSourceUrl(briefString(hit.source_url)),
+      sourcePageUrl: /^\d{10,30}$/u.test(videoId) ? `${PUBLIC_ORIGIN}/sources/tiktok-video-${videoId}` : "",
+    };
+  });
+  const matchingPassages = numericCount(searchResult.estimatedTotalHits);
+  const status = evidence.length >= 2 ? "ready" : evidence.length === 1 ? "limited" : "insufficient_evidence";
+  return jsonResponse({
+    query: queryText,
+    status,
+    statement: evidence.length
+      ? `${matchingPassages} matching public passages found. Start with ${evidence.length} distinct attributed sources and verify each excerpt against the original.`
+      : "No attributable public evidence matched this question yet.",
+    coverage: {
+      matchingPassages,
+      selectedSources: evidence.length,
+      selectedCreators: creators.size,
+      newestPublishedDate,
+    },
+    topics: topTopics,
+    evidence,
+    method: {
+      id: "d1-fts5-evidence-brief-v1",
+      synthesis: "deterministic-retrieval",
+      note: "Base2026 does not infer consensus or generate unsupported conclusions in this endpoint.",
+    },
+  }, 200, { "Cache-Control": "public, max-age=60, s-maxage=300" });
+}
+
+function normalizeEvidenceBriefQuestion(value: string): string {
+  return value.normalize("NFKC").replace(/\s+/gu, " ").trim().toLocaleLowerCase("en-US");
+}
+
+function normalizeEvidenceBriefToken(token: string): string {
+  if (token.length > 4 && token.endsWith("ies")) return `${token.slice(0, -3)}y`;
+  if (token.length > 4 && ["sses", "shes", "ches", "xes", "zes"].some((ending) => token.endsWith(ending))) {
+    return token.slice(0, -2);
+  }
+  if (token.length > 3 && token.endsWith("s") && !token.endsWith("ss")) return token.slice(0, -1);
+  return token;
+}
+
+function buildEvidenceBriefFtsQuery(normalizedQuestion: string): string | null {
+  const tokens = normalizedQuestion.match(/[\p{L}\p{N}_@-]+/gu) ?? [];
+  const uniqueTokens = [...new Set(tokens.map(normalizeEvidenceBriefToken))].filter(Boolean).slice(0, 24);
+  const meaningfulTokens = uniqueTokens.filter(
+    (token) => token.length >= 2 && !EVIDENCE_BRIEF_STOP_WORDS.has(token),
+  );
+  const selectedTokens = (meaningfulTokens.length ? meaningfulTokens : uniqueTokens).slice(0, 12);
+  if (!selectedTokens.length) return null;
+  return selectedTokens.map((token) => `"${token.replaceAll('"', '""')}"*`).join(" AND ");
+}
+
+function evidenceCandidateTopics(candidate: EvidenceBriefCandidate): string[] {
+  const labels = parseJsonList(candidate.topic_labels_json).map((value) => value.trim()).filter(Boolean);
+  return labels.length
+    ? [...new Set(labels)]
+    : [...new Set(parseJsonList(candidate.topics_json).map((value) => value.trim()).filter(Boolean))];
+}
+
+function evidenceCandidateCreator(candidate: EvidenceBriefCandidate): string {
+  return briefString(candidate.creator_handle) || briefString(candidate.creator_display_name);
+}
+
+function evidenceCandidateIsPublic(candidate: EvidenceBriefCandidate): boolean {
+  return candidate.full_transcript_public === 0
+    && candidate.admission_state === "normal_public_card"
+    && /^\d{10,30}$/u.test(briefString(candidate.video_id))
+    && Boolean(briefString(candidate.source_id))
+    && Boolean(evidenceCandidateCreator(candidate))
+    && Boolean(safePublicSourceUrl(briefString(candidate.source_url)));
+}
+
+function evidenceCandidateSeconds(value: number | null): number | null {
+  return typeof value === "number" && Number.isFinite(value) && value >= 0 ? value : null;
+}
+
+async function handleEvidenceBriefV2(request: Request, env: EnvWithBindings, url: URL): Promise<Response> {
+  if (request.method !== "GET" && request.method !== "HEAD") throw methodError(request.method, "GET, HEAD");
+  if (!env.DB) throw new RequestError(503, "DB_NOT_CONFIGURED", "D1 search database is unavailable");
+
+  const queryText = ensureString(url.searchParams.get("q") ?? "", "q", MAX_QUERY_LENGTH).trim();
+  if (queryText.length < MIN_EVIDENCE_BRIEF_QUERY_LENGTH) {
+    throw new RequestError(
+      400,
+      "QUERY_TOO_SHORT",
+      `q must contain at least ${MIN_EVIDENCE_BRIEF_QUERY_LENGTH} characters`,
+    );
+  }
+  const normalizedQuestion = normalizeEvidenceBriefQuestion(queryText);
+  const ftsQuery = buildEvidenceBriefFtsQuery(normalizedQuestion);
+  if (!ftsQuery) throw new RequestError(400, "INVALID_QUERY", "q must contain searchable letters or numbers");
+  const cacheHeaders = {
+    "Cache-Control": "public, max-age=60, s-maxage=300",
+    "X-Content-Type-Options": "nosniff",
+  };
+  if (request.method === "HEAD") {
+    return new Response(null, { status: 200, headers: { ...JSON_HEADERS, ...cacheHeaders } });
+  }
+
+  const eligibilitySql = `d.full_transcript_public=0
+    AND d.admission_state='normal_public_card'
+    AND d.video_id<>''
+    AND d.source_id<>''
+    AND (d.creator_handle<>'' OR d.creator_display_name<>'')
+    AND (d.source_url LIKE 'https://www.tiktok.com/%' OR d.source_url LIKE 'https://tiktok.com/%')`;
+  const countRow = await env.DB.prepare(
+    `SELECT COUNT(DISTINCT CASE WHEN d.video_id<>'' THEN d.video_id ELSE d.source_id END) AS matched_records
+       FROM search_documents_fts
+       JOIN search_documents AS d ON d.rowid=search_documents_fts.rowid
+      WHERE search_documents_fts MATCH ? AND ${eligibilitySql}`,
+  ).bind(ftsQuery).first<EvidenceBriefCountRow>();
+  const candidateRows = await env.DB.prepare(
+    `SELECT d.id, d.source_id, d.video_id, d.title, d.body,
+            d.creator_handle, d.creator_display_name, d.source_url,
+            d.published_date, d.topics_json, d.topic_labels_json,
+            d.full_transcript_public, d.admission_state,
+            c.claim_text, c.evidence_excerpt,
+            c.evidence_start_seconds, c.evidence_end_seconds
+       FROM search_documents_fts
+       JOIN search_documents AS d ON d.rowid=search_documents_fts.rowid
+       LEFT JOIN public_projection_cards AS c ON c.search_id=d.id
+      WHERE search_documents_fts MATCH ? AND ${eligibilitySql}
+      ORDER BY bm25(search_documents_fts) ASC, d.published_date DESC, d.id ASC
+      LIMIT ?`,
+  ).bind(ftsQuery, EVIDENCE_BRIEF_V2_CANDIDATE_LIMIT).all<EvidenceBriefCandidate>();
+  const corpus = await env.DB.prepare(
+    `SELECT COUNT(*) AS document_count,
+            COUNT(DISTINCT CASE WHEN video_id<>'' THEN video_id ELSE source_id END) AS source_count,
+            MAX(captured_at) AS latest_captured_at
+       FROM search_documents
+      WHERE full_transcript_public=0 AND admission_state='normal_public_card'`,
+  ).first<EvidenceCorpusWatermarkRow>();
+
+  const selectedCandidates: EvidenceBriefCandidate[] = [];
+  const seenSources = new Set<string>();
+  const creatorCounts = new Map<string, number>();
+  for (const candidate of candidateRows.results) {
+    if (!evidenceCandidateIsPublic(candidate)) continue;
+    const sourceKey = briefString(candidate.video_id) || briefString(candidate.source_id);
+    const creatorKey = evidenceCandidateCreator(candidate).toLocaleLowerCase("en-US");
+    const claim = briefString(candidate.claim_text) || briefString(candidate.title);
+    const excerpt = briefString(candidate.evidence_excerpt) || briefString(candidate.body);
+    if (!sourceKey || seenSources.has(sourceKey) || !claim || !excerpt) continue;
+    if ((creatorCounts.get(creatorKey) ?? 0) >= EVIDENCE_BRIEF_V2_CREATOR_LIMIT) continue;
+    seenSources.add(sourceKey);
+    creatorCounts.set(creatorKey, (creatorCounts.get(creatorKey) ?? 0) + 1);
+    selectedCandidates.push(candidate);
+    if (selectedCandidates.length >= EVIDENCE_BRIEF_V2_SOURCE_LIMIT) break;
+  }
+
+  const findings = selectedCandidates.map((candidate) => {
+    const videoId = briefString(candidate.video_id);
+    const startSeconds = evidenceCandidateSeconds(candidate.evidence_start_seconds);
+    const endSeconds = evidenceCandidateSeconds(candidate.evidence_end_seconds);
+    return {
+      claim: truncateText(briefString(candidate.claim_text) || briefString(candidate.title), 220),
+      evidence_excerpt: truncateText(
+        briefString(candidate.evidence_excerpt) || briefString(candidate.body),
+        480,
+      ),
+      creator_handle: evidenceCandidateCreator(candidate),
+      published_date: briefString(candidate.published_date) || null,
+      base2026_url: `${PUBLIC_ORIGIN}/sources/tiktok-video-${videoId}`,
+      original_source_url: safePublicSourceUrl(briefString(candidate.source_url)),
+      evidence_start_seconds: startSeconds,
+      evidence_end_seconds: startSeconds !== null && endSeconds !== null && endSeconds >= startSeconds
+        ? endSeconds
+        : null,
+      topics: evidenceCandidateTopics(candidate),
+    };
+  });
+  const distinctCreators = new Set(findings.map((finding) => finding.creator_handle.toLocaleLowerCase("en-US")));
+  const publishedDates = findings
+    .map((finding) => finding.published_date)
+    .filter((value): value is string => Boolean(value))
+    .sort();
+  const status = findings.length === 0
+    ? "no_evidence"
+    : findings.length === 1 || distinctCreators.size === 1
+      ? "limited"
+      : "full";
+  const signalCreators = new Map<string, Set<string>>();
+  for (const finding of findings) {
+    for (const topic of finding.topics) {
+      if (!signalCreators.has(topic)) signalCreators.set(topic, new Set());
+      signalCreators.get(topic)?.add(finding.creator_handle.toLocaleLowerCase("en-US"));
+    }
+  }
+  const repeatedSignals = [...signalCreators.entries()]
+    .filter(([, creatorSet]) => creatorSet.size >= 3)
+    .sort(([left], [right]) => left.localeCompare(right))
+    .map(([topic, creatorSet]) => ({ topic, distinct_creators: creatorSet.size }));
+  const matchedRecords = numericCount(countRow?.matched_records) || seenSources.size;
+  const latestCapturedAt = briefString(corpus?.latest_captured_at).slice(0, 10) || "unknown";
+  const corpusVersion = `public-d1:${numericCount(corpus?.document_count)}:${numericCount(corpus?.source_count)}:${latestCapturedAt}`;
+  const limits = ["This brief covers the current Base2026 public corpus, not the whole SEO industry."];
+  if (status === "limited") limits.push("Only one eligible source or creator supports this brief; treat it as a lead, not consensus.");
+  if (status === "no_evidence") limits.push("Not enough public evidence in Base2026 for this question.");
+
+  return jsonResponse({
+    brief_version: EVIDENCE_BRIEF_VERSION,
+    question: queryText,
+    normalized_question: normalizedQuestion,
+    status,
+    corpus_version: corpusVersion,
+    ranking_version: EVIDENCE_BRIEF_RANKING_VERSION,
+    generated_at: new Date().toISOString(),
+    coverage: {
+      matched_records: matchedRecords,
+      selected_sources: findings.length,
+      distinct_creators: distinctCreators.size,
+      published_date_min: publishedDates[0] ?? null,
+      published_date_max: publishedDates.at(-1) ?? null,
+    },
+    findings,
+    repeated_signals: repeatedSignals,
+    limits,
+  }, 200, cacheHeaders);
+}
+
 async function handleHealth(env: EnvWithBindings): Promise<Response> {
   if (!env.DB) throw new RequestError(503, "DB_NOT_CONFIGURED", "D1 binding DB is not configured");
   try {
@@ -1516,6 +1859,8 @@ export default {
         return Response.redirect(url.toString(), 301);
       }
       if (url.pathname === "/api/health") return await handleHealth(env);
+      if (url.pathname === "/api/evidence-brief") return await handleEvidenceBrief(request, env, url);
+      if (url.pathname === "/api/evidence-brief/v2") return await handleEvidenceBriefV2(request, env, url);
       if (url.pathname === "/sitemap-dynamic.xml") return await handleDynamicSitemap(request, env);
       if (url.pathname === "/api/forms/support") return await handleInboxForm(request, env, "support");
       if (url.pathname === "/api/forms/partner") return await handleInboxForm(request, env, "partner");

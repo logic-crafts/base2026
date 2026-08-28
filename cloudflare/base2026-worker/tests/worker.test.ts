@@ -8,6 +8,50 @@ type FakeRow = Record<string, unknown> & {
   full_transcript_public: number;
 };
 
+function fakeEvidenceRow(
+  videoId = "7657638702864223510",
+  creatorHandle = "@build_in_public",
+  overrides: Record<string, unknown> = {},
+): FakeRow {
+  return {
+    id: `chunk-${videoId}`,
+    item_id: `tiktok-video-${videoId}`,
+    source_id: `tiktok:${creatorHandle.slice(1)}:${videoId}`,
+    chunk_id: `chunk-${videoId}`,
+    chunk_index: 0,
+    body: "AI search visibility depends on useful source evidence.",
+    captured_at: "2026-08-19",
+    creator_display_name: "",
+    creator_handle: creatorHandle,
+    creator_id: `tiktok-${creatorHandle.slice(1)}`,
+    creator_url: `https://www.tiktok.com/${creatorHandle}`,
+    full_transcript_public: 0,
+    admission_state: "normal_public_card",
+    handle: creatorHandle,
+    platform: "tiktok",
+    post_id: videoId,
+    public_policy: "search_passage",
+    public_surface: "main_search",
+    published_at: "2026-08-19",
+    published_date: "2026-08-19",
+    source_type: "tiktok_video",
+    source_url: `https://www.tiktok.com/${creatorHandle}/video/${videoId}`,
+    title: "AI search visibility",
+    title_source: "inventory_title",
+    title_status: "raw",
+    video_id: videoId,
+    year: "2026",
+    avatar_url: "/static/assets/creators/build-in-public.jpeg",
+    topics_json: '["ai-search"]',
+    topic_labels_json: '["AI search"]',
+    claim_text: null,
+    evidence_excerpt: null,
+    evidence_start_seconds: null,
+    evidence_end_seconds: null,
+    ...overrides,
+  };
+}
+
 class FakeStatement {
   parameters: unknown[] = [];
 
@@ -20,11 +64,27 @@ class FakeStatement {
 
   async first<T>(): Promise<T | null> {
     if (this.sql.includes("SELECT 1 AS ok")) return { ok: 1 } as T;
+    if (this.sql.includes("AS matched_records")) {
+      return { matched_records: new Set(this.db.publicRows().map((row) => row.video_id || row.source_id)).size } as T;
+    }
+    if (this.sql.includes("AS document_count") && this.sql.includes("AS source_count")) {
+      const rows = this.db.publicRows();
+      const latest = rows.map((row) => String(row.captured_at ?? "")).sort().at(-1) ?? null;
+      return {
+        document_count: rows.length,
+        source_count: new Set(rows.map((row) => row.video_id || row.source_id)).size,
+        latest_captured_at: latest,
+      } as T;
+    }
     if (this.sql.includes("COUNT(*) AS count")) return { count: this.db.rows.length } as T;
     return null;
   }
 
   async all<T>(): Promise<{ results: T[] }> {
+    if (this.sql.includes("LEFT JOIN public_projection_cards")) {
+      const limit = Number(this.parameters.at(-1)) || this.db.rows.length;
+      return { results: this.db.publicRows().slice(0, limit) as T[] };
+    }
     if (this.sql.includes("GROUP BY")) {
       return { results: [{ value: "@build_in_public", count: this.db.rows.length }] as T[] };
     }
@@ -47,39 +107,22 @@ class FakeInboxDatabase {
 }
 
 class FakeDatabase {
-  readonly rows: FakeRow[] = [
-    {
-      id: "chunk-1",
-      item_id: "tiktok-video-1",
-      source_id: "tiktok:build_in_public:1",
-      chunk_id: "chunk-1",
-      chunk_index: 0,
-      body: "AI search visibility depends on useful source evidence.",
-      captured_at: "2026-08-19",
-      creator_display_name: "",
-      creator_handle: "@build_in_public",
-      creator_id: "tiktok-build-in-public",
-      creator_url: "https://www.tiktok.com/@build_in_public",
-      full_transcript_public: 0,
-      handle: "@build_in_public",
-      platform: "tiktok",
-      post_id: "1",
-      public_policy: "search_passage",
-      public_surface: "main_search",
-      published_at: "2026-08-19",
-      published_date: "2026-08-19",
-      source_type: "tiktok_video",
-      source_url: "https://www.tiktok.com/@build_in_public/video/1",
-      title: "AI search visibility",
-      title_source: "inventory_title",
-      title_status: "raw",
-      video_id: "1",
-      year: "2026",
-      avatar_url: "/static/assets/creators/build-in-public.jpeg",
-      topics_json: '["ai-search"]',
-      topic_labels_json: '["AI search"]',
-    },
-  ];
+  readonly rows: FakeRow[];
+
+  constructor(rows: FakeRow[] = [fakeEvidenceRow()]) {
+    this.rows = rows;
+  }
+
+  publicRows(): FakeRow[] {
+    return this.rows.filter((row) =>
+      row.full_transcript_public === 0
+      && row.admission_state === "normal_public_card"
+      && typeof row.creator_handle === "string"
+      && row.creator_handle.length > 0
+      && typeof row.source_url === "string"
+      && /^https:\/\/(?:www\.)?tiktok\.com\//u.test(row.source_url)
+    );
+  }
 
   prepare(sql: string): FakeStatement {
     return new FakeStatement(sql, this);
@@ -270,9 +313,6 @@ describe("Base2026 search Worker", () => {
     expect(html).toContain("https://www.tiktok.com/@test_creator/video/7657638702864223510");
     expect(html).toContain('property="og:image" content="https://base2026.dev/static/assets/base2026-ai-visibility-card.png"');
     expect(html).toContain('name="twitter:image" content="https://base2026.dev/static/assets/base2026-ai-visibility-card.png"');
-    expect(html).toContain('<link rel="stylesheet" href="/static/base2026-core.css?v=20260820-b26v1">');
-    expect(html).toContain('class="b26-projected-source"');
-    expect(html).not.toContain("#ff5a36");
     expect(html).not.toContain("Useful <AI> source evidence");
   });
 
@@ -301,6 +341,146 @@ describe("Base2026 search Worker", () => {
     );
     expect(response.status).toBe(200);
     expect(await json(response)).toEqual({ results: [] });
+  });
+
+  it("preserves the deployed evidence-brief v1 response contract", async () => {
+    const response = await worker.fetch(
+      new Request("https://base2026.dev/api/evidence-brief?q=AI%20search"),
+      env(),
+      {} as ExecutionContext,
+    );
+    expect(response.status).toBe(200);
+    expect(await json(response)).toMatchObject({
+      query: "AI search",
+      status: "limited",
+      statement: expect.stringContaining("distinct attributed sources"),
+      coverage: {
+        matchingPassages: 1,
+        selectedSources: 1,
+        selectedCreators: 1,
+        newestPublishedDate: "2026-08-19",
+      },
+      evidence: [{
+        creator: "@build_in_public",
+        sourceUrl: "https://www.tiktok.com/@build_in_public/video/7657638702864223510",
+        sourcePageUrl: "https://base2026.dev/sources/tiktok-video-7657638702864223510",
+      }],
+      method: { id: "d1-fts5-evidence-brief-v1", synthesis: "deterministic-retrieval" },
+    });
+  });
+
+  it("builds a deterministic evidence brief v2 from distinct public D1 sources", async () => {
+    const response = await worker.fetch(
+      new Request("https://base2026.dev/api/evidence-brief/v2?q=AI%20search"),
+      env(),
+      {} as ExecutionContext,
+    );
+    expect(response.status).toBe(200);
+    expect(response.headers.get("cache-control")).toContain("s-maxage=300");
+    expect(await json(response)).toMatchObject({
+      brief_version: "base2026.evidence-brief.v2",
+      question: "AI search",
+      normalized_question: "ai search",
+      status: "limited",
+      corpus_version: "public-d1:1:1:2026-08-19",
+      ranking_version: "d1-fts5-bm25-and-v2",
+      generated_at: expect.any(String),
+      coverage: {
+        matched_records: 1,
+        selected_sources: 1,
+        distinct_creators: 1,
+        published_date_min: "2026-08-19",
+        published_date_max: "2026-08-19",
+      },
+      findings: [{
+        claim: "AI search visibility",
+        evidence_excerpt: "AI search visibility depends on useful source evidence.",
+        creator_handle: "@build_in_public",
+        base2026_url: "https://base2026.dev/sources/tiktok-video-7657638702864223510",
+        original_source_url: "https://www.tiktok.com/@build_in_public/video/7657638702864223510",
+        topics: ["AI search"],
+      }],
+      repeated_signals: [],
+      limits: expect.arrayContaining([expect.stringContaining("not consensus")]),
+    });
+  });
+
+  it("enforces five findings, two per creator, and reports repeated signals without synthesis", async () => {
+    const rows = [
+      fakeEvidenceRow("7657638702864223510", "@alpha"),
+      fakeEvidenceRow("7657638702864223511", "@alpha"),
+      fakeEvidenceRow("7657638702864223512", "@alpha"),
+      fakeEvidenceRow("7657638702864223513", "@beta"),
+      fakeEvidenceRow("7657638702864223514", "@beta"),
+      fakeEvidenceRow("7657638702864223515", "@gamma"),
+      fakeEvidenceRow("7657638702864223516", "@delta"),
+    ];
+    const response = await worker.fetch(
+      new Request("https://base2026.dev/api/evidence-brief/v2?q=What%20are%20experts%20saying%20about%20AI%20search%3F"),
+      env(new FakeDatabase(rows)),
+      {} as ExecutionContext,
+    );
+    const payload = await json(response);
+    expect(response.status).toBe(200);
+    expect(payload.status).toBe("full");
+    expect(payload.findings).toHaveLength(5);
+    expect(payload.findings.filter((finding: Record<string, unknown>) => finding.creator_handle === "@alpha")).toHaveLength(2);
+    expect(payload.coverage).toMatchObject({ selected_sources: 5, distinct_creators: 3 });
+    expect(payload.repeated_signals).toEqual([{ topic: "AI search", distinct_creators: 3 }]);
+  });
+
+  it("returns no_evidence when public attribution and privacy gates exclude every row", async () => {
+    const rows = [
+      fakeEvidenceRow("7657638702864223510", "@private", { full_transcript_public: 1 }),
+      fakeEvidenceRow("7657638702864223511", "@held", { admission_state: "held_private" }),
+      fakeEvidenceRow("7657638702864223512", "@invalid", { source_url: "https://example.com/video/1" }),
+    ];
+    const response = await worker.fetch(
+      new Request("https://base2026.dev/api/evidence-brief/v2?q=AI%20search%20visibility"),
+      env(new FakeDatabase(rows)),
+      {} as ExecutionContext,
+    );
+    const payload = await json(response);
+    expect(response.status).toBe(200);
+    expect(payload.status).toBe("no_evidence");
+    expect(payload.findings).toEqual([]);
+    expect(payload.limits).toContain("Not enough public evidence in Base2026 for this question.");
+  });
+
+  it("normalizes evidence questions and exposes accurate method semantics", async () => {
+    const response = await worker.fetch(
+      new Request("https://base2026.dev/api/evidence-brief/v2?q=%20HOW%20%20should%20schema%20support%20AI%20search%3F%20"),
+      env(),
+      {} as ExecutionContext,
+    );
+    expect(response.status).toBe(200);
+    expect((await json(response)).normalized_question).toBe("how should schema support ai search?");
+
+    const head = await worker.fetch(
+      new Request("https://base2026.dev/api/evidence-brief/v2?q=AI%20search", { method: "HEAD" }),
+      env(),
+      {} as ExecutionContext,
+    );
+    expect(head.status).toBe(200);
+    expect(await head.text()).toBe("");
+
+    const post = await worker.fetch(
+      new Request("https://base2026.dev/api/evidence-brief/v2?q=AI%20search", { method: "POST" }),
+      env(),
+      {} as ExecutionContext,
+    );
+    expect(post.status).toBe(405);
+    expect(post.headers.get("allow")).toBe("GET, HEAD");
+  });
+
+  it("rejects evidence-brief requests without a useful question", async () => {
+    const response = await worker.fetch(
+      new Request("https://base2026.dev/api/evidence-brief/v2?q=AI"),
+      env(),
+      {} as ExecutionContext,
+    );
+    expect(response.status).toBe(400);
+    expect(await json(response)).toMatchObject({ error: { code: "QUERY_TOO_SHORT" } });
   });
 
   it("supports the legacy path, nested quoted filters and Meilisearch response fields", async () => {

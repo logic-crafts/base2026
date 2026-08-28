@@ -3,25 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Base2026 — Search Expert Videos Like a Knowledge Base</title>
-  <meta name="description" content="An open, source-first evidence library for short-form expert video—searchable, attributable, and built for SEO, GEO and AI-search research.">
+  <title>Base2026 — Source-backed answers from expert video</title>
+  <meta name="description" content="Ask what SEO and AI-search practitioners actually said. Base2026 returns attributable evidence from expert videos that you can verify at the source.">
   <meta name="robots" content="index,follow">
   <link rel="canonical" href="https://base2026.dev/">
   <link rel="icon" href="/static/base2026-mark.svg" type="image/svg+xml">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Base2026">
-  <meta property="og:title" content="Base2026 — Search what experts actually said">
-  <meta property="og:description" content="An open video research engine for searchable, attributable expert evidence.">
+  <meta property="og:title" content="Base2026 — Source-backed answers from expert video">
+  <meta property="og:description" content="Ask a professional question and search attributable evidence from SEO and AI-search practitioners.">
   <meta property="og:url" content="https://base2026.dev/">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Base2026 — Search what experts actually said">
-  <meta name="twitter:description" content="An open video research engine for searchable, attributable expert evidence.">
+  <meta name="twitter:title" content="Base2026 — Source-backed answers from expert video">
+  <meta name="twitter:description" content="Ask a professional question and search attributable evidence from SEO and AI-search practitioners.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600;700&amp;family=Manrope:wght@400;500;700;800&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/static/base2026-startup-homepage.css?v=20260820-b26v1">
+  <script src="/static/base2026-evidence-brief.js?v=20260828-brief-v1" defer></script>
   <script type="application/ld+json">
-    {"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://base2026.dev/#website","name":"Base2026","url":"https://base2026.dev/","potentialAction":{"@type":"SearchAction","target":"https://base2026.dev/workspace/?q={search_term_string}","query-input":"required name=search_term_string"}},{"@type":"Organization","@id":"https://base2026.dev/#organization","name":"Base2026","url":"https://base2026.dev/","founder":{"@type":"Person","name":"Alex Yarosh"},"sameAs":["https://github.com/logic-crafts/base2026"]}]}
+    {"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://base2026.dev/#website","name":"Base2026","url":"https://base2026.dev/","potentialAction":{"@type":"SearchAction","target":"https://base2026.dev/workspace/?q={search_term_string}","query-input":"required name=search_term_string"}},{"@type":"Organization","@id":"https://base2026.dev/#organization","name":"Base2026","url":"https://base2026.dev/","founder":{"@type":"Person","name":"Alex Yarosh"},"sameAs":["https://github.com/offflinerpsy/base2026"]}]}
   </script>
 </head>
 <body class="b26-home">
@@ -29,34 +30,74 @@
   <main>
     <section class="b26-home-hero b26-home-shell" aria-labelledby="hero-title">
       <div>
-        <p class="b26-home-kicker">Public source intelligence · built in the open</p>
-        <h1 id="hero-title">Search what experts actually said.</h1>
-        <p class="b26-home-copy">An open, source-first evidence library for short-form expert video—searchable, attributable, and built for SEO, GEO and AI-search research.</p>
-        <div class="b26-home-actions">
-          <a class="b26-button--primary" href="/workspace/">Search the library</a>
-          <a class="b26-button--secondary" href="/roadmap.html">Explore the roadmap</a>
-        </div>
-        <a class="b26-home-subaction" href="/support.html">Support or partner with Base2026</a>
+        <p class="b26-home-kicker">Attributable expert-video evidence</p>
+        <h1 id="hero-title">Ask what SEO and AI-search practitioners actually said.</h1>
+        <p class="b26-home-copy">Get a source-backed evidence brief in seconds. Every finding links to attributable evidence and the original source.</p>
+        <form class="b26-brief-search" action="/workspace/" method="get" role="search" aria-controls="evidence-brief-result">
+          <label for="b26-brief-query">Your professional question</label>
+          <div class="b26-brief-search__control">
+            <input id="b26-brief-query" name="q" type="search" minlength="3" maxlength="200" required placeholder="e.g. How are practitioners measuring visibility in AI search?" autocomplete="off">
+            <button class="b26-button--primary" type="submit">Get evidence brief</button>
+          </div>
+        </form>
+        <nav class="b26-suggested-queries" aria-label="Suggested evidence questions">
+          <span>Try a question:</span>
+          <a href="/workspace/?q=How%20do%20experts%20measure%20AI%20search%20visibility%3F">AI search visibility</a>
+          <a href="/workspace/?q=How%20should%20schema%20support%20AI%20search%3F">Schema for AI search</a>
+          <a href="/workspace/?q=How%20do%20practitioners%20prioritize%20content%20refreshes%3F">Content refresh prioritization</a>
+        </nav>
+        <a class="b26-home-subaction" href="/workspace/">Browse the evidence library</a>
+        <p class="b26-brief-trust">Free public research · Read-only · Sources stay attached</p>
       </div>
-      <aside class="b26-evidence-console" aria-label="Example source record">
-        <div class="b26-evidence-console__top"><span>Public research preview</span><span class="b26-live-dot">Live index</span></div>
+      <aside class="b26-evidence-console" data-b26-motion-target="evidence" aria-label="Example evidence search result">
+        <div class="b26-evidence-console__top"><span>Evidence result preview</span><span class="b26-live-dot">Live index</span></div>
         <div class="b26-evidence-console__body">
-          <div class="b26-console-query">Search: “how does GEO impact local SEO service providers”</div>
+          <div class="b26-console-query">Question: “How do experts measure AI search visibility?”</div>
           <article class="b26-console-record">
             <div class="b26-console-meta"><span>@build_in_public</span><span>2026-07-24</span></div>
             <p>Creator analysis links page citations to fan-out queries and recommends aligning URLs, titles and H1s with those searches.</p>
-            <div class="b26-console-tags"><span>AI citations</span><span>Fan-out queries</span><span class="b26-console-status">Source linked</span></div>
+            <div class="b26-console-tags"><span>AI citations</span><span>Fan-out queries</span><span class="b26-console-status">Source verified</span></div>
           </article>
         </div>
       </aside>
     </section>
 
-    <section class="b26-home-proof" aria-label="Live public D1 snapshot from 2026-08-28">
+    <section class="b26-home-proof" aria-label="Public dataset snapshot">
       <div class="b26-home-shell b26-proof-grid">
-        <div><strong>2,150</strong><span>Search documents</span></div>
-        <div><strong>1,563</strong><span>Distinct videos</span></div>
-        <div><strong>39</strong><span>Cloud projections</span></div>
-        <div><strong>2026-08-28</strong><span>Live D1 snapshot</span></div>
+        <div class="b26-proof-metric b26-proof-metric--documents">
+          <strong class="b26-proof-metric__value">2,170</strong>
+          <span class="b26-proof-metric__label">Documents indexed</span>
+          <p class="b26-proof-metric__explanation">Public evidence documents available to search and verify.</p>
+        </div>
+        <div class="b26-proof-metric b26-proof-metric--sources">
+          <strong class="b26-proof-metric__value">1,572</strong>
+          <span class="b26-proof-metric__label">Distinct sources</span>
+          <p class="b26-proof-metric__explanation">Unique source videos represented in the public evidence layer.</p>
+        </div>
+        <div class="b26-proof-metric b26-proof-metric--packets">
+          <strong class="b26-proof-metric__value">48</strong>
+          <span class="b26-proof-metric__label">Public evidence routes</span>
+          <p class="b26-proof-metric__explanation">48 source-linked routes in the dynamic sitemap. Records reach the public D1 index only through receipt-gated projection from the private pipeline.</p>
+        </div>
+        <div class="b26-proof-metric b26-proof-metric--transcripts">
+          <strong class="b26-proof-metric__value">0</strong>
+          <span class="b26-proof-metric__label">Full transcripts published</span>
+          <p class="b26-proof-metric__explanation">Privacy by design: full third-party transcripts stay private; only reviewed excerpts and attributed source records are public.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="evidence-brief-result" class="b26-brief-result" aria-labelledby="evidence-brief-title" aria-live="polite" hidden>
+      <div class="b26-home-shell">
+        <header class="b26-brief-result__header">
+          <div><p class="b26-home-kicker">Evidence brief</p><h2 id="evidence-brief-title">Source-backed findings</h2></div>
+          <p id="evidence-brief-status">Searching the public evidence index…</p>
+        </header>
+        <div id="evidence-brief-body"></div>
+        <div class="b26-brief-result__actions">
+          <button id="evidence-brief-copy" class="b26-button--secondary" type="button" hidden>Copy brief</button>
+          <button id="evidence-brief-reset" class="b26-button--secondary" type="button">Ask another question</button>
+        </div>
       </div>
     </section>
 
@@ -88,13 +129,13 @@
     </section>
 
     <section class="b26-home-section">
-      <div class="b26-home-shell b26-rigor-grid">
-        <div><p class="b26-home-kicker">Built for rigor</p><h2>Evidence stays useful when the boundaries stay clear.</h2><p class="b26-home-copy">Base2026 is not a private source vault. The visible layer is designed for inspection, attribution and careful reuse.</p></div>
+      <div class="b26-home-shell b26-rigor-grid b26-decisions-reveal" data-b26-motion-target="decisions">
+        <div><p class="b26-home-kicker">Built for decisions</p><h2>Research answers that keep their sources attached.</h2><p class="b26-home-copy">Base2026 helps SEO and AI-search practitioners move from a question to attributable evidence without treating one short video as unquestioned truth.</p></div>
         <div class="b26-rigor-list">
-          <article><h3>SEO and GEO specialists</h3><p>Trace practitioner observations to time-stamped evidence instead of unsupported summaries.</p></article>
+          <article><h3>SEO and GEO practitioners</h3><p>Trace implementation claims to dated, source-linked evidence instead of unsupported summaries.</p></article>
+          <article><h3>Small agencies</h3><p>Build client research from attributable excerpts without repeating hours of feed review.</p></article>
           <article><h3>Researchers and analysts</h3><p>Compare public signals across creators while retaining source and attribution boundaries.</p></article>
-          <article><h3>Founders and builders</h3><p>Study practical patterns without mistaking a public source library for a generic playbook.</p></article>
-          <article><h3>AI agents</h3><p>Use reviewed public text as a retrieval layer with clear links back to its source.</p></article>
+          <article><h3>AI agents</h3><p>Retrieve reviewed public evidence through stable, read-only machine interfaces.</p></article>
         </div>
       </div>
     </section>
@@ -105,7 +146,7 @@
         <div class="b26-roadmap-list">
           <article><span>Live now</span><div><h3>Public trust foundation</h3><p>Search, source records, creator attribution, methodology and correction paths are public.</p></div><em class="b26-roadmap-status b26-roadmap-status--live">Live</em></article>
           <article><span>Live, monitored</span><div><h3>Cloud evidence pipeline</h3><p>New eligible public-source records move through bounded capture, validation and automatic excerpt-card projection.</p></div><em class="b26-roadmap-status b26-roadmap-status--live">Live</em></article>
-          <article><span>Live, monitored</span><div><h3>Indexable evidence graph</h3><p>Canonical URLs, sitemaps, source pages and machine access stay synchronized as the corpus grows.</p></div><em class="b26-roadmap-status b26-roadmap-status--live">Live</em></article>
+          <article><span>In progress</span><div><h3>Indexable evidence graph</h3><p>Canonical URLs, sitemaps, source pages and machine access stay synchronized as the corpus grows.</p></div><em class="b26-roadmap-status b26-roadmap-status--progress">In progress</em></article>
         </div>
       </div>
     </section>
@@ -133,11 +174,67 @@
     </section>
 
     <section class="b26-home-final b26-home-shell">
-      <h2>Ready for the next layer?</h2>
-      <p>Enter the searchable knowledge records or help build the infrastructure that keeps public research reliable.</p>
-      <div class="b26-home-actions"><a class="b26-button--primary" href="/workspace/">Search the evidence</a><a class="b26-button--secondary" href="/partner.html">Help build the layer</a></div>
+      <h2>Ask the evidence, then check the source.</h2>
+      <p>Start with a real SEO or AI-search question. Base2026 will take you to the strongest attributable public evidence already in the index.</p>
+      <div class="b26-home-actions"><a class="b26-button--primary" href="/workspace/">Search the evidence</a><a class="b26-button--secondary" href="/methodology.html">Read the methodology</a></div>
     </section>
   </main>
   {{STARTUP_FOOTER}}
+  <script>
+    (() => {
+      const header = document.querySelector('.b26-site-header');
+      const evidence = document.querySelector('.b26-evidence-console');
+      const decisions = document.querySelector('.b26-decisions-reveal');
+      const footer = document.querySelector('.b26-site-footer');
+      const canObserve = typeof window.IntersectionObserver === 'function';
+      const canFrame = typeof window.requestAnimationFrame === 'function';
+
+      if (!header || !evidence || !decisions || !footer || !canObserve || !canFrame) return;
+
+      footer.setAttribute('data-b26-motion-target', 'footer');
+      document.body.classList.add('b26-motion-ready');
+
+      let previousScrollY = Math.max(0, window.scrollY || 0);
+      let scrollFramePending = false;
+
+      const syncHeaderState = (initial = false) => {
+        scrollFramePending = false;
+        const currentScrollY = Math.max(0, window.scrollY || 0);
+        const movingUp = currentScrollY < previousScrollY;
+        const movingDown = currentScrollY > previousScrollY;
+
+        if (currentScrollY < 24 || (!initial && movingUp)) {
+          header.classList.remove('is-compact');
+        } else if (currentScrollY > 80 && (initial || movingDown)) {
+          header.classList.add('is-compact');
+        }
+
+        previousScrollY = currentScrollY;
+      };
+
+      const handleScroll = () => {
+        if (scrollFramePending) return;
+        scrollFramePending = true;
+        window.requestAnimationFrame(() => syncHeaderState());
+      };
+
+      syncHeaderState(true);
+      window.addEventListener('scroll', handleScroll, { passive: true });
+
+      const reduceMotion = typeof window.matchMedia === 'function'
+        && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduceMotion) return;
+
+      const revealObserver = new window.IntersectionObserver((entries, observer) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        });
+      }, { threshold: 0.35 });
+
+      [evidence, decisions, footer].forEach((target) => revealObserver.observe(target));
+    })();
+  </script>
 </body>
 </html>

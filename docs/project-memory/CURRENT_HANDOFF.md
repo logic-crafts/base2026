@@ -11,16 +11,20 @@ old chat counters or historical VPS/design notes as current production truth.
 ## Live public release
 
 - Domain: `https://base2026.dev/`
-- Public Worker version: `3f5a6687-4eb8-4ba5-9610-7fe2533282ba`
-- Immediate rollback: `63d1f529-47ff-46ba-baeb-db77f6e80fc6`
+- Public Worker version: `35a2ee9e-1d95-45c4-b971-26f19183d732`
+- Immediate rollback: `dcbeb2e9-27af-4d45-b510-fdaaea055f4a`
 - Immutable candidate receipt tree SHA-256:
-  `f56ba8d34060cc5c001237772047fbc7e9900fdb0304a0e784c2313059471416`
-- Live D1 snapshot: 2,150 search documents, 1,563 distinct videos,
-  39 applied projections and zero public full transcripts.
+  `af3641c48f0ff59a7686c623835c07fab39b7b0e5908f6a9d12290cb8e212a52`
+- Live D1 snapshot: 2,170 search documents, 1,572 distinct sources,
+  48 public evidence routes and zero public full third-party transcripts.
 
-The homepage, roadmap, workspace, API health, static sitemap, dynamic sitemap
-and a dynamic projected-source page returned 200 after deployment. Candidate
-and live desktop/mobile screenshots preserved the current cool-blue shell.
+The homepage, Evidence Brief V2, preserved V1 API, roadmap, workspace, API
+health and public sitemaps returned successfully after deployment. Desktop,
+mobile, keyboard, reduced-motion and no-JS QA preserved the current cool-blue
+shell with zero horizontal overflow or browser/request errors.
+
+Canonical public repository: `https://github.com/offflinerpsy/base2026`.
+The private capture Worker and raw pipeline artifacts remain excluded.
 
 ## Product definition
 
@@ -61,16 +65,16 @@ all callers and rollback dependencies.
 
 ## GitHub release
 
-- Repository: `https://github.com/logic-crafts/base2026`
-- Main merge: `d0dd1dbe2700bb3a4e619ee0ced7cc6b71d0c8da`
-- Pull request: `https://github.com/logic-crafts/base2026/pull/16`
-- Public release commit: `95c2083d14dbd945b3e094baf6a812ac830e12bd`
+- Current repository: `https://github.com/offflinerpsy/base2026`
+- Historical LogicCrafts merge: `d0dd1dbe2700bb3a4e619ee0ced7cc6b71d0c8da`
+- Historical LogicCrafts pull request: `https://github.com/logic-crafts/base2026/pull/16`
+- Historical public release commit: `95c2083d14dbd945b3e094baf6a812ac830e12bd`
 - Description and topics now identify video search, research tools, evidence,
   Cloudflare Workers/D1 and Workers AI; stale `meilisearch` topic was removed.
 
-CodeQL did not start: GitHub returned “account is locked due to a billing
-issue” for both Python and JavaScript jobs. This is an external account blocker,
-not a code-test failure. Resolve billing, then rerun CodeQL.
+CodeQL previously did not start in the LogicCrafts organization because GitHub
+reported a billing lock. That historical account-level failure is not a
+Base2026 code-test failure.
 
 The original working checkout remains intentionally dirty and untouched at
 `/Users/alexyarosh/Projects/base2026-migration/DW/base2026`. Release work was

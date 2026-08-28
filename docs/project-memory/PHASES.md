@@ -1,5 +1,15 @@
 # Phases
 
+## Phase 15 — Evidence Brief V2 and homepage product polish
+
+Purpose: make the product immediately understandable and useful from the home
+page without changing the public/private data boundary. Status: live and
+verified on 2026-08-28. Public Worker
+`35a2ee9e-1d95-45c4-b971-26f19183d732` rolls back to
+`dcbeb2e9-27af-4d45-b510-fdaaea055f4a`. Evidence Brief V2, V1 compatibility,
+desktop/mobile layout, keyboard, reduced-motion and no-JS gates passed. Current
+action: observation; no redesign is open without a concrete defect.
+
 ## Phase 12 — Automatic Cloudflare-only publication
 
 Purpose: discover and acquire new TikTok sources in Cloudflare, keep raw
