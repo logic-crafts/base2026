@@ -1,6 +1,6 @@
 # Base2026
 
-Base2026 is an open-source public-source intelligence layer for short-form expert video. It turns public videos into attributed, searchable evidence that people and AI systems can inspect, compare and cite.
+Base2026 is an open-source video research engine and source-first evidence library for short-form expert video. It turns reviewed public videos into attributed, searchable evidence that people and AI systems can inspect, compare and trace to the original source.
 
 Built and maintained by solo founder Alex Yarosh.
 
@@ -27,7 +27,10 @@ Base2026 creates a public evidence layer that keeps those connections visible.
 - provides a Cloudflare Worker search API backed by D1 FTS5;
 - documents methodology, corrections, opt-out and publication boundaries.
 
-The current release is a working public prototype. The 2026-08-23 verified snapshot contained 2,136 indexed public documents across 1,557 distinct videos. These numbers describe a dated dataset snapshot, not users, revenue or commercial traction.
+The current release is a working public prototype. The 2026-08-28 live D1
+snapshot contained 2,150 search documents across 1,563 distinct videos, with
+39 automatic public projections applied. These are dated database dimensions,
+not users, revenue, universal coverage or commercial traction.
 
 ## Who it is for
 
@@ -50,6 +53,24 @@ Cloudflare discovery
 ```
 
 No live LLM call is required to search the public library. Raw captions, raw ASR, media, private QA notes and unreviewed material stay outside the public release.
+
+The public product and bounded cloud pipeline use Cloudflare Workers, Workers
+Static Assets, D1, R2, Queues, Workflows and Workers AI. Durable identities,
+validation and receipts prevent retries from silently publishing a different
+record. Only sanitized excerpt cards cross from the private evidence lane into
+public D1.
+
+## What makes it different
+
+- a free public research corpus rather than a private saved-video library;
+- reviewed, bounded evidence instead of a public raw-transcript dump;
+- creator attribution, original-source links and correction/removal paths;
+- human pages plus public API, JSONL and machine discovery files;
+- open-source code and a documented public/private publication boundary;
+- edge search that does not spend an LLM call for every visitor query.
+
+Base2026 does not claim complete TikTok coverage, perfect transcription,
+real-time monitoring, guaranteed rankings or an AI-visibility dashboard.
 
 ## Open-source architecture
 
@@ -87,6 +108,8 @@ Python release tests:
 
 ```bash
 python3 -m pytest tests/test_build_base2026_cloudflare_release.py -q
+python3 -m pytest tests/test_base2026_design_authority.py -q
+python3 scripts/check-base2026-design-authority.py
 ```
 
 Worker tests:
@@ -116,7 +139,7 @@ python3 scripts/audit-publication-boundary.py
 
 ## Roadmap
 
-Current priorities are search quality, provenance and creator-rights workflows, API documentation, accessibility, more public-safe tests and carefully reviewed source expansion. See [ROADMAP.md](ROADMAP.md) or the [live roadmap](https://base2026.dev/roadmap).
+Current priorities are monitored indexation, strong source-backed topic evidence maps, versioned public data examples, provenance and creator-rights workflows. See [ROADMAP.md](ROADMAP.md) or the [live roadmap](https://base2026.dev/roadmap).
 
 ## Contributing and security
 

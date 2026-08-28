@@ -1,561 +1,143 @@
-<!DOCTYPE html>
-<html lang="en"><head>
+<!doctype html>
+<html lang="en">
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Base2026 — Public Source Intelligence for SEO, GEO &amp; AI Search</title>
-  <meta name="description" content="Base2026 turns public expert videos into attributed, searchable evidence for SEO, GEO, AI-search research and trustworthy agent workflows.">
+  <title>Base2026 — Search Expert Videos Like a Knowledge Base</title>
+  <meta name="description" content="An open, source-first evidence library for short-form expert video—searchable, attributable, and built for SEO, GEO and AI-search research.">
   <meta name="robots" content="index,follow">
   <link rel="canonical" href="https://base2026.dev/">
   <link rel="icon" href="/static/base2026-mark.svg" type="image/svg+xml">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Base2026">
   <meta property="og:title" content="Base2026 — Search what experts actually said">
-  <meta property="og:description" content="Attributed public-source intelligence for marketers, researchers, founders, builders and AI agents.">
+  <meta property="og:description" content="An open video research engine for searchable, attributable expert evidence.">
   <meta property="og:url" content="https://base2026.dev/">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Base2026 — Search what experts actually said">
-  <meta name="twitter:description" content="Attributed public-source intelligence for marketers, researchers, founders, builders and AI agents.">
-  <link rel="stylesheet" href="/static/base2026-startup-homepage.css?v=20260820-01">
-  <link rel="stylesheet" href="/static/base2026-startup-shell.css?v=20260820-02">
-  <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+  <meta name="twitter:description" content="An open video research engine for searchable, attributable expert evidence.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600;700&amp;family=Manrope:wght@400;500;700;800&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/base2026-startup-homepage.css?v=20260820-b26v1">
   <script type="application/ld+json">
     {"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://base2026.dev/#website","name":"Base2026","url":"https://base2026.dev/","potentialAction":{"@type":"SearchAction","target":"https://base2026.dev/workspace/?q={search_term_string}","query-input":"required name=search_term_string"}},{"@type":"Organization","@id":"https://base2026.dev/#organization","name":"Base2026","url":"https://base2026.dev/","founder":{"@type":"Person","name":"Alex Yarosh"},"sameAs":["https://github.com/logic-crafts/base2026"]}]}
   </script>
-  <style>
-    :root {
-      --bg-paper: #F7F4EE;
-      --surface-paper: #FFFAF0;
-      --ink: #111820;
-      --ink-secondary: #5F6A72;
-      --border-ink: rgba(19, 25, 31, 0.15);
-      --accent-burnt: #C84F07;
-      --soft-fill: #E6DED1;
-    }
-
-    body {
-      background-color: var(--bg-paper);
-      font-family: 'Manrope', sans-serif;
-      color: var(--ink);
-      -webkit-font-smoothing: antialiased;
-    }
-
-    .font-mono-ui {
-      font-family: 'Geist Mono', monospace;
-    }
-
-    .text-ink { color: var(--ink); }
-    .text-ink-secondary { color: var(--ink-secondary); }
-    .bg-ink { background-color: var(--ink); }
-    .border-ink { border-color: var(--ink); }
-
-    .tight-display {
-      letter-spacing: -0.04em;
-      line-height: 0.95;
-    }
-
-    .glass-panel {
-      background: rgba(255, 250, 240, 0.76);
-      backdrop-filter: blur(18px) saturate(1.6);
-      border: 1px solid var(--border-ink);
-      box-shadow: rgba(15, 23, 42, 0.04) 0px 18px 54px 0px;
-    }
-
-    .evidence-row:hover {
-      background: var(--surface-paper);
-    }
-
-    .pill-button {
-      transition: all 0.22s ease;
-    }
-
-    .pill-button:hover {
-      transform: translateY(-1px);
-    }
-
-    .roadmap-line {
-      width: 1px;
-      background: var(--border-ink);
-      position: absolute;
-      left: 7px;
-      top: 24px;
-      bottom: -24px;
-    }
-  </style>
 </head>
-<body>
-  <div class="min-h-screen" data-sd-id="1">
-    <header class="b26-site-header" data-b26-shell>
-      <div class="b26-site-header__inner">
-        <a class="b26-wordmark" href="/" aria-label="Base2026 home"><span>BASE</span><strong>2026</strong></a>
-        <nav class="b26-desktop-nav" aria-label="Primary navigation"><a href="/workspace/">Search</a><a href="/topics/">Topics</a><a href="/creators/">Creators</a><a href="/methodology.html">Methodology</a><a href="/roadmap.html">Roadmap</a></nav>
-        <div class="b26-header-actions"><a class="b26-icon-link" href="https://github.com/logic-crafts/base2026" target="_blank" rel="noopener noreferrer" aria-label="Base2026 on GitHub"><img src="/static/brand/github.svg" alt="" width="18" height="18"></a><a class="b26-header-cta" href="/partner.html">Partner</a></div>
-        <details class="b26-mobile-nav"><summary>Menu</summary><nav aria-label="Mobile navigation"><a href="/workspace/">Search</a><a href="/topics/">Topics</a><a href="/creators/">Creators</a><a href="/methodology.html">Methodology</a><a href="/roadmap.html">Roadmap</a><a href="/support.html">Support</a><a href="/partner.html">Partner</a><a href="https://github.com/logic-crafts/base2026" target="_blank" rel="noopener noreferrer">GitHub</a></nav></details>
-      </div>
-    </header>
-
-    <!-- Hero Section -->
-    <section id="product" class="pt-24 pb-20 px-6" data-sd-id="15">
-      <div class="max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-20 items-start" data-sd-id="16">
-        <div class="space-y-8" data-sd-id="17">
-          <div class="space-y-2" data-sd-id="18">
-            <p class="font-mono-ui text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent-burnt)]" data-sd-id="19">Public Source Intelligence · Built in the Open</p>
-            <h1 class="text-[64px] lg:text-[76px] font-extrabold tight-display tracking-[-0.05em] leading-[0.9] text-[#0F172A]" data-sd-id="20">
-              Search what<br>experts actually<br>said.
-            </h1>
-          </div>
-          <p class="text-[18px] text-ink-secondary max-w-[480px] leading-relaxed" data-sd-id="21">
-            Base2026 turns public short-form expert videos into attributed, searchable evidence for marketers, researchers, founders, builders, and AI agents.
-          </p>
-          <div class="flex flex-wrap items-center gap-4 pt-4" data-sd-id="22">
-            <a href="https://base2026.dev/workspace/" id="hero-cta-primary" class="pill-button bg-[#0F172A] text-white px-8 py-[14px] rounded-full text-[15px] font-bold shadow-[rgba(15,23,42,0.12)_0px_12px_28px_0px]" data-sd-id="23">Search the library</a>
-            <a href="https://base2026.dev/roadmap.html" id="hero-cta-secondary" class="pill-button bg-white/40 border border-[rgba(15,23,42,0.1)] text-[#0F172A] px-8 py-[14px] rounded-full text-[15px] font-bold hover:bg-white transition-all" data-sd-id="24">Explore the roadmap</a>
-          </div>
-          <a href="https://base2026.dev/support.html" id="hero-support-link" class="inline-block text-[12px] font-bold border-b border-[rgba(19,25,31,0.3)] pb-0.5 hover:border-[var(--accent-burnt)] transition-colors" data-sd-id="25">Support or partner with Base2026</a>
+<body class="b26-home">
+  {{STARTUP_HEADER}}
+  <main>
+    <section class="b26-home-hero b26-home-shell" aria-labelledby="hero-title">
+      <div>
+        <p class="b26-home-kicker">Public source intelligence · built in the open</p>
+        <h1 id="hero-title">Search what experts actually said.</h1>
+        <p class="b26-home-copy">An open, source-first evidence library for short-form expert video—searchable, attributable, and built for SEO, GEO and AI-search research.</p>
+        <div class="b26-home-actions">
+          <a class="b26-button--primary" href="/workspace/">Search the library</a>
+          <a class="b26-button--secondary" href="/roadmap.html">Explore the roadmap</a>
         </div>
+        <a class="b26-home-subaction" href="/support.html">Support or partner with Base2026</a>
+      </div>
+      <aside class="b26-evidence-console" aria-label="Example source record">
+        <div class="b26-evidence-console__top"><span>Public research preview</span><span class="b26-live-dot">Live index</span></div>
+        <div class="b26-evidence-console__body">
+          <div class="b26-console-query">Search: “how does GEO impact local SEO service providers”</div>
+          <article class="b26-console-record">
+            <div class="b26-console-meta"><span>@build_in_public</span><span>2026-07-24</span></div>
+            <p>Creator analysis links page citations to fan-out queries and recommends aligning URLs, titles and H1s with those searches.</p>
+            <div class="b26-console-tags"><span>AI citations</span><span>Fan-out queries</span><span class="b26-console-status">Source linked</span></div>
+          </article>
+        </div>
+      </aside>
+    </section>
 
-        <!-- Signature Visual: Evidence Console -->
-        <div class="glass-panel rounded-[24px] overflow-hidden" data-sd-id="26">
-          <div class="border-b border-[rgba(19,25,31,0.1)] px-6 py-4 flex items-center justify-between bg-white/40" data-sd-id="27">
-            <div class="flex items-center gap-3" data-sd-id="28">
-              <div class="flex gap-1.5" data-sd-id="29">
-                <div class="w-2.5 h-2.5 rounded-full bg-[rgba(19,25,31,0.15)]" data-sd-id="30"></div>
-                <div class="w-2.5 h-2.5 rounded-full bg-[rgba(19,25,31,0.15)]" data-sd-id="31"></div>
-                <div class="w-2.5 h-2.5 rounded-full bg-[rgba(19,25,31,0.15)]" data-sd-id="32"></div>
-              </div>
-              <span class="font-mono-ui text-[10px] font-bold text-ink-secondary uppercase" data-sd-id="33">Public Research Preview</span>
-            </div>
-            <div class="flex items-center gap-2" data-sd-id="34">
-              <div class="w-2 h-2 rounded-full bg-[var(--accent-burnt)] animate-pulse" data-sd-id="35"></div>
-              <span class="font-mono-ui text-[10px] font-bold uppercase" data-sd-id="36">Live Index</span>
-            </div>
-          </div>
-          <div class="p-6 space-y-6" data-sd-id="37">
-            <div class="bg-white/60 border border-[rgba(19,25,31,0.1)] rounded-xl p-4 flex items-center gap-3 shadow-sm" data-sd-id="38">
-              <iconify-icon icon="lucide:search" class="text-ink-secondary"></iconify-icon>
-              <span class="text-[14px] font-medium" data-sd-id="39">"how does GEO impact local SEO service providers"</span>
-            </div>
+    <section class="b26-home-proof" aria-label="Live public D1 snapshot from 2026-08-28">
+      <div class="b26-home-shell b26-proof-grid">
+        <div><strong>2,150</strong><span>Search documents</span></div>
+        <div><strong>1,563</strong><span>Distinct videos</span></div>
+        <div><strong>39</strong><span>Cloud projections</span></div>
+        <div><strong>2026-08-28</strong><span>Live D1 snapshot</span></div>
+      </div>
+    </section>
 
-            <div class="space-y-4" data-sd-id="40">
-              <div class="evidence-row border border-[rgba(19,25,31,0.08)] bg-white/30 rounded-xl p-4 transition-colors" data-sd-id="41">
-                <div class="flex items-center justify-between mb-2" data-sd-id="42">
-                  <div class="flex items-center gap-2" data-sd-id="43">
-                    <div class="w-6 h-6 rounded-full bg-ink flex items-center justify-center" data-sd-id="44">
-                      <iconify-icon icon="lucide:user" class="text-white text-[12px]"></iconify-icon>
-                    </div>
-                    <span class="font-mono-ui text-[10px] font-bold" data-sd-id="45">@build_in_public</span>
-                  </div>
-                  <span class="font-mono-ui text-[10px] text-ink-secondary" data-sd-id="46">2026-07-24</span>
-                </div>
-                <p class="text-[13px] leading-relaxed mb-3 font-medium" data-sd-id="47">
-                  Creator analysis links page citations to fan-out queries and recommends aligning URLs, titles, and H1s with those searches.
-                </p>
-                <div class="flex flex-wrap gap-2" data-sd-id="48">
-                  <span class="font-mono-ui text-[9px] bg-[var(--soft-fill)] px-2 py-0.5 rounded uppercase" data-sd-id="49">#AI-CITATIONS</span>
-                  <span class="font-mono-ui text-[9px] bg-[var(--soft-fill)] px-2 py-0.5 rounded uppercase" data-sd-id="50">#FAN-OUT-QUERIES</span>
-                  <span class="font-mono-ui text-[9px] border border-[var(--accent-burnt)] text-[var(--accent-burnt)] px-2 py-0.5 rounded uppercase font-bold" data-sd-id="51">SOURCE LINKED</span>
-                </div>
-              </div>
-
-              <div class="flex items-center gap-4 px-2" data-sd-id="52">
-                <div class="h-[1px] flex-1 bg-[rgba(19,25,31,0.1)]" data-sd-id="53"></div>
-                <span class="font-mono-ui text-[9px] uppercase tracking-widest text-ink-secondary" data-sd-id="54">Related Connections</span>
-                <div class="h-[1px] flex-1 bg-[rgba(19,25,31,0.1)]" data-sd-id="55"></div>
-              </div>
-
-              <div class="grid grid-cols-2 gap-3" data-sd-id="56">
-                <div class="bg-white/20 border border-[rgba(19,25,31,0.06)] rounded-lg p-3" data-sd-id="57">
-                  <span class="font-mono-ui text-[9px] block mb-1 uppercase text-ink-secondary" data-sd-id="58">Source Topic</span>
-                  <span class="text-[12px] font-bold" data-sd-id="59">Algorithm Changes</span>
-                </div>
-                <div class="bg-white/20 border border-[rgba(19,25,31,0.06)] rounded-lg p-3" data-sd-id="60">
-                  <span class="font-mono-ui text-[9px] block mb-1 uppercase text-ink-secondary" data-sd-id="61">Verification</span>
-                  <span class="text-[12px] font-bold text-[#111820] flex items-center gap-1" data-sd-id="62">
-                    <iconify-icon icon="lucide:check-circle"></iconify-icon> Attributed
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
+    <section class="b26-home-section">
+      <div class="b26-home-shell b26-home-split">
+        <div>
+          <p class="b26-home-kicker">The research problem</p>
+          <h2>The feed is not a knowledge base.</h2>
+          <p class="b26-home-copy">Short-form platforms are designed for consumption velocity, not research accuracy. Expert observations are difficult to search, compare, cite and revisit.</p>
+        </div>
+        <div class="b26-thesis-list">
+          <div><strong>Source-linked evidence</strong><p>Each public record keeps the original creator and source visible.</p></div>
+          <div><strong>Reviewed context</strong><p>Searchable public text is structured without presenting raw, unreviewed transcripts as research.</p></div>
+          <div><strong>Clear boundaries</strong><p>Private research and client material stay outside this public evidence layer.</p></div>
         </div>
       </div>
     </section>
 
-    <!-- Verified Dataset Proof Strip -->
-    <div class="border-y border-[rgba(19,25,31,0.1)] bg-[#FFFAF0]" data-sd-id="63">
-      <div class="max-w-[1200px] mx-auto px-6 py-12" data-sd-id="64">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-8" data-sd-id="65">
-          <div class="space-y-1 border-r border-[rgba(19,25,31,0.1)]" data-sd-id="66">
-            <span class="text-[42px] font-extrabold tracking-tighter block" data-sd-id="67">1,724</span>
-            <span class="font-mono-ui text-[11px] font-bold uppercase tracking-widest text-ink-secondary" data-sd-id="68">Source Documents</span>
-          </div>
-          <div class="space-y-1 border-r border-[rgba(19,25,31,0.1)]" data-sd-id="69">
-            <span class="text-[42px] font-extrabold tracking-tighter block" data-sd-id="70">2,319</span>
-            <span class="font-mono-ui text-[11px] font-bold uppercase tracking-widest text-ink-secondary" data-sd-id="71">Public Passages</span>
-          </div>
-          <div class="space-y-1 border-r border-[rgba(19,25,31,0.1)]" data-sd-id="72">
-            <span class="text-[42px] font-extrabold tracking-tighter block" data-sd-id="73">18</span>
-            <span class="font-mono-ui text-[11px] font-bold uppercase tracking-widest text-ink-secondary" data-sd-id="74">Creators Indexed</span>
-          </div>
-          <div class="space-y-1" data-sd-id="75">
-            <span class="text-[42px] font-extrabold tracking-tighter block" data-sd-id="76">1,670</span>
-            <span class="font-mono-ui text-[11px] font-bold uppercase tracking-widest text-ink-secondary" data-sd-id="77">Topic Clusters</span>
-          </div>
-        </div>
-        <p class="mt-8 font-mono-ui text-[10px] uppercase text-center text-ink-secondary tracking-[0.2em]" data-sd-id="78">
-          Public dataset snapshot · 2026-08-20
-        </p>
-      </div>
-    </div>
-
-    <!-- Problem and Thesis -->
-    <section class="py-24 px-6" data-sd-id="79">
-      <div class="max-w-[1200px] mx-auto" data-sd-id="80">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16" data-sd-id="81">
-          <div data-sd-id="82">
-            <h2 class="text-[38px] font-extrabold tight-display mb-6" data-sd-id="83">The feed is not<br>a knowledge base.</h2>
-            <div class="space-y-6 text-[16px] leading-relaxed text-ink-secondary max-w-md" data-sd-id="84">
-              <p data-sd-id="85">Short-form platforms are designed for consumption velocity, not research accuracy. Expert observations are difficult to search, compare, cite, and revisit.</p>
-              <p data-sd-id="86">Base2026 creates a searchable, attributed research layer without replacing the original source, turning transient scrolls into permanent evidence.</p>
-            </div>
-          </div>
-          <div class="flex flex-col justify-end space-y-6" data-sd-id="87">
-            <div class="p-8 bg-[#FFFAF0] border border-[rgba(19,25,31,0.15)] rounded-2xl" data-sd-id="88">
-              <h3 class="text-[20px] font-extrabold mb-4" data-sd-id="89">Our Thesis</h3>
-              <ul class="space-y-4" data-sd-id="90">
-                <li class="border-l-2 border-[var(--accent-burnt)] pl-4" data-sd-id="91">
-                  <span data-sd-id="93">Source-linked evidence makes AI research auditable.</span>
-                </li>
-                <li class="border-l-2 border-[var(--accent-burnt)] pl-4" data-sd-id="94">
-                  <span data-sd-id="96">Attribution builds durable trust for knowledge tools.</span>
-                </li>
-                <li class="border-l-2 border-[var(--accent-burnt)] pl-4" data-sd-id="97">
-                  <span data-sd-id="99">Reviewed structured data supports more reliable AI agents.</span>
-                </li>
-              </ul>
-            </div>
-          </div>
+    <section class="b26-home-section b26-home-section--surface">
+      <div class="b26-home-shell">
+        <div class="b26-section-head"><div><p class="b26-home-kicker">How the system works</p><h2>Source records become usable research.</h2></div><p>Base2026 connects public sources, structured text, evidence links and research pathways without replacing the original creator.</p></div>
+        <div class="b26-system-grid">
+          <article><span>Capture</span><h3>Cloud discovery</h3><p>Cloudflare discovers bounded public sources while links, creator attribution and dates remain attached.</p></article>
+          <article><span>Review</span><h3>Private evidence lane</h3><p>Private D1, R2 and Workers AI turn eligible media into validated source-backed evidence.</p></article>
+          <article><span>Connect</span><h3>Receipt-gated projection</h3><p>Queues and Workflows move only sanitized public cards into the evidence graph.</p></article>
+          <article><span>Retrieve</span><h3>D1 edge search</h3><p>The D1 FTS5 workspace and read-only API help people and agents find context and return to source.</p></article>
         </div>
       </div>
     </section>
 
-    <!-- How it works -->
-    <section class="py-24 bg-[var(--soft-fill)]/30 border-y border-[rgba(19,25,31,0.1)] px-6" data-sd-id="100">
-      <div class="max-w-[1200px] mx-auto" data-sd-id="101">
-        <div class="flex justify-between items-end mb-16" data-sd-id="102">
-          <h2 class="text-[38px] font-extrabold tracking-tight" data-sd-id="103">System Architecture</h2>
-          <a href="https://base2026.dev/methodology.html" id="how-methodology-link" class="font-mono-ui text-[11px] font-bold uppercase tracking-wider border-b border-ink pb-1" data-sd-id="104">Read the methodology</a>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-[rgba(19,25,31,0.1)] border border-[rgba(19,25,31,0.1)]" data-sd-id="105">
-          <div class="bg-[var(--bg-paper)] p-8 space-y-4" data-sd-id="106">
-            <span class="font-mono-ui text-[12px] font-bold text-ink-secondary" data-sd-id="107" style="width: 112px; height: 20px; font-size: 17px; line-height: 25.5px;">CAPTURE</span>
-            <h4 class="text-[18px] font-extrabold" data-sd-id="108">Public Sources</h4>
-            <p class="text-[14px] leading-relaxed text-ink-secondary" data-sd-id="109">Source links, creator attribution, platform context, dates, and metadata.</p>
-          </div>
-          <div class="bg-[var(--bg-paper)] p-8 space-y-4" data-sd-id="110">
-            <span class="font-mono-ui text-[12px] font-bold text-ink-secondary" data-sd-id="111">REVIEW</span>
-            <h4 class="text-[18px] font-extrabold" data-sd-id="112">Structure Text</h4>
-            <p class="text-[14px] leading-relaxed text-ink-secondary" data-sd-id="113">Caption or local ASR cleanup, review notes, and public/private boundary checks.</p>
-          </div>
-          <div class="bg-[var(--bg-paper)] p-8 space-y-4" data-sd-id="114">
-            <span class="font-mono-ui text-[12px] font-bold text-ink-secondary" data-sd-id="115">CONNECT</span>
-            <h4 class="text-[18px] font-extrabold" data-sd-id="116">Evidence Graph</h4>
-            <p class="text-[14px] leading-relaxed text-ink-secondary" data-sd-id="117">Mapping passages to topic signals and source-backed insight cards.</p>
-          </div>
-          <div class="bg-[var(--bg-paper)] p-8 space-y-4" data-sd-id="118">
-            <span class="font-mono-ui text-[12px] font-bold text-ink-secondary" data-sd-id="119">DEPLOY</span>
-            <h4 class="text-[18px] font-extrabold" data-sd-id="120">Search &amp; Cite</h4>
-            <p class="text-[14px] leading-relaxed text-ink-secondary" data-sd-id="121">Canonical research workspace and agent-readable data exports.</p>
-          </div>
+    <section class="b26-home-section">
+      <div class="b26-home-shell b26-rigor-grid">
+        <div><p class="b26-home-kicker">Built for rigor</p><h2>Evidence stays useful when the boundaries stay clear.</h2><p class="b26-home-copy">Base2026 is not a private source vault. The visible layer is designed for inspection, attribution and careful reuse.</p></div>
+        <div class="b26-rigor-list">
+          <article><h3>SEO and GEO specialists</h3><p>Trace practitioner observations to time-stamped evidence instead of unsupported summaries.</p></article>
+          <article><h3>Researchers and analysts</h3><p>Compare public signals across creators while retaining source and attribution boundaries.</p></article>
+          <article><h3>Founders and builders</h3><p>Study practical patterns without mistaking a public source library for a generic playbook.</p></article>
+          <article><h3>AI agents</h3><p>Use reviewed public text as a retrieval layer with clear links back to its source.</p></article>
         </div>
       </div>
     </section>
 
-    <!-- Audience -->
-    <section class="py-24 px-6" data-sd-id="122">
-      <div class="max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-20" data-sd-id="123">
-        <div class="space-y-6" data-sd-id="124">
-          <h2 class="text-[38px] font-extrabold tracking-tight" data-sd-id="125">Built for Rigor</h2>
-          <p class="text-[16px] text-ink-secondary" data-sd-id="126">Base2026 is an instrument for professionals who cannot afford to be wrong about what was said.</p>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-px bg-[rgba(19,25,31,0.08)]" data-sd-id="127">
-          <div class="bg-[var(--bg-paper)] p-8" data-sd-id="128">
-            <iconify-icon icon="lucide:bar-chart-3" class="text-[24px] mb-4 text-[var(--accent-burnt)]"></iconify-icon>
-            <h4 class="font-bold mb-2" data-sd-id="129">SEO/GEO Specialists</h4>
-            <p class="text-[14px] text-ink-secondary" data-sd-id="130">Track expert predictions and algorithm observations with time-stamped evidence.</p>
-          </div>
-          <div class="bg-[var(--bg-paper)] p-8" data-sd-id="131">
-            <iconify-icon icon="lucide:microscope" class="text-[24px] mb-4 text-[var(--accent-burnt)]"></iconify-icon>
-            <h4 class="font-bold mb-2" data-sd-id="132">Researchers &amp; Analysts</h4>
-            <p class="text-[14px] text-ink-secondary" data-sd-id="133">Verify short-form claims across multiple creators and platform boundaries.</p>
-          </div>
-          <div class="bg-[var(--bg-paper)] p-8" data-sd-id="134">
-            <iconify-icon icon="lucide:zap" class="text-[24px] mb-4 text-[var(--accent-burnt)]"></iconify-icon>
-            <h4 class="font-bold mb-2" data-sd-id="135">Founders &amp; Builders</h4>
-            <p class="text-[14px] text-ink-secondary" data-sd-id="136">Scan the knowledge edge to identify emerging tactical operational trends.</p>
-          </div>
-          <div class="bg-[var(--bg-paper)] p-8" data-sd-id="137">
-            <iconify-icon icon="lucide:bot" class="text-[24px] mb-4 text-[var(--accent-burnt)]"></iconify-icon>
-            <h4 class="font-bold mb-2" data-sd-id="138">AI Agents</h4>
-            <p class="text-[14px] text-ink-secondary" data-sd-id="139">Feed internal research tools with clean, attributed, and structured expert data.</p>
-          </div>
+    <section class="b26-home-section b26-home-section--surface">
+      <div class="b26-home-shell b26-roadmap-preview">
+        <div><p class="b26-home-kicker">Current trajectory</p><h2>Build trust before scale.</h2><p class="b26-home-copy">The public roadmap records what is live, what is being strengthened and which decisions remain research rather than promises.</p><div class="b26-home-actions"><a class="b26-button--secondary" href="/roadmap.html">View the public roadmap</a></div></div>
+        <div class="b26-roadmap-list">
+          <article><span>Live now</span><div><h3>Public trust foundation</h3><p>Search, source records, creator attribution, methodology and correction paths are public.</p></div><em class="b26-roadmap-status b26-roadmap-status--live">Live</em></article>
+          <article><span>Live, monitored</span><div><h3>Cloud evidence pipeline</h3><p>New eligible public-source records move through bounded capture, validation and automatic excerpt-card projection.</p></div><em class="b26-roadmap-status b26-roadmap-status--live">Live</em></article>
+          <article><span>Live, monitored</span><div><h3>Indexable evidence graph</h3><p>Canonical URLs, sitemaps, source pages and machine access stay synchronized as the corpus grows.</p></div><em class="b26-roadmap-status b26-roadmap-status--live">Live</em></article>
         </div>
       </div>
     </section>
 
-    <!-- Roadmap Section -->
-    <section class="py-24 bg-[#FFFAF0] border-t border-[rgba(19,25,31,0.1)] px-6" data-sd-id="140">
-      <div class="max-w-[1200px] mx-auto" data-sd-id="141">
-        <div class="flex justify-between items-end mb-16" data-sd-id="142">
-          <div class="space-y-4" data-sd-id="143">
-            <h2 class="text-[38px] font-extrabold tracking-tight" data-sd-id="144">Trust Before Scale</h2>
-            <p class="text-ink-secondary font-mono-ui text-[11px] uppercase tracking-widest" data-sd-id="145">Strategic Development Roadmap</p>
-          </div>
-          <a href="https://base2026.dev/roadmap.html" id="roadmap-full-link" class="pill-button bg-white border border-[rgba(19,25,31,0.1)] px-6 py-2.5 rounded-full text-[13px] font-bold" data-sd-id="146">Open Full Roadmap</a>
+    <section class="b26-home-section">
+      <div class="b26-home-shell b26-home-cta">
+        <p class="b26-home-kicker">What support unlocks</p>
+        <h2>Reliable public research needs durable infrastructure.</h2>
+        <p>Support is for a visible, accountable product layer: reliable compute, correction workflows, public assets and evidence review—not hidden private-source extraction.</p>
+        <div class="b26-home-cta__items">
+          <div><strong>Infrastructure</strong><span>Reliable transcription compute, search capacity and durable public assets.</span></div>
+          <div><strong>Governance</strong><span>Creator correction workflows and enforceable source-policy boundaries.</span></div>
+          <div><strong>Accessibility</strong><span>Public API access, maintained research paths and clear source context.</span></div>
+          <div><strong>Integrity</strong><span>Human review for source-backed evidence and transparent limits.</span></div>
         </div>
-
-        <div class="space-y-0" data-sd-id="147">
-          <!-- Phase 1 -->
-          <div class="flex gap-8 relative pb-12" data-sd-id="148">
-            <div class="roadmap-line" data-sd-id="149"></div>
-            <div class="w-4 h-4 rounded-full bg-ink z-10 mt-1 flex items-center justify-center ring-4 ring-white" data-sd-id="150">
-              <iconify-icon icon="lucide:check" class="text-white text-[10px]"></iconify-icon>
-            </div>
-            <div class="flex-1 grid grid-cols-1 md:grid-cols-[200px_1fr] gap-8" data-sd-id="151">
-              <div data-sd-id="152">
-                <span class="font-mono-ui text-[11px] font-bold bg-[#E6DED1] text-[#111820] px-2 py-0.5 rounded" data-sd-id="153">LIVE</span>
-                <h5 class="text-[18px] font-extrabold mt-2" data-sd-id="154">Phase 1</h5>
-              </div>
-              <div data-sd-id="155">
-                <h6 class="font-bold mb-2" data-sd-id="156">Public Trust Foundation</h6>
-                <p class="text-ink-secondary text-[14px]" data-sd-id="157">Public deployment, searchable source records, creator attribution, methodology, policies, and correction paths.</p>
-              </div>
-            </div>
-          </div>
-          <!-- Phase 2 -->
-          <div class="flex gap-8 relative pb-12" data-sd-id="158">
-            <div class="roadmap-line" data-sd-id="159"></div>
-            <div class="w-4 h-4 rounded-full bg-[var(--accent-burnt)] z-10 mt-1 flex items-center justify-center ring-4 ring-white shadow-[0_0_10px_rgba(200,79,7,0.3)]" data-sd-id="160"></div>
-            <div class="flex-1 grid grid-cols-1 md:grid-cols-[200px_1fr] gap-8" data-sd-id="161">
-              <div data-sd-id="162">
-                <span class="font-mono-ui text-[11px] font-bold bg-[#E6DED1] text-[var(--accent-burnt)] px-2 py-0.5 rounded" data-sd-id="163">IN PROGRESS</span>
-                <h5 class="text-[18px] font-extrabold mt-2" data-sd-id="164">Phase 2</h5>
-              </div>
-              <div data-sd-id="165">
-                <h6 class="font-bold mb-2" data-sd-id="166">Content Ingestion Pipeline</h6>
-                <p class="text-ink-secondary text-[14px]" data-sd-id="167">TikTok intake handoff, source metadata, caption-first processing, local ASR fallback, review, and reproducible exports.</p>
-              </div>
-            </div>
-          </div>
-          <!-- Phase 3 -->
-          <div class="flex gap-8 relative pb-12" data-sd-id="168">
-            <div class="roadmap-line" data-sd-id="169"></div>
-            <div class="w-4 h-4 rounded-full bg-ink z-10 mt-1 flex items-center justify-center ring-4 ring-white" data-sd-id="170">
-              <iconify-icon icon="lucide:check" class="text-white text-[10px]"></iconify-icon>
-            </div>
-            <div class="flex-1 grid grid-cols-1 md:grid-cols-[200px_1fr] gap-8" data-sd-id="171">
-              <div data-sd-id="172">
-                <span class="font-mono-ui text-[11px] font-bold bg-[#E6DED1] text-[#111820] px-2 py-0.5 rounded" data-sd-id="173">LIVE · QA CONTINUES</span>
-                <h5 class="text-[18px] font-extrabold mt-2" data-sd-id="174">Phase 3</h5>
-              </div>
-              <div data-sd-id="175">
-                <h6 class="font-bold mb-2" data-sd-id="176">AI Knowledge Layer</h6>
-                <p class="text-ink-secondary text-[14px]" data-sd-id="177">Search, topic pages, public insight cards, and source-backed explanations are live; dedupe, QA, and compare surfaces continue.</p>
-              </div>
-            </div>
-          </div>
-          <!-- Phase 4 -->
-          <div class="flex gap-8 relative pb-12" data-sd-id="178">
-            <div class="roadmap-line" data-sd-id="179"></div>
-            <div class="w-4 h-4 rounded-full bg-[var(--accent-burnt)] z-10 mt-1 ring-4 ring-white" data-sd-id="180"></div>
-            <div class="flex-1 grid grid-cols-1 md:grid-cols-[200px_1fr] gap-8" data-sd-id="181">
-              <div data-sd-id="268">
-                <span class="font-mono-ui text-[11px] font-bold bg-[#E6DED1] text-[var(--accent-burnt)] px-2 py-0.5 rounded" data-sd-id="269">IN PROGRESS</span>
-                <h5 class="text-[18px] font-extrabold mt-2" data-sd-id="270">Phase 4</h5>
-              </div>
-              <div data-sd-id="271">
-                <h6 class="font-bold mb-2" data-sd-id="272">Creator &amp; Rights Controls</h6>
-                <p class="text-ink-secondary text-[14px]" data-sd-id="273">Correction and removal are live; creator claims, automated request processing, and a public change log are planned.</p>
-              </div>
-            </div>
-          </div>
-          <!-- Phase 5 -->
-          <div class="flex gap-8 relative pb-12" data-sd-id="274">
-            <div class="roadmap-line" data-sd-id="275"></div>
-            <div class="w-4 h-4 rounded-full bg-[#111820] z-10 mt-1 ring-4 ring-white" data-sd-id="276"></div>
-            <div class="flex-1 grid grid-cols-1 md:grid-cols-[200px_1fr] gap-8" data-sd-id="277">
-              <div data-sd-id="278">
-                <span class="font-mono-ui text-[11px] font-bold bg-[#E6DED1] text-[#111820] px-2 py-0.5 rounded" data-sd-id="279">LIVE · EXPANDING</span>
-                <h5 class="text-[18px] font-extrabold mt-2" data-sd-id="280">Phase 5</h5>
-              </div>
-              <div data-sd-id="281">
-                <h6 class="font-bold mb-2" data-sd-id="282">Analytics &amp; Public Signals</h6>
-                <p class="text-ink-secondary text-[14px]" data-sd-id="283">Database coverage and topic/source signals are live; visitor analytics, most-viewed entries, and search-demand signals are planned.</p>
-              </div>
-            </div>
-          </div>
-          <!-- Phase 6 -->
-          <div class="flex gap-8" data-sd-id="284">
-            <div class="w-4 h-4 rounded-full bg-[#E6DED1] z-10 mt-1 ring-4 ring-white" data-sd-id="285"></div>
-            <div class="flex-1 grid grid-cols-1 md:grid-cols-[200px_1fr] gap-8" data-sd-id="286">
-              <div data-sd-id="287">
-                <span class="font-mono-ui text-[11px] font-bold bg-[#E6DED1] text-[#5F6A72] px-2 py-0.5 rounded" data-sd-id="288">RESEARCH</span>
-                <h5 class="text-[18px] font-extrabold mt-2" data-sd-id="289">Phase 6</h5>
-              </div>
-              <div data-sd-id="290">
-                <h6 class="font-bold mb-2" data-sd-id="291">Monetization Layer</h6>
-                <p class="text-ink-secondary text-[14px]" data-sd-id="292">Supporter and sponsorship models, premium research views, partner pages, and API/data access are under research.</p>
-              </div>
-            </div>
-          </div>
-        </div>
+        <div class="b26-home-cta__actions"><a class="b26-button--primary" href="/partner.html">Propose a partnership</a><a class="b26-button--secondary" href="/support.html">Support Base2026</a></div>
       </div>
     </section>
 
-    <!-- What support unlocks -->
-    <section class="py-24 px-6" data-sd-id="183">
-      <div class="max-w-[1200px] mx-auto" data-sd-id="184">
-        <div class="bg-ink text-white rounded-[24px] p-12 lg:p-20 relative overflow-hidden" data-sd-id="185">
-          <div class="relative z-10 max-w-2xl" data-sd-id="186">
-            <h2 class="text-[42px] font-extrabold tracking-tight mb-8" data-sd-id="187">What support unlocks.</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12" data-sd-id="188">
-              <div class="space-y-2" data-sd-id="189">
-                <h5 class="font-bold text-[var(--accent-burnt)] font-mono-ui text-[12px] uppercase" data-sd-id="190">Infrastructure</h5>
-                <p class="text-white/70 text-[14px]" data-sd-id="191">Reliable transcription compute, D1 search capacity, and durable public assets.</p>
-              </div>
-              <div class="space-y-2" data-sd-id="192">
-                <h5 class="font-bold text-[var(--accent-burnt)] font-mono-ui text-[12px] uppercase" data-sd-id="193">Governance</h5>
-                <p class="text-white/70 text-[14px]" data-sd-id="194">Creator claim workflows, correction logs, and removal/privacy policy enforcement.</p>
-              </div>
-              <div class="space-y-2" data-sd-id="195">
-                <h5 class="font-bold text-[var(--accent-burnt)] font-mono-ui text-[12px] uppercase" data-sd-id="196">Accessibility</h5>
-                <p class="text-white/70 text-[14px]" data-sd-id="197">Public API access, future MCP integrations, and open dataset maintenance.</p>
-              </div>
-              <div class="space-y-2" data-sd-id="198">
-                <h5 class="font-bold text-[var(--accent-burnt)] font-mono-ui text-[12px] uppercase" data-sd-id="199">Integrity</h5>
-                <p class="text-white/70 text-[14px]" data-sd-id="200">Human review budget for source-backed insight card verification.</p>
-              </div>
-            </div>
-            <div class="flex flex-col sm:flex-row gap-4 items-center" data-sd-id="201">
-              <a href="https://base2026.dev/partner.html" id="support-cta-dark" class="w-full sm:w-auto text-center bg-white text-ink px-8 py-4 rounded-full font-bold hover:bg-[var(--bg-paper)] transition-colors" data-sd-id="202">Propose a partnership</a>
-              <span class="font-mono-ui text-[12px] text-white/50" data-sd-id="203">Clear scope · public attribution · reversible first step</span>
-            </div>
-          </div>
-          <!-- Decorative abstract element -->
-          <div class="absolute top-0 right-16 w-px h-full bg-white/10 pointer-events-none" data-sd-id="204"></div>
-        </div>
+    <section class="b26-home-section b26-home-section--surface">
+      <div class="b26-home-shell b26-trust-grid">
+        <div><p class="b26-home-kicker">Trust as infrastructure</p><h2>Useful evidence is easier to inspect than to assume.</h2><div class="b26-trust-points"><article><h3>Attribution first</h3><p>Every public record keeps a route back to the original creator and source.</p></article><article><h3>Reviewed context</h3><p>Public text is available for research without presenting private raw material as a product.</p></article><article><h3>Clear boundaries</h3><p>Creator rights, policies and correction paths are part of the system, not a footer afterthought.</p></article><article><h3>Data sovereignty</h3><p>Private credentials and client material are excluded from the public layer by design.</p></article></div></div>
+        <aside class="b26-trust-note"><p class="b26-home-kicker">Source excerpt policy</p><h3>Public evidence remains attributable.</h3><p>Base2026 operates as a discovery and research layer. It does not package creator work as a private vault or turn public content into a substitute for the original source.</p><a href="/source-policy.html">Read the source policy</a></aside>
       </div>
     </section>
 
-    <!-- Trust as Infrastructure -->
-    <section id="trust" class="py-24 border-t border-[rgba(19,25,31,0.1)] px-6" data-sd-id="205">
-      <div class="max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-16" data-sd-id="206">
-        <div class="space-y-12" data-sd-id="207">
-          <h2 class="text-[38px] font-extrabold tracking-tight" data-sd-id="208">Trust as infrastructure.</h2>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-12" data-sd-id="209">
-            <div class="space-y-4" data-sd-id="210">
-              <iconify-icon icon="lucide:link" class="text-[24px] text-ink"></iconify-icon>
-              <h4 class="font-bold" data-sd-id="211">Attribution First</h4>
-              <p class="text-ink-secondary text-[14px]" data-sd-id="212">Every record links back to the original source. We do not re-host creator videos or package creator work as a private vault.</p>
-            </div>
-            <div class="space-y-4" data-sd-id="213">
-              <iconify-icon icon="lucide:file-text" class="text-[24px] text-ink"></iconify-icon>
-              <h4 class="font-bold" data-sd-id="214">Reviewed Context</h4>
-              <p class="text-ink-secondary text-[14px]" data-sd-id="215">Search results are based on reviewed public text, not raw, unverified transcript dumps.</p>
-            </div>
-            <div class="space-y-4" data-sd-id="216">
-              <iconify-icon icon="lucide:shield-check" class="text-[24px] text-ink"></iconify-icon>
-              <h4 class="font-bold" data-sd-id="217">Clear Boundaries</h4>
-              <p class="text-ink-secondary text-[14px]" data-sd-id="218">Visible correction/removal paths and strict public methodology guide every entry.</p>
-            </div>
-            <div class="space-y-4" data-sd-id="219">
-              <iconify-icon icon="lucide:lock" class="text-[24px] text-ink"></iconify-icon>
-              <h4 class="font-bold" data-sd-id="220">Data Sovereignty</h4>
-              <p class="text-ink-secondary text-[14px]" data-sd-id="221">Private artifacts and credentials are excluded from the public API and index by design.</p>
-            </div>
-          </div>
-        </div>
-        <div class="bg-[var(--surface-paper)] border border-[rgba(19,25,31,0.1)] p-8 rounded-2xl h-fit" data-sd-id="222">
-          <span class="font-mono-ui text-[10px] font-bold uppercase tracking-widest text-[var(--accent-burnt)]" data-sd-id="223">Current Policy</span>
-          <h4 class="text-[20px] font-extrabold mt-4 mb-6" data-sd-id="224">Source Excerpt Policy</h4>
-          <p class="text-ink-secondary text-[14px] leading-relaxed mb-8" data-sd-id="225">
-            Base2026 operates as a discovery layer. We strictly adhere to an excerpt-only policy for public short-form content to ensure creators retain their primary viewing traffic.
-          </p>
-          <div class="space-y-4" data-sd-id="226">
-            <a href="https://base2026.dev/source-policy.html" id="policy-link" class="flex items-center justify-between text-[13px] font-bold border-b border-[rgba(19,25,31,0.1)] pb-2 hover:text-[var(--accent-burnt)] transition-colors" data-sd-id="227">
-              Read Source Policy <iconify-icon icon="lucide:arrow-right"></iconify-icon>
-            </a>
-            <a href="https://base2026.dev/opt-out.html" id="rights-link" class="flex items-center justify-between text-[13px] font-bold border-b border-[rgba(19,25,31,0.1)] pb-2 hover:text-[var(--accent-burnt)] transition-colors" data-sd-id="228">
-              Creator Rights Center <iconify-icon icon="lucide:arrow-right"></iconify-icon>
-            </a>
-          </div>
-        </div>
-      </div>
+    <section class="b26-home-final b26-home-shell">
+      <h2>Ready for the next layer?</h2>
+      <p>Enter the searchable knowledge records or help build the infrastructure that keeps public research reliable.</p>
+      <div class="b26-home-actions"><a class="b26-button--primary" href="/workspace/">Search the evidence</a><a class="b26-button--secondary" href="/partner.html">Help build the layer</a></div>
     </section>
-
-    <!-- Final CTA -->
-    <section class="py-32 px-6 text-center" data-sd-id="229">
-      <div class="max-w-2xl mx-auto space-y-10" data-sd-id="230">
-        <h2 class="text-[48px] lg:text-[64px] font-extrabold tight-display" data-sd-id="231">Ready for the<br>next layer?</h2>
-        <p class="text-ink-secondary text-[18px]" data-sd-id="232">Enter the searchable knowledge records or help build the infrastructure that secures them.</p>
-        <div class="flex flex-col sm:flex-row justify-center items-center gap-6" data-sd-id="233">
-          <a href="https://base2026.dev/workspace/" id="final-cta-search" class="pill-button w-full sm:w-auto bg-ink text-white px-10 py-5 rounded-full font-bold text-[16px] shadow-xl" data-sd-id="234">Search the evidence</a>
-          <a href="https://base2026.dev/support.html" id="final-cta-build" class="pill-button w-full sm:w-auto bg-white border border-ink text-ink px-10 py-5 rounded-full font-bold text-[16px]" data-sd-id="235">Help build the layer</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-white border-t border-[rgba(19,25,31,0.1)] py-20 px-6" data-sd-id="236">
-      <div class="max-w-[1200px] mx-auto" data-sd-id="237">
-        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-12" data-sd-id="238">
-          <div class="col-span-2" data-sd-id="239">
-            <a href="https://base2026.dev/" id="footer-brand" class="text-[24px] font-extrabold tracking-tighter block mb-6" data-sd-id="240">Base2026</a>
-            <p class="text-ink-secondary text-[14px] leading-relaxed" data-sd-id="241">
-              An independent research product turning expert video into structured intelligence. Built in the open, attributed at the source.
-            </p>
-            <div class="mt-8" data-sd-id="293">
-              <p class="font-mono-ui text-[10px] font-bold uppercase tracking-[0.16em] text-ink-secondary mb-3" data-sd-id="294">Socials</p>
-              <div class="flex items-center gap-3" data-sd-id="295">
-                <a href="https://x.com/AleksejAros" id="footer-social-x" target="_blank" rel="me noopener noreferrer" aria-label="Alex Yarosh on X" title="X" class="w-10 h-10 rounded-full border border-[rgba(19,25,31,0.15)] flex items-center justify-center text-[#111820] hover:bg-[#111820] hover:text-white transition-colors" data-sd-id="296">
-                  <svg viewBox="0 0 24 24" class="w-4 h-4 fill-current" aria-hidden="true" focusable="false"><path d="M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993zm-2.837 3.299-.929-1.329L3.076 1.56h3.182l5.965 8.532.929 1.329 7.754 11.09h-3.182z"/></svg>
-                </a>
-                <a href="https://github.com/logic-crafts/base2026" id="footer-social-github" target="_blank" rel="noopener noreferrer" aria-label="Base2026 on GitHub" title="GitHub" class="w-10 h-10 rounded-full border border-[rgba(19,25,31,0.15)] flex items-center justify-center text-[#111820] hover:bg-[#111820] hover:text-white transition-colors" data-sd-id="297">
-                  <svg viewBox="0 0 24 24" class="w-4 h-4 fill-current" aria-hidden="true" focusable="false"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
-                </a>
-              </div>
-            </div>
-          </div>
-          <div data-sd-id="242">
-            <h6 class="font-mono-ui text-[11px] font-bold uppercase mb-6" data-sd-id="243">Product</h6>
-            <ul class="space-y-4" data-sd-id="244">
-              <li data-sd-id="245"><a href="https://base2026.dev/workspace/" id="footer-search" class="text-[13px] text-ink-secondary hover:text-ink" data-sd-id="246">Search Workspace</a></li>
-              <li data-sd-id="247"><a href="https://base2026.dev/topics/" id="footer-topics" class="text-[13px] text-ink-secondary hover:text-ink" data-sd-id="248">Topics</a></li>
-              <li data-sd-id="249"><a href="https://base2026.dev/creators/" id="footer-creators" class="text-[13px] text-ink-secondary hover:text-ink" data-sd-id="250">Creators</a></li>
-              <li data-sd-id="251"><a href="https://base2026.dev/analytics.html" id="footer-analytics" class="text-[13px] text-ink-secondary hover:text-ink" data-sd-id="252">Analytics</a></li>
-            </ul>
-          </div>
-          <div data-sd-id="253">
-            <h6 class="font-mono-ui text-[11px] font-bold uppercase mb-6" data-sd-id="254">Platform</h6>
-            <ul class="space-y-4" data-sd-id="255">
-              <li data-sd-id="256"><a href="https://base2026.dev/api.html" id="footer-api" class="text-[13px] text-ink-secondary hover:text-ink" data-sd-id="257">API &amp; AI Access</a></li>
-              <li data-sd-id="258"><a href="https://base2026.dev/roadmap.html" id="footer-roadmap-2" class="text-[13px] text-ink-secondary hover:text-ink" data-sd-id="259">Public Roadmap</a></li>
-              <li data-sd-id="260"><a href="https://base2026.dev/methodology.html" id="footer-methodology" class="text-[13px] text-ink-secondary hover:text-ink" data-sd-id="261">Methodology</a></li>
-              <li data-sd-id="262"><a href="https://base2026.dev/apply-research.html" id="footer-apply" class="text-[13px] text-ink-secondary hover:text-ink" data-sd-id="263">Apply Research</a></li>
-            </ul>
-          </div>
-          <div class="col-span-2 space-y-6" data-sd-id="264">
-            <h6 class="font-mono-ui text-[11px] font-bold uppercase" data-sd-id="265">Get involved</h6>
-            <a href="https://base2026.dev/support.html" id="footer-support-btn" class="block w-full text-center bg-[var(--surface-paper)] border border-[rgba(19,25,31,0.15)] py-3 rounded-lg font-bold text-[14px]" data-sd-id="266">Support Base2026</a>
-            <a href="https://base2026.dev/partner.html" class="block w-full text-center border border-[rgba(19,25,31,0.15)] py-3 rounded-lg font-bold text-[14px]">Partner with us</a>
-            <p class="text-[12px] text-ink-secondary" data-sd-id="267">© 2026 Base2026. Independent open-source startup founded by Alex Yarosh.</p>
-          </div>
-        </div>
-      </div>
-    </footer>
-  </div>
-
-
-</body></html>
+  </main>
+  {{STARTUP_FOOTER}}
+</body>
+</html>

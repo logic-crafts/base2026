@@ -105,3 +105,9 @@ The manual documents the production system; it does not make the private
 control-plane source public-safe. A fresh public clone can therefore be behind
 the live Worker, and an agent must reconcile source and migrations before any
 deployment.
+
+## Automatic Cloudflare-only publication boundary — 2026-08-23
+
+The dedicated machine lane is live under `base2026.machine-publication.v1` (owner ref `owner-20260823-base2026-auto-publication-v1`, SHA-256 `b37c900a03eb63252c7736c2197f2be1eae3f117eae76914f3cbef306d89e573`, batch10, attempts4). `AUTOMATIC_PUBLICATION_ENABLED=true`, `IMPORT_ENABLED=true` and `PUBLIC_PROJECTION_ENABLED=true`; broad `PUBLIC_RELEASE_ENABLED=false` remains a separate intentional stop. `LOCAL_ADAPTER_ENABLED=false`; Cloudflare discovery runs at `0 10 UTC`, and reconcile/capture/automatic publication run every five minutes.
+
+Automatic admission requires explicit `publication_eligible`, exact source/release/import/manifest tuple and RPC presence/verification. Synthetic fixture `7999999999999999933` is excluded, `full_transcript_public=0` remains enforced, leases are fenced, hard-hold stops the batch globally, and exhausted leases become terminal holds. Valid eligible packets need no user manual review; malformed, privacy-risk and mismatch states fail closed. The first live run applied two packets and recognized one already-public packet with zero retries/holds; public search found both new rows and the site hash was unchanged. Raw media, transcripts, provider responses, private packets, credentials and local paths remain outside public D1/assets.

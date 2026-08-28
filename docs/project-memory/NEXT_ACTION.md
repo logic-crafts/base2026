@@ -1,31 +1,830 @@
 # Next Action
 
-## Current Focus: canonical Cloudflare pipeline manual published — 2026-08-23
+## Current Focus: measured visibility growth — 2026-08-28
 
-Use `docs/BASE2026_CLOUDFLARE_PIPELINE_CANONICAL_OPERATING_MANUAL.md` as the
-mandatory architecture and operating reference. Before any pipeline deploy,
-reconcile the protected operational source and migration state with the live
-Workers; the public GitHub baseline is not assumed to contain the complete live
-private control plane or the latest public projection delta.
+The positioning/design/roadmap release is live on public Worker
+`3f5a6687-4eb8-4ba5-9610-7fe2533282ba`; rollback is
+`63d1f529-47ff-46ba-baeb-db77f6e80fc6`. Live D1 remains 2,150 search
+documents / 1,563 distinct videos / 39 applied projections / zero public full
+transcripts. Desktop/mobile visual QA, dynamic source styling, health, static
+and dynamic sitemaps, typecheck, 37 Worker tests and 16 Python tests pass.
 
-Next runtime action: observe the 2026-08-24 10:00 UTC discovery cycle, record
-discovered/fresh/duplicate/admitted/failed counts, verify budget and hard-hold
-state, then confirm any resulting public projection through both D1 and live
-search. Do not mutate the pipeline merely because the cycle is a valid no-op.
+Next actions, in order:
 
-## Current Focus: Stitch V1 AI Recommends Solutions release closed — 2026-07-15
+1. Push the reviewed public-safe Git branch and open/merge a focused PR.
+2. Monitor GSC and Bing processing; record the first meaningful query,
+   discovery, indexation and exclusion readback without repeated submission.
+3. Select 10–15 existing topic/source clusters with enough evidence and build
+   useful evidence maps; do not create thin programmatic pages.
+4. Add a versioned public dataset sample, API quickstart and corpus changelog.
+5. Resolve the external GitHub CodeQL billing lock, then rerun the security
+   workflow. Do not misclassify that account-level failure as a code failure.
 
-No further action is pending for this release. PR #12 merged as `9a4670143acd615d0e832a855577b61367b89c4b`; exact release `base2026-search-solutions-stitch-v1-preview-r3-20260715-094010` is live at ZIP SHA-256 `711b79b492bd4a70e38379878a39f5230f635dfa4458c08f079463122af2f6c7`. Atomic deploy, exact route/hash and sitemap contracts, Source Detail responsive gate, Solutions-specific `24/24` responsive/interaction gate, and manual live visual QA all passed. Meilisearch, IndexNow, WordPress, corpus data and sitemap membership remained unchanged. Canonical closure: `docs/project-memory/BASE2026_SOLUTIONS_STITCH_V1_PRODUCTION_RELEASE_2026_07_15.md`. Start any further Solutions product/content/visual change as a separate bounded cycle.
+## Current Focus: measure the live SEO/GEO release — 2026-08-28
 
-## Current Focus: Search V1 option A corrective review and Git closure — 2026-07-14
+The technical release is live on public Worker
+`63d1f529-47ff-46ba-baeb-db77f6e80fc6`; rollback is
+`790e21d6-f341-4265-ae0c-7dc536a32495`. Google Search Console and Bing
+Webmaster Tools own the exact Base2026 property and have both the static and
+dynamic sitemaps. IndexNow accepted 57 changed URLs. Do not resubmit the same
+URLs repeatedly or claim indexation before dashboard evidence appears.
 
-Alex explicitly selected option A. Corrective Search-runtime hardening produced exact candidate `base2026-search-v1-derived-20260714-024003.zip` at SHA-256 `3261f235864a57c2c3f17f0ccd9588f24f888b21d5bf5c400ec089fe19311235`. Canonical/new discovery links use `/knowledge/?q=...`; the 4,183 unchanged immutable-baseline files are grandfathered and may retain 10,340 inherited outbound `#search?...` links. Runtime must accept legacy inbound bookmarks and migrate them to query URLs. The changed Search runtime contains no direct DOM HTML assignment and the exact browser gate proves scripts and inline handlers do not execute. This release must not re-export public data, reindex Meilisearch, submit IndexNow, mutate WordPress, or rewrite inherited pages.
+Next actions, in order:
 
-Corrective review is closed (`docs/project-memory/BASE2026_SEARCH_V1_INDEPENDENT_REVIEW.md`): isolated `gpt-5.6-sol`/high returned `VERDICT PASS`, no blockers, and `SAFE_TO_COMMIT YES` for candidate `024003` and the exact nine-file diff. Next exact sequence: rerun final local gates on the documented scope; commit only the reviewed public-safe source/tests/docs set; push the existing PR; wait for green CI and CodeQL; merge; verify the merged SHA contains the exact reviewed code and binds to the frozen ZIP. Stop there for a separate explicit deployment authorization. Only after authorization may the exact ZIP deploy with `-SkipPackage -SkipReindex` and no IndexNow, followed by production contract, legacy-migration, alias, responsive browser, sitemap/data-hash, rollback-readiness checks, cleanup, and production closure. Any code, manifest, or candidate-SHA drift reopens the review gate.
+1. Let Google/Bing process the two sitemaps, then record discovered/indexed
+   counts, exclusions, queries, clicks and Bing AI citations at the first
+   meaningful readback.
+2. Use the completed `$0.077` DataForSEO packet and only run a follow-up when a
+   concrete unresolved decision justifies it; verify current price first.
+3. Convert the measured intent gaps into the first 10–15 source-backed topic
+   maps from `BASE2026_SEO_GEO_GROWTH_MAP_2026_08_28.md`; no thin doorway pages.
+4. Recheck the dynamic sitemap after automatic publication and alert only on a
+   real canonical, privacy, API or indexing regression.
 
-## Current Focus: Source Detail V2 production closure complete — 2026-07-13
+## Superseded checkpoint: DataForSEO methodology-only plan — 2026-08-28
 
-No further release action is pending. Exact release `base2026-source-detail-v2-admission1827-deploycontract-20260713-142944` is live at SHA-256 `a25f1a037572b6878ebc33951e6eec5ff4a89c86ad9c8ea80d3b59b41af6dd65`; transactional deploy and live contract/browser QA passed, rollback was not needed, Meilisearch was intentionally unchanged, and IndexNow accepted the 1,493 changed indexable Source Detail URLs with HTTP 200. Archive/noindex and future/private URLs were excluded from submission. Canonical closure: `docs/project-memory/BASE2026_SOURCE_DETAIL_V2_PRODUCTION_RELEASE_2026_07_13.md`.
+This checkpoint was superseded in the same day. The authenticated positioning
+packet was executed for `$0.077`; exact tasks and results are recorded in
+`DATAFORSEO_POSITIONING_RECEIPT_2026_08_28.md`. Follow-up research is governed
+by a concrete decision, current price check and bounded payload—not an
+arbitrary fixed ceiling.
+
+## Current Focus: observe the repaired Container on the next scheduled capture — 2026-08-26
+
+Private Worker `base2026-pipeline-control` version `dbad0d33-070a-47fd-9e5e-ea36f18c59d4` and healthy Container application version 6 on image `base2026-pipeline-capture:0.5.4` are live. Two private signed reconciliations attempted 6, captured 2, and increased stored private media from 210 to 212. The image uses pinned yt-dlp with curl-cffi and fixed Chrome TLS impersonation; it contains no cookies, login, proxy, or public route. On the next `*/5` receipt, read D1 source states, artifact count, and audit records. Preserve retry backoff/terminal review behavior; do not change the public Worker or `PUBLIC_RELEASE_ENABLED=false`.
+
+## Current Focus: observe the next fair scheduled capture receipt — 2026-08-26
+
+Private Worker `base2026-pipeline-control` version `555f0294-5530-4007-85af-d6e4a9639c4d` and migrations `0013`/`0014` are live. The former starvation defect is repaired: new sources rank first, retries wait 15/30/60 minutes, and attempt four moves only the failing source to private review. The live acquisition fallback is Player API, rendered canonical page, then bounded canonical yt-dlp; immediately re-read D1/R2/audit receipts after the next `*/5` run. Keep public Worker/data unchanged and keep `PUBLIC_RELEASE_ENABLED=false`.
+
+## Current Focus: observe first automatic-publication daily cycle — 2026-08-23
+
+Automatic Cloudflare-only publication is live under policy `base2026.machine-publication.v1` (owner ref `owner-20260823-base2026-auto-publication-v1`, SHA `b37c900a03eb63252c7736c2197f2be1eae3f117eae76914f3cbef306d89e573`, batch10, attempts4). Public Worker `790e21d6-f341-4265-ae0c-7dc536a32495` rolls back to `86faccf2-e986-4437-a39a-4b3d66a1883f`; private v0.6.1 `70fd6e68-ea54-462d-ba27-e3b1a66fa997` rolls back to `f9e4a494-9780-4bd2-bb33-5b7f5a068f81`; private migrations `0011` and `0012` have no pending rows. Dedicated automatic/import/projection gates are true, broad `PUBLIC_RELEASE_ENABLED=false` and local adapter false remain intentional.
+
+The first automatic run was attempted3/applied2/already_public1/retry0/held0/`hard_hold=false`; post-counts are public 2,136 documents / 1,557 videos / 33 projection receipts / 44 cards / zero public full transcripts, private 35 imports / 33 applied projections / 0 ready, registry 4,123 / 209 eligible / 0 invalid eligible. API search found both new rows, replay attempted 0, and the site hash is unchanged. The latest partial discovery is 135 discovered / 21 fresh / 114 duplicates / 21 admitted / 0 held / 1 failed; AI is 308 completed / 18 pending / 43 held at 8,699 Neurons and 246 invocations, hard-blocked 0. Pending jobs resume automatically under the next daily budget.
+
+Do not imply the next observation already happened. The next safe action is to observe and record the first full post-release daily discovery cycle at `2026-08-24 10:00 UTC`; the final `*/5` receipt is reconcile dispatched/recovered/dead-lettered/resumed all0, capture status/attempted/succeeded/failed `completed:0:0:0`, and automatic attempted/applied/already_public/retried/held `0:0:0:0:0`, with signed `hard_hold=false`. Valid eligible packets require no manual review; malformed/privacy/mismatch states fail closed.
+
+## Current Focus: observe v0.5.2 cloud-only reset and scheduled discovery — 2026-08-23
+
+The private Worker `base2026-pipeline-control` v0.5.2 (`f9e4a494-9780-4bd2-bb33-5b7f5a068f81`) is live with migrations `0001`-`0010`. The discovery run admitted 21 fresh rows from 135 discovered across 19 creators. By `20:21Z`, Cloudflare had captured all 21/21: registry state is 4,102 known / 21 captured / 0 admitted, media is 210, and 14 new transcription jobs are durably pending at the restored 7,500-Neuron cap without additional spend. Monthly capture accounting has 25 invocations, zero reservations and no hard hold. The sole remaining `awaiting_capture` row is an older synthetic shadow control, not discovery backlog.
+
+After `00:00 UTC`, let the durable AI holds resume automatically, then observe the `10:00Z` discovery run and five-minute capture/reconcile cron. Do not rearm held jobs manually, enable the direct Container endpoint, reactivate either unloaded local LaunchAgent, use paid fallback, or auto-import/project held packets. Public D1 must remain unchanged and `PUBLIC_RELEASE_ENABLED=false`; owner review remains the release gate.
+
+The four exact `ai_provider_ai_error` rows created by the superseded native-schema deployment are already audited and queued for `2026-08-24 00:00:00`; do not requeue them again. Their receipt event is `AI_PROVIDER_CONTRACT_REPAIRED_REQUEUE`. Evidence-range and transcription-invalid holds remain deliberate private review states.
+
+## Current Focus: wait for the next UTC AI budget reset — 2026-08-23
+
+The bounded daily Cloudflare run is complete. Fresh discovery returned 245 exact TikTok source rows; one exact unseen ID was admitted after dry-run, staged audio-only, uploaded with manifest, and enqueued. The source is durably held at `ai_soft_cap`; no Luna-ready source remained after Cloudflare reconciliation, so no import or projection was attempted. The fresh discovery remainder is zero.
+
+Live receipts: private Worker v0.4.2 is healthy; private D1 is 191 sources / 188 media / 188 manifests / 32 private imports; normal and AI outboxes have zero non-sent rows; reconcile and maintenance report zero dispatch/recovery/resume/dead-letter work. Workers AI is 7,494/7,500 Neurons with hard block `0`. Public D1 remains 2,134 documents / 1,555 unique TikTok videos / zero full transcripts, with 31 applied exact projections.
+
+Next safe action: after the next UTC reset, reconcile Cloudflare and process only sources whose transcription and semantic guard have completed. Do not manually rearm today’s cap hold, retry media without a real extractor change, run the legacy controller for `cloud-*` batches, or enable broad release, Container, AI Gateway or paid fallback. Aggregate receipt: `PRIVATE_BASE2026_WORK_INBOX/cloud-discovery-20260823-01/aggregate-receipt.json`.
+
+## Current Focus: allow the repaired free-cap queue to resume — 2026-08-23
+
+No manual recovery is pending. Private Worker v0.4.2 is live and consistent; the next UTC budget reset will resume cap-deferred Workers AI jobs without consuming prior attempts. The active 06:00 Luna Max automation must reconcile existing D1/R2/Queue/Workflow receipts first, drain ready semantic sources in batches of at most 10, then run fresh discovery and explicit admission waves. Do not reset the 7,500/9,000 Neuron gates or enable a paid fallback.
+
+Current receipts: local canonical 4,101; fresh unseen remainder zero; the latest eight-source intake uploaded seven and held `7676979014401051917` in `media_retry_pending`; private D1 has 190 sources / 187 media / 187 manifests / 32 private imports. The latest two Luna batches passed eight of 20 and held twelve. Public D1 is 2,134 documents / 1,555 unique TikTok videos, 31 applied projections and zero full-transcript rows.
+
+The one media retry may be attempted only after a real TikTok extractor/transport change; do not force it with inferred audio or visual content. Keep every local private directory/file at `0700`/`0600`, reject symlinks/non-regular artifacts, and keep broad release, Container, AI Gateway and paid fallback disabled.
+
+## Current Focus: drain the live batch Cloudflare queue — 2026-08-22
+
+The current discovery snapshot is fully admitted: 210/210 unseen IDs entered the private queue, bringing local canonical inventory to 4,093. Audio-first staging plus one retry uploaded 178 sources; 32 remain private retry/manual-source work. Cloudflare holds 180 media/manifests including two earlier control sources and is continuing transcription/guard work under the daily Neuron stop.
+
+Luna reviewed 31 completed sources in four compact batches. Twenty-two exact-evidence sources passed and are live; nine were held. Public D1 is 2,129 documents / 1,548 unique TikTok videos. Projection ledger has 23 applied entries including the pilot, and broad `PUBLIC_RELEASE_ENABLED=false` remains unchanged.
+
+Next safe action is automated: the daily 06:00 `base2026-daily-bounded-discovery-intake` Luna Max run must reconcile existing Cloudflare D1/R2/Queue/Workflow receipts first, process every ready semantic source in batches of at most 10, retry transport failures without forcing no-audio sources through transcription, and only then refresh discovery/admit the full exact unseen set through repeated waves of at most 100. Evidence excerpts must pass exact continuous-span validation before upload. Keep Container, AI Gateway, paid fallback and broad release disabled.
+
+Rollback/stop order: pause the daily automation, disable exact projection on a new fail-closed private deployment, use source-level projection rollback when necessary, and retain public Worker `806e35c7-f230-4e77-aeea-15169b4faaf0` plus D1 Time Travel as recovery points.
+
+## Current Focus: curated Outreach v1 is live — 2026-08-21
+
+The Outreach extension is complete and live at `https://base2026.dev/workspace/` on Worker `806e35c7-f230-4e77-aeea-15169b4faaf0`. Separate public D1 `base2026-outreach-search` contains 78 semantically selected findings and returns 78/78/83/86 findings/FTS/topics/lanes. Existing Evidence and private Inbox data remain separate. Immediate rollback is Worker `34bdf3fe-90f8-4580-a88b-d39503655818`.
+
+There is no further release action now. The next safe product task is to review the live 78-row v1 corpus and make deliberate UI/content improvements. Any future data refresh must create a new semantic selection and explicit admission set; do not bulk-sync the workbook or infer publication from score/status. Keep private operations, contacts, GSC/GA4, ACQ3, Gmail, Search Ops, client and queue data excluded.
+
+Primary receipt: `BASE2026_OUTREACH_PRODUCTION_RELEASE_2026_08_21.md`.
+
+## Current Focus: Base2026 independent design recovery and Google Workspace email are live — 2026-08-20
+
+Owner-authorized design recovery `b26-independent-v1` and its r10 mobile-scroll hotfix are live at `https://base2026.dev/` on Cloudflare Worker version `34bdf3fe-90f8-4580-a88b-d39503655818`. Hotfix candidate `/tmp/base2026-mobile-scroll-r10-exact-r9` is the exact r9 corpus with one changed asset, `static/base2026-startup-homepage.css` SHA-256 `e65eb7856c724519e633d02b0cd2e6a87ab90b564dbbad8a2e0c3cd1568a625f`; deterministic tree SHA-256 is `ad3bce0fffb6c9ec3720e0eb494475551037f12a8060d774f2c206dda7ac818c`. Cloudflare confirmed one new/modified upload and 4,228 reused assets. The root-only `overflow: clip` rule is gone; live WebKit/iPhone scrolling, menu open/close, zero horizontal overflow, Workspace scrolling and D1 search passed.
+
+The first live visual pass found one real Roadmap mixed-content warning caused by the legacy `mailto:` contact form. The release builder and info-page generator now emit a Base2026 Support CTA instead; `r9` was rebuilt, re-tested and deployed. Final mobile Roadmap QA at 390 px has zero overflow, console errors or warnings. Root and Workspace return 200; `.html` assets preserve Cloudflare's 307 pretty-route redirect. Live D1 search returned 40 estimated `schema` hits. A synthetic Support submission was accepted, read back from private inbox D1 and then deleted by exact reference.
+
+Google Workspace Business Starter is the live email provider for `base2026.dev`. `hello@base2026.dev` is the primary Gmail profile; `offflinerpsy@gmail.com` remains a retained sender/recipient identity in the same account. Cloudflare Email Routing was disabled before the cutover, so mail DNS has one provider only. Public resolvers show MX `1 smtp.google.com`, Google SPF, 2048-bit DKIM selector `google`, and DMARC monitoring (`p=none`, reports to `hello@base2026.dev`). Google reports Gmail activated and accepted DKIM. A message from `hello@base2026.dev` to the retained Gmail address and a reverse message from the retained Gmail address to `hello@base2026.dev` were both accepted and stored with the expected From/To headers.
+
+Immediate rollback is Worker `48d8ea7e-f9db-464c-a173-265ab991fc24` (r9). Older rollback points are `3c12d5a3-5855-4971-b163-9d5b067e8031` (initial design recovery), `237385ff-5984-44c8-8df3-b52873249296` (pre-recovery startup release), `c5e88c7f-707b-4572-8d33-e369eecb2bb7`, and `4389e513-c16a-4bcf-9f8c-b97ac55b7825`. No D1 schema/data migration, canonical/indexability change, Git staging, commit or push occurred.
+
+Mail gate: closed. Independent AboutMyEmail receipt `https://aboutmy.email/27aeac2d` reports SPF aligned, DKIM aligned and DMARC pass (`p=none`), with the message sent by Google's IPv6 mail infrastructure. No further mail mutation is required now. Preserve Google-only MX routing; after an observation period, DMARC may be tightened from `p=none` only as a separate evidence-backed decision.
+
+## Current Focus: GitHub publication complete; external Actions blockers remain — 2026-08-20
+
+GitHub OAuth is active for `offflinerpsy`. Reviewed commits `3a6cd166a4bae8df8063d8ac882225f47494aae8` and `de96c08f8f5e28f3ac0ce5236093b4f0b5c152e9` were pushed to `codex/base2026-startup-publication-20260820`; `main` was fast-forwarded from `03ac829a25da66abdcd594ce766fcc00f0497fef` to `de96c08f8f5e28f3ac0ce5236093b4f0b5c152e9`. Repository description, homepage and topics now present Base2026 as an open-source public-source intelligence startup at `https://base2026.dev/`. The public README contains zero Aggressor Bulletkit or `aggressorbulkit.online` markers.
+
+GitHub CodeQL jobs cannot start because GitHub reports an account/organization billing lock. The legacy GitHub Pages build succeeds, but GitHub returned HTTP 500 while creating its deployment on the initial run and one bounded retry. These are external GitHub failures, not source failures; Cloudflare production remains HTTP 200 with the startup shell and zero personal markers on Home, Roadmap, About, Partner and Support.
+
+Next safe action: resolve the GitHub billing lock and rerun CodeQL; retry the legacy Pages deployment after the GitHub deployment API recovers. Do not change product source or Cloudflare production to mask these external failures.
+
+Cross-machine continuity was re-ingested on 2026-08-20. The pinned live architecture is Worker `237385ff-5984-44c8-8df3-b52873249296`, public D1 search `base2026-public-search` (`ac034130-4169-43c2-9a17-4b72d05457b0`), separate private proposals D1 `base2026-inbox` (`542a77ef-da00-4522-8b7a-3d78fc646c72`), with Worker rollbacks `c5e88c7f-707b-4572-8d33-e369eecb2bb7` and `4389e513-c16a-4bcf-9f8c-b97ac55b7825`. Treat the earlier current-focus entries below as historical unless they agree with this top record.
+
+## Current Focus: standalone startup surface is live — 2026-08-20
+
+Base2026 is live as a standalone solo-founder open-source startup on Cloudflare Worker version `237385ff-5984-44c8-8df3-b52873249296`. The product shell has no personal-services navigation or `aggressorbulkit.online` links. Dedicated Support, Partner, About and Privacy pages are live; Support and Partner proposals are validated by the Worker and stored in the separate private `base2026-inbox` D1 database with a documented 90-day retention policy.
+
+Release gates passed: 6/6 Python tests, 10/10 Worker tests, TypeScript, import dry-run, Wrangler dry-run, 189,455 internal targets with zero missing links, all personal-shell/publication counters at zero, production search and form write/readback, and desktop/mobile browser checks with zero overflow or console errors. The exact production QA form row was deleted after verification. Rollback Worker versions remain `c5e88c7f-707b-4572-8d33-e369eecb2bb7` and `4389e513-c16a-4bcf-9f8c-b97ac55b7825`.
+
+Two reviewed commits are ready on clean branch `codex/base2026-startup-publication-20260820`: `3a6cd166a4bae8df8063d8ac882225f47494aae8` and `de96c08f8f5e28f3ac0ce5236093b4f0b5c152e9`. Publication audit passes 40/40 public-safe files with zero forbidden or secret findings; both npm packages report zero vulnerabilities. Push is blocked only because the active `offflinerpsy` fine-grained PAT exceeds the organization's 366-day lifetime policy. No remote branch or metadata changed.
+
+Next safe action: shorten that token's expiration to 366 days or less, or authenticate GitHub CLI with an organization-approved credential, then push the verified branch and set the repository homepage, description and topics. No rebuild or recommit is required. Do not stage `output/`, private data, local databases, logs, credentials, ignored pipeline artifacts or unrelated dirty-worktree changes.
+
+## Current Focus: Startup front page is live; search moved to `/workspace/` — 2026-08-20
+
+The user-selected Superdesign `Base2026 Startup Front Page` is live at `https://base2026.dev/` on Cloudflare Worker version `c5e88c7f-707b-4572-8d33-e369eecb2bb7`. The prior search experience is preserved at `https://base2026.dev/workspace/`; legacy `/search*` routes now redirect there. The D1 search binding and the other 4,294 uploaded public assets were preserved.
+
+Production QA passed at desktop 1440 px and mobile 390 px with no horizontal overflow or console errors. The homepage CTA reaches `/workspace/`, the workspace manifest and analytics load from root static assets, and a live `fan-out` search returns attributed `@build_in_public` evidence. Source/publication safety checks, 9 Python tests, Worker typecheck, 7 Worker tests, import dry-run, and Wrangler dry-run passed.
+
+Next safe action: design and implement the dedicated Support / Partner page and form, then run the same public-boundary, desktop/mobile, and Worker release gates. Keep Cloudflare version `4389e513-c16a-4bcf-9f8c-b97ac55b7825` and the timestamped candidate/source archives as rollback points. No commit or push has been performed for this release.
+
+## Current Focus: Base2026 domain separation is live — 2026-08-19
+
+`https://base2026.dev/` is live on Cloudflare Workers Static Assets with D1 FTS5 public search. `https://www.base2026.dev/` permanently redirects to the apex. Alex Personal WordPress remains live and unchanged at `https://aggressorbulkit.online/` on the VPS. Legacy `/knowledge/*` routes redirect path-preservingly to Base2026, and the old search POST route returns a 308 to the Worker API.
+
+Verified release: Worker version `4389e513-c16a-4bcf-9f8c-b97ac55b7825`; D1 database `base2026-public-search` contains 2,095 public documents and 3,804 topic links. Main routes, robots, sitemap, llms, canonical URLs, search/highlighting/facets, 163,729 internal link targets, production browser rendering, nginx syntax, WordPress root, and rollback backups passed.
+
+Next safe action: make startup presentation/content changes directly against the Base2026 Cloudflare candidate, rebuild with `scripts/build-base2026-cloudflare-release.py`, then deploy the reviewed Worker. Keep the private pipeline and VPS release available until the new origin has had a short stability window; do not delete the old VPS artifact or Meilisearch yet.
+
+## Current Focus: controller and selector remain authoritatively idle — 2026-07-29 19:40 EDT
+
+The scheduled run reconciled durable private stage artifacts against the prior controller receipt. No completed ChatGPT response was newer than that receipt, and no response lacked its corresponding normalised/per-source stored packets, so no normalisation, stage courier, or transcript-status apply was required.
+
+The sole-authority controller rerun at `2026-07-29T23:39:48Z` is idle with `already_imported=33`, `hold_private=60`, no pending release admission, no active rate limit, and acknowledged release `base2026-daily-batch-20260729-03-release`. The required queued/needs-source-review selector returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`.
+
+Next safe action: a later scheduled run should reconcile durable packets, rerun the controller, and obey only its persisted work order. No ChatGPT submission, media/Groq recovery, import, build, deploy, discovery-preview import, or public/UI/SEO contract change is authorised from this idle receipt.
+
+## Current Focus: controller and selector remain authoritatively idle — 2026-07-29 19:02 EDT
+
+The scheduled run reconciled durable private stage artifacts against the prior controller receipt. No completed ChatGPT response was newer than that receipt, and the latest durable batch had no response lacking its normalised/per-source stored packets, so no normalisation, stage courier, or transcript-status apply was required.
+
+The sole-authority controller rerun at `2026-07-29T23:01:57Z` is idle with `already_imported=33`, `hold_private=60`, no pending release admission, no active rate limit, and acknowledged release `base2026-daily-batch-20260729-03-release`. The required queued/needs-source-review selector returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`.
+
+Next safe action: a later scheduled run should reconcile durable packets, rerun the controller, and obey only its persisted work order. No ChatGPT submission, media/Groq recovery, import, build, deploy, discovery-preview import, or public/UI/SEO contract change is authorised from this idle receipt.
+
+## Current Focus: controller and selector remain authoritatively idle — 2026-07-29 18:32 EDT
+
+The scheduled run reconciled durable private stage artifacts against the prior controller receipt. No completed ChatGPT response was newer than that receipt, and the latest durable batch had no response lacking its normalised/per-source stored packets, so no normalisation, stage courier, or transcript-status apply was required.
+
+The sole-authority controller rerun at `2026-07-29T22:32:32Z` is idle with `already_imported=33`, `hold_private=60`, no pending release admission, no active rate limit, and acknowledged release `base2026-daily-batch-20260729-03-release`. The required queued/needs-source-review selector returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`.
+
+Next safe action: a later scheduled run should reconcile durable packets, rerun the controller, and obey only its persisted work order. No ChatGPT submission, media/Groq recovery, import, build, deploy, discovery-preview import, or public/UI/SEO contract change is authorised from this idle receipt.
+
+## Current Focus: controller and selector remain authoritatively idle — 2026-07-29 18:03 EDT
+
+The scheduled run reconciled durable private stage artifacts against the prior controller receipt. No completed ChatGPT response was newer than that receipt, and the latest durable batch had no response lacking its normalised/per-source stored packets, so no normalisation, stage courier, or transcript-status apply was required.
+
+The sole-authority controller rerun at `2026-07-29T22:02:49Z` is idle with `already_imported=33`, `hold_private=60`, no pending release admission, no active rate limit, and acknowledged release `base2026-daily-batch-20260729-03-release`. The required queued/needs-source-review selector returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`.
+
+Next safe action: a later scheduled run should reconcile durable packets, rerun the controller, and obey only its persisted work order. No ChatGPT submission, media/Groq recovery, import, build, deploy, discovery-preview import, or public/UI/SEO contract change is authorised from this idle receipt.
+
+## Current Focus: controller and selector remain authoritatively idle — 2026-07-29 17:30 EDT
+
+The scheduled run reconciled durable private stage artifacts against the prior controller receipt. No completed ChatGPT response was newer than that receipt, and the latest durable batch had no response lacking its normalised/per-source stored packets, so no normalisation, stage courier, or transcript-status apply was required.
+
+The sole-authority controller rerun at `2026-07-29T21:30:07Z` is idle with `already_imported=33`, `hold_private=60`, no pending release admission, no active rate limit, and acknowledged release `base2026-daily-batch-20260729-03-release`. The required queued/needs-source-review selector returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`.
+
+Next safe action: a later scheduled run should reconcile durable packets, rerun the controller, and obey only its persisted work order. No ChatGPT submission, media/Groq recovery, import, build, deploy, discovery-preview import, or public/UI/SEO contract change is authorised from this idle receipt.
+
+## Current Focus: controller and selector remain authoritatively idle — 2026-07-29 17:00 EDT
+
+The scheduled run reconciled durable private stage artifacts against the prior controller receipt. No completed ChatGPT response was newer than that receipt, and no uncouriered response lacking its normalised/per-source stored packets was found, so no normalisation, stage courier, or transcript-status apply was required.
+
+The sole-authority controller rerun at `2026-07-29T20:59:57Z` is idle with `already_imported=33`, `hold_private=60`, no pending release admission, no active rate limit, and acknowledged release `base2026-daily-batch-20260729-03-release`. The required queued/needs-source-review selector returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`.
+
+Next safe action: a later scheduled run should reconcile durable packets, rerun the controller, and obey only its persisted work order. No ChatGPT submission, media/Groq recovery, import, build, deploy, discovery-preview import, or public/UI/SEO contract change is authorised from this idle receipt.
+
+## Current Focus: controller and selector remain authoritatively idle — 2026-07-29 16:30 EDT
+
+The scheduled run reconciled durable private stage artifacts against the prior controller receipt. No completed ChatGPT response was newer than that receipt, and the latest batch contained no uncouriered response lacking its stored per-source packets, so no normalisation, stage courier, or transcript-status apply was required.
+
+The sole-authority controller rerun at `2026-07-29T20:30:52Z` is idle with `already_imported=33`, `hold_private=60`, no pending release admission, no active rate limit, and acknowledged release `base2026-daily-batch-20260729-03-release`. The required queued/needs-source-review selector returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`.
+
+Next safe action: a later scheduled run should reconcile durable packets, rerun the controller, and obey only its persisted work order. No ChatGPT submission, media/Groq recovery, import, build, deploy, discovery-preview import, or public/UI/SEO contract change is authorised from this idle receipt.
+
+## Current Focus: controller and selector remain authoritatively idle — 2026-07-29 15:56 EDT
+
+The scheduled run reconciled durable private stage artifacts against the prior controller receipt. No completed ChatGPT response was newer than that receipt, and the latest batch contained no raw response lacking its normalised/per-source stored packets, so no courier or transcript-status apply was required.
+
+The sole-authority controller rerun at `2026-07-29T19:56:01Z` is idle with `already_imported=33`, `hold_private=60`, no pending release admission, no active rate limit, and acknowledged release `base2026-daily-batch-20260729-03-release`. The required queued/needs-source-review selector returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`.
+
+Next safe action: a later scheduled run should reconcile durable packets, rerun the controller, and obey only its persisted work order. No ChatGPT submission, media/Groq recovery, import, build, deploy, discovery-preview import, or public/UI/SEO contract change is authorised from this idle receipt.
+
+## Current Focus: controller and selector remain authoritatively idle — 2026-07-29 15:28 EDT
+
+The scheduled run reconciled durable private stage artifacts against the prior controller receipt. No completed ChatGPT response was newer than that receipt, and the latest batch contained no raw response lacking its normalised/per-source stored packets, so no courier or transcript-status apply was required.
+
+The sole-authority controller rerun at `2026-07-29T19:27:49Z` is idle with `already_imported=33`, `hold_private=60`, no pending release admission, no active rate limit, and acknowledged release `base2026-daily-batch-20260729-03-release`. The required queued/needs-source-review selector returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`.
+
+Next safe action: a later scheduled run should reconcile durable packets, rerun the controller, and obey only its persisted work order. No ChatGPT submission, media/Groq recovery, import, build, deploy, discovery-preview import, or public/UI/SEO contract change is authorised from this idle receipt.
+
+## Current Focus: controller and selector remain authoritatively idle — 2026-07-29 14:56 EDT
+
+The scheduled run found no completed ChatGPT response newer than the prior durable controller receipt and no response lacking its stored per-source packets, so no courier reconciliation or transcript-status apply was required.
+
+The sole-authority controller rerun at `2026-07-29T18:56:01Z` remains idle with `already_imported=33`, `hold_private=60`, no pending release admission, no active rate limit, and the previously acknowledged release `base2026-daily-batch-20260729-03-release`. The required queued/needs-source-review selector returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`.
+
+Next safe action: a later scheduled run should reconcile durable packets, rerun the controller, and obey only its persisted work order. No ChatGPT submission, media/Groq recovery, import, build, deploy, discovery-preview import, or public/UI/SEO contract change is authorised from this idle receipt.
+
+## Current Focus: bounded daily queue is fully released and idle — 2026-07-29 14:30 EDT
+
+The sole-authority controller authorised import of exactly the final two `daily-batch-20260729-01` Production packets: `7667677267211865376` and `7667726450258201869`. Both deterministic preflights and applies passed, adding four reviewed public cards in the expected one-plus-three split.
+
+Release operation `base2026-daily-batch-20260729-03-release` rebuilt and atomically admitted the public export with 1,724 source records, 2,319 passages, 2,463 insight cards, 1,939 public insight cards, and 1,670 topics. The canonical data-only release gate passed newest-source readiness, publication boundary (`needs_review=0`, `forbidden=0`, `secret_findings=0`), public export policy (`include_full_transcripts=false`), release contract, packaging, VPS deployment, Meilisearch reindex task `551`, and the bounded 250-page live crawl with zero bad-link contracts, crawled error pages, or warning groups.
+
+Direct live verification confirmed the release marker and both source routes: each returns `200`, declares `index,follow`, uses its exact self-canonical, appears once in the live document dataset, and exposes the expected public-card counts of one and three. The controller acknowledged the release at `2026-07-29T18:30:19Z`.
+
+Current durable controller state is `already_imported=33` and `hold_private=60`, with no pending release admission, no active rate limit, and an idle work order. The required queued/needs-source-review selector returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`. Next safe action: a later scheduled run should reconcile durable packets, rerun the controller, and obey only its persisted work order. Do not import discovery previews or change any UI/template/CSS/JS, indexability, canonical, redirect, pricing, or public-positioning contract.
+
+## Current Focus: final two Production packets are ready for import — 2026-07-29 14:02 EDT
+
+The sole-authority controller selected exactly the final two sources from `daily-batch-20260729-01` for Production Packets: `7667677267211865376` and `7667726450258201869`. One authenticated `Base2026 Production Packets` Project submission returned two ordered `base2026.production-packet.v1` objects with status `READY_FOR_IMPORT`. The exact two transcript, Source Intelligence, and Editorial triples were delivered once in controller order through the approved private-paste attachment path with the pinned prompt/schema.
+
+The complete JSON-only response was captured through the Project's exact response-copy action, transport-normalised without semantic repair, reviewer-validated, and stored as two private production packets. All four Editorial-admitted cards are present and map exactly to their Source Intelligence fields, evidence excerpts, timestamps, and topics. Strict field sets and declared limits, source order and identity, source metadata, rounded final transcript duration, private-field exclusions, and public-source-text similarity of `0.9855` and `0.8269` passed. Both deterministic importer preflights passed without writes.
+
+The required controller rerun at `2026-07-29T18:02:21Z` reports `already_imported=31`, `ready_for_import=2`, and `hold_private=60`, with no pending release admission, no active rate limit, acknowledged release `base2026-daily-batch-20260729-02-release`, and `public_content=false`.
+
+Next safe action: on the next scheduled run, reconcile durable packets, rerun `python3 scripts/base2026-pipeline-controller.py --apply --limit 4`, and import exactly the two controller-listed production packets. If at least one import succeeds, record a dated pending release and run the existing data-only export, release gate, deploy, reindex, and bounded live verification before acknowledging the release. Do not make another ChatGPT submission or change any public/UI/SEO contract in this completed Production run.
+
+## Current Focus: final two Editorial decisions validated; Production is next — 2026-07-29 13:33 EDT
+
+The sole-authority controller selected exactly the final two sources from `daily-batch-20260729-01` for Editorial Validation: `7667677267211865376` and `7667726450258201869`. One authenticated `Base2026 Editorial Validation` Project submission returned two ordered `base2026.editorial-decision.v1` receipts with status `OK`. The exact two transcript/Source Intelligence pairs were attached once in controller order with the pinned prompt/schema.
+
+The complete JSON-only response was captured, transport-normalised without semantic repair, reviewer-validated, and stored as two private Editorial decisions. All four candidate cards were admitted, and both source-level decisions are `ADMIT_PUBLIC`. The reviewer gate passed strict field sets, source order and identity, reason-length limits, complete zero-based card-index coverage, source/card decision consistency, `needs_review=true` / `public=false` on every supplied candidate, exact transcript segment boundaries, and complete contiguous transcript-evidence equality.
+
+The required controller rerun at `2026-07-29T17:33:40Z` reports `already_imported=31`, `production=2`, and `hold_private=60`, with no pending release admission, no active rate limit, acknowledged release `base2026-daily-batch-20260729-02-release`, and `public_content=false`.
+
+Next safe action: on the next scheduled run, reconcile durable packets, rerun `python3 scripts/base2026-pipeline-controller.py --apply --limit 4`, and submit exactly the two controller-listed IDs to the authenticated Base2026 Production Packets Project. Do not make a second ChatGPT submission, import, build, deploy, or change any public/UI/SEO contract in this completed Editorial run.
+
+## Current Focus: final two Source Intelligence packets validated; Editorial is next — 2026-07-29 13:02 EDT
+
+The sole-authority controller selected exactly the final two sources from `daily-batch-20260729-01` for Source Intelligence: `7667677267211865376` and `7667726450258201869`. One authenticated `Base2026 Source Intelligence` Project submission returned two ordered `base2026.source-intelligence.v1` packets with status `OK`. The exact two approved transcript packets plus the pinned prompt/schema were delivered once through the approved private-paste attachment path.
+
+The complete JSON-only response was captured, transport-normalised without semantic repair, reviewer-validated, and stored as two private Source Intelligence packets. The reviewer gate passed strict field sets and declared size limits, source order and identity, topic patterns, private flags, exact transcript segment boundaries, and complete contiguous transcript-evidence equality for all four cards.
+
+The required controller rerun at `2026-07-29T17:01:49Z` reports `already_imported=31`, `editorial=2`, and `hold_private=60`, with no pending release admission, no active rate limit, acknowledged release `base2026-daily-batch-20260729-02-release`, and `public_content=false`.
+
+Next safe action: on the next scheduled run, reconcile durable packets, rerun `python3 scripts/base2026-pipeline-controller.py --apply --limit 4`, and submit exactly the two controller-listed IDs to the authenticated Base2026 Editorial Validation Project. Do not make a second ChatGPT submission, import, build, deploy, or change any public/UI/SEO contract in this completed Source Intelligence run.
+
+## Current Focus: final two transcripts validated; Source Intelligence is next — 2026-07-29 12:33 EDT
+
+The sole-authority controller selected exactly the final two sources from `daily-batch-20260729-01` for Transcription: `7667677267211865376` and `7667726450258201869`. One authenticated `Base2026 Transcription` Project submission returned two ordered `base2026.transcript.v1` packets with status `OK`. The exact two private Groq packets plus the pinned prompt/schema were delivered once through the approved private-paste attachment path.
+
+The complete JSON-only response was captured, normalised without semantic repair, stored as two private transcript packets, and applied to the private queue. The reviewer gate passed strict field sets, source order and identity, exact metadata and hashes, non-empty ordered timestamp segments, and transcript-to-ASR similarity of `1.0000` for both packets.
+
+The required controller rerun at `2026-07-29T16:32:44Z` reports `already_imported=31`, `source_intelligence=2`, and `hold_private=60`, with no pending release admission, no active rate limit, acknowledged release `base2026-daily-batch-20260729-02-release`, and `public_content=false`.
+
+Next safe action: on the next scheduled run, reconcile durable packets, rerun `python3 scripts/base2026-pipeline-controller.py --apply --limit 4`, and submit exactly the two controller-listed IDs to the authenticated Base2026 Source Intelligence Project. Do not make a second ChatGPT submission, import, build, deploy, or change any public/UI/SEO contract in this completed Transcription run.
+
+## Current Focus: four-source data release is live; final Transcription pair is next — 2026-07-29 12:00 EDT
+
+The controller-authorised `ready_for_import` work order imported exactly four production packets from `daily-batch-20260729-01`: `7665896145075375373`, `7666514383626980621`, `7666897429983218957`, and `7667360650326199565`. All four deterministic importer preflights and applies passed, adding eleven reviewed public cards.
+
+Release operation `base2026-daily-batch-20260729-02-release` rebuilt and atomically admitted the public export with 1,722 source records, 2,315 passages, 2,459 insight cards, 1,935 public insight cards, and 1,670 topics. The canonical data-only release gate passed content readiness, publication boundary (`needs_review=0`, `forbidden=0`, `secret_findings=0`), public export policy (`include_full_transcripts=false`), release contract, packaging, VPS deployment, Meilisearch reindex task `547`, and the bounded 250-page live crawl with zero bad-link contracts, crawled error pages, or warning groups.
+
+Direct live verification confirmed the release marker and all four source routes: each returns `200`, declares `index,follow`, uses its exact self-canonical, appears once in the live document dataset, and exposes the expected approved-card split of 2/3/3/3. The controller acknowledged the release at `2026-07-29T16:00:08Z`.
+
+Current durable controller state is `already_imported=31`, `hold_private=60`, and `transcription=2`, with no pending release admission, no active rate limit, and `public_content=false`. Next safe action: on the next scheduled run, reconcile durable packets, rerun `python3 scripts/base2026-pipeline-controller.py --apply --limit 4`, and submit exactly the two controller-listed Transcription IDs to the authenticated Base2026 Transcription Project. Apply transcript statuses and rerun the controller once after couriering the complete response. Do not import, build, deploy, or process a second ChatGPT stage unless a later controller work order authorizes that branch. No UI/template/CSS/JS, indexability, canonical, redirect, pricing, or public-positioning contract changed in this release.
+
+## Current Focus: four private Production packets are ready for import — 2026-07-29 11:36 EDT
+
+The sole-authority controller selected exactly four sources from `daily-batch-20260729-01` for Production Packets: `7665896145075375373`, `7666514383626980621`, `7666897429983218957`, and `7667360650326199565`. One authenticated `Base2026 Production Packets` Project submission returned four ordered `base2026.production-packet.v1` objects with status `READY_FOR_IMPORT`. The exact controller-matched transcript, Source Intelligence, and Editorial triples were delivered once through the approved private-paste attachment path with the pinned prompt/schema.
+
+The complete JSON-only response was captured, transport-normalised, reviewer-validated, and stored as four private production packets. The reviewer gate passed strict field sets and declared size limits, source order and identity, source metadata, rounded final transcript duration, editorial admission coverage, exact admitted-card mapping, evidence excerpts and timestamp boundaries, and absence of private transport fields. All eleven admitted cards are present and the one rejected card is absent. All four deterministic importer preflights passed without writes.
+
+The required controller rerun at `2026-07-29T15:35:56Z` reports `already_imported=27`, `ready_for_import=4`, `hold_private=60`, and `transcription=2`, with no pending release admission, no active rate limit, and `public_content=false`.
+
+Next safe action: on the next scheduled run, reconcile durable packets, rerun `python3 scripts/base2026-pipeline-controller.py --apply --limit 4`, and import exactly its four `ready_for_import` packets. If at least one import succeeds, record a dated pending release and execute the existing data-only export, release gate, deploy, reindex, and bounded live verification before acknowledgement. Do not submit the two remaining Transcription records in that run unless a later controller work order authorizes that stage. No public/UI/SEO contract changed in this Production pass.
+
+## Current Focus: four private Editorial decisions passed; Production is next — 2026-07-29 11:06 EDT
+
+The sole-authority controller selected exactly four sources from `daily-batch-20260729-01` for Editorial Validation: `7665896145075375373`, `7666514383626980621`, `7666897429983218957`, and `7667360650326199565`. One authenticated `Base2026 Editorial Validation` Project submission returned four ordered `OK` receipts covering all twelve candidate cards. Eleven cards were admitted and one context-dependent card was rejected; all four sources remain source-level `ADMIT_PUBLIC`.
+
+The complete JSON-only response was captured, normalised without transport repair, and stored as four private editorial decisions. The reviewer gate passed strict schema keys, source order and identity, reason-length limits, complete card-index coverage, source/card decision consistency, and exact contiguous transcript evidence with matching segment-boundary timestamps for all twelve candidates. The required controller rerun at `2026-07-29T15:06:03Z` reports `already_imported=27`, `production=4`, `hold_private=60`, and `transcription=2`, with no pending release admission, no active rate limit, and `public_content=false`.
+
+Next safe action: on the next scheduled run, reconcile durable packets, rerun `python3 scripts/base2026-pipeline-controller.py --apply --limit 4`, and submit only its exact four-source Production Packets work order. Do not process the remaining two Transcription records or make a second ChatGPT submission in this run. Do not import, export, build, deploy, reindex, or change any public/UI/SEO contract unless a later controller work order authorizes that branch.
+
+## Current Focus: four Source Intelligence packets are contract-valid; Editorial is next — 2026-07-29 10:37 EDT
+
+The sole-authority controller selected exactly four sources from `daily-batch-20260729-01` for Source Intelligence: `7665896145075375373`, `7666514383626980621`, `7666897429983218957`, and `7667360650326199565`. One authenticated `Base2026 Source Intelligence` Project submission returned four ordered `OK` packets with twelve private candidate cards.
+
+The complete response contained one transport-only defect: quotation marks inside a verbatim evidence excerpt were not JSON-escaped. The existing `base2026-normalize-chatgpt-json.py` courier repaired only that transport encoding. The reviewer gate then passed exact source order, strict schema keys and limits, private flags, exact segment-boundary timestamps, and complete contiguous transcript evidence for all twelve cards. Four private Source Intelligence packets were stored. The required controller rerun at `2026-07-29T14:37:28Z` reports `already_imported=27`, `editorial=4`, `hold_private=60`, and `transcription=2`, with no pending release admission, no active rate limit, and `public_content=false`.
+
+Next safe action: on the next scheduled run, reconcile durable packets, rerun `python3 scripts/base2026-pipeline-controller.py --apply --limit 4`, and submit only its exact four-source Editorial Validation work order. Do not process the remaining two Transcription records or make a second ChatGPT submission in this run. Do not import, export, build, deploy, reindex, or change any public/UI/SEO contract unless a later controller work order authorizes that branch.
+
+## Current Focus: Source Intelligence evidence mismatch failed closed; same four sources remain queued — 2026-07-29 10:06 EDT
+
+The sole-authority controller selected exactly four sources from `daily-batch-20260729-01` for Source Intelligence: `7665896145075375373`, `7666514383626980621`, `7666897429983218957`, and `7667360650326199565`. One authenticated `Base2026 Source Intelligence` Project submission returned four ordered `OK` packets with twelve private candidate cards.
+
+The complete JSON-only response was captured and transport-normalised. Source order, schema keys, declared field limits, private flags, and eleven of twelve contiguous evidence checks passed. The reviewer gate found one contract mismatch for source `7666897429983218957`: the card declared timestamps `80.88–100.446` but its evidence excerpt omitted the opening sentence of the first timestamped segment. Because the courier cannot rewrite semantic evidence or timestamps, the normalised response and all four derived packets were moved into private quarantine `source-intelligence/contract-invalid-20260729T1405Z/`. The repair controller rerun at `2026-07-29T14:06:16Z` restored `already_imported=27`, `hold_private=60`, `source_intelligence=4`, and `transcription=2`, with no pending release admission, no active rate limit, and `public_content=false`.
+
+Next safe action: on the next scheduled run, reconcile durable packets, rerun `python3 scripts/base2026-pipeline-controller.py --apply --limit 4`, and submit only its exact four-source Source Intelligence work order. Require every evidence excerpt to equal the complete contiguous transcript text implied by its exact start/end segment boundaries. Do not courier the quarantined response, process the remaining two Transcription records, or make a second ChatGPT submission in this run. No import, export, build, deploy, reindex, or public/UI/SEO change is authorised by this failed private stage.
+
+## Current Focus: four private transcripts validated; Source Intelligence is next — 2026-07-29 09:38 EDT
+
+The sole-authority controller selected exactly four sources from `daily-batch-20260729-01` for Transcription: `7665896145075375373`, `7666514383626980621`, `7666897429983218957`, and `7667360650326199565`. One authenticated `Base2026 Transcription` Project submission returned four ordered, schema-valid `OK` packets. Chrome file upload was unavailable, so the exact four private Groq packets plus the pinned schema were delivered once through the approved private-paste fallback.
+
+The complete JSON-only response was captured through the Project copy control, normalised, reviewer-checked, stored as four private transcript packets, and applied to the private queue. Source metadata and hashes matched exactly; timestamp/field contracts passed; transcript-to-ASR similarity was 0.9950–0.9990. The required controller rerun at `2026-07-29T13:38:05Z` reports `already_imported=27`, `hold_private=60`, `source_intelligence=4`, and `transcription=2`, with no pending release admission, no active rate limit, and `public_content=false`.
+
+Next safe action: on the next scheduled run, reconcile durable packets, rerun `python3 scripts/base2026-pipeline-controller.py --apply --limit 4`, and submit only its exact four-source Source Intelligence work order. Do not process the remaining two Transcription records or make a second ChatGPT submission in this run. Do not import, export, build, deploy, reindex, or change any public/UI/SEO contract unless a later controller work order authorizes that branch.
+
+## Current Focus: four-source data release is live; bounded Transcription is next — 2026-07-29 09:01 EDT
+
+The controller-authorised `ready_for_import` work order imported exactly four production packets from `daily-batch-20260729-01`: `7661404992674204960`, `7664766415785757965`, `7665088847612595470`, and `7665497910938815758`. All four deterministic importer preflights and applies passed, adding ten reviewed public cards. Release operation `base2026-daily-batch-20260729-01-release` rebuilt and atomically admitted the public export with 1,718 source records, 2,304 passages, 2,448 insight cards, 1,924 public insight cards, and 1,664 topics.
+
+The canonical data-only release gate passed content readiness, publication boundary (`needs_review=0`, `forbidden=0`, `secret_findings=0`), public export policy (`include_full_transcripts=false`), release contract, packaging, VPS deployment, Meilisearch reindex task `543`, and the bounded 250-page live crawl with zero bad-link contracts, crawled error pages, or warning groups. Direct live verification confirmed all four source routes return `200`, declare `index,follow`, use exact self-canonicals, appear once each in the live document dataset, and expose the expected approved-card split of 1/3/3/3 with zero public-contract violations. The controller acknowledged the release at `2026-07-29T13:00:41Z`.
+
+Current durable controller state is `already_imported=27`, `hold_private=60`, and `transcription=6`, with no pending release admission, no active rate limit, and `public_content=false`. The persisted bounded work order names the next four Transcription IDs; the other two remain queued behind them.
+
+Next safe action: on the next scheduled run, reconcile durable packets, rerun `python3 scripts/base2026-pipeline-controller.py --apply --limit 4`, and submit exactly its bounded Transcription work order to the authenticated Base2026 Transcription Project. Apply transcript statuses and rerun the controller once after couriering the complete response. Do not process the remaining two records, run a second ChatGPT submission, or import/build/deploy unless a later controller work order authorizes that branch. No UI/template/CSS/JS, indexability, canonical, redirect, pricing, or public-positioning contract changed in this release.
+
+## Current Focus: four private Production packets are ready for import — 2026-07-29 08:39 EDT
+
+The sole-authority controller selected exactly four sources from `daily-batch-20260729-01` for Production Packets: `7661404992674204960`, `7664766415785757965`, `7665088847612595470`, and `7665497910938815758`. One authenticated `Base2026 Production Packets` Project submission returned four ordered `base2026.production-packet.v1` objects with status `READY_FOR_IMPORT`. Chrome file upload was unavailable, so the exact controller-matched transcript, Source Intelligence, and editorial triples were delivered once through the contract-permitted private-paste fallback.
+
+The complete JSON-only response was captured, transport-normalised, and stored as four private production packets. The reviewer gate passed strict field sets and declared size limits, source order and identity, source metadata, rounded final transcript duration, editorial admission coverage, exact admitted-card mapping, and contiguous transcript evidence with matching timestamps. All ten admitted cards are present; the one editorially rejected card is absent. System Python does not include `jsonschema`, so the equivalent explicit contract assertions were applied before courier storage.
+
+The required controller rerun at `2026-07-29T12:38:51Z` reports `already_imported=23`, `ready_for_import=4`, `hold_private=60`, and `transcription=6`, with no pending release admission, no active rate limit, and `public_content=false`.
+
+Next safe action: on the next scheduled run, reconcile durable packets, rerun `python3 scripts/base2026-pipeline-controller.py --apply --limit 4`, and import exactly its four `ready_for_import` packets. If at least one import succeeds, record a dated pending release and execute the existing data-only export, release gate, deploy, reindex, and bounded live verification before acknowledgement. Do not submit the six remaining Transcription records in that run unless a later controller work order authorizes that stage. No public/UI/SEO contract changed in this Production pass.
+
+## Current Focus: four private Editorial decisions passed; Production is next — 2026-07-29 08:03 EDT
+
+The sole-authority controller selected exactly four sources from `daily-batch-20260729-01` for Editorial Validation: `7661404992674204960`, `7664766415785757965`, `7665088847612595470`, and `7665497910938815758`. One authenticated `Base2026 Editorial Validation` Project submission returned four ordered `OK` receipts covering all eleven candidate cards. Ten cards were admitted and one unsupported card was rejected; all four sources remain source-level `ADMIT_PUBLIC`.
+
+The complete response was captured, normalised, and stored as four private editorial decisions. The reviewer gate passed strict schema keys, source order and identity, reason-length limits, card-index coverage, source/card decision consistency, and exact contiguous transcript evidence with matching timestamps. The required controller rerun at `2026-07-29T12:03:22Z` reports `already_imported=23`, `production=4`, `hold_private=60`, and `transcription=6`, with no pending release admission, no active rate limit, and `public_content=false`.
+
+Next safe action: on the next scheduled run, reconcile durable packets, rerun `python3 scripts/base2026-pipeline-controller.py --apply --limit 4`, and submit only its exact four-source Production Packets work order. Do not submit the six remaining Transcription records in the same run. Do not import, export, build, deploy, reindex, or change any public/UI/SEO contract unless a later controller work order authorizes the corresponding branch.
+
+## Current Focus: four Source Intelligence packets are contract-valid; Editorial is next — 2026-07-29 07:34 EDT
+
+The sole-authority controller selected exactly four validated transcripts from `daily-batch-20260729-01` for Source Intelligence: `7661404992674204960`, `7664766415785757965`, `7665088847612595470`, and `7665497910938815758`. One authenticated Base2026 Source Intelligence Project submission returned four `OK` packets with eleven private candidate cards. The complete response was captured, normalised, and stored as private per-source packets.
+
+The reviewer gate passed source order and identity, strict JSON shape, all declared field limits, `needs_review=true` / `public=false`, exact transcript timestamps, and contiguous verbatim evidence. The longest evidence excerpt is 509 characters against the 520-character maximum. The required controller rerun at `2026-07-29T11:33:55Z` reports `already_imported=23`, `editorial=4`, `hold_private=60`, and `transcription=6`, with no pending release admission, no active rate limit, and `public_content=false`.
+
+Next safe action: on the next scheduled run, reconcile durable packets, rerun `python3 scripts/base2026-pipeline-controller.py --apply --limit 4`, and submit only its exact four-source Editorial Validation work order. Do not submit the six remaining Transcription records in the same run. Do not import, export, build, deploy, reindex, or change any public/UI/SEO contract unless a later controller work order authorizes the corresponding branch.
+
+## Current Focus: Source Intelligence contract failed closed; same four sources remain queued — 2026-07-29 07:05 EDT
+
+The sole-authority controller selected the four validated transcripts from `daily-batch-20260729-01` for Source Intelligence. One authenticated Base2026 Source Intelligence Project submission returned four `OK` objects with eleven private candidate cards. The complete response was captured and normalised, and source identity, private flags, timestamps, and contiguous transcript evidence all matched.
+
+The reviewer gate then found that three evidence excerpts exceeded the pinned schema's 520-character maximum. Because the courier cannot rewrite or truncate semantic evidence, the derived per-source packets were moved out of the controller path into the private `contract-invalid-20260729T1102Z` quarantine while the raw and normalised response receipts were preserved. The repair controller run at `2026-07-29T11:04:55Z` restored the authoritative state to `source_intelligence=4`, `transcription=6`, `already_imported=23`, and `hold_private=60`. There is no pending release admission, no active rate limit, and `public_content=false`.
+
+Next safe action: on the next scheduled run, reconcile durable packets, rerun `python3 scripts/base2026-pipeline-controller.py --apply --limit 4`, and submit only its exact Source Intelligence work order. Enforce every schema limit, especially `evidence_excerpt <= 520` characters, and do not courier the quarantined response. Do not process the six remaining Transcription records in the same run, and do not import, export, build, deploy, reindex, or change any public/UI/SEO contract.
+
+## Current Focus: four private transcripts validated; Source Intelligence is next — 2026-07-29 06:33 EDT
+
+The controller-authorised Transcription work order was limited to four sources from `daily-batch-20260729-01`. One authenticated Base2026 Transcription Project submission returned four schema-valid `OK` packets in the requested source order. The response was captured from the exact underlying response text, normalised through the repository courier, stored as four private transcript packets, and applied to the private TikTok queue.
+
+The required controller rerun at `2026-07-29T10:32:54Z` reports `already_imported=23`, `hold_private=60`, `source_intelligence=4`, and `transcription=6`. Its sole-authority work order is now `source_intelligence` for the same four validated sources. There is no pending release admission, `public_content=false`, and the one-ChatGPT-submission limit for this scheduled run is exhausted.
+
+Next safe action: on the next scheduled run, reconcile any durable completed response first, rerun `python3 scripts/base2026-pipeline-controller.py --apply --limit 4`, and obey only the newly persisted work order. Do not submit the remaining six raw transcripts or the four Source Intelligence packets in this run. Do not import, export, build, deploy, reindex, or change any public/UI/SEO contract.
+
+## Current Focus: daily bounded discovery intake ready for Transcription — 2026-07-29 06:06 EDT
+
+The daily controller gate was authoritatively `idle`, so the private check-only discovery refresh ran across 19 configured TikTok creators. Its fresh report found 135 recent candidates; the bounded importer applied exactly 10 new queue rows and retained the remaining 125 for later runs.
+
+All 10 explicitly imported sources staged successfully and produced 10 durable private Groq raw-transcript packets. No media-stage failures were recorded. The controller rerun at `2026-07-29T10:06:29Z` now reports `already_imported=23`, `hold_private=60`, and `transcription=10`, with no pending release admission and `public_content=false`.
+
+Next safe action: use `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json` as the sole queue authority and process only its 10-source Transcription work order. Do not rerun discovery, re-import the remaining preview, redownload media, resubmit Groq, publish, export, build, deploy, reindex, or change UI/SEO settings.
+
+## Current Focus: scheduled controller and bounded selector remain idle — 2026-07-29 05:26 EDT
+
+The controller reconciled durable private state and returned an authoritative `idle` work order at `2026-07-29T09:26:23Z` with `already_imported=23`, `hold_private=60`, no active rate limit, and no pending release admission. No completed ChatGPT response or other private stage packet was newer than the previous controller receipt, so no normalisation, stage storage, or transcript-status application was required.
+
+The required bounded selector for `queued` and `needs_source_review` records returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`. No private media/Groq recovery, ChatGPT submission, import, public export, build, deployment, reindex, or live verification ran.
+
+Next safe action: let the next scheduled run reconcile durable private packets and rerun `python3 scripts/base2026-pipeline-controller.py --apply --limit 4`. Continue to use `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json` as the sole queue authority; do not manually reselect the 23 imported or 60 terminal private records.
+
+## Current Focus: scheduled controller and bounded selector remain idle — 2026-07-29 04:57 EDT
+
+The controller reconciled durable private state and returned an authoritative `idle` work order at `2026-07-29T08:57:09Z` with `already_imported=23`, `hold_private=60`, no active rate limit, and no pending release admission. No completed ChatGPT response or other private stage packet was newer than the previous controller receipt, so no normalisation, stage storage, or transcript-status application was required.
+
+The required bounded selector for `queued` and `needs_source_review` records returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`. No private media/Groq recovery, ChatGPT submission, import, public export, build, deployment, reindex, or live verification ran.
+
+Next safe action: let the next scheduled run reconcile durable private packets and rerun `python3 scripts/base2026-pipeline-controller.py --apply --limit 4`. Continue to use `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json` as the sole queue authority; do not manually reselect the 23 imported or 60 terminal private records.
+
+## Current Focus: scheduled controller and bounded selector remain idle — 2026-07-29 04:27 EDT
+
+The controller reconciled durable private state and returned an authoritative `idle` work order at `2026-07-29T08:26:44Z` with `already_imported=23`, `hold_private=60`, no active rate limit, and no pending release admission. No completed ChatGPT response or other private stage packet was newer than the previous controller receipt, so no normalisation, stage storage, or transcript-status application was required.
+
+The required bounded selector for `queued` and `needs_source_review` records returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`. No private media/Groq recovery, ChatGPT submission, import, public export, build, deployment, reindex, or live verification ran.
+
+Next safe action: let the next scheduled run reconcile durable private packets and rerun `python3 scripts/base2026-pipeline-controller.py --apply --limit 4`. Continue to use `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json` as the sole queue authority; do not manually reselect the 23 imported or 60 terminal private records.
+
+## Current Focus: scheduled controller and bounded selector remain idle — 2026-07-29 03:26 EDT
+
+The controller reconciled durable private state and returned an authoritative `idle` work order at `2026-07-29T07:26:55Z` with `already_imported=23`, `hold_private=60`, no active rate limit, and no pending release admission. No completed ChatGPT response or other private stage packet was newer than the previous controller receipt, so no normalisation, stage storage, or transcript-status application was required.
+
+The required bounded selector for `queued` and `needs_source_review` records returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`. No private media/Groq recovery, ChatGPT submission, import, public export, build, deployment, reindex, or live verification ran.
+
+Next safe action: let the next scheduled run reconcile durable private packets and rerun `python3 scripts/base2026-pipeline-controller.py --apply --limit 4`. Continue to use `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json` as the sole queue authority; do not manually reselect the 23 imported or 60 terminal private records.
+
+## Current Focus: scheduled controller and bounded selector remain idle — 2026-07-29 03:11 EDT
+
+The controller reconciled durable private state and returned an authoritative `idle` work order at `2026-07-29T07:11:33Z` with `already_imported=23`, `hold_private=60`, no active rate limit, and no pending release admission. No completed ChatGPT response or other private stage packet was newer than the previous controller receipt, so no normalisation, stage storage, or transcript-status application was required.
+
+The required bounded selector for `queued` and `needs_source_review` records returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`. No private media/Groq recovery, ChatGPT submission, import, public export, build, deployment, reindex, or live verification ran.
+
+Next safe action: let the next scheduled run reconcile durable private packets and rerun `python3 scripts/base2026-pipeline-controller.py --apply --limit 4`. Continue to use `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json` as the sole queue authority; do not manually reselect the 23 imported or 60 terminal private records.
+
+## Current Focus: scheduled controller and bounded selector remain idle — 2026-07-29 03:08 EDT
+
+The controller reconciled durable private state and returned an authoritative `idle` work order at `2026-07-29T07:08:29Z` with `already_imported=23`, `hold_private=60`, no active rate limit, and no pending release admission. No completed ChatGPT response or other private stage packet was newer than the previous controller receipt, so no normalisation, stage storage, or transcript-status application was required.
+
+The required bounded selector for `queued` and `needs_source_review` records returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`. No private media/Groq recovery, ChatGPT submission, import, public export, build, deployment, reindex, or live verification ran.
+
+Next safe action: let the next scheduled run reconcile durable private packets and rerun `python3 scripts/base2026-pipeline-controller.py --apply --limit 4`. Continue to use `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json` as the sole queue authority; do not manually reselect the 23 imported or 60 terminal private records.
+
+## Current Focus: scheduled controller and bounded selector remain idle — 2026-07-28 18:43 EDT
+
+The controller reconciled durable private state and returned an authoritative `idle` work order at `2026-07-28T22:43:23Z` with `already_imported=23`, `hold_private=60`, no active rate limit, and no pending release admission. No completed ChatGPT response or other private stage packet was newer than the previous controller receipt, so no normalisation, stage storage, or transcript-status application was required.
+
+The required bounded selector for `queued` and `needs_source_review` records returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`. No private media/Groq recovery, ChatGPT submission, import, public export, build, deployment, reindex, or live verification ran.
+
+Next safe action: let the next scheduled run reconcile durable private packets and rerun `python3 scripts/base2026-pipeline-controller.py --apply --limit 4`. Continue to use `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json` as the sole queue authority; do not manually reselect the 23 imported or 60 terminal private records.
+
+## Current Focus: scheduled controller and bounded selector remain idle — 2026-07-28 18:14 EDT
+
+The controller reconciled durable private state and returned an authoritative `idle` work order at `2026-07-28T22:14:01Z` with `already_imported=23`, `hold_private=60`, no active rate limit, and no pending release admission. No completed ChatGPT response or other private stage packet was newer than the previous controller receipt, so no normalisation, stage storage, or transcript-status application was required.
+
+The required bounded selector for `queued` and `needs_source_review` records returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`. No private media/Groq recovery, ChatGPT submission, import, public export, build, deployment, reindex, or live verification ran.
+
+Next safe action: let the next scheduled run reconcile durable private packets and rerun `python3 scripts/base2026-pipeline-controller.py --apply --limit 4`. Continue to use `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json` as the sole queue authority; do not manually reselect the 23 imported or 60 terminal private records.
+
+## Current Focus: scheduled controller and bounded selector remain idle — 2026-07-28 17:43 EDT
+
+The controller reconciled durable private state and returned an authoritative `idle` work order at `2026-07-28T21:43:00Z` with `already_imported=23`, `hold_private=60`, no active rate limit, and no pending release admission. No completed ChatGPT response or other private stage packet was newer than the previous controller receipt, so no normalisation, stage storage, or transcript-status application was required.
+
+The required bounded selector for `queued` and `needs_source_review` records returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`. No private media/Groq recovery, ChatGPT submission, import, public export, build, deployment, reindex, or live verification ran.
+
+Next safe action: let the next scheduled run reconcile durable private packets and rerun `python3 scripts/base2026-pipeline-controller.py --apply --limit 4`. Continue to use `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json` as the sole queue authority; do not manually reselect the 23 imported or 60 terminal private records.
+
+## Current Focus: scheduled controller and bounded selector remain idle — 2026-07-28 17:13 EDT
+
+The controller reconciled durable private state and returned an authoritative `idle` work order at `2026-07-28T21:13:15Z` with `already_imported=23`, `hold_private=60`, no active rate limit, and no pending release admission. No completed ChatGPT response or other private stage packet was newer than the previous controller receipt, so no normalisation, stage storage, or transcript-status application was required.
+
+The required bounded selector for `queued` and `needs_source_review` records returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`. No private media/Groq recovery, ChatGPT submission, import, public export, build, deployment, reindex, or live verification ran.
+
+Next safe action: let the next scheduled run reconcile durable private packets and rerun `python3 scripts/base2026-pipeline-controller.py --apply --limit 4`. Continue to use `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json` as the sole queue authority; do not manually reselect the 23 imported or 60 terminal private records.
+
+## Current Focus: scheduled controller and bounded selector remain idle — 2026-07-28 16:43 EDT
+
+The controller reconciled durable private state and returned an authoritative `idle` work order at `2026-07-28T20:43:18Z` with `already_imported=23`, `hold_private=60`, no active rate limit, and no pending release admission. No completed ChatGPT response or other private stage packet was newer than the previous controller receipt, so no normalisation, stage storage, or transcript-status application was required.
+
+The required bounded selector for `queued` and `needs_source_review` records returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`. No private media/Groq recovery, ChatGPT submission, import, public export, build, deployment, reindex, or live verification ran.
+
+Next safe action: let the next scheduled run reconcile durable private packets and rerun `python3 scripts/base2026-pipeline-controller.py --apply --limit 4`. Continue to use `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json` as the sole queue authority; do not manually reselect the 23 imported or 60 terminal private records.
+
+## Current Focus: scheduled controller and bounded selector remain idle — 2026-07-28 16:13 EDT
+
+The controller reconciled durable private state and returned an authoritative `idle` work order at `2026-07-28T20:13:29Z` with `already_imported=23`, `hold_private=60`, no active rate limit, and no pending release admission. No completed ChatGPT response or other private stage packet was newer than the previous controller receipt, so no normalisation, stage storage, or transcript-status application was required.
+
+The required bounded selector for `queued` and `needs_source_review` records returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`. No private media/Groq recovery, ChatGPT submission, import, public export, build, deployment, reindex, or live verification ran.
+
+Next safe action: let the next scheduled run reconcile durable private packets and rerun `python3 scripts/base2026-pipeline-controller.py --apply --limit 4`. Continue to use `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json` as the sole queue authority; do not manually reselect the 23 imported or 60 terminal private records.
+
+## Current Focus: scheduled controller and bounded selector remain idle — 2026-07-28 15:43 EDT
+
+The controller reconciled durable private state and returned an authoritative `idle` work order at `2026-07-28T19:42:53Z` with `already_imported=23`, `hold_private=60`, no active rate limit, and no pending release admission. No completed ChatGPT response or other private stage packet was newer than the previous controller receipt, so no normalisation, stage storage, or transcript-status application was required.
+
+The required bounded selector for `queued` and `needs_source_review` records returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`. No private media/Groq recovery, ChatGPT submission, import, public export, build, deployment, reindex, or live verification ran.
+
+Next safe action: let the next scheduled run reconcile durable private packets and rerun `python3 scripts/base2026-pipeline-controller.py --apply --limit 4`. Continue to use `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json` as the sole queue authority; do not manually reselect the 23 imported or 60 terminal private records.
+
+## Current Focus: scheduled controller and bounded selector remain idle — 2026-07-28 15:13 EDT
+
+The controller reconciled durable private state and returned an authoritative `idle` work order at `2026-07-28T19:13:33Z` with `already_imported=23`, `hold_private=60`, no active rate limit, and no pending release admission. No completed ChatGPT response or other private stage packet was newer than the previous controller receipt, so no normalisation, stage storage, or transcript-status application was required.
+
+The required bounded selector for `queued` and `needs_source_review` records returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`. No private media/Groq recovery, ChatGPT submission, import, public export, build, deployment, reindex, or live verification ran.
+
+Next safe action: let the next scheduled run reconcile durable private packets and rerun `python3 scripts/base2026-pipeline-controller.py --apply --limit 4`. Continue to use `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json` as the sole queue authority; do not manually reselect the 23 imported or 60 terminal private records.
+
+## Current Focus: scheduled controller and bounded selector remain idle — 2026-07-28 14:43 EDT
+
+The controller reconciled durable private state and returned an authoritative `idle` work order at `2026-07-28T18:43:30Z` with `already_imported=23`, `hold_private=60`, no active rate limit, and no pending release admission. No completed ChatGPT response or other private stage packet was newer than the previous controller receipt, so no normalisation, stage storage, or transcript-status application was required.
+
+The required bounded selector for `queued` and `needs_source_review` records returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`. No private media/Groq recovery, ChatGPT submission, import, public export, build, deployment, reindex, or live verification ran.
+
+Next safe action: let the next scheduled run reconcile durable private packets and rerun `python3 scripts/base2026-pipeline-controller.py --apply --limit 4`. Continue to use `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json` as the sole queue authority; do not manually reselect the 23 imported or 60 terminal private records.
+
+## Current Focus: scheduled controller and bounded selector remain idle — 2026-07-28 14:13 EDT
+
+The controller reconciled durable private state and returned an authoritative `idle` work order at `2026-07-28T18:13:34Z` with `already_imported=23`, `hold_private=60`, no active rate limit, and no pending release admission. No completed ChatGPT response or other private stage packet was newer than the previous controller receipt, so no normalisation, stage storage, or transcript-status application was required.
+
+The required bounded selector for `queued` and `needs_source_review` records returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`. No private media/Groq recovery, ChatGPT submission, import, public export, build, deployment, reindex, or live verification ran.
+
+Next safe action: let the next scheduled run reconcile durable private packets and rerun `python3 scripts/base2026-pipeline-controller.py --apply --limit 4`. Continue to use `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json` as the sole queue authority; do not manually reselect the 23 imported or 60 terminal private records.
+
+## Current Focus: scheduled controller and bounded selector remain idle — 2026-07-28 13:43 EDT
+
+The controller reconciled durable private state and returned an authoritative `idle` work order at `2026-07-28T17:43:00Z` with `already_imported=23`, `hold_private=60`, no active rate limit, and no pending release admission. No completed ChatGPT response or other private stage packet was newer than the previous controller receipt, so no normalisation, stage storage, or transcript-status application was required.
+
+The required bounded selector for `queued` and `needs_source_review` records returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`. No private media/Groq recovery, ChatGPT submission, import, public export, build, deployment, reindex, or live verification ran.
+
+Next safe action: let the next scheduled run reconcile durable private packets and rerun `python3 scripts/base2026-pipeline-controller.py --apply --limit 4`. Continue to use `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json` as the sole queue authority; do not manually reselect the 23 imported or 60 terminal private records.
+
+## Current Focus: scheduled controller and bounded selector remain idle — 2026-07-28 13:13 EDT
+
+The controller reconciled durable private state and returned an authoritative `idle` work order at `2026-07-28T17:13:07Z` with `already_imported=23`, `hold_private=60`, no active rate limit, and no pending release admission. No completed ChatGPT response or other private stage packet was newer than the previous controller receipt, so no normalisation, stage storage, or transcript-status application was required.
+
+The required bounded selector for `queued` and `needs_source_review` records returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`. No private media/Groq recovery, ChatGPT submission, import, public export, build, deployment, reindex, or live verification ran.
+
+Next safe action: let the next scheduled run reconcile durable private packets and rerun `python3 scripts/base2026-pipeline-controller.py --apply --limit 4`. Continue to use `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json` as the sole queue authority; do not manually reselect the 23 imported or 60 terminal private records.
+
+## Current Focus: scheduled controller and bounded selector remain idle — 2026-07-28 12:43 EDT
+
+The controller reconciled durable private state and returned an authoritative `idle` work order at `2026-07-28T16:43:11Z` with `already_imported=23`, `hold_private=60`, no active rate limit, and no pending release admission. No completed ChatGPT response or other private stage packet was newer than the previous controller receipt, so no normalisation, stage storage, or transcript-status application was required.
+
+The required bounded selector for `queued` and `needs_source_review` records returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`. No private media/Groq recovery, ChatGPT submission, import, public export, build, deployment, reindex, or live verification ran.
+
+Next safe action: let the next scheduled run reconcile durable private packets and rerun `python3 scripts/base2026-pipeline-controller.py --apply --limit 4`. Continue to use `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json` as the sole queue authority; do not manually reselect the 23 imported or 60 terminal private records.
+
+## Current Focus: scheduled controller and bounded selector remain idle — 2026-07-28 12:13 EDT
+
+The controller reconciled durable private state and returned an authoritative `idle` work order at `2026-07-28T16:13:16Z` with `already_imported=23`, `hold_private=60`, no active rate limit, and no pending release admission. No completed ChatGPT response or other private stage packet was newer than the previous controller receipt, so no normalisation, stage storage, or transcript-status application was required.
+
+The required bounded selector for `queued` and `needs_source_review` records returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`. No private media/Groq recovery, ChatGPT submission, import, public export, build, deployment, reindex, or live verification ran.
+
+Next safe action: let the next scheduled run reconcile durable private packets and rerun `python3 scripts/base2026-pipeline-controller.py --apply --limit 4`. Continue to use `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json` as the sole queue authority; do not manually reselect the 23 imported or 60 terminal private records.
+
+## Current Focus: scheduled controller and bounded selector remain idle — 2026-07-28 11:44 EDT
+
+The controller reconciled durable private state and returned an authoritative `idle` work order at `2026-07-28T15:44:03Z` with `already_imported=23`, `hold_private=60`, no active rate limit, and no pending release admission. No completed ChatGPT response or other private stage packet was newer than the previous controller receipt, so no normalisation, stage storage, or transcript-status application was required.
+
+The required bounded selector for `queued` and `needs_source_review` records returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`. No private media/Groq recovery, ChatGPT submission, import, public export, build, deployment, reindex, or live verification ran.
+
+Next safe action: let the next scheduled run reconcile durable private packets and rerun `python3 scripts/base2026-pipeline-controller.py --apply --limit 4`. Continue to use `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json` as the sole queue authority; do not manually reselect the 23 imported or 60 terminal private records.
+
+## Current Focus: scheduled controller and bounded selector remain idle — 2026-07-28 11:13 EDT
+
+The controller reconciled durable private state and returned an authoritative `idle` work order at `2026-07-28T15:13:17Z` with `already_imported=23`, `hold_private=60`, no active rate limit, and no pending release admission. No completed ChatGPT response or other private packet was newer than the prior recorded reconciliation, so no normalisation, stage storage, or transcript-status application was required.
+
+The required bounded selector for `queued` and `needs_source_review` records returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`. No private media/Groq recovery, ChatGPT submission, import, public export, build, deployment, reindex, or live verification ran.
+
+Next safe action: let the next scheduled run reconcile durable private packets and rerun `python3 scripts/base2026-pipeline-controller.py --apply --limit 4`. Continue to use `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json` as the sole queue authority; do not manually reselect the 23 imported or 60 terminal private records.
+
+## Current Focus: scheduled controller and bounded selector remain idle — 2026-07-28 10:44 EDT
+
+The controller reconciled durable private state and returned an authoritative `idle` work order with `already_imported=23`, `hold_private=60`, no active rate limit, and no pending release admission. No completed ChatGPT response was newer than the prior recorded reconciliation, so no normalisation, stage storage, or transcript-status application was required.
+
+The required bounded selector for `queued` and `needs_source_review` records returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`. No private media/Groq recovery, ChatGPT submission, import, public export, build, deployment, reindex, or live verification ran.
+
+Next safe action: let the next scheduled run reconcile durable private packets and rerun `python3 scripts/base2026-pipeline-controller.py --apply --limit 4`. Continue to use `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json` as the sole queue authority; do not manually reselect the 23 imported or 60 terminal private records.
+
+## Current Focus: scheduled controller and bounded selector remain idle — 2026-07-28 10:14 EDT
+
+The controller reconciled durable private state and returned an authoritative `idle` work order with `already_imported=23`, `hold_private=60`, no active rate limit, and no pending release admission. No private inbox artifact was newer than the prior recorded reconciliation, so no completed ChatGPT response required normalisation, storage, or transcript-status application.
+
+The required bounded selector for `queued` and `needs_source_review` records returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`. No private media/Groq recovery, ChatGPT submission, import, public export, build, deployment, reindex, or live verification ran.
+
+Next safe action: let the next scheduled run reconcile durable private packets and rerun `python3 scripts/base2026-pipeline-controller.py --apply --limit 4`. Continue to use `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json` as the sole queue authority; do not manually reselect the 23 imported or 60 terminal private records.
+
+## Current Focus: scheduled controller and bounded selector remain idle — 2026-07-28 09:43 EDT
+
+The controller reconciled durable private state and returned an authoritative `idle` work order with `already_imported=23`, `hold_private=60`, no active rate limit, and no pending release admission. No newer completed ChatGPT response was present to courier.
+
+The required bounded selector for `queued` and `needs_source_review` records returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`. No private media/Groq recovery, ChatGPT submission, import, public export, build, deployment, reindex, or live verification ran.
+
+Next safe action: let the next scheduled run reconcile durable private packets and rerun `python3 scripts/base2026-pipeline-controller.py --apply --limit 4`. Continue to use `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json` as the sole queue authority; do not manually reselect the 23 imported or 60 terminal private records.
+
+## Current Focus: final two-source autonomous release live and queue idle — 2026-07-28 09:17 EDT
+
+The controller-authorised `ready_for_import` work order for source IDs `7666938115918957857` and `7667255862116879648` completed. Both final production packets imported successfully, adding four reviewed public cards. Release operation `base2026-daily-batch-20260728-03-release` rebuilt and atomically admitted the public export, passed the canonical data-only release gate, deployed, reindexed Meilisearch as task `539`, and passed the bounded 250-page live crawl with zero bad-link contracts, crawled error pages, or warning groups.
+
+Direct live verification confirmed both source routes return `200`, declare `index,follow`, use self-canonicals, and appear in the live public datasets with the expected one document per source and card split of three plus one. The controller acknowledged the release at `2026-07-28T13:17:20Z`; durable state is now `already_imported=23`, `hold_private=60`, no pending release admission, and an `idle` work order. No UI/template/CSS/JS, redirect, pricing, positioning, or indexability/canonical rule was changed.
+
+Next safe action: on the next scheduled run, reconcile any newly durable private response and rerun `python3 scripts/base2026-pipeline-controller.py --apply --limit 4`. If it remains idle, use only the bounded private queue selector/recovery path defined by the automation; do not reselect any of the 23 imported or 60 terminal private records.
+
+## Current Focus: autonomous Production Packets advanced the final two private sources — 2026-07-28 08:51 EDT
+
+The controller-authorised `daily-batch-20260728-01` Production Packets stage completed for source IDs `7666938115918957857` and `7667255862116879648` with exactly one authenticated `Base2026 Production Packets` Project submission. Chrome file-upload permission was unavailable, so the exact six controller-matched transcript, Source Intelligence, and editorial JSON packets were sent through the contract-permitted private paste path. The complete JSON-only response was captured and stored immediately as two private `READY_FOR_IMPORT` packets.
+
+After the required single controller rerun, durable controller truth is `already_imported=21`, `hold_private=60`, and `ready_for_import=2`, with no pending release admission and `public_content=false`. No import, public export, build, deployment, reindex, or live check ran.
+
+Next safe action: on the next scheduled run, begin from `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json` and import exactly its two `ready_for_import` packets. If at least one import succeeds, record a dated pending release operation and run the existing deterministic data-only export, release gate, deployment, and bounded live verification before acknowledging release. Do not resubmit Production Packets or manually reselect sources.
+
+## Current Focus: autonomous Editorial Validation advanced the final two private sources — 2026-07-28 07:50 EDT
+
+The controller-authorised `daily-batch-20260728-01` Editorial Validation stage completed for source IDs `7666938115918957857` and `7667255862116879648` with exactly one authenticated `Base2026 Editorial Validation` Project submission. The exact raw JSON response is preserved privately. The reviewer pass compacted one overlong derived reason from 394 to 346 characters without changing its decision or publication state, after which both stored decisions passed the full editorial contract.
+
+Editorial admitted four of five cards and held one card private because its interpretation extended beyond the cited evidence. Both sources remain source-level `ADMIT_PUBLIC` and now require deterministic Production Packets; this is not a deploy permission.
+
+After the required single controller rerun, durable controller truth is `already_imported=21`, `hold_private=60`, and `production=2`, with no pending release admission and `public_content=false`. No import, public export, build, deployment, reindex, or live check ran.
+
+Next safe action: on the next scheduled run, begin from `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json` and submit exactly its two-source `production` work order to the authenticated `Base2026 Production Packets` Project. Do not resubmit Editorial Validation, manually reselect sources, or run a second ChatGPT stage submission in this scheduled run.
+
+## Current Focus: autonomous Source Intelligence advanced the final two private sources — 2026-07-28 07:20 EDT
+
+The controller-authorised `daily-batch-20260728-01` Source Intelligence stage completed for source IDs `7666938115918957857` and `7667255862116879648` with exactly one authenticated `Base2026 Source Intelligence` Project submission. The complete JSON-only response was normalised and stored immediately as two private packets. Both packets are schema-valid `OK`; their five total evidence excerpts match contiguous transcript segments and exact timestamp boundaries, and every card remains `needs_review=true` / `public=false`.
+
+After the required single controller rerun, durable controller truth is `already_imported=21`, `hold_private=60`, and `editorial=2`, with no pending release admission and `public_content=false`. No import, public export, build, deployment, reindex, or live check ran.
+
+Next safe action: on the next scheduled run, begin from `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json` and submit exactly its two-source `editorial` work order to the authenticated `Base2026 Editorial Validation` Project. Do not resubmit Source Intelligence, manually reselect sources, or run a second ChatGPT stage submission in this scheduled run.
+
+## Current Focus: autonomous transcription advanced the final two private sources — 2026-07-28 06:54 EDT
+
+The controller-authorised `daily-batch-20260728-01` transcription stage completed for source IDs `7666938115918957857` and `7667255862116879648` with exactly one authenticated `Base2026 Transcription` Project submission. The JSON-only response's literal line breaks were transport-normalised without changing meaning, both source identities matched their private Groq packet metadata, and both stored packets passed the strict transcript contract with status `OK`.
+
+After transcript-status application and the required single controller rerun, durable controller truth is `already_imported=21`, `hold_private=60`, and `source_intelligence=2`, with no pending release admission and `public_content=false`. No import, public export, build, deployment, reindex, or live check ran.
+
+Next safe action: on the next scheduled run, begin from `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json` and submit exactly its two-source `source_intelligence` work order to the authenticated `Base2026 Source Intelligence` Project. Do not resubmit transcription, manually reselect sources, or run a second ChatGPT stage submission in this scheduled run.
+
+## Current Focus: autonomous transcription advanced the next four private sources — 2026-07-28 06:24 EDT
+
+The controller-authorised `daily-batch-20260728-01` transcription stage completed for source IDs `7664604937971698976`, `7665083125906591009`, `7665448782527597856`, and `7665830709520567585`. The authenticated `Base2026 Transcription` Project already contained the exact completed bounded response, so it was captured without a duplicate submission. Transport escaping was normalised, all four source identities matched their Groq packet metadata, and the four stored packets were corrected after reviewer comparison found rendered-link contamination in an overlapping courier capture. All four final private packets are schema-valid `OK`.
+
+Final controller truth is `already_imported=18`, `hold_private=59`, `source_intelligence=4`, and `transcription=2`, with no pending release admission. No import, public export, build, deployment, reindex, or live check ran.
+
+Next safe action: on the next scheduled run, begin from `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json` and submit exactly its four-source `source_intelligence` work order to the authenticated `Base2026 Source Intelligence` Project. Do not resubmit this transcription batch, manually select the two remaining transcript records, or run a second ChatGPT submission in this run.
+
+## Current Focus: autonomous pipeline is live and has a two-source transcription work order — 2026-07-28 06:35 EDT
+
+The data-only releases `base2026-daily-batch-20260728-01-release` and `base2026-daily-batch-20260728-02-release` were accepted, deployed and acknowledged after five reviewed production packets were imported. Direct live checks confirmed `200`, indexability and self-canonical for all five corresponding production source routes.
+
+Current controller truth is `already_imported=21`, `hold_private=60`, `transcription=2`, with no pending release admission. On the next 30-minute run, read `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json` and submit only its two transcription source IDs: `7666938115918957857` and `7667255862116879648`. Store the completed private response through the transcript courier, rerun the controller once, and stop. Do not manually reselect sources, rerun Groq for existing raw packets, or publish anything that fails a validation gate.
+
+The daily 06:00 discovery intake separately admits at most ten new sources into private media and Groq processing. It does not export or deploy. Historical queue/rate-limit notes below are retained for audit trail only.
+
+## Current Focus: autonomous transcription advanced four private sources — 2026-07-28 05:49 EDT
+
+The controller-authorised `daily-batch-20260728-01` transcription stage completed with exactly one authenticated `Base2026 Transcription` Project submission for source IDs `7661603390337682720`, `7662032959301602593`, `7663833006481739041`, and `7664381216530959649`. The response's transport escaping was normalised without semantic changes, all four packets passed schema and source-identity checks, and all four received private status `OK`.
+
+After the required single controller rerun, the durable state is `already_imported=16`, `hold_private=57`, `source_intelligence=4`, and `transcription=6`. No import, public export, build, deployment, reindex, or live check ran.
+
+Next safe action: on the next scheduled run, begin from `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json` and submit exactly its four-source `source_intelligence` work order to the authenticated `Base2026 Source Intelligence` Project. Do not resubmit this transcription batch or manually select another source. One ChatGPT submission has already been used for this scheduled run.
+
+## Current Focus: scheduled controller remains idle — 2026-07-28 04:43 EDT
+
+The scheduled controller run at `2026-07-28T08:43:05Z` observed `already_imported=16`, `hold_private=57`, no active rate limit, and an authoritative `idle` work order with zero source IDs. The required bounded selector check returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`.
+
+Next safe action: let the next scheduled run begin from `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json`. Do not manually reselect any prior private source. No new import occurred, so do not build or deploy. The separate stale-admission export blocker below remains unresolved.
+
+## Current Focus: scheduled controller remains idle — 2026-07-28 04:13 EDT
+
+The scheduled controller run at `2026-07-28T08:13:08Z` observed `already_imported=16`, `hold_private=57`, no active rate limit, and an authoritative `idle` work order with zero source IDs. The required bounded selector check returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`.
+
+Next safe action: let the next scheduled run begin from `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json`. Do not manually reselect any prior private source. No new import occurred, so do not build or deploy. The separate stale-admission export blocker below remains unresolved.
+
+## Current Focus: scheduled controller remains idle — 2026-07-28 03:44 EDT
+
+The scheduled controller run at `2026-07-28T07:43:34Z` observed `already_imported=16`, `hold_private=57`, no active rate limit, and an authoritative `idle` work order with zero source IDs. The required bounded selector check returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`.
+
+Next safe action: let the next scheduled run begin from `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json`. Do not manually reselect any prior private source. No new import occurred, so do not build or deploy. The separate stale-admission export blocker below remains unresolved.
+
+## Current Focus: scheduled controller remains idle — 2026-07-28 03:12 EDT
+
+The scheduled controller run at `2026-07-28T07:12:29Z` observed `already_imported=16`, `hold_private=57`, no active rate limit, and an authoritative `idle` work order with zero source IDs. The required bounded selector check returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`.
+
+Next safe action: let the next scheduled run begin from `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json`. Do not manually reselect any prior private source. No new import occurred, so do not build or deploy. The separate stale-admission export blocker below remains unresolved.
+
+## Current Focus: scheduled controller remains idle — 2026-07-28 02:43 EDT
+
+The scheduled controller rerun at `2026-07-28T06:42:55Z` observed `already_imported=16`, `hold_private=57`, no active rate limit, and an authoritative `idle` work order with zero source IDs. The required bounded selector check returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`.
+
+Next safe action: let the next scheduled run begin from `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json`. Do not manually reselect any prior private source. No new import occurred, so do not build or deploy. The separate stale-admission export blocker below remains unresolved.
+
+## Current Focus: scheduled controller remains idle — 2026-07-28 02:13 EDT
+
+The scheduled controller rerun at `2026-07-28T06:13:18Z` observed `already_imported=16`, `hold_private=57`, no active rate limit, and an authoritative `idle` work order with zero source IDs. The required bounded selector check returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`.
+
+Next safe action: let the next scheduled run begin from `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json`. Do not manually reselect any prior private source. No new import occurred, so do not build or deploy. The separate stale-admission export blocker below remains unresolved.
+
+## Current Focus: scheduled controller remains idle — 2026-07-28 01:42 EDT
+
+The scheduled controller rerun at `2026-07-28T05:42:37Z` observed `already_imported=16`, `hold_private=57`, no active rate limit, and an authoritative `idle` work order with zero source IDs. The required bounded selector check returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`.
+
+Next safe action: let the next scheduled run begin from `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json`. Do not manually reselect any prior private source. No new import occurred, so do not build or deploy. The separate stale-admission export blocker below remains unresolved.
+
+## Current Focus: scheduled controller remains idle — 2026-07-28 01:07 EDT
+
+The scheduled controller rerun at `2026-07-28T05:06:58Z` observed `already_imported=16`, `hold_private=57`, no active rate limit, and an authoritative `idle` work order with zero source IDs. The required bounded selector check returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`.
+
+Next safe action: let the next scheduled run begin from `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json`. Do not manually reselect any prior private source. No new import occurred, so do not build or deploy. The separate stale-admission export blocker below remains unresolved.
+
+## Current Focus: scheduled controller remains idle — 2026-07-28 00:37 EDT
+
+The scheduled controller rerun at `2026-07-28T04:37:19Z` observed `already_imported=16`, `hold_private=57`, no active rate limit, and an authoritative `idle` work order with zero source IDs. The required bounded selector check returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`.
+
+Next safe action: let the next scheduled run begin from `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json`. Do not manually reselect any prior private source. No new import occurred, so do not build or deploy. The separate stale-admission export blocker below remains unresolved.
+
+## Current Focus: scheduled controller remains idle — 2026-07-28 00:07 EDT
+
+The scheduled controller rerun at `2026-07-28T04:07:08Z` observed `already_imported=16`, `hold_private=57`, no active rate limit, and an authoritative `idle` work order with zero source IDs. The required bounded selector check returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`.
+
+Next safe action: let the next scheduled run begin from `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json`. Do not manually reselect any prior private source. No new import occurred, so do not build or deploy. The separate stale-admission export blocker below remains unresolved.
+
+## Current Focus: scheduled controller remains idle — 2026-07-27 23:37 EDT
+
+The scheduled controller rerun at `2026-07-28T03:37:23Z` observed `already_imported=16`, `hold_private=57`, no active rate limit, and an authoritative `idle` work order with zero source IDs. The required bounded selector check returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`.
+
+Next safe action: let the next scheduled run begin from `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json`. Do not manually reselect any prior private source. No new import occurred, so do not build or deploy. The separate stale-admission export blocker below remains unresolved.
+
+## Current Focus: scheduled controller remains idle — 2026-07-27 23:07 EDT
+
+The scheduled controller rerun at `2026-07-28T03:07:00Z` observed `already_imported=16`, `hold_private=57`, no active rate limit, and an authoritative `idle` work order with zero source IDs. The required bounded selector check returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`.
+
+Next safe action: let the next scheduled run begin from `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json`. Do not manually reselect any prior private source. No new import occurred, so do not build or deploy. The separate stale-admission export blocker below remains unresolved.
+
+## Current Focus: scheduled controller remains idle — 2026-07-27 22:37 EDT
+
+The scheduled controller rerun at `2026-07-28T02:36:45Z` observed `already_imported=16`, `hold_private=57`, no active rate limit, and an authoritative `idle` work order with zero source IDs. The required bounded selector check returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`.
+
+Next safe action: let the next scheduled run begin from `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json`. Do not manually reselect any prior private source. No new import occurred, so do not build or deploy. The separate stale-admission export blocker below remains unresolved.
+
+## Current Focus: autonomous private queue exhausted — 2026-07-27
+
+The controller-authorised three-source `source_intelligence` work order from `daily-batch-20260727-01` completed with one authenticated `Base2026 Source Intelligence` Project submission using the pinned prompt and schema. The JSON-only response was normalised and stored through the existing private courier. All three records produced zero cards and became terminal private holds: two `OUT_OF_SCOPE` and one `NOT_SOURCE_BACKED`.
+
+After the required controller rerun, the state is `already_imported=16` and `hold_private=57`; the work order is `idle`. The existing selector found `eligible_count=0`, `selected_count=0`, and no unclaimed records, so no media/Groq batch was created.
+
+Next safe action: let the next scheduled run begin from `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json`. Do not resubmit these three Source Intelligence records or manually reselect any prior private source. No new import occurred, so do not build or deploy. The separate stale-admission export blocker below remains unresolved.
+
+## Current Focus: autonomous transcription batch advanced three private records — 2026-07-27
+
+The controller-authorised ten-source transcription stage completed with one authenticated `Base2026 Transcription` Project submission. The JSON-only transport response was normalised and stored through the existing private couriers. Seven records became terminal `LOW_AUDIO_CONFIDENCE` private holds and three schema-valid `OK` records advanced.
+
+After the required single controller rerun, the state is `already_imported=16`, `hold_private=54`, and `source_intelligence=3`.
+
+Next safe action: on the next scheduled run, start from `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json` and submit exactly its three-source `source_intelligence` work order to the authenticated `Base2026 Source Intelligence` Project. Do not resubmit the ten-source transcription batch, retry the seven low-confidence records, or reuse the legacy `transcript-validated/` packets. No new import occurred, so do not build or deploy. The separate stale-admission export blocker below remains unresolved.
+
+## Current Focus: autonomous Source Intelligence hold and raw intake completed — 2026-07-27
+
+The controller-authorised one-source `daily-batch-20260727-04` Source Intelligence stage completed in the authenticated `Base2026 Source Intelligence` project. The only transcript segment was a closing courtesy, so the JSON-only result correctly returned zero cards and `OUT_OF_SCOPE`; the source is now a terminal private hold.
+
+The next controller work order listed exactly ten `raw_transcript` sources across `daily-batch-20260727-01` and `daily-batch-20260727-05`. Groq Whisper intake completed only for those ten source IDs and wrote private raw packets plus normal batch receipts. After the required controller rerun, the state is `already_imported=16`, `hold_private=47`, and `transcription=10`.
+
+Next safe action: on the next scheduled run, start from `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json` and submit exactly its ten-source `transcription` work order to the authenticated `Base2026 Transcription` project. Do not resubmit the Source Intelligence record or rerun Groq for these ten sources. No new import occurred, so do not build or deploy. The separate stale-admission export blocker below remains unresolved.
+
+## Current Focus: autonomous transcription advanced one private source — 2026-07-27
+
+The controller-authorised `daily-batch-20260727-04` transcription stage completed with one authenticated `Base2026 Transcription` submission. Two records became terminal private `LOW_AUDIO_CONFIDENCE` holds and one schema-valid `OK` record advanced. The controller now reports `already_imported=16`, `hold_private=46`, `raw_transcript=10`, and `source_intelligence=1`.
+
+Next safe action: on the next scheduled run, start from `PRIVATE_BASE2026_WORK_INBOX/controller/next-work-order.json` and process exactly its one-source `source_intelligence` work order in the authenticated `Base2026 Source Intelligence` project. Do not resubmit this transcription batch, promote either low-confidence hold, or build/deploy: no new import occurred. The separate stale-admission export blocker below remains unresolved.
+
+## Current Focus: autonomous Base2026 release blocked by stale admission rows — 2026-07-27
+
+The controller completed one bounded Production Packets submission for `daily-batch-20260727-07`: three packets were imported and one packet became a terminal private hold. The accepted public baseline was not changed and no package, deploy, reindex or live check ran because `base2026-refresh-public-export.py` stopped at the export gate.
+
+Exact blocker: the existing admission rows for `tiktok:darrenshawseo:7662399921894591761` and `tiktok:tjrobertson52:7662526266918112526` are stale because their already-imported private video rows remain `transcript_validated` rather than the current importer’s public-emittable `transcribed` state.
+
+Next safe action: add or use a controller-authorized idempotent reconciliation that promotes only those two already-admitted video rows from their existing final production packets, without re-running ChatGPT or changing their editorial content. Then rerun the public export and release gates; deploy only if every contract passes. Do not manually re-select sources, resubmit the four-source production batch, or promote the `NOT_ADMITTED` source.
+
+## Current Focus: full active queue-to-production evidence pipeline — 2026-07-27
+
+`base2026-daily-batch-20260727-05` is live and directly verified. The entire active intake queue has been claimed into durable private batches without duplicate redownloads: `21` media retries, `39` low-audio private holds, `7` raw packets awaiting transcript validation, `11` transcript-approved records awaiting Source Intelligence, and one private Source Intelligence out-of-scope hold.
+
+Next safe action: wait for the explicit temporary ChatGPT rate limit to clear, then resume exactly this order: batch-06 and batch-07 Source Intelligence → editorial → production; the seven remaining batch-07 transcript packets → the same sequence. Do not retry TikTok media, invent missing ChatGPT output, or publish any low-audio/private record merely to clear a count. The daily automation is armed to resume from the selector’s durable private state rather than reselecting sources.
+
+## Current Focus: original WordPress V4 footer restored across Base2026 — 2026-07-20
+
+Owner correction: the canonical footer is the original five-column WordPress V4 footer from Home / Services / Pricing / About, not the compact Base2026 footer. Active Base release: `/var/www/base2026-knowledge/releases/base2026-wordpress-v4-footer-restore-r3-20260720T192500Z`.
+
+- All 4,131 HTML pages contain the canonical footer markup; compact `personal-v1` footer count is zero.
+- A footer-only CSS asset is linked last on all 4,131 pages, so Base component CSS cannot alter the WordPress footer geometry or typography.
+- Sitemap, public manifest and documents dataset hashes are unchanged; no reindex was run.
+- Rollback: `/var/www/base2026-knowledge/releases/base2026-shell-unified-current-home-r5-20260720T173458Z`.
+
+Next safe action: keep the canonical footer template and footer-only parity asset in every future static build. Never derive the Personal footer from the compact research navigation registry.
+
+## Current Focus: pipeline P0/P1 controller recovery complete — 2026-07-20
+
+The data-changing pipeline is not ready for restart. The scheduler remains check-only and now executes through `/usr/bin/env -i` with only fixed `HOME`, `TMPDIR`, `LANG` and `PATH`, preventing unrelated GUI-session secrets from being inherited. Backup: `~/Library/LaunchAgents/com.base2026.hermes-tiktok-check.plist.bak-20260720T181500Z`.
+
+The single failing creator route was repaired through its stable TikTok channel ID and now returns records without failures. The stale polish lock was proven ownerless and moved recoverably to `.planning/backups/tiktok-polish.lock.stale-20260720T184000Z`; no worker was started.
+
+Final full minimal-environment check-only: `apply=false`, 245 candidate rows, 95 current new dry-run rows, 150 duplicates, 0 skipped failure rows and 0 existing-row updates. The canonical `videos.csv` hash remained `8b0bdd34b7b44425c8df2a41a2512808e47102cc54b582d9d38ec4b22ae76e5c`. No intake, ASR, public export, deploy or reindex was run.
+
+Next safe action:
+
+1. Do not bulk-apply the 95-candidate spool or process the 87 `needs_source_review` rows in bulk.
+2. Select any later intake as an explicitly approved batch of at most 8 records and at most 2 per creator, with backup/hash receipt.
+3. Preserve private review and admission gates before any public export, deploy or reindex.
+
+## Current Focus: R6 closed; product contract next — 2026-07-16
+
+R6 requires no further release action. Task `10` is scoped and must not begin until the external Alex Site SITE-8 gate closes; task `54` stays scoped until task `10` closes. SITE-8 belongs only to Telegram topic `107`, so topic `22` may report the dependency but must not execute or approve Alex Site work. The earlier `base2026.com` owner-boundary alert was retracted as an unsupported agent inference; no domain action is required.
+
+## Current Focus: independent Source Detail V2 release boundary — 2026-07-13
+
+The visual, admission and sitemap gates are closed. Production is unchanged. Do not repeat the accepted footer matrix unless a release-scoped file changes footer behavior.
+
+Execute in this order:
+
+1. Recapture branch, tracked diff, untracked files and publication-boundary evidence; isolate only public-safe release files and do not stage unrelated work.
+2. Build the exact deterministic full-family candidate from the current scoped sources and generate an immutable manifest/package candidate without deploying.
+3. Run required contract, determinism and targeted regression checks over that exact candidate; reuse the closed O/P visual evidence only if no release-scoped file changes footer behavior.
+4. Obtain an independent Sol/X High GO/NO-GO review over the exact immutable evidence package.
+5. Only on complete GO: package once, deploy atomically, run live contract/visual/sitemap QA, and perform changed-URL indexation steps. Any red gate means NO-GO and no deploy.
 
 ## Current Focus: Base2026 template migration — Batch 0 inventory complete — 2026-07-12
 
@@ -1662,3 +2461,81 @@ On the next resume, read only:
 5. this file
 
 Then run a bounded `git status`. Do not reread the full project-memory bundle unless a concrete gate fails.
+
+## 2026-07-28 — Autonomous evidence queue idle; no release action
+
+Status: `python3 scripts/base2026-pipeline-controller.py --apply --limit 10` emitted the sole-authority work order `idle` at `2026-07-28T09:13:01Z`. Aggregate private state remains `already_imported=16`, `hold_private=57`, with no active rate limit and no source IDs.
+
+Verification:
+
+- `python3 scripts/base2026-select-queue-batch.py --limit 10 --format json` returned zero eligible, zero private in-flight, zero selected, and zero remaining unclaimed records.
+- Controller tests passed: 2/2.
+- `git diff --check` passed.
+- Publication audit reported `forbidden=0` and `secret_findings=0`; its two conservative `needs_review` paths are the existing untracked controller source and controller test, not private artifacts produced by this run.
+- No Groq intake, ChatGPT submission, import, export, build, deploy, reindex, or live check ran.
+
+Next safe action:
+
+1. On the next scheduled run, start from the controller's newly emitted work order.
+2. Do not manually select previously private sources or reconcile the separate stale admission rows unless a controller-authorized work order names them.
+
+## 2026-07-28 — Daily bounded discovery intake stopped at active production work
+
+Status: the required controller gate emitted a `production` / `ready` work order for two private sources at `2026-07-28T10:02:22Z`. Because the work order was not `idle`, the daily discovery intake stopped successfully before discovery refresh, queue import, media staging, or Groq intake.
+
+Next safe action:
+
+1. Finish the current controller-owned production batch through its existing private stage workflow.
+2. On the next daily intake run, rerun the controller gate and begin discovery only if its authoritative work order is `idle`.
+3. Do not manually select sources or run public export, package, deploy, reindex, UI, or SEO actions from this daily intake.
+
+## 2026-07-28 19:14 EDT — Autonomous evidence queue remained idle
+
+Status: the sole-authority controller work order observed at `2026-07-28T23:13:56Z` is `idle`. Aggregate private state remains `already_imported=23`, `hold_private=60`, with no active rate limit, no pending release admission, and acknowledged release `base2026-daily-batch-20260728-03-release`.
+
+Verification:
+
+- No completed ChatGPT response or private stage artifact was newer than the prior controller receipt.
+- The bounded `queued` plus `needs_source_review` selector returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`.
+- Focused controller/transcript-status tests passed `5/5`; `git diff --check` passed.
+- Publication audit returned `needs_review=0`, `forbidden=0`, and `secret_findings=0`.
+- No ChatGPT submission, Groq intake, import, public export, build, package, deploy, reindex, live verification, or public UI/SEO contract change ran.
+
+Next safe action:
+
+1. On the next scheduled run, reconcile durable private stage packets and start from the controller's newly emitted work order.
+2. Do not manually reselect private sources or run a release without a newly successful controller-authorized import.
+
+## 2026-07-29 03:56 EDT — Autonomous evidence queue remained idle
+
+Status: the sole-authority controller work order observed at `2026-07-29T07:56:50Z` is `idle`. Aggregate private state remains `already_imported=23`, `hold_private=60`, with no active rate limit, no pending release admission, and acknowledged release `base2026-daily-batch-20260728-03-release`.
+
+Verification:
+
+- No completed ChatGPT response or private stage artifact required reconciliation before the controller run.
+- The bounded `queued` plus `needs_source_review` selector returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`.
+- Focused controller/transcript-status tests passed `5/5`; `git diff --check` passed.
+- Publication audit returned `needs_review=0`, `forbidden=0`, and `secret_findings=0`.
+- No ChatGPT submission, Groq intake, import, public export, build, deploy, reindex, live verification, source status, phase status, or public UI/SEO contract change ran.
+
+Next safe action:
+
+1. On the next scheduled run, reconcile durable private stage packets and start from the controller's newly emitted work order.
+2. Do not manually reselect private sources or run a release without a newly successful controller-authorized import.
+
+## 2026-07-29 05:56 EDT — Autonomous evidence queue remained idle
+
+Status: the sole-authority controller work order observed at `2026-07-29T09:56:22Z` is `idle`. Aggregate private state remains `already_imported=23`, `hold_private=60`, with no active rate limit, no pending release admission, and acknowledged release `base2026-daily-batch-20260728-03-release`.
+
+Verification:
+
+- No completed ChatGPT response or private stage artifact was newer than the prior controller receipt, so no courier reconciliation was required.
+- The bounded `queued` plus `needs_source_review` selector returned `eligible_count=0`, `private_inflight_count=0`, `selected_count=0`, and `unclaimed_remaining_after_selection=0`.
+- Focused controller/transcript-status tests passed `5/5`; `git diff --check` passed.
+- Publication audit returned `needs_review=0`, `forbidden=0`, and `secret_findings=0`.
+- No ChatGPT submission, Groq intake, import, public export, build, deploy, reindex, live verification, source status, phase status, or public UI/SEO contract change ran.
+
+Next safe action:
+
+1. On the next scheduled run, reconcile durable private stage packets and start from the controller's newly emitted work order.
+2. Do not manually reselect private sources or run a release without a newly successful controller-authorized import.

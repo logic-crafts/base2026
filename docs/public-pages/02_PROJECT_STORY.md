@@ -105,18 +105,17 @@ Base2026 is being designed around:
 
 ## Where the project is going
 
-The current version is a searchable public source library with reviewed source text, topic pages, source intelligence cards, creator pages, analytics, and static SEO/share pages.
+The current version is a searchable public source library on Cloudflare with reviewed evidence, topic/source/creator pages, D1 FTS5 search, a read-only API, public JSONL, and an automatic private-to-public excerpt-card pipeline.
 
 The next versions should add:
 
-- more reliable TikTok/Instagram intake;
-- tighter review handoff for new sources;
+- stronger source-platform resilience and quality monitoring;
+- synchronized indexable pages and sitemaps for new public D1 projections;
 - better creator filtering and profile controls;
-- semantic search;
 - AI-assisted answers with citations;
 - creator claim workflows;
 - public changelog and stronger support paths;
-- open-source tooling and API/MCP access.
+- versioned public-safe datasets and read-only MCP access.
 
 Long term, Base2026 can become a research engine for short-form expert knowledge: a way to search, compare, and understand what creators are actually saying across platforms.
 

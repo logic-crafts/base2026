@@ -15,6 +15,7 @@
     "directory": "../../output/cloudflare-migration/candidate-web",
     "run_worker_first": [
       "/api/*",
+      "/sitemap-dynamic.xml",
       "/knowledge-search/*",
       "/search",
       "/search/*",
@@ -34,6 +35,12 @@
       "database_name": "base2026-inbox",
       "database_id": "542a77ef-da00-4522-8b7a-3d78fc646c72",
       "migrations_dir": "migrations-inbox"
+    },
+    {
+      "binding": "OUTREACH_DB",
+      "database_name": "base2026-outreach-search",
+      "database_id": "ffbef187-67ef-491f-8fae-62f625636ed5",
+      "migrations_dir": "migrations-outreach"
     }
   ],
   "observability": {

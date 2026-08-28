@@ -11,6 +11,7 @@ Read:
 - `docs/GIT_PUBLICATION_AUDIT.md`
 - `SECURITY.md`
 - `ROADMAP.md`
+- `docs/project-memory/VISUAL_SYSTEM_CONTRACT.md`
 
 For a substantial change, open an issue describing the user problem, affected data/rights boundary and how success will be verified.
 
@@ -28,6 +29,8 @@ Run the smallest relevant checks. For startup release or Worker changes, use:
 
 ```bash
 python3 -m pytest tests/test_build_base2026_cloudflare_release.py -q
+python3 -m pytest tests/test_base2026_design_authority.py -q
+python3 scripts/check-base2026-design-authority.py
 python3 scripts/audit-publication-boundary.py
 
 cd cloudflare/base2026-worker
@@ -39,6 +42,11 @@ npm run wrangler:dry-run
 ```
 
 For UI changes, verify representative desktop and mobile viewports, keyboard behavior, horizontal overflow and the browser console.
+
+Do not introduce a second design authority. Historical Alex V4, WordPress,
+Stitch, Search V1 and Source Detail V2 assets are compatibility/history only;
+the current Cloudflare release must use the `b26-independent-v1` templates and
+builder described in the visual-system contract.
 
 ## Pull request expectations
 

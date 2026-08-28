@@ -1,29 +1,158 @@
 # Project State
 
-Last updated: 2026-08-23
+## 2026-08-28 product visibility/GitHub checkpoint
 
-## Current override — canonical Cloudflare-only pipeline live and documented
+- Live public Worker: `3f5a6687-4eb8-4ba5-9610-7fe2533282ba`.
+- Immediate rollback: `63d1f529-47ff-46ba-baeb-db77f6e80fc6`.
+- Live D1: 2,150 search documents, 1,563 distinct videos, 39 applied
+  projections, zero public full transcripts.
+- Product category: open video research engine / source-first evidence library
+  for short-form expert video.
+- Visual authority: `b26-independent-v1`; legacy Alex V4, WordPress, Stitch,
+  Search V1 and Source Detail V2 are quarantined history, not release inputs.
+- Roadmap: Cloudflare ingestion and indexable evidence graph are live and
+  monitored; developer distribution has a live foundation; creator controls
+  remain in progress; sustainability remains research.
+- DataForSEO research spend: `$0.077`, exact tasks recorded in
+  `DATAFORSEO_POSITIONING_RECEIPT_2026_08_28.md`.
+- GitHub release work is isolated from the dirty primary checkout in branch
+  `codex/base2026-product-visibility-20260828`.
 
-The daily TikTok pipeline no longer depends on the MacBook. Cloudflare owns
-discovery, private capture/storage, Workers AI, durable state, bounded automatic
-excerpt-card projection, and public D1 FTS5 verification. Broad release remains
-off; the narrow machine-policy lane is live and fail-closed. At the verified
-2026-08-23 snapshot, public D1 contained 2,136 documents across 1,557 videos,
-33 applied projections, 44 projected cards, and zero public full transcripts.
+Last updated: 2026-08-28
 
-The authoritative architecture, source-synchronization warning, resource map,
-state contracts, operations, rollback, and agent rules are in
-`docs/BASE2026_CLOUDFLARE_PIPELINE_CANONICAL_OPERATING_MANUAL.md`. Older
-pipeline notes and the VPS/Meilisearch sections below are historical. Recheck
-live Worker/D1 state before any production claim or mutation.
+## Current override — SEO/GEO foundation live and search engines connected (2026-08-28)
 
-## Current override — Stitch V1 AI Recommends Solutions deployed and live-verified
+Public Worker `base2026` is live on version
+`63d1f529-47ff-46ba-baeb-db77f6e80fc6` with rollback
+`790e21d6-f341-4265-ae0c-7dc536a32495`. The release standardizes extensionless
+canonicals and sitemap URLs, adds automatic attributable public pages for
+eligible D1 projections, exposes the live 39-URL dynamic sitemap, corrects
+social/structured metadata, aligns roadmap/API/methodology with the actual
+Cloudflare architecture, and redirects apex HTTP to HTTPS.
 
-Release `base2026-search-solutions-stitch-v1-preview-r3-20260715-094010` is active at `/var/www/base2026-knowledge/current`, bound to ZIP SHA-256 `711b79b492bd4a70e38379878a39f5230f635dfa4458c08f079463122af2f6c7`. Source merged through PR #12 as `9a4670143acd615d0e832a855577b61367b89c4b`. Atomic deploy and exact live contract passed: 1,706 HTTP 200 byte/hash checks, 135 future/private 404 checks, 1,933 sitemap URLs with no admission leaks, Source Detail browser gate `8/8`, and Solutions-specific browser/interaction gate `24/24` at 1440/1280/390/320. Exact live Solutions HTML/CSS/JS hashes match the immutable package `8/8`; manual live visual inspection passed. Rollback was armed and not needed. Meilisearch, IndexNow, WordPress, corpus data and sitemap membership were unchanged. Canonical record: `docs/project-memory/BASE2026_SOLUTIONS_STITCH_V1_PRODUCTION_RELEASE_2026_07_15.md`.
+Live readback: 1,633 unique static sitemap URLs with zero `.html` entries;
+39 dynamic projection URLs; 2,150 public search documents; 1,563 distinct
+TikTok videos; API health/search and JSONL `200`; public full transcripts zero.
+Google Search Console Domain property `base2026.dev` is verified under
+`hello@base2026.dev`; Google reports both sitemaps Success. Bing imported only
+Base2026 and accepted both sitemaps for Processing with no immediate errors or
+warnings. IndexNow accepted 57 changed canonical URLs with HTTP `202`.
 
-## Current override — Source Detail V2 deployed and live-verified
+DataForSEO research is documentation-only: no paid call was made. Any first
+measurement packet requires current price verification, one mutually exclusive
+decision lane, explicit approval, and a hard `$0.10` ceiling.
 
-Release `base2026-source-detail-v2-admission1827-deploycontract-20260713-142944` is active at `/var/www/base2026-knowledge/current`, bound to ZIP SHA-256 `a25f1a037572b6878ebc33951e6eec5ff4a89c86ad9c8ea80d3b59b41af6dd65`. Production exact-byte/status coverage passed for 1,706 HTTP 200 routes, including 1,493 normal public Source Detail pages and 199 archive/noindex pages; all 135 future/private routes return 404. Five child sitemaps contain 1,933 unique URLs with no admission leaks. Responsive browser QA passed 8/8 at 320/390/1280/1440 with no console/page/network failures. Rollback was armed and not needed. Meilisearch stayed unchanged; IndexNow accepted all 1,493 changed indexable Source Detail URLs with HTTP 200. Canonical record: `docs/project-memory/BASE2026_SOURCE_DETAIL_V2_PRODUCTION_RELEASE_2026_07_13.md`.
+## Current override — private cloud capture repaired and proven (2026-08-26)
+
+Private Worker `base2026-pipeline-control` v0.6.1 is live on version `dbad0d33-070a-47fd-9e5e-ea36f18c59d4`. The earlier fairness migrations `0013`/`0014` remain applied: new zero-attempt sources rank ahead of retry rows, retries wait 15/30/60 minutes, and exhausted sources become private review rather than starving fresh work.
+
+The remaining transport defect was TikTok webpage negotiation in the Container. Image `base2026-pipeline-capture:0.5.4` is healthy as Container application version 6 and pins `yt-dlp 2026.08.19` with `curl-cffi` plus fixed Chrome TLS impersonation. It adds no cookie, account, proxy, browser profile, or public route. Two live HMAC-authenticated reconciliations attempted six sources, captured two, and increased private stored media from 210 to 212; the other four remain bounded retries. The fallback order is official Player API, Browser Player-API transport fallback, then canonical URL Container fallback. No public Worker/data/release setting changed and `PUBLIC_RELEASE_ENABLED=false` remains intentional.
+
+## Current override — automatic Cloudflare-only publication live (2026-08-23)
+
+The automatic Cloudflare-only publication lane is live. Public Worker `base2026` is version `790e21d6-f341-4265-ae0c-7dc536a32495` (prior rollback `86faccf2-e986-4437-a39a-4b3d66a1883f`). Private Worker `base2026-pipeline-control` v0.6.1 is version `70fd6e68-ea54-462d-ba27-e3b1a66fa997` (pre-automatic rollback `f9e4a494-9780-4bd2-bb33-5b7f5a068f81`); private migrations `0011` and `0012` are applied and none are pending.
+
+The release policy is `base2026.machine-publication.v1`, owner reference `owner-20260823-base2026-auto-publication-v1`, SHA-256 `b37c900a03eb63252c7736c2197f2be1eae3f117eae76914f3cbef306d89e573`, batch size 10 and maximum attempts 4. `AUTOMATIC_PUBLICATION_ENABLED=true`, `IMPORT_ENABLED=true`, and `PUBLIC_PROJECTION_ENABLED=true`; broad `PUBLIC_RELEASE_ENABLED=false` remains intentional. `LOCAL_ADAPTER_ENABLED=false`; Cloudflare discovery is `0 10 * * *`, and reconcile/capture/automatic publication are `*/5 * * * *`.
+
+The first live automatic run attempted 3 packets, applied 2, reported 1 `already_public`, and had retry 0, held 0 and `hard_hold=false`. Newly public TikTok IDs are `7271043105799834912` and `7402026836600851717`; `7662399921894591761` was already legacy-public with no duplicate, and synthetic fixture `7999999999999999933` was absent. Post-release counts are public documents 2,136 / distinct videos 1,557 / projection receipts 33 / cards 44 / `full_transcript_public=0`; private imports 35 / applied projections 33 / ready 0 / automatic receipts 2 applied + 1 already_public / problems 0; registry total 4,123 / `publication_eligible=209` / invalid eligible 0. Site hash is unchanged at `696c473bc5bf1a93ecb01e140100edc9019f8efc5c8ff3f5a9b29ddc6acdf98d`; API search found both new rows and replay attempted 0.
+
+The latest 2026-08-23 discovery snapshot is partial: 135 discovered, 21 fresh, 114 duplicates, 21 admitted, 0 held and 1 failed. AI jobs are 308 completed, 18 pending and 43 held; Workers AI actual/reserved usage is 8,699 Neurons across 246 invocations with `hard_blocked=0`. Monthly budget is `hard_hold=0`, browser hours approximately `0.01793`, and container invocations 25. The 18 pending jobs resume automatically under the next daily Neuron budget and are not completed yet. The final `*/5` receipt is all zero: reconcile dispatched/recovered/dead-lettered/resumed 0, capture status/attempted/succeeded/failed `completed:0:0:0`, and automatic attempted/applied/already_public/retried/held `0:0:0:0:0`; signed status `hard_hold=false`.
+
+Public tests are 34/34, private 183/183, courier 18/18; types, typecheck and dry-run pass. Recovery protections include explicit `publication_eligible`, synthetic-fixture exclusion, exact RPC presence/verify, `full_transcript_public=0`, fenced automatic/projection leases, global hard-hold batch stop and exhausted-lease terminal hold. Valid eligible packets require no user manual review; malformed, privacy-risk and mismatch states fail closed automatically. Next action is to observe and record the first full post-release daily discovery cycle at `2026-08-24 10:00 UTC`; that observation has not occurred yet.
+
+## Current override — cloud-only private discovery/acquisition v0.5.2 live-verified (2026-08-23)
+
+Private Worker `base2026-pipeline-control` v0.5.2 is live on version `f9e4a494-9780-4bd2-bb33-5b7f5a068f81`; private migrations `0001`-`0010` are applied. Intake, autopilot, Player API, Browser Run, discovery, scheduled discovery, cloud-capture reconciliation, Workers AI, private import, exact projection and retention are enabled. `LOCAL_ADAPTER_ENABLED=false`, the direct manual Container endpoint is false, `PUBLIC_RELEASE_ENABLED=false`, and ChatGPT remains manual owner-only. Cron runs capture/reconcile every five minutes and discovery at `10:00Z`; bounded scheduled Player acquisition uses the deployed Cloudflare Container app, without making the manual Container route public.
+
+At the `19:56Z` checkpoint, discovery run `83ae6e9cfc18babf715fe66c3a597f597bd16d68` covered 19 creators: 135 discovered, 21 fresh/admitted, 114 duplicates, 1 failed and 0 held. The private registry then contained 4,123 rows (4,102 known, 10 captured, 11 admitted). That scheduled capture proof completed 3/3 attempts with 0 failures; monthly totals were 12 Container invocations, all reservations released, `hard_hold=0`, and usage `.0524033333` GiB-h memory, `.78605` vCPU-minutes, `.2096133333` GiB-h disk and `.0165713889` browser-hours. A subsequent `20:01Z` cron attempted 3 captures, completed 2 and left 1 retry; the registry moved to 12 captured / 9 admitted, media to 201, and five new transcription jobs are pending at the 7,500-Neuron cap.
+
+The `19:56Z` private D1 snapshot was 213 sources and 805 artifacts; three cloud sources had reached `ready_for_import_held`. Workers AI validation used a temporary 8,900 soft cap and ended at 8,699 reserved/actual Neurons across 246 invocations; the deployed gates are restored to 7,500/9,000. Private releases were 6 held, 32 imported and 1 rejected; 31 exact projections remained applied. Public D1 was unchanged at 2,134 documents / 1,555 videos / 31 projections / 42 cards, with `full_transcript_public=0`. Private counters drift by design as each cron settles; read the latest D1/status receipt before acting.
+
+At the `20:21Z` closure, the same cloud scheduler had captured all 21/21 newly admitted discovery sources: registry state was 4,102 known / 21 captured / 0 admitted, with 210 stored media artifacts. Fourteen new transcription jobs are durably pending behind the included daily AI stop; the AI ledger remained unchanged at 8,699 / 246 invocations. Monthly capture accounting closed at 25 invocations, `.1213130556` GiB-h memory, `1.8196958333` vCPU-minutes, `.4852522222` GiB-h disk and `.0179275` browser-hours, with zero reservations and no hard hold. The one remaining `awaiting_capture` source is an older synthetic shadow control, not an uncaptured TikTok discovery source.
+
+Four semantic jobs that had failed only under the superseded native-JSON-schema deployment were moved from permanent provider hold to exact audited `pending` rows for `2026-08-24 00:00:00`; their outboxes are pending, attempts reset to zero, and audit event `AI_PROVIDER_CONTRACT_REPAIRED_REQUEUE` has four receipts. Maintenance remained a no-op and AI usage did not increase. The deterministic evidence-range review hold and transcription-invalid holds were not rearmed.
+
+The local acquisition automation is paused: both Base2026 LaunchAgents are unloaded and their plists remain only as rollback material. A bounded cleanup removed 143 processed/cloud-backed media files (619,674,115 bytes); the exact deletion receipts remain private. Verification passed worker 170/170, courier 17/17, typecheck, dry deploy, prune 6/6 and zero maintenance dispatch/recovery/dead-letter/resume/delete/orphan counts. Next action is to observe automatic AI-hold resumption after `00:00 UTC`, then continue the `10:00Z` discovery run; owner review/import/projection remains explicit and non-automatic.
+
+## Current override — bounded discovery intake completed with durable AI overflow (2026-08-23)
+
+The daily Cloudflare-first run completed from live receipts. The fresh TikTok discovery receipt contained 245 source rows and exactly one unseen ID after comparison with the canonical queue and private D1. That ID passed the explicit dry-run/apply allowlist gate, staged as audio-only, and uploaded as one isolated manifest/media chunk. Cloudflare accepted the capture and enqueued transcription; the source is held at `ai_soft_cap` with zero new Neurons consumed today. The post-wave unseen remainder is zero.
+
+No source completed transcription plus semantic pass during this run, so no Luna packet, private import or public projection was created. Private D1 now has 191 sources, 188 media/manifests, 151 raw transcripts, 31 source-intelligence artifacts, 31 editorial artifacts, 36 production packets and 32 private imports; the exact public projection ledger remains 31 applied. Public D1 remains 2,134 documents / 1,555 unique TikTok videos with zero public full transcripts.
+
+The aggregate receipt is private at `PRIVATE_BASE2026_WORK_INBOX/cloud-discovery-20260823-01/aggregate-receipt.json`. Broad `PUBLIC_RELEASE_ENABLED`, Container capture, AI Gateway and paid fallback remain disabled; the next safe action is reconciliation after the next UTC budget reset.
+
+## Current override — live pipeline repaired and reverified end to end (2026-08-23)
+
+Private Worker `base2026-pipeline-control` v0.4.2 is live on version `c8ee1126-6eb9-4129-a75d-89f78a481cb0`. It fixes the Queue/reconciler dispatch race, repairs stranded `queued + pending` jobs, and changes Workers AI daily-cap handling so a cap deferral records its UTC budget date, consumes no provider attempt, and resumes only after the next UTC reset. The previously stranded capture job completed; all normal and AI outbox consistency checks now return zero. Private migrations remain `0001`-`0009`, broad `PUBLIC_RELEASE_ENABLED=false`, Container/AI Gateway/paid fallback remain off, and the live AI ledger is 7,494/7,500 Neurons with hard block `0`.
+
+The 2026-08-23 discovery check found eight unseen IDs. All eight were explicitly admitted, bringing local canonical inventory to 4,101 unique videos and fresh unseen remainder to zero. Seven audio/manifests were staged, hash-verified and uploaded to private Cloudflare; the eighth, `7676979014401051917`, remains `media_retry_pending` because current stable yt-dlp `2026.08.19` still reports no video formats. One of the seven completed transcription before the soft stop; the remaining transcription/semantic work is durably held until the next UTC budget day.
+
+Two Luna Max evidence batches reviewed 20 Cloudflare-ready sources: eight passed and twelve were held. All eight PASS sources completed source-intelligence, editorial, production, private import, exact projection and live-search verification. Private D1 now has 190 sources, including 32 `imported_private`; public projection ledger has 31 applied entries and 42 projected documents. A separate privacy repair removed three legacy search passages for one video that contained a contact address. Net public D1 is 2,134 documents / 1,555 unique TikTok videos, with `full_transcript_public=0` throughout.
+
+The entire ignored `PRIVATE_BASE2026_WORK_INBOX` was normalized to directories `0700` and regular files `0600`, with zero symlinks, wrong owners or mode violations. The media staging writer now enforces private modes without a thread-unsafe per-worker umask, and the active daily 06:00 Luna Max automation explicitly verifies this boundary for media, transcripts, generated packets, work orders, indexes and receipts.
+
+## Historical override — batch Cloudflare-to-Base2026 v0.4.0 checkpoint (2026-08-22)
+
+Base2026 now runs high-throughput private TikTok intake without a one-video ceiling: explicit discovery admission repeats allowlist waves of at most 100 IDs until the fresh unseen set is exhausted, audio staging uses four workers, Cloudflare transfer is isolated into batches of at most 10 sources / 50 MiB, and Workers AI overflow stays durably queued behind the 7,500/9,000 daily Neuron gates. Semantic work remains Luna Max-only and public projection remains exact-source and evidence-gated.
+
+The 245-row discovery snapshot contained 35 known and 210 unseen IDs. All 210 were admitted to the private canonical queue; local canonical is now 4,093 unique videos and unseen remainder is zero. Initial staging plus one retry uploaded 178 of the 210 to private Cloudflare R2/D1; 32 remain in the private retry/manual-source lane. Cloudflare now holds 180 media/manifests including two earlier control sources.
+
+Luna reviewed 31 Cloudflare-ready sources: 22 passed exact evidence and are live, while 9 remain held. Public D1 is now 2,129 documents / 1,548 unique TikTok videos, with 23 applied projections including the earlier pilot. Live versions are public Worker `86faccf2-e986-4437-a39a-4b3d66a1883f` and private v0.4.0 Worker `831bff85-cae3-4e13-98e1-d699a9b64615`; private migrations `0001`-`0009` are applied.
+
+One daily 06:00 Luna Max/max automation processes the available backlog in compact batches and notifies only on failed runs. `PUBLIC_PROJECTION_ENABLED=true`; broad `PUBLIC_RELEASE_ENABLED`, Container capture, AI Gateway and paid fallback remain disabled. Exact projection rollback and D1 Time Travel remain the recovery path.
+
+## Current override — Cloudflare-first private pipeline is operational (2026-08-22)
+
+Base2026 now has a separately deployed private evidence/TikTok control plane at `base2026-pipeline-control.offflinerpsy.workers.dev`, Worker version `905ae9e4-fe0f-47fb-b3c1-06dd6bfe7319`. Its authoritative resources are D1 `base2026-pipeline-private` (`91dfd575-029e-43e5-91d6-6cd9aca130ca`), private R2 `base2026-pipeline-artifacts`, Queues `base2026-pipeline-jobs` and `base2026-pipeline-ai-jobs` with their DLQs, and Workflow `Base2026PipelineWorkflow`. Migrations `0001` through `0007` are applied with no pending migration; all 10 artifacts have unique explicit creation sequences and allocator `next_value=11`.
+
+Live v0.3.1 gates are intake/autopilot/local adapter/Workers AI/manual ChatGPT courier/private import/retention on; Container capture, AI Gateway, and public release are off. Workers AI is guarded by 7,500/9,000 daily Neuron soft/hard caps and single-message AI concurrency. The exact semantic model is `@cf/meta/llama-3.1-8b-instruct-fp8-fast`; its v0.3.1 live proof used 22 Neurons and completed with exact R2 readback. Current ledger is 4,778 reserved/actual Neurons, 4 completed invocations, hard-block `0`. The Container capture image passed a local non-root/read-only-root health POC only and was not deployed, so it cannot create Cloudflare Container usage.
+
+The production-boundary proof used synthetic source `7999999999999999933`. Release `072a76060006a4212889af4ccc368c616fa30183` materialized as private import `a6c7ea121154b043253337b72ff11e1e005f8627`, one `held_private` card, public flags `0`; duplicate review/import returned the same receipts and a contradictory review failed `409`. Independent R2 readback matched production SHA-256 `0476db9f0a94ba4ff0745c12c3c017a81f2b98a7559dd1ae2c4114250c254bca`.
+
+The Mac LaunchAgent `com.base2026.cloudflare-pipeline-adapter` runs the deterministic local controller every 15 minutes without Codex/ChatGPT/API-model tokens. It is currently idle and last exited `0`. Semantic stages requiring ChatGPT are exported only to a manual filesystem courier; no browser automation or programmatic ChatGPT extraction exists. Release remains an owner gate.
+
+The public product did not change: Worker `806e35c7-f230-4e77-aeea-15169b4faaf0`, Search 2,095, Outreach 78, Inbox 0, and root HTML SHA-256 `696c473bc5bf1a93ecb01e140100edc9019f8efc5c8ff3f5a9b29ddc6acdf98d` before and after.
+
+## Current override — curated Outreach collection is live (2026-08-21)
+
+Base2026 production is `https://base2026.dev/` on Worker `806e35c7-f230-4e77-aeea-15169b4faaf0`. Workspace exposes `All`, `Evidence`, and `Outreach findings`. Outreach uses isolated public D1 `base2026-outreach-search` (`ffbef187-67ef-491f-8fae-62f625636ed5`) and fixed index `base2026_public_outreach`; Evidence remains on its existing D1/index and Inbox remains private.
+
+The v1 corpus contains 78 semantically selected findings from 400 mechanically eligible candidates. Remote readback is 78 findings / 78 FTS rows / 83 topics / 86 lanes with zero prohibited rows. Live desktop/mobile/API checks passed; the Evidence `schema` control still returns 40 hits. Immediate rollback is Worker `34bdf3fe-90f8-4580-a88b-d39503655818`. The workbook stayed read-only, frozen workers stayed frozen, and no Git stage/commit/push occurred. Canonical receipt: `BASE2026_OUTREACH_PRODUCTION_RELEASE_2026_08_21.md`.
+
+## Current override — unified visual authority and inbound email are live (2026-08-20)
+
+Base2026 production is `https://base2026.dev/` on Cloudflare Worker `34bdf3fe-90f8-4580-a88b-d39503655818`. The owner-authorized `b26-independent-v1` r10 mobile-scroll hotfix is the exact r9 asset corpus plus one CSS correction: the root-only `.b26-home { overflow: clip; }` rule was removed. Live WebKit/iPhone verification now reaches `scrollY=900` with body overflow visible, zero horizontal overflow and a working mobile menu; Workspace remains scrollable and public D1 search still returns the expected 40 estimated `schema` hits. No D1 schema/data migration, canonical/indexability/redirect change or Git publication occurred.
+
+Google Workspace Business Starter is now the live mail authority for `base2026.dev`. The primary Gmail identity is `hello@base2026.dev`; the retained `offflinerpsy@gmail.com` identity can still send and receive in the same account. Root MX is `1 smtp.google.com`; Google SPF, 2048-bit DKIM selector `google`, and monitoring-only DMARC (`p=none`) resolve publicly. Cloudflare Email Routing is disabled and its former MX/SPF/DKIM records are removed. Workspace reports Gmail activated and accepted the DKIM setup. Same-account two-direction send/receive checks passed. Independent AboutMyEmail receipt `27aeac2d` reports SPF aligned, DKIM aligned and DMARC pass (`p=none`); the mail cutover gate is closed.
+
+Immediate rollback Worker version: `48d8ea7e-f9db-464c-a173-265ab991fc24`. Older rollback versions: `3c12d5a3-5855-4971-b163-9d5b067e8031`, `237385ff-5984-44c8-8df3-b52873249296`, `c5e88c7f-707b-4572-8d33-e369eecb2bb7`, `4389e513-c16a-4bcf-9f8c-b97ac55b7825`.
+
+## Historical override — visual authority recovery is active, production unchanged (2026-08-20)
+
+Base2026 is live at `https://base2026.dev/`, but its visual source authority is mixed: the root has a partial startup/Superdesign surface while Workspace, generated indexes, Roadmap and source detail retain the legacy visual corpus. This is a source-composition defect, not a cache or routing defect. The recovery decision is recorded in `BASE2026_DESIGN_RECOVERY_AUDIT_2026_08_20.md`: establish `b26-independent-v1`, a Base2026-only cool-blue research-product design contract, via shared templates, generators and the Cloudflare release builder.
+
+No candidate or production mutation has been made. Search remains public D1 FTS5, Support/Partner remain private D1 form flows, and public data/attribution, canonical/robots/redirect and Worker boundaries remain unchanged. The sole next implementation action is a fresh isolated candidate based on `de96c08f8f5e28f3ac0ce5236093b4f0b5c152e9`; deployment is explicitly blocked pending fresh functional, visual, accessibility and public-boundary gates.
+
+## Current override — verified standalone startup architecture (2026-08-20)
+
+Base2026 is independently live at `https://base2026.dev/` as a solo-founder, open-source public-source intelligence product. Cloudflare Workers Static Assets serves the public site; public evidence search uses D1 FTS5 database `base2026-public-search` (`ac034130-4169-43c2-9a17-4b72d05457b0`). The startup landing page is the root, the preserved evidence-search workspace is `/workspace/`, legacy `/search*` redirects there, and `www.base2026.dev` permanently redirects to the apex. The production Worker is `237385ff-5984-44c8-8df3-b52873249296`.
+
+The public product remains attribution-first and public-data-only. Private source vaults, raw media/captions, local databases, review queues, logs and credentials remain outside Cloudflare/public assets. Support and Partner proposals are validated by the Worker and stored separately in private D1 `base2026-inbox` (`542a77ef-da00-4522-8b7a-3d78fc646c72`) under the documented retention boundary. Alex Personal WordPress remains separately live at `https://aggressorbulkit.online/`; Base2026 has no personal-services shell, forms, navigation or personal-domain links.
+
+The startup release artifact is 4,229 files / 82,525,329 bytes, SHA-256 `826674193938709b899c89050cc42722e847afa30cee6901fc3e89aaff4ed1be`. Preserve Worker rollback identifiers `c5e88c7f-707b-4572-8d33-e369eecb2bb7` and `4389e513-c16a-4bcf-9f8c-b97ac55b7825`, plus the VPS release/Meilisearch rollback posture, until separately reviewed. External GitHub failures are the only open operational blockers: CodeQL is billing-locked before execution; GitHub Pages deployment creation returned HTTP 500 after successful builds. These are not an authorization to change product source or Cloudflare production.
+
+## Current override — `base2026.dev` separation audit complete (2026-08-19)
+
+The canonical local checkout is `/Users/alexyarosh/Projects/base2026-migration/DW/base2026`. Current production is unchanged: Alex Personal WordPress is at `https://aggressorbulkit.online/` and Base2026 remains at `https://aggressorbulkit.online/knowledge/` on the same VPS, with Meilisearch on localhost behind nginx. `base2026.dev` is registered and active as a Cloudflare Free zone with authoritative nameservers live, but apex/`www` have no web address answer and no Base2026 Worker/custom domain is attached. The content/data/UI programme remains frozen. The next scoped work is a preview-only Workers Static Assets plus D1 FTS5 migration candidate; no DNS, VPS, production, commit, push or deploy change was performed. Canonical plan: `BASE2026_CLOUDFLARE_DOMAIN_MIGRATION_PLAN_2026_08_19.md`.
+
+## Current override — R6 production closure (2026-07-16)
+
+Exact R6 is deployed and live-verified at `https://aggressorbulkit.online/knowledge/`; Agency OS task `83` / Plane `B26-15` is done. Task `10` is ready and task `54` remains scoped behind it. The earlier `base2026.com` owner-boundary alert was an unsupported agent inference and is retracted; that domain is not part of the project and no owner action is required. Canonical closure: `/Users/alexyarosh/.hermes/knowledge/projects/topic-022-base2026/BASE2026_WHOLE_CORPUS_R6_PRODUCTION_RELEASE_2026-07-16.md`.
+
+## Current override — Source Detail V2 visual, admission, and sitemap gates closed; independent release boundary remains
+
+The Source Detail V2 full-family isolated candidate is contract-valid, byte-deterministic and visually accepted against current-live WordPress at 1440/1280/390/320 for both normal and archive states. Final candidates O/P each contain 1,712 files and emit 1,692 normal/archive routes. The 13 post-freeze unclassified sources were terminally classified `future_private_backlog`; isolated export still emits 1,692 public source records and excludes all 13 new IDs. The reported `content-refresh-prioritization-framework.html` sitemap omission was a false positive: the canonical `solutions/content-refresh-prioritization.html` appears exactly once in isolated regenerated and live sitemap sets. Production remains unchanged. Package/deploy remains fail-closed pending clean publication/ownership evidence and an independent release permit.
 
 ## Current override — local source-card completeness gate closed; redesign unblocked
 

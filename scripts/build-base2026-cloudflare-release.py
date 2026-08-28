@@ -44,11 +44,17 @@ DEFAULT_HOMEPAGE_STYLESHEET = PROJECT_ROOT / "templates" / "base2026-startup-hom
 DEFAULT_STARTUP_HEADER = PROJECT_ROOT / "templates" / "base2026-startup-header.html"
 DEFAULT_STARTUP_FOOTER = PROJECT_ROOT / "templates" / "base2026-startup-footer.html"
 DEFAULT_STARTUP_SHELL_STYLESHEET = PROJECT_ROOT / "templates" / "base2026-startup-shell.css"
+DEFAULT_CORE_STYLESHEET = PROJECT_ROOT / "templates" / "base2026-core.css"
 DEFAULT_SUPPORT_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-support.html"
 DEFAULT_PARTNER_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-partner.html"
 DEFAULT_PRIVACY_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-privacy.html"
 DEFAULT_ABOUT_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-about.html"
+DEFAULT_APPLY_RESEARCH_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-apply-research.html"
+DEFAULT_AI_VISIBILITY_RESOURCES_TEMPLATE = (
+    PROJECT_ROOT / "templates" / "base2026-ai-visibility-resources.html"
+)
 DEFAULT_FORMS_SCRIPT = PROJECT_ROOT / "templates" / "base2026-forms.js"
+DEFAULT_ROADMAP_SCRIPT = PROJECT_ROOT / "web" / "static" / "roadmap.js"
 DEFAULT_GITHUB_ICON = PROJECT_ROOT / "static" / "brand" / "github.svg"
 DEFAULT_X_ICON = PROJECT_ROOT / "static" / "brand" / "x.svg"
 DEFAULT_MARK_ICON = PROJECT_ROOT / "static" / "base2026-mark.svg"
@@ -194,6 +200,7 @@ class ReplacementCounts:
     internal_knowledge_paths_to_root: int = 0
     wordpress_routes_absolutized: int = 0
     redirect_documentation_preserved: int = 0
+    html_urls_to_extensionless: int = 0
 
     def as_dict(self) -> dict[str, int]:
         return {
@@ -202,6 +209,7 @@ class ReplacementCounts:
             "internal_knowledge_paths_to_root": self.internal_knowledge_paths_to_root,
             "wordpress_routes_absolutized": self.wordpress_routes_absolutized,
             "redirect_documentation_preserved": self.redirect_documentation_preserved,
+            "html_urls_to_extensionless": self.html_urls_to_extensionless,
         }
 
     def add(self, other: "ReplacementCounts") -> None:
@@ -414,6 +422,55 @@ def _map_search_path(path: str) -> str | None:
     return None
 
 
+def _extensionless_html_path(path: str) -> str:
+    """Return the URL Cloudflare Static Assets treats as canonical."""
+
+    lowered = path.casefold()
+    if lowered == "/index.html":
+        return "/"
+    if lowered.endswith("/index.html"):
+        return path[: -len("index.html")]
+    if lowered.endswith(".html"):
+        return path[: -len(".html")]
+    return path
+
+
+BASE2026_ABSOLUTE_URL_RE = re.compile(
+    r"(?P<url>https://base2026\.dev(?P<path>/[^\s\"'<>]*))",
+    re.IGNORECASE,
+)
+ROOT_HTML_ROUTE_RE = re.compile(
+    r"(?<![A-Za-z0-9_:/.-])(?P<path>/(?:[A-Za-z0-9._~!$&()*+,;=:@%/-]+\.html))(?P<suffix>[?#][^\s\"'<>]*)?",
+    re.IGNORECASE,
+)
+
+
+def _normalize_base2026_static_urls(text: str, counts: ReplacementCounts | None = None) -> str:
+    """Align public URLs with Static Assets' extensionless HTML routing."""
+
+    def replace_absolute(match: re.Match[str]) -> str:
+        parsed = urlsplit(match.group("url"))
+        mapped_path = _extensionless_html_path(parsed.path)
+        if mapped_path == parsed.path:
+            return match.group("url")
+        if counts is not None:
+            counts.html_urls_to_extensionless += 1
+        return urlunsplit((parsed.scheme, parsed.netloc, mapped_path, parsed.query, parsed.fragment))
+
+    normalized = BASE2026_ABSOLUTE_URL_RE.sub(replace_absolute, text)
+
+    def replace_root(match: re.Match[str]) -> str:
+        path = match.group("path")
+        mapped_path = _extensionless_html_path(path)
+        if mapped_path == path:
+            return match.group(0)
+        if counts is not None:
+            counts.html_urls_to_extensionless += 1
+        return mapped_path + (match.group("suffix") or "")
+
+    return ROOT_HTML_ROUTE_RE.sub(replace_root, normalized)
+
+
 def _map_old_origin_url(full_url: str, counts: ReplacementCounts) -> str:
     """Transform one old-host URL, leaving old WordPress URLs absolute."""
 
@@ -616,6 +673,8 @@ def transform_text(
         return token
 
     transformed = ROOT_PRODUCT_URL_RE.sub(replace_product_path, transformed)
+    if standalone_startup:
+        transformed = _normalize_base2026_static_urls(transformed, counts)
     return TransformResult(
         text=transformed,
         replacements=counts,
@@ -629,6 +688,14 @@ OLD_BASE2026_CANONICAL_RE = re.compile(
 )
 BROKEN_KNOWLEDGE_PATH_RE = re.compile(
     r"(?<![A-Za-z0-9._-])/(?:knowledge)(?:/|[?#]|$)",
+    re.IGNORECASE,
+)
+REDIRECTING_CANONICAL_RE = re.compile(
+    r'<link\s+rel=["\']canonical["\'][^>]*href=["\']https://base2026\.dev/[^"\']+\.html(?:[?#][^"\']*)?["\']',
+    re.IGNORECASE,
+)
+REDIRECTING_SITEMAP_LOC_RE = re.compile(
+    r'<loc>https://base2026\.dev/[^<]+\.html(?:[?#][^<]*)?</loc>',
     re.IGNORECASE,
 )
 
@@ -670,7 +737,12 @@ def _format_json(payload: Mapping[str, object]) -> bytes:
     return (json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n").encode("utf-8")
 
 
-ROBOTS_PAYLOAD = "User-agent: *\nAllow: /\n\nSitemap: https://base2026.dev/sitemap.xml\n"
+ROBOTS_PAYLOAD = (
+    "User-agent: *\n"
+    "Allow: /\n\n"
+    "Sitemap: https://base2026.dev/sitemap.xml\n"
+    "Sitemap: https://base2026.dev/sitemap-dynamic.xml\n"
+)
 HEADERS_PAYLOAD = """/*
   Cache-Control: no-cache
   X-Content-Type-Options: nosniff
@@ -680,6 +752,97 @@ HEADERS_PAYLOAD = """/*
 
 /static/*
   Cache-Control: no-cache
+
+/static/*.jsonl
+  Content-Type: application/x-ndjson; charset=utf-8
+  Cache-Control: public, max-age=300, s-maxage=3600
+"""
+
+SOCIAL_IMAGE_URL = "https://base2026.dev/static/assets/base2026-ai-visibility-card.png"
+HUB_SITEMAP_FILENAME = "sitemaps/base2026-hubs.xml"
+HUB_SITEMAP_URL = f"{BASE2026_ORIGIN}/{HUB_SITEMAP_FILENAME}"
+HUB_SITEMAP_ROUTES = (
+    "/",
+    "/workspace/",
+    "/creators/",
+    "/compare/",
+    "/analytics",
+    "/methodology",
+    "/roadmap",
+    "/api",
+    "/about",
+    "/privacy",
+    "/partner",
+    "/apply-research",
+    "/opt-out",
+    "/solutions/",
+    "/ai-visibility-resources",
+    "/site-structure",
+)
+
+# These are generated at the publication boundary rather than inherited from
+# the former shared personal-site artifact.  They deliberately describe only
+# Base2026's public product, routes and limits.
+BASE2026_ROOT_LLMS_PAYLOAD = """# Base2026
+
+Base2026 is an independent public source-intelligence project maintained by
+Logic Crafts LLC. It makes attributed short-form expert-video evidence
+searchable for research into SEO, GEO, AEO, AI search, local visibility,
+schema, content structure and entity trust.
+
+## Public entry points
+
+- Home: https://base2026.dev/
+- Search workspace: https://base2026.dev/workspace/
+- Topics: https://base2026.dev/topics/
+- Creators: https://base2026.dev/creators/
+- Methodology: https://base2026.dev/methodology
+- Roadmap: https://base2026.dev/roadmap
+- API and AI access: https://base2026.dev/api
+- Source policy: https://base2026.dev/source-policy
+- Creator correction or removal: https://base2026.dev/opt-out
+- Current D1 projection sitemap: https://base2026.dev/sitemap-dynamic.xml
+
+## Public boundary
+
+Base2026 publishes reviewed public source records and attribution. It does not
+publish private notes, client data, credentials, raw source vaults, raw ASR,
+media files, local databases or unreviewed pipeline artifacts. Cite canonical
+source, topic or creator pages when using Base2026 evidence.
+"""
+
+BASE2026_LLMS_PAYLOAD = """# Base2026 Knowledge Library
+
+Base2026 is a public searchable library of attributed source records, reviewed
+passages, insight cards, topic pages and creator profiles drawn from
+short-form expert video. It is a research product, not a marketing-services
+site or a private client workspace.
+
+## Primary public entry points
+
+- Search workspace: https://base2026.dev/workspace/
+- Topic index: https://base2026.dev/topics/
+- Creator index: https://base2026.dev/creators/
+- Source index: https://base2026.dev/sources/
+- Methodology: https://base2026.dev/methodology
+- Apply research: https://base2026.dev/apply-research
+- API and AI access: https://base2026.dev/api
+
+## Public data and use
+
+- Release manifest: https://base2026.dev/static/manifest.json
+- Public source documents: https://base2026.dev/static/documents.jsonl
+- Public passages: https://base2026.dev/static/passages.jsonl
+- Insight cards: https://base2026.dev/static/insight_cards.jsonl
+- Topic signal briefs: https://base2026.dev/static/topic_signal_briefs.jsonl
+- Data dictionary: https://base2026.dev/data-dictionary.json
+- Read-only search API: https://base2026.dev/api/search/multi-search
+- Current D1 projection sitemap: https://base2026.dev/sitemap-dynamic.xml
+
+Use the workspace to explore public evidence and cite a canonical Base2026
+source, topic or creator page. The search API is read-only and backed by D1;
+no browser key is required. Do not use Base2026 for raw transcript harvesting,
+creator impersonation, private lead data or administrative writes.
 """
 
 
@@ -687,6 +850,12 @@ def _rewrite_public_api_docs(relative_path: Path, text: str) -> str:
     """Make the small public API docs match the Cloudflare search contract."""
 
     path = relative_path.as_posix()
+    if path == "root-llms.txt":
+        return BASE2026_ROOT_LLMS_PAYLOAD
+
+    if path == "llms.txt":
+        return text
+
     if path == "static/meili.js":
         return text.replace(
             'window.BASE2026_MEILI_URL || "http://127.0.0.1:7700"',
@@ -722,17 +891,6 @@ def _rewrite_public_api_docs(relative_path: Path, text: str) -> str:
         # /search/ and /search/index.html on a root-mounted static host.
         return text.replace('href="./', 'href="/').replace('src="../static/', 'src="/static/')
 
-    if path == "llms.txt":
-        text = text.replace(
-            "- Search proxy: https://base2026.dev/api/search/multi-search",
-            "- Search API: https://base2026.dev/api/search/multi-search",
-        )
-        text = text.replace(
-            "Use the search workspace for exploration, topic pages for canonical topic evidence, source pages for source-level attribution, and topic signal briefs for compact summaries of repeated creator signals. Use the public JSONL files for offline analysis and the search proxy only when live Meilisearch ranking is needed. Cite the canonical source or topic page when referencing Base2026 evidence.",
-            "Use the search workspace for exploration, topic pages for canonical topic evidence, source pages for source-level attribution, and topic signal briefs for compact summaries of repeated creator signals. Use the public JSONL files for offline analysis or the read-only Meilisearch-compatible Worker API backed by D1 FTS5 when live search ranking is needed; no browser key is required. Cite the canonical source or topic page when referencing Base2026 evidence.",
-        )
-        return text
-
     if path == "api.html":
         old = (
             "<h2>Search endpoint</h2><p>The public UI searches through a server-side Meilisearch proxy:</p>"
@@ -749,7 +907,17 @@ def _rewrite_public_api_docs(relative_path: Path, text: str) -> str:
             # migration-specific wording silently stops being updated.
             if "server-side Meilisearch proxy" in text or "injects the public search key" in text:
                 raise ReleaseBuildError("api.html contains an unhandled legacy search-proxy contract")
-        return text.replace(old, new)
+        text = text.replace(old, new)
+        old_ai_handoff = (
+            "<p>For business-specific implementation, use <code>/apply-research.html</code> as the public bridge from Base2026 source intelligence to Alex Yarosh&#x27;s AI Visibility Snapshot, Diagnostic Audit, and service workflow.</p>"
+        )
+        new_ai_handoff = (
+            "<p>Use <code>/apply-research.html</code> to understand the public research boundary and how to turn source evidence into an independent review question. Base2026 does not accept private client material or provide a private audit workflow.</p>"
+        )
+        text = text.replace(old_ai_handoff, new_ai_handoff)
+        if old_ai_handoff in text or "service workflow.</p>" in text:
+            raise ReleaseBuildError("api.html retains an unhandled personal-commercial handoff")
+        return text
 
     if path == "api-index.json":
         old_description = (
@@ -760,35 +928,106 @@ def _rewrite_public_api_docs(relative_path: Path, text: str) -> str:
             '      "backend": "cloudflare_worker_d1_fts5",\n'
             '      "browser_key_required": false'
         )
+        text = text.replace(
+            "Human-readable bridge from Base2026 public source intelligence to Alex Yarosh's business-specific AI visibility audit and service workflow.",
+            "Human-readable guide to Base2026 public source intelligence, its attribution rules and its public/private boundary.",
+        )
+        if "business-specific AI visibility audit" in text or "service workflow" in text:
+            raise ReleaseBuildError("api-index.json contains an unhandled personal-commercial handoff")
         if old_description not in text:
             if "Server-side Meilisearch multi-search proxy" in text:
                 raise ReleaseBuildError("api-index.json contains an unhandled legacy search-proxy contract")
             return text
-        return text.replace(old_description, new_description)
+        text = text.replace(old_description, new_description)
+        return text
+
+    return text
+
+
+def _rewrite_legacy_base_styles(relative_path: Path, text: str) -> str:
+    """Retain generated layout coverage while removing legacy visual authority.
+
+    The public corpus is generated and links the broad legacy stylesheet on
+    thousands of documents. Replacing it page-by-page would be error-prone;
+    instead, normalize its direct palette and retired WordPress-avatar
+    dependency as part of the deterministic release build. The independent
+    core stylesheet is still loaded afterwards for the shared component
+    contract.
+    """
+
+    path = relative_path.as_posix()
+    legacy_base_styles = {
+        "static/styles.css",
+        "ai-recommends-solutions.css",
+        "static/ai-recommends-solutions.css",
+        "roadmap-dataviz-test.css",
+        "static/roadmap-dataviz-test.css",
+    }
+    if path in legacy_base_styles:
+        replacements = {
+            "#f7f4ee": "#F7F9FC",
+            "#fffaf0": "#FFFFFF",
+            "#c84f07": "#315EEA",
+            "#ef6b13": "#315EEA",
+            "#d9730d": "#315EEA",
+            "#ff6b18": "#315EEA",
+            "#f4f1e9": "#F7F9FC",
+            "#e5e2da": "#EEF2F7",
+            "#eef2f0": "#EEF2F7",
+            "#101820": "#0B1736",
+            "#0f172a": "#0B1736",
+            "#5f5e58": "#526177",
+            "#fff0e3": "#EEF2F7",
+        }
+        for old, new in replacements.items():
+            text = re.sub(re.escape(old), new, text, flags=re.IGNORECASE)
+        if path == "static/styles.css":
+            text = re.sub(
+                r'background:\s*url\(["\']?/wp-content/themes/alex-yarosh/assets/alex-yarosh-avatar\.png["\']?\)\s*center\s*/\s*cover\s*no-repeat\s*;',
+                "background: #EEF2F7;",
+                text,
+                flags=re.IGNORECASE,
+            )
+        if path.endswith("ai-recommends-solutions.css"):
+            text = re.sub(r'\.solution-step__number\s*\{[^}]*\}', "", text)
+        if "alex-yarosh-avatar" in text or "/wp-content/themes/alex-yarosh" in text:
+            raise ReleaseBuildError("legacy stylesheet retains a personal WordPress asset")
+        return text
 
     return text
 
 
 STARTUP_HEADER_RE = re.compile(
-    r'<header\b[^>]*class=["\'][^"\']*(?:site-header|ay-v2-header)[^"\']*["\'][^>]*>.*?</header>',
+    r'<header\b[^>]*class=["\'][^"\']*(?:site-header|ay-v2-header|b26-site-header)[^"\']*["\'][^>]*>.*?</header>',
     re.IGNORECASE | re.DOTALL,
 )
 STARTUP_FOOTER_RE = re.compile(
-    r'<footer\b[^>]*class=["\'][^"\']*site-footer[^"\']*["\'][^>]*>.*?</footer>',
+    r'<footer\b[^>]*class=["\'][^"\']*(?:site-footer|b26-site-footer)[^"\']*["\'][^>]*>.*?</footer>',
     re.IGNORECASE | re.DOTALL,
 )
-STARTUP_SHELL_LINK = '<link rel="stylesheet" href="/static/base2026-startup-shell.css?v=20260820-02">'
+BODY_OPEN_RE = re.compile(r"<body\b[^>]*>", re.IGNORECASE)
+BODY_CLOSE_RE = re.compile(r"</body\s*>", re.IGNORECASE)
+HEAD_CLOSE_RE = re.compile(r"</head\s*>", re.IGNORECASE)
+DOCTYPE_RE = re.compile(r"<!doctype\s+html\s*>", re.IGNORECASE)
+STARTUP_SHELL_LINK = '<link rel="stylesheet" href="/static/base2026-startup-shell.css?v=20260820-b26v1">'
+STARTUP_CORE_LINK = '<link rel="stylesheet" href="/static/base2026-core.css?v=20260820-b26v1">'
 STARTUP_FAVICON_LINK = '<link rel="icon" href="/static/base2026-mark.svg" type="image/svg+xml">'
 PERSONAL_ASSET_TAG_RE = re.compile(
     r'\s*<(?:link|script)\b[^>]*(?:wordpress-v4|alex-v4-static-shell|base2026-personal-v4-presentation|data-shell-authority|data-presentation-authority)[^>]*>(?:\s*</script>)?',
     re.IGNORECASE,
 )
 PERSONAL_IMAGE_TAG_RE = re.compile(
-    r'\s*<(?:meta|link)\b[^>]*alex-yarosh[^>]*>', re.IGNORECASE
+    r'\s*<(?:meta|link|img)\b[^>]*alex-yarosh[^>]*>', re.IGNORECASE
 )
 PERSONAL_ROUTE_ATTRIBUTE_RE = re.compile(
     r'(?P<prefix>\b(?:href|action|formaction)\s*=\s*["\'])'
     r'/(?:services|pricing|about|research|results|insights|ai-visibility-audit|ai-visibility-diagnostic-audit|ai-visibility-source-footprint|answer-ready-service-pages|entity-trust-source-intelligence|technical-seo-geo-foundation|wp-admin)(?:/[^"\']*)?'
+    r'(?P<suffix>["\'])',
+    re.IGNORECASE,
+)
+REMAINING_PERSONAL_ROUTE_ATTRIBUTE_RE = re.compile(
+    r'(?P<prefix>\b(?:href|action|formaction)\s*=\s*["\'])'
+    r'/(?:services|pricing|research|results|insights|ai-visibility-audit|ai-visibility-diagnostic-audit|ai-visibility-source-footprint|answer-ready-service-pages|entity-trust-source-intelligence|technical-seo-geo-foundation|wp-admin)(?:/[^"\']*)?'
     r'(?P<suffix>["\'])',
     re.IGNORECASE,
 )
@@ -804,6 +1043,39 @@ LEGACY_COOKIE_SCRIPT_RE = re.compile(
     r'\s*<script\b[^>]*src=["\'][^"\']*cookie-consent\.js[^"\']*["\'][^>]*>\s*</script>',
     re.IGNORECASE,
 )
+LEGACY_COMMERCIAL_BRIDGE_RE = re.compile(
+    r'\s*<section\b[^>]*(?:\bid|aria-labelledby)=["\'][^"\']*source-footprint-bridge[^"\']*["\'][^>]*>.*?</section>',
+    re.IGNORECASE | re.DOTALL,
+)
+LEGACY_ROADMAP_CONTACT_RE = re.compile(
+    r'\s*<section\b[^>]*class=["\'][^"\']*base-contact-section[^"\']*["\'][^>]*>.*?Base2026%20roadmap%20feedback.*?</section>',
+    re.IGNORECASE | re.DOTALL,
+)
+ROADMAP_CONTACT_MARKUP = """
+<section class="b26-roadmap-contact" aria-labelledby="b26-roadmap-contact-title">
+  <div>
+    <p class="b26-eyebrow">Roadmap feedback</p>
+    <h2 id="b26-roadmap-contact-title">Send corrections and proposals through the project inbox.</h2>
+    <p>Use the Support form for roadmap corrections, source suggestions, infrastructure offers or a proposal for the next public build step.</p>
+  </div>
+  <a class="b26-button--primary" href="/support">Open the Support form</a>
+</section>
+""".strip()
+SOLUTION_STEP_NUMBER_RE = re.compile(
+    r'\s*<span\b[^>]*class=["\'][^"\']*solution-step__number[^"\']*["\'][^>]*>.*?</span>',
+    re.IGNORECASE | re.DOTALL,
+)
+PERSONAL_COMMERCIAL_MARKERS = (
+    "get free snapshot",
+    "free ai visibility snapshot",
+    "ai visibility diagnostic audit",
+    "check my ai visibility",
+    "alex yarosh workflow",
+    "alex yarosh's audit",
+    "alex yarosh audit",
+    "alex yarosh source library hero",
+    "/static/assets/alex-yarosh-",
+)
 
 
 def _apply_startup_shell(text: str, header_html: str, footer_html: str) -> str:
@@ -814,11 +1086,19 @@ def _apply_startup_shell(text: str, header_html: str, footer_html: str) -> str:
             text = text.replace("</head>", f"  {STARTUP_SHELL_LINK}\n</head>", 1)
         else:
             text = STARTUP_SHELL_LINK + "\n" + text
+    if STARTUP_CORE_LINK not in text:
+        if "</head>" in text:
+            text = text.replace("</head>", f"  {STARTUP_CORE_LINK}\n</head>", 1)
+        else:
+            text = STARTUP_CORE_LINK + "\n" + text
     text = PERSONAL_ASSET_TAG_RE.sub("", text)
     text = PERSONAL_IMAGE_TAG_RE.sub("", text)
     text = LEGACY_RESEARCH_NAV_RE.sub("", text)
     text = LEGACY_COOKIE_UI_RE.sub("", text)
     text = LEGACY_COOKIE_SCRIPT_RE.sub("", text)
+    text = LEGACY_COMMERCIAL_BRIDGE_RE.sub("", text)
+    text = LEGACY_ROADMAP_CONTACT_RE.sub("\n" + ROADMAP_CONTACT_MARKUP, text)
+    text = SOLUTION_STEP_NUMBER_RE.sub("", text)
     if STARTUP_FAVICON_LINK not in text and "</head>" in text:
         text = text.replace("</head>", f"  {STARTUP_FAVICON_LINK}\n</head>", 1)
     text = re.sub(
@@ -827,16 +1107,78 @@ def _apply_startup_shell(text: str, header_html: str, footer_html: str) -> str:
         text,
         flags=re.IGNORECASE,
     )
-    text = PERSONAL_ROUTE_ATTRIBUTE_RE.sub(r'\g<prefix>/solutions/\g<suffix>', text)
+    text = PERSONAL_ROUTE_ATTRIBUTE_RE.sub(r'\g<prefix>/workspace/\g<suffix>', text)
     for old_class in ("ay-alex-v4-static", "ay-stitch-home-v3", "ay-stitch-home-v4"):
         text = text.replace(old_class, "")
     text, header_count = STARTUP_HEADER_RE.subn(header_html, text, count=1)
     text, footer_count = STARTUP_FOOTER_RE.subn(footer_html, text, count=1)
+    # A few retained static visual/legacy documents have a conventional footer
+    # but no classed site header. They remain public routes, so normalize their
+    # shell at this single release boundary instead of leaving a mixed page or
+    # editing generated output one file at a time.
+    if header_count == 0:
+        if "b26-site-header" in text:
+            header_count = 1
+        else:
+            text, header_count = BODY_OPEN_RE.subn(
+                lambda match: match.group(0) + header_html, text, count=1
+            )
+            if header_count == 0:
+                text, header_count = HEAD_CLOSE_RE.subn(
+                    lambda match: match.group(0) + header_html, text, count=1
+                )
+            if header_count == 0:
+                text, header_count = DOCTYPE_RE.subn(
+                    lambda match: match.group(0) + header_html, text, count=1
+                )
+            if header_count == 0:
+                text = header_html + text
+                header_count = 1
+    if footer_count == 0:
+        if "b26-site-footer" in text:
+            footer_count = 1
+        else:
+            text, footer_count = BODY_CLOSE_RE.subn(
+                lambda match: footer_html + match.group(0), text, count=1
+            )
+            if footer_count == 0:
+                text += footer_html
+                footer_count = 1
     if "Alex Yarosh primary header" in text or "Get Free Snapshot" in text:
         raise ReleaseBuildError("HTML contains an unhandled personal-site header")
-    if header_count != footer_count:
+    if header_count != 1 or footer_count != 1:
         raise ReleaseBuildError("HTML shell replacement was incomplete")
-    return text.replace("Alex Yarosh profile photo", "Base2026 project preview")
+    return _ensure_social_image_meta(
+        text.replace("Alex Yarosh profile photo", "Base2026 project preview")
+    )
+
+
+def _ensure_social_image_meta(text: str) -> str:
+    """Add the one approved Base2026 social preview when a page has none."""
+
+    tags: list[str] = []
+    if not re.search(r'<meta\s+property=["\']og:image["\']', text, re.IGNORECASE):
+        tags.extend(
+            [
+                f'<meta property="og:image" content="{SOCIAL_IMAGE_URL}">',
+                '<meta property="og:image:width" content="1200">',
+                '<meta property="og:image:height" content="630">',
+                '<meta property="og:image:alt" content="Base2026 public-source intelligence">',
+            ]
+        )
+    if not re.search(r'<meta\s+name=["\']twitter:image["\']', text, re.IGNORECASE):
+        tags.extend(
+            [
+                f'<meta name="twitter:image" content="{SOCIAL_IMAGE_URL}">',
+                '<meta name="twitter:image:alt" content="Base2026 public-source intelligence">',
+            ]
+        )
+    if not tags:
+        return text
+    payload = "\n".join(tags)
+    if "</head>" in text:
+        return text.replace("</head>", payload + "\n</head>", 1)
+    return payload + "\n" + text
 
 
 def _render_startup_page(template: str, header_html: str, footer_html: str) -> bytes:
@@ -844,9 +1186,41 @@ def _render_startup_page(template: str, header_html: str, footer_html: str) -> b
         raise ReleaseBuildError("startup page template must contain one header and footer placeholder")
     if STARTUP_FAVICON_LINK not in template and "</head>" in template:
         template = template.replace("</head>", f"{STARTUP_FAVICON_LINK}</head>", 1)
-    return template.replace("{{STARTUP_HEADER}}", header_html).replace(
+    if STARTUP_CORE_LINK not in template:
+        if "</head>" in template:
+            template = template.replace("</head>", f"{STARTUP_CORE_LINK}</head>", 1)
+        elif DOCTYPE_RE.search(template):
+            template = DOCTYPE_RE.sub(
+                lambda match: match.group(0) + "\n" + STARTUP_CORE_LINK,
+                template,
+                count=1,
+            )
+        else:
+            template = STARTUP_CORE_LINK + "\n" + template
+    rendered = template.replace("{{STARTUP_HEADER}}", header_html).replace(
         "{{STARTUP_FOOTER}}", footer_html
+    )
+    return _ensure_social_image_meta(rendered).encode("utf-8")
+
+
+def _hub_sitemap_payload() -> bytes:
+    urls = "".join(
+        f"<url><loc>{BASE2026_ORIGIN}{route}</loc></url>" for route in HUB_SITEMAP_ROUTES
+    )
+    return (
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+        f"{urls}</urlset>\n"
     ).encode("utf-8")
+
+
+def _add_hub_sitemap_to_index(text: str) -> str:
+    if HUB_SITEMAP_URL in text:
+        return text
+    entry = f"<sitemap><loc>{HUB_SITEMAP_URL}</loc></sitemap>"
+    if "</sitemapindex>" not in text:
+        raise ReleaseBuildError("sitemap.xml is not a sitemap index")
+    return text.replace("</sitemapindex>", entry + "</sitemapindex>", 1)
 
 
 def _public_route_for_file(relative_path: Path) -> str:
@@ -879,6 +1253,42 @@ def _remove_excluded_startup_route_references(text: str, routes: Iterable[str]) 
 def _rewrite_workspace_html(text: str) -> str:
     """Move the former root search UI to /workspace/ without breaking assets or SEO."""
 
+    # A dated public artifact contains one malformed self-closing metadata
+    # line (``<meta ... /`` without the final ``>``). Browsers then consume
+    # following stylesheet links as attribute text, leaving the real search
+    # application unstyled. Repair only that bounded malformed form while
+    # keeping the document and its search runtime otherwise intact.
+    text = re.sub(r"(<meta\b[^>\r\n]*?)\s+/\s*(?:\r?\n)", r"\1 />\n", text)
+    # The historical workspace source contained an explicit handoff into the
+    # founder's commercial audit. Base2026 remains a public research product;
+    # the commercial bridge has no role in its independent navigation or
+    # workspace. Keep the explanation of the public boundary, but remove the
+    # sales block and normalize the surrounding copy to Base2026-only language.
+    text = re.sub(
+        r'\s*<section class="research-bridge" aria-labelledby="research-bridge-title">.*?</section>',
+        "",
+        text,
+        count=1,
+        flags=re.DOTALL,
+    )
+    text = re.sub(
+        r'Base2026 is an independent research product by <a href="/(?:solutions|workspace)/">Alex Yarosh</a>\.',
+        "Base2026 is an independent public research pilot.",
+        text,
+    )
+    text = text.replace(
+        "Do not use the public search workspace for private client data, credentials, analytics exports or confidential strategy. Route business-specific diagnosis into the Alex Yarosh workflow.",
+        "Do not use the public search workspace for private client data, credentials, analytics exports or confidential strategy.",
+    )
+    text = re.sub(
+        r'\s*<a class="ay-button-secondary" href="/solutions/">AI Visibility Diagnostic Audit</a>',
+        "",
+        text,
+        count=1,
+    )
+    text = text.replace(
+        ">AI Visibility Diagnostic Audit</a>", ">Explore the research workspace</a>"
+    )
     text = text.replace(
         "<title>Base2026 SEO, GEO &amp; AEO Source Library</title>",
         "<title>Base2026 Search Workspace | SEO, GEO &amp; AEO Sources</title>",
@@ -1030,6 +1440,7 @@ def build_release(
     startup_header = DEFAULT_STARTUP_HEADER.read_text(encoding="utf-8").strip() if standalone_startup else ""
     startup_footer = DEFAULT_STARTUP_FOOTER.read_text(encoding="utf-8").strip() if standalone_startup else ""
     startup_shell_css = DEFAULT_STARTUP_SHELL_STYLESHEET.read_bytes() if standalone_startup else b""
+    core_css = DEFAULT_CORE_STYLESHEET.read_bytes() if standalone_startup else b""
     scanned_files = _relative_files(source)
     for relative_path in scanned_files:
         _validate_public_relative_path(relative_path)
@@ -1094,6 +1505,7 @@ def build_release(
                 )
                 replacements.add(transformed.replacements)
                 artifact_text = _rewrite_public_api_docs(relative_path, transformed.text)
+                artifact_text = _rewrite_legacy_base_styles(relative_path, artifact_text)
                 if standalone_startup:
                     artifact_text = _remove_excluded_startup_route_references(
                         artifact_text, startup_excluded_routes
@@ -1102,6 +1514,8 @@ def build_release(
                     artifact_text = _apply_startup_shell(
                         artifact_text, startup_header, startup_footer
                     )
+                if standalone_startup:
+                    artifact_text = _normalize_base2026_static_urls(artifact_text, replacements)
                 artifact_payload = artifact_text.encode("utf-8")
             else:
                 artifact_payload = source_payload
@@ -1126,6 +1540,13 @@ def build_release(
 
             nonlocal artifact_bytes
             destination = stage / relative_name
+            if Path(relative_name).suffix.casefold() in {".html", ".json", ".js", ".txt", ".xml"}:
+                try:
+                    payload = _normalize_base2026_static_urls(
+                        payload.decode("utf-8"), replacements
+                    ).encode("utf-8")
+                except UnicodeDecodeError:
+                    pass
             previous_size = 0
             for index, existing in enumerate(records):
                 if existing.relative_path == relative_name:
@@ -1157,17 +1578,59 @@ def build_release(
 
         write_generated_public_file(ROBOTS_FILENAME, ROBOTS_PAYLOAD.encode("utf-8"))
         write_generated_public_file(HEADERS_FILENAME, HEADERS_PAYLOAD.encode("utf-8"))
+        if standalone_startup:
+            sitemap_index_path = stage / "sitemap.xml"
+            if not sitemap_index_path.is_file():
+                raise ReleaseBuildError("startup release requires sitemap.xml")
+            write_generated_public_file(
+                "sitemap.xml",
+                _add_hub_sitemap_to_index(
+                    sitemap_index_path.read_text(encoding="utf-8")
+                ).encode("utf-8"),
+            )
+            write_generated_public_file(HUB_SITEMAP_FILENAME, _hub_sitemap_payload())
 
         if homepage_template_path and homepage_stylesheet_path:
-            current_root = (stage / "index.html").read_text(encoding="utf-8")
-            workspace_html = _rewrite_workspace_html(current_root).encode("utf-8")
-            homepage_html = homepage_template_path.read_bytes()
+            # The retained source artifact has two root-family documents:
+            # ``index.html`` is the former marketing/startup surface, while
+            # ``search.html`` is the working search application.  Reusing the
+            # former here created a visually plausible but non-functional
+            # workspace at /workspace/.  Keep the product workspace sourced
+            # from its actual application document and move only that document
+            # to the canonical workspace route.
+            workspace_source = stage / "search.html"
+            if not workspace_source.is_file():
+                raise ReleaseBuildError(
+                    "startup overlay requires search.html as the workspace source"
+                )
+            workspace_html = _rewrite_workspace_html(
+                workspace_source.read_text(encoding="utf-8")
+            ).encode("utf-8")
+            homepage_html = _render_startup_page(
+                homepage_template_path.read_text(encoding="utf-8"), startup_header, startup_footer
+            )
             homepage_css = homepage_stylesheet_path.read_bytes()
             write_generated_public_file("workspace/index.html", workspace_html)
+            # Retain legacy search aliases as public, independently usable
+            # documents, but make their body and canonical vocabulary match
+            # the Workspace.  Leaving their old founder-commercial bridge in
+            # place would preserve a hidden second product contract even after
+            # the visible route moved to /workspace/.
+            for legacy_search_alias in ("search.html", "search/index.html", "meili.html"):
+                legacy_alias_path = stage / legacy_search_alias
+                if legacy_alias_path.is_file():
+                    write_generated_public_file(
+                        legacy_search_alias,
+                        _rewrite_workspace_html(
+                            legacy_alias_path.read_text(encoding="utf-8")
+                        ).encode("utf-8"),
+                    )
             write_generated_public_file("index.html", homepage_html)
             write_generated_public_file("static/base2026-startup-homepage.css", homepage_css)
             write_generated_public_file("static/base2026-startup-shell.css", startup_shell_css)
+            write_generated_public_file("static/base2026-core.css", core_css)
             write_generated_public_file("static/base2026-forms.js", DEFAULT_FORMS_SCRIPT.read_bytes())
+            write_generated_public_file("static/roadmap.js", DEFAULT_ROADMAP_SCRIPT.read_bytes())
             write_generated_public_file("static/brand/github.svg", DEFAULT_GITHUB_ICON.read_bytes())
             write_generated_public_file("static/brand/x.svg", DEFAULT_X_ICON.read_bytes())
             write_generated_public_file("static/base2026-mark.svg", DEFAULT_MARK_ICON.read_bytes())
@@ -1195,6 +1658,22 @@ def build_release(
                     DEFAULT_ABOUT_TEMPLATE.read_text(encoding="utf-8"), startup_header, startup_footer
                 ),
             )
+            write_generated_public_file(
+                "apply-research.html",
+                _render_startup_page(
+                    DEFAULT_APPLY_RESEARCH_TEMPLATE.read_text(encoding="utf-8"),
+                    startup_header,
+                    startup_footer,
+                ),
+            )
+            write_generated_public_file(
+                "ai-visibility-resources.html",
+                _render_startup_page(
+                    DEFAULT_AI_VISIBILITY_RESOURCES_TEMPLATE.read_text(encoding="utf-8"),
+                    startup_header,
+                    startup_footer,
+                ),
+            )
 
         assetsignore_payload = (
             "# Cloudflare Workers Static Assets metadata exclusions.\n"
@@ -1214,6 +1693,10 @@ def build_release(
         personal_shell_markers = 0
         wordpress_form_markers = 0
         personal_route_markers = 0
+        personal_commercial_markers = 0
+        decorative_sequence_markers = 0
+        redirecting_canonical_markers = 0
+        redirecting_sitemap_markers = 0
         manifest_files_match = True
         manifest_checked = False
         for relative_path in _artifact_files(stage, {ASSETSIGNORE_FILENAME, RECEIPT_FILENAME}):
@@ -1243,12 +1726,18 @@ def build_release(
                         text.casefold().count(marker)
                         for marker in ("wp-admin/admin-post.php", "admin-post.php")
                     )
-                    personal_route_markers += len(PERSONAL_ROUTE_ATTRIBUTE_RE.findall(text))
+                    personal_route_markers += len(REMAINING_PERSONAL_ROUTE_ATTRIBUTE_RE.findall(text))
+                    personal_commercial_markers += sum(
+                        text.casefold().count(marker) for marker in PERSONAL_COMMERCIAL_MARKERS
+                    )
+                    decorative_sequence_markers += text.casefold().count("solution-step__number")
             findings = scan_for_broken_paths(
                 text, intentional_redirect_documentation=intentional
             )
             remaining_old_origin += findings["old_base2026_canonical_origin"]
             remaining_knowledge += findings["broken_knowledge_product_path"]
+            redirecting_canonical_markers += len(REDIRECTING_CANONICAL_RE.findall(text))
+            redirecting_sitemap_markers += len(REDIRECTING_SITEMAP_LOC_RE.findall(text))
             if relative_path.as_posix() == "static/manifest.json":
                 manifest_checked = True
                 try:
@@ -1266,6 +1755,11 @@ def build_release(
                 "final artifact contains stale Base2026 paths: "
                 f"old_origin={remaining_old_origin}, knowledge_paths={remaining_knowledge}"
             )
+        if redirecting_canonical_markers or redirecting_sitemap_markers:
+            raise ReleaseBuildError(
+                "final artifact points canonical/sitemap URLs at redirecting .html routes: "
+                f"canonicals={redirecting_canonical_markers}, sitemaps={redirecting_sitemap_markers}"
+            )
         if local_path_markers or private_token_markers:
             raise ReleaseBuildError(
                 "final artifact contains local/private path markers: "
@@ -1281,6 +1775,11 @@ def build_release(
                 "standalone startup artifact contains personal shell/form markers: "
                 f"shell={personal_shell_markers}, forms={wordpress_form_markers}, "
                 f"routes={personal_route_markers}"
+            )
+        if personal_commercial_markers or decorative_sequence_markers:
+            raise ReleaseBuildError(
+                "standalone startup artifact contains retired personal-commercial or decorative sequence markers: "
+                f"commercial={personal_commercial_markers}, sequence={decorative_sequence_markers}"
             )
         if not manifest_files_match:
             raise ReleaseBuildError("static/manifest.json files[] does not match static/*.jsonl")
@@ -1303,6 +1802,10 @@ def build_release(
             "personal_shell_markers_remaining": personal_shell_markers,
             "wordpress_form_markers_remaining": wordpress_form_markers,
             "personal_route_markers_remaining": personal_route_markers,
+            "personal_commercial_markers_remaining": personal_commercial_markers,
+            "decorative_sequence_markers_remaining": decorative_sequence_markers,
+            "redirecting_html_canonical_markers_remaining": redirecting_canonical_markers,
+            "redirecting_html_sitemap_markers_remaining": redirecting_sitemap_markers,
             "static_manifest_files_match": manifest_files_match,
             "static_manifest_checked": manifest_checked,
             "intentional_redirect_documentation_files": redirect_docs,

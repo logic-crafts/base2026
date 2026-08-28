@@ -1,25 +1,107 @@
 # Decisions
 
-## 2026-08-23 — Use one canonical Cloudflare pipeline operating manual
+## 2026-08-28 — Base2026 category, design authority and research spending
 
-All Cloudflare/TikTok pipeline agents must start from
-`docs/BASE2026_CLOUDFLARE_PIPELINE_CANONICAL_OPERATING_MANUAL.md`. It owns the
-architecture, resource relationships, public/private boundary, state model,
-gates, deployment order, rollback, and anti-confusion rules. Older architecture
-files remain historical receipts, and live Cloudflare/D1 readbacks remain the
-authority for volatile state.
+- Position Base2026 as an **open video research engine** and **source-first
+  evidence library for short-form expert video**.
+- Keep “Search what experts actually said” as the H1. Treat Cloudflare as
+  technical proof and operating advantage, not the primary user benefit.
+- Do not claim generic video intelligence, AI-visibility monitoring, complete
+  TikTok coverage, perfect transcription, guaranteed rankings or live MCP.
+- Preserve `b26-independent-v1` as the only public production visual authority.
+  Historical design assets are quarantined and may be retired only after
+  dependency proof and separate review.
+- DataForSEO has no arbitrary per-project dollar ceiling. Every paid request
+  must still have a concrete decision, current price check, bounded payload and
+  durable receipt. The first positioning packet cost `$0.077`.
+- Strong evidence maps outrank bulk thin-page generation as the first organic
+  growth wedge.
 
-The public repository documents the complete operating model without
-automatically publishing the protected private Worker source. Source
-synchronization is a separate, file-by-file publication decision.
+## 2026-08-26 — Capture retries must be fair, bounded, and private
 
-## 2026-07-14 — Search V1 uses canonical query URLs with a grandfathered immutable legacy baseline
+Decision: Cloudflare's five-minute capture scheduler must not use oldest-row selection alone. Fresh zero-attempt TikTok candidates rank before due retries; failed captures back off for 15, 30, then 60 minutes; attempt four transitions the individual source and private registry to held review. Retry state is durable in private D1 and its source transition/audit receipt is atomic. Rows with exhausted attempt counts are ineligible even if damaged legacy state leaves their status as `awaiting_capture`.
 
-Decision: Base2026 Search V1 canonical and newly generated discovery links use `/knowledge/?q=...` plus explicit query parameters. The outbound `#search?...` prohibition applies to Search V1 changed paths and to all new or regenerated generation paths. The immutable Source Detail V2 baseline is grandfathered: its 4,183 unchanged files may retain their 10,340 inherited outbound hash-search links until those page families are deliberately regenerated under a separately verified release. Runtime code must continue accepting an inbound `#search?...` bookmark and immediately migrate it to the canonical query URL with `history.replaceState`.
+Reason: three historical Player API failures were repeatedly selected, starving the new Cloudflare discovery backlog and wasting container/browser allowance. The repair is migration-forward only (`0013`, `0014`), affects exactly those three historical incident rows, and changes neither public content nor `PUBLIC_RELEASE_ENABLED=false`.
 
-Reason: the exact Search V1 derivative changes only the search shell/assets and compatibility aliases while preserving 4,183 baseline files byte-for-byte. Rewriting every inherited link now would silently turn a bounded search-shell release into a thousands-of-pages corpus migration, invalidate the exact candidate SHA, and require full semantic, responsive, sitemap, and release revalidation. Grandfathering the immutable baseline preserves provenance and release safety without emitting any new legacy links.
+## 2026-08-23 — Operate private discovery/acquisition cloud-only in v0.5.2
 
-Execution authorization: Alex chose option A (`Продолжай по а`). After corrective Search-runtime hardening, the exact verified candidate is `base2026-search-v1-derived-20260714-024003.zip` at SHA-256 `3261f235864a57c2c3f17f0ccd9588f24f888b21d5bf5c400ec089fe19311235`. Final isolated `gpt-5.6-sol`/high review returned `VERDICT PASS`, no blockers, and `SAFE_TO_COMMIT YES` for the exact nine-file scope. Proceed through scoped Git commit/push, green CI/CodeQL, merge, and merged-SHA/artifact binding. Production deployment remains separately authorization-gated. Do not re-export the corpus, reindex Meilisearch, submit IndexNow, mutate WordPress, or rewrite inherited baseline pages in this release.
+Decision: the private v0.5.2 Worker is the authoritative discovery/acquisition edge. It uses bounded Browser/Player/Container execution with `*/5 * * * *` capture/reconcile and `0 10 * * *` discovery; the local adapter and Base2026 LaunchAgents remain off. The direct manual Container endpoint, paid fallback, AI Gateway and broad `PUBLIC_RELEASE_ENABLED` gate remain disabled. ChatGPT is manual owner-only and never a scheduler.
+
+The `19:56Z` run admitted 21 of 135 discovered rows from 19 creators and scheduled capture completed 3/3 attempts. A `20:01Z` cron then captured 2 of 3 attempts and left one private retry; registry/media/AI counters therefore moved to 12 captured / 9 admitted, media 201 and five transcription jobs at the restored 7,500-Neuron cap. Monthly accounting remains below the 80% hard hold, and no raw browser output, media, transcript, cookie, prompt or provider response may leave private storage. Public projection remains exact-tuple and owner-authorized only; public D1 did not change. Read live receipts before each decision.
+
+Reason: v0.5.2 provides a bounded cloud acquisition path without relying on the Mac while preserving private D1/R2 state, retry/hold semantics, budget accounting and the existing public/private release boundary. Local plists and the prior Worker remain rollback material, not active production schedulers.
+
+## 2026-08-23 — Make dispatch and daily-cap recovery durable; enforce one private local boundary
+
+Decision: a reconciler may recover only stale dispatch claims, never a fresh `dispatching` claim. A `queued + pending` outbox mismatch is explicitly repaired and republished. Workers AI soft/hard-cap deferrals record the current UTC budget date, do not consume an execution attempt, and remain held until a later UTC date. Legacy cap-loop rows with exact cap receipts are repaired to the same state. Broad public release remains disabled.
+
+Decision: every directory and regular file under the exact validated `PRIVATE_BASE2026_WORK_INBOX` root is private by construction (`0700`/`0600`), with symlinks and non-regular artifacts rejected. This applies equally to media, raw transcripts, metadata, Luna packets, work orders, indexes, status files, logs and receipts; high-throughput concurrency is not permission to weaken the filesystem boundary.
+
+Reason: the live audit found one Queue/reconcile race-stranded capture job, 31 same-day AI cap-loop jobs, and 767 local private entries with overly broad modes. Worker v0.4.2 recovered the jobs without spend or data loss, the whole private root was normalized, and regression/live checks now show zero outbox inconsistencies, wrong modes, symlinks or owners.
+
+## 2026-08-22 — Scale private intake by batching; keep semantic and public gates exact
+
+Decision: remove arbitrary one-source and 100-source daily ceilings. A daily Luna Max run admits the full fresh unseen set through repeated exact allowlist waves of at most 100 IDs, stages audio with four download workers, and transfers independent Cloudflare batches of at most 10 sources / 50 MiB. Workers AI may durably queue overflow but must stop at the existing 7,500/9,000 daily Neuron limits without paid fallback. Luna processes all currently ready sources in batches of at most 10.
+
+High throughput applies to discovery, download, private storage, transcription and review; it does not authorize broad publication. Each evidence excerpt must be an exact continuous transcript span. Failed evidence remains held, and public projection still requires the exact reviewed source, newest release, private materialization and manifest tuple while `PUBLIC_RELEASE_ENABLED=false`.
+
+Reason: the live batch pass admitted all 210 unseen candidates, uploaded 178 after retry, held 32 acquisition failures privately, reviewed 31 completed sources, published 22 evidence-valid sources and held nine weak ones. The public corpus rose to 2,129 documents / 1,548 unique TikTok videos without exposing raw transcripts or private artifacts.
+
+## 2026-08-22 — Enable exact public projection; keep broad release off
+
+Decision: allow one owner-authorized, evidence-admitted private import at a time to cross from `base2026-pipeline-control` to public Worker `base2026` through the named `PublicProjectionEntrypoint` service binding. The public DTO contains only source attribution plus one to three admitted claim/evidence cards. It must not contain private source text, raw transcripts/captions, prompts, questions, local paths, contacts, credentials, or unrelated packet fields.
+
+Every projection is keyed by exact source, release, import, manifest, content hash, and actual private importer receipt. Dispatch uses a bounded recoverable lease; public D1 writes are atomic and idempotent; exact rollback removes only its projected cards/search rows. A corrected manifest may be applied only after the prior projection for that source is rolled back. `PUBLIC_PROJECTION_ENABLED=true`; the unrelated broad `PUBLIC_RELEASE_ENABLED` gate remains false.
+
+Historical pilot posture used one daily Luna Max automation with a hard one-source cap and failure-only notifications. That throughput cap is superseded by the batch decision above; the exact public projection, evidence verification and live-search receipt requirements remain in force. The older 30-minute Sol automation remains paused to control token use.
+
+Reason: the real end-to-end proof published source `7673404909294800145` with one exact evidence card, increased public video count from 1,525 to 1,526, preserved the site asset hash, and passed replay/privacy/rollback tests. This closes the missing public handoff without weakening the existing public/private boundary.
+
+## 2026-08-22 — Operate v0.3.1 privately; keep Container, AI Gateway, and public release off
+
+Decision: operate the implemented Cloudflare pipeline with intake, reconciler, local adapter, Workers AI, manual ChatGPT courier, deterministic private import, and retention enabled. Keep `CONTAINER_CAPTURE_ENABLED=false`, `AI_GATEWAY_ENABLED=false`, and `PUBLIC_RELEASE_ENABLED=false`. The local LaunchAgent runs every 15 minutes without a model or Codex heartbeat; it may upload only authenticated private artifacts and may never cross the release owner gate.
+
+Workers AI remains bounded by D1 preflight accounting at 7,500 soft / 9,000 hard daily Neurons, one AI message at a time, no paid fallback, and a UTC reset wait state. The exact semantic allowlist uses `@cf/meta/llama-3.1-8b-instruct-fp8-fast`; aliases and the former 70B model fail closed. The locally verified Container image is retained only as a POC because remote deployment can introduce metered usage. AI Gateway is deferred because the current Workers AI binding plus D1 hard gate supplies the required zero-incremental-spend stop without adding another active dependency.
+
+Execution receipt: Worker version `905ae9e4-fe0f-47fb-b3c1-06dd6bfe7319`; migrations `0001`-`0007`; exact synthetic release `072a76060006a4212889af4ccc368c616fa30183`; private materialization `a6c7ea121154b043253337b72ff11e1e005f8627`; exact 8B live receipt `01b7214ee6ba289a38acd7a0300d8d0e9cde015f` at 22 Neurons; one held-private card; all public flags `0`; idempotent duplicate review/import; contradictory review rejected; public Worker/data/homepage unchanged.
+
+Reason: this is the smallest supported system that achieves unattended durable work inside current included allowances while keeping private evidence, ChatGPT Terms compliance, public publication authority, and spend control independently fail-closed.
+
+## 2026-08-22 — Use a separate Cloudflare-first private control plane; do not automate ChatGPT web extraction
+
+Decision: the target Base2026 evidence/TikTok pipeline uses a separate private Cloudflare Worker, D1, Queues, Workflows, short-lived private R2, Workers AI, and AI Gateway spend controls. It must not be added to the public Base2026 Static Assets/search Worker or share the public Evidence/Outreach databases. Existing deterministic admission, importer, publication, release, and live-verification gates remain authoritative.
+
+Workers AI is the Cloudflare-native unattended semantic lane and must stop below the daily free allocation through an AI Gateway spend rule plus a D1 preflight ledger. ChatGPT Pro may be tested only through supported Scheduled Tasks and Google Drive/Sheets actions; it is optional and cannot be a critical dependency. Cloudflare Browser Run, Playwright, CDP, or another program must not sign in to ChatGPT or extract its responses. TikTok acquisition stays on the existing local adapter until a credential-free, bounded Cloudflare Container POC proves reliable reachability and included-budget operation.
+
+Reason: the current local pipeline already has useful stage and evidence contracts, but its full automations are paused and its controller/courier paths have locking, transactional, validation, selector, and test gaps that should not be copied. Cloudflare's paid-plan allowances can host the durable controller at current volume, while OpenAI's individual Terms of Use prohibit automatic/programmatic extraction of ChatGPT output. Keeping private control, semantic execution, and public projection separate preserves the established publication boundary and gives every new component a shadow, budget, quality, rollback, and owner-authorization gate.
+
+## 2026-08-21 — Keep Outreach intelligence in a separately admitted search collection
+
+Decision: expose only explicitly reviewed Outreach findings through a future separate D1 database/binding and the fixed logical index `base2026_public_outreach`. Preserve the current reviewed evidence corpus in `base2026-public-search` / `base2026_public_tiktok`. A browser request may select only the two server-owned collection identifiers. The All view returns two labelled result groups and never merges their ranks or scores.
+
+Publication requires a separate admission row that pins the normalized source by SHA-256 and records `approved_public`, reviewer, timezone-aware review time and policy version. Workbook score, verdict or workflow status cannot substitute for admission. Contacts, emails, comments, owner notes, client/ACQ3/Gmail/Search Ops/GSC data, queues, backups and operational records are prohibited. Research workers remain frozen. This decision authorizes local fixtures, tests and isolated candidates only; it does not authorize a real-row import, Cloudflare resource/binding, deployment, Sheet write, commit or push.
+
+Reason: the live workbook contains 34 tabs spanning multiple security domains and has no explicit public-release field. A separate data and rollback boundary prevents a heterogeneous private operations system from weakening the existing reviewed public evidence contract.
+
+Execution closure: after explicit owner release authority, semantic review admitted 78 of 400 mechanically eligible candidates and excluded 322 weak, redundant, promotional, private or operational rows. The collection is live in isolated D1 `base2026-outreach-search`; Evidence and Inbox remain separate. Future workbook changes do not inherit publication permission and must repeat the semantic admission and controlled-release gates.
+
+## 2026-08-20 — Establish `b26-independent-v1`; do not revive an Alex-coupled visual candidate
+
+Decision: Base2026 visual recovery must use one independent Base2026-only contract at the generator/release boundary. No historical complete candidate may be restored verbatim because the inspected Stitch, Personal V4, shell-consistency and startup variants all retain either retired Alex Personal shell/footer authority or the warm/orange legacy visual treatment. The only recoverable historical input is the dense research-product component discipline, not its visual brand or markup.
+
+The contract and migration matrix are canonical in `BASE2026_DESIGN_RECOVERY_AUDIT_2026_08_20.md`. It protects D1 search, form intake, public data, external attribution, canonical/robots/redirect and deployment boundaries. This decision authorizes a local isolated candidate only; it does not authorize deployment, indexation, Cloudflare/D1/DNS/GitHub change, data import or Git publication.
+
+## 2026-08-19 — Separate Base2026 from Alex Personal with Workers Static Assets and D1
+
+Decision: target `https://base2026.dev/` as the independent Base2026 product origin on Cloudflare Workers Static Assets, with public search implemented by a Worker and D1 FTS5. Keep Alex Personal WordPress at `https://aggressorbulkit.online/` on the existing VPS. After the new origin passes preview and cutover gates, preserve old Base2026 paths with path-preserving permanent redirects from `/knowledge/*` to the new domain. Keep a Worker-to-VPS Meilisearch proxy only as a bounded fallback, not the preferred final state.
+
+Reason: the Base2026 public release is predominantly a generated static artifact and fits current Cloudflare Free asset limits, while D1 supports FTS5 and the present public search corpus is small enough for a measured prototype. This creates a real failure and hosting boundary between the startup and the agency WordPress site without moving WordPress or publishing the private build pipeline.
+
+## 2026-07-20 — Scheduled Base2026 checks must start from a minimal environment
+
+Decision: the `com.base2026.hermes-tiktok-check` LaunchAgent must execute through `/usr/bin/env -i` with only the explicit runtime variables required by the check-only worker. It must not inherit arbitrary GUI-session secrets.
+
+Reason: the P0 audit found an unrelated sensitive environment variable inside the loaded job. The worker does not need it, and inherited credentials increase exposure without adding pipeline capability.
 
 ## 2026-07-04 — Add WordPress/CMS as a private-first Base2026 vertical under web development
 
@@ -35,7 +117,7 @@ Decision: Broad Base2026 AI visibility hub pages may remain indexable, but gener
 
 Reason: QA showed the current 16 California city/niche pages are mostly templated swaps after normalizing city and niche terms. Indexing them would create doorway/thin-content risk and conflict with the public research/proof layer.
 
-## 2026-06-23 — Keep Base2026 discovery state out of crawlable query URLs (superseded for new/changed paths by 2026-07-14 Search V1 decision)
+## 2026-06-23 — Keep Base2026 discovery state out of crawlable query URLs
 
 Decision: canonical Base2026 search/discovery URLs should be `/knowledge/` plus client-side `#search?...` state, not `/knowledge/index.html?...` or other crawlable query variants. Generated static entity pages should link back to the search workspace through hash state, while sitemap generation remains limited to self-canonical, indexable HTML files.
 
@@ -460,3 +542,96 @@ Reason: the ay43 pass showed that one latest source can pass while two adjacent 
 Decision: ASR fallback rows that produce no usable speech or very short text must remain `needs_source_review` and must not be bulk-promoted into public export. `scripts/tiktok-process-transcripts.ps1` must report the ASR failure class and dedupe notes so retry results are auditable instead of noisy.
 
 Reason: some downloaded TikTok audio is music-only, visually dependent, or otherwise unusable for faithful transcription. Publishing a confident public source record from 0-4 words would invent meaning. The safe path is to ship only QA-pass ASR rows and keep weak ASR rows private until a better source/audio verification lane exists.
+# 2026-07-20 — Stable creator routes and recoverable stale-lock quarantine
+
+Decision: when a TikTok handle route stops resolving, discovery may use a verified stable TikTok channel-ID URL in the ignored private creator configuration while preserving the internal creator ID and documenting any handle transition. A stale worker lock may be moved to an ignored backup only after its PID is absent and no process holds the file.
+
+Reason: public handles can change independently of Base2026 identity, and a dead handle must not keep the whole check-only controller yellow. Stable channel routing restores deterministic discovery without silently rewriting public attribution. Recoverable quarantine removes an ownerless controller block while preserving forensic evidence.
+# 2026-07-20 — WordPress V4 footer is the only global footer authority
+
+Decision: the canonical global footer is the original five-column WordPress V4 footer used by Personal Home, Services, Pricing and About. Base2026 must consume that footer template and a footer-only parity stylesheet. The compact Personal/Research registry footer must not be used as the global footer or promoted back into WordPress.
+
+Reason: the compact footer removed the commercial service architecture, CTA ladder, Base2026 project links and established WordPress visual hierarchy. Sharing the canonical WordPress markup while isolating its CSS from Base component styles preserves one recognizable site system without allowing either product shell to overwrite the other.
+## 2026-08-19 — Keep WordPress and Base2026 operationally separated
+
+Decision: Base2026 production is `base2026.dev` on Cloudflare Workers Static Assets plus D1 FTS5; Alex Personal remains `aggressorbulkit.online` on the VPS. Preserve the VPS Base2026 release and Meilisearch as rollback-only infrastructure during a stability window rather than deleting them at cutover.
+
+Reason: the verified Cloudflare release removes the startup runtime from the WordPress/VPS serving path while retaining a recoverable fallback.
+
+## 2026-08-20 — Base2026 owns an independent startup shell
+
+Decision: on `base2026.dev`, the Base2026 startup header, footer and product navigation supersede the former shared WordPress V4 shell. The Alex Personal shell remains authoritative only on `aggressorbulkit.online`. Base2026 may name Alex Yarosh as the factual founder, but it must not link into or sell personal services from the startup product surface.
+
+Reason: startup-program reviewers need a coherent product property with clear open-source, roadmap, methodology, support and partnership paths. Sharing the personal commercial shell made Base2026 look like an agency funnel and blurred the operational domain separation already established on Cloudflare.
+
+## 2026-08-20 — Startup proposals use a separate private inbox
+
+Decision: Support and Partner forms write to a dedicated private D1 binding, `base2026-inbox`, never to the public search database. The Worker validates exact origin, structured fields, consent, elapsed time and a honeypot; it stores neither IP address nor user agent and removes untouched new proposals after 90 days. File uploads and secrets are forbidden.
+
+Reason: application and collaboration intake is operational/private data, not public evidence. A separate database and narrow retention boundary reduce accidental publication and limit collected personal data.
+
+## 2026-08-20 — Legacy commercial pSEO pages do not ship on the startup domain
+
+Decision: generated pages containing WordPress `admin-post.php` commercial forms and the matching personal-shell assets are excluded by the final Cloudflare release builder. The release fails closed if personal origins, shell markers, WordPress forms or retired service-route links remain.
+
+Reason: these pages are part of the founder's personal services funnel and conflict with the standalone startup positioning. Keeping the exclusion in the final release boundary protects current production while the older source generators are refactored separately.
+
+## 2026-08-20 — Google Workspace is the sole Base2026 mail authority
+
+Decision: `base2026.dev` uses the existing paid Google Workspace Business Starter tenant for both inbound and outbound mail. `hello@base2026.dev` is the primary Gmail identity and `offflinerpsy@gmail.com` remains a retained sender/recipient identity in the same mailbox. Cloudflare Email Routing is disabled. Root mail DNS must not mix providers: MX points only to Google; SPF authorizes Google; DKIM uses Google's generated 2048-bit `google` selector; DMARC starts at monitoring-only `p=none` until real reports justify enforcement.
+
+Reason: the owner needs one Gmail mailbox with a selectable branded From address, not forwarding-only infrastructure. A single provider removes ambiguous MX routing, while SPF, DKIM and monitoring DMARC establish the deliverability baseline without prematurely rejecting mail.
+
+## 2026-08-23 — Enable fenced automatic Cloudflare-only publication
+
+Decision: valid `publication_eligible` packets may publish automatically through policy `base2026.machine-publication.v1` (owner ref `owner-20260823-base2026-auto-publication-v1`, SHA-256 `b37c900a03eb63252c7736c2197f2be1eae3f117eae76914f3cbef306d89e573`, batch10, attempts4). `AUTOMATIC_PUBLICATION_ENABLED`, `IMPORT_ENABLED` and `PUBLIC_PROJECTION_ENABLED` are true; broad `PUBLIC_RELEASE_ENABLED=false` remains intentional, and `LOCAL_ADAPTER_ENABLED=false`. Malformed, privacy-risk and mismatch states fail closed automatically; valid eligible packets do not require user manual review.
+
+Receipt: public Worker `790e21d6-f341-4265-ae0c-7dc536a32495` (rollback `86faccf2-e986-4437-a39a-4b3d66a1883f`), private Worker v0.6.1 `70fd6e68-ea54-462d-ba27-e3b1a66fa997` (pre-automatic rollback `f9e4a494-9780-4bd2-bb33-5b7f5a068f81`), and private migrations `0011`/`0012` applied with none pending. The first run attempted3/applied2/already_public1/retry0/held0/`hard_hold=false`; new public IDs were `7271043105799834912` and `7402026836600851717`, while `7662399921894591761` was already legacy public and fixture `7999999999999999933` was absent. Post-release counts were public 2,136 documents / 1,557 videos / 33 projection receipts / 44 cards / zero full transcripts; private imports35 / applied projections33 / ready0 / automatic receipts 2 applied + 1 already-public / problems0; registry4123 / eligible209 / invalid eligible0.
+
+Reason: exact eligibility, synthetic-fixture exclusion, RPC verification, full-transcript exclusion, fenced leases, global hard-hold stop and exhausted-lease terminal hold preserve the public/private boundary while removing a manual step only for already verified packets. Observe the first full post-release daily discovery cycle at `2026-08-24 10:00 UTC`; it is not yet observed.
+
+## 2026-08-26 — Use curl-cffi only as a bounded TikTok transport compatibility layer
+
+Decision: the private Container image pins yt-dlp with its curl-cffi transport
+and fixed Chrome TLS impersonation. The only allowed input remains a
+D1-authoritative canonical TikTok video URL reached after Player API and
+Browser Player-API fallback. Cookies, authenticated accounts, browser profiles,
+proxies, arbitrary URLs, and public Container endpoints remain prohibited.
+
+Reason: a live local-equivalent diagnostic showed TikTok rejecting the
+Container's unimpersonated webpage negotiation, while the same bounded request
+with curl-cffi resolved a valid audio format. The live private reconciliation
+then stored one new media artifact. This fixes compatibility without turning
+the pipeline into account automation or widening the data boundary.
+
+## 2026-08-28 — Standardize public SEO on extensionless canonical URLs
+
+Decision: `base2026.dev` uses extensionless public canonicals. Sitemaps,
+internal links, canonical tags and Cloudflare Static Assets redirects must
+resolve to the same non-redirecting URL. A release fails when a sitemap URL
+redirects or its final canonical differs.
+
+Reason: the former `.html` sitemap URLs redirected to extensionless pages that
+canonicalized back to `.html`, splitting crawl and canonical signals across
+more than 1,600 URLs.
+
+## 2026-08-28 — Make eligible D1 projections continuously indexable
+
+Decision: every applied, public-safe automatic projection receives a stable
+attributable HTML page and an entry in `sitemap-dynamic.xml`. Pages remain
+excerpt-only and must not expose raw transcripts, media, logs, credentials or
+private D1/R2 artifacts.
+
+Reason: automatic publication previously updated D1 search without creating a
+crawlable public URL, so new evidence could not participate in organic search
+or citation discovery.
+
+## 2026-08-28 — Keep DataForSEO measurement explicitly cost-gated
+
+Decision: documentation discovery and free first-party measurements are the
+default. A paid DataForSEO request may run only after current-price verification,
+explicit approval, one mutually exclusive decision packet and a hard `$0.10`
+ceiling.
+
+Reason: the project is no-budget by design; measurement must answer a concrete
+decision and must not become an open-ended crawl or keyword-spend loop.
