@@ -1,6 +1,19 @@
 # Next Action
 
-## Current Focus: measured visibility growth — 2026-08-28
+## Current Focus: observe Evidence Brief V2 and the polished homepage — 2026-08-28
+
+Public Worker `35a2ee9e-1d95-45c4-b971-26f19183d732` is live; immediate rollback
+is `dcbeb2e9-27af-4d45-b510-fdaaea055f4a`. The homepage form successfully
+returned five attributable findings from `/api/evidence-brief/v2`; V1 and
+`/api/health` remain available. Desktop/mobile, keyboard, reduced-motion and
+no-JS gates passed. The public snapshot is 2,170 documents, 1,572 distinct
+sources, 48 public evidence routes and zero public full third-party transcripts.
+
+Next exact action: observe ordinary traffic and the first meaningful GSC/Bing
+readback. Change the homepage only for a concrete live defect. Keep private
+capture code, raw media and operational state outside the public repository.
+
+## Completed checkpoint: measured visibility foundation — 2026-08-28
 
 The positioning/design/roadmap release is live on public Worker
 `3f5a6687-4eb8-4ba5-9610-7fe2533282ba`; rollback is
@@ -9,16 +22,10 @@ documents / 1,563 distinct videos / 39 applied projections / zero public full
 transcripts. Desktop/mobile visual QA, dynamic source styling, health, static
 and dynamic sitemaps, typecheck, 37 Worker tests and 16 Python tests pass.
 
-Next actions, in order:
-
-1. Push the reviewed public-safe Git branch and open/merge a focused PR.
-2. Monitor GSC and Bing processing; record the first meaningful query,
-   discovery, indexation and exclusion readback without repeated submission.
-3. Select 10–15 existing topic/source clusters with enough evidence and build
-   useful evidence maps; do not create thin programmatic pages.
-4. Add a versioned public dataset sample, API quickstart and corpus changelog.
-5. Resolve the external GitHub CodeQL billing lock, then rerun the security
-   workflow. Do not misclassify that account-level failure as a code failure.
+Follow-up remains monitored GSC/Bing processing, 10–15 useful evidence maps, a
+versioned public dataset sample/API quickstart, and eventual CodeQL recovery.
+Do not create thin programmatic pages or misclassify the external GitHub
+billing lock as a code failure.
 
 ## Current Focus: measure the live SEO/GEO release — 2026-08-28
 

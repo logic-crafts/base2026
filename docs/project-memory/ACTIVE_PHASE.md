@@ -2,7 +2,21 @@
 
 Last updated: 2026-08-28
 
-## Current override — product visibility and GitHub release live (2026-08-28)
+## Current override — Evidence Brief V2 and homepage polish are live (2026-08-28)
+
+Base2026 now presents one primary action: ask a research question and receive
+up to five attributable public-D1 findings through additive endpoint
+`/api/evidence-brief/v2`. The unversioned V1 endpoint remains available.
+Public Worker `35a2ee9e-1d95-45c4-b971-26f19183d732` rolls back immediately to
+`dcbeb2e9-27af-4d45-b510-fdaaea055f4a`; deployed artifact tree SHA-256 is
+`af3641c48f0ff59a7686c623835c07fab39b7b0e5908f6a9d12290cb8e212a52`.
+
+Live desktop, mobile, keyboard, reduced-motion and no-JS checks passed. The
+current public snapshot is 2,170 documents, 1,572 distinct sources, 48 public
+evidence routes and zero public full third-party transcripts. The active phase
+is observation of traffic and GSC/Bing processing, not another redesign.
+
+## Completed checkpoint — product visibility and GitHub release (2026-08-28)
 
 Public Worker version `3f5a6687-4eb8-4ba5-9610-7fe2533282ba` is live with
 immediate rollback `63d1f529-47ff-46ba-baeb-db77f6e80fc6`. The homepage now
