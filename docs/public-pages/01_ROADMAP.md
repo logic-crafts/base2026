@@ -2,173 +2,145 @@
 
 ## Positioning
 
-**Base2026 is an open, local-first knowledge base project that turns public short-form expert videos into attributed, searchable, readable knowledge records.**
+**Base2026 is an open public-source intelligence layer that turns short-form
+expert videos into attributed, searchable evidence for SEO, GEO, AEO,
+AI-search, and research workflows.**
 
-The project started as a personal SEO/SMM research notebook and is evolving into a public, creator-attributed discovery layer for marketers, researchers, and builders.
+It is not a video host, transcript dump, generic SEO suite, or social-listening
+dashboard. The useful unit is a short public evidence card that preserves the
+creator, original source, topic, date, and correction path.
 
-Base2026 is not a social network clone, not a video re-hosting platform, and not a mass transcript dump. The goal is to build a reliable searchable layer over public short-form expert knowledge, with attribution, provenance, opt-out, and correction workflows.
+## What is live
 
-## Why this exists
+- The complete public product runs on Cloudflare at `base2026.dev`.
+- Cloudflare Workers serves the site, read-only API, forms, and public search.
+- Public D1 with FTS5 powers the search workspace without a browser API key.
+- Public JSONL exports, a data dictionary, API index, `llms.txt`, source pages,
+  topic pages, and creator pages provide human- and machine-readable access.
+- The project is open source and documents its public/private boundary.
+- A private Cloudflare pipeline discovers bounded public sources, captures
+  eligible media, creates reviewed evidence, and automatically projects only
+  a small sanitized public record into the public search layer.
 
-Short-form platforms contain practical knowledge: marketing tactics, SEO observations, platform updates, creator experiments, sales advice, product positioning, and operational lessons. The problem is that this knowledge is difficult to search, compare, cite, and revisit.
+Live counts change as the corpus grows. The public manifest and API are the
+machine-readable sources for current data; dated roadmap snapshots are not.
 
-Base2026 turns that stream of public spoken knowledge into structured source records, searchable passages, topic pages, and public discovery paths.
+## How the cloud workflow works
 
-## Current status
+1. Cloudflare discovers candidate public videos from an approved creator list.
+2. Private D1 rejects duplicates and records durable source and job state.
+3. Bounded Browser Rendering and a restricted Container acquire eligible
+   public media; private R2 stores temporary artifacts.
+4. Workers AI transcribes and helps select short source-backed evidence.
+5. Queues and Workflows move each job through retries, budgets, retention, and
+   validation with durable receipts.
+6. A strict automatic-publication policy permits only one to three sanitized
+   excerpt cards to cross the private/public boundary.
+7. A Cloudflare service binding sends that exact projection to the public
+   Worker, which writes it to public D1 FTS5 and verifies the result.
 
-### Live
+Raw media, raw ASR, full private transcripts, credentials, logs, and private
+review packets are never part of the public website or API.
 
-- Public VPS deployment.
-- Searchable knowledge base interface.
-- Initial database of public short-form expert content.
-- Creator/source attribution model.
-- Creator, source, topic, and comparison pages.
-- Public roadmap, project story, privacy, source/content policy, support, methodology, and creator correction/removal pages.
-- Reviewed public source text on source records where policy allows.
-- Base2026-authored short and fuller source explanations.
-- Source-backed public insight cards.
-- Public analytics page with database coverage and topic/source signals.
+## What is technically distinctive
 
-### Current limitations
+- The runtime is cloud-native and does not depend on a development computer.
+- D1 is the durable source of truth; Queues and Workflows are replay-safe
+  transport and orchestration, not competing state stores.
+- Public projection uses exact identities and receipts, so a retry cannot
+  silently create a different public record.
+- R2 artifacts have bounded retention and deletion receipts.
+- The public database has no raw-media or private-packet schema.
+- D1 FTS5 provides fast edge search without requiring a live LLM for every
+  visitor query.
+- Included Cloudflare services and hard software budgets keep the operating
+  model practical for an open startup while failing closed at its limits.
 
-- Transcription is local-first and working, but historical QA still requires source/audio verification for some rows.
-- TikTok and Instagram extraction are unstable by nature.
-- Small VPS is not suitable for heavy ASR/transcription workloads.
-- AI-powered open-ended answer generation is not yet a public feature.
-- Creator claim workflow and public change log are planned.
-- Visitor-level usage analytics and search-demand analytics are planned.
+## Current limitations
+
+- The corpus is curated and bounded; it is not a complete copy of TikTok or the
+  web.
+- Platform access changes can pause discovery or acquisition.
+- Automated transcription and evidence selection can be wrong; source links,
+  correction, removal, and suppression paths remain essential.
+- Public AI-generated answers are not live. The current product retrieves
+  source-backed records and excerpts.
+- Creator claims, public change history, richer usage analytics, and a stable
+  public MCP interface remain unfinished.
 
 # Development sequence
 
-## Phase 1 - Public Trust Foundation
+## Phase 1 — Public trust foundation
 
 **Status:** Live
 
-**Purpose:** Keep the public project understandable and accountable while the database grows.
+Methodology, source policy, privacy, source attribution, correction/removal,
+open-source documentation, and the public/private boundary are live.
 
-The public layer has a live search workspace, source records, creator/topic pages, methodology, source policy, privacy notes, and correction/removal paths.
+## Phase 2 — Cloud ingestion and evidence pipeline
 
-### Milestones
+**Status:** Live, monitored
 
-- Public VPS deployment.
-- Searchable knowledge base interface.
-- Initial database and attribution model.
-- Public roadmap live.
-- Project story and mission published.
-- Privacy policy published.
-- Source and content policy published.
-- Creator correction/removal page published.
+Cloud discovery, bounded acquisition, private R2/D1 storage, Workers AI,
+Queues, Workflows, automatic excerpt-card projection, retention, and receipts
+are operational. Ongoing work focuses on source-platform resilience, quality,
+and budget efficiency.
 
-## Phase 2 - Content Ingestion Pipeline
+## Phase 3 — Indexable evidence graph
+
+**Status:** Live, monitored
+
+Search, source/topic/creator pages, canonical URLs, sitemaps, structured data,
+internal links, static data, dynamic D1 projection pages, and read-only API
+access are live. Google Search Console and Bing Webmaster Tools are connected.
+Current work monitors discovery and keeps counters and projections synchronized.
+
+## Phase 4 — Creator and rights controls
 
 **Status:** In progress
 
-**Purpose:** Turn public creator videos into reviewed source text, searchable passages, and source-backed intelligence.
+Correction and removal paths are live. Creator claims, automated request
+tracking, suppression receipts, and a public change log remain planned.
 
-The pipeline is live for reviewed public exports, but historical transcript QA, source-review debt, and automated handoff hardening are still active work.
+## Phase 5 — Developer and research distribution
 
-### Milestones
+**Status:** Live foundation, in progress
 
-- Local transcription and source-text pipeline.
-- Data cleanup and review workflow.
-- Backups and reproducible export rebuilds.
-- TikTok intake handoff workflow.
-- Source metadata model.
-- Media/audio/video fallback logic.
-- Reviewed public source-text export.
-- Evidence-gated insight-card extraction.
-- Entity/topic cleanup.
-- Historical transcript QA and source-review queue.
+Public JSONL, data dictionary, API index, `llms.txt`, D1 search API, and GitHub
+source are live. Next: versioned public-safe sample datasets, reproducible query
+examples, release notes, and a read-only MCP contract.
 
-## Phase 3 - AI Knowledge Layer
-
-**Status:** Live
-
-**Purpose:** Convert reviewed source text into summaries, topics, insight cards, and discovery paths.
-
-The public intelligence layer is live, with search, topic pages, analytics, public insight cards, and source-backed explanations. The remaining work is dedupe, QA, and better answer/compare surfaces.
-
-### Milestones
-
-- Base2026 source summaries.
-- Entity and topic clustering.
-- Search and filtering.
-- Source-backed answer blocks.
-- Source-backed public insight cards.
-- Confidence / verification labels.
-- Internal linking between related entries.
-
-## Phase 4 - Creator & Rights Controls
-
-**Status:** In progress
-
-**Purpose:** Give creators and source owners a clear way to correct, update, remove, or claim materials.
-
-The public correction/removal page is live. Creator claims, automated request processing, and a public changelog are still planned.
-
-### Milestones
-
-- Creator claim workflow.
-- Creator correction/removal page.
-- Automated request processing workflow.
-- Public change log.
-- Source dispute review process.
-
-## Phase 5 - Analytics & Public Signals
-
-**Status:** Live
-
-**Purpose:** Show what is in the database, what topics are visible, and where the source graph is growing.
-
-The public analytics page is live for database coverage and topic/source signals. Visitor-level analytics, search-demand signals, and most-viewed entries remain planned.
-
-### Milestones
-
-- Public database counters.
-- Most viewed knowledge entries.
-- Source coverage metrics.
-- Content growth chart.
-- Search demand signals.
-
-## Phase 6 - Monetization Layer
+## Phase 6 — Sustainable open product
 
 **Status:** Research
 
-**Purpose:** Turn the platform into a sustainable product without compromising trust.
-
-### Milestones
-
-- Sponsorship / supporter model.
-- Premium research views.
-- API / data access model.
-- Partner pages.
-- Public revenue rules.
-- Transparent commercial policy.
-
-# Execution order
+Potential support, partnership, and premium research models will be tested only
+after repeated public usage. They must preserve source attribution, correction
+rights, transparent boundaries, and useful free access.
 
 ## Now
 
-- Public Trust Foundation.
-- Public VPS deployment.
-- Searchable knowledge base interface.
-- Reviewed public source-text pages.
-- Public analytics and topic signals.
+- Monitor Google Search Console and Bing Webmaster Tools for discovery and
+  indexing changes.
+- Keep public counters synchronized to dated D1/manifest dimensions.
+- Publish a small set of strong source-backed topic evidence maps.
+- Keep dynamic projection pages, canonicals and sitemaps release-tested.
 
 ## Next
 
-- Content Ingestion Pipeline.
-- TikTok intake handoff workflow.
-- Evidence-gated insight-card review.
-- Historical transcript QA and source-review queue.
+- Versioned public-safe dataset sample and API quickstart.
+- Dated corpus changelog and manifest diffs.
+- Better creator/correction workflows.
+- Read-only MCP tools for source, topic, creator, and comparison lookup.
 
 ## Later
 
-- Creator claim workflow.
-- Visitor/search analytics.
-- Monetization Layer.
-- API / MCP data access.
+- Citation-aware answer experiments with visible sources and strict limits.
+- Carefully reviewed additional source platforms.
+- Sustainability experiments driven by observed use, not speculative pricing.
 
 # What this roadmap proves
 
-This roadmap is not a list of promised features. It is a public development sequence: first transparency and governance, then ingestion, AI processing, creator controls, analytics, and monetization. Each layer makes the next one safer and more useful.
+The roadmap is a public sequence, not a promise of rankings, AI citations, or
+universal coverage. Base2026 grows by making a narrow evidence corpus easier to
+find, verify, cite, correct, and reuse.

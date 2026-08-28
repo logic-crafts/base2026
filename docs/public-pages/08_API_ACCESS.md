@@ -1,67 +1,91 @@
 # Base2026 API & AI Access
 
-Base2026 is built to be useful to humans and AI agents without forcing either one to scrape the visual interface. The public site exposes a small read-only data layer with the same public boundary as the website: reviewed source records, public passages, creator/topic metadata, and source-backed intelligence only.
+Base2026 exposes the same reviewed public evidence to people and software. The
+public layer is read-only: source metadata, short evidence passages, public
+cards, topics, attribution, and canonical links.
 
-Private research vaults, raw captions, raw ASR, media files, credentials, logs, and unreviewed pipeline artifacts are not part of the public API surface.
+Raw captions, raw ASR, media, private review packets, credentials, logs, and
+private pipeline state are not part of the public API.
 
 ## Public entry points
 
-- Human search workspace: `/knowledge/`
-- Agent-readable context file: `/knowledge/llms.txt`
-- Public data dictionary: `/knowledge/data-dictionary.json`
-- Public API index: `/knowledge/api-index.json`
-- Public sitemap: `/knowledge/sitemap.xml`
-- Research-to-audit bridge: `/knowledge/apply-research.html`
+- Human search workspace: `/workspace/`
+- Agent-readable context: `/llms.txt`
+- Public data dictionary: `/data-dictionary.json`
+- Public API index: `/api-index.json`
+- Static sitemap index: `/sitemap.xml`
+- Current D1 projection sitemap: `/sitemap-dynamic.xml`
+- Public source index: `/sources/`
 
 ## Static public data
 
-These files are safe read-only exports for external tools, notebooks, audits, and AI workflows.
+- `/static/manifest.json` — dated release counts and public export metadata.
+- `/static/documents.jsonl` — public source/search documents.
+- `/static/passages.jsonl` — public evidence passages linked to sources.
+- `/static/insight_cards.jsonl` — reviewed source-backed insight cards.
+- `/static/topic_signal_briefs.jsonl` — summaries for strong public topics.
 
-- `/knowledge/static/manifest.json` - release counts and public export metadata.
-- `/knowledge/static/documents.jsonl` - source-level search documents and public source records.
-- `/knowledge/static/passages.jsonl` - searchable public evidence passages linked to source records.
-- `/knowledge/static/insight_cards.jsonl` - reviewed public source-backed insight cards.
-- `/knowledge/static/topic_signal_briefs.jsonl` - deterministic summaries for strong topics.
-- `/knowledge/data-dictionary.json` - field descriptions and public/private boundary notes.
+Static files are best for reproducible offline analysis. Their manifest date
+must be retained when citing counts.
 
-## Search endpoint
+## Live search endpoint
 
-The public UI searches through a server-side Meilisearch proxy:
+The public UI and compatible integrations use a read-only,
+Meilisearch-compatible Cloudflare Worker endpoint backed by D1 FTS5:
 
-`POST /knowledge-search/multi-search`
+`POST /api/search/multi-search`
 
-The proxy injects the public search key server-side. Do not call Meilisearch directly and do not expect private data, raw captions, or write access. External integrations should prefer the static JSONL files unless they need live search ranking.
+No browser key is required. The endpoint provides public search and filters;
+it has no write, moderation, raw-transcript, media, credential, or private-data
+route.
 
-## AI usage
+Example:
 
-AI agents can use Base2026 as a source-backed research layer by reading `/knowledge/llms.txt`, then using the data dictionary and public JSONL files. When citing Base2026, prefer canonical source, topic, creator, or comparison pages rather than copying raw rows.
+```json
+{
+  "queries": [
+    {
+      "indexUid": "base2026_public_tiktok",
+      "q": "AI search",
+      "limit": 5
+    }
+  ]
+}
+```
 
-For business-specific implementation, use `/knowledge/apply-research.html` as the public bridge from Base2026 source intelligence to Alex Yarosh's AI Visibility Snapshot, Diagnostic Audit, and service workflow.
+## Indexable public projection
 
-Good use cases:
+Eligible automatic D1 projections receive stable public source pages at:
 
-- find creators who discuss a topic;
-- compare repeated tactics across creators;
-- inspect source-backed SEO/GEO/AEO claims;
-- build internal research notebooks from public records;
-- cite a canonical Base2026 source page with original creator attribution.
+`/sources/tiktok-video-{numeric_video_id}`
 
-Not supported:
+These pages show only sanitized public excerpt cards and attribution. The
+original creator video remains the canonical source for the full content.
 
-- raw transcript harvesting;
+## Good uses
+
+- find creators and sources discussing a topic;
+- compare repeated tactics across public sources;
+- inspect source-backed SEO, GEO, AEO, and AI-search claims;
+- build a research notebook from public JSONL;
+- link an answer to a stable Base2026 page and the original source.
+
+## Not supported
+
+- raw transcript harvesting or video re-hosting;
 - creator impersonation;
-- private lead or admin data access;
-- writes, corrections, or moderation through public endpoints;
+- private lead, inbox, review, or administrative access;
+- public writes, corrections, or moderation through the search endpoint;
 - replacing the original creator channel.
 
-## Future MCP contract
+## Planned read-only MCP contract
 
-The planned MCP layer should remain read-only at first:
+The first MCP layer should expose only bounded public lookups:
 
-- search sources by query and filters;
-- get one source by item ID;
-- get one topic by topic ID;
-- list creators with filters;
-- compare creator viewpoints for one topic.
+- search sources by query and public filters;
+- get one canonical source record;
+- get one topic or creator;
+- compare public source-backed viewpoints.
 
-Every tool response must preserve attribution, canonical URLs, original source links, and public/private policy flags.
+Every response must preserve attribution, original source links, canonical
+Base2026 URLs, and public/private policy flags.

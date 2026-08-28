@@ -4,6 +4,30 @@ All notable public-facing changes to Base2026 are summarized here.
 
 Base2026 is early, so this changelog focuses on useful release milestones rather than every internal pipeline run.
 
+## 2026-08-28 — Product positioning, indexation and design authority
+
+### Changed
+
+- Defined Base2026 as an open video research engine and source-first evidence
+  library, with explicit honest differentiation and competitor boundaries.
+- Synchronized the public roadmap with the live Cloudflare Workers, D1, R2,
+  Queues, Workflows, Workers AI, automatic projection and indexation surfaces.
+- Connected the release plan to Google Search Console and Bing Webmaster Tools
+  monitoring and source-backed topic evidence maps.
+- Reconciled the homepage to a dated live D1 snapshot: 2,150 search documents,
+  1,563 distinct videos and 39 applied automatic projections.
+- Established `b26-independent-v1` as the only production visual authority and
+  documented legacy Alex V4/WordPress/Stitch assets as quarantined history.
+- Normalized dynamic projected-source pages to the current cool-blue Base2026
+  core stylesheet and added a fail-closed design-authority check.
+
+### Research and verification
+
+- Ran a cost-controlled US/en DataForSEO positioning packet for $0.077 and
+  rejected downloader, troubleshooting and surveillance-oriented intent.
+- Preserved creator attribution, correction/removal and public/private data
+  boundaries while updating product language.
+
 ## 2026-08-23 — Canonical Cloudflare pipeline operating manual
 
 ### Changed

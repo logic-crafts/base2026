@@ -2,11 +2,28 @@
 
 Status: authoritative architecture and operations reference
 
-Production snapshot verified: 2026-08-23 23:13 UTC
+Production snapshot verified: 2026-08-26 23:05 UTC
 
 Applies to: TikTok discovery, cloud acquisition, private processing, automatic excerpt-card publication, public Base2026 search, deployment, rollback, and agent handoff
 
 > **All agents start here for Base2026 Cloudflare or TikTok-pipeline work.** Repository files and live Cloudflare receipts override chat memory. This document defines the system; dated counters and version IDs are only a verified snapshot and must be refreshed before a production change.
+
+## Current live capture receipt — 2026-08-26
+
+The private control Worker is deployed as version
+`dbad0d33-070a-47fd-9e5e-ea36f18c59d4`. Its private Container application is
+healthy on image `base2026-pipeline-capture:0.5.4` (application version 6).
+The image pins `yt-dlp 2026.08.19` with the `curl-cffi` TLS transport and a
+fixed Chrome impersonation target. This is transport compatibility only: the
+Container has no cookies, account, browser profile, proxy, or public route.
+
+A pair of live, HMAC-authenticated private capture reconciliations attempted
+six queued sources and stored media for two of them; stored private `media`
+artifacts increased from 210 to 212. The four unsuccessful sources were left
+in the bounded retry lane; they do not block newer rows. The scheduled cadence is
+unchanged: capture/reconcile every five minutes and discovery daily at 10:00
+UTC. Health is green and `PUBLIC_RELEASE_ENABLED=false`; no public Worker,
+public D1 data, or public release switch changed during this repair.
 
 ## 1. The short version
 
@@ -14,7 +31,7 @@ Base2026 now has a cloud-only production path. The MacBook is not required for t
 
 1. Cloudflare discovers new TikTok video IDs from the registered creator list.
 2. D1 rejects duplicates and admits only bounded, normalized TikTok sources.
-3. Cloudflare obtains the media URL, a private Container converts the video to bounded audio, and R2 stores the private artifact.
+3. Cloudflare first validates the official Player API, then uses a bounded Browser Player-API transport fallback only when needed; a private Container uses the canonical source URL only as the final bounded acquisition fallback, converts the media to audio, and R2 stores the private artifact.
 4. Workers AI transcribes the audio and produces a strictly validated evidence selection.
 5. Deterministic code builds Source Intelligence, Editorial, and Production Packet artifacts. Invalid or weak material stays private.
 6. A pinned machine-publication policy imports eligible packets into the private materialized layer.

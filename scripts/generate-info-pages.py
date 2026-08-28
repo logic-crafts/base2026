@@ -290,9 +290,10 @@ def flush_paragraph(out: list[str], paragraph: list[str]) -> None:
         paragraph.clear()
 
 
-def flush_list(out: list[str], items: list[str]) -> None:
+def flush_list(out: list[str], items: list[str], *, ordered: bool = False) -> None:
     if items:
-        out.append("<ul>" + "".join(f"<li>{inline_md(item)}</li>" for item in items) + "</ul>")
+        tag = "ol" if ordered else "ul"
+        out.append(f"<{tag}>" + "".join(f"<li>{inline_md(item)}</li>" for item in items) + f"</{tag}>")
         items.clear()
 
 
@@ -350,20 +351,48 @@ def render_markdown(markdown: str, page_class: str) -> tuple[str, str]:
         body: list[str] = []
         paragraph: list[str] = []
         list_items: list[str] = []
+        list_ordered = False
         table_lines: list[str] = []
+        code_lines: list[str] | None = None
+        code_language = ""
+
+        def flush_active_list() -> None:
+            flush_list(body, list_items, ordered=list_ordered)
 
         def flush_table() -> None:
             nonlocal table_lines
             if table_lines:
                 flush_paragraph(body, paragraph)
-                flush_list(body, list_items)
+                flush_active_list()
                 body.append(render_table(table_lines))
                 table_lines = []
 
         for line in section_lines:
+            if code_lines is not None:
+                if line.strip().startswith("```"):
+                    language_class = (
+                        f' class="language-{html.escape(code_language)}"'
+                        if code_language
+                        else ""
+                    )
+                    body.append(
+                        f"<pre><code{language_class}>{html.escape(chr(10).join(code_lines))}</code></pre>"
+                    )
+                    code_lines = None
+                    code_language = ""
+                else:
+                    code_lines.append(normalize_copy(line))
+                continue
+            if line.strip().startswith("```"):
+                flush_table()
+                flush_paragraph(body, paragraph)
+                flush_active_list()
+                code_language = line.strip()[3:].strip()
+                code_lines = []
+                continue
             if re.fullmatch(r"\s*-{3,}\s*", line):
                 flush_paragraph(body, paragraph)
-                flush_list(body, list_items)
+                flush_active_list()
                 continue
             if line.startswith("|") and line.endswith("|"):
                 table_lines.append(line)
@@ -371,21 +400,36 @@ def render_markdown(markdown: str, page_class: str) -> tuple[str, str]:
             flush_table()
             if not line.strip():
                 flush_paragraph(body, paragraph)
-                flush_list(body, list_items)
+                flush_active_list()
                 continue
             if line.startswith("### "):
                 flush_paragraph(body, paragraph)
-                flush_list(body, list_items)
+                flush_active_list()
                 body.append(f"<h3>{inline_md(line[4:])}</h3>")
                 continue
-            if re.match(r"^\s*(?:[-*]|\d+\.)\s+", line):
+            list_match = re.match(r"^\s*(?P<marker>[-*]|\d+\.)\s+(?P<item>.+)", line)
+            if list_match:
                 flush_paragraph(body, paragraph)
-                list_items.append(re.sub(r"^\s*(?:[-*]|\d+\.)\s+", "", line))
+                ordered = list_match.group("marker")[0].isdigit()
+                if list_items and ordered != list_ordered:
+                    flush_active_list()
+                list_ordered = ordered
+                list_items.append(list_match.group("item"))
+                continue
+            if list_items:
+                list_items[-1] = f"{list_items[-1]} {line.strip()}"
                 continue
             paragraph.append(line)
         flush_table()
+        if code_lines is not None:
+            language_class = (
+                f' class="language-{html.escape(code_language)}"' if code_language else ""
+            )
+            body.append(
+                f"<pre><code{language_class}>{html.escape(chr(10).join(code_lines))}</code></pre>"
+            )
         flush_paragraph(body, paragraph)
-        flush_list(body, list_items)
+        flush_active_list()
 
         section_class = "content-section"
         if page_class == "roadmap-page" and title.lower().startswith("phase"):
@@ -431,6 +475,17 @@ def cookie_consent_markup() -> str:
 
 
 def contact_form_markup(kind: str) -> str:
+    if kind == "roadmap":
+        return """
+      <section class="b26-roadmap-contact" aria-labelledby="b26-roadmap-contact-title">
+        <div>
+          <p class="b26-eyebrow">Roadmap feedback</p>
+          <h2 id="b26-roadmap-contact-title">Send corrections and proposals through the project inbox.</h2>
+          <p>Use the Support form for roadmap corrections, source suggestions, infrastructure offers or a proposal for the next public build step.</p>
+        </div>
+        <a class="b26-button--primary" href="/support">Open the Support form</a>
+      </section>
+"""
     subject = "Base2026 support request" if kind == "support" else "Base2026 roadmap feedback"
     intro = (
         "Send a correction, support note, sponsorship question, or source suggestion."
@@ -501,21 +556,21 @@ def page_shell(meta: dict[str, str], h1: str, body: str) -> str:
       <section class="roadmap-experience" aria-labelledby="roadmap-experience-title">
         <div class="roadmap-experience__intro">
           <p class="eyebrow">Product roadmap</p>
-          <h2 id="roadmap-experience-title">A compact build sequence for the public knowledge layer.</h2>
-          <p>Trust, ingestion, knowledge, rights, signals, and revenue stay in one inspectable operating map.</p>
+          <h2 id="roadmap-experience-title">A compact build sequence for the public evidence layer.</h2>
+          <p>Trust, cloud ingestion, indexation, creator rights, distribution, and sustainability stay in one inspectable operating map.</p>
         </div>
         <section class="summary-strip" aria-label="Roadmap summary">
           <article>
             <span>Now</span>
-            <strong>Public Trust Foundation</strong>
+            <strong>Monitor indexation and synchronize evidence</strong>
           </article>
           <article>
             <span>Next</span>
-            <strong>Content Ingestion Pipeline</strong>
+            <strong>Evidence maps, data samples, creator controls</strong>
           </article>
           <article>
             <span>Later</span>
-            <strong>AI Knowledge Layer, Creator Controls, Analytics, Monetization</strong>
+            <strong>Read-only MCP, source expansion, sustainability</strong>
           </article>
         </section>
         <section class="control-strip" aria-label="Roadmap controls">
@@ -546,8 +601,8 @@ def page_shell(meta: dict[str, str], h1: str, body: str) -> str:
           </article>
           <article class="roadmap-panel roadmap-panel-wide" aria-labelledby="funding-title">
             <div class="roadmap-panel-head">
-              <p class="eyebrow">Funding logic</p>
-              <h2 id="funding-title">What support unlocks</h2>
+              <p class="eyebrow">Delivery logic</p>
+              <h2 id="funding-title">What each layer unlocks</h2>
             </div>
             <div id="funding-grid" class="funding-grid"></div>
           </article>

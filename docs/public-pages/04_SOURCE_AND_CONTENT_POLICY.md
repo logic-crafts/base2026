@@ -159,7 +159,7 @@ The project should prefer:
 - authorized APIs where practical;
 - user-submitted public URLs;
 - creator-authorized sources;
-- local-first processing;
+- private cloud processing with bounded retention;
 - conservative rate limits;
 - transparent provenance.
 

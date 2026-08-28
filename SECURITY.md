@@ -1,6 +1,6 @@
 # Security Policy
 
-Base2026 is a public prototype. The deployed product serves a public read-only evidence library and accepts structured Support/Partner proposals. Source ingestion and review remain maintainer-controlled workflows.
+Base2026 is a public prototype. The deployed product serves a public read-only evidence library and accepts structured Support/Partner proposals. A separate private Cloudflare lane performs bounded discovery, acquisition, transcription and validation before a strict policy permits sanitized excerpt cards into public D1.
 
 ## Reporting
 
@@ -24,12 +24,18 @@ There are no public source-ingestion, transcript-refresh, database-admin, media-
 - untouched new proposals expire after 90 days;
 - public releases exclude raw captions, raw ASR, media, private QA, local databases, logs and unreviewed material;
 - the release builder fails closed on personal-site shell, WordPress-form and retired-route markers;
+- the design-authority gate blocks retired warm/Alex V4 shell markers and
+  requires dynamic Worker pages to load the current Base2026 core stylesheet;
+- retries and public projections use exact identities and durable receipts;
+- raw media, raw ASR and private evidence packets cannot enter public D1;
 - a publication-boundary audit is required before staging for GitHub.
 
 ## Verification
 
 ```bash
 python3 -m pytest tests/test_build_base2026_cloudflare_release.py -q
+python3 -m pytest tests/test_base2026_design_authority.py -q
+python3 scripts/check-base2026-design-authority.py
 python3 scripts/audit-publication-boundary.py
 
 cd cloudflare/base2026-worker

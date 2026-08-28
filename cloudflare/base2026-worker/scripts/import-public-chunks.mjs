@@ -82,6 +82,7 @@ const SQL_COLUMNS = Object.freeze([
   "avatar_url",
   "topics_json",
   "topic_labels_json",
+  "admission_state",
 ]);
 
 const FORBIDDEN_KEY = /(caption|transcript|asr|audio|media|secret|token|cookie|claim|private|password|credential)/i;
@@ -227,7 +228,7 @@ function validateRow(raw, lineNumber) {
   const topicLabels = listField(raw, "topic_labels", topics);
   const topicLabelById = new Map(topicLabels.map((label, index) => [topics[index] ?? label, label]));
   return {
-    admission_state: stringField(raw, "admission_state"),
+    admission_state: stringField(raw, "admission_state") || "normal_public_card",
     avatar_url: normalizeAvatarUrl(stringField(raw, "avatar_url", { max: 2_000 })),
     body,
     captured_at: stringField(raw, "captured_at", { max: 100 }),

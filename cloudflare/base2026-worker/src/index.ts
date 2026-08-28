@@ -1,4 +1,17 @@
+import { WorkerEntrypoint } from "cloudflare:workers";
+import {
+  applyPublicProjection,
+  inspectPublicSource,
+  rollbackPublicProjection,
+  verifyPublicProjection,
+} from "./public-projection";
+
 const INDEX_UID = "base2026_public_tiktok" as const;
+const OUTREACH_INDEX_UID = "base2026_public_outreach" as const;
+const SEARCH_INDEXES = Object.freeze({
+  [INDEX_UID]: "tiktok",
+  [OUTREACH_INDEX_UID]: "outreach",
+} as const);
 const MAX_BODY_BYTES = 64 * 1024;
 const MAX_QUERY_LENGTH = 200;
 const MAX_MULTI_QUERIES = 4;
@@ -10,6 +23,10 @@ const FORM_ORIGIN = "https://base2026.dev";
 const FORM_CONSENT_VERSION = "2026-08-20";
 const MIN_FORM_COMPLETION_MS = 1_200;
 const MAX_FORM_COMPLETION_MS = 2 * 60 * 60 * 1_000;
+const PUBLIC_ORIGIN = "https://base2026.dev";
+const MAX_DYNAMIC_SITEMAP_URLS = 50_000;
+const DYNAMIC_SOURCE_ROUTE = /^\/sources\/tiktok-video-(\d{10,30})\/?$/u;
+const SOCIAL_IMAGE_URL = `${PUBLIC_ORIGIN}/static/assets/base2026-ai-visibility-card.png`;
 
 const PUBLIC_FIELDS = Object.freeze([
   "admission_state",
@@ -45,6 +62,36 @@ const PUBLIC_FIELDS = Object.freeze([
 ] as const);
 type PublicField = (typeof PUBLIC_FIELDS)[number];
 
+const OUTREACH_PUBLIC_FIELDS = Object.freeze([
+  "id",
+  "collection",
+  "record_type",
+  "source_record_id",
+  "title",
+  "summary",
+  "tactic",
+  "evidence_summary",
+  "verdict",
+  "source_url",
+  "platform",
+  "author_name",
+  "author_handle",
+  "observed_at",
+  "score",
+  "source_status",
+  "topics",
+  "lanes",
+  "cost",
+  "complexity",
+  "effect_speed",
+  "public_policy",
+  "reviewed_at",
+  "source_hash",
+  "dedup_key",
+  "language",
+] as const);
+type OutreachPublicField = (typeof OUTREACH_PUBLIC_FIELDS)[number];
+
 const FACET_COLUMNS = Object.freeze({
   creator_id: "creator_id",
   handle: "handle",
@@ -58,6 +105,47 @@ const FACET_FIELDS = Object.freeze([
   "topics",
 ] as const);
 type FacetField = (typeof FACET_FIELDS)[number];
+
+const OUTREACH_FACET_COLUMNS = Object.freeze({
+  platform: "platform",
+  source_status: "source_status",
+  cost: "cost",
+  complexity: "complexity",
+  effect_speed: "effect_speed",
+  language: "language",
+} as const);
+const OUTREACH_FACET_FIELDS = Object.freeze([
+  "platform",
+  "source_status",
+  "topics",
+  "lanes",
+  "cost",
+  "complexity",
+  "effect_speed",
+  "language",
+] as const);
+type OutreachFacetField = (typeof OUTREACH_FACET_FIELDS)[number];
+type OutreachFilterField = OutreachFacetField | "score" | "observed_at";
+const OUTREACH_SEARCHABLE_FIELDS = Object.freeze([
+  "title",
+  "summary",
+  "tactic",
+  "evidence_summary",
+  "verdict",
+  "source_url",
+  "platform",
+  "author_name",
+  "author_handle",
+  "cost",
+  "complexity",
+  "effect_speed",
+] as const);
+const OUTREACH_ALLOWED_SORTS = Object.freeze([
+  "observed_at:asc",
+  "observed_at:desc",
+  "score:asc",
+  "score:desc",
+] as const);
 
 const SEARCHABLE_FIELDS = Object.freeze(["body", "title", "topic_labels", "handle", "creator_id", "platform"] as const);
 const ALLOWED_SORTS = Object.freeze([
@@ -73,7 +161,7 @@ const JSON_HEADERS = Object.freeze({
   "Cache-Control": "no-store",
 });
 
-type EnvWithBindings = Env & { INBOX_DB?: D1Database };
+type EnvWithBindings = Env & { INBOX_DB?: D1Database; OUTREACH_DB?: D1Database };
 
 type FormKind = "support" | "partner";
 
@@ -91,7 +179,7 @@ interface InboxSubmission {
 }
 
 interface SearchQuery {
-  indexUid: string;
+  indexUid: typeof INDEX_UID;
   q: string;
   limit: number;
   offset: number;
@@ -100,6 +188,23 @@ interface SearchQuery {
   filter: Array<string | string[]>;
   sort: string;
   attributesToRetrieve: PublicField[] | "*";
+  attributesToHighlight: string[];
+  attributesToCrop: string[];
+  cropMarker: string;
+  highlightPreTag: string;
+  highlightPostTag: string;
+}
+
+interface OutreachSearchQuery {
+  indexUid: typeof OUTREACH_INDEX_UID;
+  q: string;
+  limit: number;
+  offset: number;
+  facets: OutreachFacetField[];
+  facetFilters: string[][];
+  filter: Array<string | string[]>;
+  sort: string;
+  attributesToRetrieve: OutreachPublicField[] | "*";
   attributesToHighlight: string[];
   attributesToCrop: string[];
   cropMarker: string;
@@ -118,6 +223,34 @@ interface SearchRow {
   topics_json: string;
   topic_labels_json: string;
   full_transcript_public: number;
+}
+
+interface ProjectedSourcePageRow {
+  video_id: string;
+  source_id: string;
+  creator_handle: string;
+  creator_url: string;
+  source_url: string;
+  published_date: string;
+  ordinal: number;
+  claim_text: string;
+  suggested_action: string;
+  topic_label: string;
+  evidence_excerpt: string;
+  evidence_start_seconds: number;
+  evidence_end_seconds: number;
+}
+
+interface DynamicSitemapRow {
+  video_id: string;
+  lastmod: string;
+}
+
+interface OutreachSearchRow {
+  [key: string]: unknown;
+  id: string;
+  topics_json: string;
+  lanes_json: string;
 }
 
 class RequestError extends Error {
@@ -295,11 +428,7 @@ function validateTags(value: unknown, field: string, fallback: string): string {
   return tag;
 }
 
-function parseQuery(raw: unknown): SearchQuery {
-  if (!raw || typeof raw !== "object" || Array.isArray(raw)) {
-    throw new RequestError(400, "INVALID_QUERY", "each query must be a JSON object");
-  }
-  const query = raw as Record<string, unknown>;
+function parseTikTokQuery(query: Record<string, unknown>, indexUid: string): SearchQuery {
   const allowed = new Set([
     "indexUid",
     "q",
@@ -319,7 +448,6 @@ function parseQuery(raw: unknown): SearchQuery {
   for (const key of Object.keys(query)) {
     if (!allowed.has(key)) throw new RequestError(400, "UNSUPPORTED_OPTION", `query option ${key} is not supported`);
   }
-  const indexUid = query.indexUid === undefined ? INDEX_UID : ensureString(query.indexUid, "indexUid", 100);
   if (indexUid !== INDEX_UID) throw new RequestError(403, "UNKNOWN_INDEX", `only ${INDEX_UID} is available`);
   const q = query.q === undefined ? "" : ensureString(query.q, "q", MAX_QUERY_LENGTH).trim();
   const facets = validateFacets(query.facets);
@@ -371,6 +499,124 @@ function parseQuery(raw: unknown): SearchQuery {
     highlightPreTag: validateTags(query.highlightPreTag, "highlightPreTag", "<mark>"),
     highlightPostTag: validateTags(query.highlightPostTag, "highlightPostTag", "</mark>"),
   };
+}
+
+function validateOutreachPublicField(field: string, option: string): OutreachPublicField {
+  if (!OUTREACH_PUBLIC_FIELDS.includes(field as OutreachPublicField)) {
+    throw new RequestError(400, "UNSUPPORTED_FIELD", `${option} does not support field ${field}`);
+  }
+  return field as OutreachPublicField;
+}
+
+function validateOutreachFacets(value: unknown): OutreachFacetField[] {
+  if (value === undefined) return [];
+  if (value === "*") return [...OUTREACH_FACET_FIELDS];
+  if (!Array.isArray(value) || value.length > OUTREACH_FACET_FIELDS.length) {
+    throw new RequestError(400, "INVALID_FIELD", "facets must be an array of supported Outreach fields");
+  }
+  if (value.includes("*")) {
+    if (value.length !== 1) throw new RequestError(400, "UNSUPPORTED_FACET", "facets wildcard cannot be combined with named facets");
+    return [...OUTREACH_FACET_FIELDS];
+  }
+  return value.map((item, index) => {
+    if (typeof item !== "string" || !OUTREACH_FACET_FIELDS.includes(item as OutreachFacetField)) {
+      throw new RequestError(400, "UNSUPPORTED_FACET", `facets[${index}] is not supported for Outreach`);
+    }
+    return item as OutreachFacetField;
+  });
+}
+
+function parseOutreachQuery(query: Record<string, unknown>): OutreachSearchQuery {
+  const allowed = new Set([
+    "indexUid",
+    "q",
+    "limit",
+    "offset",
+    "facets",
+    "facetFilters",
+    "filter",
+    "sort",
+    "attributesToRetrieve",
+    "attributesToHighlight",
+    "attributesToCrop",
+    "cropMarker",
+    "highlightPreTag",
+    "highlightPostTag",
+  ]);
+  for (const key of Object.keys(query)) {
+    if (!allowed.has(key)) throw new RequestError(400, "UNSUPPORTED_OPTION", `query option ${key} is not supported`);
+  }
+  const q = query.q === undefined ? "" : ensureString(query.q, "q", MAX_QUERY_LENGTH).trim();
+  const facets = validateOutreachFacets(query.facets);
+  const facetFilters = validateFacetFilters(query.facetFilters);
+  const filter = validateFilter(query.filter);
+  const sortValues = ensureStringArray(query.sort, "sort", 2, 100);
+  for (const value of sortValues) {
+    if (!OUTREACH_ALLOWED_SORTS.includes(value as (typeof OUTREACH_ALLOWED_SORTS)[number])) {
+      throw new RequestError(400, "UNSUPPORTED_SORT", `sort ${value} is not supported for Outreach`);
+    }
+  }
+  const retrieveRaw = query.attributesToRetrieve;
+  let attributesToRetrieve: OutreachPublicField[] | "*" = "*";
+  if (retrieveRaw !== undefined) {
+    if (retrieveRaw === "*") attributesToRetrieve = "*";
+    else {
+      const retrieve = ensureStringArray(retrieveRaw, "attributesToRetrieve", OUTREACH_PUBLIC_FIELDS.length, 100);
+      attributesToRetrieve = retrieve.map((field) => validateOutreachPublicField(field, "attributesToRetrieve"));
+    }
+  }
+  const attributesToHighlight = query.attributesToHighlight === undefined
+    ? ["title", "summary", "evidence_summary"]
+    : ensureStringArray(query.attributesToHighlight, "attributesToHighlight", 12, 100);
+  for (const field of attributesToHighlight) {
+    if (!OUTREACH_SEARCHABLE_FIELDS.includes(field as (typeof OUTREACH_SEARCHABLE_FIELDS)[number])) {
+      throw new RequestError(400, "UNSUPPORTED_FIELD", `attributesToHighlight does not support Outreach field ${field}`);
+    }
+  }
+  const attributesToCrop = ensureStringArray(query.attributesToCrop, "attributesToCrop", 8, 100);
+  for (const value of attributesToCrop) {
+    const [field, length] = value.split(":", 2);
+    if (
+      !["title", "summary", "tactic", "evidence_summary"].includes(field) ||
+      !/^\d+$/.test(length ?? "") ||
+      Number(length) < 1 ||
+      Number(length) > 100
+    ) {
+      throw new RequestError(400, "UNSUPPORTED_CROP", `attributesToCrop value ${value} is not supported for Outreach`);
+    }
+  }
+  return {
+    indexUid: OUTREACH_INDEX_UID,
+    q,
+    limit: ensureInteger(query.limit, "limit", 0, MAX_LIMIT, DEFAULT_LIMIT),
+    offset: ensureInteger(query.offset, "offset", 0, MAX_OFFSET, 0),
+    facets,
+    facetFilters,
+    filter,
+    sort: sortValues[0] ?? "",
+    attributesToRetrieve,
+    attributesToHighlight,
+    attributesToCrop,
+    cropMarker: query.cropMarker === undefined ? "..." : ensureString(query.cropMarker, "cropMarker", 20),
+    highlightPreTag: validateTags(query.highlightPreTag, "highlightPreTag", "<mark>"),
+    highlightPostTag: validateTags(query.highlightPostTag, "highlightPostTag", "</mark>"),
+  };
+}
+
+function parseQuery(raw: unknown): SearchQuery | OutreachSearchQuery {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) {
+    throw new RequestError(400, "INVALID_QUERY", "each query must be a JSON object");
+  }
+  const query = raw as Record<string, unknown>;
+  const rawIndexUid = query.indexUid === undefined ? INDEX_UID : ensureString(query.indexUid, "indexUid", 100);
+  const indexKind = Object.prototype.hasOwnProperty.call(SEARCH_INDEXES, rawIndexUid)
+    ? SEARCH_INDEXES[rawIndexUid as keyof typeof SEARCH_INDEXES]
+    : undefined;
+  if (!indexKind) {
+    throw new RequestError(403, "UNKNOWN_INDEX", `index ${rawIndexUid} is not available`);
+  }
+  if (indexKind === "outreach") return parseOutreachQuery(query);
+  return parseTikTokQuery(query, INDEX_UID);
 }
 
 function normalizeFilterLiteral(value: string): string {
@@ -573,6 +819,137 @@ function escapeHtml(value: string): string {
   return value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;");
 }
 
+function truncateText(value: string, length: number): string {
+  const compact = value.replace(/\s+/gu, " ").trim();
+  return compact.length <= length ? compact : `${compact.slice(0, Math.max(0, length - 1)).trimEnd()}…`;
+}
+
+function safePublicSourceUrl(value: string): string {
+  try {
+    const parsed = new URL(value);
+    if (parsed.protocol === "https:" && (parsed.hostname === "www.tiktok.com" || parsed.hostname === "tiktok.com")) {
+      return parsed.toString();
+    }
+  } catch {
+    // Fail closed below. Public D1 projection validation should make this
+    // unreachable, but rendering never trusts persisted strings blindly.
+  }
+  return "";
+}
+
+function secondsLabel(value: number): string {
+  const seconds = Math.max(0, Math.floor(Number(value) || 0));
+  const minutes = Math.floor(seconds / 60);
+  return `${minutes}:${String(seconds % 60).padStart(2, "0")}`;
+}
+
+async function readProjectedSourceRows(db: D1Database, videoId: string): Promise<ProjectedSourcePageRow[]> {
+  const result = await db.prepare(
+    `SELECT d.video_id, d.source_id, d.creator_handle, d.creator_url,
+            d.source_url, d.published_date, c.ordinal, c.claim_text,
+            c.suggested_action, c.topic_label, c.evidence_excerpt,
+            c.evidence_start_seconds, c.evidence_end_seconds
+       FROM public_projection_receipts AS r
+       JOIN public_projection_cards AS c ON c.projection_id=r.projection_id
+       JOIN search_documents AS d ON d.id=c.search_id
+      WHERE r.status='applied'
+        AND d.video_id=?
+        AND d.projection_id=r.projection_id
+        AND d.source_id=r.source_id
+        AND d.full_transcript_public=0
+      ORDER BY c.ordinal ASC
+      LIMIT 3`,
+  ).bind(videoId).all<ProjectedSourcePageRow>();
+  return result.results;
+}
+
+function renderProjectedSourcePage(videoId: string, rows: ProjectedSourcePageRow[]): string {
+  const first = rows[0];
+  const canonical = `${PUBLIC_ORIGIN}/sources/tiktok-video-${videoId}`;
+  const sourceUrl = safePublicSourceUrl(first.source_url);
+  const creator = first.creator_handle || "Original creator";
+  const title = truncateText(first.claim_text || `Public source ${videoId}`, 120);
+  const description = truncateText(first.evidence_excerpt || first.claim_text, 160);
+  const topics = Array.from(new Set(rows.map((row) => row.topic_label).filter(Boolean)));
+  const jsonLd = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": `${canonical}#webpage`,
+    url: canonical,
+    name: title,
+    description,
+    ...(first.published_date ? { datePublished: first.published_date } : {}),
+    ...(sourceUrl ? { citation: sourceUrl, isBasedOn: sourceUrl } : {}),
+    about: topics,
+    publisher: { "@type": "Organization", name: "Base2026", url: `${PUBLIC_ORIGIN}/` },
+  }).replaceAll("<", "\\u003c");
+  const cards = rows.map((row) => {
+    const evidenceTime = `${secondsLabel(row.evidence_start_seconds)}–${secondsLabel(row.evidence_end_seconds)}`;
+    return `<article class="card"><p class="topic">${escapeHtml(row.topic_label)}</p><h2>${escapeHtml(row.claim_text)}</h2><blockquote>${escapeHtml(row.evidence_excerpt)}</blockquote><p class="time">Source excerpt ${escapeHtml(evidenceTime)}</p><h3>Suggested action</h3><p>${escapeHtml(row.suggested_action)}</p></article>`;
+  }).join("");
+  const topicQuery = encodeURIComponent(topics[0] || title);
+  return `<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${escapeHtml(title)} | Base2026</title><meta name="description" content="${escapeHtml(description)}">
+<meta name="robots" content="index,follow"><link rel="canonical" href="${canonical}">
+<meta property="og:type" content="article"><meta property="og:title" content="${escapeHtml(title)}"><meta property="og:description" content="${escapeHtml(description)}"><meta property="og:url" content="${canonical}">
+<meta property="og:image" content="${SOCIAL_IMAGE_URL}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Base2026 public-source intelligence">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${escapeHtml(title)}"><meta name="twitter:description" content="${escapeHtml(description)}"><meta name="twitter:image" content="${SOCIAL_IMAGE_URL}"><meta name="twitter:image:alt" content="Base2026 public-source intelligence">
+<script type="application/ld+json">${jsonLd}</script>
+<link rel="stylesheet" href="/static/base2026-core.css?v=20260820-b26v1">
+<style>:root{color-scheme:light}*{box-sizing:border-box}body{margin:0;background:var(--b26-canvas,#f7f9fc);color:var(--b26-ink,#0b1736);font:16px/1.65 Manrope,Arial,sans-serif}a{color:inherit}.shell{max-width:1040px;margin:auto;padding:24px}.nav{display:flex;gap:18px;align-items:center;padding:8px 0 38px}.brand{font-weight:900;text-decoration:none}.nav a:not(.brand){color:var(--b26-muted,#526177)}.hero{max-width:860px;padding:42px 0}.eyebrow,.topic,.time{font-family:"Geist Mono",monospace;font-size:13px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--b26-muted,#526177)}h1{font-size:clamp(38px,7vw,72px);line-height:1.03;letter-spacing:-.04em;margin:.2em 0}.lede{font-size:19px;color:var(--b26-muted,#526177)}.cards{display:grid;gap:18px}.card{background:var(--b26-surface,#fff);border:1px solid var(--b26-line,#dce5f0);border-radius:16px;padding:clamp(24px,5vw,44px)}.card h2{font-size:clamp(24px,4vw,36px);line-height:1.15}.card h3{margin-top:28px}blockquote{margin:24px 0;padding-left:18px;border-left:4px solid var(--b26-accent,#315eea);font-size:18px}.source{margin:34px 0;padding:28px;border:1px solid var(--b26-line,#dce5f0);border-radius:16px}.actions{display:flex;flex-wrap:wrap;gap:12px;margin:28px 0 60px}.actions a{padding:11px 18px;border:1px solid var(--b26-dark-cta,#10213f);border-radius:10px;text-decoration:none;font-weight:800}.actions a:first-child{background:var(--b26-dark-cta,#10213f);color:#fff}@media(max-width:620px){.nav{flex-wrap:wrap}.shell{padding:18px}}</style></head>
+<body class="b26-projected-source"><main class="shell"><nav class="nav" aria-label="Primary"><a class="brand" href="/">Base2026</a><a href="/workspace/">Search</a><a href="/topics/">Topics</a><a href="/methodology">Methodology</a></nav>
+<header class="hero"><p class="eyebrow">Public source record · ${escapeHtml(creator)}</p><h1>${escapeHtml(title)}</h1><p class="lede">Source-backed excerpt cards generated by the Base2026 public evidence pipeline. The original creator remains the canonical source.</p></header>
+<section class="cards" aria-label="Public evidence cards">${cards}</section>
+<section class="source"><h2>Source and attribution</h2><p>Creator: <strong>${escapeHtml(creator)}</strong>${first.published_date ? ` · Published ${escapeHtml(first.published_date)}` : ""}</p>${sourceUrl ? `<p><a href="${escapeHtml(sourceUrl)}" rel="nofollow noopener noreferrer">Open the original TikTok video</a></p>` : ""}<p>Base2026 publishes short evidence excerpts, not raw media or a full private transcript. See the <a href="/methodology">methodology</a> and <a href="/opt-out">correction policy</a>.</p></section>
+<div class="actions"><a href="/workspace/?q=${topicQuery}">Find related evidence</a><a href="/sources/">Browse sources</a></div></main></body></html>`;
+}
+
+async function handleProjectedSourcePage(request: Request, env: EnvWithBindings, videoId: string): Promise<Response | null> {
+  if (request.method !== "GET" && request.method !== "HEAD") throw methodError(request.method);
+  if (!env.DB) throw new RequestError(503, "DB_NOT_CONFIGURED", "D1 search database is unavailable");
+  const rows = await readProjectedSourceRows(env.DB, videoId);
+  if (!rows.length) return null;
+  const body = renderProjectedSourcePage(videoId, rows);
+  return new Response(request.method === "HEAD" ? null : body, {
+    status: 200,
+    headers: {
+      "Content-Type": "text/html; charset=utf-8",
+      "Cache-Control": "public, max-age=300, s-maxage=900",
+      "X-Content-Type-Options": "nosniff",
+    },
+  });
+}
+
+async function handleDynamicSitemap(request: Request, env: EnvWithBindings): Promise<Response> {
+  if (request.method !== "GET" && request.method !== "HEAD") throw methodError(request.method);
+  if (!env.DB) throw new RequestError(503, "DB_NOT_CONFIGURED", "D1 search database is unavailable");
+  const result = await env.DB.prepare(
+    `SELECT d.video_id AS video_id, MAX(r.updated_at) AS lastmod
+       FROM public_projection_receipts AS r
+       JOIN search_documents AS d ON d.projection_id=r.projection_id AND d.source_id=r.source_id
+      WHERE r.status='applied' AND d.video_id<>'' AND d.full_transcript_public=0
+      GROUP BY d.video_id
+      ORDER BY d.video_id ASC
+      LIMIT ?`,
+  ).bind(MAX_DYNAMIC_SITEMAP_URLS).all<DynamicSitemapRow>();
+  const urls = result.results.map((row) => {
+    const videoId = /^\d{10,30}$/u.test(row.video_id) ? row.video_id : "";
+    if (!videoId) return "";
+    const lastmod = /^\d{4}-\d{2}-\d{2}/u.test(row.lastmod || "") ? `<lastmod>${escapeHtml(row.lastmod.slice(0, 10))}</lastmod>` : "";
+    return `<url><loc>${PUBLIC_ORIGIN}/sources/tiktok-video-${videoId}</loc>${lastmod}</url>`;
+  }).filter(Boolean).join("");
+  const body = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls}</urlset>\n`;
+  return new Response(request.method === "HEAD" ? null : body, {
+    status: 200,
+    headers: {
+      "Content-Type": "application/xml; charset=utf-8",
+      "Cache-Control": "public, max-age=300, s-maxage=900",
+      "X-Robots-Tag": "noindex",
+    },
+  });
+}
+
 function cropText(value: string, query: SearchQuery): string {
   const crop = query.attributesToCrop.find((item) => item.startsWith("body:"));
   if (!crop) return value;
@@ -659,6 +1036,284 @@ async function executeSearch(env: EnvWithBindings, query: SearchQuery): Promise<
   return response;
 }
 
+type OutreachFilterOperator = "=" | "!=" | "IN" | "NOT IN" | ">" | ">=" | "<" | "<=";
+
+const OUTREACH_SQL_COLUMNS = Object.freeze([
+  "id",
+  "collection",
+  "record_type",
+  "source_record_id",
+  "title",
+  "summary",
+  "tactic",
+  "evidence_summary",
+  "verdict",
+  "source_url",
+  "platform",
+  "author_name",
+  "author_handle",
+  "observed_at",
+  "score",
+  "source_status",
+  "topics_json",
+  "lanes_json",
+  "cost",
+  "complexity",
+  "effect_speed",
+  "public_policy",
+  "reviewed_at",
+  "source_hash",
+  "dedup_key",
+  "language",
+] as const);
+
+function isOutreachFilterField(field: string): field is OutreachFilterField {
+  return OUTREACH_FACET_FIELDS.includes(field as OutreachFacetField) || field === "score" || field === "observed_at";
+}
+
+function normalizeOutreachNumber(value: string): number {
+  const trimmed = value.trim();
+  const unquoted = (trimmed.startsWith("'") && trimmed.endsWith("'")) || (trimmed.startsWith('"') && trimmed.endsWith('"'))
+    ? trimmed.slice(1, -1)
+    : trimmed;
+  if (!/^-?(?:\d+(?:\.\d+)?|\.\d+)$/u.test(unquoted)) {
+    throw new RequestError(400, "INVALID_FILTER", `score filter value ${value} must be numeric`);
+  }
+  const parsed = Number(unquoted);
+  if (!Number.isFinite(parsed)) throw new RequestError(400, "INVALID_FILTER", `score filter value ${value} must be finite`);
+  return parsed;
+}
+
+function outreachListValues(value: string): string[] {
+  const listText = value.trim();
+  if (!listText.startsWith("[") || !listText.endsWith("]")) {
+    throw new RequestError(400, "INVALID_FILTER", "IN filters must use a bracketed list");
+  }
+  const values = listText.slice(1, -1).split(",").map((item) => item.trim());
+  if (!values.length || values.length > 32 || values.some((item) => !item)) {
+    throw new RequestError(400, "INVALID_FILTER", "IN filters must contain 1-32 values");
+  }
+  return values;
+}
+
+function outreachFieldCondition(field: string, operator: OutreachFilterOperator, value: string | string[]): SqlCondition {
+  if (!isOutreachFilterField(field)) {
+    throw new RequestError(400, "UNSUPPORTED_FILTER", `filter field ${field} is not supported for Outreach`);
+  }
+  const values = Array.isArray(value) ? value : [value];
+  if (operator === "IN" || operator === "NOT IN") {
+    const positive = operator === "IN";
+    const normalizedValues = field === "score" ? values.map(normalizeOutreachNumber).map(String) : values.map(normalizeFilterLiteral);
+    if (field === "topics" || field === "lanes") {
+      const table = field === "topics" ? "outreach_topics" : "outreach_lanes";
+      const column = field === "topics" ? "topic" : "lane";
+      return {
+        sql: `${positive ? "EXISTS" : "NOT EXISTS"} (SELECT 1 FROM ${table} AS ol WHERE ol.finding_id=d.id AND ol.${column} IN (${normalizedValues.map(() => "?").join(", ")}))`,
+        params: normalizedValues,
+      };
+    }
+    const column = field === "score" || field === "observed_at" ? field : OUTREACH_FACET_COLUMNS[field as keyof typeof OUTREACH_FACET_COLUMNS];
+    return {
+      sql: `d.${column} ${positive ? "IN" : "NOT IN"} (${normalizedValues.map(() => "?").join(", ")})`,
+      params: normalizedValues,
+    };
+  }
+  if (values.length !== 1) throw new RequestError(400, "INVALID_FILTER", "scalar filters accept one value");
+  if (field === "topics" || field === "lanes") {
+    if (operator !== "=" && operator !== "!=") {
+      throw new RequestError(400, "UNSUPPORTED_FILTER", `${field} supports only equality filters`);
+    }
+    const table = field === "topics" ? "outreach_topics" : "outreach_lanes";
+    const column = field === "topics" ? "topic" : "lane";
+    return {
+      sql: `${operator === "=" ? "EXISTS" : "NOT EXISTS"} (SELECT 1 FROM ${table} AS ol WHERE ol.finding_id=d.id AND ol.${column}=?)`,
+      params: [normalizeFilterLiteral(values[0])],
+    };
+  }
+  if (field !== "score" && operator !== "=" && operator !== "!=" && field !== "observed_at") {
+    throw new RequestError(400, "UNSUPPORTED_FILTER", `${field} supports only equality filters`);
+  }
+  const parameter = field === "score" ? normalizeOutreachNumber(values[0]) : normalizeFilterLiteral(values[0]);
+  const column = field === "score" || field === "observed_at" ? field : OUTREACH_FACET_COLUMNS[field as keyof typeof OUTREACH_FACET_COLUMNS];
+  const sqlOperator = operator === "!=" ? "<>" : operator;
+  return { sql: `d.${column}${sqlOperator}?`, params: [String(parameter)] };
+}
+
+function parseOutreachFilterAtom(value: string): SqlCondition {
+  const expression = stripOuterParentheses(value);
+  const match = expression.match(/^(?:"([A-Za-z_][A-Za-z0-9_]*)"|([A-Za-z_][A-Za-z0-9_]*))\s*(NOT\s+IN|>=|<=|!=|=|>|<|IN)\s*(.+)$/i);
+  if (!match) throw new RequestError(400, "INVALID_FILTER", `unsupported Outreach filter expression ${expression}`);
+  const [, quotedField, bareField, rawOperator, rawValue] = match;
+  const field = quotedField ?? bareField;
+  const operator = rawOperator.toUpperCase().replace(/\s+/g, " ") as OutreachFilterOperator;
+  if (operator === "IN" || operator === "NOT IN") return outreachFieldCondition(field, operator, outreachListValues(rawValue));
+  return outreachFieldCondition(field, operator, rawValue);
+}
+
+function parseOutreachFilterExpression(value: string): SqlCondition {
+  const expression = stripOuterParentheses(value);
+  const orParts = splitTopLevel(expression, "OR");
+  if (orParts.length > 1) return combineConditions(orParts.map(parseOutreachFilterExpression), "OR");
+  const andParts = splitTopLevel(expression, "AND");
+  if (andParts.length > 1) return combineConditions(andParts.map(parseOutreachFilterExpression), "AND");
+  return parseOutreachFilterAtom(expression);
+}
+
+function outreachFacetEqualityCondition(field: string, value: string): SqlCondition {
+  if (!OUTREACH_FACET_FIELDS.includes(field as OutreachFacetField)) {
+    throw new RequestError(400, "UNSUPPORTED_FACET", `facet filter field ${field} is not supported for Outreach`);
+  }
+  const literal = value.trim();
+  if (!literal || /[\u0000-\u001f\u007f]/u.test(literal)) {
+    throw new RequestError(400, "INVALID_FACET_FILTER", `facet filter ${field} has an invalid value`);
+  }
+  if (field === "topics" || field === "lanes") {
+    const table = field === "topics" ? "outreach_topics" : "outreach_lanes";
+    const column = field === "topics" ? "topic" : "lane";
+    return {
+      sql: `EXISTS (SELECT 1 FROM ${table} AS ol WHERE ol.finding_id=d.id AND ol.${column}=?)`,
+      params: [literal],
+    };
+  }
+  const column = OUTREACH_FACET_COLUMNS[field as keyof typeof OUTREACH_FACET_COLUMNS];
+  return { sql: `d.${column}=?`, params: [literal] };
+}
+
+function buildOutreachConditions(query: OutreachSearchQuery): SqlCondition[] {
+  const conditions: SqlCondition[] = [];
+  for (const group of query.facetFilters) {
+    const groupConditions = group.map((facetFilter) => {
+      const separator = facetFilter.indexOf(":");
+      if (separator <= 0) throw new RequestError(400, "INVALID_FACET_FILTER", `facet filter ${facetFilter} must use field:value`);
+      const field = facetFilter.slice(0, separator).trim();
+      return outreachFacetEqualityCondition(field, facetFilter.slice(separator + 1));
+    });
+    conditions.push(combineConditions(groupConditions, "OR"));
+  }
+  for (const filter of query.filter) {
+    if (Array.isArray(filter)) conditions.push(combineConditions(filter.map(parseOutreachFilterExpression), "OR"));
+    else conditions.push(parseOutreachFilterExpression(filter));
+  }
+  return conditions;
+}
+
+function buildOutreachScope(query: OutreachSearchQuery, conditions: SqlCondition[]): { from: string; where: string; params: string[] } {
+  const ftsQuery = buildFtsQuery(query.q);
+  const from = ftsQuery
+    ? "FROM outreach_findings_fts JOIN outreach_findings AS d ON d.rowid=outreach_findings_fts.rowid"
+    : "FROM outreach_findings AS d";
+  const predicates: string[] = [];
+  const params: string[] = [];
+  if (query.q && !ftsQuery) predicates.push("0");
+  if (ftsQuery) {
+    predicates.push("outreach_findings_fts MATCH ?");
+    params.push(ftsQuery);
+  }
+  predicates.push(...conditions.map((condition) => condition.sql));
+  params.push(...conditions.flatMap((condition) => condition.params));
+  return { from, where: predicates.length ? `WHERE ${predicates.join(" AND ")}` : "", params };
+}
+
+function outreachRowValue(row: OutreachSearchRow, field: OutreachPublicField): unknown {
+  if (field === "topics") return parseJsonList(row.topics_json);
+  if (field === "lanes") return parseJsonList(row.lanes_json);
+  if (field === "score") return numericCount(row.score);
+  return row[field];
+}
+
+function cropOutreachText(value: string, query: OutreachSearchQuery, field: string): string {
+  const crop = query.attributesToCrop.find((item) => item.startsWith(`${field}:`));
+  if (!crop) return value;
+  const length = Number(crop.slice(`${field}:`.length));
+  const words = value.trim().split(/\s+/u);
+  return words.length > length ? `${words.slice(0, length).join(" ")}${query.cropMarker}` : value;
+}
+
+function formatOutreachHighlighted(value: string, query: OutreachSearchQuery, field: string): string {
+  const escaped = escapeHtml(cropOutreachText(value, query, field));
+  if (!query.q || !query.attributesToHighlight.includes(field)) return escaped;
+  const tokens = query.q.normalize("NFKC").match(/[\p{L}\p{N}_@-]+/gu) ?? [];
+  return tokens
+    .filter((token) => token.length > 0)
+    .sort((left, right) => right.length - left.length)
+    .reduce((result, token) => {
+      const safeToken = token.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      return result.replace(new RegExp(`(${safeToken})`, "giu"), `${query.highlightPreTag}$1${query.highlightPostTag}`);
+    }, escaped);
+}
+
+function outreachRowToHit(row: OutreachSearchRow, query: OutreachSearchQuery): Record<string, unknown> {
+  const fields = query.attributesToRetrieve === "*" ? OUTREACH_PUBLIC_FIELDS : query.attributesToRetrieve;
+  const hit: Record<string, unknown> = {};
+  for (const field of fields) hit[field] = outreachRowValue(row, field);
+  if (!Object.prototype.hasOwnProperty.call(hit, "id")) hit.id = row.id;
+  const highlightFields = query.attributesToHighlight.filter((field) => fields.includes(field as OutreachPublicField));
+  const formatted: Record<string, string> = {};
+  for (const field of highlightFields) {
+    const value = hit[field];
+    if (typeof value === "string") formatted[field] = formatOutreachHighlighted(value, query, field);
+  }
+  hit._formatted = formatted;
+  return hit;
+}
+
+async function outreachFacetDistribution(
+  env: EnvWithBindings,
+  query: OutreachSearchQuery,
+  scope: ReturnType<typeof buildOutreachScope>,
+): Promise<Record<string, Record<string, number>>> {
+  const distribution: Record<string, Record<string, number>> = {};
+  const db = env.OUTREACH_DB;
+  if (!db) throw new RequestError(503, "OUTREACH_DB_NOT_CONFIGURED", "D1 binding OUTREACH_DB is not configured");
+  for (const facet of query.facets) {
+    const statement = facet === "topics" || facet === "lanes"
+      ? (() => {
+        const table = facet === "topics" ? "outreach_topics" : "outreach_lanes";
+        const column = facet === "topics" ? "topic" : "lane";
+        return `SELECT ol.${column} AS value, COUNT(DISTINCT d.id) AS count FROM ${table} AS ol JOIN outreach_findings AS d ON d.id=ol.finding_id ${scope.from.includes("outreach_findings_fts") ? "JOIN outreach_findings_fts ON d.rowid=outreach_findings_fts.rowid" : ""} ${scope.where} GROUP BY ol.${column} ORDER BY count DESC, value ASC LIMIT ${MAX_FACET_VALUES}`;
+      })()
+      : `SELECT d.${OUTREACH_FACET_COLUMNS[facet as keyof typeof OUTREACH_FACET_COLUMNS]} AS value, COUNT(*) AS count ${scope.from} ${scope.where} GROUP BY d.${OUTREACH_FACET_COLUMNS[facet as keyof typeof OUTREACH_FACET_COLUMNS]} ORDER BY count DESC, value ASC LIMIT ${MAX_FACET_VALUES}`;
+    const result = await db.prepare(statement).bind(...scope.params).all<{ value: string | null; count: number }>();
+    const values: Record<string, number> = {};
+    for (const row of result.results) {
+      if (row.value !== null && row.value !== "") values[String(row.value)] = numericCount(row.count);
+    }
+    distribution[facet] = values;
+  }
+  return distribution;
+}
+
+async function executeOutreachSearch(env: EnvWithBindings, query: OutreachSearchQuery): Promise<Record<string, unknown>> {
+  if (!env.OUTREACH_DB) throw new RequestError(503, "OUTREACH_DB_NOT_CONFIGURED", "D1 binding OUTREACH_DB is not configured");
+  const started = performance.now();
+  const conditions = buildOutreachConditions(query);
+  const scope = buildOutreachScope(query, conditions);
+  const db = env.OUTREACH_DB;
+  const count = await db.prepare(`SELECT COUNT(*) AS count ${scope.from} ${scope.where}`).bind(...scope.params).first<{ count: number }>();
+  const order = query.sort
+    ? `ORDER BY d.${query.sort.split(":", 1)[0]} ${query.sort.endsWith(":asc") ? "ASC" : "DESC"}, d.id ASC`
+    : scope.from.includes("outreach_findings_fts")
+      ? "ORDER BY bm25(outreach_findings_fts) ASC, d.observed_at DESC, d.id ASC"
+      : "ORDER BY d.observed_at DESC, d.id ASC";
+  const rows = await db
+    .prepare(`SELECT ${OUTREACH_SQL_COLUMNS.map((column) => `d.${column}`).join(", ")} ${scope.from} ${scope.where} ${order} LIMIT ? OFFSET ?`)
+    .bind(...scope.params, query.limit, query.offset)
+    .all<OutreachSearchRow>();
+  const response: Record<string, unknown> = {
+    indexUid: OUTREACH_INDEX_UID,
+    hits: rows.results.map((row) => outreachRowToHit(row, query)),
+    query: query.q,
+    processingTimeMs: Math.max(0, Math.round(performance.now() - started)),
+    limit: query.limit,
+    offset: query.offset,
+    estimatedTotalHits: numericCount(count?.count),
+    facetDistribution: {},
+    facetStats: {},
+  };
+  if (query.facets.length) response.facetDistribution = await outreachFacetDistribution(env, query, scope);
+  return response;
+}
+
 async function handleSearch(request: Request, env: EnvWithBindings): Promise<Response> {
   if (request.method !== "POST") throw methodError(request.method);
   if (!contentTypeIsJson(request)) throw new RequestError(415, "UNSUPPORTED_MEDIA_TYPE", "search requests require Content-Type: application/json");
@@ -669,7 +1324,10 @@ async function handleSearch(request: Request, env: EnvWithBindings): Promise<Res
   }
   const parsedQueries = queries.map(parseQuery);
   const results = [];
-  for (const query of parsedQueries) results.push(await executeSearch(env, query));
+  for (const query of parsedQueries) {
+    if (query.indexUid === OUTREACH_INDEX_UID) results.push(await executeOutreachSearch(env, query));
+    else results.push(await executeSearch(env, query));
+  }
   return jsonResponse({ results });
 }
 
@@ -814,10 +1472,37 @@ async function handleInboxForm(request: Request, env: EnvWithBindings, kind: For
   );
 }
 
+/**
+ * Service-binding/RPC entrypoint for the separately authorized public
+ * projection lane.  The default export below remains the existing public
+ * fetch/static-assets Worker; this class is not a new HTTP publication route.
+ */
+export class PublicProjectionEntrypoint extends WorkerEntrypoint<Env> {
+  async applyProjection(input: unknown) {
+    return applyPublicProjection(this.env.DB, input);
+  }
+
+  async inspectPublicSource(input: unknown) {
+    return inspectPublicSource(this.env.DB, input);
+  }
+
+  async verifyProjection(input: unknown) {
+    return verifyPublicProjection(this.env.DB, input);
+  }
+
+  async rollbackProjection(input: unknown) {
+    return rollbackPublicProjection(this.env.DB, input);
+  }
+}
+
 export default {
   async fetch(request: Request, env: EnvWithBindings, _ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
     try {
+      if (url.protocol !== "https:") {
+        url.protocol = "https:";
+        return Response.redirect(url.toString(), 301);
+      }
       if (
         request.method === "GET" &&
         (url.pathname === "/search" ||
@@ -831,11 +1516,19 @@ export default {
         return Response.redirect(url.toString(), 301);
       }
       if (url.pathname === "/api/health") return await handleHealth(env);
+      if (url.pathname === "/sitemap-dynamic.xml") return await handleDynamicSitemap(request, env);
       if (url.pathname === "/api/forms/support") return await handleInboxForm(request, env, "support");
       if (url.pathname === "/api/forms/partner") return await handleInboxForm(request, env, "partner");
       if (url.pathname === "/api/search/multi-search" || url.pathname === "/knowledge-search/multi-search") {
         if (!env.DB) throw new RequestError(503, "DB_NOT_CONFIGURED", "D1 binding DB is not configured");
         return await handleSearch(request, env);
+      }
+      if (request.method === "GET" || request.method === "HEAD") {
+        const sourceMatch = url.pathname.match(DYNAMIC_SOURCE_ROUTE);
+        if (sourceMatch) {
+          const response = await handleProjectedSourcePage(request, env, sourceMatch[1]);
+          if (response) return response;
+        }
       }
       if (env.ASSETS) return await env.ASSETS.fetch(request);
       throw new RequestError(404, "NOT_FOUND", "asset or API route not found");

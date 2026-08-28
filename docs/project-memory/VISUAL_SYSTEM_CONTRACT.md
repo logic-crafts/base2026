@@ -1,68 +1,83 @@
-# Visual System Contract
+# Base2026 Visual System Contract
+
+Last updated: 2026-08-28
+Authority: `b26-independent-v1`
 
 ## Rule
 
-The public knowledge UI must look like part of the main Alex Yarosh WordPress site, not like a separate dark AI dashboard.
+Base2026 is an independent research product. Every public route must preserve
+the current cool-blue Base2026 shell and must not inherit the retired Alex
+Personal, WordPress V4, warm cream/orange, Stitch, or generic AI-dashboard
+designs.
 
-## Main-Site Tokens
+## Canonical source authority
 
-- Font: `Source Sans 3`
-- Base2026 product/search UI font: `Geist` with `Geist Mono` for counts and compact analytics
-- Page background: warm off-white `#f7f4ee`
-- Paper/card background: `#fffaf0` or soft white
-- Main text: `#111820`
-- Secondary text: `#5f6a72`
-- Orange CTA: `#c84f07`
-- Orange hover/accent: `#ef6b13`
-- Dark primary button: `#10231f`
-- Standard radius: `8px`
-- Large panel radius: `14px`
-- Header: white or near-white sticky bar
-- Shadows: soft warm shadows, not dark dashboard glows
+The final design authority is:
 
-## WordPress Root Site Contract
+- `templates/base2026-core.css` — tokens, components and compatibility layer;
+- `templates/base2026-startup-shell.css` — startup-only shell adjustments;
+- `templates/base2026-startup-header.html` and
+  `templates/base2026-startup-footer.html` — the only public header/footer;
+- `templates/base2026-startup-homepage.html/.css` — homepage content/layout;
+- `scripts/build-base2026-cloudflare-release.py` — the only production release
+  boundary that may normalize retained generated pages;
+- the builder tests and design-authority gate — release blockers, not optional
+  visual checks.
 
-- Treat WordPress pages as one design system, not separate one-off layouts.
-- Panels use one internal grid and one internal left alignment.
-- Normal marketing lists use dot markers only; do not add horizontal dividers between normal sentence bullets.
-- Eyebrows, headings, body/list copy, and CTAs must use consistent sizing across comparable sections.
-- Footer CTA buttons must be equal-size on desktop and equal-width stacked on mobile.
-- A WordPress UI task is not complete until the live site has been checked on desktop and mobile, cache is cleared if needed, and SEO title/description still render.
+`web/static/styles.css` may remain as retained component/search styling, but it
+is loaded beneath `base2026-core.css` and is not allowed to define the product
+shell or palette.
 
-## Required UI Feel
+## Tokens
 
-- calm consulting/product interface;
-- strong but not decorative search surface;
-- clear source-card hierarchy;
-- visible attribution and original-source links;
-- filters that look like real form controls;
-- compact but readable passages;
-- source record dialog with full text readability.
-- Base2026 should feel like a compact search/research product: permanent product nav in the header, no duplicate workspace nav strip, no permanent third column, and analytics counters that clarify the database instead of becoming extra buttons.
+- Canvas: `#F7F9FC`
+- Surface: `#FFFFFF`
+- Muted surface: `#F0F4FA`
+- Ink: `#0B1736`
+- Muted text: `#526177`
+- Line: `#DCE5F0`
+- Evidence accent: `#315EEA`
+- Accent hover: `#254AC0`
+- Dark CTA: `#10213F`
+- Positive state: `#147A5A`
+- Control radius: `10px`
+- Surface radius: `16px`
+- Desktop shell: `1160px`
+- Mobile gutter: `14px` per side
+- Typography: Manrope for product copy; Geist Mono for compact labels/data
 
-## Forbidden UI Drift
+## Protected experience
 
-- dark cyber/AI dashboard shell;
-- purple/pink gradient brand;
-- giant unrelated hero ornamentation;
-- default unstyled browser controls;
-- hidden or ambiguous source attribution;
-- result cards that look like raw database dumps;
-- black unchecked checkboxes;
-- separate brand name such as `AI-Visibility` unless explicitly approved.
+- one sticky Base2026 header and one Base2026 footer;
+- compact, readable search and evidence density;
+- visible creator/source attribution and original-source links;
+- source, topic, creator, roadmap, methodology and API pages use the same
+  palette and component grammar;
+- full-pill shapes are limited to tags and filters, not every button/card;
+- one visible H1, normal focus rings, labelled controls and zero horizontal
+  overflow at 390px;
+- no visual change is complete until desktop and mobile screenshots, DOM
+  checks, console checks, search/API checks and the release receipt pass.
 
-## Reference Evidence
+## Forbidden regression markers
 
-Main site observed through browser automation:
+- `aggressorbulkit.online` or personal-service CTAs in final public HTML;
+- Alex Personal header/footer classes or commercial service navigation;
+- warm authority colors `#c84f07`, `#d9730d`, `#ef6b13`, `#fffaf0`;
+- WordPress forms, `/wp-admin/`, pricing or free-audit routes;
+- decorative `01 / 02 / 03` presentation as a page-wide motif;
+- dark cyber, purple/pink gradient or unstyled generic AI-dashboard shells;
+- a generator, hotfix or VPS script becoming a second production design
+  authority.
 
-- body font: `Source Sans 3`
-- body background: `rgb(247, 244, 238)`
-- H1 example: `Yes. We’ll Actually Help.`
-- H1 size: about `62px`
-- CTA `Check My AI Visibility`: orange `rgb(200, 79, 7)`, `8px` radius
-- secondary buttons: warm paper background, dark text, `8px` radius
+## Legacy quarantine
 
-Knowledge UI light preview:
+Historical Personal V4, Stitch, Search V1, Source Detail V2 and template
+migration assets remain in Git only as compatibility/history. They may not be
+called by the Cloudflare production builder or copied into a release as shell
+authority. Exact paths and deprecation rules are in
+`BASE2026_DESIGN_AUTHORITY_AND_LEGACY_QUARANTINE_2026_08_28.md`.
 
-- screenshot: `output/evidence/knowledge-ay-light-preview.png`
-- this preview is directionally approved for source implementation, but it is not a deployment proof.
+Do not delete historical assets merely because their names look old. First
+prove that no active generator, test, rollback or migration depends on them;
+then move them in a separately reviewed archive change.
