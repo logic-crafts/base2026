@@ -4,8 +4,8 @@
 
 - Live `origin/main` is `616d6de4c64c13fa91bbc589f0a59fddbcd69a63`.
 - Isolated candidate: `/Users/alexyarosh/Projects/base2026-migration/DW/.worktrees/base2026-consolidate-20260829`, branch `codex/base2026-consolidate-20260829`.
-- The exact reviewed public candidate is
-  `output/cloudflare-migration/base2026-consolidation-20260829-v2`.
+- The corrected public candidate is
+  `output/cloudflare-migration/base2026-consolidation-20260829-v3`.
 
 ## Live founder receipt
 
@@ -14,7 +14,7 @@ The 2026-08-28 receipt in `FOUNDER_PROFILE_HERO_RELEASE_2026_08_28.md` remains t
 - `/founder`: `d03b01a8a464adcdd7b09de4989f9655f9292283a45bb58e7a553f18b35a6539`
 - `/static/base2026-founder.css`: `43ec793f4e6eab25ea1f67a543b9b4bc14a20f2391d8c60435dbc89142f31e1c`
 - `/static/assets/alex-yarosh-founder-step-wall.webp`: `3922ebadf65f2b7ba928efa8ddec9b537276aa4353d297825675831a8a7e89a8`
-- Candidate artifact tree: `a7cba1e05e7aa51aa54fe9fa6747d447c69e9cb88fc4da863b2115fe8fc55010`
+- Candidate artifact tree: `4abe1a4f67ff8e67c81578429f8bb1776a3ea6f9f62a33e1ce81d198ee80d83e`
   (4,235 served files; 4,237 including ignored release metadata)
 
 Unchanged live sentinels remain homepage `cf384e7c890b76b7bc8b446a03d96e959af52fb41e914dee812569500f6750b3`, homepage CSS `bec459945e06bc7e295d3e4d5d17b55a3264ac871717dc90ee85551e5df24f6f`, and Evidence Brief JS `ef57559fe992fa467a6d82425dc9e0495789bfe47b777f343313ee64938f6a7d`.
@@ -39,6 +39,9 @@ Wrangler points only to the exact v2 candidate above.
   review holds and zero secret findings.
 - Browser QA: homepage, founder, Analytics and API passed without horizontal
   overflow or console errors; built Analytics/API copy was verified from v2.
+- Independent review caught misleading zero-filled historical Analytics in v2.
+  V3 restores the verified 2026-07-29 summary totals and removes empty ranking,
+  creator, year and latest-record sections; regression tests cover this gate.
 - Pre-deploy public D1 invariant: 2,175 documents, 1,574 distinct videos,
   50 applied projections, 83 projected cards and zero public full transcripts.
 - Current public rollback before this release:

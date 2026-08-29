@@ -9227,8 +9227,11 @@ Actions and receipts:
   truthful historical-analytics labeling and current Cloudflare D1 API docs.
 - Fixed the release builder so tracked Analytics/API/API-index changes are
   actually emitted into the deployment artifact.
-- Built exact v2 artifact tree
-  `a7cba1e05e7aa51aa54fe9fa6747d447c69e9cb88fc4da863b2115fe8fc55010`.
+- Independent review caught a misleading zero-filled historical Analytics
+  block in v2. V3 restores the verified 2026-07-29 summary totals and removes
+  empty ranking sections.
+- Built corrected v3 artifact tree
+  `4abe1a4f67ff8e67c81578429f8bb1776a3ea6f9f62a33e1ce81d198ee80d83e`.
 - Passed 29 Python contract tests, 44 Worker tests, typecheck, deterministic D1
   import dry-run, Wrangler dry-run, artifact policy, browser QA and the Git
   publication audit with zero forbidden files, review holds or secret findings.

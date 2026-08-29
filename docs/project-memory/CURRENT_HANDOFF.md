@@ -27,7 +27,7 @@ public source and repairing degraded private creator discovery.
 
 ## Exact next action
 
-Use the exact v2 artifact recorded in
+Use the exact v3 artifact recorded in
 [`HANDOFF_2026-08-29_BASE2026_CONSOLIDATION.md`](HANDOFF_2026-08-29_BASE2026_CONSOLIDATION.md).
 Its build, tests, browser QA and publication gates pass. Commit and push only
 the 30 audited public-safe files, merge through GitHub, deploy that exact

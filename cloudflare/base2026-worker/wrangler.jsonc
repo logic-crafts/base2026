@@ -12,7 +12,7 @@
   ],
   "assets": {
     "binding": "ASSETS",
-    "directory": "../../output/cloudflare-migration/base2026-consolidation-20260829-v2",
+    "directory": "../../output/cloudflare-migration/base2026-consolidation-20260829-v3",
     "run_worker_first": [
       "/api/*",
       "/sitemap-dynamic.xml",
