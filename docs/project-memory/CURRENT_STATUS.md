@@ -47,6 +47,9 @@ MacBook or ChatGPT Web.
 - Container app v8 is `running`, but Cloudflare telemetry regressed from
   `healthy=1` immediately after one recycle to `active=1, healthy=0, errors=[]`.
   No second restart was attempted; stable readiness remains the real blocker.
+- Hourly heartbeat `base2026-private-pipeline-hourly-watchdog` is active in the
+  dedicated pipeline task. It is read-only first and explicitly forbids another
+  restart for this incident without a real Container-required failure.
 - Broad `PUBLIC_RELEASE_ENABLED=false` remains correct. The narrow, policy-bound
   automatic projection lane remains enabled.
 
