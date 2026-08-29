@@ -1,0 +1,161 @@
+/* Founder-only campaign hero. The Base2026 product shell and every other
+   public page retain the shared core contract. */
+.b26-founder-page main { padding-top: 0; }
+
+.b26-founder-campaign {
+  --campaign-edge: clamp(22px, 4vw, 64px);
+  isolation: isolate;
+  position: relative;
+  width: 100vw;
+  height: min(calc(100svh - 73px), 56.28vw);
+  min-height: 690px;
+  margin-left: calc(50% - 50vw);
+  overflow: hidden;
+  background: #e9e2d8;
+}
+
+.b26-founder-campaign__art,
+.b26-founder-campaign__wash {
+  position: absolute;
+  inset: 0;
+}
+
+.b26-founder-campaign__art {
+  z-index: -3;
+  background: #e9e2d8 url("/static/assets/alex-yarosh-founder-step-wall.webp") center / cover no-repeat;
+  filter: contrast(1.035) saturate(.72);
+}
+
+.b26-founder-campaign__wash {
+  z-index: -2;
+  width: 57%;
+  background:
+    linear-gradient(90deg, rgba(239,233,224,.66) 0%, rgba(239,233,224,.42) 64%, rgba(239,233,224,0) 100%),
+    linear-gradient(180deg, rgba(255,255,255,.16), transparent 44%);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.b26-founder-page .b26-founder-campaign__headline {
+  position: relative;
+  z-index: 1;
+  width: 114%;
+  margin: clamp(58px, 8svh, 86px) 0 0 var(--campaign-edge);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1px, .18vw, 3px);
+  color: #181715;
+  font-family: "League Gothic", "Arial Narrow", sans-serif;
+  font-size: clamp(144px, 17vw, 304px);
+  font-weight: 400;
+  letter-spacing: -.018em;
+  line-height: .76;
+  text-transform: uppercase;
+  text-wrap: nowrap;
+  transform: scaleX(.75);
+  transform-origin: left top;
+  text-shadow: 0 1px 0 rgba(255,255,255,.38), 0 12px 28px rgba(0,0,0,.22);
+}
+
+.b26-founder-campaign__headline span {
+  display: block;
+  line-height: .76;
+}
+
+.b26-founder-campaign__headline .b26-founder-campaign__impact {
+  font-size: 1.08em;
+}
+
+.b26-founder-campaign__impact i {
+  display: inline-block;
+  margin-left: .04em;
+  font: inherit;
+  transform: scaleX(1.22);
+  transform-origin: left;
+}
+
+.b26-founder-campaign__name {
+  position: absolute;
+  left: var(--campaign-edge);
+  bottom: clamp(24px, 4vw, 58px);
+  z-index: 2;
+  margin: 0;
+  color: #181715;
+  font-family: Manrope, sans-serif;
+  font-size: clamp(14px, 1vw, 17px);
+  font-weight: 700;
+  letter-spacing: .14em;
+  line-height: 1;
+  text-shadow: 0 1px 0 rgba(255,255,255,.5), 0 5px 18px rgba(255,255,255,.4);
+  text-transform: uppercase;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .b26-founder-campaign__art { animation: b26-founder-settle 1.4s cubic-bezier(.2,.8,.2,1) both; }
+  .b26-founder-campaign__headline span,
+  .b26-founder-campaign__name { animation: b26-founder-rise .7s cubic-bezier(.2,.8,.2,1) both; }
+  .b26-founder-campaign__headline span:nth-child(1) { animation-delay: .06s; }
+  .b26-founder-campaign__headline span:nth-child(2) { animation-delay: .12s; }
+  .b26-founder-campaign__headline span:nth-child(3) { animation-delay: .18s; }
+  .b26-founder-campaign__name { animation-delay: .24s; }
+}
+
+@keyframes b26-founder-rise {
+  from { opacity: 0; translate: 0 18px; }
+  to { opacity: 1; translate: 0 0; }
+}
+
+@keyframes b26-founder-settle {
+  from { opacity: .72; scale: 1.03; }
+  to { opacity: 1; scale: 1; }
+}
+
+@media (max-width: 980px) {
+  .b26-founder-campaign {
+    height: calc(100svh - 65px);
+    min-height: 620px;
+  }
+
+  .b26-founder-campaign__art {
+    background-position: 61% calc(100% + 9rem);
+    background-size: auto 64%;
+  }
+
+  .b26-founder-campaign__wash {
+    width: 100%;
+    background: linear-gradient(180deg, rgba(239,233,224,.98) 0%, rgba(239,233,224,.88) 27%, rgba(239,233,224,.14) 42%, rgba(24,23,21,.04) 100%);
+  }
+
+  .b26-founder-page .b26-founder-campaign__headline {
+    width: 114%;
+    margin-top: 8svh;
+    font-size: clamp(90px, 25vw, 128px);
+  }
+
+  .b26-founder-campaign__name {
+    bottom: 22px;
+    font-size: 12px;
+    text-shadow: 0 1px 0 rgba(255,255,255,.8), 0 0 14px rgba(239,233,224,.9);
+  }
+}
+
+@media (max-width: 520px) {
+  .b26-founder-campaign {
+    height: calc(100svh - 64px);
+    min-height: 680px;
+  }
+
+  .b26-founder-campaign__art {
+    background-position: 61% bottom;
+    background-size: auto 56%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .b26-founder-campaign *,
+  .b26-founder-campaign *::before,
+  .b26-founder-campaign *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

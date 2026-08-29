@@ -6,6 +6,7 @@ Codex, Hermes, and any other agent must start from checked-in project files, not
 
 Before any meaningful work, read:
 
+- `docs/project-memory/CURRENT_STATUS.md`
 - `docs/project-memory/PROJECT_STATE.md`
 - `docs/project-memory/ACTIVE_PHASE.md`
 - `docs/project-memory/NEXT_ACTION.md`
@@ -14,6 +15,11 @@ Before any meaningful work, read:
 - `docs/project-memory/STATUS_BOARD.csv`
 - `docs/project-memory/PHASES.md`
 - `docs/project-memory/PUBLICATION_BOUNDARY.md`
+
+`CURRENT_STATUS.md`, `PROJECT_STATE.md`, `ACTIVE_PHASE.md`, and
+`NEXT_ACTION.md` must stay compact and current. Preserve history in Git and
+dated receipts; never turn these files back into chronological transcript
+dumps with multiple competing "current" sections.
 
 For deployment or automation tasks, also read:
 

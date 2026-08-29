@@ -64,6 +64,16 @@ class FakeStatement {
 
   async first<T>(): Promise<T | null> {
     if (this.sql.includes("SELECT 1 AS ok")) return { ok: 1 } as T;
+    if (this.sql.includes("AS public_evidence_routes")) {
+      const rows = this.db.publicRows();
+      return {
+        document_count: rows.length,
+        source_count: new Set(rows.map((row) => row.video_id || row.source_id)).size,
+        full_transcript_public: 0,
+        public_evidence_routes: 1,
+        projected_cards: 3,
+      } as T;
+    }
     if (this.sql.includes("AS matched_records")) {
       return { matched_records: new Set(this.db.publicRows().map((row) => row.video_id || row.source_id)).size } as T;
     }
@@ -298,6 +308,35 @@ describe("Base2026 search Worker", () => {
     expect(await json(response)).toMatchObject({ error: { code: "DB_NOT_CONFIGURED" } });
   });
 
+  it("exposes current public D1 totals without private pipeline fields", async () => {
+    const response = await worker.fetch(
+      new Request("https://base2026.dev/api/stats"),
+      env(),
+      {} as ExecutionContext,
+    );
+    expect(response.status).toBe(200);
+    expect(response.headers.get("cache-control")).toContain("s-maxage=300");
+    expect(await json(response)).toMatchObject({
+      ok: true,
+      service: "base2026",
+      dataset: {
+        documents_indexed: 1,
+        distinct_sources: 1,
+        public_evidence_routes: 1,
+        projected_cards: 3,
+        full_transcripts_published: 0,
+      },
+    });
+
+    const head = await worker.fetch(
+      new Request("https://base2026.dev/api/stats", { method: "HEAD" }),
+      env(),
+      {} as ExecutionContext,
+    );
+    expect(head.status).toBe(200);
+    expect(await head.text()).toBe("");
+  });
+
   it("renders an indexable source page for an applied D1 projection", async () => {
     const response = await worker.fetch(
       new Request("https://base2026.dev/sources/tiktok-video-7657638702864223510"),
@@ -313,6 +352,9 @@ describe("Base2026 search Worker", () => {
     expect(html).toContain("https://www.tiktok.com/@test_creator/video/7657638702864223510");
     expect(html).toContain('property="og:image" content="https://base2026.dev/static/assets/base2026-ai-visibility-card.png"');
     expect(html).toContain('name="twitter:image" content="https://base2026.dev/static/assets/base2026-ai-visibility-card.png"');
+    expect(html).toContain('/static/base2026-core.css?v=20260820-b26v1');
+    expect(html).toContain('--accent:#315eea');
+    expect(html).not.toContain('#ff5a36');
     expect(html).not.toContain("Useful <AI> source evidence");
   });
 
