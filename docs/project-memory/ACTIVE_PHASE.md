@@ -4,26 +4,24 @@ Last verified: 2026-08-29
 
 ## Phase
 
-Production stabilization and source synchronization.
+Post-release operational observation.
 
 ## Active work
 
-1. Repair degraded private creator discovery without weakening capture,
-   privacy, retry or publication gates.
-2. Synchronize the already-live founder release into clean public Git source.
-3. Replace stale manually embedded corpus totals with read-only live D1 stats
-   and label historical analytics honestly.
-4. Run the full public/private-boundary review, commit/push the public-safe
-   candidate, deploy exactly that candidate and prove live readback.
-5. Observe GSC/Bing after processing; no repeated submissions while data is
-   unavailable.
+1. Observe private Container readiness without repeated restarts; the Worker,
+   scheduler, D1/R2 pipeline and non-Container acquisition path remain live.
+2. Keep `@webhivedigital` in source review until discovery returns an exact
+   current video link; do not force admission.
+3. Recheck Google Search Console and Bing only after processing data appears.
+4. Preserve the exact public release and privacy invariants; make no further
+   homepage/founder changes without a concrete defect or owner-selected scope.
 
 ## Not active
 
-- another homepage redesign;
-- automated ChatGPT Web;
+- another public redesign;
 - broad transcript publication;
-- bulk worktree cleanup;
-- premium founder redesign before a separately selected direction.
+- blind Container restart loops;
+- ChatGPT Web automation;
+- bulk dirty-worktree cleanup.
 
-See [`CURRENT_STATUS.md`](CURRENT_STATUS.md) for exact live counters and paths.
+See [`CURRENT_STATUS.md`](CURRENT_STATUS.md) for exact versions and counters.
