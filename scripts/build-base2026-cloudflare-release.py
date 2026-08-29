@@ -50,6 +50,10 @@ DEFAULT_PARTNER_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-partner.html"
 DEFAULT_PRIVACY_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-privacy.html"
 DEFAULT_ABOUT_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-about.html"
 DEFAULT_FOUNDER_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-founder.html"
+DEFAULT_FOUNDER_STYLESHEET = PROJECT_ROOT / "templates" / "base2026-founder.css"
+DEFAULT_FOUNDER_HERO_IMAGE = (
+    PROJECT_ROOT / "static" / "assets" / "alex-yarosh-founder-step-wall.webp"
+)
 DEFAULT_APPLY_RESEARCH_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-apply-research.html"
 DEFAULT_AI_VISIBILITY_RESOURCES_TEMPLATE = (
     PROJECT_ROOT / "templates" / "base2026-ai-visibility-resources.html"
@@ -57,6 +61,9 @@ DEFAULT_AI_VISIBILITY_RESOURCES_TEMPLATE = (
 DEFAULT_FORMS_SCRIPT = PROJECT_ROOT / "templates" / "base2026-forms.js"
 DEFAULT_EVIDENCE_BRIEF_SCRIPT = PROJECT_ROOT / "templates" / "base2026-evidence-brief.js"
 DEFAULT_ROADMAP_SCRIPT = PROJECT_ROOT / "web" / "static" / "roadmap.js"
+DEFAULT_ANALYTICS_PAGE = PROJECT_ROOT / "web" / "static" / "analytics.html"
+DEFAULT_API_PAGE = PROJECT_ROOT / "web" / "static" / "api.html"
+DEFAULT_API_INDEX = PROJECT_ROOT / "web" / "static" / "api-index.json"
 DEFAULT_GITHUB_ICON = PROJECT_ROOT / "static" / "brand" / "github.svg"
 DEFAULT_X_ICON = PROJECT_ROOT / "static" / "brand" / "x.svg"
 DEFAULT_MARK_ICON = PROJECT_ROOT / "static" / "base2026-mark.svg"
@@ -1581,6 +1588,34 @@ def build_release(
             artifact_bytes += len(payload) - previous_size
             _write_bytes(destination, payload, 0o644)
 
+        def write_tracked_public_overlay(relative_name: str, source_path: Path) -> None:
+            """Publish a reviewed repository page through the normal release transforms."""
+
+            source_text = source_path.read_text(encoding="utf-8")
+            transformed = transform_text(
+                source_text,
+                public_root_names=public_root_names,
+                intentional_redirect_documentation=False,
+                standalone_startup=standalone_startup,
+            )
+            replacements.add(transformed.replacements)
+            relative_path = Path(relative_name)
+            artifact_text = _rewrite_public_api_docs(relative_path, transformed.text)
+            artifact_text = _rewrite_legacy_base_styles(relative_path, artifact_text)
+            if standalone_startup:
+                artifact_text = _remove_excluded_startup_route_references(
+                    artifact_text, startup_excluded_routes
+                )
+            if standalone_startup and relative_path.suffix.casefold() in {
+                ".html",
+                ".htm",
+                ".xhtml",
+            }:
+                artifact_text = _apply_startup_shell(
+                    artifact_text, startup_header, startup_footer
+                )
+            write_generated_public_file(relative_name, artifact_text.encode("utf-8"))
+
         write_generated_public_file(ROBOTS_FILENAME, ROBOTS_PAYLOAD.encode("utf-8"))
         write_generated_public_file(HEADERS_FILENAME, HEADERS_PAYLOAD.encode("utf-8"))
         if standalone_startup:
@@ -1637,9 +1672,19 @@ def build_release(
             write_generated_public_file("static/base2026-forms.js", DEFAULT_FORMS_SCRIPT.read_bytes())
             write_generated_public_file("static/base2026-evidence-brief.js", DEFAULT_EVIDENCE_BRIEF_SCRIPT.read_bytes())
             write_generated_public_file("static/roadmap.js", DEFAULT_ROADMAP_SCRIPT.read_bytes())
+            write_tracked_public_overlay("analytics.html", DEFAULT_ANALYTICS_PAGE)
+            write_tracked_public_overlay("api.html", DEFAULT_API_PAGE)
+            write_tracked_public_overlay("api-index.json", DEFAULT_API_INDEX)
             write_generated_public_file("static/brand/github.svg", DEFAULT_GITHUB_ICON.read_bytes())
             write_generated_public_file("static/brand/x.svg", DEFAULT_X_ICON.read_bytes())
             write_generated_public_file("static/base2026-mark.svg", DEFAULT_MARK_ICON.read_bytes())
+            write_generated_public_file(
+                "static/base2026-founder.css", DEFAULT_FOUNDER_STYLESHEET.read_bytes()
+            )
+            write_generated_public_file(
+                "static/assets/alex-yarosh-founder-step-wall.webp",
+                DEFAULT_FOUNDER_HERO_IMAGE.read_bytes(),
+            )
             write_generated_public_file(
                 "support.html",
                 _render_startup_page(

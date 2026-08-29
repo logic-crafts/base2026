@@ -122,9 +122,9 @@ def test_homepage_metrics_explain_the_public_boundary() -> None:
     _, document = _parse_homepage()
     cells = _metric_cells(document)
     expected = (
-        ("2,170", None),
-        ("1,572", None),
-        ("48", "Public evidence routes"),
+        ("2,175", None),
+        ("1,574", None),
+        ("50", "Public evidence routes"),
         ("0", "Full transcripts published"),
     )
 
@@ -150,6 +150,17 @@ def test_homepage_metrics_explain_the_public_boundary() -> None:
     assert "privacy by design" in privacy
     assert "only reviewed excerpts and attributed source records are public" in privacy
     assert "full third-party transcripts stay private" in privacy
+
+    keys = [cell.element_children()[0].attrs.get("data-b26-public-stat") for cell in cells]
+    assert keys == [
+        "documents_indexed",
+        "distinct_sources",
+        "public_evidence_routes",
+        "full_transcripts_published",
+    ]
+    runtime = (ROOT / "templates" / "base2026-evidence-brief.js").read_text(encoding="utf-8")
+    assert 'fetch("/api/stats"' in runtime
+    assert "Number.isSafeInteger" in runtime
 
 
 def test_homepage_motion_hooks_and_controller_are_progressive_and_bounded() -> None:

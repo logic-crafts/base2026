@@ -1,7 +1,7 @@
 {
   "name": "Base2026 public API index",
-  "version": "2026-06-18",
-  "status": "static_public_index",
+  "version": "2026-08-29",
+  "status": "cloudflare_public_api",
   "base_url": "https://aggressorbulkit.online/knowledge/",
   "policy": {
     "access": "public read-only",
@@ -66,6 +66,34 @@
   ],
   "endpoints": [
     {
+      "id": "health",
+      "url": "https://base2026.dev/api/health",
+      "method": "GET",
+      "format": "json",
+      "description": "Cloudflare Worker and public D1 FTS5 liveness."
+    },
+    {
+      "id": "stats",
+      "url": "https://base2026.dev/api/stats",
+      "method": "GET",
+      "format": "json",
+      "description": "Current public corpus, evidence-route, card and full-transcript privacy totals."
+    },
+    {
+      "id": "evidence_brief_v1",
+      "url": "https://base2026.dev/api/evidence-brief?q={question}",
+      "method": "GET",
+      "format": "json",
+      "description": "Stable deterministic Evidence Brief V1 over public D1."
+    },
+    {
+      "id": "evidence_brief_v2",
+      "url": "https://base2026.dev/api/evidence-brief/v2?q={question}",
+      "method": "GET",
+      "format": "json",
+      "description": "Bounded attributable findings with corpus coverage, limits and source links."
+    },
+    {
       "id": "manifest",
       "url": "https://aggressorbulkit.online/knowledge/static/manifest.json",
       "format": "json",
@@ -103,10 +131,12 @@
     },
     {
       "id": "search_multi",
-      "url": "https://aggressorbulkit.online/knowledge-search/multi-search",
+      "url": "https://base2026.dev/api/search/multi-search",
       "method": "POST",
       "format": "json",
-      "description": "Server-side Meilisearch multi-search proxy used by the public UI. Prefer static JSONL for bulk/offline analysis; use this endpoint when live search ranking is needed."
+      "description": "Read-only Meilisearch-compatible Cloudflare Worker API backed by D1 FTS5. Prefer static JSONL for bulk/offline analysis; use this endpoint when live search ranking is needed.",
+      "backend": "cloudflare_worker_d1_fts5",
+      "browser_key_required": false
     }
   ],
   "future_mcp_contract": {

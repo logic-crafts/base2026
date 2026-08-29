@@ -28,10 +28,12 @@ Base2026 creates a public evidence layer that keeps those connections visible.
 - provides a Cloudflare Worker search API backed by D1 FTS5;
 - documents methodology, corrections, opt-out and publication boundaries.
 
-The current release is a working public prototype. The 2026-08-28 live D1
-snapshot contained 2,150 search documents across 1,563 distinct videos, with
-39 automatic public projections applied. These are dated database dimensions,
-not users, revenue, universal coverage or commercial traction.
+The current release is a working public prototype. The verified 2026-08-29
+snapshot contained 2,175 search documents across 1,574 distinct videos, with
+50 public evidence projections applied and zero public full transcripts. These
+are dated database dimensions, not users, revenue, universal coverage or
+commercial traction. Current totals are available from the read-only
+[`/api/stats`](https://base2026.dev/api/stats) endpoint.
 
 ## Build reproducibility boundary
 
@@ -94,10 +96,11 @@ real-time monitoring, guaranteed rankings or an AI-visibility dashboard.
 
 Generated website trees, public export artifacts, local databases and deployment archives are not committed.
 
-The live private control plane and the latest public projection delta are
-maintained in a protected operational checkout and may be ahead of public
-`main`. The canonical manual records this source-synchronization boundary so a
-fresh clone is never mistaken for a complete production deployment source.
+The live private control plane is maintained in a protected operational
+checkout and is not public source. Compare public `main` with current live
+Worker versions and migration receipts before every deployment. The canonical
+manual records this boundary so a fresh clone is never mistaken for the
+private production control plane.
 
 ## Trust and privacy
 

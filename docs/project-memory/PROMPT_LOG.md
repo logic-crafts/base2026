@@ -9155,6 +9155,7 @@ Actions and receipts:
 - Public production remained exact: Worker `806e35c7-f230-4e77-aeea-15169b4faaf0`; Search/Outreach/Inbox 2,095/78/0; homepage SHA-256 `696c473bc5bf1a93ecb01e140100edc9019f8efc5c8ff3f5a9b29ddc6acdf98d`.
 
 Limits: no public projection, public Worker/D1 mutation, Container deployment, AI Gateway, paid fallback, ChatGPT browser automation, Git stage/commit/push, or recurring Codex/model heartbeat was introduced.
+
 # 2026-08-26 — Cloudflare capture transport repair and live proof
 
 Prompt: repair the Base2026 Cloudflare TikTok pipeline until it actually
@@ -9208,3 +9209,33 @@ Actions and receipts:
   changed URLs.
 - Paid DataForSEO execution remained closed; the documented first packet has a
   hard `$0.10` ceiling and requires explicit approval after price verification.
+
+## 2026-08-29 — Production consolidation candidate
+
+Prompt: stop fragmenting Base2026 work across dirty branches, determine what
+actually works, repair the private pipeline degradation, synchronize the live
+founder release into canonical public source, finish live public statistics,
+and release only after exact verification.
+
+Actions and receipts:
+
+- Created isolated branch `codex/base2026-consolidate-20260829` from clean
+  personal `origin/main` `616d6de4c64c13fa91bbc589f0a59fddbcd69a63`;
+  protected all pre-existing dirty checkouts and parallel private CV work.
+- Reproduced the live founder HTML/CSS/WebP byte-for-byte in tracked source.
+- Added read-only aggregate `/api/stats`, live homepage/Analytics counters,
+  truthful historical-analytics labeling and current Cloudflare D1 API docs.
+- Fixed the release builder so tracked Analytics/API/API-index changes are
+  actually emitted into the deployment artifact.
+- Built exact v2 artifact tree
+  `a7cba1e05e7aa51aa54fe9fa6747d447c69e9cb88fc4da863b2115fe8fc55010`.
+- Passed 29 Python contract tests, 44 Worker tests, typecheck, deterministic D1
+  import dry-run, Wrangler dry-run, artifact policy, browser QA and the Git
+  publication audit with zero forbidden files, review holds or secret findings.
+- Pre-deploy public D1 stayed unchanged at 2,175 documents, 1,574 videos,
+  50 projections, 83 cards and zero public full transcripts.
+
+Limits: the generated artifact and browser receipts remain ignored; no private
+pipeline source, media, transcripts, logs, credentials or CV files enter the
+public candidate. Final GitHub merge, Worker version and live post-deploy
+readback are recorded separately after release.

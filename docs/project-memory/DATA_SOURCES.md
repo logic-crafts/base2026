@@ -144,5 +144,14 @@ Tools imported only `https://base2026.dev/`. Both receive
 `https://base2026.dev/sitemap-dynamic.xml`; Google reports Success and Bing is
 Processing with zero immediate errors/warnings. These are measurement sources,
 not public content sources, and no account token is stored in the repository.
-DataForSEO remains a cost-gated external measurement source: documentation was
-researched on 2026-08-28, but no paid API/MCP request was executed.
+DataForSEO remains a cost-controlled external measurement source. One bounded
+positioning packet was executed on 2026-08-28 for `$0.077`; its exact receipt is
+`DATAFORSEO_POSITIONING_RECEIPT_2026_08_28.md`. Do not repeat paid tasks without
+a concrete decision need and current price verification.
+
+Runtime update 2026-08-29: Google last read the static and dynamic sitemaps on
+2026-08-29 and reports Success with 1,634 and 49 discovered pages. Bing reports
+Success with 833 and 39 discovered URLs, zero sitemap errors and zero warnings.
+Both performance/indexing datasets are still processing; discovered sitemap
+counts are not indexed-page or traffic evidence. Exact safe receipt:
+`BASE2026_GSC_BING_READBACK_2026_08_29.md`.

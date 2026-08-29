@@ -1,6 +1,32 @@
 (() => {
   "use strict";
 
+  const statsStatus = document.querySelector("[data-b26-stats-status]");
+  const statNodes = [...document.querySelectorAll("[data-b26-public-stat]")];
+  const loadPublicStats = async () => {
+    if (!(statsStatus instanceof HTMLElement) || statNodes.length === 0) return;
+    try {
+      const response = await fetch("/api/stats", { headers: { Accept: "application/json" } });
+      if (!response.ok) return;
+      const payload = await response.json();
+      const dataset = payload && typeof payload === "object" ? payload.dataset : null;
+      if (!dataset || typeof dataset !== "object") return;
+      for (const node of statNodes) {
+        const key = node.getAttribute("data-b26-public-stat");
+        const value = key ? Number(dataset[key]) : Number.NaN;
+        if (Number.isSafeInteger(value) && value >= 0) node.textContent = value.toLocaleString("en-US");
+      }
+      const updated = new Date(typeof payload.generated_at === "string" ? payload.generated_at : "");
+      const timestamp = Number.isNaN(updated.getTime())
+        ? "just now"
+        : `${updated.toISOString().slice(0, 16).replace("T", " ")} UTC`;
+      statsStatus.textContent = `Live public D1 · updated ${timestamp}`;
+    } catch {
+      // Keep the verified release snapshot when the live read-only endpoint is unavailable.
+    }
+  };
+  void loadPublicStats();
+
   const form = document.querySelector(".b26-brief-search");
   const input = document.querySelector("#b26-brief-query");
   const result = document.querySelector("#evidence-brief-result");

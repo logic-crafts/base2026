@@ -196,8 +196,22 @@ def test_startup_homepage_overlay_preserves_search_as_workspace(tmp_path: Path) 
     assert (output / "static" / "base2026-forms.js").is_file()
     assert (output / "static" / "base2026-evidence-brief.js").read_bytes() == builder.DEFAULT_EVIDENCE_BRIEF_SCRIPT.read_bytes()
     assert (output / "static" / "roadmap.js").read_bytes() == builder.DEFAULT_ROADMAP_SCRIPT.read_bytes()
+    analytics = (output / "analytics.html").read_text(encoding="utf-8")
+    assert 'data-b26-public-stat="documents_indexed"' in analytics
+    assert "Historical release analytics" in analytics
+    assert "2026-07-29 static release" in analytics
+    api_page = (output / "api.html").read_text(encoding="utf-8")
+    assert "GET /api/stats" in api_page
+    assert "D1 FTS5" in api_page
+    assert "server-side Meilisearch proxy" not in api_page
+    api_index = json.loads((output / "api-index.json").read_text(encoding="utf-8"))
+    endpoint_urls = {endpoint["url"] for endpoint in api_index["endpoints"]}
+    assert "https://base2026.dev/api/stats" in endpoint_urls
+    assert "https://base2026.dev/api/evidence-brief/v2?q={question}" in endpoint_urls
     assert (output / "static" / "brand" / "github.svg").is_file()
     assert (output / "static" / "base2026-mark.svg").is_file()
+    assert (output / "static" / "base2026-founder.css").read_bytes() == builder.DEFAULT_FOUNDER_STYLESHEET.read_bytes()
+    assert (output / "static" / "assets" / "alex-yarosh-founder-step-wall.webp").read_bytes() == builder.DEFAULT_FOUNDER_HERO_IMAGE.read_bytes()
     assert (output / builder.HUB_SITEMAP_FILENAME).is_file()
     assert builder.HUB_SITEMAP_URL in (output / "sitemap.xml").read_text(encoding="utf-8")
     assert "sitemap-dynamic.xml" in (output / "robots.txt").read_text(encoding="utf-8")
@@ -207,7 +221,9 @@ def test_startup_homepage_overlay_preserves_search_as_workspace(tmp_path: Path) 
     assert 'href="/roadmap"' in support
     founder = (output / "founder.html").read_text(encoding="utf-8")
     assert '<link rel="canonical" href="https://base2026.dev/founder">' in founder
-    assert "Alex Yarosh builds the systems behind ambitious digital work." in founder
+    assert "Do something" in founder
+    assert "With me." in founder
+    assert 'href="/static/base2026-founder.css?v=20260828-founder-hero-v1"' in founder
     assert 'href="/founder"' in rendered_homepage
     assert "Maharani" not in founder
     assert "Primavera" not in founder
@@ -215,7 +231,7 @@ def test_startup_homepage_overlay_preserves_search_as_workspace(tmp_path: Path) 
     assert receipt["replacements"]["html_urls_to_extensionless"] > 0
     assert receipt["verification"]["redirecting_html_canonical_markers_remaining"] == 0
     assert receipt["verification"]["redirecting_html_sitemap_markers_remaining"] == 0
-    assert receipt["artifact"]["file_count"] == 31
+    assert receipt["artifact"]["file_count"] == 36
 
 
 def test_startup_homepage_exposes_product_first_evidence_brief_search() -> None:

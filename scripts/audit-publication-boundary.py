@@ -209,6 +209,7 @@ PUBLIC_SAFE_EXACT = {
     "tests/test_build_kb_reviewed_candidate_replay.py",
     "tests/test_build_base2026_cloudflare_release.py",
     "tests/test_base2026_homepage_motion.py",
+    "tests/test_base2026_live_stats.py",
     "tests/test_base2026_design_authority.py",
     "tests/test_check_public_content_readiness.py",
     "tests/test_export_public_tiktok_admission.py",
@@ -223,6 +224,7 @@ PUBLIC_SAFE_EXACT = {
     "web/UI_AUDIT.md",
     "web/server.py",
     "static/base2026-mark.svg",
+    "static/assets/alex-yarosh-founder-step-wall.webp",
     # Reviewed operational/build assets. They are source code or templates only;
     # the audit still scans them for secrets and never treats source data as safe.
     "requirements-base2026-cloud-transcription.txt",

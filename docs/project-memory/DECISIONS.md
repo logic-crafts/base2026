@@ -1,5 +1,20 @@
 # Decisions
 
+## 2026-08-29 — Keep operating memory compact and public totals live
+
+- `CURRENT_STATUS.md` is the one-screen current operating snapshot. Keep
+  `PROJECT_STATE.md`, `ACTIVE_PHASE.md`, `NEXT_ACTION.md` and
+  `CURRENT_HANDOFF.md` compact; Git history and dated receipts preserve old
+  states. Do not append competing chronological "current" sections.
+- Public corpus totals come from a read-only, cacheable `/api/stats` endpoint
+  backed by public D1. Homepage and analytics keep a verified no-JS fallback
+  but refresh from this endpoint when available.
+- The July analytics corpus remains available only as an explicitly dated
+  historical release analysis; it must not be presented as current D1 totals.
+- Public stats expose aggregate public counts only. Private pipeline state,
+  media, transcripts, artifacts, credentials and publication controls remain
+  outside the endpoint.
+
 ## 2026-08-28 — Evidence Brief V2, restrained motion and personal GitHub
 
 - Preserve the approved blue-white `b26-independent-v1` visual authority.
