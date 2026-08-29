@@ -9340,6 +9340,9 @@ Actions and receipts:
   secret findings. Independent closeout review returned GO for commit/push.
 - Source commit `67be027f6` opened reviewed PR #28 in the canonical public
   repository; the PR itself contains no deployment or external publication.
+- PR #28 merged as `0cde5dfe0f5eae08c7700cb9e92bd38a389407b0`;
+  its automatic GitHub Pages documentation build passed and Cloudflare
+  deployments stayed unchanged.
 
 Limits: no Worker deploy, D1/R2 write, indexing request, account creation,
 dataset upload, social/editorial publication or other public-site mutation was

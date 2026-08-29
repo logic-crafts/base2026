@@ -5,11 +5,10 @@ Last verified: 2026-08-29
 ## Resume state
 
 - Read [`CURRENT_STATUS.md`](CURRENT_STATUS.md) first.
-- Public source before this closeout is merged through PR #27 on canonical repository
-  `https://github.com/offflinerpsy/base2026`.
-- Reviewed non-publication closeout source is PR #28 from
-  `codex/base2026-seo-geo-closeout-20260829`; it carries no deployment or
-  external-publication action.
+- Reviewed non-publication closeout source is merged through PR #28 as
+  `0cde5dfe0f5eae08c7700cb9e92bd38a389407b0` on canonical repository
+  `https://github.com/offflinerpsy/base2026`. It carries no Cloudflare
+  deployment or external-publication action.
 - Current non-publication closeout branch/worktree:
   `codex/base2026-seo-geo-closeout-20260829` at
   `/Users/alexyarosh/Projects/base2026-migration/DW/.worktrees/base2026-growth-20260829`.
@@ -34,10 +33,10 @@ Last verified: 2026-08-29
 
 ## Exact next action
 
-Merge reviewed PR #28 after its GitHub checks. Do not deploy or create another
-external publication in this task. After a future deployment is authorized,
-verify sitemap membership, Worker headers/cache behavior, API-index workspace
-routing and the regenerated roadmap before requesting any indexing action.
+No source-closeout action remains. After a future deployment is explicitly
+authorized, verify sitemap membership, Worker headers/cache behavior, API-index
+workspace routing and the regenerated roadmap before requesting any indexing
+action. Do not infer that the merged source candidate is already live.
 
 ## Protected boundaries
 

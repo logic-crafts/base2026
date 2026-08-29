@@ -79,10 +79,13 @@ artifacts outside Git. They are not deployment authorization.
 ## GitHub closeout
 
 - Source commit: `67be027f6`.
-- Reviewed pull request: `https://github.com/offflinerpsy/base2026/pull/28`.
+- Reviewed pull request: `https://github.com/offflinerpsy/base2026/pull/28`,
+  merged as `0cde5dfe0f5eae08c7700cb9e92bd38a389407b0`.
 - Independent reviewer verdict: GO for commit/push; no deploy or publication.
 - The PR changes source and public-safe documentation only. Production remains
   on the live Worker/artifact identifiers in the readback above.
+- The automatic GitHub Pages documentation build for the merge completed
+  successfully. Cloudflare deployments remained unchanged.
 
 ## Growth preparation and real holds
 
