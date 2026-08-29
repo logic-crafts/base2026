@@ -48,7 +48,7 @@ const roadmapData = {
       lane: "Discovery",
       status: "Live, monitored",
       purpose: "Make the same public evidence discoverable to visitors, search engines and machines.",
-      explanation: "Search, source/topic/creator pages, canonicals, sitemaps, structured data, dynamic projection pages and read-only API access are live. Google and Bing discovery are monitored.",
+      explanation: "Search, source/topic/creator pages, canonicals, sitemaps, structured data, dynamic projection pages and read-only API access are live. The topic-enrichment configuration contains 60 source-backed entries; every entry has an answer capsule, proof-source IDs and FAQ, with 102 proof links total. Public route and indexation status are measured per entry. Google Search Console shows 22 impressions, 0 clicks and average position 55.4; Bing performance data is still preparing.",
       quarter: "Discovery track",
       milestones: [
         { title: "D1 FTS5 search and filtering", status: "Live" },
@@ -57,7 +57,7 @@ const roadmapData = {
         { title: "Dynamic projection pages", status: "Live" },
         { title: "Google Search Console", status: "Live" },
         { title: "Bing Webmaster Tools", status: "Live" },
-        { title: "Topic evidence maps", status: "In progress" },
+        { title: "Configuration coverage and route audit", status: "In progress" },
       ],
     },
     {
@@ -119,12 +119,12 @@ const roadmapData = {
   ],
   priorities: {
     Now: [
-      { title: "Monitor Google and Bing discovery", status: "In progress" },
+      { title: "Measure Google and Bing performance", status: "In progress" },
+      { title: "Audit 60 configured enrichment entries", status: "In progress" },
       { title: "Synchronize counters and D1 projections", status: "In progress" },
       { title: "Release-test canonicals and sitemaps", status: "In progress" },
     ],
     Next: [
-      { title: "10–15 source-backed topic evidence maps", status: "In progress" },
       { title: "Public dataset landing page and catalog", status: "Live" },
       { title: "API quickstart and query example", status: "Live" },
       { title: "Dated corpus changelog", status: "Planned" },
@@ -152,9 +152,9 @@ const roadmapData = {
     },
     {
       title: "Indexable distribution",
-      status: "In progress",
-      text: "Turn strong source evidence into discoverable pages and stable machine access.",
-      items: ["Evidence maps", "Indexation monitoring", "API samples", "Creator controls"],
+      status: "Live, monitored",
+      text: "Keep configured enrichment entries source-backed while measuring route coverage and search treatment.",
+      items: ["60 configured entries", "Route and indexation audit", "API samples", "Creator controls"],
     },
   ],
 };

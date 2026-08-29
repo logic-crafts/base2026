@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import worker from "../src/index";
 
@@ -281,7 +282,27 @@ async function json(response: Response): Promise<Record<string, any>> {
   return (await response.json()) as Record<string, any>;
 }
 
+const EXPECTED_PUBLIC_SECURITY_HEADERS = {
+  "x-content-type-options": "nosniff",
+  "referrer-policy": "strict-origin-when-cross-origin",
+  "x-frame-options": "SAMEORIGIN",
+  "permissions-policy": "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()",
+};
+
+function expectPublicSecurityHeaders(response: Response): void {
+  for (const [name, value] of Object.entries(EXPECTED_PUBLIC_SECURITY_HEADERS)) {
+    expect(response.headers.get(name)).toBe(value);
+  }
+}
+
 describe("Base2026 search Worker", () => {
+  it("routes source paths through the Worker before static assets", () => {
+    const config = JSON.parse(
+      readFileSync(new URL("../wrangler.jsonc", import.meta.url), "utf8"),
+    ) as { assets?: { run_worker_first?: string[] } };
+    expect(config.assets?.run_worker_first).toContain("/sources/*");
+  });
+
   it("redirects the apex HTTP surface to the same HTTPS URL", async () => {
     const response = await worker.fetch(
       new Request("http://base2026.dev/workspace/?q=schema"),
@@ -305,7 +326,16 @@ describe("Base2026 search Worker", () => {
   it("reports a structured error for an unavailable D1 binding", async () => {
     const response = await worker.fetch(new Request("https://base2026.dev/api/health"), {} as Env, {} as ExecutionContext);
     expect(response.status).toBe(503);
+    expectPublicSecurityHeaders(response);
     expect(await json(response)).toMatchObject({ error: { code: "DB_NOT_CONFIGURED" } });
+
+    const healthy = await worker.fetch(
+      new Request("https://base2026.dev/api/health"),
+      env(),
+      {} as ExecutionContext,
+    );
+    expect(healthy.status).toBe(200);
+    expectPublicSecurityHeaders(healthy);
   });
 
   it("exposes current public D1 totals without private pipeline fields", async () => {
@@ -315,6 +345,7 @@ describe("Base2026 search Worker", () => {
       {} as ExecutionContext,
     );
     expect(response.status).toBe(200);
+    expectPublicSecurityHeaders(response);
     expect(response.headers.get("cache-control")).toContain("s-maxage=300");
     expect(await json(response)).toMatchObject({
       ok: true,
@@ -334,6 +365,7 @@ describe("Base2026 search Worker", () => {
       {} as ExecutionContext,
     );
     expect(head.status).toBe(200);
+    expectPublicSecurityHeaders(head);
     expect(await head.text()).toBe("");
   });
 
@@ -345,6 +377,7 @@ describe("Base2026 search Worker", () => {
     );
     const html = await response.text();
     expect(response.status).toBe(200);
+    expectPublicSecurityHeaders(response);
     expect(response.headers.get("content-type")).toContain("text/html");
     expect(html).toContain('<link rel="canonical" href="https://base2026.dev/sources/tiktok-video-7657638702864223510">');
     expect(html).toContain("Useful &lt;AI&gt; source evidence");
@@ -358,6 +391,45 @@ describe("Base2026 search Worker", () => {
     expect(html).not.toContain("Useful <AI> source evidence");
   });
 
+  it("redirects only trailing-slash dynamic source variants to the extensionless canonical", async () => {
+    const response = await worker.fetch(
+      new Request("https://base2026.dev/sources/tiktok-video-7657638702864223510/?utm_source=test"),
+      env(),
+      {} as ExecutionContext,
+    );
+    expect(response.status).toBe(308);
+    expect(response.headers.get("location")).toBe(
+      "https://base2026.dev/sources/tiktok-video-7657638702864223510?utm_source=test",
+    );
+    expectPublicSecurityHeaders(response);
+  });
+
+  it("preserves static asset status, body, and cache/content headers while adding the public baseline", async () => {
+    const response = await worker.fetch(
+      new Request("https://base2026.dev/static/example.css"),
+      {
+        ...env(),
+        ASSETS: {
+          fetch: async () => new Response("body", {
+            status: 203,
+            headers: {
+              "Content-Type": "text/css; charset=utf-8",
+              "Cache-Control": "public, max-age=3600",
+              "Access-Control-Allow-Origin": "https://base2026.dev",
+            },
+          }),
+        },
+      } as unknown as Env,
+      {} as ExecutionContext,
+    );
+    expect(response.status).toBe(203);
+    expect(await response.text()).toBe("body");
+    expect(response.headers.get("content-type")).toContain("text/css");
+    expect(response.headers.get("cache-control")).toBe("public, max-age=3600");
+    expect(response.headers.get("access-control-allow-origin")).toBe("https://base2026.dev");
+    expectPublicSecurityHeaders(response);
+  });
+
   it("exposes applied D1 projections through the dynamic sitemap", async () => {
     const response = await worker.fetch(
       new Request("https://base2026.dev/sitemap-dynamic.xml"),
@@ -366,6 +438,7 @@ describe("Base2026 search Worker", () => {
     );
     const xml = await response.text();
     expect(response.status).toBe(200);
+    expectPublicSecurityHeaders(response);
     expect(response.headers.get("content-type")).toContain("application/xml");
     expect(xml).toContain("https://base2026.dev/sources/tiktok-video-7657638702864223510");
     expect(xml).toContain("<lastmod>2026-08-28</lastmod>");
@@ -392,6 +465,7 @@ describe("Base2026 search Worker", () => {
       {} as ExecutionContext,
     );
     expect(response.status).toBe(200);
+    expectPublicSecurityHeaders(response);
     expect(await json(response)).toMatchObject({
       query: "AI search",
       status: "limited",
@@ -418,6 +492,7 @@ describe("Base2026 search Worker", () => {
       {} as ExecutionContext,
     );
     expect(response.status).toBe(200);
+    expectPublicSecurityHeaders(response);
     expect(response.headers.get("cache-control")).toContain("s-maxage=300");
     expect(await json(response)).toMatchObject({
       brief_version: "base2026.evidence-brief.v2",
@@ -504,6 +579,7 @@ describe("Base2026 search Worker", () => {
       {} as ExecutionContext,
     );
     expect(head.status).toBe(200);
+    expectPublicSecurityHeaders(head);
     expect(await head.text()).toBe("");
 
     const post = await worker.fetch(

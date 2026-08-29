@@ -9309,3 +9309,37 @@ Follow-up live receipts:
 
 Limits: no backlink, media placement or subscription was purchased; no PBN,
 sitewide network or paid ranking link was created.
+
+## 2026-08-29 — Non-publication technical and growth closeout
+
+Prompt: finish every remaining Base2026 task except publication, preserve the
+working public site and private pipeline, and close the source/GitHub work with
+real verification rather than another plan.
+
+Actions and receipts:
+
+- Re-read live public/private Cloudflare, D1, R2, Queue, migration and automatic
+  projection state; the pipeline has no stale/dead jobs or eligible automatic
+  backlog, and D1/R2 agree on 318 private media artifacts.
+- Recorded the first GSC baseline (22 impressions, zero clicks, average position
+  55.4) and Bing's still-processing state without submitting unchanged URLs.
+- Fixed the Workspace sitemap mismatch, public security-header contract,
+  Worker-first `/sources/*` handling, query-preserving source canonical redirect,
+  JSONL cache overlap, API-index Workspace URL and deterministic roadmap overlay.
+- Replaced the overstated “60 live maps” wording with 60 configured
+  source-backed enrichment entries whose route and indexation state are audited
+  individually.
+- Prepared local-only DEV, Hashnode, Show HN, Reddit, Indie Hackers and Product
+  Hunt copy. Kept Hugging Face/Zenodo on HOLD until dataset rights, provenance,
+  versioning and takedown policy are explicit.
+- Built ignored candidate `base2026-closeout-candidate-20260829-r5`, artifact
+  tree `6b4dddd702917831e574153f36261d62c2f1b090ffcbbe78c20eba24a74c5e09`.
+- Passed 40 selected Python tests, 47 Worker tests, TypeScript typecheck,
+  deterministic 2,095-row import dry-run, explicit-assets Wrangler dry-run,
+  artifact policy and Git publication audit with zero forbidden, review-hold or
+  secret findings. Independent closeout review returned GO for commit/push.
+
+Limits: no Worker deploy, D1/R2 write, indexing request, account creation,
+dataset upload, social/editorial publication or other public-site mutation was
+performed in this closeout. The candidate is source readiness, not a live
+release receipt.

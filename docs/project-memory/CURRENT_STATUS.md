@@ -25,28 +25,33 @@ MacBook or ChatGPT Web.
 - Homepage and Analytics refresh these totals from read-only `/api/stats`.
   Analytics also preserves verified 2026-07-29 summary totals without empty
   historical ranking sections.
-- Core routes, Evidence Brief V1/V2, founder hashes, API docs, static sitemap
-  (1,634 URLs) and dynamic sitemap (50 URLs) pass live readback.
+- Core routes, Evidence Brief V1/V2, founder hashes and API docs pass live
+  readback. The current static sitemap contains 1,636 unique URLs and the
+  dynamic sitemap 50; GSC's last processed copies report 1,634 and 49.
 - The first public engineering journal article is live at
   `/journal/source-backed-video-search-cloudflare/`. Its free distribution is
   live on Medium, X and LinkedIn; the Medium copy canonicals to Base2026.
 
 ## Private production pipeline
 
-- Private Worker: v0.6.2, `4d9f291e-0f7e-4795-adb4-e18c5f028d58`
-  (100%); rollback `48968a83-9a9f-4824-82a9-d8181b9ffee3`.
+- Private Worker: v0.6.2, `14adacb6-7f0f-4aa7-9131-fc41469eec15`
+  (100%). Resolve its immediate rollback from the live deployment list before
+  any mutation; this readback made no rollback selection.
 - Cron: reconciliation/capture/publication every five minutes; discovery daily
   at 10:00 UTC.
 - Private R2/D1 intake, Workers AI, automatic eligible-card publication and
   receipt-based retention are active.
 - Latest discovery: 135 discovered, 17 fresh/admitted, 118 duplicates and one
-  `browser_discovery_empty`; 18 cursors active, only `@webhivedigital` failed.
-- One bounded private canary stored media and completed transcription and
-  semantic jobs. It used official Player API Browser acquisition, so it did
-  not prove Container fallback.
-- Container app v8 is `running`, but Cloudflare telemetry regressed from
-  `healthy=1` immediately after one recycle to `active=1, healthy=0, errors=[]`.
-  No second restart was attempted; stable readiness remains the real blocker.
+  failed source across 19 creators. The failed `@webhivedigital` cursor remains
+  a source-review issue, not a capture retry loop.
+- Private D1 has 339 sources; R2 has 1,280 objects including 318 media objects,
+  exactly matching D1's stored-media aggregate. There are no stale leases,
+  failed/dead jobs or Queue delivery failures.
+- Automatic publication has 19 applied and 1 already-public receipt, no
+  pending/retry/held receipt, and zero currently eligible candidates.
+- Container image 0.5.5 / app v8 has one active/running instance, no failed
+  instance and no errors. Cloudflare's detail counter still says `healthy=0`;
+  this is contradictory telemetry, not a restart trigger or proof of failure.
 - Hourly heartbeat `base2026-private-pipeline-hourly-watchdog` is active in the
   dedicated pipeline task. It is read-only first and explicitly forbids another
   restart for this incident without a real Container-required failure.
@@ -66,20 +71,41 @@ MacBook or ChatGPT Web.
 ## Search-engine measurement
 
 - Google Search Console and Bing both accept the static and dynamic sitemaps.
-- Google: processing; 1,634 static and 49 dynamic URLs discovered.
-- Bing: processing; 833 static and 39 dynamic URLs discovered.
-- Neither engine exposes performance or indexed-page data yet. Do not resubmit
-  unchanged URLs or claim discovery counts as indexation.
+- Google now exposes early three-month performance: 0 clicks, 22 impressions,
+  0% CTR and average position 55.4. Thirteen pages have impressions; the
+  historical `.html` AI-citation topic leads with 8 while Google recrawls the
+  corrected extensionless canonical topology.
+- Google Page indexing and Links still process; the new journal is not indexed.
+- Bing still prepares Search Performance. Its journal live test reports that
+  the URL can be indexed with no SEO/GEO issue, while the index view says
+  discovered but not crawled. Sitemap totals remain 872 discovered URLs.
+- Do not resubmit unchanged URLs or claim discovery/impression counts as
+  indexation.
+
+## Reviewed local closeout — not deployed
+
+- The current source branch fixes the Workspace sitemap mismatch, conflicting
+  JSONL cache directives, API-index Workspace URL, stale roadmap overlay,
+  baseline Worker security headers and trailing-slash dynamic-source canonical;
+  `/sources/*` is explicitly routed Worker-first for that contract.
+- Candidate artifact tree:
+  `6b4dddd702917831e574153f36261d62c2f1b090ffcbbe78c20eba24a74c5e09`;
+  artifact policy, tests, deterministic import and explicit-assets Wrangler
+  dry-run pass.
+- These fixes are source/GitHub candidates only. The live Worker and public
+  artifact above remain unchanged because this task excluded deployment and
+  further external publication.
 
 ## Open loops
 
 1. Observe Container readiness without restart loops; prove fallback only on a
    real candidate that requires it.
-2. Review `@webhivedigital` as a source problem; do not force a candidate.
-3. Observe GSC/Bing after their processing window. Premium founder redesign is
-   separate optional scope; the current founder page remains live.
-4. Measure referral and discovery signals from Medium, X and LinkedIn before
-   duplicating the same article on more editorial platforms.
+2. Keep `@webhivedigital` in source review; do not force a candidate or mistake
+   its zero-attempt holds for a transport failure.
+3. Let Google recrawl the corrected canonicals and Bing finish processing;
+   measure query/page growth without resubmitting unchanged URLs.
+4. Measure referral and discovery signals from the existing distribution
+   before creating or publishing another copy of the same article.
 
 ## Protected boundaries
 

@@ -174,6 +174,12 @@ const JSON_HEADERS = Object.freeze({
   "Access-Control-Allow-Origin": "*",
   "Cache-Control": "no-store",
 });
+const PUBLIC_SECURITY_HEADERS = Object.freeze({
+  "X-Content-Type-Options": "nosniff",
+  "Referrer-Policy": "strict-origin-when-cross-origin",
+  "X-Frame-Options": "SAMEORIGIN",
+  "Permissions-Policy": "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()",
+});
 
 type EnvWithBindings = Env & { INBOX_DB?: D1Database; OUTREACH_DB?: D1Database };
 
@@ -312,10 +318,34 @@ class RequestError extends Error {
   }
 }
 
+function withPublicResponseHeaders(...headerSets: HeadersInit[]): Headers {
+  const headers = new Headers();
+  for (const headerSet of headerSets) {
+    new Headers(headerSet).forEach((value, name) => headers.set(name, value));
+  }
+  for (const [name, value] of Object.entries(PUBLIC_SECURITY_HEADERS)) headers.set(name, value);
+  return headers;
+}
+
+function publicRedirect(location: string, status: 301 | 308): Response {
+  return new Response(null, {
+    status,
+    headers: withPublicResponseHeaders({ Location: location }),
+  });
+}
+
+function publicAssetResponse(response: Response): Response {
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers: withPublicResponseHeaders(response.headers),
+  });
+}
+
 function jsonResponse(payload: unknown, status = 200, headers: HeadersInit = {}): Response {
   return new Response(JSON.stringify(payload), {
     status,
-    headers: { ...JSON_HEADERS, ...headers },
+    headers: withPublicResponseHeaders(JSON_HEADERS, headers),
   });
 }
 
@@ -959,11 +989,10 @@ async function handleProjectedSourcePage(request: Request, env: EnvWithBindings,
   const body = renderProjectedSourcePage(videoId, rows);
   return new Response(request.method === "HEAD" ? null : body, {
     status: 200,
-    headers: {
+    headers: withPublicResponseHeaders({
       "Content-Type": "text/html; charset=utf-8",
       "Cache-Control": "public, max-age=300, s-maxage=900",
-      "X-Content-Type-Options": "nosniff",
-    },
+    }),
   });
 }
 
@@ -988,11 +1017,11 @@ async function handleDynamicSitemap(request: Request, env: EnvWithBindings): Pro
   const body = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls}</urlset>\n`;
   return new Response(request.method === "HEAD" ? null : body, {
     status: 200,
-    headers: {
+    headers: withPublicResponseHeaders({
       "Content-Type": "application/xml; charset=utf-8",
       "Cache-Control": "public, max-age=300, s-maxage=900",
       "X-Robots-Tag": "noindex",
-    },
+    }),
   });
 }
 
@@ -1548,10 +1577,9 @@ async function handleEvidenceBriefV2(request: Request, env: EnvWithBindings, url
   if (!ftsQuery) throw new RequestError(400, "INVALID_QUERY", "q must contain searchable letters or numbers");
   const cacheHeaders = {
     "Cache-Control": "public, max-age=60, s-maxage=300",
-    "X-Content-Type-Options": "nosniff",
   };
   if (request.method === "HEAD") {
-    return new Response(null, { status: 200, headers: { ...JSON_HEADERS, ...cacheHeaders } });
+    return new Response(null, { status: 200, headers: withPublicResponseHeaders(JSON_HEADERS, cacheHeaders) });
   }
 
   const eligibilitySql = `d.full_transcript_public=0
@@ -1690,10 +1718,9 @@ async function handlePublicStats(request: Request, env: EnvWithBindings): Promis
   if (!env.DB) throw new RequestError(503, "DB_NOT_CONFIGURED", "D1 search database is unavailable");
   const cacheHeaders = {
     "Cache-Control": "public, max-age=60, s-maxage=300",
-    "X-Content-Type-Options": "nosniff",
   };
   if (request.method === "HEAD") {
-    return new Response(null, { status: 200, headers: { ...JSON_HEADERS, ...cacheHeaders } });
+    return new Response(null, { status: 200, headers: withPublicResponseHeaders(JSON_HEADERS, cacheHeaders) });
   }
 
   const row = await env.DB.prepare(
@@ -1888,7 +1915,7 @@ export default {
     try {
       if (url.protocol !== "https:") {
         url.protocol = "https:";
-        return Response.redirect(url.toString(), 301);
+        return publicRedirect(url.toString(), 301);
       }
       if (
         request.method === "GET" &&
@@ -1900,7 +1927,7 @@ export default {
       ) {
         url.pathname = "/workspace/";
         url.hash = "";
-        return Response.redirect(url.toString(), 301);
+        return publicRedirect(url.toString(), 301);
       }
       if (url.pathname === "/api/health") return await handleHealth(env);
       if (url.pathname === "/api/stats") return await handlePublicStats(request, env);
@@ -1916,11 +1943,15 @@ export default {
       if (request.method === "GET" || request.method === "HEAD") {
         const sourceMatch = url.pathname.match(DYNAMIC_SOURCE_ROUTE);
         if (sourceMatch) {
+          if (url.pathname.endsWith("/")) {
+            url.pathname = url.pathname.slice(0, -1);
+            return publicRedirect(url.toString(), 308);
+          }
           const response = await handleProjectedSourcePage(request, env, sourceMatch[1]);
           if (response) return response;
         }
       }
-      if (env.ASSETS) return await env.ASSETS.fetch(request);
+      if (env.ASSETS) return publicAssetResponse(await env.ASSETS.fetch(request));
       throw new RequestError(404, "NOT_FOUND", "asset or API route not found");
     } catch (error) {
       if (error instanceof RequestError) return errorResponse(error);

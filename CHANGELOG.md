@@ -4,6 +4,31 @@ All notable public-facing changes to Base2026 are summarized here.
 
 Base2026 is early, so this changelog focuses on useful release milestones rather than every internal pipeline run.
 
+## Unreleased — 2026-08-29 technical closeout
+
+Prepared and tested in source; not deployed in this non-publication task.
+
+### Fixed
+
+- Removed the `noindex` Workspace from the hub sitemap while preserving its
+  internal discovery links.
+- Unified baseline security headers across Worker API, dynamic HTML/XML,
+  redirects and Static Assets responses.
+- Added a canonical 308 for trailing-slash dynamic source variants and routed
+  `/sources/*` Worker-first so the contract is consistent after deployment.
+- Removed conflicting static JSONL cache directives and corrected the
+  machine-readable Workspace URL.
+- Made the current tracked roadmap page part of the deterministic release
+  overlay so the old VPS/local-first fallback cannot return in a clean build.
+
+### Verified
+
+- Private D1/R2, scheduled jobs and automatic projection have no systemic
+  backlog or privacy regression; public full transcripts remain zero.
+- GSC exposes the first 22 impressions; Bing performance remains in processing.
+- No new external post, indexing request or deployment was made in this
+  closeout.
+
 ## 2026-08-28 — Product positioning, indexation and design authority
 
 ### Changed
