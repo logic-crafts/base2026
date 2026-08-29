@@ -200,6 +200,12 @@ def test_startup_homepage_overlay_preserves_search_as_workspace(tmp_path: Path) 
     assert 'data-b26-public-stat="documents_indexed"' in analytics
     assert "Historical release analytics" in analytics
     assert "2026-07-29 static release" in analytics
+    assert "1,724" in analytics
+    assert "2,319" in analytics
+    assert "1,939" in analytics
+    assert "1,204" in analytics
+    assert "28 signal briefs" in analytics
+    assert "<tbody></tbody>" not in analytics
     api_page = (output / "api.html").read_text(encoding="utf-8")
     assert "GET /api/stats" in api_page
     assert "D1 FTS5" in api_page

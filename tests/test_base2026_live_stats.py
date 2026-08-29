@@ -26,6 +26,12 @@ def test_public_stats_are_wired_to_homepage_and_analytics() -> None:
 
     assert "Historical release analytics" in analytics
     assert "2026-07-29 static release" in analytics
+    assert "1,724" in analytics
+    assert "2,319" in analytics
+    assert "1,939" in analytics
+    assert "1,204" in analytics
+    assert "28 signal briefs" in analytics
+    assert "<tbody></tbody>" not in analytics
     assert "/static/base2026-evidence-brief.js" in analytics
 
 
