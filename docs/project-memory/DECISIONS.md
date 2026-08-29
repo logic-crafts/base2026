@@ -664,3 +664,29 @@ ceiling.
 
 Reason: the project is no-budget by design; measurement must answer a concrete
 decision and must not become an open-ended crawl or keyword-spend loop.
+
+## 2026-08-29 — Publish only reviewed public insight cards
+
+Decision: the Cloudflare release artifact may contain only insight-card rows
+that are explicitly public, reviewed and governed by the public policy. Rows
+marked `needs_review`, non-public or governed by another policy remain outside
+the artifact even when older local exports include them. The builder and
+artifact gate fail closed on a contradictory row.
+
+Reason: the public dataset landing exposed that an older static file mixed 524
+review holds with 1,939 public cards. Filtering only in the UI is insufficient;
+the publication boundary must be enforced before files enter the artifact.
+
+## 2026-08-29 — Earn contextual references instead of building a link network
+
+Decision: an owned-domain Base2026 reference must live on a standalone,
+truthful page that is useful without the link, use one natural branded anchor,
+be internally discoverable and appear in a valid sitemap. Footer/sitewide
+links, hidden orphan pages, reciprocal link patterns and keyword anchors are
+forbidden. Paid publisher tests are for relevant referral reach only, require
+explicit budget approval and use `rel="sponsored"` or `nofollow`; buying links
+for ranking is forbidden.
+
+Reason: contextual editorial references can document real implementation while
+preserving user value and search-engine policy. A cross-domain owner network or
+paid dofollow package would add risk without proving qualified traffic.
