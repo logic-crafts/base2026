@@ -155,3 +155,19 @@ Success with 833 and 39 discovered URLs, zero sitemap errors and zero warnings.
 Both performance/indexing datasets are still processing; discovered sitemap
 counts are not indexed-page or traffic evidence. Exact safe receipt:
 `BASE2026_GSC_BING_READBACK_2026_08_29.md`.
+
+Runtime update 2026-08-29 (public): Worker
+`79e3677f-3828-4355-8c59-8801458f0fb2` serves 2,175 public documents across
+1,574 videos, 50 applied evidence routes and 83 projection cards. Read-only
+`/api/stats` reports the same totals and zero public full transcripts. The
+verified 2026-07-29 static Analytics summary remains a dated historical source,
+not a current D1 counter.
+
+Runtime update 2026-08-29 (private): Worker
+`4d9f291e-0f7e-4795-adb4-e18c5f028d58` restored discovery to 18 active
+creator cursors and one `@webhivedigital` source-review failure. One bounded
+canary stored media and completed downstream AI jobs, but used official Player
+API Browser acquisition rather than Container fallback. Container app v8 is
+running while health telemetry remains unstable (`active=1`, `healthy=0`, no
+reported errors); this is an infrastructure observation, not authority to
+repeat restarts or widen acquisition.

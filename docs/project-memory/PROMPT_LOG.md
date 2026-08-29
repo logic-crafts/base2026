@@ -9235,10 +9235,18 @@ Actions and receipts:
 - Passed 29 Python contract tests, 44 Worker tests, typecheck, deterministic D1
   import dry-run, Wrangler dry-run, artifact policy, browser QA and the Git
   publication audit with zero forbidden files, review holds or secret findings.
-- Pre-deploy public D1 stayed unchanged at 2,175 documents, 1,574 videos,
-  50 projections, 83 cards and zero public full transcripts.
+- PR #19 merged the consolidated source and PR #20 merged the reviewer-driven
+  Analytics correction. Public Worker
+  `79e3677f-3828-4355-8c59-8801458f0fb2` now serves the exact v3 artifact.
+- Post-deploy D1 stayed unchanged at 2,175 documents, 1,574 videos,
+  50 projections, 83 cards and zero public full transcripts; verification
+  queries wrote zero rows.
+- Private Worker `4d9f291e-0f7e-4795-adb4-e18c5f028d58` restored discovery to
+  18 active cursors and one source-review failure. A bounded media canary
+  completed, while Container telemetry remains contradictory at `running`,
+  `active=1`, `healthy=0` after one recycle; no restart loop followed.
 
 Limits: the generated artifact and browser receipts remain ignored; no private
 pipeline source, media, transcripts, logs, credentials or CV files enter the
-public candidate. Final GitHub merge, Worker version and live post-deploy
-readback are recorded separately after release.
+public release. Exact GitHub, Worker, rollback and live receipts are recorded in
+`BASE2026_PUBLIC_CONSOLIDATION_RELEASE_2026_08_29.md`.

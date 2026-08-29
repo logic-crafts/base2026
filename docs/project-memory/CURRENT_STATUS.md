@@ -16,37 +16,46 @@ MacBook or ChatGPT Web.
 ## Public production
 
 - Domain: `https://base2026.dev/`
-- Worker: `1ad991e4-bc8f-4c34-a8d1-c77723377137`
+- Worker: `79e3677f-3828-4355-8c59-8801458f0fb2` (100%).
+- Exact artifact tree:
+  `4abe1a4f67ff8e67c81578429f8bb1776a3ea6f9f62a33e1ce81d198ee80d83e`.
+- Safe pre-consolidation rollback:
+  `1ad991e4-bc8f-4c34-a8d1-c77723377137`. Immediate predecessor
+  `de84ef34-6cf9-4f6c-b392-34c064626d2a` has the corrected APIs but retains the
+  known zero-filled historical Analytics defect and is not the preferred rollback.
 - Public D1: 2,175 documents; 1,574 distinct videos; 50 applied projections;
   83 projected cards; zero public full transcripts.
-- Core routes, Evidence Brief V1/V2, static sitemap (1,634 URLs) and dynamic
-  sitemap (50 URLs) pass live readback.
-- `/founder` campaign hero is live. Its source is being synchronized into the
-  clean public Git candidate described below.
-- Candidate improvement: `/api/stats` plus live homepage/analytics counters;
-  not deployed until all gates and review pass.
+- Homepage and Analytics refresh these totals from read-only `/api/stats`.
+  Analytics also preserves verified 2026-07-29 summary totals without empty
+  historical ranking sections.
+- Core routes, Evidence Brief V1/V2, founder hashes, API docs, static sitemap
+  (1,634 URLs) and dynamic sitemap (50 URLs) pass live readback.
 
 ## Private production pipeline
 
-- Private Worker: v0.6.2, deployment
-  `48968a83-9a9f-4824-82a9-d8181b9ffee3` at the last readback.
+- Private Worker: v0.6.2, `4d9f291e-0f7e-4795-adb4-e18c5f028d58`
+  (100%); rollback `48968a83-9a9f-4824-82a9-d8181b9ffee3`.
 - Cron: reconciliation/capture/publication every five minutes; discovery daily
   at 10:00 UTC.
 - Private R2/D1 intake, Workers AI, automatic eligible-card publication and
   receipt-based retention are active.
-- Current degradation: 12 of 19 creator cursors report
-  `browser_discovery_empty`; repair is isolated to the private pipeline task.
+- Latest discovery: 135 discovered, 17 fresh/admitted, 118 duplicates and one
+  `browser_discovery_empty`; 18 cursors active, only `@webhivedigital` failed.
+- One bounded private canary stored media and completed transcription and
+  semantic jobs. It used official Player API Browser acquisition, so it did
+  not prove Container fallback.
+- Container app v8 is `running`, but Cloudflare telemetry regressed from
+  `healthy=1` immediately after one recycle to `active=1, healthy=0, errors=[]`.
+  No second restart was attempted; stable readiness remains the real blocker.
 - Broad `PUBLIC_RELEASE_ENABLED=false` remains correct. The narrow, policy-bound
   automatic projection lane remains enabled.
 
 ## Git authority
 
 - Canonical public repository: `https://github.com/offflinerpsy/base2026`
-- Canonical baseline: `origin/main` at
-  `616d6de4c64c13fa91bbc589f0a59fddbcd69a63`.
-- Clean integration candidate:
-  `/Users/alexyarosh/Projects/base2026-migration/DW/.worktrees/base2026-consolidate-20260829`
-  on `codex/base2026-consolidate-20260829`.
+- PR #19 merged the consolidated source; PR #20 merged the independent-review
+  Analytics correction. Production code merge:
+  `f06a27aa2261704aa566837405a5ed623ef1ad83`.
 - The original SEO/GEO checkout and historical worktrees are dirty snapshots.
   Never bulk-stage, reset, merge, prune or delete them.
 
@@ -60,13 +69,11 @@ MacBook or ChatGPT Web.
 
 ## Open loops
 
-1. Finish and verify the private creator-discovery repair.
-2. Reproduce live `/founder`, live stats and truthful API/analytics docs from
-   the clean public candidate; run full tests and publication audit.
-3. Commit/push through a reviewed public branch, deploy the exact candidate,
-   and verify live hashes/API/privacy invariants.
-4. Observe GSC/Bing after their processing window. Premium founder redesign is
-   a separate optional selection; the current founder page remains live.
+1. Observe Container readiness without restart loops; prove fallback only on a
+   real candidate that requires it.
+2. Review `@webhivedigital` as a source problem; do not force a candidate.
+3. Observe GSC/Bing after their processing window. Premium founder redesign is
+   separate optional scope; the current founder page remains live.
 
 ## Protected boundaries
 

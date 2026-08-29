@@ -2,9 +2,9 @@
 
 ## Current baseline
 
-- Live `origin/main` is `616d6de4c64c13fa91bbc589f0a59fddbcd69a63`.
-- Isolated candidate: `/Users/alexyarosh/Projects/base2026-migration/DW/.worktrees/base2026-consolidate-20260829`, branch `codex/base2026-consolidate-20260829`.
-- The corrected public candidate is
+- Production code is merged through PR #19 (`dbc273782…`) and review-fix PR
+  #20 (`f06a27aa…`).
+- Exact release source remains reproducible from
   `output/cloudflare-migration/base2026-consolidation-20260829-v3`.
 
 ## Live founder receipt
@@ -17,16 +17,13 @@ The 2026-08-28 receipt in `FOUNDER_PROFILE_HERO_RELEASE_2026_08_28.md` remains t
 - Candidate artifact tree: `4abe1a4f67ff8e67c81578429f8bb1776a3ea6f9f62a33e1ce81d198ee80d83e`
   (4,235 served files; 4,237 including ignored release metadata)
 
-Unchanged live sentinels remain homepage `cf384e7c890b76b7bc8b446a03d96e959af52fb41e914dee812569500f6750b3`, homepage CSS `bec459945e06bc7e295d3e4d5d17b55a3264ac871717dc90ee85551e5df24f6f`, and Evidence Brief JS `ef57559fe992fa467a6d82425dc9e0495789bfe47b777f343313ee64938f6a7d`.
-
 ## Integrated source boundary
 
 The founder sub-delta was applied first: founder template, founder-only CSS, approved public WebP, the builder's two founder asset writes, founder-specific test expectations, the dated founder receipt, and Wrangler's exact v4 artifact directory (`founder-profile-hero-20260828-v4`). That sub-delta did not alter homepage, shared header/footer, Worker API, Evidence Brief, analytics, D1, or private pipeline source. The combined worktree now also contains root-owned live-stats/API/analytics edits outside this founder slice; those are not represented as founder changes here.
 
-The dirty root checkout's Wrangler path pointed at v3, while the live receipt
-and matching local artifact are v4. The consolidated builder now writes the
-reviewed founder assets plus the tracked Analytics, API and API-index sources;
-Wrangler points only to the exact v2 candidate above.
+The consolidated builder writes the reviewed founder assets plus the tracked
+Analytics, API and API-index sources. Wrangler points only to the immutable v3
+candidate above. Generated deployment trees remain ignored and uncommitted.
 
 ## Candidate gates
 
@@ -35,14 +32,16 @@ Wrangler points only to the exact v2 candidate above.
 - D1 import dry-run: 2,095 rows read, 224 skipped, 33 deterministic batches.
 - Wrangler asset dry-run: 4,249 uploadable files read.
 - Artifact publication gate: passed with four reviewed public JSONL files.
-- Git publication audit: 30 public-safe files, zero forbidden paths, zero
-  review holds and zero secret findings.
+- Git publication audits: 31-file consolidation plus 7-file correction, both
+  with zero forbidden paths, review holds or secret findings.
 - Browser QA: homepage, founder, Analytics and API passed without horizontal
-  overflow or console errors; built Analytics/API copy was verified from v2.
+  overflow or console errors; final Analytics passed desktop and mobile live.
 - Independent review caught misleading zero-filled historical Analytics in v2.
   V3 restores the verified 2026-07-29 summary totals and removes empty ranking,
   creator, year and latest-record sections; regression tests cover this gate.
-- Pre-deploy public D1 invariant: 2,175 documents, 1,574 distinct videos,
+- Post-deploy public D1 invariant: 2,175 documents, 1,574 distinct videos,
   50 applied projections, 83 projected cards and zero public full transcripts.
-- Current public rollback before this release:
+- Public Worker: `79e3677f-3828-4355-8c59-8801458f0fb2` at 100%; deployment
+  `d315d098-a0ed-4f79-b3da-cda0fd6cb98b`.
+- Safe pre-consolidation rollback:
   `1ad991e4-bc8f-4c34-a8d1-c77723377137`.
