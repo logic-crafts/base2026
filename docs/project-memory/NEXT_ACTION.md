@@ -23,9 +23,13 @@ to the dedicated private-pipeline task with failed-run-only notifications.
 - Keep public Worker `fadc6c25-1d9f-4805-aed2-614e1463a018`, artifact tree
   `9e56f5002e3f684adb639388e701ee8d44405db2a53b7a208a390c80db0b0101`
   and zero-full-transcript invariant unless a verified defect requires change.
-- Measure discovery of `/dataset`, the GitHub release and the live Enigmavista
-  reference before repeating submissions. The Base2026 and Enigmavista
-  IndexNow submissions were already accepted.
+- Measure discovery of `/dataset`, the GitHub release and the live Enigmavista,
+  Dreamwood and Aster references before repeating submissions. Base2026 and
+  Enigmavista IndexNow submissions were already accepted; Dreamwood/Aster use
+  natural sitemap and internal-link discovery.
+- Do not retry Golem production from this Mac until a verified deployment
+  credential is restored. Its code is merged, but both GitHub Actions runs
+  failed before job start and existing local SSH keys were rejected.
 - Prepare free distribution to Hugging Face and Zenodo only after the dataset
   rights/license fields are verified. Treat DEV, Hashnode, Show HN and Product
   Hunt as original editorial launches, not duplicate link drops.

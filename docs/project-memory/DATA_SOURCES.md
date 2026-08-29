@@ -173,6 +173,15 @@ transcripts. The GitHub release `public-data-v2026.08.29` publishes only the
 public catalog JSON; generated data bodies remain runtime artifacts rather than
 Git-tracked source.
 
+Runtime update 2026-08-29 (contextual discovery): Enigmavista, Dreamwood and
+Aster each expose one useful, crawlable page with one branded contextual link
+to Base2026 public evidence. Enigmavista uses `/projects/base2026/` and links to
+the live `/topics/ai-visibility-and-answer-readiness` evidence page; Dreamwood
+and Aster use `/source-transparency/`, link to `/dataset` and are discoverable from
+`/answers/` and `/city-guides/` respectively. All three pages are live and in
+their XML sitemaps. Golem Roofing is code-merged only and remains excluded from
+the live-source count until its production deployment receives a real receipt.
+
 Runtime update 2026-08-29 (private): Worker
 `4d9f291e-0f7e-4795-adb4-e18c5f028d58` restored discovery to 18 active
 creator cursors and one `@webhivedigital` source-review failure. One bounded

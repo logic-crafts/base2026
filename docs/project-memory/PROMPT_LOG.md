@@ -9276,7 +9276,17 @@ Actions and receipts:
 - Enigmavista now publishes a crawlable contextual Base2026 case page, links
   to it internally, includes it in sitemap and received IndexNow HTTP 202.
 
+Follow-up live receipts:
+
+- Dreamwood page `5818` is live at `/source-transparency/`, with one internal
+  discovery link from `/answers/`, one exact `/dataset` link and sitemap entry.
+- Aster page `5167` is live at `/source-transparency/`, with one internal
+  discovery link from `/city-guides/`, one exact `/dataset` link and sitemap
+  entry.
+- Golem PR `#1` merged as `2abd8387`, but production remains unchanged: both
+  GitHub Actions attempts failed before job start and existing local SSH keys
+  were rejected. `/source-transparency/` is still 404, so no Golem backlink or
+  sitemap/indexation completion is claimed.
+
 Limits: no backlink, media placement or subscription was purchased; no PBN,
-sitewide network or paid ranking link was created. Golem Roofing and
-Dreamwood/Aster remain independent coordinated publication tasks until their
-own live receipts arrive.
+sitewide network or paid ranking link was created.
