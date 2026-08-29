@@ -58,7 +58,18 @@ def write_fixture(root: Path) -> None:
     )
     (root / "static" / "documents.jsonl").write_text("{}\n", encoding="utf-8")
     (root / "static" / "passages.jsonl").write_text("{}\n", encoding="utf-8")
-    (root / "static" / "insight_cards.jsonl").write_text("{}\n", encoding="utf-8")
+    (root / "static" / "insight_cards.jsonl").write_text(
+        json.dumps(
+            {
+                "id": "insight:fixture-public",
+                "public": True,
+                "needs_review": False,
+                "public_policy": "reviewed_insight",
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
     (root / "static" / "topic_signal_briefs.jsonl").write_text("{}\n", encoding="utf-8")
     (root / "static" / "manifest.json").write_text(
         json.dumps({"files": ["private.jsonl", "stale.jsonl"]}) + "\n", encoding="utf-8"
@@ -191,6 +202,7 @@ def test_startup_homepage_overlay_preserves_search_as_workspace(tmp_path: Path) 
     assert (output / "privacy.html").is_file()
     assert (output / "about.html").is_file()
     assert (output / "founder.html").is_file()
+    assert (output / "dataset.html").is_file()
     assert (output / "apply-research.html").is_file()
     assert (output / "ai-visibility-resources.html").is_file()
     assert (output / "static" / "base2026-forms.js").is_file()
@@ -231,13 +243,19 @@ def test_startup_homepage_overlay_preserves_search_as_workspace(tmp_path: Path) 
     assert "With me." in founder
     assert 'href="/static/base2026-founder.css?v=20260828-founder-hero-v1"' in founder
     assert 'href="/founder"' in rendered_homepage
+    assert 'href="/dataset"' in rendered_homepage
+    dataset = (output / "dataset.html").read_text(encoding="utf-8")
+    assert '<link rel="canonical" href="https://base2026.dev/dataset">' in dataset
+    assert '"@type":"Dataset"' in dataset
+    assert "https://base2026.dev/static/documents.jsonl" in dataset
+    assert "full private transcripts" in dataset
     assert "Maharani" not in founder
     assert "Primavera" not in founder
     assert receipt["verification"]["personal_site_origin_markers_remaining"] == 0
     assert receipt["replacements"]["html_urls_to_extensionless"] > 0
     assert receipt["verification"]["redirecting_html_canonical_markers_remaining"] == 0
     assert receipt["verification"]["redirecting_html_sitemap_markers_remaining"] == 0
-    assert receipt["artifact"]["file_count"] == 36
+    assert receipt["artifact"]["file_count"] == 37
 
 
 def test_startup_homepage_exposes_product_first_evidence_brief_search() -> None:
@@ -332,6 +350,33 @@ def test_workspace_rewrite_removes_legacy_commercial_handoff() -> None:
     assert "independent public research pilot" in rendered
 
 
+def test_workspace_fallback_counts_come_from_the_static_manifest(tmp_path: Path) -> None:
+    manifest = tmp_path / "manifest.json"
+    manifest.write_text(
+        json.dumps(
+            {
+                "documents": 1525,
+                "chunks": 2095,
+                "creators": 18,
+                "created_at": "2026-07-29T14:27:42",
+            }
+        ),
+        encoding="utf-8",
+    )
+    rendered = builder._rewrite_workspace_html(
+        '<strong data-manifest-count="documents">1,219</strong>'
+        '<strong data-manifest-count="chunks">1,715</strong>'
+        '<strong data-manifest-count="creators">4</strong>',
+        builder._workspace_manifest_counts(manifest),
+        builder._workspace_manifest_snapshot_date(manifest),
+    )
+
+    assert 'data-manifest-count="documents">1,525' in rendered
+    assert 'data-manifest-count="chunks">2,095' in rendered
+    assert 'data-manifest-count="creators">18' in rendered
+    assert "Static snapshot · 2026-07-29" in rendered
+
+
 def test_public_ai_docs_are_rewritten_to_the_base2026_only_contract() -> None:
     root_llms = builder._rewrite_public_api_docs(Path("root-llms.txt"), "legacy")
     llms = builder._rewrite_public_api_docs(Path("llms.txt"), "Base2026 Search workspace")
@@ -346,7 +391,35 @@ def test_public_ai_docs_are_rewritten_to_the_base2026_only_contract() -> None:
         assert "Diagnostic Audit" not in rendered
     assert "Base2026" in root_llms
     assert "Search workspace" in llms
+    assert "https://base2026.dev/dataset" in llms
     assert "independent review question" in api
+
+
+def test_public_insight_export_drops_review_holds_and_rejects_contradictions() -> None:
+    held = {
+        "id": "insight:held",
+        "public": False,
+        "needs_review": True,
+        "public_policy": "needs_review",
+    }
+    public = {
+        "id": "insight:public",
+        "public": True,
+        "needs_review": False,
+        "public_policy": "reviewed_insight",
+    }
+    rendered = builder._rewrite_public_api_docs(
+        Path("static/insight_cards.jsonl"),
+        json.dumps(held) + "\n" + json.dumps(public) + "\n",
+    )
+    assert "insight:held" not in rendered
+    assert "insight:public" in rendered
+
+    contradictory = dict(public, needs_review=True)
+    with pytest.raises(builder.ReleaseBuildError, match="contradictory public row"):
+        builder._rewrite_public_api_docs(
+            Path("static/insight_cards.jsonl"), json.dumps(contradictory) + "\n"
+        )
 
     api_index = builder._rewrite_public_api_docs(
         Path("api-index.json"),

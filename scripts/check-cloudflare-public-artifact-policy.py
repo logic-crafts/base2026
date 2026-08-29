@@ -82,6 +82,19 @@ def count_jsonl(path: Path) -> int:
                 ) from exc
             if not isinstance(value, dict):
                 raise ArtifactGateError(f"{path.name} line {line_number} must be an object")
+            if path.name == "insight_cards.jsonl":
+                if value.get("public") is not True:
+                    raise ArtifactGateError(
+                        f"insight_cards.jsonl line {line_number} is not public"
+                    )
+                if value.get("needs_review") is True:
+                    raise ArtifactGateError(
+                        f"insight_cards.jsonl line {line_number} still needs review"
+                    )
+                if value.get("public_policy") != "reviewed_insight":
+                    raise ArtifactGateError(
+                        f"insight_cards.jsonl line {line_number} has a non-public policy"
+                    )
             count += 1
     if count == 0:
         raise ArtifactGateError(f"{path.name} is empty")
@@ -120,18 +133,27 @@ def validate_artifact(artifact_dir: Path) -> dict[str, Any]:
         raise ArtifactGateError("Cloudflare build receipt has an invalid file count")
 
     file_receipts: list[dict[str, Any]] = []
+    row_counts: dict[str, int] = {}
     for name in sorted(CLOUDFLARE_PUBLIC_DATASET_FILES):
         path = static_dir / name
         if not path.is_file():
             raise ArtifactGateError(f"static manifest file is missing: {name}")
+        rows = count_jsonl(path)
+        row_counts[name] = rows
         file_receipts.append(
             {
                 "name": name,
                 "bytes": path.stat().st_size,
-                "rows": count_jsonl(path),
+                "rows": rows,
                 "sha256": sha256_file(path),
             }
         )
+
+    insight_rows = row_counts["insight_cards.jsonl"]
+    if manifest.get("insight_cards") != insight_rows:
+        raise ArtifactGateError("static manifest insight_cards count does not match file")
+    if manifest.get("public_insight_cards") != insight_rows:
+        raise ArtifactGateError("static manifest public_insight_cards count does not match file")
 
     return {
         "schema": SCHEMA,

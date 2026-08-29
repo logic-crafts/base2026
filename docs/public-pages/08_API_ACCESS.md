@@ -10,6 +10,7 @@ private pipeline state are not part of the public API.
 ## Public entry points
 
 - Human search workspace: `/workspace/`
+- Public dataset landing page: `/dataset`
 - Agent-readable context: `/llms.txt`
 - Public data dictionary: `/data-dictionary.json`
 - Public API index: `/api-index.json`
@@ -27,6 +28,9 @@ private pipeline state are not part of the public API.
 
 Static files are best for reproducible offline analysis. Their manifest date
 must be retained when citing counts.
+
+The public dataset landing page links these distributions to the live D1 layer,
+source policy, machine-readable catalog, and a copy-ready API query.
 
 ## Live search endpoint
 

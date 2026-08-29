@@ -106,9 +106,9 @@ tracking, suppression receipts, and a public change log remain planned.
 
 **Status:** Live foundation, in progress
 
-Public JSONL, data dictionary, API index, `llms.txt`, D1 search API, and GitHub
-source are live. Next: versioned public-safe sample datasets, reproducible query
-examples, release notes, and a read-only MCP contract.
+Public JSONL, dataset landing page, machine-readable catalog, data dictionary,
+API index, `llms.txt`, D1 search API, reproducible query examples, and GitHub
+source are live. Next: dated corpus release notes and a read-only MCP contract.
 
 ## Phase 6 — Sustainable open product
 
@@ -128,7 +128,6 @@ rights, transparent boundaries, and useful free access.
 
 ## Next
 
-- Versioned public-safe dataset sample and API quickstart.
 - Dated corpus changelog and manifest diffs.
 - Better creator/correction workflows.
 - Read-only MCP tools for source, topic, creator, and comparison lookup.

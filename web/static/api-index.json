@@ -24,6 +24,12 @@
       "description": "Human-readable API and AI access documentation."
     },
     {
+      "id": "public_dataset_page",
+      "url": "https://aggressorbulkit.online/knowledge/dataset.html",
+      "format": "html",
+      "description": "Public dataset landing page with distributions, live statistics, source boundaries, and a reproducible query."
+    },
+    {
       "id": "apply_research_page",
       "url": "https://aggressorbulkit.online/knowledge/apply-research.html",
       "format": "html",

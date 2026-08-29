@@ -7,6 +7,7 @@ Built and maintained by solo founder Alex Yarosh.
 - Product: <https://base2026.dev/>
 - Repository: <https://github.com/offflinerpsy/base2026>
 - Search workspace: <https://base2026.dev/workspace/>
+- Public dataset: <https://base2026.dev/dataset>
 - Methodology: <https://base2026.dev/methodology>
 - Public roadmap: <https://base2026.dev/roadmap>
 - Support: <https://base2026.dev/support>
@@ -34,6 +35,24 @@ snapshot contained 2,175 search documents across 1,574 distinct videos, with
 are dated database dimensions, not users, revenue, universal coverage or
 commercial traction. Current totals are available from the read-only
 [`/api/stats`](https://base2026.dev/api/stats) endpoint.
+
+## Public dataset quickstart
+
+Base2026 exposes public source documents, evidence passages, reviewed insight
+cards and topic signal briefs as JSONL. Search the live D1 FTS5 layer without a
+key:
+
+```bash
+curl -sS -X POST https://base2026.dev/api/search/multi-search \
+  -H 'content-type: application/json' \
+  --data '{"queries":[{"indexUid":"base2026_public_tiktok","q":"AI search visibility","limit":5}]}'
+```
+
+See the [dataset landing page](https://base2026.dev/dataset),
+[full quickstart](docs/PUBLIC_DATASET_QUICKSTART.md), and the
+[standard-library Python example](examples/query_public_evidence.py).
+The Apache-2.0 license applies to repository code; creator/source rights remain
+governed by the public source policy.
 
 ## Build reproducibility boundary
 

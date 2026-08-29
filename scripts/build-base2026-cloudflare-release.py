@@ -50,6 +50,7 @@ DEFAULT_PARTNER_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-partner.html"
 DEFAULT_PRIVACY_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-privacy.html"
 DEFAULT_ABOUT_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-about.html"
 DEFAULT_FOUNDER_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-founder.html"
+DEFAULT_DATASET_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-dataset.html"
 DEFAULT_FOUNDER_STYLESHEET = PROJECT_ROOT / "templates" / "base2026-founder.css"
 DEFAULT_FOUNDER_HERO_IMAGE = (
     PROJECT_ROOT / "static" / "assets" / "alex-yarosh-founder-step-wall.webp"
@@ -779,6 +780,7 @@ HUB_SITEMAP_ROUTES = (
     "/methodology",
     "/roadmap",
     "/api",
+    "/dataset",
     "/about",
     "/founder",
     "/privacy",
@@ -795,8 +797,8 @@ HUB_SITEMAP_ROUTES = (
 # Base2026's public product, routes and limits.
 BASE2026_ROOT_LLMS_PAYLOAD = """# Base2026
 
-Base2026 is an independent public source-intelligence project maintained by
-Logic Crafts LLC. It makes attributed short-form expert-video evidence
+Base2026 is an independent open-source public source-intelligence project. It
+makes attributed short-form expert-video evidence
 searchable for research into SEO, GEO, AEO, AI search, local visibility,
 schema, content structure and entity trust.
 
@@ -809,6 +811,7 @@ schema, content structure and entity trust.
 - Methodology: https://base2026.dev/methodology
 - Roadmap: https://base2026.dev/roadmap
 - API and AI access: https://base2026.dev/api
+- Public dataset: https://base2026.dev/dataset
 - Founder and selected work: https://base2026.dev/founder
 - Source policy: https://base2026.dev/source-policy
 - Creator correction or removal: https://base2026.dev/opt-out
@@ -839,6 +842,7 @@ site or a private client workspace.
 - Founder and selected work: https://base2026.dev/founder
 - Apply research: https://base2026.dev/apply-research
 - API and AI access: https://base2026.dev/api
+- Public dataset and quickstart: https://base2026.dev/dataset
 
 ## Public data and use
 
@@ -866,7 +870,34 @@ def _rewrite_public_api_docs(relative_path: Path, text: str) -> str:
         return BASE2026_ROOT_LLMS_PAYLOAD
 
     if path == "llms.txt":
-        return text
+        return BASE2026_LLMS_PAYLOAD
+
+    if path == "static/insight_cards.jsonl":
+        public_rows: list[str] = []
+        for line_number, line in enumerate(text.splitlines(), start=1):
+            if not line.strip():
+                continue
+            try:
+                row = json.loads(line)
+            except json.JSONDecodeError as exc:
+                raise ReleaseBuildError(
+                    f"static/insight_cards.jsonl contains invalid JSON at line {line_number}"
+                ) from exc
+            if not isinstance(row, dict):
+                raise ReleaseBuildError(
+                    f"static/insight_cards.jsonl line {line_number} must be an object"
+                )
+            if row.get("public") is not True:
+                continue
+            if row.get("needs_review") is True or row.get("public_policy") != "reviewed_insight":
+                raise ReleaseBuildError(
+                    "static/insight_cards.jsonl contains a contradictory public row "
+                    f"at line {line_number}"
+                )
+            public_rows.append(json.dumps(row, ensure_ascii=False, sort_keys=True))
+        if not public_rows:
+            raise ReleaseBuildError("static/insight_cards.jsonl has no publishable rows")
+        return "\n".join(public_rows) + "\n"
 
     if path == "static/meili.js":
         return text.replace(
@@ -896,6 +927,9 @@ def _rewrite_public_api_docs(relative_path: Path, text: str) -> str:
             "passages.jsonl",
             "topic_signal_briefs.jsonl",
         ]
+        public_insight_cards = payload.get("public_insight_cards")
+        if isinstance(public_insight_cards, int) and not isinstance(public_insight_cards, bool):
+            payload["insight_cards"] = public_insight_cards
         return json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
 
     if path == "search/index.html":
@@ -1262,7 +1296,48 @@ def _remove_excluded_startup_route_references(text: str, routes: Iterable[str]) 
     return text
 
 
-def _rewrite_workspace_html(text: str) -> str:
+def _workspace_manifest_counts(path: Path) -> dict[str, int]:
+    """Read safe fallback counters from the reviewed static release manifest."""
+
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError):
+        return {}
+    if not isinstance(payload, dict):
+        return {}
+    candidates = {
+        "documents": payload.get("documents", payload.get("source_records")),
+        "chunks": payload.get("chunks", payload.get("passages")),
+        "creators": payload.get("creators"),
+    }
+    return {
+        key: value
+        for key, value in candidates.items()
+        if isinstance(value, int) and not isinstance(value, bool) and value >= 0
+    }
+
+
+def _workspace_manifest_snapshot_date(path: Path) -> str:
+    """Return the YYYY-MM-DD date for a reviewed static release manifest."""
+
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError):
+        return ""
+    if not isinstance(payload, dict):
+        return ""
+    created_at = payload.get("created_at")
+    if not isinstance(created_at, str):
+        return ""
+    match = re.fullmatch(r"(\d{4}-\d{2}-\d{2})(?:T.*)?", created_at.strip())
+    return match.group(1) if match else ""
+
+
+def _rewrite_workspace_html(
+    text: str,
+    manifest_counts: Mapping[str, int] | None = None,
+    manifest_snapshot_date: str = "",
+) -> str:
     """Move the former root search UI to /workspace/ without breaking assets or SEO."""
 
     # A dated public artifact contains one malformed self-closing metadata
@@ -1340,6 +1415,28 @@ def _rewrite_workspace_html(text: str) -> str:
         text = text.replace(f"{quote}static/", f"{quote}/static/")
     text = text.replace('href="./story.html"', 'href="/about.html"')
     text = text.replace("href='./story.html'", "href='/about.html'")
+    for key, value in (manifest_counts or {}).items():
+        text = re.sub(
+            rf'(data-manifest-count="{re.escape(key)}">)[^<]*',
+            rf'\g<1>{value:,}',
+            text,
+        )
+    if manifest_snapshot_date and "workspace-stat-snapshot" not in text:
+        snapshot_markup = (
+            '<p class="workspace-stat-snapshot">Static snapshot · '
+            + manifest_snapshot_date
+            + "</p>"
+        )
+        analytics_link = '<a class="workspace-stat-link" href="./analytics.html">Analytics</a>'
+        if analytics_link in text:
+            text = text.replace(analytics_link, snapshot_markup + analytics_link, 1)
+        else:
+            text = re.sub(
+                r'(<strong data-manifest-count="creators">[^<]*</strong>)',
+                r"\1" + snapshot_markup,
+                text,
+                count=1,
+            )
     return text
 
 
@@ -1643,8 +1740,15 @@ def build_release(
                 raise ReleaseBuildError(
                     "startup overlay requires search.html as the workspace source"
                 )
+            workspace_manifest_path = stage / "static" / "manifest.json"
+            workspace_manifest_counts = _workspace_manifest_counts(workspace_manifest_path)
+            workspace_manifest_snapshot_date = _workspace_manifest_snapshot_date(
+                workspace_manifest_path
+            )
             workspace_html = _rewrite_workspace_html(
-                workspace_source.read_text(encoding="utf-8")
+                workspace_source.read_text(encoding="utf-8"),
+                workspace_manifest_counts,
+                workspace_manifest_snapshot_date,
             ).encode("utf-8")
             homepage_html = _render_startup_page(
                 homepage_template_path.read_text(encoding="utf-8"), startup_header, startup_footer
@@ -1662,7 +1766,9 @@ def build_release(
                     write_generated_public_file(
                         legacy_search_alias,
                         _rewrite_workspace_html(
-                            legacy_alias_path.read_text(encoding="utf-8")
+                            legacy_alias_path.read_text(encoding="utf-8"),
+                            workspace_manifest_counts,
+                            workspace_manifest_snapshot_date,
                         ).encode("utf-8"),
                     )
             write_generated_public_file("index.html", homepage_html)
@@ -1713,6 +1819,14 @@ def build_release(
                 "founder.html",
                 _render_startup_page(
                     DEFAULT_FOUNDER_TEMPLATE.read_text(encoding="utf-8"),
+                    startup_header,
+                    startup_footer,
+                ),
+            )
+            write_generated_public_file(
+                "dataset.html",
+                _render_startup_page(
+                    DEFAULT_DATASET_TEMPLATE.read_text(encoding="utf-8"),
                     startup_header,
                     startup_footer,
                 ),

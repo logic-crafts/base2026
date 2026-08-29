@@ -86,14 +86,14 @@ const roadmapData = {
       lane: "Now",
       status: "Live foundation",
       purpose: "Make public-safe evidence reusable through stable human and machine interfaces.",
-      explanation: "JSONL, a data dictionary, API index, llms.txt, D1 search API and GitHub source are live. Versioned samples, quickstarts and a read-only MCP contract remain in progress.",
+      explanation: "JSONL, the dataset landing page, machine-readable catalog, data dictionary, API index, llms.txt, D1 search API, reproducible samples and GitHub source are live. Dated corpus release notes and a read-only MCP contract remain next.",
       quarter: "Distribution track",
       milestones: [
         { title: "Public JSONL and data dictionary", status: "Live" },
         { title: "Read-only D1 search API", status: "Live" },
         { title: "llms.txt and API index", status: "Live" },
         { title: "GitHub source", status: "Live" },
-        { title: "Versioned samples and quickstarts", status: "In progress" },
+        { title: "Versioned samples and quickstarts", status: "Live" },
         { title: "Read-only MCP contract", status: "Planned" },
       ],
     },
@@ -125,8 +125,9 @@ const roadmapData = {
     ],
     Next: [
       { title: "10–15 source-backed topic evidence maps", status: "In progress" },
-      { title: "Versioned public dataset sample", status: "Planned" },
-      { title: "API quickstart and corpus changelog", status: "Planned" },
+      { title: "Public dataset landing page and catalog", status: "Live" },
+      { title: "API quickstart and query example", status: "Live" },
+      { title: "Dated corpus changelog", status: "Planned" },
       { title: "Creator claim and correction tracking", status: "Planned" },
     ],
     Later: [
