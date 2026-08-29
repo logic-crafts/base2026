@@ -82,6 +82,11 @@ official Player API Browser path, so stable Container readiness and an organic
 Container-fallback proof remain unresolved. Do not loop restarts or weaken
 capture/privacy gates.
 
+Hourly heartbeat `base2026-private-pipeline-hourly-watchdog` remains active in
+the dedicated pipeline task. Its current prompt records the exact Worker and
+Container baseline, checks live D1/R2 first, and forbids another restart for the
+same incident without a real Container-required candidate failure.
+
 ## Boundary
 
 No private pipeline source, media, transcript, provider response, log,

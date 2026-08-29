@@ -4,6 +4,9 @@ Last verified: 2026-08-29
 
 ## Pipeline observation
 
+Active automation: `base2026-private-pipeline-hourly-watchdog`, hourly, attached
+to the dedicated private-pipeline task with failed-run-only notifications.
+
 1. On the next bounded health audit, read signed Worker health and Container
    state once. Do not restart while it is `running` with no active lease or
    explicit error merely to chase contradictory `healthy` telemetry.
