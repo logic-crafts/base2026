@@ -20,8 +20,17 @@ to the dedicated private-pipeline task with failed-run-only notifications.
 
 - Recheck GSC/Bing after indexing/performance processing produces data; do not
   resubmit unchanged sitemaps.
-- Keep public Worker `79e3677f-3828-4355-8c59-8801458f0fb2`, artifact tree
-  `4abe1a4f67ff8e67c81578429f8bb1776a3ea6f9f62a33e1ce81d198ee80d83e`
+- Keep public Worker `fadc6c25-1d9f-4805-aed2-614e1463a018`, artifact tree
+  `9e56f5002e3f684adb639388e701ee8d44405db2a53b7a208a390c80db0b0101`
   and zero-full-transcript invariant unless a verified defect requires change.
+- Measure discovery of `/dataset`, the GitHub release and the live Enigmavista
+  reference before repeating submissions. The Base2026 and Enigmavista
+  IndexNow submissions were already accepted.
+- Prepare free distribution to Hugging Face and Zenodo only after the dataset
+  rights/license fields are verified. Treat DEV, Hashnode, Show HN and Product
+  Hunt as original editorial launches, not duplicate link drops.
+- Do not buy ranking links. Any paid newsletter or publisher test requires an
+  explicit budget decision and must be purchased for relevant referral reach
+  with `rel="sponsored"` or `nofollow`.
 - Audit historical dirty worktrees individually before removal; never bulk
   clean, reset, merge or delete them.

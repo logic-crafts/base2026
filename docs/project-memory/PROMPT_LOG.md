@@ -9250,3 +9250,33 @@ Limits: the generated artifact and browser receipts remain ignored; no private
 pipeline source, media, transcripts, logs, credentials or CV files enter the
 public release. Exact GitHub, Worker, rollback and live receipts are recorded in
 `BASE2026_PUBLIC_CONSOLIDATION_RELEASE_2026_08_29.md`.
+
+## 2026-08-29 — Reviewed public dataset and earned-link launch
+
+Prompt: turn Base2026 into a crawlable, reusable public data product; find
+legitimate backlink/distribution surfaces; use owner-controlled domains only
+for useful contextual references; commit, push, merge, deploy and verify the
+result without leaking private review holds.
+
+Actions and receipts:
+
+- Added `/dataset`, public quickstart, query example and versioned catalog;
+  aligned API, roadmap, header/footer, sitemap and `llms.txt` discovery.
+- Independent review found 524 non-public/`needs_review` insight rows in the
+  legacy static file. The builder and artifact gate now ship only 1,939
+  reviewed public rows and fail closed on contradictory policy state.
+- Passed 21 Python tests, 44 Worker tests, typecheck, deterministic D1 import,
+  Wrangler dry-run, artifact-policy audit and desktop/mobile browser QA.
+- PR #23 merged as `f900055333e27f06e4f864ba4695636f8cc3bc7e`;
+  GitHub release `public-data-v2026.08.29` publishes the public catalog.
+- Public Worker `fadc6c25-1d9f-4805-aed2-614e1463a018` serves artifact tree
+  `9e56f5002e3f684adb639388e701ee8d44405db2a53b7a208a390c80db0b0101`.
+  `/dataset` is 200, self-canonical, index/follow and Dataset JSON-LD enabled.
+- Submitted exactly `/dataset` through IndexNow and received HTTP 200.
+- Enigmavista now publishes a crawlable contextual Base2026 case page, links
+  to it internally, includes it in sitemap and received IndexNow HTTP 202.
+
+Limits: no backlink, media placement or subscription was purchased; no PBN,
+sitewide network or paid ranking link was created. Golem Roofing and
+Dreamwood/Aster remain independent coordinated publication tasks until their
+own live receipts arrive.
