@@ -213,6 +213,7 @@ PUBLIC_SAFE_EXACT = {
     "tests/test_base2026_homepage_motion.py",
     "tests/test_base2026_live_stats.py",
     "tests/test_base2026_public_dataset.py",
+    "tests/test_base2026_journal_article.py",
     "tests/test_cloudflare_public_artifact_policy.py",
     "tests/test_base2026_design_authority.py",
     "tests/test_check_public_content_readiness.py",

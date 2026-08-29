@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>How I Built Source-Backed Expert-Video Search on Cloudflare — Base2026</title>
+  <meta name="description" content="How Alex Yarosh built Base2026 as source-backed expert-video search using Cloudflare Workers, D1 FTS5, R2, Queues, Workflows and strict publication boundaries.">
+  <meta name="author" content="Alex Yarosh">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href="https://base2026.dev/journal/source-backed-video-search-cloudflare/">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Base2026">
+  <meta property="og:title" content="How I Built Source-Backed Expert-Video Search on Cloudflare">
+  <meta property="og:description" content="A solo-founder architecture for turning public expert video into attributable, searchable evidence without publishing raw transcripts.">
+  <meta property="og:url" content="https://base2026.dev/journal/source-backed-video-search-cloudflare/">
+  <meta property="article:published_time" content="2026-08-29">
+  <meta property="article:modified_time" content="2026-08-29">
+  <meta property="article:author" content="Alex Yarosh">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="How I Built Source-Backed Expert-Video Search on Cloudflare">
+  <meta name="twitter:description" content="The architecture, evidence boundary and release discipline behind Base2026.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600;700&amp;family=Manrope:wght@400;500;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    .b26-journal{width:min(1160px,calc(100% - 28px));margin:0 auto;padding:72px 0 104px}.b26-journal a{color:var(--b26-accent);font-weight:700}.b26-journal__hero{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(320px,.8fr);gap:54px;align-items:end;padding:44px 0 58px;border-bottom:1px solid var(--b26-line)}.b26-journal__meta{display:flex;flex-wrap:wrap;gap:9px 18px;margin:0 0 24px;color:var(--b26-muted);font-family:"Geist Mono",monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase}.b26-journal h1{max-width:820px;margin:0;font-size:clamp(45px,6.8vw,82px);line-height:.98;letter-spacing:-.057em}.b26-journal__lede{max-width:760px;margin:25px 0 0;color:var(--b26-muted);font-size:19px;line-height:1.68}.b26-journal__system{position:relative;overflow:hidden;padding:26px;border:1px solid #1d315d;border-radius:18px;background:#091633;color:#e8efff;box-shadow:0 26px 70px rgba(20,41,83,.16)}.b26-journal__system:before{position:absolute;inset:0;background:radial-gradient(circle at 78% 8%,rgba(49,94,234,.38),transparent 40%);content:"";pointer-events:none}.b26-journal__system>*{position:relative}.b26-journal__system-label{display:flex;align-items:center;gap:9px;margin-bottom:22px;font-family:"Geist Mono",monospace;font-size:11px;text-transform:uppercase;letter-spacing:.1em}.b26-journal__system-label i{width:8px;height:8px;border-radius:50%;background:#5df0a6;box-shadow:0 0 0 5px rgba(93,240,166,.12)}.b26-journal__flow{display:grid;gap:9px}.b26-journal__flow div{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:13px 14px;border:1px solid rgba(215,228,255,.14);border-radius:9px;background:rgba(255,255,255,.045);font-size:13px}.b26-journal__flow span{color:#aab9dd;font-family:"Geist Mono",monospace;font-size:10px;text-transform:uppercase}.b26-journal__flow b{color:#6d91ff;font-weight:500}.b26-journal__layout{display:grid;grid-template-columns:230px minmax(0,720px);gap:68px;justify-content:center;margin-top:64px}.b26-journal__rail{align-self:start;position:sticky;top:105px}.b26-journal__rail p{margin:0 0 16px;color:var(--b26-muted);font-family:"Geist Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase}.b26-journal__rail a{display:block;padding:8px 0;border-bottom:1px solid var(--b26-line);color:var(--b26-muted);font-size:12px;text-decoration:none}.b26-journal__rail a:hover{color:var(--b26-accent)}.b26-journal__body section{scroll-margin-top:110px}.b26-journal__body section+section{margin-top:62px}.b26-journal__body h2{margin:0 0 20px;color:var(--b26-ink);font-size:clamp(29px,4vw,42px);line-height:1.08;letter-spacing:-.04em}.b26-journal__body h3{margin:30px 0 12px;font-size:20px}.b26-journal__body p,.b26-journal__body li{color:#45526a;font-size:17px;line-height:1.83}.b26-journal__body p{margin:0 0 21px}.b26-journal__body ul{margin:22px 0;padding-left:24px}.b26-journal__body li+li{margin-top:10px}.b26-journal__body strong{color:var(--b26-ink)}.b26-journal__pull{margin:38px 0;padding:7px 0 7px 26px;border-left:4px solid var(--b26-accent);color:var(--b26-ink)!important;font-size:clamp(23px,3vw,30px)!important;font-weight:800;line-height:1.32!important;letter-spacing:-.025em}.b26-journal__stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;margin:32px 0;border:1px solid var(--b26-line);background:var(--b26-line)}.b26-journal__stats div{padding:22px;background:var(--b26-surface)}.b26-journal__stats strong{display:block;font-family:"Geist Mono",monospace;font-size:29px}.b26-journal__stats span{display:block;margin-top:7px;color:var(--b26-muted);font-size:12px;line-height:1.5}.b26-journal__boundary{margin:30px 0;padding:27px;border:1px solid var(--b26-line);border-radius:14px;background:var(--b26-muted-surface)}.b26-journal__boundary h3{margin-top:0}.b26-journal__boundary ul{margin-bottom:0}.b26-journal__code{overflow:auto;margin:28px 0;padding:22px;border:1px solid #1e3158;border-radius:14px;background:#0a1733;color:#dfe8ff}.b26-journal__code pre{margin:0;font-family:"Geist Mono",monospace;font-size:12px;line-height:1.75;white-space:pre}.b26-journal__cta{margin-top:72px;padding:34px;border:1px solid var(--b26-line);border-radius:18px;background:linear-gradient(120deg,#edf2ff 0%,#fff 72%)}.b26-journal__cta h2{max-width:560px}.b26-journal__cta p{max-width:620px}.b26-journal__actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:25px}.b26-journal__actions a{display:inline-flex;align-items:center;min-height:46px;padding:0 18px;border:1px solid var(--b26-line);border-radius:10px;color:var(--b26-ink);text-decoration:none}.b26-journal__actions a:first-child{border-color:var(--b26-ink);background:var(--b26-ink);color:#fff}.b26-journal__actions a:hover{border-color:var(--b26-accent);color:var(--b26-accent)}.b26-journal__actions a:first-child:hover{background:var(--b26-accent);color:#fff}.b26-journal__author{display:flex;gap:15px;align-items:center;margin-top:48px;padding-top:25px;border-top:1px solid var(--b26-line)}.b26-journal__author-mark{display:grid;width:44px;height:44px;border-radius:50%;background:var(--b26-ink);color:#fff;font-family:"Geist Mono",monospace;font-size:12px;place-items:center}.b26-journal__author p{margin:0;color:var(--b26-muted);font-size:13px;line-height:1.5}.b26-journal__author strong{display:block;color:var(--b26-ink);font-size:14px}@media(max-width:880px){.b26-journal{padding-top:42px}.b26-journal__hero{grid-template-columns:1fr;gap:36px}.b26-journal__system{max-width:620px}.b26-journal__layout{grid-template-columns:1fr;margin-top:48px}.b26-journal__rail{display:none}}@media(max-width:520px){.b26-journal h1{font-size:43px}.b26-journal__hero{padding-top:24px}.b26-journal__system{padding:20px}.b26-journal__flow div{display:block}.b26-journal__flow span{display:block;margin-top:6px}.b26-journal__body p,.b26-journal__body li{font-size:16px}.b26-journal__stats{grid-template-columns:1fr}.b26-journal__cta{padding:25px}.b26-journal__actions a{width:100%;justify-content:center}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}}
+  </style>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@graph":[{"@type":"TechArticle","@id":"https://base2026.dev/journal/source-backed-video-search-cloudflare/#article","headline":"How I Built Source-Backed Expert-Video Search on Cloudflare","description":"A solo-founder architecture for turning public expert video into attributable, searchable evidence without publishing raw transcripts.","url":"https://base2026.dev/journal/source-backed-video-search-cloudflare/","mainEntityOfPage":"https://base2026.dev/journal/source-backed-video-search-cloudflare/","datePublished":"2026-08-29","dateModified":"2026-08-29","inLanguage":"en","isAccessibleForFree":true,"author":{"@type":"Person","name":"Alex Yarosh","url":"https://base2026.dev/founder"},"publisher":{"@type":"Organization","name":"Base2026","url":"https://base2026.dev/"},"about":["Cloudflare Workers","Cloudflare D1","expert video search","source-backed evidence","open source"],"keywords":["Cloudflare Workers","D1 FTS5","expert video search","source-backed research","open source search"]},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Base2026","item":"https://base2026.dev/"},{"@type":"ListItem","position":2,"name":"Build journal","item":"https://base2026.dev/journal/source-backed-video-search-cloudflare/"}]}]}
+  </script>
+</head>
+<body class="b26-form-page">
+  {{STARTUP_HEADER}}
+  <main class="b26-journal">
+    <header class="b26-journal__hero">
+      <div>
+        <p class="b26-journal__meta"><span>Build journal 001</span><span>Alex Yarosh</span><time datetime="2026-08-29">August 29, 2026</time><span>8 min read</span></p>
+        <h1>How I built source-backed expert-video search on Cloudflare.</h1>
+        <p class="b26-journal__lede">A solo-founder architecture for turning public short-form expert knowledge into attributable, searchable records—without publishing raw transcripts or asking a model to invent the answer.</p>
+      </div>
+      <aside class="b26-journal__system" aria-label="Base2026 public system overview">
+        <div class="b26-journal__system-label"><i aria-hidden="true"></i>Public evidence path · live</div>
+        <div class="b26-journal__flow">
+          <div>Reviewed source material <span>private boundary</span></div>
+          <div>Sanitized evidence cards <span><b>policy gate</b></span></div>
+          <div>Cloudflare D1 + FTS5 <span>public search</span></div>
+          <div>Worker + Static Assets <span>pages · API · JSONL</span></div>
+        </div>
+      </aside>
+    </header>
+
+    <div class="b26-journal__layout">
+      <nav class="b26-journal__rail" aria-label="Article sections">
+        <p>In this article</p>
+        <a href="#problem">The problem</a>
+        <a href="#architecture">The architecture</a>
+        <a href="#boundary">The boundary</a>
+        <a href="#determinism">Deterministic retrieval</a>
+        <a href="#numbers">Numbers with provenance</a>
+        <a href="#release">Open-source release</a>
+        <a href="#next">What comes next</a>
+      </nav>
+
+      <article class="b26-journal__body">
+        <section id="problem">
+          <p class="b26-eyebrow">01 · The problem</p>
+          <h2>A feed is not a citation system.</h2>
+          <p>Useful SEO and AI-search knowledge often lives inside short-form video. Discovering a clip is easy. Remembering who said what, comparing it with another practitioner, and giving a teammate a source they can inspect is not.</p>
+          <p>I built Base2026 around a narrower question: <strong>what did practitioners actually say about this topic?</strong> A useful result should retain the creator, a bounded excerpt, its context, the Base2026 record and the original source. If the corpus cannot support a responsible answer, “not enough evidence” is a valid result.</p>
+          <p class="b26-journal__pull">I did not want another answer engine. I wanted an evidence path a person could inspect, challenge and revisit.</p>
+          <p>The indexed sample is not the whole industry, and Base2026 does not present it as consensus. That limitation is part of the product, not a footnote.</p>
+        </section>
+
+        <section id="architecture">
+          <p class="b26-eyebrow">02 · The architecture</p>
+          <h2>Keep the public path small. Keep the source trail intact.</h2>
+          <p>The public request, search and delivery path runs on Cloudflare. Workers handles routes and API requests. D1 stores the public evidence and powers FTS5 search. Workers Static Assets serves the HTML, CSS, JavaScript and versioned public data files.</p>
+          <p>The cloud intake path is deliberately separate. D1 and R2 hold bounded private state and media, Queues and Workflows coordinate retries, and Workers AI supports transcription. Identities, validation and receipts stop a retry from silently turning into a different public record.</p>
+          <div class="b26-journal__code" aria-label="Base2026 architecture flow"><pre>public discovery
+  → private D1 / R2 intake and dedupe
+  → queued capture and transcription
+  → evidence validation and review state
+  → policy-bound excerpt projection
+  → public D1 FTS5
+  → Worker pages, search API and JSONL</pre></div>
+          <p>Public search itself does not need a live model call for every visitor query. A request reaches the Worker, the Worker reads the public D1 layer or serves a static asset, and the visitor can open a stable evidence page or the original source.</p>
+        </section>
+
+        <section id="boundary">
+          <p class="b26-eyebrow">03 · The boundary</p>
+          <h2>What the system refuses to publish matters.</h2>
+          <p>Base2026 exposes reviewed public records, bounded evidence and source links. It is not a mirror of TikTok and not a transcript dump. The public/private split is architectural, operational and editorial at the same time.</p>
+          <aside class="b26-journal__boundary">
+            <h3>The public release excludes:</h3>
+            <ul>
+              <li>raw media, raw captions and raw ASR;</li>
+              <li>full private transcripts and private review packets;</li>
+              <li>credentials, logs, client material and lead data;</li>
+              <li>unreviewed or policy-ineligible model output.</li>
+            </ul>
+          </aside>
+          <p>People should be able to inspect the evidence and return to the creator, while private source material stays private. Correction and removal paths are public product features for the same reason.</p>
+        </section>
+
+        <section id="determinism">
+          <p class="b26-eyebrow">04 · Retrieval</p>
+          <h2>Make reproducibility the goal.</h2>
+          <p>The product direction is deterministic retrieval. For a fixed question, filter set, corpus version and ranking version, I want the result to be explainable and reproducible. That is a different goal from generating the smoothest possible paragraph.</p>
+          <p>Evidence Brief V1 and V2 are live deterministic retrieval endpoints today: attributable findings, bounded excerpts, original-source links, coverage and ranking receipts. What I am not claiming is a free-form generative synthesis layer that invents conclusions beyond the public corpus.</p>
+          <p>The current capabilities are D1 FTS5 search, stable public source pages, attribution, the <a href="/api">read-only Evidence Brief API</a>, public JSONL files, documented methodology, and correction or removal paths.</p>
+        </section>
+
+        <section id="numbers">
+          <p class="b26-eyebrow">05 · Provenance</p>
+          <h2>Numbers only matter when you say which layer they describe.</h2>
+          <p>The verified August 29 public readback recorded:</p>
+          <div class="b26-journal__stats" aria-label="Verified Base2026 public dataset dimensions">
+            <div><strong>2,175</strong><span>public search documents</span></div>
+            <div><strong>1,574</strong><span>distinct source videos</span></div>
+            <div><strong>50</strong><span>dynamic evidence routes</span></div>
+            <div><strong>0</strong><span>full transcripts published</span></div>
+          </div>
+          <p>The versioned static artifact contains 1,939 reviewed public insight cards. That is a different layer from the 83 projection cards recorded in live D1. An independent review found that an earlier static file mixed those 1,939 reviewed rows with 524 non-public or <code>needs_review</code> rows. The corrected release contains only the reviewed public set, and its builder rejects a non-public, review-held or wrong-policy row before it can ship.</p>
+          <p>The zero-full-transcript rule is as important as the larger numbers. The public layer can preserve claims, bounded excerpts, topics, time ranges, attribution and original links without becoming an archive of every underlying source text.</p>
+        </section>
+
+        <section id="release">
+          <p class="b26-eyebrow">06 · Release discipline</p>
+          <h2>Open source is a release contract, not a badge.</h2>
+          <p>The public-safe code lives in the <a href="https://github.com/offflinerpsy/base2026" target="_blank" rel="noopener noreferrer">Base2026 GitHub repository</a>. The August 29 dataset shipped through a reviewed pull request and a versioned release.</p>
+          <p>Before deployment, the release suite checked the generated pages, Worker behavior, TypeScript types, deterministic D1 import, Static Assets upload, forbidden paths, review holds and secret patterns. Desktop and mobile browser QA then checked overflow, console errors and broken requests. The live dataset page was read back for its canonical, indexability, heading and Dataset structured data.</p>
+          <p>Those checks answer unglamorous but essential questions: did only the intended rows cross the boundary? Did the bundle contain anything it should not? Does the page work on a phone? Can another person inspect what the dataset contains?</p>
+          <p>The public core is free to use and read-only. I do not describe the entire operation as cost-free: infrastructure, processing, review and maintenance still consume resources. Cloudflare makes a compact edge architecture possible; release discipline is what makes that architecture credible.</p>
+        </section>
+
+        <section id="next">
+          <p class="b26-eyebrow">07 · What comes next</p>
+          <h2>Dependable for one job beats omniscient in a demo.</h2>
+          <p>The next step is to keep improving deterministic retrieval and turn the Evidence Brief contract into a verified product experience only when its latency, attribution and quality gates are real. Coverage and limits should remain visible. Original sources should remain one click away. “Not enough evidence” should remain possible.</p>
+          <p>That is the larger lesson I am taking from building Base2026: infrastructure, data policy and publishing discipline are not separate chores. Together, they shape the product a user can trust.</p>
+        </section>
+
+        <section class="b26-journal__cta" aria-labelledby="journal-cta-title">
+          <p class="b26-eyebrow">Inspect, do not take my word for it</p>
+          <h2 id="journal-cta-title">Search the evidence or query the public data.</h2>
+          <p>If you work on SEO, GEO, AEO or AI-search research, inspect the current public surface. I would value a concrete critique of the evidence boundary or its failure modes.</p>
+          <div class="b26-journal__actions"><a href="/dataset">Open the public dataset</a><a href="/workspace/?q=AI%20search%20visibility">Search the workspace</a></div>
+        </section>
+
+        <footer class="b26-journal__author">
+          <span class="b26-journal__author-mark" aria-hidden="true">AY</span>
+          <p><strong>Alex Yarosh</strong>Solo founder and product engineer building Base2026.</p>
+        </footer>
+      </article>
+    </div>
+  </main>
+  {{STARTUP_FOOTER}}
+</body>
+</html>
