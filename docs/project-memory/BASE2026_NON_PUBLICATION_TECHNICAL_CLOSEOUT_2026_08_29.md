@@ -76,6 +76,14 @@ Exact aggregate receipts:
 The candidate directory and policy receipt remain temporary verification
 artifacts outside Git. They are not deployment authorization.
 
+## GitHub closeout
+
+- Source commit: `67be027f6`.
+- Reviewed pull request: `https://github.com/offflinerpsy/base2026/pull/28`.
+- Independent reviewer verdict: GO for commit/push; no deploy or publication.
+- The PR changes source and public-safe documentation only. Production remains
+  on the live Worker/artifact identifiers in the readback above.
+
 ## Growth preparation and real holds
 
 `BASE2026_NON_PUBLICATION_GROWTH_PACK_2026_08_29.md` contains local-only copy

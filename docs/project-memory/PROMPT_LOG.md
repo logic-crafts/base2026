@@ -9338,6 +9338,8 @@ Actions and receipts:
   deterministic 2,095-row import dry-run, explicit-assets Wrangler dry-run,
   artifact policy and Git publication audit with zero forbidden, review-hold or
   secret findings. Independent closeout review returned GO for commit/push.
+- Source commit `67be027f6` opened reviewed PR #28 in the canonical public
+  repository; the PR itself contains no deployment or external publication.
 
 Limits: no Worker deploy, D1/R2 write, indexing request, account creation,
 dataset upload, social/editorial publication or other public-site mutation was
