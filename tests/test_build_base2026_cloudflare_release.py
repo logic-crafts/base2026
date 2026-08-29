@@ -203,6 +203,7 @@ def test_startup_homepage_overlay_preserves_search_as_workspace(tmp_path: Path) 
     assert (output / "about.html").is_file()
     assert (output / "founder.html").is_file()
     assert (output / "dataset.html").is_file()
+    assert (output / "journal" / "source-backed-video-search-cloudflare" / "index.html").is_file()
     assert (output / "apply-research.html").is_file()
     assert (output / "ai-visibility-resources.html").is_file()
     assert (output / "static" / "base2026-forms.js").is_file()
@@ -249,13 +250,24 @@ def test_startup_homepage_overlay_preserves_search_as_workspace(tmp_path: Path) 
     assert '"@type":"Dataset"' in dataset
     assert "https://base2026.dev/static/documents.jsonl" in dataset
     assert "full private transcripts" in dataset
+    journal = (
+        output / "journal" / "source-backed-video-search-cloudflare" / "index.html"
+    ).read_text(encoding="utf-8")
+    assert '<link rel="canonical" href="https://base2026.dev/journal/source-backed-video-search-cloudflare/">' in journal
+    assert '"@type":"TechArticle"' in journal
+    assert "Alex Yarosh" in journal
+    assert "raw media, raw captions and raw ASR" in journal
+    assert "works entirely for free" not in journal
+    assert "https://base2026.dev/journal/source-backed-video-search-cloudflare/" in (
+        output / builder.HUB_SITEMAP_FILENAME
+    ).read_text(encoding="utf-8")
     assert "Maharani" not in founder
     assert "Primavera" not in founder
     assert receipt["verification"]["personal_site_origin_markers_remaining"] == 0
     assert receipt["replacements"]["html_urls_to_extensionless"] > 0
     assert receipt["verification"]["redirecting_html_canonical_markers_remaining"] == 0
     assert receipt["verification"]["redirecting_html_sitemap_markers_remaining"] == 0
-    assert receipt["artifact"]["file_count"] == 37
+    assert receipt["artifact"]["file_count"] == 38
 
 
 def test_startup_homepage_exposes_product_first_evidence_brief_search() -> None:

@@ -51,6 +51,9 @@ DEFAULT_PRIVACY_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-privacy.html"
 DEFAULT_ABOUT_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-about.html"
 DEFAULT_FOUNDER_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-founder.html"
 DEFAULT_DATASET_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-dataset.html"
+DEFAULT_JOURNAL_CLOUDFLARE_TEMPLATE = (
+    PROJECT_ROOT / "templates" / "base2026-journal-cloudflare.html"
+)
 DEFAULT_FOUNDER_STYLESHEET = PROJECT_ROOT / "templates" / "base2026-founder.css"
 DEFAULT_FOUNDER_HERO_IMAGE = (
     PROJECT_ROOT / "static" / "assets" / "alex-yarosh-founder-step-wall.webp"
@@ -790,6 +793,7 @@ HUB_SITEMAP_ROUTES = (
     "/solutions/",
     "/ai-visibility-resources",
     "/site-structure",
+    "/journal/source-backed-video-search-cloudflare/",
 )
 
 # These are generated at the publication boundary rather than inherited from
@@ -812,6 +816,7 @@ schema, content structure and entity trust.
 - Roadmap: https://base2026.dev/roadmap
 - API and AI access: https://base2026.dev/api
 - Public dataset: https://base2026.dev/dataset
+- Build journal: https://base2026.dev/journal/source-backed-video-search-cloudflare/
 - Founder and selected work: https://base2026.dev/founder
 - Source policy: https://base2026.dev/source-policy
 - Creator correction or removal: https://base2026.dev/opt-out
@@ -843,6 +848,7 @@ site or a private client workspace.
 - Apply research: https://base2026.dev/apply-research
 - API and AI access: https://base2026.dev/api
 - Public dataset and quickstart: https://base2026.dev/dataset
+- Build journal: https://base2026.dev/journal/source-backed-video-search-cloudflare/
 
 ## Public data and use
 
@@ -1827,6 +1833,14 @@ def build_release(
                 "dataset.html",
                 _render_startup_page(
                     DEFAULT_DATASET_TEMPLATE.read_text(encoding="utf-8"),
+                    startup_header,
+                    startup_footer,
+                ),
+            )
+            write_generated_public_file(
+                "journal/source-backed-video-search-cloudflare/index.html",
+                _render_startup_page(
+                    DEFAULT_JOURNAL_CLOUDFLARE_TEMPLATE.read_text(encoding="utf-8"),
                     startup_header,
                     startup_footer,
                 ),
