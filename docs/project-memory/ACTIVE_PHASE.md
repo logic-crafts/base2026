@@ -13,8 +13,9 @@ Post-release operational observation and public dataset distribution.
 2. Keep `@webhivedigital` in source review until discovery returns an exact
    current video link; do not force admission.
 3. Recheck Google Search Console and Bing only after processing data appears.
-4. Observe discovery and referral evidence for `/dataset`, the GitHub release
-   and contextual owned-domain references before repeating submissions.
+4. Observe discovery and referral evidence for `/dataset`, the GitHub release,
+   contextual owned-domain references, Medium, X and LinkedIn before repeating
+   the same submission.
 5. Preserve the exact public release and privacy invariants; make no further
    homepage/founder changes without a concrete defect or owner-selected scope.
 

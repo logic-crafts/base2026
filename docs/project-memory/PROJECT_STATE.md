@@ -9,10 +9,14 @@ research engine. Workers Static Assets and public D1 FTS5 serve the product;
 a separate private Cloudflare Worker, D1, R2, Queues, Workflows, Workers AI,
 Browser Rendering and restricted Container run cloud-only intake.
 
-The public product and exact Git source are synchronized through PRs #19 and
-#20. Live statistics, Evidence Brief V1/V2, founder page, API documentation,
-Analytics and both sitemaps pass production readback. The public privacy
-invariant remains zero full transcripts.
+The public product and exact Git source are synchronized through PR #26. Live
+statistics, Evidence Brief V1/V2, founder page, API documentation, Analytics,
+both sitemaps and the first engineering journal article pass production
+readback. The public privacy invariant remains zero full transcripts.
+
+The journal article is also live on Medium with a canonical back to Base2026,
+and adapted launch posts are live on X and LinkedIn. These are free editorial
+distribution receipts, not paid ranking links.
 
 Private creator discovery recovered from 7 active / 12 failed cursors to 18
 active / 1 source-review failure. One private media canary completed, but the

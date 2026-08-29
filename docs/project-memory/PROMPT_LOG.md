@@ -1,5 +1,24 @@
 # Prompt Log
 
+## 2026-08-29 — Free editorial syndication to Medium, X and LinkedIn
+
+Owner published the prepared Medium import and explicitly authorized the
+operator to finish the current X/LinkedIn launch and handle future reviewed
+Base2026 editorial publish clicks without a separate preview.
+
+Actions and receipts:
+
+- Verified the live Medium article is `index,follow` and canonicals to the
+  Base2026 journal URL.
+- Published and live-read the adapted X post at
+  `https://x.com/AleksejAros/status/2093786744286024103`.
+- Published and live-read the adapted LinkedIn post at
+  `https://www.linkedin.com/feed/update/urn:li:share:7499552919294312448/`.
+- Used the canonical Base2026 article URL on both social surfaces. No paid
+  placement, DM, reply, comment or bulk outreach occurred.
+- Recorded exact release and distribution evidence in
+  `BASE2026_EDITORIAL_SYNDICATION_RECEIPT_2026_08_29.md`.
+
 ## 2026-08-28 — Evidence Brief V2, homepage motion and personal GitHub release
 
 Owner requested a coordinated homepage polish without disturbing the parallel
