@@ -15,10 +15,10 @@ public-before-private deployment order in the canonical manual.
 Current Workers Static Assets release:
 
 - Domain: `https://base2026.dev/`
-- Public Worker: `35a2ee9e-1d95-45c4-b971-26f19183d732`
-- Immediate rollback: `dcbeb2e9-27af-4d45-b510-fdaaea055f4a`
+- Public Worker: `3e06c10b-9fa4-40aa-ad14-913a11b85f30`
+- Immediate rollback: `fadc6c25-1d9f-4805-aed2-614e1463a018`
 - Artifact tree SHA-256:
-  `af3641c48f0ff59a7686c623835c07fab39b7b0e5908f6a9d12290cb8e212a52`
+  `e04bc4be2b46a29de89fd7f59bf4e845ef686d3d9036b28f5439c6a8908a011c`
 - Canonical source repository: `https://github.com/offflinerpsy/base2026`
 
 Legacy VPS rollback path:

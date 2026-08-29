@@ -5,31 +5,43 @@ Last verified: 2026-08-29
 ## Resume state
 
 - Read [`CURRENT_STATUS.md`](CURRENT_STATUS.md) first.
-- Public release receipt:
-  [`BASE2026_PUBLIC_CONSOLIDATION_RELEASE_2026_08_29.md`](BASE2026_PUBLIC_CONSOLIDATION_RELEASE_2026_08_29.md).
-- Public code merged through PRs #19 and #20; production code merge is
-  `f06a27aa2261704aa566837405a5ed623ef1ad83`.
-- Private pipeline worktree: `/Users/alexyarosh/.codex/worktrees/d187/base2026`.
+- Public source before this closeout is merged through PR #27 on canonical repository
+  `https://github.com/offflinerpsy/base2026`.
+- Reviewed non-publication closeout source is PR #28 from
+  `codex/base2026-seo-geo-closeout-20260829`; it carries no deployment or
+  external-publication action.
+- Current non-publication closeout branch/worktree:
+  `codex/base2026-seo-geo-closeout-20260829` at
+  `/Users/alexyarosh/Projects/base2026-migration/DW/.worktrees/base2026-growth-20260829`.
 - Original coordinator checkout and historical worktrees are dirty/protected;
   do not stage or clean them.
 
 ## Live state
 
-- Public Worker `79e3677f-3828-4355-8c59-8801458f0fb2` serves exact v3 artifact
-  tree `4abe1a4f67ff8e67c81578429f8bb1776a3ea6f9f62a33e1ce81d198ee80d83e`.
-- Private Worker `4d9f291e-0f7e-4795-adb4-e18c5f028d58` restored creator discovery to
-  18 active cursors and one source-review failure.
-- Remaining blocker is unstable Container health telemetry, not a public-site,
-  D1/R2, scheduler or privacy-boundary failure.
+- Public Worker `3e06c10b-9fa4-40aa-ad14-913a11b85f30` serves artifact tree
+  `e04bc4be2b46a29de89fd7f59bf4e845ef686d3d9036b28f5439c6a8908a011c`.
+- Private Worker v0.6.2 `14adacb6-7f0f-4aa7-9131-fc41469eec15` has no
+  stale/dead jobs. D1 and R2 agree on 318 stored media objects; automatic
+  publication has zero eligible backlog.
+- Public D1 reports 2,175 documents, 1,574 videos, 50 projections, 83 cards and
+  zero public full transcripts.
+- GSC has an early baseline of 22 impressions, zero clicks and average
+  position 55.4. Bing performance is still preparing.
+- Exact readbacks:
+  [`BASE2026_PIPELINE_READBACK_2026_08_29_R2.md`](BASE2026_PIPELINE_READBACK_2026_08_29_R2.md)
+  and
+  [`BASE2026_GSC_BING_READBACK_2026_08_29_R2.md`](BASE2026_GSC_BING_READBACK_2026_08_29_R2.md).
 
 ## Exact next action
 
-Follow [`NEXT_ACTION.md`](NEXT_ACTION.md): observe Container readiness once,
-wait for an organic Container-required candidate, review `@webhivedigital`,
-and recheck GSC/Bing after processing. Do not loop restarts or redesign the
-public product without new evidence.
+Merge reviewed PR #28 after its GitHub checks. Do not deploy or create another
+external publication in this task. After a future deployment is authorized,
+verify sitemap membership, Worker headers/cache behavior, API-index workspace
+routing and the regenerated roadmap before requesting any indexing action.
 
 ## Protected boundaries
 
 No bulk worktree cleanup, broad transcript release, ChatGPT Web automation,
-private source publication, or combined public/private Worker mutation.
+private source publication, external submission, or combined public/private
+Worker mutation. Hugging Face/Zenodo remain held until dataset rights and
+provenance are explicit.

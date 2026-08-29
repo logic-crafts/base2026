@@ -13,15 +13,22 @@ fundraising, traction or ranking promises.
 - methodology, attribution, correction/removal and privacy boundaries;
 - a private Cloudflare Workers/D1/R2/Queues/Workflows/Workers AI evidence lane;
 - automatic, receipt-gated publication of sanitized excerpt cards only;
-- public JSONL, data dictionary, API index, `llms.txt` and GitHub source;
+- public JSONL, dataset landing page, machine-readable catalog, API quickstart,
+  data dictionary, API index, `llms.txt` and GitHub source;
+- 60 configured source-backed enrichment entries in
+  `data/base2026_topic_traffic_pages.json`; every entry has an answer capsule,
+  proof-source IDs and FAQ, with 102 proof links total. This is configuration
+  coverage; public route and indexation status are measured per entry;
 - Google Search Console and Bing Webmaster Tools connections.
 
 ## Now
 
-- monitor discovery and indexation in Google and Bing;
+- monitor discovery, indexation and performance in Google and Bing; the latest
+  GSC readback has 22 impressions, 0 clicks and average position 55.4, while
+  Bing performance data is still preparing;
 - keep public counters, D1 projections, canonicals and sitemaps synchronized;
-- publish 10–15 strong source-backed topic evidence maps;
-- add versioned public dataset samples and API quickstarts;
+- keep the 60 configured enrichment entries source-backed and audit their
+  public route and search treatment individually;
 - strengthen creator claims, correction tracking and public change history;
 - enforce the single `b26-independent-v1` visual authority in every release.
 

@@ -13,7 +13,7 @@
   "entry_points": [
     {
       "id": "human_search_workspace",
-      "url": "https://aggressorbulkit.online/knowledge/",
+      "url": "https://base2026.dev/workspace/",
       "format": "html",
       "description": "Public search workspace for human review of sources, topics, creators, and source-backed intelligence."
     },

@@ -2,28 +2,31 @@
 
 Status: authoritative architecture and operations reference
 
-Production snapshot verified: 2026-08-26 23:05 UTC
+Production snapshot verified: 2026-08-29 (read-only closeout)
 
 Applies to: TikTok discovery, cloud acquisition, private processing, automatic excerpt-card publication, public Base2026 search, deployment, rollback, and agent handoff
 
 > **All agents start here for Base2026 Cloudflare or TikTok-pipeline work.** Repository files and live Cloudflare receipts override chat memory. This document defines the system; dated counters and version IDs are only a verified snapshot and must be refreshed before a production change.
 
-## Current live capture receipt — 2026-08-26
+## Current live capture receipt — 2026-08-29
 
 The private control Worker is deployed as version
-`dbad0d33-070a-47fd-9e5e-ea36f18c59d4`. Its private Container application is
-healthy on image `base2026-pipeline-capture:0.5.4` (application version 6).
-The image pins `yt-dlp 2026.08.19` with the `curl-cffi` TLS transport and a
-fixed Chrome impersonation target. This is transport compatibility only: the
-Container has no cookies, account, browser profile, proxy, or public route.
+`14adacb6-7f0f-4aa7-9131-fc41469eec15` (v0.6.2). Its private Container uses
+capture build 0.5.5 (application version 8). Cloudflare
+reports one active/running instance, no failed instance and no errors; the
+detail counter still reports `healthy=0`. Treat that mismatch as telemetry to
+observe, not as a restart trigger without an active lease, explicit error or
+real Container-required capture failure. The Container has no cookies,
+account, browser profile, proxy, or public route.
 
-A pair of live, HMAC-authenticated private capture reconciliations attempted
-six queued sources and stored media for two of them; stored private `media`
-artifacts increased from 210 to 212. The four unsuccessful sources were left
-in the bounded retry lane; they do not block newer rows. The scheduled cadence is
+Private D1 contains 339 sources and records 318 stored-media artifacts; direct
+R2 aggregation also returns exactly 318 media objects (1,280 objects total).
+No stale lease, failed/dead job or Queue delivery failure was found. Automatic
+publication has 19 applied plus 1 already-public receipt, no pending/retry/held
+receipt, and zero currently eligible candidates. The scheduled cadence is
 unchanged: capture/reconcile every five minutes and discovery daily at 10:00
-UTC. Health is green and `PUBLIC_RELEASE_ENABLED=false`; no public Worker,
-public D1 data, or public release switch changed during this repair.
+UTC. `PUBLIC_RELEASE_ENABLED=false` remains correct; the narrow policy-bound
+projection lane remains enabled.
 
 ## 1. The short version
 
@@ -55,12 +58,19 @@ For a production mutation, never rely on a version number or counter copied from
 
 ### Source synchronization warning
 
-The public GitHub repository contains the public-site Worker baseline and the `www` redirect. At the time of this snapshot, the live public projection delta and the private control-plane Worker remain in the protected operational checkout and are ahead of public `main`. This manual documents the live production architecture, but it is not permission to publish the private implementation.
+The public GitHub repository contains the current public-site Worker source,
+startup release inputs, projection boundary, and `www` redirect through the
+reviewed public-source merges. The private control-plane Worker remains in the
+protected operational checkout and is intentionally not public source. A
+generated live corpus artifact is also not reproduced by a clean clone. This
+manual documents the production architecture, but it is not permission to
+publish the private implementation or generated corpus.
 
 Consequences:
 
 - absence of `base2026-pipeline-control` from a fresh public clone does not mean the Worker is inactive;
-- do not deploy the public Worker from an older clone until its live projection module and migration state are reconciled;
+- do not deploy from a clone or branch that predates current public `main`, and
+  always recheck live deployments plus D1 migration state before a mutation;
 - any future source synchronization requires its own public/private and secret review.
 
 ## 3. System map
@@ -477,7 +487,17 @@ npm ci
 npm run typecheck
 npm test
 npm run import:dry-run
-npm run wrangler:dry-run
+```
+
+The import and Wrangler asset checks need an exact reviewed public artifact.
+When it is outside the checkout, provide both paths explicitly instead of
+copying generated data into Git:
+
+```bash
+node scripts/import-public-chunks.mjs --dry-run \
+  --input /absolute/path/to/reviewed/passages.jsonl
+npx wrangler deploy --dry-run \
+  --assets /absolute/path/to/reviewed/candidate-web
 ```
 
 ### Repository publication checks
@@ -493,28 +513,29 @@ The 2026-08-23 production closeout passed 34 public Worker tests, 183 private Wo
 
 ## 16. Verified production snapshot
 
-Verified read-only at 2026-08-23 23:13 UTC:
+Verified read-only on 2026-08-29:
 
 | Item | Verified value |
 | --- | --- |
-| Public Worker `base2026` | `790e21d6-f341-4265-ae0c-7dc536a32495` |
-| Public rollback | `86faccf2-e986-4437-a39a-4b3d66a1883f` |
-| `www` redirect Worker | `89ebc975-4906-49f8-95d5-3454625c3ee0` |
-| Private Worker | v0.6.1, `70fd6e68-ea54-462d-ba27-e3b1a66fa997` |
-| Pre-automatic private rollback | `f9e4a494-9780-4bd2-bb33-5b7f5a068f81` |
-| Private migrations | `0011` and `0012` applied; none pending |
-| Automatic policy | `base2026.machine-publication.v1`, batch 10, attempts 4, `hard_hold=0` |
-| Public D1 | 2,136 documents; 1,557 distinct videos; 33 applied projections; 44 projected cards |
+| Public Worker `base2026` | `3e06c10b-9fa4-40aa-ad14-913a11b85f30` |
+| Public rollback | `fadc6c25-1d9f-4805-aed2-614e1463a018` |
+| `www` redirect Worker | Path/query redirect behavior verified; deployment version was not re-read in this pass |
+| Private Worker | v0.6.2, `14adacb6-7f0f-4aa7-9131-fc41469eec15` |
+| Private rollback | Resolve from the live deployment list immediately before any mutation; this readback made no rollback selection |
+| Private migrations | 14 applied; none pending |
+| Automatic policy | `base2026.machine-publication.v1`, broad hard hold false |
+| Public D1 | 2,175 documents; 1,574 distinct videos; 50 applied projections; 83 projected cards |
 | Privacy invariant | `full_transcript_public=0` |
-| Private D1 | 35 private imports; 33 applied projection receipts; zero `ready_for_import_held` |
-| Automatic receipts | 2 `applied`; 1 `already_public`; no retry/held receipt |
-| Registry | 4,123 total; 209 `publication_eligible` |
-| Latest discovery receipt | 135 discovered; 21 fresh/admitted; 114 duplicates; 1 failed; 0 held |
-| AI backlog | 308 completed; 18 pending for the next UTC budget; 43 held |
-| Workers AI ledger | 8,699 actual/reserved Neurons across 246 invocations; no hard block |
-| Health | public D1 FTS5 healthy; private service reports v0.6.1 and broad public release false |
+| Private D1 | 339 sources: 1 capture, 12 transcription, 3 semantic, 52 imported, 271 source review |
+| Automatic receipts | 19 `applied`; 1 `already_public`; no pending/retry/held receipt; eligible query zero |
+| Private R2 | 1,280 objects; 318 media objects, matching D1 |
+| Latest discovery receipt | 135 discovered; 17 fresh/admitted; 118 duplicates; 1 failed; 0 held |
+| Workers AI ledger | 3,943 actual/reserved Neurons across 69 invocations; no hard block |
+| Health | public healthy; private active/running, no errors/failed instance, detail counter `healthy=0`; broad public release false |
 
-The first live automatic batch applied two new projections and reconciled one legacy-public source without duplication. The next operational observation is the first complete post-release daily discovery cycle at 2026-08-24 10:00 UTC.
+The automatic lane is caught up at this snapshot. Source-specific acquisition
+holds remain private and bounded; neither they nor the Container detail counter
+justify a restart or broad release.
 
 ## 17. Repository map
 

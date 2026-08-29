@@ -15,8 +15,14 @@ creator, original source, topic, date, and correction path.
 - The complete public product runs on Cloudflare at `base2026.dev`.
 - Cloudflare Workers serves the site, read-only API, forms, and public search.
 - Public D1 with FTS5 powers the search workspace without a browser API key.
-- Public JSONL exports, a data dictionary, API index, `llms.txt`, source pages,
-  topic pages, and creator pages provide human- and machine-readable access.
+- Public JSONL exports, the dataset landing page, machine-readable catalog, API
+  quickstart, data dictionary, API index, `llms.txt`, source pages, topic pages,
+  and creator pages provide human- and machine-readable access.
+- The topic-enrichment configuration in
+  `data/base2026_topic_traffic_pages.json` contains 60 source-backed entries.
+  Every entry has an `answer_capsule`, `proof_source_ids`, and FAQ, with 102
+  proof links total. This describes configuration coverage; public route and
+  indexation status are measured per entry.
 - The project is open source and documents its public/private boundary.
 - A private Cloudflare pipeline discovers bounded public sources, captures
   eligible media, creates reviewed evidence, and automatically projects only
@@ -93,7 +99,10 @@ and budget efficiency.
 Search, source/topic/creator pages, canonical URLs, sitemaps, structured data,
 internal links, static data, dynamic D1 projection pages, and read-only API
 access are live. Google Search Console and Bing Webmaster Tools are connected.
-Current work monitors discovery and keeps counters and projections synchronized.
+GSC now has early performance data (22 impressions, 0 clicks, average position
+55.4); Bing performance data is still preparing. Sitemap discovery and early
+performance do not establish that every evidence map is indexed. Current work
+monitors discovery and keeps counters and projections synchronized.
 
 ## Phase 4 — Creator and rights controls
 
@@ -120,10 +129,13 @@ rights, transparent boundaries, and useful free access.
 
 ## Now
 
-- Monitor Google Search Console and Bing Webmaster Tools for discovery and
-  indexing changes.
+- Monitor Google Search Console and Bing Webmaster Tools for discovery,
+  indexing, and performance changes. GSC currently reports 22 impressions,
+  0 clicks, and average position 55.4; Bing performance data is still
+  preparing.
 - Keep public counters synchronized to dated D1/manifest dimensions.
-- Publish a small set of strong source-backed topic evidence maps.
+- Keep the 60 configured enrichment entries source-backed and audit their
+  public route and search treatment individually.
 - Keep dynamic projection pages, canonicals and sitemaps release-tested.
 
 ## Next

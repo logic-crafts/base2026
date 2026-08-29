@@ -1,5 +1,22 @@
 # Decisions
 
+## 2026-08-29 — Hold third-party dataset mirrors until rights are explicit
+
+- Apache-2.0 covers repository code and documentation; it does not
+  automatically license third-party creator video, captions or bounded source
+  text for redistribution as a hosted dataset.
+- Do not upload the current JSONL corpus to Hugging Face, Zenodo or another
+  mirror until a dataset-level rights model, per-record reuse basis/provenance,
+  complete versioned payload, checksums, and correction/takedown policy pass a
+  new public-release review.
+- A deliberately metadata/pointer-only export may be evaluated later, but it
+  is not an automatic exception to the rights and provenance gate.
+
+Reason: the audited static-v3 documents, passages and insight cards have useful
+source attribution but no explicit license/rights/provenance keys. A public,
+readable excerpt is not by itself evidence of third-party redistribution
+rights.
+
 ## 2026-08-29 — Keep operating memory compact and public totals live
 
 - `CURRENT_STATUS.md` is the one-screen current operating snapshot. Keep

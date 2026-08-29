@@ -65,6 +65,7 @@ DEFAULT_AI_VISIBILITY_RESOURCES_TEMPLATE = (
 DEFAULT_FORMS_SCRIPT = PROJECT_ROOT / "templates" / "base2026-forms.js"
 DEFAULT_EVIDENCE_BRIEF_SCRIPT = PROJECT_ROOT / "templates" / "base2026-evidence-brief.js"
 DEFAULT_ROADMAP_SCRIPT = PROJECT_ROOT / "web" / "static" / "roadmap.js"
+DEFAULT_ROADMAP_PAGE = PROJECT_ROOT / "web" / "static" / "roadmap.html"
 DEFAULT_ANALYTICS_PAGE = PROJECT_ROOT / "web" / "static" / "analytics.html"
 DEFAULT_API_PAGE = PROJECT_ROOT / "web" / "static" / "api.html"
 DEFAULT_API_INDEX = PROJECT_ROOT / "web" / "static" / "api-index.json"
@@ -757,13 +758,15 @@ ROBOTS_PAYLOAD = (
     "Sitemap: https://base2026.dev/sitemap-dynamic.xml\n"
 )
 HEADERS_PAYLOAD = """/*
-  Cache-Control: no-cache
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: SAMEORIGIN
   Permissions-Policy: accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()
 
-/static/*
+/*.html
+  Cache-Control: no-cache
+
+/*/
   Cache-Control: no-cache
 
 /static/*.jsonl
@@ -776,7 +779,6 @@ HUB_SITEMAP_FILENAME = "sitemaps/base2026-hubs.xml"
 HUB_SITEMAP_URL = f"{BASE2026_ORIGIN}/{HUB_SITEMAP_FILENAME}"
 HUB_SITEMAP_ROUTES = (
     "/",
-    "/workspace/",
     "/creators/",
     "/compare/",
     "/analytics",
@@ -972,6 +974,18 @@ def _rewrite_public_api_docs(relative_path: Path, text: str) -> str:
         return text
 
     if path == "api-index.json":
+        # The source API index historically pointed the human workspace at
+        # the old root route.  Keep this route-specific correction at the
+        # release boundary so legacy source artifacts cannot reintroduce `/`
+        # after the generic old-origin mapping runs.
+        workspace_entry_re = re.compile(
+            r'("id"\s*:\s*"human_search_workspace"\s*,\s*'
+            r'"url"\s*:\s*")[^"]*(")',
+            re.IGNORECASE | re.DOTALL,
+        )
+        text = workspace_entry_re.sub(
+            rf'\g<1>{BASE2026_ORIGIN}/workspace/\g<2>', text, count=1
+        )
         old_description = (
             '"description": "Server-side Meilisearch multi-search proxy used by the public UI. Prefer static JSONL for bulk/offline analysis; use this endpoint when live search ranking is needed."'
         )
@@ -1784,6 +1798,7 @@ def build_release(
             write_generated_public_file("static/base2026-forms.js", DEFAULT_FORMS_SCRIPT.read_bytes())
             write_generated_public_file("static/base2026-evidence-brief.js", DEFAULT_EVIDENCE_BRIEF_SCRIPT.read_bytes())
             write_generated_public_file("static/roadmap.js", DEFAULT_ROADMAP_SCRIPT.read_bytes())
+            write_tracked_public_overlay("roadmap.html", DEFAULT_ROADMAP_PAGE)
             write_tracked_public_overlay("analytics.html", DEFAULT_ANALYTICS_PAGE)
             write_tracked_public_overlay("api.html", DEFAULT_API_PAGE)
             write_tracked_public_overlay("api-index.json", DEFAULT_API_INDEX)

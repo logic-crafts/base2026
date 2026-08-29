@@ -18,12 +18,22 @@ The journal article is also live on Medium with a canonical back to Base2026,
 and adapted launch posts are live on X and LinkedIn. These are free editorial
 distribution receipts, not paid ranking links.
 
-Private creator discovery recovered from 7 active / 12 failed cursors to 18
-active / 1 source-review failure. One private media canary completed, but the
-Cloudflare Container reports contradictory telemetry (`running`,
-`active=1`, `healthy=0`) after one bounded recycle. Do not loop restarts; treat
-stable Container readiness as the remaining infrastructure observation.
+Private creator discovery remains recovered at 135 discovered / 17 fresh / 118
+duplicates / one source-review failure. Private D1 has 339 sources, and R2's
+318 media-object aggregate exactly matches D1. No stale leases, failed/dead
+jobs, Queue failures, or automatic-publication backlog exist. The Cloudflare
+Container is active/running with no errors or failed instance while its detail
+counter remains `healthy=0`; do not loop restarts for this telemetry mismatch.
 
-Google and Bing accept both sitemaps but are still processing measurement
-data. Historical dirty checkouts remain protected. Older narratives stay in
-Git history and dated receipts; do not append them back into this file.
+Google now reports 22 early impressions across 13 pages with zero clicks and
+average position 55.4. Page indexing/Links and Bing performance are still
+processing; Bing's live journal test is eligible while its index view remains
+discovered-not-crawled. Historical dirty checkouts remain protected. Older
+narratives stay in Git history and dated receipts; do not append them back into
+this file.
+
+A reviewed but undeployed source candidate fixes the remaining sitemap,
+security-header, cache, API-index and roadmap-release defects. Its artifact tree
+is `6b4dddd702917831e574153f36261d62c2f1b090ffcbbe78c20eba24a74c5e09`.
+Do not describe these fixes as live until a separate deployment task produces a
+new Worker/version and production readback.

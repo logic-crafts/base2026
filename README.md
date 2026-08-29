@@ -148,12 +148,20 @@ python3 scripts/check-base2026-design-authority.py
 Worker tests:
 
 ```bash
+npm --prefix cloudflare/base2026-worker ci
+npm --prefix cloudflare/base2026-worker run typecheck
+npm --prefix cloudflare/base2026-worker test
+```
+
+The import and Static Assets dry-runs require reviewed generated data that a
+clean clone intentionally does not contain. Pass the public JSONL input and
+candidate asset directory explicitly when they live outside the checkout:
+
+```bash
+node cloudflare/base2026-worker/scripts/import-public-chunks.mjs \
+  --dry-run --input /absolute/path/to/reviewed/passages.jsonl
 cd cloudflare/base2026-worker
-npm ci
-npm run typecheck
-npm test
-npm run import:dry-run
-npm run wrangler:dry-run
+npx wrangler deploy --dry-run --assets /absolute/path/to/reviewed/candidate-web
 ```
 
 Build a new, non-overwriting candidate from an existing public web artifact:
@@ -172,7 +180,11 @@ python3 scripts/audit-publication-boundary.py
 
 ## Roadmap
 
-Current priorities are monitored indexation, strong source-backed topic evidence maps, versioned public data examples, provenance and creator-rights workflows. See [ROADMAP.md](ROADMAP.md) or the [live roadmap](https://base2026.dev/roadmap).
+Current priorities are measured indexation, keeping the 60 configured
+topic-enrichment entries source-backed, stronger provenance and
+creator-rights workflows. The dataset landing page, versioned catalog and API
+quickstart are already live. See [ROADMAP.md](ROADMAP.md) or the
+[live roadmap](https://base2026.dev/roadmap).
 
 ## Contributing and security
 

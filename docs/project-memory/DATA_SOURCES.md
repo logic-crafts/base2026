@@ -1,5 +1,7 @@
 # Data Sources
 
+Last updated: 2026-08-29
+
 ## 2026-08-28 positioning and live release evidence
 
 - Live public D1 remote query: 2,150 `search_documents`, 1,563 distinct
@@ -13,8 +15,6 @@
 - Live Base2026 routes verified after Worker deployment: homepage, roadmap,
   workspace, health API, static sitemap, dynamic sitemap and a projected source
   page. Cloudflare version is `3f5a6687-4eb8-4ba5-9610-7fe2533282ba`.
-
-Last updated: 2026-08-26
 
 ## Private Cloudflare capture fairness receipt — 2026-08-26
 
@@ -199,3 +199,24 @@ canonicals to Base2026. Adapted X and LinkedIn posts are live and link to the
 canonical article. Exact URLs, hashes and scope are recorded in
 `BASE2026_EDITORIAL_SYNDICATION_RECEIPT_2026_08_29.md`. These external pages are
 distribution/measurement sources, not Base2026 evidence-corpus inputs.
+
+Runtime update 2026-08-29 R2 (private): Worker v0.6.2 deployment
+`14adacb6-7f0f-4aa7-9131-fc41469eec15` has 14 migrations applied and none
+pending. Private D1 records 339 sources and 318 stored-media artifacts; direct
+R2 aggregation returns the same 318 media objects among 1,280 objects. There
+are no stale leases, failed/dead jobs or Queue delivery failures. Automatic
+publication is caught up at 19 applied plus 1 already-public receipt and zero
+eligible candidates. The Container is active/running with no errors or failed
+instance; `healthy=0` remains a contradictory detail counter, not a restart
+trigger. Exact safe aggregate receipt:
+`BASE2026_PIPELINE_READBACK_2026_08_29_R2.md`.
+
+Runtime update 2026-08-29 R2 (search measurement): Google Search Console now
+reports 0 clicks, 22 impressions, 0% CTR and average position 55.4 across 13
+pages for the last three months. The indexed `.html` AI-citation topic and the
+current extensionless canonical are in a stored-crawl transition following the
+2026-08-28 redirect/canonical correction; Page indexing and Links still
+process. Bing Search/AI Performance remains unpopulated, while a live journal
+test says it can be indexed with no SEO/GEO issue and the index view says
+discovered but not crawled. No indexing request or sitemap resubmission was
+made. Exact receipt: `BASE2026_GSC_BING_READBACK_2026_08_29_R2.md`.

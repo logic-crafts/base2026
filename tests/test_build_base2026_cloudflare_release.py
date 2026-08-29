@@ -151,6 +151,20 @@ def test_build_excludes_private_stale_inputs_and_emits_root_contract(tmp_path: P
     assert receipt["verification"]["private_token_markers_remaining"] == 0
 
 
+def test_static_cache_headers_keep_html_and_jsonl_rules_disjoint() -> None:
+    headers = builder.HEADERS_PAYLOAD
+
+    assert "/*\n  Cache-Control: no-cache" not in headers
+    assert "/*.html\n  Cache-Control: no-cache" in headers
+    assert "/*/\n  Cache-Control: no-cache" in headers
+    assert "/static/*\n  Cache-Control: no-cache" not in headers
+    assert (
+        "/static/*.jsonl\n"
+        "  Content-Type: application/x-ndjson; charset=utf-8\n"
+        "  Cache-Control: public, max-age=300, s-maxage=3600"
+    ) in headers
+
+
 def test_startup_homepage_overlay_preserves_search_as_workspace(tmp_path: Path) -> None:
     source = tmp_path / "source-web"
     output = tmp_path / "release"
@@ -209,6 +223,12 @@ def test_startup_homepage_overlay_preserves_search_as_workspace(tmp_path: Path) 
     assert (output / "static" / "base2026-forms.js").is_file()
     assert (output / "static" / "base2026-evidence-brief.js").read_bytes() == builder.DEFAULT_EVIDENCE_BRIEF_SCRIPT.read_bytes()
     assert (output / "static" / "roadmap.js").read_bytes() == builder.DEFAULT_ROADMAP_SCRIPT.read_bytes()
+    roadmap = (output / "roadmap.html").read_text(encoding="utf-8")
+    assert "The complete public product runs on Cloudflare" in roadmap
+    assert "Cloudflare Workers serves the site, read-only API, forms, and public search." in roadmap
+    assert "Public D1 with FTS5 powers the search workspace without a browser API key." in roadmap
+    for stale_phrase in ("Public VPS deployment", "local-first knowledge base", "Small VPS"):
+        assert stale_phrase not in roadmap
     analytics = (output / "analytics.html").read_text(encoding="utf-8")
     assert 'data-b26-public-stat="documents_indexed"' in analytics
     assert "Historical release analytics" in analytics
@@ -227,6 +247,11 @@ def test_startup_homepage_overlay_preserves_search_as_workspace(tmp_path: Path) 
     endpoint_urls = {endpoint["url"] for endpoint in api_index["endpoints"]}
     assert "https://base2026.dev/api/stats" in endpoint_urls
     assert "https://base2026.dev/api/evidence-brief/v2?q={question}" in endpoint_urls
+    entry_point_urls = {
+        entry_point["id"]: entry_point["url"]
+        for entry_point in api_index["entry_points"]
+    }
+    assert entry_point_urls["human_search_workspace"] == "https://base2026.dev/workspace/"
     assert (output / "static" / "brand" / "github.svg").is_file()
     assert (output / "static" / "base2026-mark.svg").is_file()
     assert (output / "static" / "base2026-founder.css").read_bytes() == builder.DEFAULT_FOUNDER_STYLESHEET.read_bytes()
@@ -261,13 +286,16 @@ def test_startup_homepage_overlay_preserves_search_as_workspace(tmp_path: Path) 
     assert "https://base2026.dev/journal/source-backed-video-search-cloudflare/" in (
         output / builder.HUB_SITEMAP_FILENAME
     ).read_text(encoding="utf-8")
+    hub_sitemap = (output / builder.HUB_SITEMAP_FILENAME).read_text(encoding="utf-8")
+    assert "https://base2026.dev/workspace/" not in hub_sitemap
+    assert 'href="/workspace/"' in rendered_homepage
     assert "Maharani" not in founder
     assert "Primavera" not in founder
     assert receipt["verification"]["personal_site_origin_markers_remaining"] == 0
     assert receipt["replacements"]["html_urls_to_extensionless"] > 0
     assert receipt["verification"]["redirecting_html_canonical_markers_remaining"] == 0
     assert receipt["verification"]["redirecting_html_sitemap_markers_remaining"] == 0
-    assert receipt["artifact"]["file_count"] == 38
+    assert receipt["artifact"]["file_count"] == 39
 
 
 def test_startup_homepage_exposes_product_first_evidence_brief_search() -> None:
@@ -446,6 +474,29 @@ def test_public_insight_export_drops_review_holds_and_rejects_contradictions() -
     )
     assert "service workflow" not in extensionless_api
     assert "independent review question" in extensionless_api
+
+
+def test_api_index_workspace_route_is_owned_by_source_and_builder() -> None:
+    source_text = (ROOT / "web" / "static" / "api-index.json").read_text(encoding="utf-8")
+    source_payload = json.loads(source_text)
+    source_workspace = next(
+        entry
+        for entry in source_payload["entry_points"]
+        if entry["id"] == "human_search_workspace"
+    )
+    assert source_workspace["url"] == "https://base2026.dev/workspace/"
+
+    legacy_root = source_text.replace(
+        "https://base2026.dev/workspace/", "https://base2026.dev/"
+    )
+    rewritten = builder._rewrite_public_api_docs(Path("api-index.json"), legacy_root)
+    rewritten_payload = json.loads(rewritten)
+    rewritten_workspace = next(
+        entry
+        for entry in rewritten_payload["entry_points"]
+        if entry["id"] == "human_search_workspace"
+    )
+    assert rewritten_workspace["url"] == "https://base2026.dev/workspace/"
 
 
 def test_legacy_styles_are_normalized_at_the_release_boundary() -> None:
