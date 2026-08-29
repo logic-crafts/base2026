@@ -690,3 +690,18 @@ for ranking is forbidden.
 Reason: contextual editorial references can document real implementation while
 preserving user value and search-engine policy. A cross-domain owner network or
 paid dofollow package would add risk without proving qualified traffic.
+
+## 2026-08-29 — Syndicate reviewed journal releases without a preview handoff
+
+Decision: after a Base2026 journal article is reviewed and live on its canonical
+URL, the operator may complete the Medium publish action and publish adapted
+announcement posts to Alex Yarosh's X and LinkedIn accounts without a separate
+preview or final-click handoff. Preserve the Base2026 canonical on syndicated
+copies and use the canonical URL in social posts. This standing scope does not
+authorize paid promotion, DMs, comments, replies, account changes or unrelated
+content.
+
+Reason: the owner explicitly requested autonomous publication of the current
+article and the same bounded distribution pattern for future reviewed releases.
+Removing the repeated final-click handoff closes the editorial pipeline while
+keeping unrelated representational actions outside scope.

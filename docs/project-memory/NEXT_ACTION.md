@@ -20,8 +20,8 @@ to the dedicated private-pipeline task with failed-run-only notifications.
 
 - Recheck GSC/Bing after indexing/performance processing produces data; do not
   resubmit unchanged sitemaps.
-- Keep public Worker `fadc6c25-1d9f-4805-aed2-614e1463a018`, artifact tree
-  `9e56f5002e3f684adb639388e701ee8d44405db2a53b7a208a390c80db0b0101`
+- Keep public Worker `3e06c10b-9fa4-40aa-ad14-913a11b85f30`, artifact tree
+  `e04bc4be2b46a29de89fd7f59bf4e845ef686d3d9036b28f5439c6a8908a011c`
   and zero-full-transcript invariant unless a verified defect requires change.
 - Measure discovery of `/dataset`, the GitHub release and the live Enigmavista,
   Dreamwood and Aster references before repeating submissions. Base2026 and
@@ -33,6 +33,11 @@ to the dedicated private-pipeline task with failed-run-only notifications.
 - Prepare free distribution to Hugging Face and Zenodo only after the dataset
   rights/license fields are verified. Treat DEV, Hashnode, Show HN and Product
   Hunt as original editorial launches, not duplicate link drops.
+- Measure the live Medium, X and LinkedIn article launch before syndicating the
+  same piece elsewhere. Future reviewed journal releases may be published to
+  Medium, X and LinkedIn without a separate final-click handoff under the
+  bounded standing authorization in
+  `BASE2026_EDITORIAL_SYNDICATION_RECEIPT_2026_08_29.md`.
 - Do not buy ranking links. Any paid newsletter or publisher test requires an
   explicit budget decision and must be purchased for relevant referral reach
   with `rel="sponsored"` or `nofollow`.

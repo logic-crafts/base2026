@@ -16,13 +16,10 @@ MacBook or ChatGPT Web.
 ## Public production
 
 - Domain: `https://base2026.dev/`
-- Worker: `79e3677f-3828-4355-8c59-8801458f0fb2` (100%).
+- Worker: `3e06c10b-9fa4-40aa-ad14-913a11b85f30` (100%).
 - Exact artifact tree:
-  `4abe1a4f67ff8e67c81578429f8bb1776a3ea6f9f62a33e1ce81d198ee80d83e`.
-- Safe pre-consolidation rollback:
-  `1ad991e4-bc8f-4c34-a8d1-c77723377137`. Immediate predecessor
-  `de84ef34-6cf9-4f6c-b392-34c064626d2a` has the corrected APIs but retains the
-  known zero-filled historical Analytics defect and is not the preferred rollback.
+  `e04bc4be2b46a29de89fd7f59bf4e845ef686d3d9036b28f5439c6a8908a011c`.
+- Immediate rollback: `fadc6c25-1d9f-4805-aed2-614e1463a018`.
 - Public D1: 2,175 documents; 1,574 distinct videos; 50 applied projections;
   83 projected cards; zero public full transcripts.
 - Homepage and Analytics refresh these totals from read-only `/api/stats`.
@@ -30,6 +27,9 @@ MacBook or ChatGPT Web.
   historical ranking sections.
 - Core routes, Evidence Brief V1/V2, founder hashes, API docs, static sitemap
   (1,634 URLs) and dynamic sitemap (50 URLs) pass live readback.
+- The first public engineering journal article is live at
+  `/journal/source-backed-video-search-cloudflare/`. Its free distribution is
+  live on Medium, X and LinkedIn; the Medium copy canonicals to Base2026.
 
 ## Private production pipeline
 
@@ -57,8 +57,9 @@ MacBook or ChatGPT Web.
 
 - Canonical public repository: `https://github.com/offflinerpsy/base2026`
 - PR #19 merged the consolidated source; PR #20 merged the independent-review
-  Analytics correction. Production code merge:
-  `f06a27aa2261704aa566837405a5ed623ef1ad83`.
+  Analytics correction; PR #23 shipped the reviewed public dataset; PR #26
+  shipped the engineering journal. Current production source merge:
+  `74662da45f70316279b963e231eaecc6cd4ed79c`.
 - The original SEO/GEO checkout and historical worktrees are dirty snapshots.
   Never bulk-stage, reset, merge, prune or delete them.
 
@@ -77,6 +78,8 @@ MacBook or ChatGPT Web.
 2. Review `@webhivedigital` as a source problem; do not force a candidate.
 3. Observe GSC/Bing after their processing window. Premium founder redesign is
    separate optional scope; the current founder page remains live.
+4. Measure referral and discovery signals from Medium, X and LinkedIn before
+   duplicating the same article on more editorial platforms.
 
 ## Protected boundaries
 

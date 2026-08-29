@@ -190,3 +190,12 @@ API Browser acquisition rather than Container fallback. Container app v8 is
 running while health telemetry remains unstable (`active=1`, `healthy=0`, no
 reported errors); this is an infrastructure observation, not authority to
 repeat restarts or widen acquisition.
+
+Runtime update 2026-08-29 (editorial distribution): the canonical engineering
+article is live at
+`https://base2026.dev/journal/source-backed-video-search-cloudflare/` on public
+Worker `3e06c10b-9fa4-40aa-ad14-913a11b85f30`. The Medium copy is live and
+canonicals to Base2026. Adapted X and LinkedIn posts are live and link to the
+canonical article. Exact URLs, hashes and scope are recorded in
+`BASE2026_EDITORIAL_SYNDICATION_RECEIPT_2026_08_29.md`. These external pages are
+distribution/measurement sources, not Base2026 evidence-corpus inputs.
