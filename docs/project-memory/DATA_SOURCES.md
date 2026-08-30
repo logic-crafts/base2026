@@ -1,6 +1,6 @@
 # Data Sources
 
-Last updated: 2026-08-29
+Last updated: 2026-08-30
 
 ## 2026-08-28 positioning and live release evidence
 
@@ -220,3 +220,15 @@ process. Bing Search/AI Performance remains unpopulated, while a live journal
 test says it can be indexed with no SEO/GEO issue and the index view says
 discovered but not crawled. No indexing request or sitemap resubmission was
 made. Exact receipt: `BASE2026_GSC_BING_READBACK_2026_08_29_R2.md`.
+
+Runtime update 2026-08-30 (public technical release): Worker
+`eeeabd1b-7454-4ec5-9ac3-6b35d3bb3fa3` serves artifact tree
+`02dc9883597dfab6215cb10b2082c19c804fda21bbbc3e71fe882a2d273a3065`.
+Post-deployment public D1 readback is 2,175 documents, 1,574 distinct videos,
+50 applied projections, 83 cards and zero public full transcripts. The query
+changed no rows. All four public JSONL distributions are byte-identical to
+the pre-deployment live files; no source admission, import, private data
+publication or external submission occurred. Sitemap, API-index, security,
+cache and roadmap fixes are now live, not merely prepared. Exact receipt:
+`BASE2026_TECHNICAL_RELEASE_2026_08_30.md`. Private pipeline and GSC/Bing
+snapshots above remain dated 2026-08-29.

@@ -1,6 +1,7 @@
 # Base2026 Current Status
 
-Verified: 2026-08-29
+Public release verified: 2026-08-30. Private pipeline and search-console
+snapshots below remain dated 2026-08-29; they were not rerun in this release.
 
 This is the one-screen operating snapshot. Live Cloudflare receipts override
 dated counters. Git history and dated receipts preserve older states; do not
@@ -16,23 +17,24 @@ MacBook or ChatGPT Web.
 ## Public production
 
 - Domain: `https://base2026.dev/`
-- Worker: `3e06c10b-9fa4-40aa-ad14-913a11b85f30` (100%).
+- Worker: `eeeabd1b-7454-4ec5-9ac3-6b35d3bb3fa3` (100%).
 - Exact artifact tree:
-  `e04bc4be2b46a29de89fd7f59bf4e845ef686d3d9036b28f5439c6a8908a011c`.
-- Immediate rollback: `fadc6c25-1d9f-4805-aed2-614e1463a018`.
+  `02dc9883597dfab6215cb10b2082c19c804fda21bbbc3e71fe882a2d273a3065`.
+- Immediate rollback: `3e06c10b-9fa4-40aa-ad14-913a11b85f30`.
 - Public D1: 2,175 documents; 1,574 distinct videos; 50 applied projections;
   83 projected cards; zero public full transcripts.
 - Homepage and Analytics refresh these totals from read-only `/api/stats`.
   Analytics also preserves verified 2026-07-29 summary totals without empty
   historical ranking sections.
 - Core routes, Evidence Brief V1/V2, founder hashes and API docs pass live
-  readback. The current static sitemap contains 1,636 unique URLs and the
-  dynamic sitemap 50; GSC's last processed copies report 1,634 and 49.
+  readback. The hub sitemap excludes the noindex Workspace; the dynamic
+  sitemap contains 50 URLs. GSC's 2026-08-29 processed copies reported 1,634
+  static and 49 dynamic URLs, not a current indexation count.
 - The first public engineering journal article is live at
   `/journal/source-backed-video-search-cloudflare/`. Its free distribution is
   live on Medium, X and LinkedIn; the Medium copy canonicals to Base2026.
 
-## Private production pipeline
+## Private production pipeline — 2026-08-29 snapshot
 
 - Private Worker: v0.6.2, `14adacb6-7f0f-4aa7-9131-fc41469eec15`
   (100%). Resolve its immediate rollback from the live deployment list before
@@ -63,12 +65,13 @@ MacBook or ChatGPT Web.
 - Canonical public repository: `https://github.com/offflinerpsy/base2026`
 - PR #19 merged the consolidated source; PR #20 merged the independent-review
   Analytics correction; PR #23 shipped the reviewed public dataset; PR #26
-  shipped the engineering journal. Current production source merge:
-  `74662da45f70316279b963e231eaecc6cd4ed79c`.
+  shipped the engineering journal. PR #28 added the technical closeout.
+  Current deployed source commit:
+  `0ced3a5c03554d1316397c5cbeceeb697a4d5c05`.
 - The original SEO/GEO checkout and historical worktrees are dirty snapshots.
   Never bulk-stage, reset, merge, prune or delete them.
 
-## Search-engine measurement
+## Search-engine measurement — 2026-08-29 snapshot
 
 - Google Search Console and Bing both accept the static and dynamic sitemaps.
 - Google now exposes early three-month performance: 0 clicks, 22 impressions,
@@ -82,19 +85,19 @@ MacBook or ChatGPT Web.
 - Do not resubmit unchanged URLs or claim discovery/impression counts as
   indexation.
 
-## Reviewed local closeout — not deployed
+## Technical closeout — deployed 2026-08-30
 
-- The current source branch fixes the Workspace sitemap mismatch, conflicting
+- The live release fixes the Workspace sitemap mismatch, conflicting
   JSONL cache directives, API-index Workspace URL, stale roadmap overlay,
   baseline Worker security headers and trailing-slash dynamic-source canonical;
   `/sources/*` is explicitly routed Worker-first for that contract.
-- Candidate artifact tree:
-  `6b4dddd702917831e574153f36261d62c2f1b090ffcbbe78c20eba24a74c5e09`;
-  artifact policy, tests, deterministic import and explicit-assets Wrangler
-  dry-run pass.
-- These fixes are source/GitHub candidates only. The live Worker and public
-  artifact above remain unchanged because this task excluded deployment and
-  further external publication.
+- The builder also preserves the Workspace Project Story link to `/about`
+  and excludes its generated metadata from replayed source records.
+- 41 Python tests, 47 Worker tests, typecheck, deterministic import, artifact
+  policy and explicit-assets Wrangler dry-run pass. Homepage, Workspace,
+  founder and the four public JSONL payloads are unchanged from production.
+- This technical release changes no D1 rows, private Worker, DNS, article or
+  social post. Receipt: [`BASE2026_TECHNICAL_RELEASE_2026_08_30.md`](BASE2026_TECHNICAL_RELEASE_2026_08_30.md).
 
 ## Open loops
 

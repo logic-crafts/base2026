@@ -1,5 +1,27 @@
 # Prompt Log
 
+## 2026-08-30 — Finish the actual technical production release
+
+Owner challenged the gap between completed source work and an unchanged live
+site. The previous exclusion of further editorial publication had also held
+the technical deployment. This task completed the public technical release;
+it did not reopen new articles, social posts, indexing submissions, private
+pipeline changes, DNS or data imports.
+
+Work used an isolated clean worktree and Luna Max execution/review gates.
+Preflight found one additional builder replay defect: the Workspace Project
+Story link was rewritten to the Workspace itself. The exact link now remains
+`/about`; generated receipt metadata is also excluded from replay. The source
+fix was committed and pushed as `0ced3a5c03554d1316397c5cbeceeb697a4d5c05`.
+
+Public Worker `eeeabd1b-7454-4ec5-9ac3-6b35d3bb3fa3` was deployed at
+2026-08-30 14:12 UTC from exact artifact
+`02dc9883597dfab6215cb10b2082c19c804fda21bbbc3e71fe882a2d273a3065`.
+Rollback remains `3e06c10b-9fa4-40aa-ad14-913a11b85f30`. Tests, privacy checks,
+live readback and unchanged-design/data proofs are recorded in
+`BASE2026_TECHNICAL_RELEASE_2026_08_30.md`. Dirty historical checkouts and
+parallel profile/pipeline work were untouched.
+
 ## 2026-08-29 — Free editorial syndication to Medium, X and LinkedIn
 
 Owner published the prepared Medium import and explicitly authorized the

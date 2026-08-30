@@ -4,9 +4,9 @@ All notable public-facing changes to Base2026 are summarized here.
 
 Base2026 is early, so this changelog focuses on useful release milestones rather than every internal pipeline run.
 
-## Unreleased — 2026-08-29 technical closeout
+## 2026-08-30 — Technical SEO and release-contract fixes
 
-Prepared and tested in source; not deployed in this non-publication task.
+Live public Worker: `eeeabd1b-7454-4ec5-9ac3-6b35d3bb3fa3`.
 
 ### Fixed
 
@@ -20,14 +20,19 @@ Prepared and tested in source; not deployed in this non-publication task.
   machine-readable Workspace URL.
 - Made the current tracked roadmap page part of the deterministic release
   overlay so the old VPS/local-first fallback cannot return in a clean build.
+- Preserved the Workspace Project Story link to `/about` during rebuilds and
+  excluded generated builder metadata from replayed source records.
 
 ### Verified
 
-- Private D1/R2, scheduled jobs and automatic projection have no systemic
-  backlog or privacy regression; public full transcripts remain zero.
-- GSC exposes the first 22 impressions; Bing performance remains in processing.
-- No new external post, indexing request or deployment was made in this
-  closeout.
+- 41 Python tests, 47 public Worker tests, typecheck, deterministic import,
+  artifact policy and explicit-assets dry-run passed before deployment.
+- Homepage, founder, Workspace and the four public JSONL files retain their
+  production bytes. Public D1 remains at 2,175 documents, 1,574 videos, 50
+  projections, 83 cards and zero full transcripts; no database rows changed.
+- No private Worker, DNS, external post or indexing submission changed.
+- Exact deployment and live checks:
+  [`technical release receipt`](docs/project-memory/BASE2026_TECHNICAL_RELEASE_2026_08_30.md).
 
 ## 2026-08-28 — Product positioning, indexation and design authority
 
