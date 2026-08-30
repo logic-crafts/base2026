@@ -80,6 +80,12 @@ def write_fixture(root: Path) -> None:
     (root / "manifest.json").write_text(
         json.dumps({"pages": ["/Users/example/private/release/index.html"]}), encoding="utf-8"
     )
+    (root / builder.ASSETSIGNORE_FILENAME).write_text(
+        "stale generated metadata\n", encoding="utf-8"
+    )
+    (root / builder.RECEIPT_FILENAME).write_text(
+        json.dumps({"artifact": {"tree_sha256": "stale"}}), encoding="utf-8"
+    )
     (root / "knowledge" / "solutions" / "solutions").mkdir(parents=True)
     (root / "knowledge" / "solutions" / "solutions" / "index.html").write_text(
         "stale", encoding="utf-8"
@@ -142,9 +148,14 @@ def test_build_excludes_private_stale_inputs_and_emits_root_contract(tmp_path: P
         "topic_signal_briefs.jsonl",
     ]
     assert (output / "static/avatar.bin").read_bytes() == b"\x89PNG\r\n\x00\xff\x01\x02"
-    assert receipt["source"]["file_count"] == 13
-    assert receipt["source"]["excluded_file_count"] == 2
+    assert receipt["source"]["file_count"] == 15
+    assert receipt["source"]["excluded_file_count"] == 4
     assert receipt["artifact"]["file_count"] == 13
+    assert receipt["output"]["file_count"] == 15
+    assert all(
+        record["path"] not in {builder.ASSETSIGNORE_FILENAME, builder.RECEIPT_FILENAME}
+        for record in receipt["files"]
+    )
     assert receipt["verification"]["static_manifest_files_match"] is True
     assert receipt["verification"]["binary_bytes_preserved"] is True
     assert receipt["verification"]["local_path_markers_remaining"] == 0
@@ -388,6 +399,18 @@ def test_workspace_rewrite_removes_legacy_commercial_handoff() -> None:
     assert "Alex Yarosh workflow" not in rendered
     assert "Alex Yarosh's audit" not in rendered
     assert "independent public research pilot" in rendered
+
+
+def test_workspace_rewrite_keeps_project_story_on_the_about_route() -> None:
+    rendered = builder._rewrite_workspace_html(
+        '<a href="/workspace/">Project Story</a>'
+        '<a href="/workspace/">Search workspace</a>'
+        '<a href="./story.html">Project Story</a>'
+    )
+
+    assert rendered.count('<a href="/about">Project Story</a>') == 2
+    assert '<a href="/workspace/">Project Story</a>' not in rendered
+    assert '<a href="/workspace/">Search workspace</a>' in rendered
 
 
 def test_workspace_fallback_counts_come_from_the_static_manifest(tmp_path: Path) -> None:

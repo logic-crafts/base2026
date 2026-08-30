@@ -15,11 +15,21 @@ public-before-private deployment order in the canonical manual.
 Current Workers Static Assets release:
 
 - Domain: `https://base2026.dev/`
-- Public Worker: `3e06c10b-9fa4-40aa-ad14-913a11b85f30`
-- Immediate rollback: `fadc6c25-1d9f-4805-aed2-614e1463a018`
+- Public Worker: `eeeabd1b-7454-4ec5-9ac3-6b35d3bb3fa3`
+- Immediate rollback: `3e06c10b-9fa4-40aa-ad14-913a11b85f30`
 - Artifact tree SHA-256:
-  `e04bc4be2b46a29de89fd7f59bf4e845ef686d3d9036b28f5439c6a8908a011c`
+  `02dc9883597dfab6215cb10b2082c19c804fda21bbbc3e71fe882a2d273a3065`
 - Canonical source repository: `https://github.com/offflinerpsy/base2026`
+- Deployed source: `0ced3a5c03554d1316397c5cbeceeb697a4d5c05`
+- Live release receipt: `BASE2026_TECHNICAL_RELEASE_2026_08_30.md`
+
+Always pass the exact reviewed candidate to Wrangler with `--assets`; the
+ignored output path in the checked-in config is not an implicit release
+selection. Rebuilt candidates must exclude previous builder receipts and keep
+the Workspace Project Story link on `/about`. `/sources/*` must remain
+Worker-first so static and projected source routes share canonical redirects
+and security headers. This technical release required no D1 import or schema
+change.
 
 Legacy VPS rollback path:
 

@@ -2,13 +2,28 @@
 
 Status: authoritative architecture and operations reference
 
-Production snapshot verified: 2026-08-29 (read-only closeout)
+Public production verified: 2026-08-30 (technical release).
+Private production snapshot: 2026-08-29 (read-only closeout).
 
 Applies to: TikTok discovery, cloud acquisition, private processing, automatic excerpt-card publication, public Base2026 search, deployment, rollback, and agent handoff
 
 > **All agents start here for Base2026 Cloudflare or TikTok-pipeline work.** Repository files and live Cloudflare receipts override chat memory. This document defines the system; dated counters and version IDs are only a verified snapshot and must be refreshed before a production change.
 
-## Current live capture receipt — 2026-08-29
+## Public technical release — 2026-08-30
+
+Public Worker `eeeabd1b-7454-4ec5-9ac3-6b35d3bb3fa3` is live at 100%.
+Immediate rollback is `3e06c10b-9fa4-40aa-ad14-913a11b85f30`; artifact tree is
+`02dc9883597dfab6215cb10b2082c19c804fda21bbbc3e71fe882a2d273a3065`.
+The release keeps `/sources/*` Worker-first for consistent canonical 308
+redirects and security headers, removes the noindex Workspace from the hub
+sitemap, fixes JSONL cache/API discovery and deterministically overlays the
+current Cloudflare roadmap. The builder preserves the Workspace Project Story
+link and does not replay its own generated metadata. Public D1, reviewed JSONL,
+homepage, founder and Workspace content remain unchanged. No private Worker,
+schema, binding, DNS or intake action was part of the release. Exact source and
+verification: [`release receipt`](project-memory/BASE2026_TECHNICAL_RELEASE_2026_08_30.md).
+
+## Latest private capture receipt — 2026-08-29
 
 The private control Worker is deployed as version
 `14adacb6-7f0f-4aa7-9131-fc41469eec15` (v0.6.2). Its private Container uses
@@ -513,12 +528,13 @@ The 2026-08-23 production closeout passed 34 public Worker tests, 183 private Wo
 
 ## 16. Verified production snapshot
 
-Verified read-only on 2026-08-29:
+Public Worker, rollback and public D1 verified on 2026-08-30. Private and
+`www` entries retain the read-only 2026-08-29 snapshot:
 
 | Item | Verified value |
 | --- | --- |
-| Public Worker `base2026` | `3e06c10b-9fa4-40aa-ad14-913a11b85f30` |
-| Public rollback | `fadc6c25-1d9f-4805-aed2-614e1463a018` |
+| Public Worker `base2026` | `eeeabd1b-7454-4ec5-9ac3-6b35d3bb3fa3` |
+| Public rollback | `3e06c10b-9fa4-40aa-ad14-913a11b85f30` |
 | `www` redirect Worker | Path/query redirect behavior verified; deployment version was not re-read in this pass |
 | Private Worker | v0.6.2, `14adacb6-7f0f-4aa7-9131-fc41469eec15` |
 | Private rollback | Resolve from the live deployment list immediately before any mutation; this readback made no rollback selection |

@@ -1,6 +1,6 @@
 # Active Phase
 
-Last verified: 2026-08-29
+Last verified: 2026-08-30 (public technical release).
 
 ## Phase
 
@@ -19,8 +19,9 @@ Post-release operational observation and public dataset distribution.
    do not create another external copy in this phase.
 5. Preserve the exact public release and privacy invariants; make no further
    homepage/founder changes without a concrete defect or owner-selected scope.
-6. Keep the reviewed technical closeout candidate undeployed until a separate
-   deployment task; source readiness is not a live-fix receipt.
+6. The technical closeout is deployed and verified; preserve its exact release
+   and rollback in `BASE2026_TECHNICAL_RELEASE_2026_08_30.md`. No technical
+   candidate from this closeout remains waiting for deployment.
 
 ## Not active
 

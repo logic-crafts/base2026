@@ -1,6 +1,6 @@
 # Next Action
 
-Last verified: 2026-08-29
+Last verified: 2026-08-30 (public technical release).
 
 ## Pipeline observation
 
@@ -20,15 +20,14 @@ to the dedicated private-pipeline task with failed-run-only notifications.
 
 ## Product observation
 
-- In a future explicit deployment task, rebuild from the reviewed Git commit,
-  rerun artifact policy and deploy public Worker only. Then live-read sitemap
-  membership, dynamic/static security headers, JSONL cache, API index,
-  trailing-slash source redirect and roadmap before any indexing request.
+- Technical closeout is live, not awaiting deployment. Its exact source,
+  artifact, verification and rollback are recorded in
+  `BASE2026_TECHNICAL_RELEASE_2026_08_30.md`. Do not redeploy an older candidate.
 - Recheck GSC Page indexing/Links and Bing after processing. Track Google's
   current 22-impression baseline and canonical consolidation; do not resubmit
   unchanged sitemaps or request indexing for unchanged URLs.
-- Keep public Worker `3e06c10b-9fa4-40aa-ad14-913a11b85f30`, artifact tree
-  `e04bc4be2b46a29de89fd7f59bf4e845ef686d3d9036b28f5439c6a8908a011c`
+- Keep public Worker `eeeabd1b-7454-4ec5-9ac3-6b35d3bb3fa3`, artifact tree
+  `02dc9883597dfab6215cb10b2082c19c804fda21bbbc3e71fe882a2d273a3065`
   and zero-full-transcript invariant unless a verified defect requires change.
 - Measure discovery of `/dataset`, the GitHub release and the live Enigmavista,
   Dreamwood and Aster references before repeating submissions. Base2026 and
