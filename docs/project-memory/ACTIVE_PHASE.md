@@ -1,36 +1,41 @@
 # Active Phase
 
-Last verified: 2026-08-30 (public technical release).
+Phase 22 — release reproducibility and archive-backed editorial closure.
+Current checkpoint: 2026-08-31 10:17 UTC. Root owns final public documentation
+and PR32 integration; the main source, roadmap correction, two archive
+articles and private reliability implementation have real release receipts.
 
-## Phase
+## Completed scope
 
-Post-release operational observation and public dataset distribution.
+- Source316a39f64 merged through PR31; correction4960c99bd was pushed before
+  its exact two-asset public release. Design and other static assets are preserved.
+- Two independently reviewed archive-backed articles are published; blog5 and
+  five unchanged maintained guides are distinct counts. Do not replay them.
+- Two exact unsupported historical cards were withdrawn with private history
+  preserved. The later natural projection is separate from those withdrawals.
+- Private releases57/58 and additive migration0016 are deployed. Release58
+  changes only diagnostic revision filtering over release57's reliability work.
 
-## Active work
+## Remaining work
 
-1. Observe private Container readiness without repeated restarts; the Worker,
-   scheduler, D1/R2 pipeline and non-Container acquisition path remain live.
-2. Keep `@webhivedigital` in source review until discovery returns an exact
-   current video link; do not force admission.
-3. Measure the first Google query/page impressions while Google consolidates
-   the corrected extensionless canonicals; Bing remains in processing.
-4. Observe discovery and referral evidence for `/dataset`, the GitHub release,
-   contextual owned-domain references and the existing editorial distribution;
-   do not create another external copy in this phase.
-5. Preserve the exact public release and privacy invariants; make no further
-   homepage/founder changes without a concrete defect or owner-selected scope.
-6. The technical closeout is deployed and verified; preserve its exact release
-   and rollback in `BASE2026_TECHNICAL_RELEASE_2026_08_30.md`. No technical
-   candidate from this closeout remains waiting for deployment.
+- Finish independent final-doc review and PR32 integration; do not preclaim merge.
+- Observe the bounded cohort and fail-closed holds/retries. At 10:16, 27 admitted
+  yielded 6 media, 5 transcripts and one verified projection, not 27 completions.
+- Continue two distinct unfinished archive candidates with separate author and
+  critic; no filler quota or repeated unchanged-guide publication.
+- Keep cleanup pagination/starvation and external deployment/access blockers
+  separate; no expanded deletion, old-record resurrection or blind retries.
 
-## Not active
+The editorial office remains every six hours. Private fallback is incident-first
+at 04:45/10:45/16:45/22:45 UTC; native five-minute doctor is unchanged.
+External silent-outage detection may take six hours plus host availability.
+Authoring/review/refill need the Codex host; both legacy local jobs remain paused.
 
-- another public redesign;
-- broad transcript publication;
-- blind Container restart loops;
-- ChatGPT Web automation;
-- bulk dirty-worktree cleanup.
-- paid PageRank links, PBNs, sitewide backlink networks or unverified directory
-  blasts.
+No new scheduler, CMS, paid API, redesign or private-source publication.
+Root remains the sole editorial publisher; private operations retains its own
+release authority and protected receipts.
 
-See [`CURRENT_STATUS.md`](CURRENT_STATUS.md) for exact versions and counters.
+[Current state](CURRENT_STATUS.md) ·
+[Closure and exact receipts](BASE2026_OFFICE_CLOSURE_2026_08_31.md) ·
+[Editorial contract](../BASE2026_EDITORIAL_PUBLISHING.md) ·
+[Guide contract](../BASE2026_EVIDENCE_TO_SEO_OPERATING_MANUAL.md)

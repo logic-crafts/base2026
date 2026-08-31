@@ -1,53 +1,45 @@
 # Next Action
 
-Last verified: 2026-08-30 (public technical release).
+Checkpoint: 2026-08-31 10:17 UTC.
+[Current state](CURRENT_STATUS.md) ·
+[Closure and receipts](BASE2026_OFFICE_CLOSURE_2026_08_31.md).
 
-## Pipeline observation
+PR31 is merged; correction/closure are tracked by PR32. Verify its GitHub
+merge receipt before further release; do not preclaim it or rewrite history.
 
-Active automation: `base2026-private-pipeline-hourly-watchdog`, hourly, attached
-to the dedicated private-pipeline task with failed-run-only notifications.
+1. Observe deployed private release58 and the ongoing cohort at10:45 UTC; do not repeat
+   its completed migration/release as a test. At 10:16, 27 admitted yielded
+   6 media, 5 transcripts and one packet/import/verified projection. Keep
+   external capture retry bounded and semantic holds fail-closed.
+2. Preserve the rollback fence: release57 is the diagnostic rollback.
+   Release56 requires zero active capture leases and no reserved, settling
+   or uncertain operation. Keep migration0016/ledger; no automatic refund,
+   replay, tuple rearming or resurrection. Cleanup pagination/starvation
+   needs its separate bounded investigation, not broader deletion.
+3. Both archive articles are published revision1, recorded at 09:15:33.466
+   and 10:06:01.197 UTC. Do not replay them, the worksheet or completed guide
+   acceptances. Corrections need independent exact-payload review and explicit CAS.
+4. Comparison is complete; two archive candidates remain: research/expert
+   interviews and context-preserving repurposing. They are research tasks,
+   not approved publications. The six-hour office should finish useful pending
+   work even when guide snapshots are unchanged, with separate author/critic
+   and one publisher. Preserve truncation and source/rights caveats.
+5. Reconcile existing X IDs before refill. The 08:20 snapshot is four sent/
+   five scheduled/one queued thread; no new posts in this closure. Next slot:
+   August31 12:30 UTC. The first 24-hour launch window begins19:24 UTC.
+   LinkedIn remains Computer Use/action-time Post confirmation, never Buffer/stealth.
+6. Keep private fallback at 04:45/10:45/16:45/22:45 UTC and native doctor every
+   five minutes. Healthy unchanged checks stop cheaply. External total-outage
+   detection is up to six hours plus host availability. Direct GPT Work
+   incident delivery is unverified; do not report an unobserved dispatch.
+7. Golem remains blocked by Actions startup and unavailable authorized SSH;
+   merged code is not a live backlink. Preserve existing contextual references.
+   Instagram and dataset mirrors still require access/rights clearance.
+8. The orphan enrichment key is retired; 59 others are preserved, not
+   recertified. Matching roadmap HTML/JS is live. Do not invent a replacement page.
 
-1. On the next bounded health audit, read signed Worker health and Container
-   state once. Do not restart while it is `running` with no failed instance,
-   active lease, or explicit error merely to chase contradictory `healthy`
-   telemetry.
-2. Prove Container fallback only when a real admitted candidate requires it;
-   the latest successful canary used the official Player API path and therefore
-   did not prove Container capture.
-3. Keep `@webhivedigital` in source review. Its rows have zero capture attempts
-   and no capture error, so do not send them into transport retries without an
-   exact current video link.
-
-## Product observation
-
-- Technical closeout is live, not awaiting deployment. Its exact source,
-  artifact, verification and rollback are recorded in
-  `BASE2026_TECHNICAL_RELEASE_2026_08_30.md`. Do not redeploy an older candidate.
-- Recheck GSC Page indexing/Links and Bing after processing. Track Google's
-  current 22-impression baseline and canonical consolidation; do not resubmit
-  unchanged sitemaps or request indexing for unchanged URLs.
-- Keep public Worker `eeeabd1b-7454-4ec5-9ac3-6b35d3bb3fa3`, artifact tree
-  `02dc9883597dfab6215cb10b2082c19c804fda21bbbc3e71fe882a2d273a3065`
-  and zero-full-transcript invariant unless a verified defect requires change.
-- Measure discovery of `/dataset`, the GitHub release and the live Enigmavista,
-  Dreamwood and Aster references before repeating submissions. Base2026 and
-  Enigmavista IndexNow submissions were already accepted; Dreamwood/Aster use
-  natural sitemap and internal-link discovery.
-- Do not retry Golem production from this Mac until a verified deployment
-  credential is restored. Its code is merged, but both GitHub Actions runs
-  failed before job start and existing local SSH keys were rejected.
-- Keep Hugging Face and Zenodo on HOLD until the dataset rights model,
-  per-record reuse basis/provenance, complete mirror payload and
-  correction/takedown policy are explicit. Prepared DEV, Hashnode, Show HN,
-  Reddit, Indie Hackers and Product Hunt copy remains local-only until a new
-  publication task.
-- Measure the live Medium, X and LinkedIn article launch before syndicating the
-  same piece elsewhere. Future reviewed journal releases may be published to
-  Medium, X and LinkedIn without a separate final-click handoff under the
-  bounded standing authorization in
-  `BASE2026_EDITORIAL_SYNDICATION_RECEIPT_2026_08_29.md`.
-- Do not buy ranking links. Any paid newsletter or publisher test requires an
-  explicit budget decision and must be purchased for relevant referral reach
-  with `rel="sponsored"` or `nofollow`.
-- Audit historical dirty worktrees individually before removal; never bulk
-  clean, reset, merge or delete them.
+Public Worker `7522595a-13bf-4437-8955-fd14816b2569` serves tree
+`ed0a9371e0471d13006b62b250d458c7f3b3fdbcc8530fc938dd32c758fe46e2`.
+Compatible public rollback: `a63f4c74-b6b2-4935-a392-61003d28567a`.
+Never restore a pre-guide Worker over guide-kind data. Routine editorial work
+does not deploy code or change design, DNS, credentials, budgets or private intake.

@@ -15,10 +15,10 @@ fundraising, traction or ranking promises.
 - automatic, receipt-gated publication of sanitized excerpt cards only;
 - public JSONL, dataset landing page, machine-readable catalog, API quickstart,
   data dictionary, API index, `llms.txt` and GitHub source;
-- 60 configured source-backed enrichment entries in
-  `data/base2026_topic_traffic_pages.json`; every entry has an answer capsule,
-  proof-source IDs and FAQ, with 102 proof links total. This is configuration
-  coverage; public route and indexation status are measured per entry;
+- an enrichment registry in `data/base2026_topic_traffic_pages.json`;
+  configuration, evidence support, published routes and indexing are separate
+  checks. One orphan entry with unsuitable evidence was retired on August31;
+  the other 59 entries were preserved, not newly certified by this cleanup;
 - Google Search Console and Bing Webmaster Tools connections.
 - a reviewed original blog with durable D1 revisions, RSS and article sitemap;
 - maintained task guides on existing topic canonicals, with exact public
@@ -35,10 +35,13 @@ fundraising, traction or ranking promises.
 - operate the five-topic maintained-guide cohort through the existing six-hour
   editorial office: material evidence changes, separate semantic review and a
   single sequential data-only publisher. The first recurring run on August 31
-  published four reviewed guides without changing the runtime; all five are live;
+  published four reviewed guides without changing the runtime; all five are live.
+  Two archive-backed articles are published; five blog articles are live as
+  of August31 10:15 UTC. Comparison is complete; two archive candidates remain.
+  Unchanged guides are not republished;
 - keep public counters, D1 projections, canonicals and sitemaps synchronized;
-- keep the 60 configured enrichment entries source-backed and audit their
-  public route and search treatment individually;
+- review enrichment source support, public routes and search treatment
+  individually; keep unsupported or unresolved additions held;
 - strengthen creator claims, correction tracking and public change history;
 - enforce the single `b26-independent-v1` visual authority in every release.
 

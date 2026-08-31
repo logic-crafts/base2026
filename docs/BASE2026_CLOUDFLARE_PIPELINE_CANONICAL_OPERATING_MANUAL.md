@@ -2,14 +2,95 @@
 
 Status: authoritative architecture and operations reference
 
-Public production verified: 2026-08-31 (first recurring data-only guide run; unchanged runtime).
-Private production verified: 2026-08-30 (separate owner's compatible editorial adapter; application label remains v0.6.4).
+Public production verified through 2026-08-31 10:17 UTC; aggregate counters are dated10:15. The two-roadmap-asset release is unchanged.
+Private production: reliability release57 and diagnostic release58 deployed; cohort observation is dated10:16. Private deployment identifiers remain in protected receipts.
 
 Applies to: TikTok discovery, cloud acquisition, private processing, automatic excerpt-card publication, public Base2026 search, deployment, rollback, and agent handoff
 
 > **All agents start here for Base2026 Cloudflare or TikTok-pipeline work.** Repository files and live Cloudflare receipts override chat memory. This document defines the system; dated counters and version IDs are only a verified snapshot and must be refreshed before a production change.
 
-## Latest editorial operation — 2026-08-31
+## Current reliability and editorial checkpoint — 2026-08-31 10:17 UTC
+
+Public totals at10:15 are2175 documents/1573 sources/49 routes/83 cards/zero
+full transcripts; blog5 and five unchanged guides are separate counts.
+Two archive articles are published; comparison is complete and two archive
+candidates remain. PR31 is merged; correction/closure follow PR32. Verify its
+GitHub merge receipt before further release; no GitHub CI result is claimed.
+
+Private release57 deployed09:57:24 after additive migration0016 at09:55:59.
+Its387 Worker/18 courier tests, types/dry-run and45-binding parity passed.
+Semantic pointer v2 uses complete attributed segments, rejects contradictory
+retain/negative-classification decisions and checks prompt fit. This is not
+a veto on negative claims or criticism. Exact quotes/hashes are structural
+evidence, not truth.
+Terminal false waits are repaired. Source capture leases and the operation
+ledger provide atomic reservation/idempotent settlement; uncertain work stays
+held, without automatic refund/replay or resurrection. Recovery is limited to
+evidenced pending-media work. Cleanup pagination/starvation remains separate;
+deletion scope is not expanded.
+
+Diagnostic release58 deployed10:15:41.832 at100%, changing only two-file
+revision filtering. Independent review,388 Worker/18 courier tests,
+types/dry-run, health, no pending migration,45-binding parity and one fresh
+R2 byte/hash readback passed. Diagnostic rollback is57. Older56 requires zero
+active capture leases and no reserved/settling/uncertain operations; preserve
+migration0016 and its ledger and recheck ownership before rollback.
+
+At10:16:27 admitted/6 media/5 transcripts/one packet/import/verified projection,
+not27 completions. Five semantic attempts yielded1 packet/2 review
+classifications/2 contract holds. One external capture failure has bounded retry.
+The owner recorded18 unique source-state corrections (16 historical/2 fresh); the terminal
+false-wait backlog is zero in that receipt. Holds and the next tick remain.
+Public source/search/catalog/sitemap and1440/390 QA prove one natural path,
+not creator truth or traffic.
+
+Fallback remains04:45/10:45/16:45/22:45 UTC with its dated release57 prompt
+refreshed; native doctor remains five-minute. Authoring/review/refill need the
+host; external outage detection may take six hours plus host availability.
+The open AI incident has no verified direct GPT Work dispatch.
+See [current state](project-memory/CURRENT_STATUS.md) and
+[closure](project-memory/BASE2026_OFFICE_CLOSURE_2026_08_31.md).
+
+## Dated public roadmap release — 2026-08-31 09:41 UTC
+
+Public Worker `7522595a-13bf-4437-8955-fd14816b2569` serves artifact
+`base2026-enrichment-retirement-20260831-v2`, tree
+`ed0a9371e0471d13006b62b250d458c7f3b3fdbcc8530fc938dd32c758fe46e2`.
+Only roadmap HTML/JS copy changed; all4243 other served files, Worker/RPC logic,
+bindings and D1 data remain unchanged. Source4960c99bd was committed/pushed
+before release. The previously deployed editorial source316a39f64 is merged
+through PR31; correction/closure docs are tracked through PR32.
+[Exact roadmap release](project-memory/BASE2026_ROADMAP_CORRECTION_2026_08_31.md).
+
+Retired one orphan unsupported enrichment entry, preserving59others without
+new certification. No fake replacement route or weakened indexation gate.
+Compatible public rollback:a63f4c74-b6b2-4935-a392-61003d28567a, not a pre-guide
+Worker. Current source checks use the new private59-file manifest; older
+51-file pins are historical. CURRENT_STATUS records changing private repair
+and editorial state; do not treat older snapshots below as current gates.
+
+## Earlier office closure — 2026-08-31
+
+Current source commit316a39f64 is pushed; final main integration is tracked in
+[the closure receipt](project-memory/BASE2026_OFFICE_CLOSURE_2026_08_31.md).
+Earlier statements below that the deployed delta was uncommitted are historical,
+not current source state. Generated artifact, live D1 and private state remain
+separate restore inputs; no public Worker redeploy occurred in this closure.
+
+Live09:20UTC:2173documents/1572sources/48evidenceroutes/81projectedcards/zero
+full transcripts. Exactly two unsupported historical claim/excerpt pairs were
+withdrawn with fenced receipts; private history remains and five guides are
+unchanged. A new archive-backed article is published: blog4/guides5.
+Publication/discovery is not traffic. Use CURRENT_STATUS.md for changing counts.
+
+Existing editorial office now consumes useful unfinished archive tasks even
+when guide hashes do not change. Private fallback is incident-first at04:45,
+10:45,16:45,22:45UTC; native five-minute doctor remains. External silent-outage
+detection can take six hours plus host availability. No cloud-only authoring
+bridge or new paid engine is established. Private reliability repair is still
+under its owner's independent test/release gate; do not assume deployed.
+
+## Historical first editorial operation — 2026-08-31
 
 The first recurring office run published four independently reviewed guides
 through the existing publisher, without deploying a Worker or altering intake.

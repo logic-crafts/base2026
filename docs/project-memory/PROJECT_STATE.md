@@ -1,41 +1,37 @@
 # Project State
 
-Public release verified: 2026-08-30; private and search-console snapshots: 2026-08-29.
+Base2026 is a free, open-source video research engine at
+https://base2026.dev/. Cloudflare serves attributed evidence, original blog
+articles and source-dependent task guides. Public readability is not a grant
+of third-party redistribution rights.
 
-Canonical current snapshot: [`CURRENT_STATUS.md`](CURRENT_STATUS.md).
+Continue from [CURRENT_STATUS.md](CURRENT_STATUS.md),
+[NEXT_ACTION.md](NEXT_ACTION.md) and the
+[closure receipt](BASE2026_OFFICE_CLOSURE_2026_08_31.md), not old chat or counters.
 
-Base2026 is live at `https://base2026.dev/` as a free, open-source video
-research engine. Workers Static Assets and public D1 FTS5 serve the product;
-a separate private Cloudflare Worker, D1, R2, Queues, Workflows, Workers AI,
-Browser Rendering and restricted Container run cloud-only intake.
+The 2026-08-31 10:15 public snapshot is 2175 documents /1573 sources /
+49 evidence routes /83 projected cards /zero full transcripts. Blog5 and five
+unchanged maintained guides are separate counts. Two archive-backed articles
+are published. The 09:16 withdrawal total2173/1572/48/81/0 is history; private
+evidence for both withdrawn cards was preserved.
 
-The public product includes the technical closeout through deployed source
-`0ced3a5c03554d1316397c5cbeceeb697a4d5c05`. Live
-statistics, Evidence Brief V1/V2, founder page, API documentation, Analytics,
-both sitemaps and the first engineering journal article pass production
-readback. The public privacy invariant remains zero full transcripts.
+Source316a39f64 merged through PR31. Correction4960c99bd was pushed before
+the two-roadmap-asset release; public Worker7522595a and artifacted0a9371
+remain current. PR32 tracks final documentation/integration; verify its GitHub
+merge receipt before further releases rather than replaying completed work.
+Git source, static artifact and live D1/private state are separate restore inputs.
 
-The journal article is also live on Medium with a canonical back to Base2026,
-and adapted launch posts are live on X and LinkedIn. These are free editorial
-distribution receipts, not paid ranking links.
+Private reliability release57 and additive migration0016 are deployed.
+Diagnostic-only release58 followed at10:15:41.832 UTC. The 10:16 cohort
+contains27 admitted /6 media /5 transcripts /one verified projection;
+this proves a natural end-to-end path, not completion of all27 or creator truth.
+Release57 is the diagnostic rollback; release56 requires the ownership/ledger
+fences in the deployment runbook. Holds, bounded retry and cleanup follow-up remain.
 
-The 2026-08-29 private discovery snapshot recorded 135 discovered / 17 fresh / 118
-duplicates / one source-review failure. Private D1 has 339 sources, and R2's
-318 media-object aggregate exactly matches D1. No stale leases, failed/dead
-jobs, Queue failures, or automatic-publication backlog exist. The Cloudflare
-Container is active/running with no errors or failed instance while its detail
-counter remains `healthy=0`; do not loop restarts for this telemetry mismatch.
+Editorial work continues from two unfinished archive candidates, not forced
+guide revisions. Private fallback is four daily incident checks; native
+five-minute doctor is unchanged. External total-outage detection can take
+six hours plus host availability; authoring/review/refill need the Codex host.
 
-The 2026-08-29 Google snapshot reports 22 early impressions across 13 pages with zero clicks and
-average position 55.4. Page indexing/Links and Bing performance are still
-processing; Bing's live journal test is eligible while its index view remains
-discovered-not-crawled. Historical dirty checkouts remain protected. Older
-narratives stay in Git history and dated receipts; do not append them back into
-this file.
-
-The sitemap, security-header, cache, API-index and roadmap-release fixes are
-live on public Worker `eeeabd1b-7454-4ec5-9ac3-6b35d3bb3fa3`. Artifact tree:
-`02dc9883597dfab6215cb10b2082c19c804fda21bbbc3e71fe882a2d273a3065`.
-The release also fixes replay of the Workspace Project Story link and generated
-build metadata. Public data and the approved visual design are unchanged.
-See [`BASE2026_TECHNICAL_RELEASE_2026_08_30.md`](BASE2026_TECHNICAL_RELEASE_2026_08_30.md).
+Golem deployment access, Instagram clearance, dataset rights and measured
+traffic growth remain open. Direct GPT Work incident delivery is not verified.

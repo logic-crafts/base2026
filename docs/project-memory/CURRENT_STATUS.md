@@ -1,118 +1,97 @@
 # Base2026 Current Status
 
-Public release verified: 2026-08-30. Private pipeline and search-console
-snapshots below remain dated 2026-08-29; they were not rerun in this release.
+Verified 2026-08-31 through 10:17 UTC. Public counters below are the dated
+10:15 UTC read. [Closure receipt](BASE2026_OFFICE_CLOSURE_2026_08_31.md)
+separates completed releases from remaining observation and external blockers.
+Older dated receipts are history, not current counters.
 
-This is the one-screen operating snapshot. Live Cloudflare receipts override
-dated counters. Git history and dated receipts preserve older states; do not
-append historical narratives here.
+## Live product
 
-## Product
+- Public Worker `7522595a-13bf-4437-8955-fd14816b2569` remains at 100%.
+  Artifact `base2026-enrichment-retirement-20260831-v2`, tree SHA
+  `ed0a9371e0471d13006b62b250d458c7f3b3fdbcc8530fc938dd32c758fe46e2`.
+  The [roadmap release](BASE2026_ROADMAP_CORRECTION_2026_08_31.md) changed
+  exactly two text assets; the other 4,243 static assets and Worker logic
+  did not change. Live D1 content changes are separate.
+- Public /api/stats at 10:15: **2,175 documents, 1,573 distinct sources,
+  49 evidence routes, 83 projected cards, zero full transcripts**.
+  The earlier 09:16 total of 2173/1572/48/81/0 followed two exact unsupported
+  card withdrawals. Their private history remains; neither was a guide dependency.
+- Blog/API/RSS contain **five articles**; all five maintained guides retain
+  their approved revision-1 hashes. Two distinct archive-backed articles are
+  now live: [content backlog](https://base2026.dev/blog/evidence-first-content-backlog/)
+  and [comparison-page evidence check](https://base2026.dev/blog/comparison-page-evidence-check/).
+  Exact hashes and recorded publication times are in the closure receipt.
+- Both new articles passed independent review, exact live API/hash checks,
+  HTML/feed/sitemap checks and Chrome 1440/390 QA with no overflow or errors.
+  All 31/29 same-origin links passed. IndexNow accepted each new URL once;
+  acceptance is not indexing, citations or traffic.
+- The newly projected source was verified at 10:17: two public cards,
+  source HTML/canonical/indexability, dynamic sitemap, catalog page 2, two
+  normal search queries and desktop/mobile QA. This proves one natural
+  end-to-end path, not creator truth or complete daily processing.
 
-Base2026 is a free, open-source video research engine. It turns eligible public
-expert videos into attributable evidence cards and searchable public pages.
-The scheduled production path is Cloudflare-native and does not require the
-MacBook or ChatGPT Web.
+## Source, release and recovery
 
-## Public production
+- Source `316a39f64190d9e2133aba600ea22a5008c604ef` merged through
+  [PR31](https://github.com/offflinerpsy/base2026/pull/31) at 09:27:49 UTC;
+  remote main was `d05f1b0efd30eeadb4c086331b8fbe3fd1131ef5`.
+  Correction `4960c99bd84a9384e3f3083e18b0389a4f21967c` was pushed before
+  the 09:39 two-asset deployment. [PR32](https://github.com/offflinerpsy/base2026/pull/32)
+  tracks the correction and final documentation. Read its GitHub merge receipt
+  before further releases; this dated snapshot does not preclaim integration.
+- The initial source gate passed 597 Worker/56 Python tests, typecheck,
+  exact-artifact dry-run and artifact policy. Its six filename-classification
+  exceptions were individually reviewed. The later 59-file source manifest
+  supersedes the original 51 pins. Local checks are not CI: zero GitHub checks
+  and no GitHub Actions workflows are claimed.
+- Git source, the reviewed static artifact and live D1/private state are
+  separate restore inputs. Generated/private material is not committed.
+  Public compatible rollback is `a63f4c74-b6b2-4935-a392-61003d28567a`;
+  never restore a pre-guide Worker over guide-kind data.
 
-- Domain: `https://base2026.dev/`
-- Worker: `eeeabd1b-7454-4ec5-9ac3-6b35d3bb3fa3` (100%).
-- Exact artifact tree:
-  `02dc9883597dfab6215cb10b2082c19c804fda21bbbc3e71fe882a2d273a3065`.
-- Immediate rollback: `3e06c10b-9fa4-40aa-ad14-913a11b85f30`.
-- Public D1: 2,175 documents; 1,574 distinct videos; 50 applied projections;
-  83 projected cards; zero public full transcripts.
-- Homepage and Analytics refresh these totals from read-only `/api/stats`.
-  Analytics also preserves verified 2026-07-29 summary totals without empty
-  historical ranking sections.
-- Core routes, Evidence Brief V1/V2, founder hashes and API docs pass live
-  readback. The hub sitemap excludes the noindex Workspace; the dynamic
-  sitemap contains 50 URLs. GSC's 2026-08-29 processed copies reported 1,634
-  static and 49 dynamic URLs, not a current indexation count.
-- The first public engineering journal article is live at
-  `/journal/source-backed-video-search-cloudflare/`. Its free distribution is
-  live on Medium, X and LinkedIn; the Medium copy canonicals to Base2026.
+## Private reliability: deployed, with bounded outcomes
 
-## Private production pipeline — 2026-08-29 snapshot
+- Release 57 deployed at 09:57:24 after additive migration 0016 at 09:55:59.
+  Its gate passed 387 Worker/18 courier tests, types and dry-run, with all
+  45 bindings preserved. It adds complete attributed-segment selection,
+  a veto for contradictory retain/negative-classification decisions and
+  prompt-fit checks, terminal false-wait repair,
+  source capture leases and atomic operation accounting. Hashes are not truth.
+- Release 58 deployed at 10:15:41.832, 100%: only the two-file diagnostic
+  revision filter changed. Independent review, 388 Worker/18 courier tests,
+  types/dry-run, health, no pending migration and 45-binding parity passed.
+  One fresh R2 artifact byte/hash readback passed at 10:16.
+- Owner's 10:16 cohort: 27 admitted, 6 media, 5 transcripts, one packet,
+  one import and one verified projection. The five semantic attempts are
+  classified as 1 packet / 2 review classifications / 2 contract holds.
+  The final owner receipt reports 18 unique source-state corrections
+  (16 historical/2 fresh), with zero terminal false-wait backlog.
+  Not all 27 are processed;
+  the next tick is ongoing, one external capture failure has bounded retry,
+  and semantic holds remain fail-closed.
+- Diagnostic rollback is release 57. Older release 56 requires zero active
+  capture leases and zero reserved/settling/uncertain operations; preserve
+  migration 0016 and its ledger. Uncertain operations are held, not refunded
+  or replayed. Recovery is limited to evidenced pending-media work, not
+  resurrection of withdrawn records. Cleanup pagination/starvation remains
+  separate; no expanded deletion authority.
 
-- Private Worker: v0.6.2, `14adacb6-7f0f-4aa7-9131-fc41469eec15`
-  (100%). Resolve its immediate rollback from the live deployment list before
-  any mutation; this readback made no rollback selection.
-- Cron: reconciliation/capture/publication every five minutes; discovery daily
-  at 10:00 UTC.
-- Private R2/D1 intake, Workers AI, automatic eligible-card publication and
-  receipt-based retention are active.
-- Latest discovery: 135 discovered, 17 fresh/admitted, 118 duplicates and one
-  failed source across 19 creators. The failed `@webhivedigital` cursor remains
-  a source-review issue, not a capture retry loop.
-- Private D1 has 339 sources; R2 has 1,280 objects including 318 media objects,
-  exactly matching D1's stored-media aggregate. There are no stale leases,
-  failed/dead jobs or Queue delivery failures.
-- Automatic publication has 19 applied and 1 already-public receipt, no
-  pending/retry/held receipt, and zero currently eligible candidates.
-- Container image 0.5.5 / app v8 has one active/running instance, no failed
-  instance and no errors. Cloudflare's detail counter still says `healthy=0`;
-  this is contradictory telemetry, not a restart trigger or proof of failure.
-- Hourly heartbeat `base2026-private-pipeline-hourly-watchdog` is active in the
-  dedicated pipeline task. It is read-only first and explicitly forbids another
-  restart for this incident without a real Container-required failure.
-- Broad `PUBLIC_RELEASE_ENABLED=false` remains correct. The narrow, policy-bound
-  automatic projection lane remains enabled.
+## Automation and external limits
 
-## Git authority
-
-- Canonical public repository: `https://github.com/offflinerpsy/base2026`
-- PR #19 merged the consolidated source; PR #20 merged the independent-review
-  Analytics correction; PR #23 shipped the reviewed public dataset; PR #26
-  shipped the engineering journal. PR #28 added the technical closeout.
-  Current deployed source commit:
-  `0ced3a5c03554d1316397c5cbeceeb697a4d5c05`.
-- The original SEO/GEO checkout and historical worktrees are dirty snapshots.
-  Never bulk-stage, reset, merge, prune or delete them.
-
-## Search-engine measurement — 2026-08-29 snapshot
-
-- Google Search Console and Bing both accept the static and dynamic sitemaps.
-- Google now exposes early three-month performance: 0 clicks, 22 impressions,
-  0% CTR and average position 55.4. Thirteen pages have impressions; the
-  historical `.html` AI-citation topic leads with 8 while Google recrawls the
-  corrected extensionless canonical topology.
-- Google Page indexing and Links still process; the new journal is not indexed.
-- Bing still prepares Search Performance. Its journal live test reports that
-  the URL can be indexed with no SEO/GEO issue, while the index view says
-  discovered but not crawled. Sitemap totals remain 872 discovered URLs.
-- Do not resubmit unchanged URLs or claim discovery/impression counts as
-  indexation.
-
-## Technical closeout — deployed 2026-08-30
-
-- The live release fixes the Workspace sitemap mismatch, conflicting
-  JSONL cache directives, API-index Workspace URL, stale roadmap overlay,
-  baseline Worker security headers and trailing-slash dynamic-source canonical;
-  `/sources/*` is explicitly routed Worker-first for that contract.
-- The builder also preserves the Workspace Project Story link to `/about`
-  and excludes its generated metadata from replayed source records.
-- 41 Python tests, 47 Worker tests, typecheck, deterministic import, artifact
-  policy and explicit-assets Wrangler dry-run pass. Homepage, Workspace,
-  founder and the four public JSONL payloads are unchanged from production.
-- This technical release changes no D1 rows, private Worker, DNS, article or
-  social post. Receipt: [`BASE2026_TECHNICAL_RELEASE_2026_08_30.md`](BASE2026_TECHNICAL_RELEASE_2026_08_30.md).
-
-## Open loops
-
-1. Observe Container readiness without restart loops; prove fallback only on a
-   real candidate that requires it.
-2. Keep `@webhivedigital` in source review; do not force a candidate or mistake
-   its zero-attempt holds for a transport failure.
-3. Let Google recrawl the corrected canonicals and Bing finish processing;
-   measure query/page growth without resubmitting unchanged URLs.
-4. Measure referral and discovery signals from the existing distribution
-   before creating or publishing another copy of the same article.
-
-## Protected boundaries
-
-Never publish private pipeline source, raw media/transcripts, credentials,
-provider responses, private owner-profile/CV files, logs, local databases or
-generated deployment trees. Never change the public and private Workers in one
-unreviewed batch.
+- Editorial office: every six hours, all helpers Sol Max, separate author/
+  critic and one publisher. Comparison is completed; two distinct archive
+  candidates remain, not approved publications. Unchanged guides are not redated.
+- Private fallback: 04:45/10:45/16:45/22:45 UTC, incident-first; its dated
+  release-57 prompt was refreshed. Native five-minute doctor is unchanged.
+  External silent-outage detection can take six hours plus host availability.
+  Authoring/review/refill still need the Codex host; both legacy local jobs stay paused.
+- Golem remains 404: Actions startup and unavailable authorized SSH block
+  deployment. It is not a live backlink. Instagram capture is unproved;
+  dataset mirrors remain held for rights/provenance. Direct GPT Work incident
+  delivery is unverified; no dispatch is claimed.
+- The orphan enrichment entry is retired without a replacement page; 59
+  other entries are preserved, not newly certified. X's 08:20 snapshot remains
+  four sent/five scheduled, with no new posts in this closure. LinkedIn keeps
+  its Computer Use/action-time gate. GSC's 45 impressions/0 clicks are dated
+  Aug27–28; no growth result is invented.
