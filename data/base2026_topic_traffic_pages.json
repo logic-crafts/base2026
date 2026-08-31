@@ -817,41 +817,6 @@
       "tiktok:webhivedigital:7610834485151681814"
     ]
   },
-  "content-strategy": {
-    "target_query": "AI visibility content strategy",
-    "seo_title": "Content Strategy for AI Visibility and Search Demand | Base2026",
-    "meta_description": "How to choose content by buyer prompts, evidence gaps, Search Console signals and source-footprint opportunities.",
-    "answer_capsule": {
-      "heading": "AI visibility content strategy starts with demand and proof gaps.",
-      "body": "Instead of publishing random posts, choose pages where buyer prompts, search demand, existing evidence and commercial next steps overlap."
-    },
-    "faq": [
-      {
-        "question": "What should guide AI visibility content planning?",
-        "answer": "Use buyer prompts, GSC impressions, competitor citations, source-footprint gaps, internal link opportunities and conversion intent."
-      },
-      {
-        "question": "How many pages should be published at once?",
-        "answer": "Publish in verified batches: only pages with clear intent, unique evidence and enough value to deserve indexation."
-      },
-      {
-        "question": "What content should not be indexed?",
-        "answer": "Thin variations, duplicate summaries and pages without enough proof or demand should stay noindex or unpublished until improved."
-      }
-    ],
-    "cta": {
-      "title": "Build content around demand plus evidence",
-      "body": "Use Base2026-style proof mapping to decide which pages can create traffic and which gaps need source work first.",
-      "primary_label": "Audit content/source gaps",
-      "primary_href": "/ai-visibility-source-footprint/",
-      "secondary_label": "Run diagnostic audit",
-      "secondary_href": "/ai-visibility-diagnostic-audit/"
-    },
-    "proof_source_ids": [
-      "tiktok:build_in_public:7649507228147256598",
-      "tiktok:tjrobertson52:7649531548655521038"
-    ]
-  },
   "ai-content-quality": {
     "target_query": "AI content quality SEO",
     "seo_title": "AI Content Quality for SEO and AI Visibility | Base2026",

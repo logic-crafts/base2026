@@ -48,7 +48,7 @@ const roadmapData = {
       lane: "Discovery",
       status: "Live, monitored",
       purpose: "Make the same public evidence discoverable to visitors, search engines and machines.",
-      explanation: "Search, source/topic/creator pages, canonicals, sitemaps, structured data, dynamic projection pages and read-only API access are live. The topic-enrichment configuration contains 60 source-backed entries; every entry has an answer capsule, proof-source IDs and FAQ, with 102 proof links total. Public route and indexation status are measured per entry. Google Search Console shows 22 impressions, 0 clicks and average position 55.4; Bing performance data is still preparing.",
+      explanation: "Search, source/topic/creator pages, canonicals, sitemaps, structured data, dynamic projection pages and read-only API access are live. Enrichment coverage requires per-entry review of source support, public routes and indexation status; a configuration entry is not proof of a published or indexed page. Unresolved entries remain held. Google Search Console and Bing Webmaster Tools are connected; discovery, indexing and traffic are measured separately through dated observations.",
       quarter: "Discovery track",
       milestones: [
         { title: "D1 FTS5 search and filtering", status: "Live" },
@@ -120,7 +120,7 @@ const roadmapData = {
   priorities: {
     Now: [
       { title: "Measure Google and Bing performance", status: "In progress" },
-      { title: "Audit 60 configured enrichment entries", status: "In progress" },
+      { title: "Review enrichment sources and route coverage", status: "In progress" },
       { title: "Synchronize counters and D1 projections", status: "In progress" },
       { title: "Release-test canonicals and sitemaps", status: "In progress" },
     ],
@@ -153,8 +153,8 @@ const roadmapData = {
     {
       title: "Indexable distribution",
       status: "Live, monitored",
-      text: "Keep configured enrichment entries source-backed while measuring route coverage and search treatment.",
-      items: ["60 configured entries", "Route and indexation audit", "API samples", "Creator controls"],
+      text: "Review enrichment coverage against source support, public routes and search treatment.",
+      items: ["Source-review gates", "Route and indexation audit", "API samples", "Creator controls"],
     },
   ],
 };

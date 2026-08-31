@@ -12,7 +12,7 @@
   ],
   "assets": {
     "binding": "ASSETS",
-    "directory": "../../output/cloudflare-migration/base2026-seo-evidence-20260830-v1",
+    "directory": "../../output/cloudflare-migration/base2026-enrichment-retirement-20260831-v2",
     "run_worker_first": [
       "/api/*",
       "/sources",
