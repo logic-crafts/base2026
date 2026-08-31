@@ -21,6 +21,9 @@ meili_data/
 # Local captures and QA artifacts
 audio_*.ogg
 base2026-*.png
+# Reviewed, already-public editorial illustrations (not local QA captures).
+!/static/assets/base2026-ai-visibility-measurement.png
+!/static/assets/base2026-source-diversity.png
 base2026-*.md
 docs/*_roadmap_pack.zip
 scripts/tmp_*.py

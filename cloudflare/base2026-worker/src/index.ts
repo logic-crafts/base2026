@@ -1,4 +1,8 @@
 import { WorkerEntrypoint } from "cloudflare:workers";
+import { inspectStoredEditorialArticle, publishEditorialArticle, type EditorialOverwrite } from "./editorial";
+import { handleEditorialRoute } from "./editorial-routes";
+import { handleSourceCatalog } from "./source-catalog";
+import { handleEvidenceGuideRoute } from "./evidence-guide-routes";
 import {
   applyPublicProjection,
   inspectPublicSource,
@@ -1892,6 +1896,20 @@ async function handleInboxForm(request: Request, env: EnvWithBindings, kind: For
  * fetch/static-assets Worker; this class is not a new HTTP publication route.
  */
 export class PublicProjectionEntrypoint extends WorkerEntrypoint<Env> {
+  async publishEditorialArticle(input: unknown, overwrite?: EditorialOverwrite) {
+    return publishEditorialArticle(this.env.DB, input, {
+      now: new Date().toISOString(),
+      ...(overwrite === undefined ? {} : { overwrite }),
+    });
+  }
+
+  async inspectEditorialArticle(slug: string) {
+    // Repair must be able to inspect the current CAS receipt even while public
+    // guide reads are held by a changed/withdrawn evidence dependency.
+    const article = await inspectStoredEditorialArticle(this.env.DB, slug, new Date().toISOString());
+    return article ? { ok: true, receipt: article.receipt } : { ok: false, code: "NOT_FOUND" };
+  }
+
   async applyProjection(input: unknown) {
     return applyPublicProjection(this.env.DB, input);
   }
@@ -1917,6 +1935,12 @@ export default {
         url.protocol = "https:";
         return publicRedirect(url.toString(), 301);
       }
+      const guide = await handleEvidenceGuideRoute(request, env);
+      if (guide) return publicAssetResponse(guide);
+      const editorial = await handleEditorialRoute(request, env);
+      if (editorial) return publicAssetResponse(editorial);
+      const sourceCatalog = await handleSourceCatalog(request, env, url);
+      if (sourceCatalog) return publicAssetResponse(sourceCatalog);
       if (
         request.method === "GET" &&
         (url.pathname === "/search" ||

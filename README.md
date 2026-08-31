@@ -8,6 +8,10 @@ Built and maintained by solo founder Alex Yarosh.
 - Repository: <https://github.com/offflinerpsy/base2026>
 - Search workspace: <https://base2026.dev/workspace/>
 - Public dataset: <https://base2026.dev/dataset>
+- Live source catalog: <https://base2026.dev/sources/>
+- Maintained guides API: <https://base2026.dev/api/guides>
+- Blog: <https://base2026.dev/blog>
+- Blog RSS: <https://base2026.dev/blog/feed.xml>
 - Methodology: <https://base2026.dev/methodology>
 - Public roadmap: <https://base2026.dev/roadmap>
 - Support: <https://base2026.dev/support>
@@ -27,6 +31,8 @@ Base2026 creates a public evidence layer that keeps those connections visible.
 - generates source, creator, topic and comparison pages;
 - exposes public-safe machine-readable files for scripts and AI agents;
 - provides a Cloudflare Worker search API backed by D1 FTS5;
+- publishes original source-linked research articles through a separate reviewed editorial path;
+- maintains task-focused topic guides with exact evidence dependencies and useful decision tools;
 - documents methodology, corrections, opt-out and publication boundaries.
 
 The current release is a working public prototype. The verified 2026-08-29
@@ -35,6 +41,14 @@ snapshot contained 2,175 search documents across 1,574 distinct videos, with
 are dated database dimensions, not users, revenue, universal coverage or
 commercial traction. Current totals are available from the read-only
 [`/api/stats`](https://base2026.dev/api/stats) endpoint.
+
+Five maintained task guides are live as of August 31, 2026: internal linking,
+content refresh, Search Console opportunity selection, structured-data checks
+and llms.txt consumer evaluation. They are original, source-linked decision
+workflows at existing topic URLs, separate from the blog. The first recurring
+editorial run published four of them without a Worker redeploy; see the
+[data-only publication receipt](docs/project-memory/BASE2026_EDITORIAL_OFFICE_RUN_2026_08_31.md).
+Publication and accepted discovery requests do not establish traffic growth.
 
 ## Public dataset quickstart
 
@@ -91,6 +105,49 @@ Static Assets, D1, R2, Queues, Workflows and Workers AI. Durable identities,
 validation and receipts prevent retries from silently publishing a different
 record. Only sanitized excerpt cards cross from the private evidence lane into
 public D1.
+
+## Original research blog
+
+The [blog](https://base2026.dev/blog) connects original practical articles with
+the evidence library. Approved structured articles are validated, reviewed
+against an exact content hash, then published through an authenticated private
+receiver and Worker service binding into separate public D1 editorial tables.
+HTML, the [read-only article API](https://base2026.dev/api/blog), RSS and the
+blog sitemap update without rebuilding the site for each text publication.
+Retries are idempotent; corrections require an explicit revision comparison.
+Existing journal URLs remain unchanged.
+
+Sources, contextual research links and AI-assistance disclosures are visible.
+This is not a raw-transcript republishing lane. Sol Max research and review
+currently run in the owner's Codex office; the cloud serves published articles
+independently. No unlimited, cloud-only ChatGPT Pro authoring service is claimed.
+
+See the [editorial operating contract](docs/BASE2026_EDITORIAL_PUBLISHING.md)
+and the [first live publication/replay receipt](docs/project-memory/BASE2026_EDITORIAL_RUNTIME_RELEASE_2026_08_30.md).
+
+## Maintained evidence guides
+
+A video is an input, not automatically another SEO page. Relevant public
+evidence can improve a maintained guide at an existing topic URL. Each guide
+answers a concrete task, attributes the evidence, separates observed practices
+from Base2026 synthesis, and offers a decision or verification step. The blog
+remains separate for original research stories.
+
+Guide publication binds short supporting quotes to exact public document hashes.
+The Worker rechecks source eligibility and dependencies before serving a guide;
+changed or withdrawn evidence holds the page for repair. An exact-hash semantic
+review is still required: matching bytes do not establish truth or reuse rights.
+No model call is made on a public request. A new text revision uses the same
+authenticated data-only publisher, without rebuilding the website.
+
+The [live catalog](https://base2026.dev/sources/) provides bounded crawlable
+navigation to cloud-added source records and preserves the labeled legacy
+selection. [Guide metadata](https://base2026.dev/api/guides) and the separate
+[guide sitemap](https://base2026.dev/sitemap-guides.xml) describe actual
+published guides, not the number of videos or promised traffic.
+
+See the [evidence-to-SEO operating manual](docs/BASE2026_EVIDENCE_TO_SEO_OPERATING_MANUAL.md)
+for source-delta research, merge/update rules, read-time holds and host limits.
 
 ## What makes it different
 

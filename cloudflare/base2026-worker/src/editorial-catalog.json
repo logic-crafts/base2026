@@ -1,0 +1,28 @@
+[
+  {
+    "id": "source-diversity-check",
+    "path": "/journal/source-diversity-check/",
+    "title": "Three Sources Are Not Always Three Independent Voices",
+    "description": "A small, reproducible check for source diversity before turning search results into advice.",
+    "category": "Research methods",
+    "published_at": "2026-08-30",
+    "updated_at": "2026-08-30",
+    "author": "Alex Yarosh",
+    "hero": {
+      "path": "/static/assets/base2026-source-diversity.png",
+      "alt": "Blue-and-white evidence card showing video, excerpt and source-link labels.",
+      "credit": "AI-generated editorial illustration, not a product screenshot or a creator quotation.",
+      "ai_generated": true
+    }
+  },
+  {
+    "id": "source-backed-video-search-cloudflare",
+    "path": "/journal/source-backed-video-search-cloudflare/",
+    "title": "How I Built Source-Backed Expert-Video Search on Cloudflare",
+    "description": "The architecture, evidence boundary and release discipline behind Base2026.",
+    "category": "Engineering",
+    "published_at": "2026-08-29",
+    "updated_at": "2026-08-29",
+    "author": "Alex Yarosh"
+  }
+]

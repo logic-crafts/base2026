@@ -20,12 +20,22 @@ fundraising, traction or ranking promises.
   proof-source IDs and FAQ, with 102 proof links total. This is configuration
   coverage; public route and indexation status are measured per entry;
 - Google Search Console and Bing Webmaster Tools connections.
+- a reviewed original blog with durable D1 revisions, RSS and article sitemap;
+- maintained task guides on existing topic canonicals, with exact public
+  evidence dependencies, separate guide API/sitemap and drift holds;
+- five independently reviewed task guides and live receipt-backed source
+  navigation, preserving the existing legacy selection.
 
 ## Now
 
-- monitor discovery, indexation and performance in Google and Bing; the latest
-  GSC readback has 22 impressions, 0 clicks and average position 55.4, while
-  Bing performance data is still preparing;
+- monitor discovery, indexation and performance in Google and Bing; GSC processed
+  the new guide sitemap with one discovered page, not a traffic result. The last
+  dated performance observation covers Aug27–28:45 impressions/0 clicks;
+  Bing performance data was still preparing at its last recorded check;
+- operate the five-topic maintained-guide cohort through the existing six-hour
+  editorial office: material evidence changes, separate semantic review and a
+  single sequential data-only publisher. The first recurring run on August 31
+  published four reviewed guides without changing the runtime; all five are live;
 - keep public counters, D1 projections, canonicals and sitemaps synchronized;
 - keep the 60 configured enrichment entries source-backed and audit their
   public route and search treatment individually;
@@ -38,6 +48,8 @@ fundraising, traction or ranking promises.
 - read-only MCP contract for source, topic, creator and comparison lookup;
 - better provenance labels and public quality benchmarks;
 - carefully reviewed source expansion where attribution and rights stay clear.
+- expand maintained-guide coverage only after distinct-task/evidence review,
+  without duplicate keyword pages or a publication-volume quota.
 
 ## Research
 
