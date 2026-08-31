@@ -1,6 +1,216 @@
 # Data Sources
 
-Last updated: 2026-08-30
+Last updated: 2026-08-31
+
+## 2026-08-31 latest public and natural-pipeline checkpoint
+
+Public /api/stats at10:15 UTC:2175 documents/1573 distinct sources/49 evidence
+routes/83 projected cards/zero full transcripts. Blog5 and the five unchanged
+revision1 guides are separate counts. The09:16 withdrawal totals below remain
+dated history; the later natural projection is a separate event.
+
+The second archive article, comparison-page-evidence-check, revision1, was
+recorded10:06:01.197 UTC; normalized payload SHA
+`c074c9e44ec6bb69e03269e59a6d656064e60e59814e0c9450573e3431bda4bb`.
+Independent critic/root API/hash and1440/390 QA passed without overflow/errors;
+29 same-origin links passed. Its single URL received IndexNow HTTP200 at
+10:06:43.593 UTC. The first article's31-link/09:20:30.522 acceptance below is
+unchanged. Acceptance is not indexing or traffic. Comparison is complete;
+two distinct archive candidates remain, not approved publications.
+
+Private57/58 and migration0016 are deployed. The10:16 cohort is27 admitted/
+6 media/5 transcripts/one packet/import/verified projection. Semantic outcomes
+are1 packet/2 review classifications/2 contract holds. Eighteen unique
+source-state corrections were recorded (16 historical/2 fresh); terminal false-wait backlog is
+zero in that receipt. One external capture failure remains on bounded retry;
+not all27 are processed. One fresh R2 byte/hash readback passed.
+
+At10:17, root verified the [natural public source](https://base2026.dev/sources/tiktok-video-7679869746929601806):
+two cards by read-only SELECT, zero writes; HTTP200/self-canonical/index-follow,
+dynamic sitemap/catalog page2, two normal search queries and1440/390 QA.
+This proves one natural end-to-end path, not creator truth, reuse rights or
+traffic. Private identifiers/raw evidence remain protected. Direct GPT Work
+incident delivery is unverified; no dispatch is claimed.
+
+## 2026-08-31 first archive article and semantic correction (09:15–09:20 receipt)
+
+One existing-corpus article published at09:15:33.466UTC recorded time:
+`evidence-first-content-backlog`, revision1, normalized payload SHA
+`4decbafa3759a4c75f09c00cc57e9eb2e40bc67c2d2f449eea0820cc4860afef`.
+Five cited sources, eight sections, separate exact-source author/critic review.
+Signed inspect and live API match; blog4/guides5. Existing five guide hashes
+and revisions are unchanged. The article uses existing reviewed public records;
+no new media or transcript acquisition is claimed.
+
+Exactly two historical claim/excerpt pairs failed independent semantic review
+and were withdrawn through receipt-fenced rollback, preserving private evidence
+and history. Neither affected current guide dependencies. Live stats09:20UTC:
+2173documents/1572sources/48evidenceroutes/81projectedcards/zero full transcripts.
+The decrease is deliberate quality correction, not pipeline loss.
+
+IndexNow accepted only the new article URL once at09:20:30.522UTC (HTTP200).
+Thirty-one same-origin article links passed; canonical, index/follow, blog/feed/
+actual child-sitemap inclusion and existing hosted key were verified. No old
+batch repeated. Acceptance does not prove indexing or traffic.
+[Closure proof](BASE2026_OFFICE_CLOSURE_2026_08_31.md).
+
+## 2026-08-31 second recurring check (historical receipt)
+
+At 07:50 UTC all 12 bounded corpus snapshots still matched baseline/prior run.
+Five guide payloads and the worksheet matched their exact approved packets and
+signed receipts. Six selected primary pages plus the GSC filtering page were
+read semantically; no material correction identified. This is bounded review,
+not continuous external monitoring or renewed source-rights clearance.
+No editorial/public-corpus change. X03 is sent; one GSC standalone is scheduled
+for September 1 07:30 UTC. At 08:00 UTC: four sent/five scheduled/one queued
+thread/no unresolved write. GSC remains 45 impressions/0 clicks through Aug28;
+older sitemap discovery counts are not indexing. [Check receipt](BASE2026_EDITORIAL_OFFICE_CHECK_2026_08_31_0739.md).
+
+## 2026-08-31 first recurring editorial run (publication receipt)
+
+The 01:43:23 UTC scanner repeated 12 fixed intents in 13 read-only calls.
+All source snapshot hashes matched the prior baseline. Internal-linking stayed
+no_change; four existing unprepared topic tasks received original reviewed
+guides, not four newly discovered sources. The GSC corpus query remains partial
+at 149 matches / 100 returned. Seven unregistered directions stay research-only.
+
+Two authors, an independent critic and root read selected full public bodies
+and current primary documents. All six direct dependencies across the four
+guides were individually checked; quotes, identities and eight-field hashes
+match. Review corrected a schema-measurement distinction and an unsupported
+GSC attribution before publication. No invented experiment, generalized creator
+outcome, independent-study count or reuse-license claim was admitted.
+
+Remote D1 SELECTs confirm six editorial records/six receipts/five guides/zero
+orphan receipts, with zero rows written by those checks. Four single writes
+were recorded 02:07:18.124–02:17:13.029 UTC; exact signed receipts and full
+public API payloads match the approved candidates. Existing guide/worksheet
+dates and receipts are unchanged. Blog/API/RSS remain three articles, separate
+from the five-entry guide API/sitemap. Corpus remains 2175/1574/50/83/zero
+full-transcript flags; no intake claim follows from editorial publications.
+
+IndexNow accepted only four changed guide URLs at 02:21:36.532 UTC, HTTP 200.
+GSC's read-only snapshot retains Success for all four sitemaps and discovered
+counts 1/1/50/1636; its guide count predates the four new entries. Available Web
+data still covers August 27–28: 45 impressions/0 clicks/position 52.8. No traffic
+lift or AI-citation outcome is proved; a report absent from inspected navigation
+is not a measured zero or proof of the property's inclusion setting.
+
+X-02 was confirmed sent with a native URL. Official history now has three sent
+and five scheduled publications, including one queued thread; two additions
+are scheduled for August 31 19:30/22:30 UTC, not published. The X-06 field
+distinction is now explicit: dueAt 21:18:43.810 versus actual sentAt 21:18:46.272
+on August 30. The 24/72-hour measurement windows were not yet due.
+
+The first updated six-hour office run is observed. Same public Worker and all
+51 pinned implementation files remain unchanged. No code/schema/design/Git/
+private intake or LinkedIn mutation. [Exact run and limits](BASE2026_EDITORIAL_OFFICE_RUN_2026_08_31.md).
+
+## 2026-08-30 Phase 21 evidence-to-SEO (historical release receipt)
+
+The independent SEO practitioner, researcher and critic used live Base2026
+queries and current primary sources. Exa advanced search/fetch worked via its
+official MCP without a paid key. Private reports retain the detailed query
+evidence; they are not a public research dump or a rights license.
+
+At 23:36:07 UTC the shipped scanner made 13 read-only requests for 12 research
+intents. It observed five registered topics and the live internal-linking
+revision. Selected cohort counts: internal linking 73 documents / 59 sources /
+9 handles; Search Console 149 matches but only 100 returned (partial);
+content refresh 30; schema markup 19; llms.txt 15. Queries overlap; do not add
+these into a distinct-corpus or independent-source total. Identical-body groups
+were found in reporting/Search Console results, not proved independent works.
+
+The first guide uses three individually rechecked public document pins and
+Google's primary link guidance. Four URLs are not four controlled experiments.
+Root reviewed the exact final payload; signed publication recorded
+`2026-08-30T23:34:41.154Z`, SHA
+`3e3bb3282cc7777f185bdbcefd26f33617dacf822949462a901e72cc838a7e1a`.
+One acceptance replay made no duplicate. Editorial D1 now has two records/two
+receipts: one guide plus the prior blog article; blog/RSS still list three.
+
+Source navigation now reaches all 50 current dynamic-sitemap IDs over 30/20
+record pages, preserving 80 labeled legacy entries. This closes the earlier
+catalog graph gap without new intake. Public corpus remains 2,175 documents,
+1,574 sources, 50 routes, 83 cards and zero full-transcript flags.
+
+Public Worker `a63f4c74-b6b2-4935-a392-61003d28567a`; tree
+`fa3626039508a4ab4a483044c8336b93a8f63eebb3798bcc46c3e8b15620aa39`.
+No new public migration or source-corpus rewrite. Private owner deployed only
+the compatible editorial adapter as `4af232c8-27b5-4be1-a4e2-bf9593abed32`,
+preserving config/Container/intake/Instagram state. Displayed label stays 0.6.4.
+
+IndexNow accepted the changed guide and catalog at 23:37:51 UTC. GSC guide
+sitemap is Success / 1 discovered page / 0 videos after exactly one submission.
+Discovery is not indexing or traffic. The existing six-hour office update was
+persisted at 23:43:54.436 UTC; its first future run is unobserved. Source and
+deployment are uncommitted/unpushed on the isolated SEO-engine branch.
+
+[Live release and limitations](BASE2026_EVIDENCE_SEO_RELEASE_2026_08_30.md);
+[canonical guide operating manual](../BASE2026_EVIDENCE_TO_SEO_OPERATING_MANUAL.md).
+
+## 2026-08-30 Phase 20 editorial runtime and source office (historical receipt)
+
+Public Worker `2b1a1c19-a9ab-4c43-b4b6-973678d9ee07` serves artifact tree
+`1d0220c8392aa36e712b7a2f0ffb2a718fa5b807d993157e6f3cbff58629ec92`;
+rollback is `d242f1aa-60f5-4ff5-97af-883318173027`. Branch
+`codex/base2026-growth-office-20260830` remains at HEAD
+`5b709108d69229d92fa2a73b049392e161781969`: the release delta is deployed,
+uncommitted and unpushed. HEAD alone does not reproduce this release.
+
+[The blog](https://base2026.dev/blog) now contains two retained journal entries
+and [the first new article](https://base2026.dev/blog/ai-visibility-measurement-worksheet/).
+Revision 1 published at `2026-08-30T21:08:58.525Z`, with payload SHA-256
+`ba59b023b672d0c82010ce75d9f716b605e1dcfd199e98a22f3e4655d71072c1`.
+One exact replay returned `already_published`; the store stayed at one article
+and one publication receipt. That replay proof is complete; do not repeat it.
+Nine cited public URLs are not nine independent studies. Source-corpus totals
+remain 2,175 documents, 1,574 videos, 50 evidence routes, 83 cards and zero
+public full transcripts; editorial storage is separate.
+
+Source discovery produced 36 creator candidates, including 16 corroborated
+Instagram identities and eight exact Instagram URLs from four creators.
+Admissions and proved Instagram captures are both zero; access, rights and
+cross-platform dedupe remain held. Three next-cycle briefs from six public
+evidence-brief queries are research inputs, not written/reviewed/published
+articles. The strongest next action-card brief used 36 internal-link matches,
+five selected records and three handles, without claiming independence.
+
+The new four-part X thread was sent with image/article link at
+`2026-08-30T21:18:43.810Z`; all four native posts were verified. Earlier
+Medium/X releases and four previously scheduled X posts remain distinct.
+IndexNow accepted the two new URLs with HTTP 200. After one GSC submission,
+the initial Couldn't fetch state is historical: the 21:50 UTC native readback
+shows the blog sitemap Success, type Sitemap index, last read August 30, one
+discovered page and zero videos. Static and dynamic sitemaps also show Success
+with 1,636 and 50 discovered pages. The earlier Google live test succeeded at
+21:20:06 UTC. No resubmission or configuration change was made; processing and
+discovery do not prove article indexation or traffic.
+
+The existing six-hour heartbeat is updated and persisted ACTIVE as
+“Base2026 — Editorial and X growth office”, with the owner's explicit Sol Max
+override for all helpers. Its first future updated run is not observed.
+Authoring/review/refill require the owner's Codex host and protected
+credentials; Cloudflare serving and queued Buffer posts run in the cloud.
+
+The separate v0.6.4 owner reports passing health/doctor and R2 checks and daily
+production-packet remainder 9 to 7 to 6 to 0. These bounded checks do not prove
+whole-pipeline health. Older private and search snapshots below retain their
+original dates. Exact production/QA proof:
+[release receipt](BASE2026_EDITORIAL_RUNTIME_RELEASE_2026_08_30.md);
+[editorial contract](../BASE2026_EDITORIAL_PUBLISHING.md).
+
+## 2026-08-30 post-release search measurement
+
+Authenticated Google Web performance (three-month range) reports 45 impressions,
+zero clicks, 33 page rows and average position 52.8; its available chart covers
+August 27–28. Google sitemaps report Success with 1,636 static and 50 dynamic
+discovered pages. Page indexing and Bing Search Performance still process.
+Other Bing reports, Google Links and individual URL inspection were not rerun.
+Public `/api/stats` independently still reports 2,175 documents, 1,574 sources,
+50 evidence routes, 83 cards and zero full transcripts. Exact bounded receipt:
+`BASE2026_GSC_BING_READBACK_2026_08_30.md`. Older source snapshots below remain
+historical; none of these measurements authorize publication or data import.
 
 ## 2026-08-28 positioning and live release evidence
 
@@ -232,3 +442,20 @@ publication or external submission occurred. Sitemap, API-index, security,
 cache and roadmap fixes are now live, not merely prepared. Exact receipt:
 `BASE2026_TECHNICAL_RELEASE_2026_08_30.md`. Private pipeline and GSC/Bing
 snapshots above remain dated 2026-08-29.
+
+Runtime update 2026-08-30 (source-diversity growth): public Worker
+`d242f1aa-60f5-4ff5-97af-883318173027` serves the additive article release,
+tree `473d735f87d8c8aad2b2bbec77a1c7db9e613b88c257e03c197b76f8577c86cf`.
+The dated public V2 query `AI citation tracking` returned 12 matched records,
+three selected sources and two distinct creators. This is one query/corpus
+observation; `status: full` is not factual validation or complete coverage.
+Public D1 counters and all four JSONL payloads remain unchanged; private state
+was not reread or changed by this growth release.
+
+The new canonical article, canonicalized Medium copy and four-part X thread
+are live. Four additional X posts are scheduled, not published. Official
+Buffer readback and native X/Medium UI confirm the exact states recorded in
+`BASE2026_GROWTH_RELEASE_2026_08_30.md`. LinkedIn is now Computer Use-only; no
+new LinkedIn publication is claimed. External distribution is measurement,
+not evidence-corpus intake. Credentials, private audience data, API operation
+logs and browser/security receipts remain outside public Git.

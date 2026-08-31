@@ -35,9 +35,11 @@ Base2026 creates a public evidence layer that keeps those connections visible.
 - maintains task-focused topic guides with exact evidence dependencies and useful decision tools;
 - documents methodology, corrections, opt-out and publication boundaries.
 
-The current release is a working public prototype. The verified 2026-08-29
-snapshot contained 2,175 search documents across 1,574 distinct videos, with
-50 public evidence projections applied and zero public full transcripts. These
+The current release is a working public prototype. The 2026-08-31 10:15 UTC
+snapshot contains 2,175 search documents across 1,573 distinct sources, with
+49 public evidence routes, 83 projected cards and zero public full transcripts.
+Two unsupported historical claim/excerpt pairs were narrowly withdrawn with
+private history preserved. These
 are dated database dimensions, not users, revenue, universal coverage or
 commercial traction. Current totals are available from the read-only
 [`/api/stats`](https://base2026.dev/api/stats) endpoint.
@@ -48,7 +50,13 @@ and llms.txt consumer evaluation. They are original, source-linked decision
 workflows at existing topic URLs, separate from the blog. The first recurring
 editorial run published four of them without a Worker redeploy; see the
 [data-only publication receipt](docs/project-memory/BASE2026_EDITORIAL_OFFICE_RUN_2026_08_31.md).
+Five original blog articles are live, including an
+[evidence-first content backlog](https://base2026.dev/blog/evidence-first-content-backlog/)
+and a [comparison-page evidence check](https://base2026.dev/blog/comparison-page-evidence-check/),
+both built from existing reviewed sources. The same editorial office can produce
+useful new work without waiting for new videos; unchanged guides are not redated.
 Publication and accepted discovery requests do not establish traffic growth.
+See the [source synchronization and quality receipt](docs/project-memory/BASE2026_OFFICE_CLOSURE_2026_08_31.md).
 
 ## Public dataset quickstart
 
@@ -237,8 +245,8 @@ python3 scripts/audit-publication-boundary.py
 
 ## Roadmap
 
-Current priorities are measured indexation, keeping the 60 configured
-topic-enrichment entries source-backed, stronger provenance and
+Current priorities are measured indexation, reviewing source support for
+configured topic-enrichment entries, stronger provenance and
 creator-rights workflows. The dataset landing page, versioned catalog and API
 quickstart are already live. See [ROADMAP.md](ROADMAP.md) or the
 [live roadmap](https://base2026.dev/roadmap).

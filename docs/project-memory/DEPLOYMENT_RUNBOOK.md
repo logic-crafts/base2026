@@ -15,21 +15,65 @@ public-before-private deployment order in the canonical manual.
 Current Workers Static Assets release:
 
 - Domain: `https://base2026.dev/`
-- Public Worker: `eeeabd1b-7454-4ec5-9ac3-6b35d3bb3fa3`
-- Immediate rollback: `3e06c10b-9fa4-40aa-ad14-913a11b85f30`
+- Public Worker: `7522595a-13bf-4437-8955-fd14816b2569`
+- Compatible rollback: `a63f4c74-b6b2-4935-a392-61003d28567a`, the first
+  maintained-guide release. Never restore a pre-guide Worker over guide rows.
 - Artifact tree SHA-256:
-  `02dc9883597dfab6215cb10b2082c19c804fda21bbbc3e71fe882a2d273a3065`
+  `ed0a9371e0471d13006b62b250d458c7f3b3fdbcc8530fc938dd32c758fe46e2`
 - Canonical source repository: `https://github.com/offflinerpsy/base2026`
-- Deployed source: `0ced3a5c03554d1316397c5cbeceeb697a4d5c05`
-- Live release receipt: `BASE2026_TECHNICAL_RELEASE_2026_08_30.md`
+- Reviewed public source commit: `316a39f64190d9e2133aba600ea22a5008c604ef`,
+  merged through PR31 at09:27:49 UTC. Correction/closure follow PR32; verify
+  its GitHub merge receipt before further release. Final integration is tracked in
+  `BASE2026_OFFICE_CLOSURE_2026_08_31.md`. Generated artifact/export inputs and
+  live D1/private state remain separate restore requirements; cloning is not
+  a full production restore.
+- Branch: `codex/base2026-seo-evidence-engine-20260830`
+- Current source correction: `4960c99bd84a9384e3f3083e18b0389a4f21967c`.
+- Live release receipt: `BASE2026_ROADMAP_CORRECTION_2026_08_31.md`;
+  original runtime contract remains in the August30 evidence-guide receipt.
 
 Always pass the exact reviewed candidate to Wrangler with `--assets`; the
 ignored output path in the checked-in config is not an implicit release
-selection. Rebuilt candidates must exclude previous builder receipts and keep
+selection. The current config is pinned to `base2026-enrichment-retirement-20260831-v2`;
+verify that pin and the actual tree hash before every deploy. Rebuilt candidates
+must exclude previous builder receipts and keep
 the Workspace Project Story link on `/about`. `/sources/*` must remain
 Worker-first so static and projected source routes share canonical redirects
-and security headers. This technical release required no D1 import or schema
-change.
+and security headers. The editorial extension applied additive public migration
+0004 only; it did not import or rewrite source-corpus tables. The guide extension
+reuses those tables without a migration; `/topics/*` and guide sitemap are now
+Worker-first. Source-catalog and guide responses must not be bypassed by assets.
+
+For data-only original articles, follow `docs/BASE2026_EDITORIAL_PUBLISHING.md`:
+prepare and semantically review an exact packet, use the existing authenticated
+private client, inspect after uncertainty, and verify HTML/API/RSS/sitemap.
+Never redeploy the site merely to add article text, and never write article
+tables directly. A new illustration still requires an exact reviewed asset
+release. Public/private Worker code deployments remain separately reviewed and
+owned, in public-before-private contract order.
+
+Maintained guides additionally follow
+`docs/BASE2026_EVIDENCE_TO_SEO_OPERATING_MANUAL.md`: exact source dependencies,
+no-store public reads, no blog duplicate and repair through reviewed CAS.
+First article and first guide acceptance-replays are complete; routine content
+publishing must not repeat them. Both archive articles are also published;
+never reuse their completed writes as release tests.
+
+### Private release and rollback fence — 2026-08-31
+
+Release57 deployed09:57:24 after additive migration0016 at09:55:59.
+Diagnostic-only release58 deployed10:15:41.832;388 Worker/18 courier tests,
+types/dry-run, health, no pending migration and45-binding parity passed.
+Keep private deployment identifiers and exact operations in protected receipts.
+
+Release57 is the diagnostic rollback. Do not restore56 unless a fresh owner
+check proves zero active capture leases and no reserved/settling/uncertain
+operations. Preserve0016 and its ledger; never force-clear ownership or drop
+records to make rollback possible. Uncertain operations remain held, without
+automatic refund/replay. Recovery covers evidenced pending media only, not
+resurrection of withdrawn tuples. The10:16:53 record of19 browser/9 capture
+operations settled with no owners is dated, not permanent rollback permission.
+Cleanup pagination/starvation requires separate scope; no broader deletion.
 
 Legacy VPS rollback path:
 

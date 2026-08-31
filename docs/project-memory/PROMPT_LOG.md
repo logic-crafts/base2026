@@ -1,5 +1,209 @@
 # Prompt Log
 
+## 2026-08-31 — Final dated closure update through10:17 UTC
+
+Root requested essential current-state documentation with historical receipts
+preserved, no code/deploy/Git changes by this executor and independent review.
+PR31 is merged; source4960c99bd was pushed before the exact two-asset roadmap
+release. Correction/closure follow PR32; its merge is not preclaimed. No CI
+result is invented: zero GitHub checks and no Actions workflows.
+
+Both archive articles are published once, recorded09:15:33.466/10:06:01.197;
+their31/29 same-origin links, exact hashes and1440/390 checks passed.
+IndexNow accepted one URL each at09:20:30.522/10:06:43.593, not traffic proof.
+Public totals at10:15 are2175/1573/49/83/0; blog5/guides5. Comparison is
+complete and two archive candidates remain. The09:16 withdrawals stay history.
+
+Private57/58 and migration0016 are deployed; final diagnostic gate388 Worker/
+18 courier tests, types/dry-run and45-binding parity passed. At10:16,27 admitted
+yielded6 media/5 transcripts/one verified projection, not27 completions.
+Holds, bounded external retry, cleanup follow-up and external access/rights
+remain. Eighteen unique source-state corrections were recorded (16 historical/2 fresh).
+Diagnostic rollback57 is compatible;56 requires the ownership/ledger fence.
+Direct GPT Work incident delivery is unverified. Existing schedules and host/
+external-detection limits remain explicit; no new social post or traffic win.
+
+Next: bounded cohort observation at10:45, two archive tasks, Golem access and
+dated outcome measurement. Verify PR32's merge receipt before further release.
+
+## 2026-08-31 09:15–09:20 — Historical owner-execution checkpoint
+
+Owner asked to resolve GitHub, semantic gaps and empty watchdog work, using
+the large existing corpus and independent team without overengineering.
+
+Root plus separate source auditor/author/semantic critic completed:
+51-file public source commit316a39f64 pushed;597 Worker+56 Python tests,
+typecheck/dry-run/artifact checks; exact deployed source and served-file pins.
+Two already-public illustrations now tracked via narrow ignore exceptions.
+Final main integration is recorded in the closure receipt, not assumed.
+
+A separately reviewed old-corpus article was published once at09:15:33UTC:
+`/blog/evidence-first-content-backlog/`, rev1, exact SHA4decbafa3759a4c75f09c00cc57e9eb2e40bc67c2d2f449eea0820cc4860afef.
+Live signed/API/browser/blog/feed/sitemap checks passed; blog4/guides5.
+Two unsupported historical cards were narrowly withdrawn; stats2173/1572/48/
+81/0. Private evidence/history and current guide dependencies are preserved.
+
+Existing schedules were updated/read back: archive work every six hours and
+four incident-first private fallback checks daily, native5m recovery unchanged.
+External silent-outage latency up to6h+hostavailability is explicit.
+Private runtime repair remains independently owned/in testing; no release
+claim before its receipt. Golem deployment is externally blocked, not live.
+IndexNow accepted one new URL at09:20UTC; no traffic result invented.
+
+[Execution and next action](BASE2026_OFFICE_CLOSURE_2026_08_31.md).
+
+
+## 2026-08-31 — Second recurring no-change check and rolling X refill
+
+The 07:39 UTC heartbeat rechecked public/signed health, all six exact stored
+editorial receipts and full API payloads, five guide canonicals, catalog and
+feed/sitemap separation. All 12 bounded source snapshots stayed unchanged;
+independent current-primary checks found no material correction. No guide/blog
+write, date churn, replay or indexing submission was performed.
+
+X03 was confirmed sent and read natively. Root scheduled one separately reviewed
+GSC standalone for September 1 07:30 UTC, once. Official 08:00 UTC readback:
+4 sent / 5 scheduled / 1 queued thread; previous eight IDs/texts/times preserved;
+9 submitted operations, no unresolved write. Scheduled is not published.
+GSC remains 45 impressions/0 clicks through August 28; no outcome window due.
+No runtime/Git/intake/LinkedIn changes. All 51 pinned implementation files match.
+
+[Exact maintenance receipt](BASE2026_EDITORIAL_OFFICE_CHECK_2026_08_31_0739.md).
+Next: reconcile the 12:30 UTC X item and unchanged guide dependencies; fill only
+a distinct next-24-hour slot, and measure actual 24/72-hour outcomes when due.
+
+## 2026-08-31 — First recurring evidence-to-SEO office run
+
+Trigger: existing six-hour `base2026-x-queue-and-growth-receipts`, beginning
+01:39:23.086 UTC. Scope was reviewed data-only content, bounded X distribution,
+live verification and documentation; all helpers remained Sol Max.
+
+- Preflight public endpoints, signed health, source snapshots and complete X
+  history. All 12 corpus snapshots were unchanged; the internal guide stayed
+  unchanged. Four already-registered editorial tasks still needed useful guides.
+- Two authors and an independent critic checked exact evidence and current
+  primaries. Fixed a schema-goal distinction and unsupported GSC attribution
+  before root approved the exact final hashes and actual 1440/390 renders.
+- Root published all four passing guide revisions once, sequentially, at
+  02:07–02:17 UTC. Exact signed/public readback passed: five guides, six D1
+  records/six receipts, zero orphans. Blog/RSS retain three separate articles;
+  source corpus is unchanged. No completed acceptance replay was repeated.
+- Official X history confirmed X-02 sent; root natively verified it. Added a
+  reviewed four-part internal-link thread and distinct freshness standalone
+  to August 31 19:30/22:30 UTC. Five scheduled publications, one queued thread,
+  three sent; no failed/other state or unresolved write. Scheduled is not live.
+- IndexNow accepted only four changed guides once. GSC was read-only and still
+  reports older Success/discovery counts; Web performance remains 45 impressions/
+  0 clicks through August 28. No indexing, traffic or AI-citation gain claimed.
+- Same runtime at 100%; all 51 pinned implementation files match. No Worker,
+  schema, design, DNS, secret, Git, private intake or LinkedIn/OAuth mutation.
+  Existing automation remains ACTIVE with the unchanged prompt; its first
+  updated run is now verified, while 24/72-hour results remain future work.
+
+[Current run receipt](BASE2026_EDITORIAL_OFFICE_RUN_2026_08_31.md). Next: reconcile
+the exact published revisions and scheduled IDs, maintain only genuine changes,
+measure results when due, and preserve the separate private/Git boundaries.
+
+## 2026-08-30 — Turn video evidence into maintained SEO task guides
+
+Owner requested an evidence-based automatic SEO conveyor, preferably separate
+from the blog, with an independent practitioner/researcher/critic focus group.
+The current all-Sol-Max override was retained. Root reviewed current Exa/primary
+research and real corpus examples rather than assuming every video deserves a URL.
+
+- Shipped public Worker `a63f4c74-b6b2-4935-a392-61003d28567a`: guide kind,
+  exact public dependencies, atomic drift guards, existing-topic HTML/API/sitemap
+  and receipt-backed source catalog. No new public migration or corpus rewrite.
+- Fixed the catalog's live discovery gap: all 50 cloud source IDs reachable
+  over 30/20 pages, 80 legacy entries preserved, no extra/missing sitemap IDs.
+- Published the reviewed internal-link decision guide at 23:34:41.154 UTC.
+  One explicit acceptance replay made no duplicate. Two editorial records/two
+  receipts; blog/RSS retain three articles. The guide has a practical tab-only
+  decision tool and attributed evidence, not copied full transcripts.
+- Root reran 597 Worker / 56 Python tests, typecheck, dry-run, privacy and
+  candidate gates. Real D1 exposed a depth-100 SQL limit; grouped predicates
+  fixed it without weakening checks. Desktop/mobile and live bytes passed.
+- Private owner separately deployed only its compatible adapter as
+  `4af232c8-27b5-4be1-a4e2-bf9593abed32`; config/Container/intake/Instagram
+  unchanged. Root alone performed editorial publication.
+- Post-release scanner made 13 read-only requests over 12 intents. Five topics
+  are registered; only one is a published maintained guide. Counts/truncation
+  and duplicate-body caveats are preserved, not turned into demand claims.
+- IndexNow accepted the two changed URLs once. GSC processed guide sitemap:
+  Success / 1 discovered page / 0 videos. No indexation/traffic lift claimed.
+- Updated the existing six-hour office and verified persisted exact prompt at
+  23:43:54.436 UTC. It reviews all justified changed/cohort candidates, with
+  one sequential data-only publisher and separate Sol Max review, not a filler
+  or one-page/day quota. First future scheduled run is not yet observed.
+
+The approved design and existing publications are preserved. No new X/LinkedIn
+post, paid service, private-data release or Git staging/commit/push occurred in
+this Phase 21 slice. Code is deployed but its source delta remains uncommitted;
+host-dependent authoring and guide-compatible rollback limits are explicit.
+See [release proof](BASE2026_EVIDENCE_SEO_RELEASE_2026_08_30.md) and the
+[operating manual](../BASE2026_EVIDENCE_TO_SEO_OPERATING_MANUAL.md).
+
+## 2026-08-30 — Deliver the Sol Max editorial growth office
+
+Owner requested a source-to-article-to-distribution-to-measurement office and
+explicitly selected Sol Max for every helper, overriding prior executor
+defaults. The source office, original article, durable editorial runtime and
+bounded distribution were delivered with independent Sol Max review.
+
+- Released public Worker `2b1a1c19-a9ab-4c43-b4b6-973678d9ee07` and published
+  the revision-1 measurement worksheet through the signed data-only route.
+  Blog total is three articles, including two unchanged legacy journal URLs.
+  One authorized replay proved one article/one receipt and needs no repeat.
+- Passed 308 public Worker tests, 58 selected Python tests, typecheck,
+  exact-candidate dry-run and artifact/privacy checks. The public source
+  corpus remains unchanged. Exact hashes, rollback and live checks are in the
+  [release receipt](BASE2026_EDITORIAL_RUNTIME_RELEASE_2026_08_30.md).
+- Prepared 36 creator candidates and three future research briefs; admitted
+  no creator and proved no Instagram capture. The next useful article is the
+  scoped internal-link action card, not another launch or measurement story.
+- Sent the new four-part X adaptation at 21:18:43.810 UTC and verified all
+  four native posts. Preserved earlier Medium/X publications and the four
+  scheduled X posts. LinkedIn had no usable Computer Use editor and no new
+  Post; its route and action-time confirmation remain mandatory.
+- IndexNow accepted two new URLs. After one GSC blog-sitemap submission and
+  the successful 21:20:06 UTC Google live test, the 21:50 UTC native readback
+  reports Success: Sitemap index, last read August 30, one discovered page,
+  zero videos. Static/dynamic sitemaps show Success with 1,636/50 discovered
+  pages. The initial Couldn't fetch state is resolved. No resubmission or
+  configuration change was made; no article-indexation or traffic result is
+  claimed.
+- Updated the existing six-hour heartbeat to “Base2026 — Editorial and X
+  growth office”, persisted ACTIVE with all-Sol-Max review/execution. Its
+  first future updated run has not been observed. Routine work uses the
+  [editorial contract](../BASE2026_EDITORIAL_PUBLISHING.md), not Worker
+  deployments or Git mutations.
+
+Remaining: measure 24/72-hour outcomes, observe the updated heartbeat, draft
+the next source-backed article, and gate an Instagram canary on access,
+rights and dedupe. Authoring/review/refill need the owner's Codex host and
+protected credentials; Cloudflare serving and already queued Buffer posts
+are cloud-hosted. The exact source delta is deployed but uncommitted/unpushed
+on `codex/base2026-growth-office-20260830`; no source synchronization is
+claimed. Separate private-owner readbacks are bounded checks, not a claim
+that the whole pipeline is healthy.
+
+## 2026-08-30 — Reconcile the remaining plan and refresh search evidence
+
+Owner asked whether the plan was complete and to continue. Confirmed the
+technical release is already deployed/merged, read the latest separate task
+status without waking or changing it, and checked GSC/Bing in the existing
+Chrome work profile. Google increased from the previous dated 22-impression
+snapshot to 45 impressions and 33 page rows, with zero clicks. Google Page
+indexing and Bing Search Performance still process. Public `/api/stats`
+retains 2,175 documents and 1,574 sources.
+
+Recorded the scope in `BASE2026_GSC_BING_READBACK_2026_08_30.md` and updated
+the operating plan: audit actual route/content coverage of the 60 configured
+SEO entries, beginning with the two topic families already showing impressions.
+No code, public content, private pipeline, account setting, paid API request,
+index submission, Git commit/push or deployment changed. Matthew's reply is
+still a draft. Local documentation is not a new unshipped technical release.
+
 ## 2026-08-30 — Finish the actual technical production release
 
 Owner challenged the gap between completed source work and an unchanged live
@@ -9370,3 +9574,38 @@ Limits: no Worker deploy, D1/R2 write, indexing request, account creation,
 dataset upload, social/editorial publication or other public-site mutation was
 performed in this closeout. The candidate is source readiness, not a live
 release receipt.
+
+## 2026-08-30 — Evidence-led distribution and explicit LinkedIn route
+
+Prompt: use the existing public evidence and free channels for sustained
+Base2026 growth, prepare useful X threads with images and LinkedIn posts,
+preserve the site and account safety, and use Luna Max for bounded execution.
+Latest owner decision: LinkedIn publishes through Computer Use, not Buffer.
+
+Actions and receipts:
+
+- Completed the base-aware internal graph/60-entry audit. Withdrew the earlier
+  five-Workspace-404 claim; those links resolve through `<base href="/">`.
+- Built, reviewed, deployed and live-verified the four-asset source-diversity
+  article release. Public Worker is `d242f1aa-60f5-4ff5-97af-883318173027`;
+  public data, API code, approved shell/design and private pipeline are unchanged.
+- Published the canonical Medium adaptation and verified its original URL,
+  image/disclosure and actual publication. The first engineering story stayed
+  untouched. Published one four-part X thread with one illustration and verified
+  all four native posts; scheduled four distinct X posts with exact readbacks.
+- Set up Buffer Free for X, secured credentials outside Git, implemented a
+  guarded official API client with durable receipts and dedupe, and restricted
+  submit to Twitter/X after the owner's LinkedIn choice. Seven offline tests pass.
+- Created the six-hour X queue/readback heartbeat. Existing private-pipeline
+  watchdog and paused legacy intake/release automations are unchanged.
+- Kept LinkedIn in the existing Computer Use session. Its final tool readback
+  exposed only a small menu with no editor or screenshot; no new login, blind
+  publish or alternate transport was attempted. Two reviewed posts remain local.
+
+Exact safe receipt: `BASE2026_GROWTH_RELEASE_2026_08_30.md`. Source delta is
+deployed but uncommitted/unpushed; no Git synchronization is claimed. Private
+publishing credentials, API logs, audience/security records and work packets
+remain outside the repository. Next: reconcile scheduled X results, measure
+24/72-hour outcomes, restore usable existing Computer Use editor access, then
+confirm immediately before final LinkedIn Post. Source synchronization remains
+an explicit targeted Git task, not permission to bulk-stage the dirty tree.

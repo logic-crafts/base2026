@@ -1,13 +1,121 @@
 # Phases
 
+Phase 22 and CURRENT_STATUS are current. Lower phases preserve their dated
+release checkpoints; old blog counts and uncommitted-source notes are historical
+and superseded by Phase 22, not outstanding duplicate instructions.
+
+## Phase 22 — Release reproducibility and archive-backed editorial closure
+
+Status: deployed / final integration, checkpoint2026-08-31 10:17 UTC.
+The owner explicitly reopened public GitHub
+synchronization, semantic-quality gaps and ineffective repeated checks.
+Use existing public evidence for new useful work; fresh video intake is not
+a prerequisite. Preserve working Cloudflare transport and approved design.
+
+Separate source auditor, author and semantic reviewer prepare bounded results;
+root owns actual Git, public documentation and the single editorial publisher.
+Private Pipeline Operations owns its private runtime changes. No new scheduler,
+CMS, paid provider or blanket source reprocessing.
+
+Existing editorial office still runs every six hours, now explicitly consuming
+unfinished old-corpus tasks. Existing private fallback changed to four daily
+incident-first checks; native five-minute doctor is unchanged. External total
+outage detection may therefore take up to six hours plus host availability.
+
+Source316a39f64 is merged via PR31; correction4960c99bd was pushed before its
+two-asset release (Worker7522595a/treeed0a9371). Two archive articles are
+published revision1; blog5/guides5 and two archive candidates remain.
+Each new URL received one IndexNow acceptance, not proof of indexing.
+The10:15 totals are2175/1573/49/83/0; the09:16 exact-two withdrawal snapshot
+2173/1572/48/81/0 remains historical.
+
+Private releases57/58 and migration0016 are deployed. At10:16,27 admitted
+yielded6 media/5 transcripts/one verified projection, with fail-closed holds
+and bounded retry. Diagnostic rollback57 is compatible;56 needs the ledger
+ownership fence. PR32 final integration, cohort observation, separate cleanup,
+external access/rights and measurement remain; the entire project is not done.
+[Execution and acceptance](BASE2026_OFFICE_CLOSURE_2026_08_31.md).
+
+## Phase 21 — Maintained evidence-to-SEO conveyor
+
+Status: runtime and five cohort guides live; first recurring office run verified
+2026-08-31. Indexation and attributable traffic still require observation.
+
+Three Sol Max focus roles tested the idea against actual corpus evidence and
+primary research. Implemented the guide kind, pinned dependencies, atomic
+revision/receipt checks, public topic rendering, guide API/sitemap and a live
+receipt-backed source catalog. No new CMS, public migration or paid service.
+
+The first internal-link decision guide and its one replay remain complete.
+The August 31 run published the other four guides once: six editorial records/
+six receipts, five maintained guides. Blog remains three articles; source catalog
+and corpus are unchanged. Live guide sitemap has five entries; GSC last reports
+Success with one discovered page, not five indexed pages.
+
+The existing six-hour office now compares corpus changes and sequentially
+publishes supported updates after independent exact-hash review. No-change
+leaves dates alone. All helpers Sol Max; one signed data-only publisher; no
+routine Worker/schema/design/DNS/Git/private-intake mutation. First updated run
+began August 31 01:39:23 UTC and is verified; host-dependent authoring remains.
+
+Next: reconcile all five completed revision-1 guides and five scheduled X
+publications, maintain genuine evidence changes and measure useful search/referral
+outcomes when due. Keep private source quality/Instagram and targeted
+Git synchronization separate. Proof and instructions:
+[release](BASE2026_EVIDENCE_SEO_RELEASE_2026_08_30.md),
+[first recurring run](BASE2026_EDITORIAL_OFFICE_RUN_2026_08_31.md),
+[operating manual](../BASE2026_EVIDENCE_TO_SEO_OPERATING_MANUAL.md).
+
+## Phase 20 — Sol Max editorial growth office
+
+Purpose: turn public evidence into useful original articles, bounded
+distribution and measured follow-up. Status: runtime and first article live;
+recurring office configured at its August 30 release; Phase 21's first recurring
+run is now verified in the section above. All
+helpers use Sol Max under the owner's explicit override; the existing
+Cloudflare transcription model was not replaced.
+
+The blog serves three articles, including two retained journal entries. The
+new measurement worksheet and its four-part X adaptation are live; exact
+replay kept one editorial article and one receipt. The existing six-hour
+“Base2026 — Editorial and X growth office” heartbeat is persisted ACTIVE. It
+uses semantic review, the single signed data-only publishing route, readback,
+X-only Buffer Free and measurement; routine runs must not mutate Workers or Git.
+Authoring/review/refill still need the owner's host, so this is not cloud-only
+Sol Max authoring. LinkedIn remains Computer Use-only with no usable editor or
+new Post and retains action-time confirmation.
+
+At 21:50 UTC, GSC reports the blog sitemap Success with one discovered page
+and zero videos; the initial fetch error is no longer a blocker. This is
+processing/discovery evidence, not proof of article indexation or traffic.
+
+Phase 21 supersedes the internal-link brief and expands the recurring office:
+the result is a maintained topic guide, not another blog article. Observe
+indexation and 24/72-hour outcomes; clear rights/access/dedupe before one
+Instagram canary. The 36-candidate registry is discovery, not admission/capture.
+Source delta is deployed but uncommitted/unpushed; synchronization is separate
+targeted Git work. Current production/QA:
+[release receipt](BASE2026_EDITORIAL_RUNTIME_RELEASE_2026_08_30.md);
+[contract](../BASE2026_EDITORIAL_PUBLISHING.md).
+
+## Phase 19 — Source-diversity case and bounded social growth
+
+Purpose: publish useful, reproducible research instead of repeating a launch
+pitch. Status: Base2026 article and canonical Medium adaptation live; one
+four-part X thread live and four distinct posts scheduled through Buffer Free.
+LinkedIn is Computer Use-only and remains local draft pending usable editor
+access and action-time confirmation. Six-hour X queue maintenance is active;
+the first future run is not yet verified. Source/Git synchronization is pending.
+Current release: `BASE2026_GROWTH_RELEASE_2026_08_30.md`.
+
 ## Phase 18 — Engineering journal and free editorial distribution
 
 Purpose: explain the Cloudflare evidence architecture in one canonical public
 article and measure useful discovery rather than buying ranking links. Status:
 live/measurement active. The Base2026 article, one canonical Medium adaptation,
-and adapted X/LinkedIn announcements are already live. Current action: measure
-referrals and search discovery; do not create another copy in the current
-non-publication closeout.
+and adapted X/LinkedIn announcements are already live. Measure their referrals
+and search discovery. The owner reopened new editorial work in Phase 19; that
+does not authorize duplicate copies of this same launch pitch.
 
 ## Phase 17 — Public dataset and contextual discovery
 
@@ -22,7 +130,8 @@ per-record provenance and takedown/version policy exist.
 
 Purpose: align current public Worker source, founder/product surfaces and
 read-only D1 totals with the canonical public repository. Status: live. Current
-public Worker is `3e06c10b-9fa4-40aa-ad14-913a11b85f30`; public D1 reports
+technical checkpoint Worker was `eeeabd1b-7454-4ec5-9ac3-6b35d3bb3fa3`;
+see `CURRENT_STATUS.md` for the additive Phase 19 release. Public D1 reports
 2,175 documents, 1,574 videos, 50 projections, 83 cards and zero public full
 transcripts.
 
@@ -41,9 +150,12 @@ this entry as release history; use `CURRENT_STATUS.md` for live identifiers.
 
 Purpose: make the public evidence graph technically crawlable, connect Google
 and Bing, and measure real query/page evidence. Status: live/measurement active.
-GSC currently reports 22 impressions, zero clicks and average position 55.4;
-Bing performance is still preparing. Sixty source-backed enrichment entries are
-configured; public route and indexation state vary and are audited individually.
+The August 30 GSC readback reports 45 impressions, zero clicks, 33 page rows
+and average position 52.8; available reporting covers August 27–28. Bing
+performance is still preparing. Sixty source-backed enrichment entries are
+configured; audit their actual routes and indexability next, prioritizing
+AI citation tracking and self-promotional listicles. Configuration is not proof
+that every route is live or indexed.
 
 ## Phase 13 — Capture fairness and transport resilience
 

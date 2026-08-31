@@ -1,5 +1,89 @@
 # Decisions
 
+## 2026-08-31 — Preserve reliability ownership and uncertain-operation holds
+
+Complete attributed-segment selection, rejection of contradictory retain/
+negative-classification decisions and prompt fit
+remain distinct from quote/hash verification; neither proves creator truth.
+Additive migration0016 ownership and operation accounting must survive rollback.
+Release58's diagnostic rollback is57. Older56 requires zero active capture
+leases and zero reserved/settling/uncertain operations. Never force-clear,
+refund or replay uncertain work; pending-media recovery is not resurrection.
+Cleanup pagination/starvation stays a separate scoped issue, not wider deletion.
+
+## 2026-08-31 — Retire an unsupported orphan instead of fabricating a page
+
+The content-strategy enrichment key did not create a generated route and its
+proof references did not support the intended answer. Remove only that orphan
+from active configuration, preserve its preimage privately and leave59other
+entries unchanged. No alias to an adjacent noindex page, automatic new route or
+weakened gate. Roadmap copy must distinguish configuration, publication,
+indexation and dated performance in both initialHTML and JS.
+
+## 2026-08-31 — Use archive work and correct exact unsupported claims
+
+- Unchanged source hashes mean no forced guide revision, not no editorial work.
+  The same six-hour office must finish distinct useful archive-backed tasks;
+  fresh intake, another CMS or a new scheduler is unnecessary.
+- An exact quote/hash is structural evidence, not proof that an inferred claim
+  follows. Independent semantic review controls publication. Two known failed
+  pairs were narrowly withdrawn with receipts/private history preserved.
+  Do not rearm old publication tuples or reprocess unrelated sources.
+- Private fallback is incident-first four times daily, native recovery remains
+  five-minute. Accept and disclose external total-outage detection latency of
+  up to six hours plus host availability; this is not continuous external watch.
+- Preserve deployed source and reviewed public assets through exact audited Git
+  changes. Source, generated artifact and live data are separate recovery inputs.
+  No stale-design restore or private/generated bulk staging.
+
+
+## 2026-08-30 — Maintain task guides, not one SEO page per video
+
+- Reuse existing topic canonicals for supported user tasks; keep original
+  blog stories separate. New evidence may update, merge, contradict or add
+  nothing. No-change does not produce a synthetic freshness date.
+- Reuse the existing editorial store and signed publisher with the
+  `evidence_guide` kind. Five existing topics form the first registered cohort;
+  registration does not approve their content. Routine reviewers do not ask
+  Alex to check every passing page.
+- A guide binds short quotes to exact public document hashes and admission
+  checks. Publish/read-time dependency checks detect drift; independent semantic
+  review still establishes support, attribution, uncertainty and original value.
+  Neither hashes nor the absence of full transcripts proves rights or truth.
+- Source catalog navigation follows existing public receipts, not unreviewed
+  intake. The legacy selection stays visible and labeled.
+- Keep one sequential data-only publisher. A guide correction uses a separately
+  reviewed higher revision and explicit CAS. Stored inspection is for repair
+  identity, not a public source-health certificate.
+- Pre-guide Worker versions are not compatible with guide rows in the shared
+  table. Use verified compatible restore points, never delete receipts/data to
+  make an older design/runtime work.
+- Continue the existing six-hour office rather than introducing another
+  scheduler. All execution/review seats remain Sol Max under the owner override.
+  Cloudflare serves published pages; authoring/review/refill is host-dependent.
+
+Reason: the focus group and live corpus checks found useful task evidence but
+also duplicate works, unsupported claim/span pairs and a real catalog gap.
+Maintained canonical answers and source-dependent repair are a stronger
+product than bulk paraphrase pages. Release proof:
+[Phase 21](BASE2026_EVIDENCE_SEO_RELEASE_2026_08_30.md).
+
+## 2026-08-30 — Separate X scheduling from LinkedIn Computer Use
+
+- The owner selected Computer Use in the existing Chrome session for LinkedIn,
+  explicitly excluding Buffer. Do not retry LinkedIn OAuth or disguise browser
+  automation. Stop at new security checks and preserve the existing session.
+- Buffer Free is X/Twitter-only; the private client's submit path rejects
+  LinkedIn, including dry-run. The first X thread and four scheduled posts have
+  real receipts, not merely prepared copy.
+- Computer Use's action-time confirmation applies before the final LinkedIn
+  public Post. Standing publication permission does not remove that skill gate.
+- Scheduled Buffer posts publish in its cloud; local queue refilling requires
+  Codex and Keychain access. Do not call that unlimited cloud-only autonomy.
+
+Reason: protect the existing LinkedIn account after repeated verification and
+follow the owner's chosen publishing route without conflating drafts and posts.
+
 ## 2026-08-29 — Hold third-party dataset mirrors until rights are explicit
 
 - Apache-2.0 covers repository code and documentation; it does not
@@ -722,3 +806,57 @@ Reason: the owner explicitly requested autonomous publication of the current
 article and the same bounded distribution pattern for future reviewed releases.
 Removing the repeated final-click handoff closes the editorial pipeline while
 keeping unrelated representational actions outside scope.
+
+## 2026-08-30 — Separate original editorial publishing from video projection
+
+Decision: reviewed original articles use the additive public editorial D1
+tables, `/blog/<slug>/`, a signed private ingress and existing service binding.
+They do not write into the video corpus or expose a public admin endpoint.
+Structural validation and a separate semantic/privacy review must cover one
+exact normalized payload hash. Atomic conditional revisions and receipts make
+the same publication idempotent; uncertain writes require inspection before
+retry, and corrections require explicit compare-and-swap authorization.
+
+Reason: a useful original article can publish without a full-site rebuild or
+manual SQL while preserving attribution, reproducibility and the raw-transcript
+boundary. Serving/publication runtime is Cloudflare-native; local Codex review
+and credential access are not a cloud-only authoring service.
+
+## 2026-08-30 — All growth-office execution seats use Sol Max
+
+Decision: the owner's latest explicit model override replaces the earlier
+Luna/Terra staffing for this office. Every assistant/executor uses
+`gpt-5.6-sol` with `max` reasoning; root owns architecture, integration,
+semantic review and release. Private pipeline maintenance stays with its
+separate owner and worktree. This does not replace the deployed Cloudflare
+transcription model or change global routing configuration.
+
+Reason: the owner explicitly requested the same maximum-capability route for
+all office seats. Scoped ownership and one publisher prevent concurrent agents
+from overwriting each other's files or duplicating an external write.
+
+## 2026-08-30 — Run a reviewed editorial/X loop, not a bulk posting quota
+
+Decision: extend the existing six-hour growth heartbeat to source research,
+original article preparation, separate exact-hash review, signed data-only
+publication and X distribution/measurement. Reconcile completed/in-flight
+receipts first; ordinary runs must not mutate Worker code, schema, design,
+DNS, Git, secrets or intake policy. Publish a useful article when warranted,
+not filler to reach a quota. Preserve free-plan capacity and count already
+published/scheduled X content before refill.
+
+Reason: one connected repeatable path is safer than several competing
+schedulers. A configured future run, submitted URL, queued post, social view
+and attributable website action are distinct states with different receipts.
+
+## 2026-08-30 — LinkedIn uses Computer Use and its action-time gate
+
+Decision: the owner's newer Computer Use-only route supersedes the LinkedIn
+part of the August 29 no-final-click-handoff decision. Do not use Buffer,
+DOM/CDP, another login route or anti-bot concealment. Prepare drafts safely;
+the final Computer Use Post requires its action-time confirmation. A menu-only
+readback without a usable composer is not permission to click blind.
+
+Reason: preserve the verified account and follow the selected interaction
+channel after repeated security checks. X's reviewed official Buffer route
+and Medium's normal-browser publication route are unchanged.
