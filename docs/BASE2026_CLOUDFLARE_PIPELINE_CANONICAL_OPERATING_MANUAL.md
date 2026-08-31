@@ -2,14 +2,92 @@
 
 Status: authoritative architecture and operations reference
 
-Public production verified: 2026-08-30 (technical release).
-Private production snapshot: 2026-08-29 (read-only closeout).
+Public production verified: 2026-08-31 (first recurring data-only guide run; unchanged runtime).
+Private production verified: 2026-08-30 (separate owner's compatible editorial adapter; application label remains v0.6.4).
 
 Applies to: TikTok discovery, cloud acquisition, private processing, automatic excerpt-card publication, public Base2026 search, deployment, rollback, and agent handoff
 
 > **All agents start here for Base2026 Cloudflare or TikTok-pipeline work.** Repository files and live Cloudflare receipts override chat memory. This document defines the system; dated counters and version IDs are only a verified snapshot and must be refreshed before a production change.
 
-## Public technical release — 2026-08-30
+## Latest editorial operation — 2026-08-31
+
+The first recurring office run published four independently reviewed guides
+through the existing publisher, without deploying a Worker or altering intake.
+All five registered guides now have revision 1. Remote read-only D1 verification:
+six editorial records/six receipts/five guides/zero orphan receipts; blog/RSS
+retain three articles. Each new live API payload matches its reviewed hash.
+Source corpus remains 2175 documents/1574 sources/50 routes/83 cards/zero full
+transcripts. Signed control-plane health is healthy 0.6.4 with broad/local false;
+this is not a new R2 or daily intake audit.
+
+Live deployment inventory still selects `a63f4c74-b6b2-4935-a392-61003d28567a`
+at 100%. The existing six-hour office's first updated run is now observed.
+Five X publications are scheduled, not five new live posts; only changed guide
+URLs were sent to IndexNow. GSC discovery and traffic remain separate metrics.
+No private Worker, schema, credential, design, Git or platform-access change.
+[Exact data-only run](project-memory/BASE2026_EDITORIAL_OFFICE_RUN_2026_08_31.md).
+
+## Historical maintained-guide extension — 2026-08-30
+
+Public Worker `a63f4c74-b6b2-4935-a392-61003d28567a` serves reviewed tree
+`fa3626039508a4ab4a483044c8336b93a8f63eebb3798bcc46c3e8b15620aa39`.
+No new public migration: the existing editorial publisher/tables now support
+maintained `evidence_guide` records at registered topic canonicals. A guide
+binds short supporting quotes to exact public document hashes. Publication and
+public reads recheck identity/admission/dependencies; drift holds the guide
+for repair. Semantic review remains separate from structural/hash checks.
+
+The first internal-link guide was published at 23:34:41.154 UTC; one deliberate
+replay made no duplicate. At that checkpoint D1 had two editorial records/two receipts,
+while blog/RSS stay at three articles. Guide API and sitemap are separate and
+read-only/no-store. The catalog now reaches all 50 cloud-added source records
+over 30/20 pages, preserving 80 labeled legacy entries. Source corpus is unchanged.
+
+The private owner separately deployed only its compatible adapter as version56
+`4af232c8-27b5-4be1-a4e2-bf9593abed32`; rollback
+`9b72420c-e963-4d52-b67b-f49c4bec6534`. Configuration, bindings, Container,
+intake gates, credentials, migrations and Instagram code were unchanged. The
+application label intentionally remains0.6.4; deployed UUID is authoritative.
+
+Pre-guide public Worker versions cannot safely read guide-kind records in the
+shared table. Restore a verified compatible version; never delete data/receipts
+to run an old build. The existing six-hour editorial office was updated, not
+duplicated. It is host-dependent for authoring/review/refill; Cloudflare serving
+and durable publication are cloud-native. This does not alter the intake lane.
+
+Instructions: [evidence-to-SEO operating manual](BASE2026_EVIDENCE_TO_SEO_OPERATING_MANUAL.md),
+[shared publisher](BASE2026_EDITORIAL_PUBLISHING.md),
+[live release proof](project-memory/BASE2026_EVIDENCE_SEO_RELEASE_2026_08_30.md).
+GSC guides sitemap is Success/1 discovered page; discovery is not new traffic.
+
+## Historical first-blog editorial extension — 2026-08-30
+
+Public Worker `2b1a1c19-a9ab-4c43-b4b6-973678d9ee07` serves the reviewed
+artifact `1d0220c8392aa36e712b7a2f0ffb2a718fa5b807d993157e6f3cbff58629ec92`;
+rollback is `d242f1aa-60f5-4ff5-97af-883318173027`. Additive public migration
+0004 creates separate article/receipt tables. The private owner deployed
+v0.6.4 `9b72420c-e963-4d52-b67b-f49c4bec6534` with rollback
+`ba61607a-0748-4cd4-877d-9dd863f097e1`, preserving prior intake/projection gates.
+
+The existing service binding now also accepts reviewed original editorial
+packets through an admin-HMAC-only receiver. This is separate from the TikTok
+production-packet and excerpt-card lane below. `/blog`, article HTML, public
+read-only API, RSS and the independent blog sitemap read validated public D1.
+One real article was published and replayed: one article, one receipt, no
+duplicate; public corpus remains 2175/1574/50/83/zero full transcripts.
+
+Sol Max authoring/review is host-dependent; public serving and durable writes
+are cloud-native. New source research does not turn a TikTok-only adapter into
+Instagram/YouTube support. Daily private receipts currently show media and
+transcripts but zero new production packets; healthy control-plane transport
+must not be reported as a successful end-to-end daily content run.
+
+See [editorial contract](BASE2026_EDITORIAL_PUBLISHING.md) and
+[exact release/readback](project-memory/BASE2026_EDITORIAL_RUNTIME_RELEASE_2026_08_30.md).
+Historical snapshots below explain prior releases; do not deploy their versions
+as if they were the latest state.
+
+## Historical public technical release — 2026-08-30
 
 Public Worker `eeeabd1b-7454-4ec5-9ac3-6b35d3bb3fa3` is live at 100%.
 Immediate rollback is `3e06c10b-9fa4-40aa-ad14-913a11b85f30`; artifact tree is
@@ -23,7 +101,7 @@ homepage, founder and Workspace content remain unchanged. No private Worker,
 schema, binding, DNS or intake action was part of the release. Exact source and
 verification: [`release receipt`](project-memory/BASE2026_TECHNICAL_RELEASE_2026_08_30.md).
 
-## Latest private capture receipt — 2026-08-29
+## Historical private capture receipt — 2026-08-29
 
 The private control Worker is deployed as version
 `14adacb6-7f0f-4aa7-9131-fc41469eec15` (v0.6.2). Its private Container uses
@@ -43,9 +121,11 @@ unchanged: capture/reconcile every five minutes and discovery daily at 10:00
 UTC. `PUBLIC_RELEASE_ENABLED=false` remains correct; the narrow policy-bound
 projection lane remains enabled.
 
-## 1. The short version
+## 1. The short version — TikTok intake lane
 
-Base2026 now has a cloud-only production path. The MacBook is not required for the daily run.
+The TikTok intake/projection lane has a cloud-only production path; the MacBook
+is not required for that scheduled run. This does not describe the separate
+Sol Max editorial authoring/review office above, which remains host-dependent.
 
 1. Cloudflare discovers new TikTok video IDs from the registered creator list.
 2. D1 rejects duplicates and admits only bounded, normalized TikTok sources.
@@ -73,9 +153,13 @@ For a production mutation, never rely on a version number or counter copied from
 
 ### Source synchronization warning
 
-The public GitHub repository contains the current public-site Worker source,
+The public GitHub repository contains the merged public-site Worker baseline,
 startup release inputs, projection boundary, and `www` redirect through the
-reviewed public-source merges. The private control-plane Worker remains in the
+reviewed public-source merges. The August 30 growth-office runtime and article
+delta is deployed but still uncommitted/unpushed; HEAD alone does not reproduce
+that release. Its exact boundary is recorded in
+[`BASE2026_EDITORIAL_RUNTIME_RELEASE_2026_08_30.md`](project-memory/BASE2026_EDITORIAL_RUNTIME_RELEASE_2026_08_30.md).
+The private control-plane Worker remains in the
 protected operational checkout and is intentionally not public source. A
 generated live corpus artifact is also not reproduced by a clean clone. This
 manual documents the production architecture, but it is not permission to

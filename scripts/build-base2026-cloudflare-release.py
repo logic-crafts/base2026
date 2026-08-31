@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import html
 import json
 import os
 import re
@@ -28,6 +29,7 @@ import stat
 import sys
 import tempfile
 from dataclasses import dataclass, field
+from datetime import datetime
 from pathlib import Path
 from typing import Iterable, Mapping, Sequence
 from urllib.parse import urlsplit, urlunsplit
@@ -53,6 +55,23 @@ DEFAULT_FOUNDER_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-founder.html"
 DEFAULT_DATASET_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-dataset.html"
 DEFAULT_JOURNAL_CLOUDFLARE_TEMPLATE = (
     PROJECT_ROOT / "templates" / "base2026-journal-cloudflare.html"
+)
+DEFAULT_JOURNAL_SOURCE_DIVERSITY_TEMPLATE = (
+    PROJECT_ROOT / "templates" / "base2026-journal-source-diversity.html"
+)
+DEFAULT_JOURNAL_SOURCE_DIVERSITY_IMAGE = (
+    PROJECT_ROOT / "static" / "assets" / "base2026-source-diversity.png"
+)
+DEFAULT_EDITORIAL_MEASUREMENT_IMAGE = (
+    PROJECT_ROOT / "static" / "assets" / "base2026-ai-visibility-measurement.png"
+)
+DEFAULT_BLOG_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-blog-index.html"
+DEFAULT_BLOG_STYLESHEET = PROJECT_ROOT / "templates" / "base2026-blog.css"
+DEFAULT_BLOG_ARTICLE_STYLESHEET = PROJECT_ROOT / "templates" / "base2026-blog-article.css"
+DEFAULT_EVIDENCE_GUIDE_STYLESHEET = PROJECT_ROOT / "templates" / "base2026-evidence-guide.css"
+DEFAULT_EVIDENCE_GUIDE_SCRIPT = PROJECT_ROOT / "templates" / "base2026-evidence-guide.js"
+DEFAULT_EDITORIAL_CATALOG = (
+    PROJECT_ROOT / "cloudflare" / "base2026-worker" / "src" / "editorial-catalog.json"
 )
 DEFAULT_FOUNDER_STYLESHEET = PROJECT_ROOT / "templates" / "base2026-founder.css"
 DEFAULT_FOUNDER_HERO_IMAGE = (
@@ -762,6 +781,8 @@ ROBOTS_PAYLOAD = (
     "Allow: /\n\n"
     "Sitemap: https://base2026.dev/sitemap.xml\n"
     "Sitemap: https://base2026.dev/sitemap-dynamic.xml\n"
+    "Sitemap: https://base2026.dev/sitemap-blog.xml\n"
+    "Sitemap: https://base2026.dev/sitemap-guides.xml\n"
 )
 HEADERS_PAYLOAD = """/*
   X-Content-Type-Options: nosniff
@@ -801,7 +822,9 @@ HUB_SITEMAP_ROUTES = (
     "/solutions/",
     "/ai-visibility-resources",
     "/site-structure",
+    "/blog",
     "/journal/source-backed-video-search-cloudflare/",
+    "/journal/source-diversity-check/",
 )
 
 # These are generated at the publication boundary rather than inherited from
@@ -825,6 +848,8 @@ schema, content structure and entity trust.
 - API and AI access: https://base2026.dev/api
 - Public dataset: https://base2026.dev/dataset
 - Build journal: https://base2026.dev/journal/source-backed-video-search-cloudflare/
+- Blog: https://base2026.dev/blog
+- Blog RSS: https://base2026.dev/blog/feed.xml
 - Founder and selected work: https://base2026.dev/founder
 - Source policy: https://base2026.dev/source-policy
 - Creator correction or removal: https://base2026.dev/opt-out
@@ -857,6 +882,8 @@ site or a private client workspace.
 - API and AI access: https://base2026.dev/api
 - Public dataset and quickstart: https://base2026.dev/dataset
 - Build journal: https://base2026.dev/journal/source-backed-video-search-cloudflare/
+- Blog: https://base2026.dev/blog
+- Blog RSS: https://base2026.dev/blog/feed.xml
 
 ## Public data and use
 
@@ -1284,6 +1311,129 @@ def _hub_sitemap_payload() -> bytes:
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
         f"{urls}</urlset>\n"
     ).encode("utf-8")
+
+
+def _editorial_catalog(path: Path = DEFAULT_EDITORIAL_CATALOG) -> list[dict]:
+    """The two existing journal articles remain one reviewed metadata source.
+
+    New articles live in receipted D1 rows, never in this fallback catalog.
+    This rejects unsafe catalog URLs before either HTML or JSON-LD insertion.
+    """
+    records = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(records, list) or not 1 <= len(records) <= 25:
+        raise ReleaseBuildError("editorial catalog must contain 1-25 records")
+    seen: set[str] = set()
+    required = {"id", "path", "title", "description", "category", "published_at", "updated_at", "author"}
+    allowed_paths = {
+        "/journal/source-diversity-check/",
+        "/journal/source-backed-video-search-cloudflare/",
+    }
+    for record in records:
+        if not isinstance(record, dict) or not required <= record.keys() or record.keys() - required - {"hero"}:
+            raise ReleaseBuildError("invalid editorial catalog fields")
+        if any(not isinstance(record[key], str) or not record[key].strip() for key in required):
+            raise ReleaseBuildError("invalid editorial catalog text")
+        if not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", record["id"]):
+            raise ReleaseBuildError("invalid editorial catalog id")
+        if record["path"] not in allowed_paths or record["path"] in seen:
+            raise ReleaseBuildError("invalid or duplicate editorial catalog route")
+        seen.add(record["path"])
+        for key in ("published_at", "updated_at"):
+            try:
+                if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", record[key]):
+                    raise ValueError
+                datetime.strptime(record[key], "%Y-%m-%d")
+            except ValueError as exc:
+                raise ReleaseBuildError("invalid editorial catalog date") from exc
+        if record["updated_at"] < record["published_at"]:
+            raise ReleaseBuildError("invalid editorial catalog date order")
+        if record["author"] != "Alex Yarosh":
+            raise ReleaseBuildError("editorial catalog byline is not approved")
+        hero = record.get("hero")
+        if hero is not None:
+            if not isinstance(hero, dict) or set(hero) != {"path", "alt", "credit", "ai_generated"}:
+                raise ReleaseBuildError("invalid editorial image fields")
+            if hero["path"] != "/static/assets/base2026-source-diversity.png":
+                raise ReleaseBuildError("editorial image is not in the reviewed catalog")
+            if any(not isinstance(hero[key], str) or not hero[key].strip() for key in ("alt", "credit")):
+                raise ReleaseBuildError("invalid editorial image text")
+            if hero["ai_generated"] is not True or "AI-generated" not in hero["credit"]:
+                raise ReleaseBuildError("editorial image disclosure is missing")
+    return sorted(records, key=lambda item: (-datetime.strptime(item["published_at"], "%Y-%m-%d").toordinal(), item["id"]))
+
+
+def _editorial_card(record: dict, *, featured: bool) -> str:
+    esc = html.escape
+    heading_id = "blog-" + ("feature-" if featured else "card-") + "journal-" + record["id"]
+    tag = "h2" if featured else "h3"
+    date = datetime.strptime(record["published_at"], "%Y-%m-%d")
+    label = date.strftime("%B") + f" {date.day}, {date.year}"
+    copy = (
+        '<p class="b26-blog-card__meta"><span class="b26-blog-card__category">'
+        + esc(record["category"]) + '</span><time datetime="' + esc(record["published_at"])
+        + '">' + label + "</time></p>"
+        + f'<{tag} class="b26-blog-card__title" id="{esc(heading_id)}">'
+        + esc(record["title"]) + f"</{tag}>"
+        + '<p class="b26-blog-card__excerpt">' + esc(record["description"]) + "</p>"
+        + '<div class="b26-blog-card__footer"><span class="b26-blog-card__byline">'
+        + esc(record["author"]) + '</span><span class="b26-blog-card__read">'
+        + 'Read article <span aria-hidden="true">→</span></span></div>'
+    )
+    hero = record.get("hero") if featured else None
+    class_name = "b26-blog-feature" if featured else "b26-blog-card"
+    if featured and not hero:
+        class_name += " b26-blog-feature--text-only"
+    media = (
+        '<figure class="b26-blog-feature__media"><img src="' + esc(hero["path"])
+        + '" alt="' + esc(hero["alt"]) + '" width="1254" height="1254" loading="eager" fetchpriority="high">'
+        + "<figcaption>" + esc(hero["credit"]) + "</figcaption></figure>"
+    ) if hero else ""
+    return (
+        '<article class="' + class_name + '"><a class="b26-blog-card__link" href="'
+        + esc(record["path"]) + '" aria-labelledby="' + esc(heading_id) + '">'
+        + ('<div class="b26-blog-feature__body">' + copy + "</div>" if featured else copy)
+        + media + "</a></article>"
+    )
+
+
+def _render_editorial_index(header_html: str, footer_html: str) -> bytes:
+    records = _editorial_catalog()
+    graph = {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "CollectionPage", "@id": BASE2026_ORIGIN + "/blog#page",
+                "url": BASE2026_ORIGIN + "/blog", "name": "Base2026 Blog",
+                "mainEntity": {"@id": BASE2026_ORIGIN + "/blog#blog"},
+            },
+            {
+                "@type": "Blog", "@id": BASE2026_ORIGIN + "/blog#blog",
+                "name": "Base2026 Blog", "url": BASE2026_ORIGIN + "/blog",
+                "blogPost": [
+                    {
+                        "@type": "BlogPosting", "headline": item["title"],
+                        "url": BASE2026_ORIGIN + item["path"],
+                        "datePublished": item["published_at"], "dateModified": item["updated_at"],
+                        "author": {"@type": "Person", "name": item["author"], "url": BASE2026_ORIGIN + "/founder"},
+                    }
+                    for item in records
+                ],
+            },
+        ],
+    }
+    template = DEFAULT_BLOG_TEMPLATE.read_text(encoding="utf-8")
+    values = {
+        "BLOG_FEATURED": _editorial_card(records[0], featured=True),
+        "BLOG_CARDS": "".join(_editorial_card(item, featured=False) for item in records[1:]),
+        "BLOG_TOPIC_LINKS": '<a href="/topics/">Browse source topics</a><a href="/methodology">Research methodology</a>',
+        "BLOG_SCHEMA": json.dumps(graph, ensure_ascii=True).replace("<", "\\u003c").replace(">", "\\u003e").replace("&", "\\u0026"),
+    }
+    for key, value in values.items():
+        slot = "{{" + key + "}}"
+        if template.count(slot) != 1:
+            raise ReleaseBuildError("editorial template slot mismatch")
+        template = template.replace(slot, value)
+    return _render_startup_page(template, header_html, footer_html)
 
 
 def _add_hub_sitemap_to_index(text: str) -> str:
@@ -1876,6 +2026,27 @@ def build_release(
                     startup_header,
                     startup_footer,
                 ),
+            )
+            write_generated_public_file(
+                "journal/source-diversity-check/index.html",
+                _render_startup_page(
+                    DEFAULT_JOURNAL_SOURCE_DIVERSITY_TEMPLATE.read_text(encoding="utf-8"),
+                    startup_header,
+                    startup_footer,
+                ),
+            )
+            write_generated_public_file(
+                "static/assets/base2026-source-diversity.png",
+                DEFAULT_JOURNAL_SOURCE_DIVERSITY_IMAGE.read_bytes(),
+            )
+            write_generated_public_file("blog.html", _render_editorial_index(startup_header, startup_footer))
+            write_generated_public_file("static/base2026-blog.css", DEFAULT_BLOG_STYLESHEET.read_bytes())
+            write_generated_public_file("static/base2026-blog-article.css", DEFAULT_BLOG_ARTICLE_STYLESHEET.read_bytes())
+            write_generated_public_file("static/base2026-evidence-guide.css", DEFAULT_EVIDENCE_GUIDE_STYLESHEET.read_bytes())
+            write_generated_public_file("static/base2026-evidence-guide.js", DEFAULT_EVIDENCE_GUIDE_SCRIPT.read_bytes())
+            write_generated_public_file(
+                "static/assets/base2026-ai-visibility-measurement.png",
+                DEFAULT_EDITORIAL_MEASUREMENT_IMAGE.read_bytes(),
             )
             write_generated_public_file(
                 "apply-research.html",

@@ -1,6 +1,6 @@
 {
   "name": "Base2026 public API index",
-  "version": "2026-08-29",
+  "version": "2026-08-30",
   "status": "cloudflare_public_api",
   "base_url": "https://aggressorbulkit.online/knowledge/",
   "policy": {
@@ -98,6 +98,34 @@
       "method": "GET",
       "format": "json",
       "description": "Bounded attributable findings with corpus coverage, limits and source links."
+    },
+    {
+      "id": "editorial_index",
+      "url": "https://base2026.dev/api/blog",
+      "method": "GET",
+      "format": "json",
+      "description": "Original editorial metadata with bounded keyset pagination. Counts are separate from the evidence corpus and maintained topic guides."
+    },
+    {
+      "id": "editorial_article",
+      "url": "https://base2026.dev/api/blog/{slug}",
+      "method": "GET",
+      "format": "json",
+      "description": "A published original article, canonical path and exact public payload hash."
+    },
+    {
+      "id": "maintained_guides",
+      "url": "https://base2026.dev/api/guides",
+      "method": "GET",
+      "format": "json",
+      "description": "Published task guides on registered existing topic canonicals; no automatic claim that every source becomes a page."
+    },
+    {
+      "id": "maintained_guide",
+      "url": "https://base2026.dev/api/guides/{slug}",
+      "method": "GET",
+      "format": "json",
+      "description": "A reviewed guide and bounded public evidence dependencies. Changed or unavailable dependencies hold the guide instead of silently serving stale advice."
     },
     {
       "id": "manifest",

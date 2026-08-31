@@ -306,7 +306,27 @@ def test_startup_homepage_overlay_preserves_search_as_workspace(tmp_path: Path) 
     assert receipt["replacements"]["html_urls_to_extensionless"] > 0
     assert receipt["verification"]["redirecting_html_canonical_markers_remaining"] == 0
     assert receipt["verification"]["redirecting_html_sitemap_markers_remaining"] == 0
-    assert receipt["artifact"]["file_count"] == 39
+    # Blog files plus guide-only CSS/JS are additive; retained assets stay intact.
+    assert receipt["artifact"]["file_count"] == 47
+    blog = (output / "blog.html").read_text(encoding="utf-8")
+    assert '<link rel="canonical" href="https://base2026.dev/blog">' in blog
+    assert 'data-b26-blog-schema' in blog
+    assert "{{BLOG_" not in blog
+    assert blog.count("<!--B26_BLOG_FEATURED_START-->") == 1
+    assert 'href="/journal/source-diversity-check/"' in blog
+    assert 'href="/journal/source-backed-video-search-cloudflare/"' in blog
+    assert 'href="/blog"' in rendered_homepage
+    assert "https://base2026.dev/blog" in hub_sitemap
+    assert "Sitemap: https://base2026.dev/sitemap-blog.xml" in (output / "robots.txt").read_text(encoding="utf-8")
+    # The blog sitemap is an independent index; do not nest it in sitemap.xml.
+    assert "sitemap-blog.xml" not in (output / "sitemap.xml").read_text(encoding="utf-8")
+    assert (output / "static/base2026-blog.css").read_bytes() == builder.DEFAULT_BLOG_STYLESHEET.read_bytes()
+    assert (output / "static/base2026-blog-article.css").read_bytes() == builder.DEFAULT_BLOG_ARTICLE_STYLESHEET.read_bytes()
+    assert "Sitemap: https://base2026.dev/sitemap-guides.xml" in (output / "robots.txt").read_text(encoding="utf-8")
+    assert "sitemap-guides.xml" not in (output / "sitemap.xml").read_text(encoding="utf-8")
+    assert (output / "static/base2026-evidence-guide.css").read_bytes() == builder.DEFAULT_EVIDENCE_GUIDE_STYLESHEET.read_bytes()
+    assert (output / "static/base2026-evidence-guide.js").read_bytes() == builder.DEFAULT_EVIDENCE_GUIDE_SCRIPT.read_bytes()
+    assert (output / "static/assets/base2026-ai-visibility-measurement.png").read_bytes() == builder.DEFAULT_EDITORIAL_MEASUREMENT_IMAGE.read_bytes()
 
 
 def test_startup_homepage_exposes_product_first_evidence_brief_search() -> None:
