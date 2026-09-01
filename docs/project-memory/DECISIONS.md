@@ -1,5 +1,22 @@
 # Decisions
 
+## 2026-09-01 — Add reliability contracts without widening production authority
+
+Keep the redacted production manifest, channel-job state contract, private
+incident snapshot and privacy-safe measurement-event contract as additive,
+read-only release-closure gates. They must report unresolved commit/binding,
+incident, or external-effect conditions as holds; they do not authorize a
+deployment, external retry, private-pipeline replay, analytics write, or
+public data release.
+
+## 2026-09-01 — Preserve external-effect fences and privacy-safe measurement
+
+Unsupported channel states remain held until their contract is repaired, and a
+possibly effective external action remains fenced until the same target is read
+back. The five-event member measurement trace may use only opaque references and
+bucketed properties; raw queries, private artifacts, credentials and provider
+responses remain excluded. Emission stays a future reviewed canary.
+
 ## 2026-08-31 — Preserve reliability ownership and uncertain-operation holds
 
 Complete attributed-segment selection, rejection of contradictory retain/

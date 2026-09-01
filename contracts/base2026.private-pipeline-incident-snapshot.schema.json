@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://base2026.dev/contracts/base2026.private-pipeline-incident-snapshot.schema.json",
+  "title": "Base2026 bounded private-pipeline incident closure snapshot",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "read_only",
+    "incident_id",
+    "expected_environment",
+    "actual_environment",
+    "bounded_cohort",
+    "orphan_jobs",
+    "public_projection_count",
+    "accounting_complete",
+    "external_effects_replayed",
+    "doctor_runs"
+  ],
+  "properties": {
+    "$schema": {"type": "string", "format": "uri"},
+    "schema_version": {"const": "base2026.private-pipeline-incident-snapshot.v1"},
+    "read_only": {"const": true},
+    "incident_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{2,96}$"},
+    "expected_environment": {"enum": ["production", "shadow", "staging", "unknown"]},
+    "actual_environment": {"enum": ["production", "shadow", "staging", "unknown"]},
+    "bounded_cohort": {"$ref": "#/$defs/cohort"},
+    "orphan_jobs": {"type": "integer", "minimum": 0},
+    "public_projection_count": {"type": "integer", "minimum": 0},
+    "accounting_complete": {"type": "boolean"},
+    "external_effects_replayed": {"const": false},
+    "doctor_runs": {
+      "type": "array",
+      "minItems": 2,
+      "items": {"$ref": "#/$defs/doctor_run"}
+    }
+  },
+  "$defs": {
+    "cohort": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cohort_id", "items"],
+      "properties": {
+        "cohort_id": {"type": "string", "pattern": "^cohort_[A-Za-z0-9_-]{4,96}$"},
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 100,
+          "items": {"$ref": "#/$defs/cohort_item"}
+        }
+      }
+    },
+    "cohort_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["item_id", "terminal", "terminal_receipt", "terminal_state"],
+      "properties": {
+        "item_id": {"type": "string", "pattern": "^item_[A-Za-z0-9_-]{4,96}$"},
+        "terminal": {"type": "boolean"},
+        "terminal_receipt": {"type": "boolean"},
+        "terminal_state": {
+          "enum": ["completed", "held", "failed_terminal", "published_verified", "blocked_owner"]
+        }
+      }
+    },
+    "doctor_run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "incident_ids"],
+      "properties": {
+        "status": {"enum": ["healthy", "ok", "degraded", "failed"]},
+        "incident_ids": {
+          "type": "array",
+          "items": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{2,96}$"}
+        }
+      }
+    }
+  }
+}

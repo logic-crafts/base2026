@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://base2026.dev/contracts/base2026.channel-publication-job.schema.json",
+  "title": "Base2026 channel publication job",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "job_id", "channel", "state", "payload", "external_effect", "next_action"],
+  "properties": {
+    "$schema": {"type": "string", "format": "uri"},
+    "schema_version": {"const": "base2026.channel-publication-job.v2"},
+    "job_id": {"type": "string", "pattern": "^job_[A-Za-z0-9_-]{4,128}$"},
+    "channel": {"enum": ["dev", "linkedin", "medium", "x"]},
+    "state": {
+      "enum": [
+        "prepared",
+        "draft_ready",
+        "submit_attempted",
+        "submitted",
+        "response_complete",
+        "review_passed",
+        "publishing",
+        "published_verified",
+        "blocked_owner",
+        "blocked_transport",
+        "held_contract",
+        "fenced_no_retry"
+      ]
+    },
+    "payload": {"$ref": "#/$defs/artifact"},
+    "external_effect": {"$ref": "#/$defs/external_effect"},
+    "next_action": {
+      "enum": [
+        "resume_author_chat",
+        "prepare_channel_draft",
+        "prepare_external_editor",
+        "prepare_linkedin_computer_use",
+        "inspect_same_external_target_before_retry",
+        "resume_same_conversation_and_capture_complete_response",
+        "independent_review",
+        "prepare_publication_and_request_action_time_confirmation",
+        "repair_job_contract",
+        "repair_visual_contract_before_publication",
+        "recheck_recorded_blocker_without_blind_retry",
+        "record_live_readback",
+        "none"
+      ]
+    },
+    "review_receipt": {"$ref": "#/$defs/artifact"},
+    "publication_receipt": {"$ref": "#/$defs/artifact"},
+    "visual_manifest": {"$ref": "#/$defs/artifact"},
+    "contract_errors": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"state": {"enum": ["review_passed", "publishing"]}}},
+      "then": {
+        "required": ["visual_manifest"],
+        "properties": {
+          "external_effect": {"properties": {"replay_allowed": {"const": false}}}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"state": {"const": "published_verified"}}},
+      "then": {
+        "required": ["publication_receipt"],
+        "properties": {
+          "external_effect": {
+            "properties": {
+              "status": {"const": "published_verified"},
+              "replay_allowed": {"const": false},
+              "same_target_readback": {"const": true}
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"state": {"const": "held_contract"}}},
+      "then": {
+        "required": ["contract_errors"],
+        "properties": {
+          "external_effect": {
+            "properties": {
+              "status": {"const": "none"},
+              "replay_allowed": {"const": false}
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"state": {"const": "fenced_no_retry"}}},
+      "then": {
+        "properties": {
+          "external_effect": {
+            "properties": {"replay_allowed": {"const": false}}
+          },
+          "next_action": {"const": "inspect_same_external_target_before_retry"}
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "path", "sha256"],
+      "properties": {
+        "kind": {"enum": ["prompt", "draft", "response", "review", "publication", "visual_manifest"]},
+        "path": {
+          "type": "string",
+          "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.?(?:/|$))[A-Za-z0-9._/-]+$"
+        },
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "external_effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "replay_allowed", "same_target_readback"],
+      "properties": {
+        "status": {"enum": ["none", "attempted", "submitted", "scheduled", "published_verified", "unknown"]},
+        "replay_allowed": {"type": "boolean"},
+        "same_target_readback": {"type": "boolean"}
+      }
+    }
+  },
+  "x-legacy-state-aliases": {
+    "native_draft_saved": {
+      "canonical_state": "held_contract",
+      "reason": "unsupported_state:native_draft_saved",
+      "external_action": "forbidden_until_contract_repaired"
+    }
+  },
+  "x-state-machine": {
+    "published_verified": [],
+    "fenced_no_retry": ["published_verified", "blocked_owner", "blocked_transport"],
+    "held_contract": ["prepared", "draft_ready", "blocked_owner", "blocked_transport"],
+    "review_passed": ["publishing", "blocked_owner", "held_contract"],
+    "publishing": ["published_verified", "fenced_no_retry", "blocked_transport"]
+  }
+}

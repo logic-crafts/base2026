@@ -1,0 +1,187 @@
+{
+  "$schema": "https://base2026.dev/contracts/base2026.production-manifest.schema.json",
+  "schema_version": "base2026.production-manifest.v1",
+  "recorded_at": "2026-09-01T22:33:36Z",
+  "status": "observed_not_deployment_authorization",
+  "production_mutation_performed": false,
+  "source": {
+    "repository": "github.com/offflinerpsy/base2026",
+    "baseline_commit": "0e5804a8da31ad9d23e5e5b1dd0acc6af2f3f07e",
+    "post_release_candidate_commit": "561a917eb0706173cc71cf97721d45430111061c",
+    "post_release_candidate_recorded_after_deploy": true,
+    "deployed_artifact_tree_sha256": "8ab0277cb5c1a0cf2fbd6798b9ed4c191a3334f118e139dc2a1ac31671fb5f6a",
+    "release_config_sha256": "4da35bee7997a8d7d69d6c96041bd3f9c7dbf4788e18a7b2bf63eac47061b6f1",
+    "artifact_receipt_sha256": "4222c94c35aa6ee36f7ee0c42847970093f00c1289f09ccf4f4959ccaf965629",
+    "source_state_at_release": "dirty_uncommitted_unpushed",
+    "exact_commit_binding": "unresolved",
+    "reproducible_from_commit": false
+  },
+  "workers": {
+    "public": {
+      "name": "base2026",
+      "version_label": "34",
+      "version_id": "0337f7d6-ebe4-4bcc-8b4a-e23317a99a8e",
+      "version_id_status": "public",
+      "deployment_id": "1d8d9322-bc33-4901-8376-7df0d384a823",
+      "traffic_percent": 100
+    },
+    "redirect": {
+      "name": "base2026-www-redirect",
+      "version_label": "live",
+      "version_id": "89ebc975-4906-49f8-95d5-3454625c3ee0",
+      "version_id_status": "public",
+      "traffic_percent": 100
+    },
+    "private": {
+      "name": "base2026-pipeline-control",
+      "version_label": "0.6.6",
+      "deployment_label": "60",
+      "version_id": null,
+      "version_id_status": "withheld_private",
+      "traffic_percent": 100
+    }
+  },
+  "routes": {
+    "custom_domains": [
+      {"domain": "base2026.dev", "worker": "base2026", "mode": "custom_domain"},
+      {"domain": "www.base2026.dev", "worker": "base2026-www-redirect", "mode": "custom_domain"}
+    ],
+    "worker_first_patterns": [
+      "/api/*",
+      "/my-research",
+      "/my-research/*",
+      "/sources",
+      "/sources/*",
+      "/sitemap-dynamic.xml",
+      "/sitemap-blog.xml",
+      "/sitemap-guides.xml",
+      "/sitemaps/blog-*",
+      "/topics/*",
+      "/blog",
+      "/blog.html",
+      "/blog/*",
+      "/knowledge-search/*",
+      "/search",
+      "/search/*",
+      "/search.html",
+      "/meili.html"
+    ],
+    "live_verified": [
+      "/",
+      "/workspace/",
+      "/topics/",
+      "/tools/evidence-search/",
+      "/my-research/",
+      "/sitemap.xml",
+      "/api/health",
+      "/api/stats"
+    ]
+  },
+  "bindings": {
+    "public_worker": {
+      "observed_runtime": ["ASSETS", "DB", "INBOX_DB", "OUTREACH_DB", "AUTH_DB"],
+      "tracked_config": ["ASSETS", "DB", "INBOX_DB", "OUTREACH_DB"],
+      "missing_from_tracked_config": ["AUTH_DB"],
+      "vars": {"MEMBER_AUTH_ENABLED": true},
+      "secret_names_preserved": true,
+      "secret_values_read_or_uploaded": false
+    },
+    "private_worker": {
+      "observed_runtime": [
+        "PIPELINE_DB",
+        "PIPELINE_ARTIFACTS",
+        "PIPELINE_JOBS",
+        "PIPELINE_AI_JOBS",
+        "PIPELINE_WORKFLOW",
+        "AI",
+        "BROWSER",
+        "CAPTURE_CONTAINER",
+        "PUBLIC_PROJECTION"
+      ],
+      "source_visibility": "protected_not_in_public_repo",
+      "identifiers_committed": false
+    }
+  },
+  "migrations": {
+    "public_worker": {
+      "DB": {
+        "directory": "migrations",
+        "source_files": [
+          "0001_search.sql",
+          "0002_align_fts_content_columns.sql",
+          "0003_public_projection.sql",
+          "0004_editorial_articles.sql"
+        ],
+        "runtime_status": "release_receipt_and_live_behavior_observed",
+        "fresh_full_readback_required": true
+      },
+      "INBOX_DB": {
+        "directory": "migrations-inbox",
+        "source_files": ["0001_inbox.sql"],
+        "runtime_status": "source_declared",
+        "fresh_full_readback_required": true
+      },
+      "OUTREACH_DB": {
+        "directory": "migrations-outreach",
+        "source_files": ["0001_outreach_search.sql"],
+        "runtime_status": "source_declared",
+        "fresh_full_readback_required": true
+      },
+      "AUTH_DB": {
+        "directory": "migrations-members",
+        "source_files": ["0001_better_auth.sql", "0002_member_research.sql"],
+        "runtime_status": "release_receipt_and_live_behavior_observed",
+        "fresh_full_readback_required": true
+      }
+    },
+    "private_worker": {
+      "applied_count_observed": 14,
+      "pending_observed": 0,
+      "runtime_observation": "2026-08-30 canonical readback retained in the current snapshot; exact filenames intentionally omitted",
+      "fresh_full_readback_required": true
+    }
+  },
+  "live_checks": {
+    "public_health": {
+      "ok": true,
+      "service": "base2026",
+      "search": "d1-fts5",
+      "index": "base2026_public_tiktok"
+    },
+    "public_stats": {
+      "documents_indexed": 2198,
+      "distinct_sources": 1589,
+      "public_evidence_routes": 65,
+      "projected_cards": 106,
+      "full_transcripts_published": 0
+    },
+    "private_health": {
+      "http_status": 200,
+      "version_label": "0.6.6",
+      "deployment_label": "60",
+      "environment": "shadow",
+      "incident": "new_ai_runtime_failures"
+    },
+    "route_status": {
+      "/": 200,
+      "/workspace/": 200,
+      "/topics/": 200,
+      "/tools/evidence-search/": 200,
+      "/my-research/": 200,
+      "/sitemap.xml": 200,
+      "/api/health": 200,
+      "/api/stats": 200
+    },
+    "privacy_invariants": {
+      "full_transcripts_published": 0,
+      "signed_out_private_denied": true,
+      "signed_out_api_denied": true
+    }
+  },
+  "unapplied_recommendations": [
+    "Create a clean commit from the exact deployed candidate and prove commit, tree and artifact equality before any deploy.",
+    "Add and verify AUTH_DB plus member migration declarations in a tracked release config; the current manifest remains non-reproducible until then.",
+    "Refresh private migration state and environment identity from protected control-plane config before any mutation.",
+    "Keep new_ai_runtime_failures open until bounded cohort terminal accounting, zero orphans and two subsequent doctor runs are not degraded by that incident."
+  ]
+}

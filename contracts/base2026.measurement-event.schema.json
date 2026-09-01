@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://base2026.dev/contracts/base2026.measurement-event.schema.json",
+  "title": "Base2026 privacy-safe measurement event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "event_id", "trace_id", "event_name", "occurred_at", "route", "query_id", "properties"],
+  "properties": {
+    "$schema": {"type": "string", "format": "uri"},
+    "schema_version": {"const": "base2026.measurement-event.v1"},
+    "event_id": {"type": "string", "pattern": "^evt_[A-Za-z0-9_-]{8,128}$"},
+    "trace_id": {"type": "string", "pattern": "^trace_[A-Za-z0-9_-]{8,128}$"},
+    "event_name": {
+      "enum": ["search_submitted", "result_opened", "save_completed", "revisit_completed", "export_completed"]
+    },
+    "occurred_at": {"type": "string", "format": "date-time"},
+    "route": {"enum": ["/tools/evidence-search/", "/my-research/"]},
+    "query_id": {"type": "string", "pattern": "^qry_[A-Za-z0-9_-]{8,128}$"},
+    "actor_ref": {"type": "string", "pattern": "^usr_[A-Za-z0-9_-]{8,128}$"},
+    "source_id": {"type": "string", "pattern": "^src_[A-Za-z0-9_-]{4,128}$"},
+    "properties": {"$ref": "#/$defs/properties"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"event_name": {"const": "search_submitted"}}},
+      "then": {
+        "properties": {
+          "route": {"const": "/tools/evidence-search/"},
+          "properties": {"required": ["query_length_bucket"]}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"event_name": {"const": "result_opened"}}},
+      "then": {
+        "properties": {"route": {"const": "/tools/evidence-search/"}},
+        "required": ["source_id"]
+      }
+    },
+    {
+      "if": {"properties": {"event_name": {"const": "save_completed"}}},
+      "then": {"required": ["actor_ref", "source_id"]}
+    },
+    {
+      "if": {"properties": {"event_name": {"const": "revisit_completed"}}},
+      "then": {
+        "properties": {
+          "route": {"const": "/my-research/"},
+          "properties": {
+            "properties": {"new_auth_session": {"const": true}},
+            "required": ["new_auth_session"]
+          }
+        },
+        "required": ["actor_ref"]
+      }
+    },
+    {
+      "if": {"properties": {"event_name": {"const": "export_completed"}}},
+      "then": {
+        "properties": {
+          "route": {"const": "/my-research/"},
+          "properties": {
+            "properties": {
+              "unique_sources_bucket": {"const": "3+"},
+              "export_format": {"enum": ["json", "csv"]}
+            },
+            "required": ["unique_sources_bucket", "export_format"]
+          }
+        },
+        "required": ["actor_ref"]
+      }
+    }
+  ],
+  "$defs": {
+    "properties": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "query_length_bucket": {"enum": ["0", "1-3", "4-8", "9+"]},
+        "result_count_bucket": {"enum": ["0", "1-10", "11-25", "26+"]},
+        "latency_bucket_ms": {"enum": ["0-250", "251-1000", "1001+"]},
+        "viewport_bucket": {"enum": ["mobile", "desktop"]},
+        "unique_sources_bucket": {"enum": ["0", "1-2", "3+"]},
+        "new_auth_session": {"type": "boolean"},
+        "export_format": {"enum": ["json", "csv"]}
+      }
+    }
+  }
+}

@@ -16,6 +16,11 @@ merge, deploy, D1 write, sitemap submission or external publication occurred.
 Verification and the final local commit are recorded after the integration and
 review pass below.
 
+The reliability slice remains additive and non-authorizing: its checked-in
+manifest is intentionally non-reproducible until exact artifact/commit and
+binding parity are proven, its channel validator performs no replay, and its
+five-event measurement contract has no live emitter or analytics write.
+
 ## 2026-08-31 — Isolated Google auth implementation checkpoint
 
 Owner requested a useful optional Google login/private research slice while

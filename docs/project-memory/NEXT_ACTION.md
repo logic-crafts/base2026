@@ -13,6 +13,11 @@ Next action: root review the exact diff and test receipts, then decide whether
 the bounded static evidence-map overlay and public MCP/API additions belong in
 a separately approved release. Do not deploy this candidate directly.
 
+The integrated reliability manifest is an observed, redacted receipt with
+`release_ready=false`; its unresolved commit/binding and private-incident
+recommendations remain holds. Channel reconciliation and member measurement
+contracts are staging/read-only artifacts, not external-action permission.
+
 ## Evidence Search production release — September 1, 20:10 UTC
 
 Worker `0337f7d6-ebe4-4bcc-8b4a-e23317a99a8e` is live at 100% with
