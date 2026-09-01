@@ -175,8 +175,10 @@ D1 row, production sitemap or live page was changed by this task.
 
 - Implementation branch: `codex/base2026-evidence-map-canary-20260901`.
 - Base commit: `c9ff51b4d`.
-- Implementation commit: recorded after the public-safe code/config/test
-  commit is created; the final response identifies the exact hash.
+- Implementation commit: `efab336d55b4b22c018b383fd1e436fa5e276420`
+  (`feat: add gated evidence map canary`).
+- This receipt-file pin is a follow-up documentation commit; the final
+  response identifies both hashes and the branch remains unpushed.
 - No AgencyOS write was performed. This document is the handoff receipt for
   command-center review; an AgencyOS update is appropriate only if the owner
   chooses to record this receipt in its operational system.
