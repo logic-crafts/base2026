@@ -57,6 +57,22 @@ Example:
 }
 ```
 
+## Current read-only Worker routes
+
+The same public boundary also covers these bounded, read-only routes:
+
+- `GET /api/health` for Worker and public-search liveness;
+- `GET /api/stats` for current public corpus and privacy-boundary totals;
+- `GET /api/evidence-brief?q=...` for deterministic Evidence Brief V1;
+- `GET /api/evidence-brief/v2?q=...` for bounded attributable findings with
+  corpus and ranking receipts;
+- `GET /api/blog` and `GET /api/blog/{slug}` for approved editorial metadata;
+- `GET /api/guides` and `GET /api/guides/{slug}` for maintained task guides
+  whose public-source dependencies are checked before serving.
+
+Editorial and guide records are separate from source-corpus counts. No public
+route writes, approves or moderates content.
+
 ## Indexable public projection
 
 Eligible automatic D1 projections receive stable public source pages at:
@@ -101,7 +117,13 @@ Base2026 URLs and public/private policy flags. Request bodies, arguments and
 returned evidence are bounded; raw captions, raw ASR, full private transcripts,
 media, inbox data and pipeline control state are never returned.
 
+The Worker configuration includes a `MCP_RATE_LIMIT` binding at 60 requests per
+minute per edge identity. Exhausted clients receive `429` with a retry hint;
+when the binding is missing or unavailable, the route fails closed with `503`.
+The binding still needs live deployment/readback before this candidate can be
+called release-ready.
+
 The route is source-complete in this candidate but is not a deployment receipt.
-Use the [MCP guide](10_MCP_FOR_AI_AGENTS.md) and
-[integration guide](11_PLUGINS_AND_INTEGRATIONS.md) after the worker, static,
+Use the [MCP guide](mcp.html) and
+[integration guide](integrations.html) after the worker, static,
 browser and publication-boundary release gates pass.

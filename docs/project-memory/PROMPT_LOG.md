@@ -30,7 +30,9 @@ The API/MCP slice is integrated additively: `POST /api/mcp` is backed only by
 public D1 projections and six bounded read-only tools. Its docs and static
 pages remain part of the local candidate until worker, static, browser and
 publication-boundary gates pass. No client registration, live endpoint
-readback, D1 mutation or external publication was performed.
+readback, D1 mutation or external publication was performed. The route now
+requires the configured `MCP_RATE_LIMIT` binding and fails closed when absent;
+live binding/readback remains an explicit release blocker.
 
 ## 2026-08-31 — Isolated Google auth implementation checkpoint
 

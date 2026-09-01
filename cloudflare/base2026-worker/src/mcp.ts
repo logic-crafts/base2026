@@ -26,6 +26,8 @@ const MAX_TOPIC_CREATORS = 10;
 const MAX_CREATOR_TOPICS = 30;
 const MAX_EXCERPT_LENGTH = 640;
 const MAX_CARD_EXCERPT_LENGTH = 900;
+const MCP_RATE_LIMIT_RETRY_AFTER_SECONDS = 60;
+const MCP_RATE_LIMIT_KEY_PREFIX = "base2026:mcp:v1:";
 const PUBLIC_BOUNDARY = Object.freeze({
   access: "public_read_only",
   raw_captions: false,
@@ -37,6 +39,9 @@ const PUBLIC_BOUNDARY = Object.freeze({
 
 export interface PublicMcpEnv {
   DB?: D1Database;
+  MCP_RATE_LIMIT?: {
+    limit(options: { key: string }): Promise<{ success: boolean }>;
+  };
 }
 
 type JsonRpcId = string | number | null;
@@ -876,6 +881,35 @@ function mcpHeaders(request: Request, extra: HeadersInit = {}): Headers {
   return headers;
 }
 
+function rateLimitIdentity(request: Request): string {
+  // Cloudflare supplies CF-Connecting-IP at the edge. Do not fall back to
+  // caller-controlled forwarding headers; local/test requests share the
+  // anonymous bucket until the configured binding is available.
+  const candidate = request.headers.get("CF-Connecting-IP")?.trim() ?? "";
+  if (!candidate || candidate.length > 128 || /[\u0000-\u001f\u007f-\u009f]/u.test(candidate)) {
+    return "anonymous";
+  }
+  return candidate;
+}
+
+async function enforceMcpRateLimit(request: Request, env: PublicMcpEnv): Promise<void> {
+  if (!env.MCP_RATE_LIMIT) {
+    throw new McpHttpError(503, -32030, "MCP abuse protection is not configured");
+  }
+  try {
+    const outcome = await env.MCP_RATE_LIMIT.limit({
+      key: `${MCP_RATE_LIMIT_KEY_PREFIX}${rateLimitIdentity(request)}`,
+    });
+    if (!outcome.success) {
+      throw new McpHttpError(429, -32029, "MCP request rate limit exceeded");
+    }
+  } catch (error) {
+    if (error instanceof McpHttpError) throw error;
+    console.error(JSON.stringify({ event: "base2026_mcp_rate_limit_error" }));
+    throw new McpHttpError(503, -32030, "MCP abuse protection is unavailable");
+  }
+}
+
 function mcpResponse(request: Request, payload: JsonRecord | null, status = 200, extra: HeadersInit = {}): Response {
   return new Response(payload === null ? null : JSON.stringify(payload), {
     status,
@@ -893,6 +927,7 @@ function httpErrorResponse(request: Request, id: JsonRpcId, error: McpHttpError)
     : undefined;
   return mcpResponse(request, jsonRpcError(id, error.code, error.message, data), error.status, {
     ...(responseVersion ? { "MCP-Protocol-Version": responseVersion } : {}),
+    ...(error.status === 429 ? { "Retry-After": String(MCP_RATE_LIMIT_RETRY_AFTER_SECONDS) } : {}),
   });
 }
 
@@ -997,6 +1032,12 @@ export async function handlePublicMcp(request: Request, env: PublicMcpEnv): Prom
   if (contentType !== "application/json") {
     return mcpResponse(request, jsonRpcError(null, -32600, "MCP requests require Content-Type: application/json"), 415);
   }
+  try {
+    await enforceMcpRateLimit(request, env);
+  } catch (error) {
+    if (error instanceof McpHttpError) return httpErrorResponse(request, null, error);
+    return mcpResponse(request, jsonRpcError(null, -32603, "MCP abuse protection is unavailable"), 503);
+  }
 
   let message: JsonRpcRequest;
   try {
@@ -1022,12 +1063,23 @@ export async function handlePublicMcp(request: Request, env: PublicMcpEnv): Prom
     const { params } = requestMeta(message);
     const responseHeaders = { "MCP-Protocol-Version": version };
 
+    if (!hasOwn(message, "id")) {
+      // JSON-RPC notifications never receive a response body and must not
+      // dispatch a tool or touch D1, including notifications/initialized and
+      // tools/call notifications.
+      return mcpResponse(request, null, 202, responseHeaders);
+    }
     if (message.method === "notifications/initialized" || message.method === "notifications/cancelled") {
       return mcpResponse(request, null, 202, responseHeaders);
     }
     if (message.method === "server/discover") return mcpResponse(request, jsonRpcResult(id, discoverResult()), 200, responseHeaders);
-    if (message.method === "initialize") return mcpResponse(request, jsonRpcResult(id, initializeResult(version)), 200, responseHeaders);
-    if (message.method === "ping") return mcpResponse(request, jsonRpcResult(id, {}), 200, responseHeaders);
+    if (message.method === "initialize") {
+      if (version === MODERN_PROTOCOL_VERSION) {
+        return mcpResponse(request, jsonRpcError(id, -32601, "MCP method initialize is not available for protocol 2026-07-28"), 404, responseHeaders);
+      }
+      return mcpResponse(request, jsonRpcResult(id, initializeResult(version)), 200, responseHeaders);
+    }
+    if (message.method === "ping") return mcpResponse(request, jsonRpcResult(id, { resultType: "complete" }), 200, responseHeaders);
     if (message.method === "tools/list") return mcpResponse(request, jsonRpcResult(id, toolsListResult()), 200, responseHeaders);
     if (message.method === "tools/call") {
       if (typeof params.name !== "string" || !params.name) {

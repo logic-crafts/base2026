@@ -12,7 +12,9 @@ The isolated growth candidate is based on the reviewed member-auth commit
 public-safe evidence-map canary and a read-only public API/MCP surface. The
 candidate preserves the member-auth, Evidence Search and current visual shell.
 It is local and review-only: no deployment, push, merge, D1 write, sitemap
-submission or external publication is implied by these files.
+submission or external publication is implied by these files. The public
+no-key MCP route is fail-closed behind `MCP_RATE_LIMIT`; account binding and
+live readback remain unverified release gates.
 
 ## Completed scope
 

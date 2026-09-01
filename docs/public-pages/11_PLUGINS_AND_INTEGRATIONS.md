@@ -3,7 +3,9 @@
 Base2026 is usable from agent clients through its public remote HTTP MCP
 endpoint. The compatible setup is deliberately small: add one read-only
 server, then let the client discover the six public tools. No API key, OAuth
-secret, local daemon or private package is required.
+secret, local daemon or private package is required. The endpoint is protected
+by a Cloudflare per-edge-identity rate limit; it fails closed if that binding is
+not configured, so this local candidate is not a release-ready live service.
 
 ## Codex
 
@@ -59,8 +61,8 @@ machine-readable contracts in:
 For clients that support repository-local instructions, the copyable
 instruction-only skill is `docs/integrations/base2026-public-mcp/SKILL.md` and
 its explicit non-marketplace manifest is
-`docs/integrations/base2026-public-mcp/manifest.json`. These files contain no
-credentials and do not install or mutate a client configuration.
+`docs/integrations/base2026-public-mcp/integration-manifest.json`. These files
+contain no credentials and do not install or mutate a client configuration.
 
 These are documentation and public data surfaces, not an official Codex or
 Claude marketplace plugin. A client that does not support remote HTTP MCP can

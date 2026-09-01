@@ -148,14 +148,34 @@ class FakeMcpStatement {
 
 class FakeMcpDatabase {
   readonly rows = SOURCE_ROWS;
+  prepareCalls = 0;
 
   prepare(sql: string): FakeMcpStatement {
+    this.prepareCalls += 1;
     return new FakeMcpStatement(sql, this);
   }
 }
 
-function env(): Env {
-  return { DB: new FakeMcpDatabase() as unknown as D1Database } as unknown as Env;
+class FakeMcpRateLimit {
+  calls = 0;
+
+  constructor(readonly allowed = true) {}
+
+  async limit(_options: { key: string }): Promise<{ success: boolean }> {
+    this.calls += 1;
+    return { success: this.allowed };
+  }
+}
+
+function env(db = new FakeMcpDatabase(), rateLimit = new FakeMcpRateLimit()): Env {
+  return {
+    DB: db as unknown as D1Database,
+    MCP_RATE_LIMIT: rateLimit,
+  } as unknown as Env;
+}
+
+function envWithoutRateLimit(db = new FakeMcpDatabase()): Env {
+  return { DB: db as unknown as D1Database } as unknown as Env;
 }
 
 function modernRequest(method: string, id: string | number, params: Record<string, unknown> = {}): Request {
@@ -175,6 +195,26 @@ function modernRequest(method: string, id: string | number, params: Record<strin
     method: "POST",
     headers,
     body: JSON.stringify({ jsonrpc: "2.0", id, method, params: bodyParams }),
+  });
+}
+
+function modernNotification(method: string, params: Record<string, unknown> = {}): Request {
+  const bodyParams = {
+    ...params,
+    _meta: {
+      "io.modelcontextprotocol/protocolVersion": MODERN_PROTOCOL_VERSION,
+    },
+  };
+  const headers = new Headers({
+    "Content-Type": "application/json",
+    "MCP-Protocol-Version": MODERN_PROTOCOL_VERSION,
+    "Mcp-Method": method,
+  });
+  if (method === "tools/call" && typeof params.name === "string") headers.set("Mcp-Name", params.name);
+  return new Request("https://base2026.dev/api/mcp", {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ jsonrpc: "2.0", method, params: bodyParams }),
   });
 }
 
@@ -278,6 +318,60 @@ describe("Base2026 public MCP", () => {
     expect(response.status).toBe(200);
     expect(response.headers.get("MCP-Protocol-Version")).toBe("2025-06-18");
     expect(payload.result.protocolVersion).toBe("2025-06-18");
+  });
+
+  it("rejects modern initialize while returning the complete modern ping result", async () => {
+    const initialize = await worker.fetch(
+      modernRequest("initialize", "modern-init", { capabilities: {}, clientInfo: { name: "test", version: "1" } }),
+      env(),
+      {} as ExecutionContext,
+    );
+    const ping = await worker.fetch(modernRequest("ping", "modern-ping"), env(), {} as ExecutionContext);
+    const initializePayload = await responseJson(initialize);
+    const pingPayload = await responseJson(ping);
+
+    expect(initialize.status).toBe(404);
+    expect(initializePayload.error.code).toBe(-32601);
+    expect(ping.status).toBe(200);
+    expect(pingPayload.result).toEqual({ resultType: "complete" });
+  });
+
+  it("accepts no-id tool notifications without touching D1", async () => {
+    const db = new FakeMcpDatabase();
+    const response = await worker.fetch(
+      modernNotification("tools/call", { name: "search_sources", arguments: { query: "AI evidence" } }),
+      env(db),
+      {} as ExecutionContext,
+    );
+
+    expect(response.status).toBe(202);
+    expect(await response.text()).toBe("");
+    expect(db.prepareCalls).toBe(0);
+  });
+
+  it("fails closed when abuse protection is unavailable or exhausted", async () => {
+    const missingBindingDb = new FakeMcpDatabase();
+    const missingBinding = await worker.fetch(
+      modernRequest("server/discover", "missing-binding"),
+      envWithoutRateLimit(missingBindingDb),
+      {} as ExecutionContext,
+    );
+    const limited = new FakeMcpRateLimit(false);
+    const rateLimited = await worker.fetch(
+      modernRequest("server/discover", "rate-limited"),
+      env(new FakeMcpDatabase(), limited),
+      {} as ExecutionContext,
+    );
+    const missingPayload = await responseJson(missingBinding);
+    const limitedPayload = await responseJson(rateLimited);
+
+    expect(missingBinding.status).toBe(503);
+    expect(missingPayload.error.code).toBe(-32030);
+    expect(missingBindingDb.prepareCalls).toBe(0);
+    expect(rateLimited.status).toBe(429);
+    expect(rateLimited.headers.get("Retry-After")).toBe("60");
+    expect(limitedPayload.error.code).toBe(-32029);
+    expect(limited.calls).toBe(1);
   });
 
   it("rejects protocol/header mismatches and non-POST transport", async () => {

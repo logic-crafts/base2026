@@ -15,6 +15,9 @@ open the private ingestion or review pipeline.
   versions are accepted.
 - Sessions: none. Server-sent events: none. DELETE: not supported.
 - Authentication: none; the data is intentionally public.
+- Abuse protection: the Worker uses the configured `MCP_RATE_LIMIT` binding at
+  60 requests per minute per edge identity; if the binding is unavailable the
+  route fails closed with `503` rather than serving an unprotected endpoint.
 
 Modern clients should send `Content-Type: application/json`,
 `MCP-Protocol-Version`, `Mcp-Method`, and the matching protocol metadata in
@@ -65,6 +68,8 @@ page URL.
 ## Limits and errors
 
 - MCP request bodies are capped at 64 KiB.
+- The configured Cloudflare rate limit returns `429` with `Retry-After: 60`
+  after the per-identity minute budget is exhausted.
 - `search_sources` is bounded to 20 results and offset 1,000.
 - Source lookup returns at most eight passages and three applied public cards.
 - Creator and topic samples are bounded; counts are current D1 reads at call
@@ -76,7 +81,9 @@ page URL.
 
 Agents should cite the original source URL and any returned Base2026 source
 page. Do not present a bounded result as a real-time ranking, complete corpus,
-full transcript or independent confirmation of the creator's claim.
+full transcript or independent confirmation of the creator's claim. The
+implementation is a local release candidate until the rate-limit binding is
+configured and read back in a deployment receipt.
 
 ## Privacy boundary
 

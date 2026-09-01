@@ -29,6 +29,9 @@ Worker typecheck, MCP route tests, static-page generation and publication
 boundary checks must pass before root considers a release. Keep the endpoint
 read-only and public-D1-only; no live route claim, MCP client registration or
 deployment is authorized by this checkpoint.
+The Cloudflare `MCP_RATE_LIMIT` binding is configured in the Worker manifest
+and enforced fail-closed in code, but its live account binding/readback is
+unverified; this is a release blocker for a public no-key endpoint.
 
 ## Evidence Search production release — September 1, 20:10 UTC
 

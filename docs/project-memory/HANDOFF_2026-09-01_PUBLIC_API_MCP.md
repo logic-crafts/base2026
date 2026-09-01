@@ -1,9 +1,9 @@
 # Handoff: Base2026 public API, MCP and agent integrations
 
 Date: 2026-09-01
-Branch: `codex/base2026-api-mcp-surface-20260901`
-Commit: `git rev-parse HEAD` after checkout (final immutable hash is recorded in the task receipt)
-Status: PR-ready candidate; no push, merge or Cloudflare deployment occurred
+Branch: `codex/base2026-growth-integration-20260901`
+Base: `codex/base2026-google-auth-20260831` at `561a917eb0706173cc71cf97721d45430111061c`
+Status: local integrated candidate; no push, merge or Cloudflare deployment occurred
 
 ## Outcome
 
@@ -12,20 +12,24 @@ existing public-safe Base2026 evidence projection:
 
 - `POST /api/mcp` in the existing public Worker;
 - six bounded, read-only MCP tools;
-- current `2026-07-28` discovery plus compatible legacy 2025 `initialize`;
+- current `2026-07-28` discovery with an intentional `-32601` rejection for
+  modern `initialize`, while retaining compatible legacy 2025 `initialize`;
 - free API, MCP, Codex and Claude Code documentation;
 - indexable `/api`, `/mcp` and `/integrations` pages using the current
   Base2026 startup shell;
 - public-only `api-index.json`, `data-dictionary.json`, `llms.txt` and
   `llms-root.txt` contracts;
 - a repository-local instruction-only skill and explicit non-marketplace
-  manifest.
+  integration manifest.
 
 The route is implemented and locally tested, but it is not live until a
 separate deployment receipt, live smoke test and rollback record exist. The
 current public baseline was read without mutation: `GET /api/health` returned
 200, the existing `POST /api/search/multi-search` returned 200 for `AI search`,
 and the undeployed `GET /api/mcp` returned the expected pre-release 404.
+The local candidate fails closed unless the configured Cloudflare
+`MCP_RATE_LIMIT` binding is present (60 requests/minute per edge identity);
+binding configuration and live readback remain release blockers.
 
 ## Public routes and machine files
 
@@ -55,7 +59,16 @@ MCP request bodies are capped at 64 KiB. `search_sources` is capped at 20
 results and offset 1,000; all other samples are bounded in the implementation.
 Modern requests use JSON-RPC 2.0 with `MCP-Protocol-Version`, `Mcp-Method`,
 matching `params._meta` protocol metadata, and `Mcp-Name` for `tools/call`.
-The handler is stateless JSON-only HTTP: no session IDs, SSE, DELETE or writes.
+Modern `initialize` is deliberately rejected as unsupported (`-32601`), while
+legacy 2025 `initialize` remains available; `ping` returns
+`{"resultType":"complete"}`. Any request without an `id`, including
+`tools/call`, is accepted with HTTP 202 and an empty body without dispatching to
+D1. Explicit `notifications/initialized` and `notifications/cancelled`
+handling remains intact. The handler is stateless JSON-only HTTP: no session
+IDs, SSE, DELETE or writes.
+Requests are protected by `MCP_RATE_LIMIT` and return `429` with a retry hint
+when the per-identity minute budget is exhausted; an unavailable binding
+returns `503` and does not execute D1.
 
 ## Security and privacy boundary
 
@@ -79,27 +92,28 @@ video ID.
 Run from the repository root in the isolated worktree:
 
 ```bash
-git switch codex/base2026-api-mcp-surface-20260901
+git switch codex/base2026-growth-integration-20260901
 
 cd cloudflare/base2026-worker
 npm ci
 npm run typecheck
 npm test
-npm run import:dry-run -- --input tests/fixtures/passages.jsonl
-npm run wrangler:dry-run
+MCP_DRYRUN_ASSETS="$(mktemp -d /tmp/base2026-mcp-dryrun.XXXXXX)"
+npx wrangler deploy --dry-run --assets "$MCP_DRYRUN_ASSETS"
 cd ../..
 
 python3 -m py_compile scripts/generate-info-pages.py scripts/build-base2026-cloudflare-release.py
-python3 -m pytest tests/test_build_base2026_cloudflare_release.py tests/test_generate_info_pages.py tests/test_root_llms_contract.py -q
+python3 -m pytest -q
 python3 scripts/check-base2026-design-authority.py
-python3 scripts/audit-publication-boundary.py
+git add <reviewed-candidate-paths>
+python3 scripts/audit-publication-boundary.py --json
 git diff --check
 ```
 
-The fixture import command is intentional: a fresh checkout does not contain
-the ignored generated public export at
-`output/cloudflare-migration/source-web/static/passages.jsonl`. Never create a
-private or raw substitute to make the default importer appear green.
+The publication audit must run after the candidate paths are staged (or against
+an equivalent real diff), so its receipt must show the integrated changed-file
+set rather than `changed_files=0`. Never create a private or raw substitute to
+make an importer or release gate appear green.
 
 For a populated public source artifact, build a new non-overwriting candidate
 and then point the local Wrangler config at that candidate path (or copy the
@@ -141,6 +155,7 @@ Worker and tests:
 - `cloudflare/base2026-worker/src/index.ts`
 - `cloudflare/base2026-worker/src/mcp.ts`
 - `cloudflare/base2026-worker/tests/mcp.test.ts`
+- `cloudflare/base2026-worker/wrangler.jsonc`
 
 Public docs and integration guidance:
 
@@ -150,7 +165,7 @@ Public docs and integration guidance:
 - `docs/public-pages/10_MCP_FOR_AI_AGENTS.md`
 - `docs/public-pages/11_PLUGINS_AND_INTEGRATIONS.md`
 - `docs/integrations/base2026-public-mcp/SKILL.md`
-- `docs/integrations/base2026-public-mcp/manifest.json`
+- `docs/integrations/base2026-public-mcp/integration-manifest.json`
 
 Build, packaging and design authority:
 
@@ -195,15 +210,21 @@ the public source status and phase state did not change in this candidate.
 
 ## Verification receipts from this pass
 
-- Worker Vitest: 45/45 passed.
-- Worker TypeScript: passed.
-- Python builder/info/root-llms tests: 17 passed.
+- Worker Vitest: 12 files / 625 tests passed; targeted MCP suite 11/11.
+- Worker TypeScript: `npm run typecheck` passed.
+- Python full suite: 171 passed; relevant integration subset: 39 passed.
+- Python compile checks for the generator and release builder: passed.
 - Design-authority check: passed.
-- Public import dry-run: one public-safe fixture row, one deterministic batch.
-- Standalone builder fixture: 67 served files; tree
-  `b7fb821c77e95bd6c49bf9e35f8ae17457b2d81b9f68c5d420a75df4ac276ea0`;
-  all public/private marker counters were zero.
-- Wrangler dry-run: read 76 asset files; no deployment performed.
+- Info-page generator: `info_pages=12`; API, MCP and integrations pages
+  regenerated from the source Markdown.
+- Wrangler dry-run: completed with an empty temporary assets directory; the
+  binding inventory included `MCP_RATE_LIMIT` at 60 requests/60 seconds; no
+  deployment performed.
+- Publication audit: the full base-to-candidate snapshot (auth base plus the
+  staged reviewer fixes) reported `changed_files=61`, all 61 public-safe,
+  `forbidden=[]`, `needs_review=[]`, and `secret_findings=[]`.
+- No public source export was present in this isolated worktree, so no import
+  or populated standalone artifact was manufactured for this pass.
 - Live read-only baseline: `/api/health` 200; existing search API 200;
   candidate `/api/mcp` 404 because this branch was not deployed.
 
