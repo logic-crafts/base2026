@@ -16,8 +16,11 @@ are published. The 09:16 withdrawal total2173/1572/48/81/0 is history; private
 evidence for both withdrawn cards was preserved.
 
 Source316a39f64 merged through PR31. Correction4960c99bd was pushed before
-the two-roadmap-asset release; public Worker7522595a and artifacted0a9371
-remain current. PR32 tracks final documentation/integration; verify its GitHub
+the two-roadmap-asset release. Current public Worker0337f7d6 adds the reviewed
+Evidence Search artifact while retaining member auth, four D1 bindings and the
+two guide-hub aliases; version5a326a64 is its rollback. The free tool is live200,
+self-canonical, indexable, hub-sitemap listed and real-D1/browser verified.
+PR32 tracks older documentation/integration; verify its GitHub
 merge receipt before further releases rather than replaying completed work.
 Git source, static artifact and live D1/private state are separate restore inputs.
 

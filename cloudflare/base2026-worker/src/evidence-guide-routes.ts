@@ -9,6 +9,7 @@ type GuideEnv = Pick<Env, "DB" | "ASSETS">;
 const MAX_SHELL_BYTES = 256 * 1024;
 const MAX_GUIDES = 8;
 const APPROVED_SLUGS = new Set<string>(EDITORIAL_EVIDENCE_GUIDE_SLUGS);
+const GUIDE_HUB_ALIASES = new Set(["/guides", "/guides/"]);
 const TOPIC_PATH = /^\/topics\/([a-z0-9]+(?:-[a-z0-9]+)*)(?:\/|\.html)?$/u;
 const API_PATH = /^\/api\/guides\/([a-z0-9]+(?:-[a-z0-9]+)*)$/u;
 
@@ -153,11 +154,19 @@ export async function handleEvidenceGuideRoute(
   const url = new URL(request.url);
   const topic = TOPIC_PATH.exec(url.pathname);
   const html = topic !== null && APPROVED_SLUGS.has(topic[1]);
+  const hubAlias = GUIDE_HUB_ALIASES.has(url.pathname);
   const api = url.pathname === "/api/guides" || url.pathname.startsWith("/api/guides/");
   const sitemap = url.pathname === "/sitemap-guides.xml";
-  if (!html && !api && !sitemap) return null;
+  if (!html && !hubAlias && !api && !sitemap) return null;
   if (request.method !== "GET" && request.method !== "HEAD") {
     return json(request, { ok: false, code: "METHOD_NOT_ALLOWED" }, 405, { Allow: "GET, HEAD" });
+  }
+  // Maintained evidence guides are canonical topic pages. Keep the intuitive
+  // collection alias useful without introducing a second index or canonical.
+  if (hubAlias) {
+    return response(request, "", "text/plain; charset=utf-8", 308, {
+      Location: EDITORIAL_ORIGIN + "/topics/" + url.search,
+    });
   }
   const detail = api ? API_PATH.exec(url.pathname) : null;
   if (api && url.pathname !== "/api/guides" && (!detail || !APPROVED_SLUGS.has(detail[1]))) {

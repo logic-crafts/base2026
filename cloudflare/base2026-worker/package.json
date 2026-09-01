@@ -5,6 +5,7 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "test:members": "vitest run --config vitest.members.config.ts",
     "test:watch": "vitest",
     "wrangler:types": "wrangler types",
     "wrangler:dry-run": "wrangler deploy --dry-run",
@@ -16,5 +17,8 @@
     "typescript": "^5.9.2",
     "vitest": "^4.1.11",
     "wrangler": "4.124.0"
+  },
+  "dependencies": {
+    "better-auth": "1.7.2"
   }
 }

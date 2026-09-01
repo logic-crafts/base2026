@@ -166,7 +166,7 @@ class Assets implements Fetcher {
 }
 
 function environment(db = new SqliteD1(), assets = new Assets()): Env {
-  return { DB: db, ASSETS: assets,
+  return { DB: db, ASSETS: assets, MEMBER_AUTH_ENABLED: "false",
     get INBOX_DB(): D1Database { throw new Error("Editorial routes must not inspect Inbox"); },
     get OUTREACH_DB(): D1Database { throw new Error("Editorial routes must not inspect Outreach"); },
   };
@@ -456,6 +456,7 @@ describe("editorial fail-closed and HTTP/RPC boundaries", () => {
   it.each(["POST", "PUT", "DELETE", "PATCH", "OPTIONS"])("rejects public %s before even reading bindings", async (method) => {
     let bindingReads = 0;
     const env: Env = {
+      MEMBER_AUTH_ENABLED: "false",
       get DB(): D1Database { bindingReads += 1; throw new Error("Unexpected DB access"); },
       get ASSETS(): Fetcher { bindingReads += 1; throw new Error("Unexpected asset access"); },
       get INBOX_DB(): D1Database { throw new Error("Unexpected Inbox access"); },

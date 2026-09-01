@@ -235,6 +235,7 @@ describe("guide routes with real public SQLite fixtures", () => {
     environment.ASSETS.html = shell().replace(header, sharedHeader).replace(footer, sharedFooter);
     const network = vi.spyOn(globalThis, "fetch").mockRejectedValue(new Error("No external fetch expected"));
     const fullEnv: Env = { ...environment,
+      MEMBER_AUTH_ENABLED: "false",
       get INBOX_DB(): D1Database { throw new Error("Guide must not read Inbox"); },
       get OUTREACH_DB(): D1Database { throw new Error("Guide must not read Outreach"); },
     };
@@ -292,6 +293,18 @@ describe("guide routes with real public SQLite fixtures", () => {
     expect(environment.ASSETS.requests).toHaveLength(1); expect(environment.DB.calls.length).toBeGreaterThan(1);
     const body = await response.text();
     if (method === "HEAD") expect(body).toBe(""); else expect(body).toContain("<h1>");
+  });
+
+  it.each(["/guides", "/guides/"])("redirects the intuitive guide hub alias %s to the canonical topics hub", async (path) => {
+    const environment = env();
+    for (const method of ["GET", "HEAD"]) {
+      const response = await route(path + "?utm_source=fixture", environment, method);
+      expect(response.status).toBe(308);
+      expect(response.headers.get("Location")).toBe(ORIGIN + "/topics/?utm_source=fixture");
+      expect(await response.text()).toBe("");
+    }
+    expect(environment.DB.calls).toHaveLength(0);
+    expect(environment.ASSETS.requests).toHaveLength(0);
   });
 
   it.each(["/topics/internal-linking/", "/topics/internal-linking.html"])("redirects the healthy %s alias only after validation", async (path) => {
@@ -366,7 +379,7 @@ describe("guide routes with real public SQLite fixtures", () => {
   it.each(["POST", "PUT", "PATCH", "DELETE", "OPTIONS"])("rejects %s on all owned routes before binding access", async (method) => {
     let reads = 0;
     const environment = { get DB(): D1Database { reads += 1; throw new Error("No DB access"); }, get ASSETS(): Fetcher { reads += 1; throw new Error("No ASSETS access"); } };
-    for (const path of ["/topics/internal-linking", "/topics/internal-linking.html", "/api/guides", "/api/guides/internal-linking", "/api/guides/invalid/path", "/sitemap-guides.xml"]) {
+    for (const path of ["/guides", "/guides/", "/topics/internal-linking", "/topics/internal-linking.html", "/api/guides", "/api/guides/internal-linking", "/api/guides/invalid/path", "/sitemap-guides.xml"]) {
       const response = await handleEvidenceGuideRoute(new Request(ORIGIN + path, { method }), environment, NOW);
       expect(response?.status).toBe(405); expect(response?.headers.get("Allow")).toBe("GET, HEAD");
     }

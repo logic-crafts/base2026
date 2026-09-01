@@ -1,6 +1,65 @@
 # Data Sources
 
-Last updated: 2026-08-31
+## 2026-09-01 Evidence Search production release
+
+Worker `0337f7d6-ebe4-4bcc-8b4a-e23317a99a8e` serves the reviewed Evidence
+Search release at `https://base2026.dev/tools/evidence-search/`. The route is
+HTTP 200, self-canonical, indexable and present in the hub sitemap. A live D1
+query for `internal linking` returned 24 hits with an estimated total of 27;
+the browser rendered 10 deduplicated attributed results. The no-JS fallback,
+390 px mobile view, privacy headers, member routes and Google-auth boundaries
+were rechecked after deployment. One exact IndexNow URL was accepted with HTTP
+200; this is submission evidence, not proof of indexing or traffic.
+
+The exact deployment, artifact hashes, rollback version and live QA matrix are
+recorded in
+`HANDOFF_2026-09-01_BASE2026_EVIDENCE_SEARCH_PRODUCTION_RELEASE.md`.
+
+Last updated: 2026-09-01
+
+## 2026-09-01 live member and guide-alias evidence
+
+Worker `5a326a64-c755-4036-93af-1a1809e0aeb6` is the verified rollback for the
+current release. Its live hashes for
+workspace, My Research, privacy, member JS and member CSS match the reviewed v2
+asset bundle; `/guides` and `/guides/` now return bodyless 308 responses to
+`/topics/`, including query preservation. The private release receipt is
+`auth/20260831/member-guide-alias-hotfix-20260901T1601Z.json`.
+
+Fresh script-settings readback has invocation logging and log/trace persistence
+off, traces disabled, Worker Logpush off and no tail consumer. Query redaction
+is false, and account/zone/instant Logpush inventory is still unknown because
+the current OAuth grant lacks Logpush read; do not infer an empty inventory.
+
+Google's current basic-scope exception allows External/Testing access when the
+app requests only `openid email profile`; the unsaved second test-user row was
+closed without changing the one-user allowlist. Identity B is recognized by
+Google but waits at the owner's password screen. This is not a completed
+identity-B or cross-user-isolation receipt.
+
+Last updated: 2026-09-01
+
+## 2026-08-31 isolated member-auth evidence
+
+Live Google Console confirms the intended owner completed physical sign-in.
+The selected existing project denies OAuth configuration reads; an exact
+Base2026 project search returned no resources. A dedicated free project was
+subsequently created once within the coordinator-confirmed scope and selected,
+with a completed Google creation notification. No old project was deleted;
+no billing or IAM change was made. After the owner's action-time confirmation,
+Google confirmed OAuth app and one web-client creation. Canonical origin and
+callback were read back; homepage/privacy/domain and basic identity scopes
+were saved. Audience is External/Testing with one owner test user and no
+sensitive or restricted scopes. Credentials are stored privately with mode600.
+These receipts prove Google configuration, not product Google-login success.
+
+The local member asset candidate has five changed/added served paths and
+independent per-file hash readback. Native workerd/D1 tests use synthetic
+Google responses; browser fixture checks are UI evidence only. Neither proves
+live Google OAuth or production private D1 operation. Follow the
+[auth handoff](HANDOFF_2026-08-31_GOOGLE_AUTH.md) for the exact candidate and
+passed final security delta review and remaining integration/release gates. Private account and browser
+details remain outside public Git.
 
 ## 2026-08-31 latest public and natural-pipeline checkpoint
 

@@ -210,6 +210,7 @@ PUBLIC_SAFE_EXACT = {
     "tests/test_base2026_tiktok_repair_queue.py",
     "tests/test_build_kb_reviewed_candidate_replay.py",
     "tests/test_build_base2026_cloudflare_release.py",
+    "tests/test_base2026_evidence_search_tool.py",
     "tests/test_base2026_homepage_motion.py",
     "tests/test_base2026_live_stats.py",
     "tests/test_base2026_public_dataset.py",

@@ -1,0 +1,622 @@
+/* Private research controls. Keep this additive: the public shell remains the
+   authority for type, palette, spacing tokens and the shared header/footer. */
+.b26-members-main {
+  width: var(--b26-shell);
+  min-width: 0;
+  margin: 0 auto;
+  padding: 30px 0 82px;
+}
+
+.b26-members-main,
+.b26-members-main * {
+  min-width: 0;
+}
+
+.b26-members-page [hidden] {
+  display: none !important;
+}
+
+.b26-members-skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 1000;
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  padding: 0 14px;
+  border: 1px solid var(--b26-ink);
+  border-radius: var(--b26-radius-control);
+  background: var(--b26-ink);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  text-decoration: none;
+  transform: translateY(-180%);
+}
+
+.b26-members-skip-link:focus,
+.b26-members-skip-link:focus-visible {
+  outline: 3px solid var(--b26-accent);
+  outline-offset: 2px;
+  transform: translateY(0);
+}
+
+.b26-content-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 34px;
+}
+
+.b26-content-toolbar a,
+.b26-members-action {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.b26-members-page .b26-content-toolbar a,
+.b26-members-page .b26-members-action,
+.b26-members-page .b26-members-dialog-actions .b26-members-action {
+  min-height: 44px;
+}
+
+#hits .result .result-actions [data-members-save] {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.b26-members-heading {
+  max-width: 820px;
+  margin: 0 0 30px;
+}
+
+.b26-members-heading h1 {
+  margin: 0;
+  max-width: 760px;
+}
+
+.b26-members-heading .b26-lede {
+  max-width: 720px;
+  margin: 20px 0 0;
+}
+
+.b26-members-status,
+.b26-members-inline-status {
+  min-height: 22px;
+  color: var(--b26-muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.b26-members-sr-status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.b26-members-status {
+  margin: 0 0 18px;
+}
+
+.b26-members-status[data-state="error"],
+.b26-members-inline-status[data-state="error"] {
+  color: #b42318;
+}
+
+.b26-members-status[data-state="success"],
+.b26-members-inline-status[data-state="success"] {
+  color: var(--b26-positive);
+}
+
+.b26-members-state,
+.b26-members-card {
+  border: 1px solid var(--b26-line);
+  border-radius: var(--b26-radius-surface);
+  background: var(--b26-surface);
+  box-shadow: var(--b26-shadow-sm);
+}
+
+.b26-members-state {
+  padding: 22px 24px;
+  color: var(--b26-muted);
+}
+
+.b26-members-state p {
+  margin: 0;
+}
+
+.b26-members-signed-out {
+  max-width: 720px;
+  padding: clamp(24px, 4vw, 38px);
+}
+
+.b26-members-signed-out h2,
+.b26-members-card h2 {
+  margin: 0;
+  color: var(--b26-ink);
+  font-size: clamp(24px, 3vw, 34px);
+  letter-spacing: -.045em;
+  line-height: 1.05;
+}
+
+.b26-members-signed-out > p:not(.b26-eyebrow),
+.b26-members-account-zone > div:first-child > p:last-child {
+  max-width: 690px;
+  margin: 14px 0 0;
+  color: var(--b26-muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.b26-members-boundary-list {
+  display: grid;
+  gap: 8px;
+  margin: 22px 0 26px;
+  padding-left: 20px;
+  color: var(--b26-muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.b26-members-signed-in {
+  display: grid;
+  gap: 18px;
+}
+
+.b26-members-identity {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 22px;
+  padding: 24px;
+}
+
+.b26-members-identity-name {
+  margin: 13px 0 0;
+  color: var(--b26-ink);
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.b26-members-identity-email {
+  margin: 4px 0 0;
+  color: var(--b26-muted);
+  font-family: "Geist Mono", ui-monospace, monospace;
+  font-size: 11px;
+  overflow-wrap: anywhere;
+}
+
+.b26-members-identity-actions,
+.b26-members-account-actions,
+.b26-members-form-actions,
+.b26-members-dialog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 9px;
+}
+
+.b26-members-workspace {
+  display: grid;
+  grid-template-columns: minmax(230px, .78fr) minmax(0, 1.22fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.b26-members-collections,
+.b26-members-items,
+.b26-members-account-zone {
+  padding: 24px;
+}
+
+.b26-members-section-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.b26-members-section-heading h2 {
+  font-size: clamp(22px, 2.4vw, 29px);
+}
+
+.b26-members-section-meta {
+  margin: 9px 0 0;
+  color: var(--b26-muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.b26-members-create-form {
+  display: grid;
+  gap: 12px;
+  margin: 0 0 18px;
+  padding: 14px;
+  border: 1px solid var(--b26-line);
+  border-radius: var(--b26-radius-control);
+  background: var(--b26-surface-muted);
+}
+
+.b26-members-field {
+  display: grid;
+  gap: 7px;
+}
+
+.b26-members-field label {
+  color: var(--b26-ink);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.b26-members-field input,
+.b26-members-dialog input {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid var(--b26-line);
+  border-radius: var(--b26-radius-control);
+  background: var(--b26-surface);
+  color: var(--b26-ink);
+  font: inherit;
+  font-size: 14px;
+  padding: 10px 12px;
+}
+
+.b26-members-field input:focus,
+.b26-members-dialog input:focus {
+  border-color: var(--b26-accent);
+}
+
+.b26-members-collection-list,
+.b26-members-item-list {
+  display: grid;
+  gap: 9px;
+}
+
+.b26-members-collection-list:empty::before,
+.b26-members-item-list:empty::before {
+  color: var(--b26-muted);
+  content: "Nothing here yet.";
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.b26-members-collection {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: stretch;
+  padding: 0;
+  border: 1px solid var(--b26-line);
+  border-radius: var(--b26-radius-control);
+  background: var(--b26-surface);
+}
+
+.b26-members-collection.is-selected {
+  border-color: var(--b26-accent);
+  background: #edf2ff;
+}
+
+.b26-members-collection-select {
+  display: grid;
+  gap: 3px;
+  min-height: 58px;
+  align-content: center;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: var(--b26-radius-control);
+  background: transparent;
+  color: var(--b26-ink);
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.b26-members-collection-select:hover {
+  background: var(--b26-surface-muted);
+}
+
+.b26-members-collection-name {
+  overflow-wrap: anywhere;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.b26-members-collection-count {
+  color: var(--b26-muted);
+  font-family: "Geist Mono", ui-monospace, monospace;
+  font-size: 10px;
+}
+
+.b26-members-collection-menu {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 7px;
+}
+
+.b26-members-collection-menu button {
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--b26-muted);
+  cursor: pointer;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.b26-members-collection-menu button:hover {
+  border-color: var(--b26-line);
+  color: var(--b26-accent);
+}
+
+.b26-members-item {
+  display: grid;
+  gap: 10px;
+  padding: 16px;
+  border: 1px solid var(--b26-line);
+  border-radius: var(--b26-radius-control);
+  background: var(--b26-surface);
+}
+
+.b26-members-item-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.b26-members-item-title,
+.b26-members-item-title:visited {
+  color: var(--b26-ink);
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.b26-members-item-title:hover {
+  color: var(--b26-accent);
+}
+
+.b26-members-item-date {
+  flex: 0 0 auto;
+  color: var(--b26-muted);
+  font-family: "Geist Mono", ui-monospace, monospace;
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.b26-members-note-label {
+  display: grid;
+  gap: 7px;
+  color: var(--b26-ink);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.b26-members-note {
+  width: 100%;
+  min-height: 76px;
+  resize: vertical;
+  border: 1px solid var(--b26-line);
+  border-radius: 8px;
+  background: var(--b26-surface-muted);
+  color: var(--b26-ink);
+  font: inherit;
+  font-size: 13px;
+  line-height: 1.5;
+  padding: 10px;
+}
+
+.b26-members-note:focus {
+  border-color: var(--b26-accent);
+}
+
+.b26-members-item-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 9px;
+  align-items: center;
+}
+
+.b26-members-item-save,
+.b26-members-item-remove {
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--b26-line);
+  border-radius: var(--b26-radius-control);
+  background: var(--b26-surface);
+  color: var(--b26-ink);
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.b26-members-item-save:hover {
+  border-color: var(--b26-accent);
+  color: var(--b26-accent);
+}
+
+.b26-members-item-remove,
+.b26-button--danger {
+  border-color: #e4b5b1;
+  background: #fff8f7;
+  color: #8c2018;
+}
+
+.b26-members-item-remove:hover,
+.b26-button--danger:hover {
+  border-color: #b42318;
+  background: #fff0ee;
+  color: #8c2018;
+}
+
+.b26-members-account-zone {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 22px;
+}
+
+.b26-members-dialog {
+  width: min(520px, calc(100% - 28px));
+  max-width: 520px;
+  padding: 0;
+  border: 1px solid var(--b26-line);
+  border-radius: var(--b26-radius-surface);
+  background: var(--b26-surface);
+  color: var(--b26-ink);
+  box-shadow: var(--b26-shadow);
+}
+
+.b26-members-dialog::backdrop {
+  background: rgba(11, 23, 54, .42);
+}
+
+.b26-members-dialog__body {
+  display: grid;
+  gap: 14px;
+  padding: 28px;
+}
+
+.b26-members-dialog h2 {
+  font-size: clamp(24px, 5vw, 32px);
+}
+
+.b26-members-dialog p:not(.b26-eyebrow):not(.b26-members-inline-status) {
+  margin: 0;
+  color: var(--b26-muted);
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.b26-members-dialog-form,
+.b26-members-dialog .b26-members-create-form {
+  margin: 0;
+}
+
+.b26-members-dialog-list {
+  display: grid;
+  gap: 9px;
+  max-height: min(300px, 40vh);
+  overflow: auto;
+}
+
+.b26-members-dialog-list:empty::before {
+  color: var(--b26-muted);
+  content: "Create your first collection below.";
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.b26-members-chooser-option {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  min-height: 54px;
+  padding: 8px 10px 8px 14px;
+  border: 1px solid var(--b26-line);
+  border-radius: var(--b26-radius-control);
+  background: var(--b26-surface);
+  color: var(--b26-ink);
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  text-align: left;
+}
+
+.b26-members-chooser-option:hover {
+  border-color: var(--b26-accent);
+  background: #edf2ff;
+}
+
+.b26-members-chooser-option small {
+  color: var(--b26-muted);
+  font-family: "Geist Mono", ui-monospace, monospace;
+  font-size: 10px;
+  font-weight: 400;
+}
+
+.b26-members-dialog [disabled],
+.b26-members-page [disabled] {
+  cursor: wait;
+  opacity: .58;
+}
+
+@media (max-width: 760px) {
+  .b26-members-workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .b26-members-account-zone,
+  .b26-members-identity {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .b26-members-main {
+    padding-top: 22px;
+  }
+
+  .b26-content-toolbar {
+    margin-bottom: 26px;
+  }
+
+  .b26-members-heading {
+    margin-bottom: 24px;
+  }
+
+  .b26-members-heading h1 {
+    font-size: 42px;
+  }
+
+  .b26-members-identity,
+  .b26-members-collections,
+  .b26-members-items,
+  .b26-members-account-zone,
+  .b26-members-signed-out {
+    padding: 20px;
+  }
+
+  .b26-members-section-heading,
+  .b26-members-item-heading {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .b26-members-section-heading > button {
+    width: 100%;
+  }
+
+  .b26-members-dialog__body {
+    padding: 22px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .b26-members-page,
+  .b26-members-page * {
+    scroll-behavior: auto !important;
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+  }
+}
