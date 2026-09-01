@@ -229,6 +229,7 @@ PUBLIC_SAFE_EXACT = {
     "tests/test_generate_public_pages_indexability.py",
     "tests/test_generate_evidence_map_canary.py",
     "tests/test_generate_info_pages.py",
+    "tests/test_root_llms_contract.py",
     "tests/test_hermes_tiktok_refresh_atomicity.py",
     "tests/test_public_dataset_manifest_contract.py",
     "tests/test_tiktok_faithful_polish_local.py",

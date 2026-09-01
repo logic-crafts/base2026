@@ -1,5 +1,15 @@
 # Decisions
 
+## 2026-09-01 — Keep public API/MCP additive and read-only
+
+Integrate the public API/MCP contract around the newer member-auth and
+Evidence Search routes. The public Worker route may read only allowlisted
+public D1 evidence/projection data and exposes bounded lookups; it must not
+share member bindings, sessions, writes, moderation, credentials, raw ASR,
+media, inbox or private pipeline state. The source/docs candidate is not a
+deployment receipt, and any live release still needs the existing worker,
+static, browser and publication-boundary gates.
+
 ## 2026-09-01 — Add reliability contracts without widening production authority
 
 Keep the redacted production manifest, channel-job state contract, private

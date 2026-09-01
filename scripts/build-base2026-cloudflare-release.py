@@ -566,7 +566,9 @@ def _base_root_segments(public_root_names: Iterable[str] | None) -> set[str]:
         "compare",
         "creators",
         "index.html",
+        "integrations.html",
         "llms.txt",
+        "mcp.html",
         "methodology.html",
         "root-llms.txt",
         "search",
@@ -820,6 +822,8 @@ HUB_SITEMAP_ROUTES = (
     "/roadmap",
     "/api",
     "/dataset",
+    "/mcp",
+    "/integrations",
     "/about",
     "/founder",
     "/privacy",
@@ -859,9 +863,16 @@ schema, content structure and entity trust.
 - Blog: https://base2026.dev/blog
 - Blog RSS: https://base2026.dev/blog/feed.xml
 - Founder and selected work: https://base2026.dev/founder
+- MCP for AI agents: https://base2026.dev/mcp
+- Plugins and integrations: https://base2026.dev/integrations
 - Source policy: https://base2026.dev/source-policy
 - Creator correction or removal: https://base2026.dev/opt-out
 - Current D1 projection sitemap: https://base2026.dev/sitemap-dynamic.xml
+
+The public search API is https://base2026.dev/api/search/multi-search and the
+stateless JSON MCP endpoint is https://base2026.dev/api/mcp. Both are no-key,
+read-only surfaces over public D1. The MCP tools are search_sources, get_source,
+get_creator, get_topic, get_topic_signal and get_public_manifest.
 
 ## Public boundary
 
@@ -902,11 +913,16 @@ site or a private client workspace.
 - Topic signal briefs: https://base2026.dev/static/topic_signal_briefs.jsonl
 - Data dictionary: https://base2026.dev/data-dictionary.json
 - Read-only search API: https://base2026.dev/api/search/multi-search
+- MCP endpoint: https://base2026.dev/api/mcp
+- MCP guide: https://base2026.dev/mcp
+- Plugins and integrations: https://base2026.dev/integrations
 - Current D1 projection sitemap: https://base2026.dev/sitemap-dynamic.xml
 
 Use the workspace to explore public evidence and cite a canonical Base2026
-source, topic or creator page. The search API is read-only and backed by D1;
-no browser key is required. Do not use Base2026 for raw transcript harvesting,
+source, topic or creator page. The search API and MCP endpoint are read-only
+and backed by public D1; no browser key is required. MCP has six bounded tools:
+search_sources, get_source, get_creator, get_topic, get_topic_signal and
+get_public_manifest. Do not use Base2026 for raw transcript harvesting,
 creator impersonation, private lead data or administrative writes.
 """
 

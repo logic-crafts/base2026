@@ -1,73 +1,73 @@
 {
-  "name": "Base2026 public API index",
-  "version": "2026-08-30",
-  "status": "cloudflare_public_api",
-  "base_url": "https://aggressorbulkit.online/knowledge/",
+  "name": "Base2026 public developer surface",
+  "version": "2026-09-01",
+  "status": "public_read_only_v1",
+  "base_url": "https://base2026.dev/",
   "policy": {
-    "access": "public read-only",
-    "private_data": "not exposed",
-    "raw_captions": "not exposed",
-    "raw_asr": "not exposed",
-    "media_files": "not exposed"
+    "access": "public_read_only",
+    "authentication": "none",
+    "writes": false,
+    "private_data": false,
+    "raw_captions": false,
+    "raw_asr": false,
+    "media_files": false,
+    "credentials": false,
+    "rate_quota": "not_promised"
   },
   "entry_points": [
     {
       "id": "human_search_workspace",
       "url": "https://base2026.dev/workspace/",
       "format": "html",
-      "description": "Public search workspace for human review of sources, topics, creators, and source-backed intelligence."
+      "description": "Public search workspace for human review of source records, topics and creators."
     },
     {
       "id": "api_access_page",
-      "url": "https://aggressorbulkit.online/knowledge/api.html",
+      "url": "https://base2026.dev/api",
       "format": "html",
-      "description": "Human-readable API and AI access documentation."
+      "description": "Free API guide with live search, static data, limits and privacy boundary."
     },
     {
       "id": "public_dataset_page",
-      "url": "https://aggressorbulkit.online/knowledge/dataset.html",
+      "url": "https://base2026.dev/dataset",
       "format": "html",
-      "description": "Public dataset landing page with distributions, live statistics, source boundaries, and a reproducible query."
+      "description": "Public dataset landing page with static distributions, live dimensions and source boundaries."
+    },
+    {
+      "id": "source_index",
+      "url": "https://base2026.dev/sources/",
+      "format": "html",
+      "description": "Public source catalog with attribution and bounded navigation."
     },
     {
       "id": "apply_research_page",
-      "url": "https://aggressorbulkit.online/knowledge/apply-research.html",
+      "url": "https://base2026.dev/apply-research",
       "format": "html",
-      "description": "Human-readable bridge from Base2026 public source intelligence to Alex Yarosh's business-specific AI visibility audit and service workflow."
+      "description": "Public research-boundary guidance for proposing an independent evidence question."
+    },
+    {
+      "id": "mcp_page",
+      "url": "https://base2026.dev/mcp",
+      "format": "html",
+      "description": "MCP transport, tool schemas, JSON examples and bounded-use guidance."
+    },
+    {
+      "id": "integrations_page",
+      "url": "https://base2026.dev/integrations",
+      "format": "html",
+      "description": "Truthful Codex and Claude Code setup for the public remote HTTP MCP endpoint."
     },
     {
       "id": "llms_context",
-      "url": "https://aggressorbulkit.online/knowledge/llms.txt",
+      "url": "https://base2026.dev/llms.txt",
       "format": "text",
-      "description": "Agent-readable project context, public boundaries, and recommended entry points."
+      "description": "Concise machine-readable context, links and public boundary."
     },
     {
-      "id": "sitemap",
-      "url": "https://aggressorbulkit.online/knowledge/sitemap.xml",
-      "format": "xml",
-      "description": "Public sitemap index for generated source, topic, comparison, creator, and info pages."
-    }
-  ],
-  "route_templates": [
-    {
-      "id": "source_page",
-      "template": "https://aggressorbulkit.online/knowledge/sources/{item_id}.html",
-      "description": "Canonical public source record page with attribution, reviewed public source text when policy allows, and source-backed intelligence."
-    },
-    {
-      "id": "topic_page",
-      "template": "https://aggressorbulkit.online/knowledge/topics/{topic_id}.html",
-      "description": "Canonical topic evidence page."
-    },
-    {
-      "id": "creator_page",
-      "template": "https://aggressorbulkit.online/knowledge/creators/{handle}.html",
-      "description": "Canonical creator attribution page."
-    },
-    {
-      "id": "compare_page",
-      "template": "https://aggressorbulkit.online/knowledge/compare/{topic_id}.html",
-      "description": "Canonical topic comparison page for repeated source-backed viewpoints."
+      "id": "data_dictionary",
+      "url": "https://base2026.dev/data-dictionary.json",
+      "format": "json",
+      "description": "Public field, dataset and MCP response dictionary."
     }
   ],
   "endpoints": [
@@ -76,7 +76,7 @@
       "url": "https://base2026.dev/api/health",
       "method": "GET",
       "format": "json",
-      "description": "Cloudflare Worker and public D1 FTS5 liveness."
+      "description": "Read-only Worker and public D1 health response."
     },
     {
       "id": "stats",
@@ -100,95 +100,131 @@
       "description": "Bounded attributable findings with corpus coverage, limits and source links."
     },
     {
+      "id": "multi_search",
+      "url": "https://base2026.dev/api/search/multi-search",
+      "method": "POST",
+      "format": "json",
+      "content_type": "application/json",
+      "description": "Meilisearch-compatible read-only search over public evidence and the separately bound public Outreach index.",
+      "index_uids": [
+        "base2026_public_tiktok",
+        "base2026_public_outreach"
+      ]
+    },
+    {
       "id": "editorial_index",
       "url": "https://base2026.dev/api/blog",
       "method": "GET",
       "format": "json",
-      "description": "Original editorial metadata with bounded keyset pagination. Counts are separate from the evidence corpus and maintained topic guides."
-    },
-    {
-      "id": "editorial_article",
-      "url": "https://base2026.dev/api/blog/{slug}",
-      "method": "GET",
-      "format": "json",
-      "description": "A published original article, canonical path and exact public payload hash."
+      "description": "Original editorial metadata with bounded pagination; counts remain separate from evidence and maintained guides."
     },
     {
       "id": "maintained_guides",
       "url": "https://base2026.dev/api/guides",
       "method": "GET",
       "format": "json",
-      "description": "Published task guides on registered existing topic canonicals; no automatic claim that every source becomes a page."
+      "description": "Published task guides on registered topic canonicals with bounded public evidence dependencies."
     },
     {
-      "id": "maintained_guide",
-      "url": "https://base2026.dev/api/guides/{slug}",
+      "id": "mcp",
+      "url": "https://base2026.dev/api/mcp",
+      "method": "POST",
+      "format": "json-rpc-2.0",
+      "content_type": "application/json",
+      "description": "Stateless public MCP endpoint over the evidence D1 projection.",
+      "transport": "streamable_http_json",
+      "sessions": false,
+      "sse": false
+    },
+    {
+      "id": "static_manifest",
+      "url": "https://base2026.dev/static/manifest.json",
       "method": "GET",
       "format": "json",
-      "description": "A reviewed guide and bounded public evidence dependencies. Changed or unavailable dependencies hold the guide instead of silently serving stale advice."
+      "description": "Dated static release dimensions and file metadata."
     },
     {
-      "id": "manifest",
-      "url": "https://aggressorbulkit.online/knowledge/static/manifest.json",
-      "format": "json",
-      "description": "Release counts and public export metadata."
-    },
-    {
-      "id": "documents",
-      "url": "https://aggressorbulkit.online/knowledge/static/documents.jsonl",
+      "id": "static_documents",
+      "url": "https://base2026.dev/static/documents.jsonl",
+      "method": "GET",
       "format": "jsonl",
-      "description": "Search documents and public source records."
+      "description": "Public source/search records for offline analysis."
     },
     {
-      "id": "passages",
-      "url": "https://aggressorbulkit.online/knowledge/static/passages.jsonl",
+      "id": "static_passages",
+      "url": "https://base2026.dev/static/passages.jsonl",
+      "method": "GET",
       "format": "jsonl",
-      "description": "Public evidence passages linked to source records."
+      "description": "Bounded public evidence passages linked to source records."
     },
     {
-      "id": "insight_cards",
-      "url": "https://aggressorbulkit.online/knowledge/static/insight_cards.jsonl",
+      "id": "static_insight_cards",
+      "url": "https://base2026.dev/static/insight_cards.jsonl",
+      "method": "GET",
       "format": "jsonl",
-      "description": "Reviewed public source-backed insight cards."
+      "description": "Reviewed source-backed public evidence cards."
     },
     {
-      "id": "topic_signal_briefs",
-      "url": "https://aggressorbulkit.online/knowledge/static/topic_signal_briefs.jsonl",
+      "id": "static_topic_signal_briefs",
+      "url": "https://base2026.dev/static/topic_signal_briefs.jsonl",
+      "method": "GET",
       "format": "jsonl",
-      "description": "Compact deterministic signal summaries for strong public topics."
-    },
-    {
-      "id": "data_dictionary",
-      "url": "https://aggressorbulkit.online/knowledge/data-dictionary.json",
-      "format": "json",
-      "description": "Field and dataset documentation for public Base2026 data."
-    },
-    {
-      "id": "search_multi",
-      "url": "https://base2026.dev/api/search/multi-search",
-      "method": "POST",
-      "format": "json",
-      "description": "Read-only Meilisearch-compatible Cloudflare Worker API backed by D1 FTS5. Prefer static JSONL for bulk/offline analysis; use this endpoint when live search ranking is needed.",
-      "backend": "cloudflare_worker_d1_fts5",
-      "browser_key_required": false
+      "description": "Deterministic topic signal briefs for strong public topics."
     }
   ],
-  "future_mcp_contract": {
-    "planned": true,
-    "principles": [
-      "read-only public data first",
-      "source attribution required",
-      "no raw caption or private pipeline exposure",
-      "stable source, creator, topic, and signal lookup tools before write tools"
+  "mcp": {
+    "endpoint": "https://base2026.dev/api/mcp",
+    "human_docs": "https://base2026.dev/mcp",
+    "protocol_versions": [
+      "2026-07-28",
+      "2025-11-25",
+      "2025-06-18",
+      "2025-03-26"
+    ],
+    "current_protocol": "2026-07-28",
+    "discovery_method": "server/discover",
+    "stateless": true,
+    "json_only": true,
+    "tools": [
+      "search_sources",
+      "get_source",
+      "get_creator",
+      "get_topic",
+      "get_topic_signal",
+      "get_public_manifest"
     ]
   },
+  "route_templates": {
+    "projected_source_page": "https://base2026.dev/sources/tiktok-video-{numeric_video_id}",
+    "projection_condition": "only an applied public card with a numeric video ID"
+  },
+  "limits": {
+    "worker_body_bytes": 65536,
+    "multi_search_queries": 4,
+    "multi_search_limit": 100,
+    "multi_search_offset": 10000,
+    "mcp_search_limit": 20,
+    "mcp_search_offset": 1000,
+    "mcp_source_passages": 8,
+    "mcp_applied_cards": 3
+  },
+  "attribution": {
+    "preserve_original_source_url": true,
+    "preserve_base2026_source_page_when_returned": true,
+    "coverage_claim": "bounded_public_corpus_only",
+    "trend_claim": "not_realtime"
+  },
+  "not_offered": [
+    "official marketplace plugin",
+    "OAuth application",
+    "private database access",
+    "raw transcript or media access",
+    "public writes or moderation"
+  ],
   "project_identity": {
     "product": "Base2026",
-    "creator": "Alex Yarosh",
     "owner": "Logic Crafts LLC, Kyrgyzstan",
     "status": "independent experimental startup product",
-    "not_a_marketing_agency": true,
-    "not_marketing_services": true,
-    "description": "Base2026 is a separate product/startup: a public source-intelligence and knowledge-base system for short-form expert video."
+    "not_a_marketing_agency": true
   }
 }

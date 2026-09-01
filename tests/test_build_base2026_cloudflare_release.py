@@ -597,6 +597,14 @@ def test_api_index_workspace_route_is_owned_by_source_and_builder() -> None:
     assert rewritten_workspace["url"] == "https://base2026.dev/workspace/"
 
 
+def test_hub_sitemap_includes_developer_distribution_routes() -> None:
+    payload = builder._hub_sitemap_payload().decode("utf-8")
+
+    assert "https://base2026.dev/api" in payload
+    assert "https://base2026.dev/mcp" in payload
+    assert "https://base2026.dev/integrations" in payload
+
+
 def test_legacy_styles_are_normalized_at_the_release_boundary() -> None:
     rendered = builder._rewrite_legacy_base_styles(
         Path("static/styles.css"),

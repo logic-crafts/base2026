@@ -24,6 +24,12 @@ been materialized in this candidate. Re-fetch current public D1 topic exports
 into an ephemeral location before any approved generation; keep the canary
 outside the live release until root completes the final review.
 
+The public API/MCP source, docs and integration pages are also candidate-only.
+Worker typecheck, MCP route tests, static-page generation and publication
+boundary checks must pass before root considers a release. Keep the endpoint
+read-only and public-D1-only; no live route claim, MCP client registration or
+deployment is authorized by this checkpoint.
+
 ## Evidence Search production release — September 1, 20:10 UTC
 
 Worker `0337f7d6-ebe4-4bcc-8b4a-e23317a99a8e` is live at 100% with

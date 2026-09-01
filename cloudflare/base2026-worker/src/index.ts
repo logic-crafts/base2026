@@ -11,6 +11,7 @@ import {
   rollbackPublicProjection,
   verifyPublicProjection,
 } from "./public-projection";
+import { handlePublicMcp } from "./mcp";
 
 const INDEX_UID = "base2026_public_tiktok" as const;
 const OUTREACH_INDEX_UID = "base2026_public_outreach" as const;
@@ -2025,6 +2026,7 @@ export default {
       if (url.pathname === "/api/stats") return await handlePublicStats(request, env);
       if (url.pathname === "/api/evidence-brief") return await handleEvidenceBrief(request, env, url);
       if (url.pathname === "/api/evidence-brief/v2") return await handleEvidenceBriefV2(request, env, url);
+      if (url.pathname === "/api/mcp") return await handlePublicMcp(request, env);
       if (url.pathname === "/sitemap-dynamic.xml") return await handleDynamicSitemap(request, env);
       if (url.pathname === "/api/forms/support") return await handleInboxForm(request, env, "support");
       if (url.pathname === "/api/forms/partner") return await handleInboxForm(request, env, "partner");

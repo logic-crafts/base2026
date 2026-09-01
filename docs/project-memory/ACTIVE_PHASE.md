@@ -5,6 +5,15 @@ Current checkpoint: 2026-08-31 10:17 UTC. Root owns final public documentation
 and PR32 integration; the main source, roadmap correction, two archive
 articles and private reliability implementation have real release receipts.
 
+## Local integration candidate — public API/MCP distribution (2026-09-01)
+
+The isolated growth candidate is based on the reviewed member-auth commit
+`561a917eb` and adds the organic-growth contract, reliability receipts,
+public-safe evidence-map canary and a read-only public API/MCP surface. The
+candidate preserves the member-auth, Evidence Search and current visual shell.
+It is local and review-only: no deployment, push, merge, D1 write, sitemap
+submission or external publication is implied by these files.
+
 ## Completed scope
 
 - Source316a39f64 merged through PR31; correction4960c99bd was pushed before

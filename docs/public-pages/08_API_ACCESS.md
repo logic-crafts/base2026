@@ -82,14 +82,26 @@ original creator video remains the canonical source for the full content.
 - public writes, corrections, or moderation through the search endpoint;
 - replacing the original creator channel.
 
-## Planned read-only MCP contract
+## Read-only MCP contract in the current candidate
 
-The first MCP layer should expose only bounded public lookups:
+The candidate adds `POST /api/mcp`, a stateless JSON-RPC surface over public D1.
+It supports the current MCP discovery and legacy `2025-11-25` initialization
+compatibility, with bounded calls to:
 
-- search sources by query and public filters;
-- get one canonical source record;
-- get one topic or creator;
-- compare public source-backed viewpoints.
+- `search_sources` for public source/evidence lookup;
+- `get_source` for one canonical source record;
+- `get_creator` for creator metadata and linked public sources;
+- `get_topic` for a topic and its public source summary;
+- `get_topic_signal` for a deterministic public topic signal;
+- `get_public_manifest` for dated public release dimensions.
 
-Every response must preserve attribution, original source links, canonical
-Base2026 URLs, and public/private policy flags.
+The route has no sessions, SSE, writes, moderation, private bindings or
+credentials. Responses preserve attribution, original source links, canonical
+Base2026 URLs and public/private policy flags. Request bodies, arguments and
+returned evidence are bounded; raw captions, raw ASR, full private transcripts,
+media, inbox data and pipeline control state are never returned.
+
+The route is source-complete in this candidate but is not a deployment receipt.
+Use the [MCP guide](10_MCP_FOR_AI_AGENTS.md) and
+[integration guide](11_PLUGINS_AND_INTEGRATIONS.md) after the worker, static,
+browser and publication-boundary release gates pass.

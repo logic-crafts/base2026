@@ -1,102 +1,181 @@
 {
   "name": "Base2026 public data dictionary",
-  "version": "2026-06-14",
+  "version": "2026-09-01",
   "public_boundary": {
+    "access": "public_read_only",
     "allowed": [
       "attributed public source records",
-      "reviewed public source text",
-      "public passages",
-      "public insight cards",
+      "bounded public evidence passages",
       "public topic and creator metadata",
-      "deterministic topic signal briefs"
+      "applied public insight cards",
+      "dated static manifest dimensions"
     ],
     "not_public": [
       "raw captions",
       "raw ASR",
-      "private QA notes",
-      "local databases",
+      "full private transcripts",
+      "media files",
+      "private review packets",
       "credentials",
-      "audio files",
-      "video files",
+      "logs",
+      "inbox data",
+      "local databases",
+      "pipeline control state",
       "unreviewed source vaults"
     ]
   },
   "datasets": [
     {
-      "file": "/knowledge/static/manifest.json",
-      "format": "json",
-      "description": "Release-level public export counts, timestamps, and policy flags."
-    },
-    {
-      "file": "/knowledge/static/documents.jsonl",
+      "id": "public_search_documents",
+      "storage": "public D1 search_documents",
+      "file": "/static/documents.jsonl",
       "format": "jsonl",
-      "description": "Search-ready public documents used by the Base2026 workspace.",
-      "primary_keys": ["item_id"],
-      "common_fields": [
+      "description": "Public search rows. One source can have multiple bounded passages.",
+      "primary_fields": [
+        "id",
         "item_id",
         "source_id",
+        "chunk_id",
+        "chunk_index",
+        "body",
+        "creator_display_name",
         "creator_handle",
+        "creator_id",
+        "creator_url",
+        "full_transcript_public",
+        "handle",
+        "platform",
+        "post_id",
+        "public_policy",
+        "public_surface",
+        "published_at",
         "published_date",
         "source_type",
-        "language",
         "source_url",
-        "public_source_text",
-        "source_summary_short",
-        "source_summary_long",
+        "title",
+        "title_source",
+        "title_status",
+        "video_id",
+        "year",
+        "avatar_url",
         "topics",
         "topic_labels"
-      ]
+      ],
+      "field_notes": {
+        "body": "Public bounded passage used for search; not a raw transcript field.",
+        "full_transcript_public": "Boolean projection flag; public search rows are false.",
+        "topics": "Topic IDs represented as a JSON array in D1 and an array in API responses.",
+        "topic_labels": "Human-readable topic labels represented as a JSON array in D1."
+      }
     },
     {
-      "file": "/knowledge/static/passages.jsonl",
+      "id": "public_passages",
+      "storage": "static export",
+      "file": "/static/passages.jsonl",
       "format": "jsonl",
-      "description": "Public evidence passages linked to source records for search and citation.",
-      "common_fields": [
-        "source_id",
-        "item_id",
-        "body",
-        "topics",
-        "creator_handle"
-      ]
+      "description": "Offline public passage records linked to source identity and attribution."
     },
     {
-      "file": "/knowledge/static/insight_cards.jsonl",
+      "id": "public_insight_cards",
+      "storage": "public D1 public_projection_cards plus static export",
+      "file": "/static/insight_cards.jsonl",
       "format": "jsonl",
-      "description": "Reviewed public insight cards derived from public source evidence.",
-      "common_fields": [
+      "description": "Applied source-backed claim/action/topic cards with bounded evidence excerpts and timecodes.",
+      "fields": [
         "source_id",
-        "topic_id",
-        "topic",
-        "creator_handle",
+        "card_id",
+        "ordinal",
         "claim_text",
-        "stance",
-        "evidence_excerpt",
         "suggested_action",
-        "public"
+        "topic_label",
+        "evidence_excerpt",
+        "evidence_start_seconds",
+        "evidence_end_seconds"
       ]
     },
     {
-      "file": "/knowledge/static/topic_signal_briefs.jsonl",
+      "id": "topic_signal_briefs",
+      "storage": "static export",
+      "file": "/static/topic_signal_briefs.jsonl",
       "format": "jsonl",
-      "description": "Deterministic compact topic signal summaries generated only for strong public topics.",
+      "description": "Deterministic summaries for topics that pass the public evidence gate.",
       "strong_topic_threshold": {
         "source_count": ">= 5",
         "creator_count": ">= 2",
         "public_insight_count": ">= 3"
-      },
-      "common_fields": [
-        "topic_id",
-        "topic_label",
-        "status",
-        "source_count",
-        "creator_count",
-        "public_insight_count",
-        "creator_angles",
-        "repeated_tactics",
-        "source_backed_actions",
-        "monthly_activity",
-        "top_sources"
-      ]
+      }
     }
-  ]
+  ],
+  "api_contract": {
+    "search_endpoint": "POST /api/search/multi-search",
+    "search_index_uids": [
+      "base2026_public_tiktok",
+      "base2026_public_outreach"
+    ],
+    "default_shape": [
+      "indexUid",
+      "hits",
+      "query",
+      "processingTimeMs",
+      "limit",
+      "offset",
+      "estimatedTotalHits"
+    ],
+    "search_limit": 100,
+    "search_offset": 10000,
+    "multi_search_queries": 4,
+    "body_bytes": 65536
+  },
+  "mcp_contract": {
+    "endpoint": "POST /api/mcp",
+    "current_protocol": "2026-07-28",
+    "supported_protocols": [
+      "2026-07-28",
+      "2025-11-25",
+      "2025-06-18",
+      "2025-03-26"
+    ],
+    "tools": {
+      "search_sources": {
+        "arguments": [
+          "query",
+          "creator_handle",
+          "topic_id",
+          "platform",
+          "limit",
+          "offset"
+        ],
+        "max_results": 20,
+        "max_offset": 1000
+      },
+      "get_source": {
+        "arguments": ["source_id"],
+        "max_passages": 8,
+        "max_applied_cards": 3
+      },
+      "get_creator": {
+        "arguments": ["handle"],
+        "max_source_samples": 10,
+        "max_topics": 30
+      },
+      "get_topic": {
+        "arguments": ["topic_id"],
+        "max_source_samples": 10,
+        "max_creator_samples": 10
+      },
+      "get_topic_signal": {
+        "arguments": ["topic_id"],
+        "method": "deterministic_public_d1_counts"
+      },
+      "get_public_manifest": {
+        "arguments": [],
+        "returns": "live public D1 dimensions and endpoint links"
+      }
+    }
+  },
+  "attribution": {
+    "source_url": "original public source_url value from the source record",
+    "source_page": "/sources/tiktok-video-{numeric_video_id} when an applied projection exists",
+    "rule": "Preserve the original creator URL and identify Base2026 as a bounded public evidence layer."
+  }
 }

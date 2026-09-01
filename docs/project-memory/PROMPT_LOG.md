@@ -26,6 +26,12 @@ fail-closed generator/checker, the current-shell stylesheet and tests. The
 reviewed live exports are not copied into Git, and this integration did not
 generate pages, alter the sitemap, write D1, deploy a Worker or submit URLs.
 
+The API/MCP slice is integrated additively: `POST /api/mcp` is backed only by
+public D1 projections and six bounded read-only tools. Its docs and static
+pages remain part of the local candidate until worker, static, browser and
+publication-boundary gates pass. No client registration, live endpoint
+readback, D1 mutation or external publication was performed.
+
 ## 2026-08-31 — Isolated Google auth implementation checkpoint
 
 Owner requested a useful optional Google login/private research slice while

@@ -67,9 +67,11 @@ PAGE_MAP = {
     "08_API_ACCESS.md": {
         "slug": "api.html",
         "eyebrow": "AI and API access",
-        "title": "Base2026 API & AI Access",
-        "lead": "Public read-only files and agent-readable entry points for using Base2026 as an attributed source intelligence library.",
-        "body_class": "doc-page",
+        "title": "Free Base2026 API for Public Video Research",
+        "lead": "A no-key, read-only API for searching attributed short-form video evidence and building reproducible research workflows.",
+        "seo_title": "Free Base2026 API | Public Video Research API",
+        "meta_description": "Use the free Base2026 API to search attributed public short-form video evidence with bounded results, stable source links and a documented privacy boundary.",
+        "body_class": "developer-page",
     },
     "09_APPLY_RESEARCH.md": {
         "slug": "apply-research.html",
@@ -79,6 +81,24 @@ PAGE_MAP = {
         "seo_title": "Apply Base2026 Research | SEO, GEO & AEO Source Intelligence",
         "meta_description": "Use Base2026 as a public SEO/GEO/AEO research layer, then route business-specific AI visibility, technical SEO, content and entity trust work into Alex Yarosh audits.",
         "body_class": "doc-page",
+    },
+    "10_MCP_FOR_AI_AGENTS.md": {
+        "slug": "mcp.html",
+        "eyebrow": "MCP for AI agents",
+        "title": "MCP for AI Agents",
+        "lead": "Connect an agent to six bounded, read-only Base2026 tools over standard remote HTTP MCP.",
+        "seo_title": "MCP for AI Agents | Base2026 Public Evidence Tools",
+        "meta_description": "Connect Codex, Claude Code or another MCP client to Base2026 public evidence with six read-only tools, JSON examples, limits and privacy rules.",
+        "body_class": "developer-page",
+    },
+    "11_PLUGINS_AND_INTEGRATIONS.md": {
+        "slug": "integrations.html",
+        "eyebrow": "Plugins and integrations",
+        "title": "Base2026 Plugins and Integrations",
+        "lead": "Install the public Base2026 MCP endpoint in Codex or Claude Code with truthful, copy-pasteable configuration.",
+        "seo_title": "Base2026 Plugins and Integrations | Codex and Claude Code",
+        "meta_description": "Add Base2026 to Codex or Claude Code through the public remote HTTP MCP endpoint and use documented read-only evidence tools without secrets.",
+        "body_class": "developer-page",
     },
 }
 
@@ -96,6 +116,8 @@ PROJECT_NAV_LINKS = [
     ("search", "Search", ""),
     ("analytics", "Analytics", "analytics.html"),
     ("api", "API", "api.html"),
+    ("mcp", "MCP", "mcp.html"),
+    ("integrations", "Integrations", "integrations.html"),
     ("apply", "Apply Research", "apply-research.html"),
     ("ai_visibility_pages", "AI Visibility Pages", "ai-visibility-pages/"),
     ("topics", "Topics", "topics/"),
@@ -114,6 +136,8 @@ FOOTER_LINKS = [
     ("Roadmap", "./roadmap.html"),
     ("Methodology", "./methodology.html"),
     ("API & AI access", "./api.html"),
+    ("MCP for AI agents", "./mcp.html"),
+    ("Plugins and integrations", "./integrations.html"),
     ("Apply research", "./apply-research.html"),
     ("Source policy", "./source-policy.html"),
     ("Privacy", "./privacy.html"),
@@ -181,6 +205,10 @@ def nav_key_for_slug(slug_value: str) -> str:
         return "support"
     if slug_value == "api.html":
         return "api"
+    if slug_value == "mcp.html":
+        return "mcp"
+    if slug_value == "integrations.html":
+        return "integrations"
     if slug_value == "apply-research.html":
         return "apply"
     return ""
