@@ -8,6 +8,7 @@ Base2026 has two layers:
 ## Public-safe
 
 - `AGENTS.md`
+- `.agents/skills/`
 - `.env.example`
 - `.gitignore`
 - `requirements-local-worker.txt`

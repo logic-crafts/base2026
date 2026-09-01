@@ -1,5 +1,18 @@
 # Next Action
 
+## Integrated growth candidate — September 1, 2026
+
+The isolated branch `codex/base2026-growth-integration-20260901` starts at the
+reviewed member/auth base `561a917eb` and integrates the reviewed organic-growth,
+reliability-contract, evidence-map-canary and public API/MCP candidate slices.
+Member auth, Evidence Search, the current Base2026 shell and public/private
+boundary remain preserved. This candidate is local only: no push, merge,
+deployment, D1 write, sitemap submission or external publication occurred.
+
+Next action: root review the exact diff and test receipts, then decide whether
+the bounded static evidence-map overlay and public MCP/API additions belong in
+a separately approved release. Do not deploy this candidate directly.
+
 ## Evidence Search production release — September 1, 20:10 UTC
 
 Worker `0337f7d6-ebe4-4bcc-8b4a-e23317a99a8e` is live at 100% with

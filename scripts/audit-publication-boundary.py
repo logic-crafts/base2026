@@ -66,6 +66,7 @@ FORBIDDEN_PATTERNS = [
 
 PUBLIC_SAFE_PREFIXES = {
     ".github/ISSUE_TEMPLATE/",
+    ".agents/skills/",
     "10_agent-instructions/",
     "cloudflare/base2026-worker/",
     "cloudflare/base2026-www-redirect/",

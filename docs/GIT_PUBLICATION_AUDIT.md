@@ -16,6 +16,7 @@ Date: 2026-06-06
 - `scripts/tiktok-source-review-audit.py`
 - `web/static/` source shell files, shared assets, public info pages, API metadata, and runtime JS/CSS
 - `10_agent-instructions/`
+- `.agents/skills/`
 - `config/creator-profiles.json`
 - `config/creators.example.json`
 - public-safe readmes under `12_knowledge-base/`

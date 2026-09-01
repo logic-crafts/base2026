@@ -1,5 +1,21 @@
 # Prompt Log
 
+## 2026-09-01 — Integrated growth candidate from the reviewed auth base
+
+Built the isolated worktree
+`/Users/alexyarosh/.codex/worktrees/base2026-growth-integration-20260901` from
+`codex/base2026-google-auth-20260831` at `561a917eb0706173cc71cf97721d45430111061c`.
+Applied the reviewed organic-growth skill, reliability contracts, evidence-map
+canary plus receipt, and public API/MCP/developer-access slices. Integration
+preserves the member-auth and Evidence Search routes, current visual shell,
+public D1-only boundary and private pipeline separation. Generated public pages
+are handled through their Markdown generator; no private data, credentials,
+raw ASR/transcripts/media, outreach or inbox material was added. No push,
+merge, deploy, D1 write, sitemap submission or external publication occurred.
+
+Verification and the final local commit are recorded after the integration and
+review pass below.
+
 ## 2026-08-31 — Isolated Google auth implementation checkpoint
 
 Owner requested a useful optional Google login/private research slice while
