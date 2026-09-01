@@ -21,6 +21,11 @@ manifest is intentionally non-reproducible until exact artifact/commit and
 binding parity are proven, its channel validator performs no replay, and its
 five-event measurement contract has no live emitter or analytics write.
 
+The evidence-map canary slice adds only public-safe configuration, a
+fail-closed generator/checker, the current-shell stylesheet and tests. The
+reviewed live exports are not copied into Git, and this integration did not
+generate pages, alter the sitemap, write D1, deploy a Worker or submit URLs.
+
 ## 2026-08-31 — Isolated Google auth implementation checkpoint
 
 Owner requested a useful optional Google login/private research slice while

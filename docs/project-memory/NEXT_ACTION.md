@@ -18,6 +18,12 @@ The integrated reliability manifest is an observed, redacted receipt with
 recommendations remain holds. Channel reconciliation and member measurement
 contracts are staging/read-only artifacts, not external-action permission.
 
+The reviewed evidence-map canary generator, public-safe config, checker and
+visual template are integrated but no generated pages or sitemap overlay have
+been materialized in this candidate. Re-fetch current public D1 topic exports
+into an ephemeral location before any approved generation; keep the canary
+outside the live release until root completes the final review.
+
 ## Evidence Search production release — September 1, 20:10 UTC
 
 Worker `0337f7d6-ebe4-4bcc-8b4a-e23317a99a8e` is live at 100% with
