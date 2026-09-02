@@ -1,5 +1,82 @@
 # Prompt Log
 
+## 2026-09-01 — Integrated growth candidate from the reviewed auth base
+
+Built the isolated worktree
+`/Users/alexyarosh/.codex/worktrees/base2026-growth-integration-20260901` from
+`codex/base2026-google-auth-20260831` at `561a917eb0706173cc71cf97721d45430111061c`.
+Applied the reviewed organic-growth skill, reliability contracts, evidence-map
+canary plus receipt, and public API/MCP/developer-access slices. Integration
+preserves the member-auth and Evidence Search routes, current visual shell,
+public D1-only boundary and private pipeline separation. Generated public pages
+are handled through their Markdown generator; no private data, credentials,
+raw ASR/transcripts/media, outreach or inbox material was added. No push,
+merge, deploy, D1 write, sitemap submission or external publication occurred.
+
+Verification and the final local commit are recorded after the integration and
+review pass below.
+
+The reliability slice remains additive and non-authorizing: its checked-in
+manifest is intentionally non-reproducible until exact artifact/commit and
+binding parity are proven, its channel validator performs no replay, and its
+five-event measurement contract has no live emitter or analytics write.
+
+The evidence-map canary slice adds only public-safe configuration, a
+fail-closed generator/checker, the current-shell stylesheet and tests. The
+reviewed live exports are not copied into Git, and this integration did not
+generate pages, alter the sitemap, write D1, deploy a Worker or submit URLs.
+
+The API/MCP slice is integrated additively: `POST /api/mcp` is backed only by
+public D1 projections and six bounded read-only tools. Its docs and static
+pages remain part of the local candidate until worker, static, browser and
+publication-boundary gates pass. No client registration, live endpoint
+readback, D1 mutation or external publication was performed. The route now
+requires the configured `MCP_RATE_LIMIT` binding and fails closed when absent;
+live binding/readback remains an explicit release blocker.
+
+## 2026-08-31 — Isolated Google auth implementation checkpoint
+
+Owner requested a useful optional Google login/private research slice while
+preserving the public product. Root reconciled the stale initial checkout to
+the exact public main baseline in its own branch and reproduced the approved
+served tree byte-for-byte. Luna executors own bounded backend/UI work and
+independent security checking; the root owns integration and release review.
+
+The canonical opt-in UI candidate has exactly three added and two changed
+served paths; 4,243 baseline files remain byte-identical. Local UI fixture
+checks cover explicit Save, pending-intent return, private collection/source
+display, notes, responsive layout and reduced motion. They are synthetic UI
+evidence, not Google or D1 authentication proof. Before backend completion,
+612 public-Worker/routing tests and 27 combined builder/UI tests passed.
+Native-D1/full security gates remain in progress.
+
+The owner then confirmed Google Console sign-in. Physical passkey is resolved;
+OAuth permissions are missing in the selected existing project, and an exact
+Base2026 project search returned no resources. No IAM request or OAuth/resource
+write was made at that initial checkpoint. The coordinator clarified dedicated
+free-project scope, and the owner's next instruction authorized proceeding.
+The new Base2026 project was created once and selected, with Google's completed
+creation receipt. Twelve quota slots had been available; no old project was
+deleted, no billing attached and no IAM edited. The owner directly confirmed
+the identified contact/client setup; the Google app and one Web client were
+created. Canonical callback/origin, homepage/privacy/domain and the three
+basic identity scopes were saved. External/Testing has only the owner as test
+user. Issued credentials are in a private mode600 file, never Git or chat.
+
+Independent code/security review passed its first frozen snapshot; root then
+requested bounded hardening of the OAuth URL guard, trusted-edge fallback,
+freshness boundary, expired-state cleanup and cookie-transport failure path.
+The privacy notice makes delayed expired-state cleanup explicit. The hardened
+candidate passed a fresh independent delta review with 25 matching hashes,
+612 Worker tests, 13 native-D1 tests, 28 builder/UI tests and typecheck; the
+earlier review remains a historical snapshot.
+The rebuilt five-path artifact is hash-verified; no public renderer, shell,
+founder design or current live D1 blog is reconstructed. Preserve the handoff
+and coordinator-owned integration gate. No commit, push, merge, deployment, remote D1
+mutation, new scheduler or public release occurred.
+
+[Auth continuation and asset receipt](HANDOFF_2026-08-31_GOOGLE_AUTH.md).
+
 ## 2026-08-31 — Final dated closure update through10:17 UTC
 
 Root requested essential current-state documentation with historical receipts
@@ -9609,3 +9686,173 @@ remain outside the repository. Next: reconcile scheduled X results, measure
 24/72-hour outcomes, restore usable existing Computer Use editor access, then
 confirm immediately before final LinkedIn Post. Source synchronization remains
 an explicit targeted Git task, not permission to bulk-stage the dirty tree.
+
+## 2026-09-01 — Member auth production release checkpoint
+
+Prompt: continue the reviewed Base2026 Google Login / My Research contour,
+resolve the privacy gate, provision the isolated auth database and secrets, and
+deploy one member-enabled Worker with live verification.
+
+Actions and receipts:
+
+- Re-read the frozen candidate and verified 35/35 source hashes with no
+  mismatches. Created the separate `base2026-member-auth` D1, applied exactly
+  `0001_better_auth.sql` and `0002_member_research.sql`, and confirmed no pending
+  migrations or writes to public databases.
+- Rotated the Google OAuth secret and Better Auth secret; the old OAuth secret
+  was disabled/deleted. Secret values were not retained in the repository or
+  receipts; local credential artifacts were removed after upload.
+- Deployed `base2026-member-auth-reviewed-release-20260901` at 100%. Public
+  smoke checks for `/`, `/api/health`, and `/my-research/` returned 200; an
+  unauthenticated `/api/auth/session` returned 403.
+- Re-applied and read back the privacy settings after deploy because Wrangler
+  reset dashboard flags: invocation logs off, log/traces persistence off,
+  query redaction on, Logpush/traces/tail destinations absent. Synthetic
+  callback canary returned 404 with no applicable destination.
+- Identity A real Google E2E passed login, collection/evidence save, revisit,
+  JSON export, and logout. Identity B remains pending the owner's physical
+  Google passkey/password reauth required to add a valid second test user.
+
+Private checkpoint: `auth/20260831/member-release-partial-20260901T1120Z.json`.
+The release is live, but cross-user isolation is not claimed until identity B
+is completed.
+
+## 2026-09-01 — Member-compatible `/guides` hotfix and identity-B handoff
+
+Prompt: recover from the guide-only Worker regression without losing the live
+member runtime, retain the exact deployed member asset bundle and bindings, add
+only the tested guide-hub alias, and continue identity B without changing OAuth
+scopes, client, audience or publishing status.
+
+Actions and receipts:
+
+- Rolled provenance back to the exact member overlay SHA `dc3b4d9395420b72…`
+  and v2 asset tree `1039f92aeae0195d…`. The pre-alias dry-run rebuilt byte
+  for byte to the recorded member bundle; the post-alias compiled diff contains
+  only the `/guides` and `/guides/` 308 branch.
+- Passed typecheck, 111 guide tests, 614 Worker tests, 13 member tests, 48 Python
+  tests, diff check, zero forbidden/secret publication findings, Wrangler
+  strict dry-run and independent review.
+- Deployed version `5a326a64-c755-4036-93af-1a1809e0aeb6` at 100%. No static
+  asset uploaded. Member routes/bindings/secrets remained present; guide aliases
+  return bodyless 308 responses with query preservation. Live member/public
+  routes and exact v2 asset hashes passed.
+- Reapplied the complete safe observability object after Wrangler restored
+  persistence defaults. Fresh GET proves invocation logs and log/trace
+  persistence off, traces disabled, Worker Logpush off and no tail consumer.
+  Account/zone/instant Logpush inventory and the non-secret canary remain open.
+- Closed the unsaved OAuth test-user modal with zero allowlist effect. Google
+  recognized identity B and is waiting at the physical password field; no
+  password/MFA was entered and no identity-B E2E is claimed.
+
+Private receipt:
+`auth/20260831/member-guide-alias-hotfix-20260901T1601Z.json`.
+Rollback is member version `5b72e529-a3af-467e-b6f1-bada347129d1`; never use
+the regressed `da381253-2427-4b8d-9834-56ba86f46b9b` as rollback.
+
+## 2026-09-01 — Evidence Search isolated implementation
+
+Prompt: implement only priority-one `/tools/evidence-search/` as an honest free
+tool around the existing public D1 FTS5 search, consume the frozen Round 3
+contract and corrected implementation overlay, preserve the concurrent member
+auth lane, and stop before any commit, push, deploy or publication.
+
+Actions and receipts:
+
+- Verified immutable Round 3 response SHA-256
+  `02cb96ccee9428b62c815af3fb19b5cab369f2e5c5ee63871a1b926c48a7038b`,
+  reviewed addendum SHA-256
+  `05793792b8cdb387a73c77682fb2e8f242491ad6ca30d54605ea0c29d709c946`
+  and independent review SHA-256
+  `c43658168954d03f3305494f1d6991160f1c960b267e4428fd3b56b56a674020`.
+- Added one builder-owned template, scoped stylesheet and progressive JS
+  runtime. Query state uses a fragment, results come only from
+  `base2026_public_tiktok`, response fields exclude `body`, public `title`
+  summaries are capped at 360 characters, public record and original URLs are
+  allowlisted, missing creator/original metadata stays visible, and analytics
+  receives buckets/public record IDs rather than query text or source content.
+- Preserved exact live destinations `/workspace/`, `/methodology`, `/api` and
+  `/topics/`; rejected `/knowledge/*`. D1 topic labels remain visible, but only
+  the verified topic-index root is linked because several stored slugs currently
+  return 404.
+- Dated the 27-match worked example to the independent readback at
+  `2026-09-01T16:49:09Z`. Kept source-diversity check and source-backed brief as
+  disabled future boundaries; no article or native distribution was created.
+- Full Python suite: 147 passed. Final production-like local artifact: 4,248
+  served files, 89,929,110 bytes, tree SHA-256
+  `40d292499478b88228249f472e071d4393caf208285de6a9303dc030d135c622`,
+  with zero builder findings for private tokens, local paths, legacy product
+  paths, personal shell/commercial markers or WordPress forms. The design
+  authority check passed, and the publication audit reports nine public-safe
+  candidates, zero manual-review paths, zero forbidden files and zero secrets.
+- Browser QA covered live D1 results, result/empty/partial/error behavior,
+  missing attribution, query retention, privacy-safe analytics, one H1, exact
+  links, 390px no-overflow and 44px controls. With JavaScript disabled, all
+  eight content sections remain readable, and the GET form keeps the query on
+  `/tools/evidence-search/` while the same static response presents an honest
+  no-script error plus a link to the existing Workspace.
+- Live truth after implementation remains `/workspace/` 200,
+  `/tools/evidence-search/` 404, `/methodology` 200, `/api` 200, `/topics/` 200
+  and stale `/knowledge/` 404. The local reviewed route returns 200. The
+  implementation/test slice passes a read-only `git apply --check` over the
+  separate member-auth candidate, and the four new filenames do not collide.
+  The two project-memory files are append-only handoffs from both lanes and must
+  be reconciled manually rather than applied as an opaque full patch.
+
+Limits: no commit, push, merge, deploy, D1 mutation, binding change, IndexNow
+call, supporting article, Medium adaptation, LinkedIn/X post or live-route claim
+was made in this isolated pass. The screenshot and generated candidate receipts
+remain ignored local QA artifacts.
+
+## 2026-09-01 — Evidence Search/member-auth integration
+
+Prompt: integrate the already-reviewed Evidence Search implementation into the
+authoritative current member-auth candidate while preserving the member slice,
+both append-only project-memory histories and the public/private boundary.
+
+Actions and receipts:
+
+- Confirmed target worktree `58dd` is branch
+  `codex/base2026-google-auth-20260831`, at the shared `0e5804a8d` baseline,
+  with the live member-auth source, bindings, migrations, templates and dirty
+  v2 asset changes present. The four new Evidence Search filenames were absent
+  and the read-only implementation/test/builder patch passed `git apply --check`.
+- Added the reviewed Evidence Search template, scoped CSS/JS, Python tests,
+  builder-owned route/assets and public-safe audit allowlist entry. The member
+  Worker, member-auth package/configuration, member templates, bindings and
+  current live asset bundle were not changed by this integration.
+- Preserved the member-auth and Evidence Search sections in `NEXT_ACTION.md`,
+  appended both lane histories here, and created the unique integration handoff
+  receipt. No commit, push, merge, deploy, IndexNow call, D1 write, remote
+  mutation or social/editorial publication was performed.
+
+Verification is recorded in the integration handoff after the focused and full
+local gates complete; the public `/tools/evidence-search/` route remains an
+undeployed candidate and must not be described as live.
+
+## 2026-09-01 — Evidence Search controlled production release
+
+Prompt: finish the reviewed free-tool lane instead of leaving the candidate
+undeployed, while preserving Google member auth, private research boundaries,
+the live guide aliases and an exact rollback.
+
+Actions and receipts:
+
+- Revalidated the 45-file member-auth plus Evidence Search candidate with 157
+  Python tests, 614 Worker tests, 13 member tests, typecheck, design-authority,
+  diff and publication-boundary checks. The two manual-review test files were
+  inspected as loopback/synthetic test-only sources; no forbidden or secret
+  path was admitted.
+- Built and hash-verified the exact release tree, authenticated Wrangler,
+  passed a config-scoped dry run, then deployed only the reviewed private
+  Worker. Production version is
+  `0337f7d6-ebe4-4bcc-8b4a-e23317a99a8e`; rollback is
+  `5a326a64-c755-4036-93af-1a1809e0aeb6`.
+- Verified live HTTP, canonical/indexability, hub sitemap inclusion, a real D1
+  search, attributed rendering, no-JS fallback, mobile layout, console health,
+  member/auth invariants and private My Research headers. Submitted exactly
+  the new tool URL to IndexNow once; no indexing or traffic claim is made.
+- Created
+  `HANDOFF_2026-09-01_BASE2026_EVIDENCE_SEARCH_PRODUCTION_RELEASE.md` with the
+  artifact hashes, deployment receipt, rollback and remaining measurement/Git
+  work. The earlier undeployed-candidate entry is superseded by this release.

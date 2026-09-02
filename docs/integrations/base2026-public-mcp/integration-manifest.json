@@ -1,0 +1,39 @@
+{
+  "name": "base2026-public-mcp",
+  "version": "2026-09-01",
+  "status": "candidate_not_deployed",
+  "endpoint": "https://base2026.dev/api/mcp",
+  "human_docs": "https://base2026.dev/mcp",
+  "transport": "streamable_http_json",
+  "authentication": "none",
+  "stateless": true,
+  "rate_limit": {
+    "binding": "MCP_RATE_LIMIT",
+    "requests_per_minute_per_edge_identity": 60,
+    "fail_closed_if_unavailable": true
+  },
+  "protocol_versions": [
+    "2026-07-28",
+    "2025-11-25",
+    "2025-06-18",
+    "2025-03-26"
+  ],
+  "tools": [
+    "search_sources",
+    "get_source",
+    "get_creator",
+    "get_topic",
+    "get_topic_signal",
+    "get_public_manifest"
+  ],
+  "public_boundary": {
+    "read_only": true,
+    "private_data": false,
+    "raw_captions": false,
+    "raw_asr": false,
+    "media_files": false,
+    "writes": false
+  },
+  "official_marketplace_plugin": false,
+  "source_skill": "docs/integrations/base2026-public-mcp/SKILL.md"
+}

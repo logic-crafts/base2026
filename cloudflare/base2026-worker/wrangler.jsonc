@@ -15,6 +15,8 @@
     "directory": "../../output/cloudflare-migration/base2026-enrichment-retirement-20260831-v2",
     "run_worker_first": [
       "/api/*",
+      "/my-research",
+      "/my-research/*",
       "/sources",
       "/sources/*",
       "/sitemap-dynamic.xml",
@@ -50,10 +52,32 @@
       "database_name": "base2026-outreach-search",
       "database_id": "ffbef187-67ef-491f-8fae-62f625636ed5",
       "migrations_dir": "migrations-outreach"
+    },
+    {
+      "binding": "AUTH_DB",
+      "database_name": "base2026-member-auth",
+      "database_id": "53b0adf1-39ac-40a7-93b8-84c08881ff43",
+      "migrations_dir": "migrations-members"
     }
   ],
+  "ratelimits": [
+    {
+      "name": "MCP_RATE_LIMIT",
+      "namespace_id": "20260901",
+      "simple": {
+        "limit": 60,
+        "period": 60
+      }
+    }
+  ],
+  "vars": {
+    "MEMBER_AUTH_ENABLED": "true"
+  },
   "observability": {
     "enabled": true,
-    "head_sampling_rate": 1
+    "head_sampling_rate": 1,
+    "logs": {
+      "invocation_logs": false
+    }
   }
 }

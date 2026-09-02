@@ -1,0 +1,27 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "base2026-members-local",
+  "main": "src/member-prototype.ts",
+  "compatibility_date": "2026-08-22",
+  "compatibility_flags": ["nodejs_compat"],
+  "vars": {
+    "MEMBER_AUTH_ENABLED": "true",
+    "MEMBER_AUTH_LOCAL_DEV": "true",
+    "BETTER_AUTH_SECRET": "synthetic-local-only-member-secret-012345678901234567890",
+    "GOOGLE_CLIENT_ID": "synthetic-google-client-id.apps.googleusercontent.com",
+    "GOOGLE_CLIENT_SECRET": "synthetic-google-client-secret"
+  },
+  "d1_databases": [
+    {
+      "binding": "AUTH_DB",
+      "database_name": "base2026-members-local-auth",
+      "database_id": "00000000-0000-4000-8000-000000000001",
+      "migrations_dir": "migrations-members"
+    },
+    {
+      "binding": "DB",
+      "database_name": "base2026-public-local-fixture",
+      "database_id": "00000000-0000-4000-8000-000000000002"
+    }
+  ]
+}

@@ -3,12 +3,15 @@ import { inspectStoredEditorialArticle, publishEditorialArticle, type EditorialO
 import { handleEditorialRoute } from "./editorial-routes";
 import { handleSourceCatalog } from "./source-catalog";
 import { handleEvidenceGuideRoute } from "./evidence-guide-routes";
+import { memberError, type MemberAuthEnv } from "./member-auth";
+import { handleMemberRequest } from "./member-research";
 import {
   applyPublicProjection,
   inspectPublicSource,
   rollbackPublicProjection,
   verifyPublicProjection,
 } from "./public-projection";
+import { handlePublicMcp } from "./mcp";
 
 const INDEX_UID = "base2026_public_tiktok" as const;
 const OUTREACH_INDEX_UID = "base2026_public_outreach" as const;
@@ -185,7 +188,22 @@ const PUBLIC_SECURITY_HEADERS = Object.freeze({
   "Permissions-Policy": "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()",
 });
 
-type EnvWithBindings = Env & { INBOX_DB?: D1Database; OUTREACH_DB?: D1Database };
+type EnvWithBindings = Env & MemberAuthEnv & { INBOX_DB?: D1Database; OUTREACH_DB?: D1Database };
+
+const MEMBER_API_PATH = /^\/api\/(?:auth|my-research)(?:\/|$)/u;
+const MEMBER_PAGE_PATH = /^\/my-research(?:\/|$)/u;
+const MEMBER_PAGE_CSP = [
+  "default-src 'none'",
+  "script-src 'self'",
+  "style-src 'self' https://fonts.googleapis.com",
+  "font-src 'self' https://fonts.gstatic.com",
+  "img-src 'self' data:",
+  "connect-src 'self'",
+  "base-uri 'none'",
+  "form-action 'self'",
+  "frame-ancestors 'none'",
+  "object-src 'none'",
+].join("; ");
 
 type FormKind = "support" | "partner";
 
@@ -343,6 +361,29 @@ function publicAssetResponse(response: Response): Response {
     status: response.status,
     statusText: response.statusText,
     headers: withPublicResponseHeaders(response.headers),
+  });
+}
+
+function privateMemberResponse(response: Response, page = false): Response {
+  // Copy Headers directly: forEach/set would fold multiple Set-Cookie fields
+  // into a single value and break OAuth state/session cookie handling.
+  const headers = new Headers(response.headers);
+  for (const [name, value] of Object.entries(PUBLIC_SECURITY_HEADERS)) headers.set(name, value);
+  // Private routes must never inherit the public search API's wildcard CORS
+  // or cache policy, including when authentication is disabled or fails.
+  const corsHeaders: string[] = [];
+  headers.forEach((_value, name) => { if (name.startsWith("access-control-")) corsHeaders.push(name); });
+  for (const name of corsHeaders) headers.delete(name);
+  headers.set("Cache-Control", "private, no-store");
+  headers.set("X-Robots-Tag", "noindex, nofollow");
+  headers.set("Referrer-Policy", "no-referrer");
+  headers.set("X-Frame-Options", "DENY");
+  headers.set("Cross-Origin-Resource-Policy", "same-origin");
+  headers.set("Content-Security-Policy", page ? MEMBER_PAGE_CSP : "default-src 'none'; frame-ancestors 'none'; base-uri 'none'");
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
   });
 }
 
@@ -1930,10 +1971,38 @@ export class PublicProjectionEntrypoint extends WorkerEntrypoint<Env> {
 export default {
   async fetch(request: Request, env: EnvWithBindings, _ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
+    if (MEMBER_API_PATH.test(url.pathname)) {
+      // Keep auth failures outside the public API error/CORS path. The member
+      // handler enforces canonical HTTPS and the explicit local-test exception.
+      try {
+        const member = await handleMemberRequest(request, env);
+        return privateMemberResponse(member ?? memberError(404, "NOT_FOUND", "Not found."));
+      } catch {
+        // Do not log request URLs or provider errors: callbacks contain codes.
+        return privateMemberResponse(memberError(503, "AUTH_UNAVAILABLE", "Private research is temporarily unavailable."));
+      }
+    }
     try {
       if (url.protocol !== "https:") {
         url.protocol = "https:";
         return publicRedirect(url.toString(), 301);
+      }
+      if (MEMBER_PAGE_PATH.test(url.pathname)) {
+        if (request.method !== "GET" && request.method !== "HEAD") {
+          return privateMemberResponse(memberError(405, "METHOD_NOT_ALLOWED", "Method is not allowed."));
+        }
+        if (url.pathname === "/my-research" || url.pathname === "/my-research/index.html") {
+          url.pathname = "/my-research/";
+          return privateMemberResponse(new Response(null, { status: 308, headers: { Location: url.toString() } }), true);
+        }
+        if (url.pathname !== "/my-research/" || !env.ASSETS) {
+          return privateMemberResponse(memberError(404, "NOT_FOUND", "Not found."));
+        }
+        try {
+          return privateMemberResponse(await env.ASSETS.fetch(request), true);
+        } catch {
+          return privateMemberResponse(memberError(503, "ASSET_UNAVAILABLE", "Private research is temporarily unavailable."));
+        }
       }
       const guide = await handleEvidenceGuideRoute(request, env);
       if (guide) return publicAssetResponse(guide);
@@ -1957,6 +2026,7 @@ export default {
       if (url.pathname === "/api/stats") return await handlePublicStats(request, env);
       if (url.pathname === "/api/evidence-brief") return await handleEvidenceBrief(request, env, url);
       if (url.pathname === "/api/evidence-brief/v2") return await handleEvidenceBriefV2(request, env, url);
+      if (url.pathname === "/api/mcp") return await handlePublicMcp(request, env);
       if (url.pathname === "/sitemap-dynamic.xml") return await handleDynamicSitemap(request, env);
       if (url.pathname === "/api/forms/support") return await handleInboxForm(request, env, "support");
       if (url.pathname === "/api/forms/partner") return await handleInboxForm(request, env, "partner");

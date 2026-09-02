@@ -35,6 +35,29 @@ Base2026 creates a public evidence layer that keeps those connections visible.
 - maintains task-focused topic guides with exact evidence dependencies and useful decision tools;
 - documents methodology, corrections, opt-out and publication boundaries.
 
+## Developer access
+
+The public developer surface is read-only and keyless. The compatible search
+API provides bounded retrieval, and the stateless MCP endpoint provides
+AI-agent lookups over the same public evidence boundary:
+
+```bash
+curl -sS -X POST https://base2026.dev/api/search/multi-search \
+  -H 'content-type: application/json' \
+  --data '{"queries":[{"indexUid":"base2026_public_tiktok","q":"AI search","limit":5}]}'
+
+codex mcp add base2026 --url https://base2026.dev/api/mcp
+claude mcp add --transport http base2026 https://base2026.dev/api/mcp
+```
+
+The MCP contract is limited to `search_sources`, `get_source`, `get_creator`,
+`get_topic`, `get_topic_signal` and `get_public_manifest`. It reads only
+allowlisted public D1 data and does not expose raw captions, raw ASR, media,
+private records, credentials, writes, moderation or publication controls. See
+the [API guide](docs/public-pages/08_API_ACCESS.md),
+[MCP guide](docs/public-pages/10_MCP_FOR_AI_AGENTS.md) and
+[integration guide](docs/public-pages/11_PLUGINS_AND_INTEGRATIONS.md).
+
 The current release is a working public prototype. The 2026-08-31 10:15 UTC
 snapshot contains 2,175 search documents across 1,573 distinct sources, with
 49 public evidence routes, 83 projected cards and zero public full transcripts.

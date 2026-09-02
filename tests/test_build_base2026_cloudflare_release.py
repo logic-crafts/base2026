@@ -92,6 +92,59 @@ def write_fixture(root: Path) -> None:
     )
 
 
+def test_member_assets_are_additive_idempotent_and_require_complete_html() -> None:
+    original = (
+        '<html><head><title>Search</title></head><body>'
+        '<main id="hits">Public results stay here</main>'
+        '<script src="/static/meili.js?v=protected"></script></body></html>'
+    )
+    actual = builder._with_member_workspace_assets(original)
+    assert '<main id="hits">Public results stay here</main>' in actual
+    assert '<script src="/static/meili.js?v=protected"></script>' in actual
+    assert actual.count("base2026-members.js") == 1
+    assert actual.count("base2026-members.css") == 1
+    assert builder._with_member_workspace_assets(actual) == actual
+    with pytest.raises(builder.ReleaseBuildError):
+        builder._with_member_workspace_assets("<main>Incomplete source</main>")
+
+
+def test_member_workspace_requires_explicit_shell_and_preserves_public_bytes(tmp_path: Path) -> None:
+    source = tmp_path / "source"
+    source.mkdir()
+    write_fixture(source)
+    (source / "search.html").write_text(
+        '<html><head><title>Search</title></head><body>'
+        '<main id="hits">Public results</main>'
+        '<script src="/static/meili.js"></script></body></html>', encoding="utf-8"
+    )
+    (source / "static" / "meili.js").write_text("/* protected search renderer */", encoding="utf-8")
+    with pytest.raises(builder.ReleaseBuildError, match="current startup shell"):
+        builder.build_release(source, tmp_path / "no-shell", members_workspace=True)
+
+    options = {
+        "homepage_template": builder.DEFAULT_HOMEPAGE_TEMPLATE,
+        "homepage_stylesheet": builder.DEFAULT_HOMEPAGE_STYLESHEET,
+    }
+    base = builder.build_release(source, tmp_path / "base", **options)
+    candidate = builder.build_release(source, tmp_path / "member", members_workspace=True, **options)
+    base_files = {entry["path"]: entry["artifact_sha256"] for entry in base["files"]}
+    member_files = {entry["path"]: entry["artifact_sha256"] for entry in candidate["files"]}
+    assert set(member_files) - set(base_files) == {
+        "my-research/index.html", "static/base2026-members.css", "static/base2026-members.js"
+    }
+    assert {name for name in base_files if base_files[name] != member_files[name]} == {
+        "workspace/index.html", "privacy.html"
+    }
+    assert base_files["static/meili.js"] == member_files["static/meili.js"]
+    member_html = (tmp_path / "member/my-research/index.html").read_text(encoding="utf-8")
+    assert "noindex" in member_html
+    for sitemap in (tmp_path / "member").rglob("*.xml"):
+        assert "/my-research" not in sitemap.read_text(encoding="utf-8")
+    assert 'id="b26-members-privacy"' in (tmp_path / "member/privacy.html").read_text(encoding="utf-8")
+    with pytest.raises(builder.ReleaseBuildError, match="explicit --members-workspace"):
+        builder.build_release(tmp_path / "member", tmp_path / "unintended-downgrade", **options)
+
+
 def test_transform_maps_boundaries_and_preserves_external_creator_urls() -> None:
     result = builder.transform_text(
         '<a href="https://aggressorbulkit.online/knowledge/sources/1.html">Base</a>'
@@ -254,6 +307,18 @@ def test_startup_homepage_overlay_preserves_search_as_workspace(tmp_path: Path) 
     assert "GET /api/stats" in api_page
     assert "D1 FTS5" in api_page
     assert "server-side Meilisearch proxy" not in api_page
+    mcp_page = (output / "mcp.html").read_text(encoding="utf-8")
+    assert "POST https://base2026.dev/api/mcp" in mcp_page
+    assert "search_sources" in mcp_page
+    integrations_page = (output / "integrations.html").read_text(encoding="utf-8")
+    assert "codex mcp add base2026" in integrations_page
+    assert "claude mcp add --transport http base2026" in integrations_page
+    data_dictionary = json.loads((output / "data-dictionary.json").read_text(encoding="utf-8"))
+    assert "full private transcripts" in data_dictionary["public_boundary"]["not_public"]
+    llms = (output / "llms.txt").read_text(encoding="utf-8")
+    root_llms = (output / "root-llms.txt").read_text(encoding="utf-8")
+    assert "https://base2026.dev/api/mcp" in llms
+    assert "https://base2026.dev/api/mcp" in root_llms
     api_index = json.loads((output / "api-index.json").read_text(encoding="utf-8"))
     endpoint_urls = {endpoint["url"] for endpoint in api_index["endpoints"]}
     assert "https://base2026.dev/api/stats" in endpoint_urls
@@ -307,7 +372,9 @@ def test_startup_homepage_overlay_preserves_search_as_workspace(tmp_path: Path) 
     assert receipt["verification"]["redirecting_html_canonical_markers_remaining"] == 0
     assert receipt["verification"]["redirecting_html_sitemap_markers_remaining"] == 0
     # Blog files plus guide-only CSS/JS are additive; retained assets stay intact.
-    assert receipt["artifact"]["file_count"] == 47
+    # Blog files, guide assets, and the isolated Evidence Search tool are
+    # additive; retained assets stay intact.
+    assert receipt["artifact"]["file_count"] == 55
     blog = (output / "blog.html").read_text(encoding="utf-8")
     assert '<link rel="canonical" href="https://base2026.dev/blog">' in blog
     assert 'data-b26-blog-schema' in blog
@@ -540,6 +607,14 @@ def test_api_index_workspace_route_is_owned_by_source_and_builder() -> None:
         if entry["id"] == "human_search_workspace"
     )
     assert rewritten_workspace["url"] == "https://base2026.dev/workspace/"
+
+
+def test_hub_sitemap_includes_developer_distribution_routes() -> None:
+    payload = builder._hub_sitemap_payload().decode("utf-8")
+
+    assert "https://base2026.dev/api" in payload
+    assert "https://base2026.dev/mcp" in payload
+    assert "https://base2026.dev/integrations" in payload
 
 
 def test_legacy_styles_are_normalized_at_the_release_boundary() -> None:

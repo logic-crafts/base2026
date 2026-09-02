@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My Research — Base2026</title>
+    <meta name="description" content="Keep a private collection of selected Base2026 evidence sources.">
+    <meta name="robots" content="noindex,nofollow">
+    <link rel="canonical" href="https://base2026.dev/my-research/">
+    <link rel="icon" href="/static/base2026-mark.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;600;700&amp;family=Manrope:wght@400;500;700;800&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/base2026-startup-shell.css?v=20260831-members-v1">
+    <link rel="stylesheet" href="/static/base2026-members.css?v=20260831-members-v1">
+  </head>
+  <body class="b26-form-page b26-members-page">
+    <a class="b26-members-skip-link" href="#main-content">Skip to main content</a>
+    {{STARTUP_HEADER}}
+    <main id="main-content" class="b26-members-main" data-members-page tabindex="-1">
+      <nav class="b26-content-toolbar b26-members-content-toolbar" aria-label="Research workspace">
+        <a class="b26-button--secondary" href="/workspace/">Search workspace</a>
+        <a class="b26-button--secondary" href="/my-research/" aria-current="page">My Research</a>
+      </nav>
+
+      <header class="b26-members-heading">
+        <p class="b26-eyebrow">Private research space</p>
+        <h1>Keep the evidence you want to revisit.</h1>
+        <p class="b26-lede">Save selected public Base2026 source records into named private collections. Your collections are separate from the public search index and are never query history.</p>
+      </header>
+
+      <div id="members-status" class="b26-members-status" role="status" aria-live="polite" aria-atomic="true"></div>
+
+      <section id="members-loading" class="b26-members-state b26-members-state--loading" aria-live="polite">
+        <p>Checking your private research session…</p>
+      </section>
+
+      <section id="members-signed-out" class="b26-members-signed-out b26-members-card" aria-labelledby="members-signed-out-title" hidden>
+        <p class="b26-eyebrow">Optional account</p>
+        <h2 id="members-signed-out-title">Sign in to save evidence privately.</h2>
+        <p>Public search remains open without an account. Sign in only when you want to keep a source in a private collection that you can revisit or export.</p>
+        <ul class="b26-members-boundary-list">
+          <li>Only selected evidence references are saved; searches are not recorded.</li>
+          <li>Only basic Google identity details are used for sign-in; searches are not recorded.</li>
+          <li>Do not place confidential client material or credentials in notes.</li>
+        </ul>
+        <button class="b26-button--primary b26-members-action" type="button" data-members-sign-in>Continue with Google</button>
+      </section>
+
+      <section id="members-signed-in" class="b26-members-signed-in" aria-labelledby="members-signed-in-title" hidden>
+        <div class="b26-members-identity b26-members-card">
+          <div>
+            <p class="b26-eyebrow">Signed in</p>
+            <h2 id="members-signed-in-title">Your private research</h2>
+            <p id="members-identity-name" class="b26-members-identity-name"></p>
+            <p id="members-identity-email" class="b26-members-identity-email"></p>
+          </div>
+          <div class="b26-members-identity-actions">
+            <button class="b26-button--secondary b26-members-action" type="button" data-members-export>Export JSON</button>
+            <button class="b26-button--secondary b26-members-action" type="button" data-members-sign-out>Sign out</button>
+          </div>
+        </div>
+
+        <div class="b26-members-workspace">
+          <section class="b26-members-collections b26-members-card" aria-labelledby="members-collections-title">
+            <div class="b26-members-section-heading">
+              <div>
+                <p class="b26-eyebrow">Collections</p>
+                <h2 id="members-collections-title">Named evidence sets</h2>
+              </div>
+              <button class="b26-button--secondary b26-members-action" type="button" data-members-toggle-create aria-controls="members-create-collection" aria-expanded="false">New collection</button>
+            </div>
+            <form id="members-create-collection" class="b26-members-create-form" novalidate hidden>
+              <div class="b26-members-field">
+                <label for="members-collection-name">Collection name</label>
+                <input id="members-collection-name" name="name" type="text" maxlength="80" autocomplete="off" required>
+              </div>
+              <div class="b26-members-form-actions">
+                <button class="b26-button--primary b26-members-action" type="submit">Create</button>
+                <button class="b26-button--secondary b26-members-action" type="button" data-members-cancel-create>Cancel</button>
+              </div>
+              <p id="members-collection-form-status" class="b26-members-inline-status" role="status" aria-live="polite"></p>
+            </form>
+            <div id="members-collections-list" class="b26-members-collection-list" role="list" aria-live="polite"></div>
+          </section>
+
+          <section class="b26-members-items b26-members-card" aria-labelledby="members-items-title">
+            <div class="b26-members-section-heading">
+              <div>
+                <p class="b26-eyebrow">Saved evidence</p>
+                <h2 id="members-items-title">Select a collection</h2>
+                <p id="members-selected-collection-meta" class="b26-members-section-meta"></p>
+              </div>
+            </div>
+            <div id="members-items-list" class="b26-members-item-list" role="list" aria-live="polite"></div>
+          </section>
+        </div>
+
+        <section class="b26-members-account-zone b26-members-card" aria-labelledby="members-account-title">
+          <div>
+            <p class="b26-eyebrow">Account controls</p>
+            <h2 id="members-account-title">Manage access</h2>
+            <p>Revoke all sessions if a device is no longer trusted. Account deletion is permanent and requires a fresh session.</p>
+          </div>
+          <div class="b26-members-account-actions">
+            <button class="b26-button--secondary b26-members-action" type="button" data-members-revoke>Revoke all sessions</button>
+            <button class="b26-button--danger b26-members-action" type="button" data-members-delete-account>Delete account</button>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <dialog id="members-sign-in-dialog" class="b26-members-dialog" aria-labelledby="members-sign-in-title" aria-describedby="members-sign-in-description">
+      <div class="b26-members-dialog__body">
+        <p class="b26-eyebrow">Optional sign-in</p>
+        <h2 id="members-sign-in-title">Continue with Google</h2>
+        <p id="members-sign-in-description">Google provides only the basic identity details needed for sign-in. You will return to the same Base2026 workspace, and no search history is stored here.</p>
+        <form id="members-sign-in-form" class="b26-members-dialog-form" novalidate>
+          <div class="b26-members-dialog-actions">
+            <button class="b26-button--primary b26-members-action" type="submit" data-members-sign-in-submit>Continue with Google</button>
+            <button class="b26-button--secondary b26-members-action" type="button" data-members-dialog-close="sign-in">Cancel</button>
+          </div>
+          <p id="members-sign-in-status" class="b26-members-inline-status" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </dialog>
+
+    <dialog id="members-collection-dialog" class="b26-members-dialog" aria-labelledby="members-collection-dialog-title" aria-describedby="members-collection-dialog-description">
+      <div class="b26-members-dialog__body">
+        <p class="b26-eyebrow">Save evidence</p>
+        <h2 id="members-collection-dialog-title">Choose a collection</h2>
+        <p id="members-collection-dialog-description">Keep this public source in one private collection. Duplicate saves are safe.</p>
+        <div id="members-collection-dialog-list" class="b26-members-dialog-list" role="list"></div>
+        <form id="members-dialog-create-form" class="b26-members-create-form" novalidate>
+          <div class="b26-members-field">
+            <label for="members-dialog-collection-name">Or create a collection</label>
+            <input id="members-dialog-collection-name" name="name" type="text" maxlength="80" autocomplete="off" required>
+          </div>
+          <div class="b26-members-form-actions">
+            <button class="b26-button--secondary b26-members-action" type="submit">Create and save</button>
+            <button class="b26-button--secondary b26-members-action" type="button" data-members-dialog-close="collection">Cancel</button>
+          </div>
+        </form>
+        <p id="members-collection-dialog-status" class="b26-members-inline-status" role="status" aria-live="polite"></p>
+      </div>
+    </dialog>
+
+    <dialog id="members-delete-dialog" class="b26-members-dialog" aria-labelledby="members-delete-title" aria-describedby="members-delete-description">
+      <div class="b26-members-dialog__body">
+        <p class="b26-eyebrow">Permanent action</p>
+        <h2 id="members-delete-title">Delete your account?</h2>
+        <p id="members-delete-description">This removes your private collections and sessions. Type DELETE to confirm. This cannot be undone.</p>
+        <form id="members-delete-form" class="b26-members-dialog-form" novalidate>
+          <div class="b26-members-field">
+            <label for="members-delete-confirmation">Confirmation</label>
+            <input id="members-delete-confirmation" name="confirmation" type="text" maxlength="6" autocomplete="off" spellcheck="false" required>
+          </div>
+          <div class="b26-members-dialog-actions">
+            <button class="b26-button--danger b26-members-action" type="submit">Delete account</button>
+            <button class="b26-button--secondary b26-members-action" type="button" data-members-dialog-close="delete">Cancel</button>
+          </div>
+          <button class="b26-button--secondary b26-members-action" type="button" data-members-reauth hidden>Sign out and sign in again</button>
+          <p id="members-delete-status" class="b26-members-inline-status" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </dialog>
+
+    {{STARTUP_FOOTER}}
+    <script src="/static/base2026-members.js?v=20260831-members-v1" defer></script>
+  </body>
+</html>

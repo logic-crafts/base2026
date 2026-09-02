@@ -1,0 +1,48 @@
+{
+  "schema_version": "base2026.evidence-map-canary-config.v1",
+  "canary_id": "2026-09-01",
+  "maps": [
+    {
+      "slug": "ai-visibility-answer-readiness",
+      "topic_id": "ai-visibility-and-answer-readiness",
+      "title": "What makes a page ready for AI answers?",
+      "meta_description": "An evidence map for making pages easier to understand, verify and cite in AI search without treating visibility as a ranking guarantee.",
+      "target_intent": "How do I make a page easier for AI search to understand and cite?",
+      "answer": "A useful answer-ready page gives the reader a clear answer in visible HTML, shows why the answer is trustworthy, and connects the claim to evidence that can be checked. The public records in this map point to a practical combination: make the page readable to crawlers, add first-party detail or data that is not interchangeable, and measure which pages or queries attract attention instead of treating one AI mention as proof of performance.",
+      "scope": "This is a comparison of public source records, not a consensus report or a promise that any tactic will produce a citation.",
+      "actions": [
+        "Put the direct answer and the important context in the rendered page, so a crawler does not need a client-side interaction to discover the point.",
+        "Add a specific first-party example, result, process detail or dataset that gives the page information another page does not provide.",
+        "Track cited pages, impressions and qualified visits separately; use each signal to decide what to improve next rather than collapsing them into one visibility score."
+      ]
+    },
+    {
+      "slug": "seo-research-tooling-workflow",
+      "topic_id": "seo-research-and-tooling-workflow",
+      "title": "How should an SEO research and tooling workflow work?",
+      "meta_description": "A source-backed evidence map for turning search data, tools and page improvements into a repeatable SEO research workflow.",
+      "target_intent": "How do I turn SEO research and tools into a repeatable workflow?",
+      "answer": "A durable SEO workflow starts with an observable opportunity, uses a tool to narrow the question, and ends with a page or measurement change that can be reviewed later. The public records here repeatedly describe that loop in different forms: find queries or pages already receiving a signal, inspect the gap, make a focused improvement, then measure the result. The tool is useful when it reduces uncertainty; it is not a substitute for the operator's judgment or the source evidence.",
+      "scope": "The records are directional examples from public creator posts; they are not a controlled experiment and should not be read as guaranteed rankings advice.",
+      "actions": [
+        "Start with one measurable question, such as which pages receive impressions without clicks or which topics already have a trusted signal.",
+        "Use the smallest tool or report that can answer that question, and save the input, date and decision so the next review has context.",
+        "Change one meaningful page or workflow element at a time, then compare the resulting search and business signals before scaling the change."
+      ]
+    },
+    {
+      "slug": "local-seo-google-business-profile-operations",
+      "topic_id": "google-business-profile-local-seo-operations",
+      "title": "What belongs in a local SEO and Google Business Profile check?",
+      "meta_description": "A public evidence map for reviewing Google Business Profile details, local proof and measurement without reducing local SEO to a single setting.",
+      "target_intent": "What should I review in a local SEO and Google Business Profile operation?",
+      "answer": "A local SEO check should connect profile accuracy, service relevance, customer proof and the pages or sources that support the business. The public records in this map describe profile fields and categories, service descriptions, reviews, local reporting and wider web evidence as related parts of the job. That makes the useful unit of work an auditable local presence, not a single keyword or a copied competitor setting.",
+      "scope": "These records show operator observations and recommendations; verify platform rules, business details and local context before making a change.",
+      "actions": [
+        "Confirm the primary category, services, hours, photos and contact details against the real business before comparing the profile with competitors.",
+        "Check whether each important service has a useful matching page and whether reviews or other public proof support the promise being made.",
+        "Review calls, clicks, directions, rankings and qualified enquiries as separate signals, then record the change and its date for the next local review."
+      ]
+    }
+  ]
+}

@@ -57,6 +57,22 @@ Example:
 }
 ```
 
+## Current read-only Worker routes
+
+The same public boundary also covers these bounded, read-only routes:
+
+- `GET /api/health` for Worker and public-search liveness;
+- `GET /api/stats` for current public corpus and privacy-boundary totals;
+- `GET /api/evidence-brief?q=...` for deterministic Evidence Brief V1;
+- `GET /api/evidence-brief/v2?q=...` for bounded attributable findings with
+  corpus and ranking receipts;
+- `GET /api/blog` and `GET /api/blog/{slug}` for approved editorial metadata;
+- `GET /api/guides` and `GET /api/guides/{slug}` for maintained task guides
+  whose public-source dependencies are checked before serving.
+
+Editorial and guide records are separate from source-corpus counts. No public
+route writes, approves or moderates content.
+
 ## Indexable public projection
 
 Eligible automatic D1 projections receive stable public source pages at:
@@ -82,14 +98,28 @@ original creator video remains the canonical source for the full content.
 - public writes, corrections, or moderation through the search endpoint;
 - replacing the original creator channel.
 
-## Planned read-only MCP contract
+## Read-only MCP contract
 
-The first MCP layer should expose only bounded public lookups:
+`POST /api/mcp` is a stateless JSON-RPC surface over public D1.
+It supports the current MCP discovery and legacy `2025-11-25` initialization
+compatibility, with bounded calls to:
 
-- search sources by query and public filters;
-- get one canonical source record;
-- get one topic or creator;
-- compare public source-backed viewpoints.
+- `search_sources` for public source/evidence lookup;
+- `get_source` for one canonical source record;
+- `get_creator` for creator metadata and linked public sources;
+- `get_topic` for a topic and its public source summary;
+- `get_topic_signal` for a deterministic public topic signal;
+- `get_public_manifest` for dated public release dimensions.
 
-Every response must preserve attribution, original source links, canonical
-Base2026 URLs, and public/private policy flags.
+The route has no sessions, SSE, writes, moderation, private bindings or
+credentials. Responses preserve attribution, original source links, canonical
+Base2026 URLs and public/private policy flags. Request bodies, arguments and
+returned evidence are bounded; raw captions, raw ASR, full private transcripts,
+media, inbox data and pipeline control state are never returned.
+
+The Worker configuration includes a `MCP_RATE_LIMIT` binding at 60 requests per
+minute per edge identity. Exhausted clients receive `429` with a retry hint;
+when the binding is missing or unavailable, the route fails closed with `503`.
+Production releases verify the binding through Cloudflare version readback and
+exercise the endpoint after deployment. Use the [MCP guide](mcp.html) and
+[integration guide](integrations.html) for request examples and client setup.

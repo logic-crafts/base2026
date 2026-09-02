@@ -83,14 +83,26 @@ DEFAULT_AI_VISIBILITY_RESOURCES_TEMPLATE = (
 )
 DEFAULT_FORMS_SCRIPT = PROJECT_ROOT / "templates" / "base2026-forms.js"
 DEFAULT_EVIDENCE_BRIEF_SCRIPT = PROJECT_ROOT / "templates" / "base2026-evidence-brief.js"
+DEFAULT_MEMBERS_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-my-research.html"
+DEFAULT_MEMBERS_STYLESHEET = PROJECT_ROOT / "templates" / "base2026-members.css"
+DEFAULT_MEMBERS_SCRIPT = PROJECT_ROOT / "templates" / "base2026-members.js"
+DEFAULT_MEMBERS_PRIVACY = PROJECT_ROOT / "templates" / "base2026-members-privacy.html"
 DEFAULT_ROADMAP_SCRIPT = PROJECT_ROOT / "web" / "static" / "roadmap.js"
 DEFAULT_ROADMAP_PAGE = PROJECT_ROOT / "web" / "static" / "roadmap.html"
 DEFAULT_ANALYTICS_PAGE = PROJECT_ROOT / "web" / "static" / "analytics.html"
 DEFAULT_API_PAGE = PROJECT_ROOT / "web" / "static" / "api.html"
 DEFAULT_API_INDEX = PROJECT_ROOT / "web" / "static" / "api-index.json"
+DEFAULT_MCP_PAGE = PROJECT_ROOT / "web" / "static" / "mcp.html"
+DEFAULT_INTEGRATIONS_PAGE = PROJECT_ROOT / "web" / "static" / "integrations.html"
+DEFAULT_DATA_DICTIONARY = PROJECT_ROOT / "web" / "static" / "data-dictionary.json"
+DEFAULT_LLMS = PROJECT_ROOT / "web" / "static" / "llms.txt"
+DEFAULT_ROOT_LLMS = PROJECT_ROOT / "web" / "static" / "llms-root.txt"
 DEFAULT_GITHUB_ICON = PROJECT_ROOT / "static" / "brand" / "github.svg"
 DEFAULT_X_ICON = PROJECT_ROOT / "static" / "brand" / "x.svg"
 DEFAULT_MARK_ICON = PROJECT_ROOT / "static" / "base2026-mark.svg"
+DEFAULT_EVIDENCE_SEARCH_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-evidence-search.html"
+DEFAULT_EVIDENCE_SEARCH_STYLESHEET = PROJECT_ROOT / "templates" / "base2026-evidence-search.css"
+DEFAULT_EVIDENCE_SEARCH_SCRIPT = PROJECT_ROOT / "templates" / "base2026-evidence-search.js"
 
 OLD_WORDPRESS_ORIGIN = "https://aggressorbulkit.online"
 BASE2026_ORIGIN = "https://base2026.dev"
@@ -559,7 +571,9 @@ def _base_root_segments(public_root_names: Iterable[str] | None) -> set[str]:
         "compare",
         "creators",
         "index.html",
+        "integrations.html",
         "llms.txt",
+        "mcp.html",
         "methodology.html",
         "root-llms.txt",
         "search",
@@ -813,6 +827,8 @@ HUB_SITEMAP_ROUTES = (
     "/roadmap",
     "/api",
     "/dataset",
+    "/mcp",
+    "/integrations",
     "/about",
     "/founder",
     "/privacy",
@@ -825,6 +841,7 @@ HUB_SITEMAP_ROUTES = (
     "/blog",
     "/journal/source-backed-video-search-cloudflare/",
     "/journal/source-diversity-check/",
+    "/tools/evidence-search/",
 )
 
 # These are generated at the publication boundary rather than inherited from
@@ -851,9 +868,16 @@ schema, content structure and entity trust.
 - Blog: https://base2026.dev/blog
 - Blog RSS: https://base2026.dev/blog/feed.xml
 - Founder and selected work: https://base2026.dev/founder
+- MCP for AI agents: https://base2026.dev/mcp
+- Plugins and integrations: https://base2026.dev/integrations
 - Source policy: https://base2026.dev/source-policy
 - Creator correction or removal: https://base2026.dev/opt-out
 - Current D1 projection sitemap: https://base2026.dev/sitemap-dynamic.xml
+
+The public search API is https://base2026.dev/api/search/multi-search and the
+stateless JSON MCP endpoint is https://base2026.dev/api/mcp. Both are no-key,
+read-only surfaces over public D1. The MCP tools are search_sources, get_source,
+get_creator, get_topic, get_topic_signal and get_public_manifest.
 
 ## Public boundary
 
@@ -894,11 +918,16 @@ site or a private client workspace.
 - Topic signal briefs: https://base2026.dev/static/topic_signal_briefs.jsonl
 - Data dictionary: https://base2026.dev/data-dictionary.json
 - Read-only search API: https://base2026.dev/api/search/multi-search
+- MCP endpoint: https://base2026.dev/api/mcp
+- MCP guide: https://base2026.dev/mcp
+- Plugins and integrations: https://base2026.dev/integrations
 - Current D1 projection sitemap: https://base2026.dev/sitemap-dynamic.xml
 
 Use the workspace to explore public evidence and cite a canonical Base2026
-source, topic or creator page. The search API is read-only and backed by D1;
-no browser key is required. Do not use Base2026 for raw transcript harvesting,
+source, topic or creator page. The search API and MCP endpoint are read-only
+and backed by public D1; no browser key is required. MCP has six bounded tools:
+search_sources, get_source, get_creator, get_topic, get_topic_signal and
+get_public_manifest. Do not use Base2026 for raw transcript harvesting,
 creator impersonation, private lead data or administrative writes.
 """
 
@@ -1717,11 +1746,43 @@ def _receipt(
     }
 
 
+def _with_member_workspace_assets(text: str) -> str:
+    """Add opt-in account controls without replacing the served search renderer."""
+    stylesheet = '<link rel="stylesheet" href="/static/base2026-members.css?v=20260831-members-v1">'
+    script = '<script src="/static/base2026-members.js?v=20260831-members-v1" defer></script>'
+    if text.count("</head>") != 1 or text.count("</body>") != 1:
+        raise ReleaseBuildError("member workspace requires one complete HTML document")
+    if "base2026-members.css" not in text:
+        text = text.replace("</head>", stylesheet + "\n</head>", 1)
+    if "base2026-members.js" not in text:
+        text = text.replace("</body>", script + "\n</body>", 1)
+    return text
+
+
+def _with_member_privacy_notice(text: str, notice: str) -> str:
+    if text.count("</article>") != 1 or 'id="b26-members-privacy"' not in notice:
+        raise ReleaseBuildError("member privacy notice requires the current legal template")
+    if 'id="b26-members-privacy"' in text:
+        raise ReleaseBuildError("member privacy notice must be rendered from its source template")
+    text = text.replace("</article>", notice.strip() + "</article>", 1)
+    text = text.replace(
+        "How Base2026 handles support and partnership proposal data.",
+        "How Base2026 handles Google sign-in, private research and project proposals.",
+        1,
+    ).replace(
+        "Project forms, kept separate from public research.",
+        "Your private research and project information.",
+        1,
+    ).replace("Last updated: 20 August 2026.", "Last updated: 31 August 2026.", 1)
+    return text
+
+
 def build_release(
     source_web: Path | str,
     out: Path | str,
     homepage_template: Path | str | None = None,
     homepage_stylesheet: Path | str | None = None,
+    members_workspace: bool = False,
 ) -> dict[str, object]:
     """Build and verify a release; return the deterministic JSON receipt."""
 
@@ -1733,6 +1794,10 @@ def build_release(
         Path(homepage_stylesheet).resolve(strict=True) if homepage_stylesheet else None
     )
     standalone_startup = bool(homepage_template_path)
+    if members_workspace and not standalone_startup:
+        raise ReleaseBuildError("member workspace requires the current startup shell")
+    if not members_workspace and (source / "my-research" / "index.html").exists():
+        raise ReleaseBuildError("member-enabled input requires explicit --members-workspace")
     startup_header = DEFAULT_STARTUP_HEADER.read_text(encoding="utf-8").strip() if standalone_startup else ""
     startup_footer = DEFAULT_STARTUP_FOOTER.read_text(encoding="utf-8").strip() if standalone_startup else ""
     startup_shell_css = DEFAULT_STARTUP_SHELL_STYLESHEET.read_bytes() if standalone_startup else b""
@@ -1854,7 +1919,9 @@ def build_release(
                         source_size=existing.source_size,
                         artifact_size=len(payload),
                         kind="text",
-                        changed=payload != (source / relative_name).read_bytes(),
+                        # A generated page can receive another reviewed overlay
+                        # in the same build without existing in the input tree.
+                        changed=not existing.source_sha256 or _sha256(payload) != existing.source_sha256,
                     )
                     break
             else:
@@ -1969,6 +2036,11 @@ def build_release(
             write_tracked_public_overlay("analytics.html", DEFAULT_ANALYTICS_PAGE)
             write_tracked_public_overlay("api.html", DEFAULT_API_PAGE)
             write_tracked_public_overlay("api-index.json", DEFAULT_API_INDEX)
+            write_tracked_public_overlay("mcp.html", DEFAULT_MCP_PAGE)
+            write_tracked_public_overlay("integrations.html", DEFAULT_INTEGRATIONS_PAGE)
+            write_tracked_public_overlay("data-dictionary.json", DEFAULT_DATA_DICTIONARY)
+            write_tracked_public_overlay("llms.txt", DEFAULT_LLMS)
+            write_tracked_public_overlay("root-llms.txt", DEFAULT_ROOT_LLMS)
             write_generated_public_file("static/brand/github.svg", DEFAULT_GITHUB_ICON.read_bytes())
             write_generated_public_file("static/brand/x.svg", DEFAULT_X_ICON.read_bytes())
             write_generated_public_file("static/base2026-mark.svg", DEFAULT_MARK_ICON.read_bytes())
@@ -2045,6 +2117,22 @@ def build_release(
             write_generated_public_file("static/base2026-evidence-guide.css", DEFAULT_EVIDENCE_GUIDE_STYLESHEET.read_bytes())
             write_generated_public_file("static/base2026-evidence-guide.js", DEFAULT_EVIDENCE_GUIDE_SCRIPT.read_bytes())
             write_generated_public_file(
+                "static/base2026-evidence-search.css",
+                DEFAULT_EVIDENCE_SEARCH_STYLESHEET.read_bytes(),
+            )
+            write_generated_public_file(
+                "static/base2026-evidence-search.js",
+                DEFAULT_EVIDENCE_SEARCH_SCRIPT.read_bytes(),
+            )
+            write_generated_public_file(
+                "tools/evidence-search/index.html",
+                _render_startup_page(
+                    DEFAULT_EVIDENCE_SEARCH_TEMPLATE.read_text(encoding="utf-8"),
+                    startup_header,
+                    startup_footer,
+                ),
+            )
+            write_generated_public_file(
                 "static/assets/base2026-ai-visibility-measurement.png",
                 DEFAULT_EDITORIAL_MEASUREMENT_IMAGE.read_bytes(),
             )
@@ -2064,6 +2152,35 @@ def build_release(
                     startup_footer,
                 ),
             )
+
+            if members_workspace:
+                write_generated_public_file(
+                    "workspace/index.html",
+                    _with_member_workspace_assets(
+                        (stage / "workspace" / "index.html").read_text(encoding="utf-8")
+                    ).encode("utf-8"),
+                )
+                write_generated_public_file(
+                    "my-research/index.html",
+                    _render_startup_page(
+                        DEFAULT_MEMBERS_TEMPLATE.read_text(encoding="utf-8"),
+                        startup_header,
+                        startup_footer,
+                    ),
+                )
+                write_generated_public_file("static/base2026-members.css", DEFAULT_MEMBERS_STYLESHEET.read_bytes())
+                write_generated_public_file("static/base2026-members.js", DEFAULT_MEMBERS_SCRIPT.read_bytes())
+                write_generated_public_file(
+                    "privacy.html",
+                    _render_startup_page(
+                        _with_member_privacy_notice(
+                            DEFAULT_PRIVACY_TEMPLATE.read_text(encoding="utf-8"),
+                            DEFAULT_MEMBERS_PRIVACY.read_text(encoding="utf-8"),
+                        ),
+                        startup_header,
+                        startup_footer,
+                    ),
+                )
 
         assetsignore_payload = (
             "# Cloudflare Workers Static Assets metadata exclusions.\n"
@@ -2248,6 +2365,11 @@ def _build_parser() -> argparse.ArgumentParser:
         default=DEFAULT_HOMEPAGE_STYLESHEET,
         help="compiled production CSS for the startup homepage",
     )
+    parser.add_argument(
+        "--members-workspace",
+        action="store_true",
+        help="include the optional private My Research UI (requires separately configured auth)",
+    )
     return parser
 
 
@@ -2259,6 +2381,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             args.out,
             homepage_template=args.homepage_template,
             homepage_stylesheet=args.homepage_stylesheet,
+            members_workspace=args.members_workspace,
         )
     except (OSError, ReleaseBuildError, UnicodeError) as exc:
         print(f"error: {exc}", file=sys.stderr)

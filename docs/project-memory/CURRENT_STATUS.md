@@ -1,18 +1,22 @@
 # Base2026 Current Status
 
-Verified 2026-08-31 through 10:17 UTC. Public counters below are the dated
+Verified 2026-09-01 through 20:10 UTC. Public counters below are the dated
 10:15 UTC read. [Closure receipt](BASE2026_OFFICE_CLOSURE_2026_08_31.md)
 separates completed releases from remaining observation and external blockers.
 Older dated receipts are history, not current counters.
 
 ## Live product
 
-- Public Worker `7522595a-13bf-4437-8955-fd14816b2569` remains at 100%.
-  Artifact `base2026-enrichment-retirement-20260831-v2`, tree SHA
-  `ed0a9371e0471d13006b62b250d458c7f3b3fdbcc8530fc938dd32c758fe46e2`.
-  The [roadmap release](BASE2026_ROADMAP_CORRECTION_2026_08_31.md) changed
-  exactly two text assets; the other 4,243 static assets and Worker logic
-  did not change. Live D1 content changes are separate.
+- Public Worker `0337f7d6-ebe4-4bcc-8b4a-e23317a99a8e` is at 100%. It adds the
+  reviewed public `/tools/evidence-search/` artifact while preserving member
+  auth/My Research, four D1 bindings, three remote member secret names and both
+  `/guides` 308 aliases. Safe rollback is the member-plus-alias version
+  `5a326a64-c755-4036-93af-1a1809e0aeb6`; the intervening `da381253...`
+  regression is not rollback-compatible.
+- Evidence Search is live200, self-canonical, indexable and in the hub sitemap.
+  A real D1 search rendered ten deduplicated records from 24 returned hits;
+  no-JS fallback, mobile390 and console0 QA passed. IndexNow accepted exactly
+  this new URL with HTTP200; indexing/traffic are not proved.
 - Public /api/stats at 10:15: **2,175 documents, 1,573 distinct sources,
   49 evidence routes, 83 projected cards, zero full transcripts**.
   The earlier 09:16 total of 2173/1572/48/81/0 followed two exact unsupported

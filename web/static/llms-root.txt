@@ -1,39 +1,33 @@
-# Alex Yarosh
+# Base2026
 
-Alex Yarosh helps US-based local service businesses improve visibility across Google Search, Google AI Overviews, ChatGPT, Gemini, Perplexity, Copilot, Bing, and AI-powered discovery paths through SEO, GEO, AEO, technical SEO, answer-ready content, schema, citations, reviews, entity trust, and source intelligence.
+Base2026 is an independent public source-intelligence project maintained by
+Logic Crafts LLC. It makes attributed short-form expert-video evidence
+searchable for research into SEO, GEO, AEO, AI search, local visibility,
+schema, content structure and entity trust.
 
-## Site Areas
+## Public entry points
 
-- Home: https://aggressorbulkit.online/
-- Services: https://aggressorbulkit.online/services/
-- Pricing: https://aggressorbulkit.online/pricing/
-- Free AI Visibility Snapshot: https://aggressorbulkit.online/ai-visibility-audit/
-- AI Visibility Diagnostic Audit: https://aggressorbulkit.online/ai-visibility-diagnostic-audit/
-- Technical SEO & GEO Foundation: https://aggressorbulkit.online/technical-seo-geo-foundation/
-- Answer-Ready Service Pages: https://aggressorbulkit.online/answer-ready-service-pages/
-- Entity, Trust & Source Intelligence: https://aggressorbulkit.online/entity-trust-source-intelligence/
-- About: https://aggressorbulkit.online/about/
-- Contact: https://aggressorbulkit.online/contact/
-- Base2026 knowledge library: https://aggressorbulkit.online/knowledge/
-- Apply Base2026 research: https://aggressorbulkit.online/knowledge/apply-research.html
+- Home: https://base2026.dev/
+- Search workspace: https://base2026.dev/workspace/
+- Topics: https://base2026.dev/topics/
+- Creators: https://base2026.dev/creators/
+- Methodology: https://base2026.dev/methodology
+- Roadmap: https://base2026.dev/roadmap
+- API and AI access: https://base2026.dev/api
+- MCP for AI agents: https://base2026.dev/mcp
+- Plugins and integrations: https://base2026.dev/integrations
+- Source policy: https://base2026.dev/source-policy
+- Creator correction or removal: https://base2026.dev/opt-out
+- Current D1 projection sitemap: https://base2026.dev/sitemap-dynamic.xml
 
+The public search API is https://base2026.dev/api/search/multi-search and the
+stateless JSON MCP endpoint is https://base2026.dev/api/mcp. Both are no-key,
+read-only surfaces over public D1. The MCP tools are search_sources, get_source,
+get_creator, get_topic, get_topic_signal and get_public_manifest.
 
-## Base2026 Project Identity
+## Public boundary
 
-Base2026 is an independent experimental startup product created by Alex Yarosh. Ownership and rights belong to Logic Crafts LLC, Kyrgyzstan. Base2026 is not a marketing agency and does not provide marketing services. It should be treated as a separate product/startup, not as a marketing-services offer.
-
-## Base2026
-
-Base2026 is the public research and proof layer: a searchable source library and signal map built from public short-form expert videos about SEO, GEO, AEO, AI search visibility, schema, content strategy, local SEO, citations, entity trust, and related topics. It is not a lead database, a private client vault, or a replacement for original creators.
-
-Key Base2026 files:
-
-- Base2026 llms file: https://aggressorbulkit.online/knowledge/llms.txt
-- Base2026 API and AI access: https://aggressorbulkit.online/knowledge/api.html
-- Applying Base2026 research to a business audit: https://aggressorbulkit.online/knowledge/apply-research.html
-- Base2026 data dictionary: https://aggressorbulkit.online/knowledge/data-dictionary.json
-- Base2026 API index: https://aggressorbulkit.online/knowledge/api-index.json
-
-## Public Boundary
-
-The public site does not publish private notes, client data, credentials, raw source vaults, raw captions, raw ASR, audio, video, local databases, or unreviewed pipeline artifacts.
+Base2026 publishes reviewed public source records and attribution. It does not
+publish private notes, client data, credentials, raw source vaults, raw ASR,
+media files, local databases or unreviewed pipeline artifacts. Cite canonical
+source, topic or creator pages when using Base2026 evidence.

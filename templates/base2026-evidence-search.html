@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Find Attributed SEO Advice | Base2026 Evidence Search</title>
+  <meta name="description" content="Search a bounded public corpus of attributed SEO, GEO and AEO evidence. Inspect source records and open the original links before reusing advice.">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://base2026.dev/tools/evidence-search/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600;700&amp;family=Manrope:wght@400;500;700;800&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/base2026-startup-shell.css?v=20260901-evidence-search-v1">
+  <link rel="stylesheet" href="/static/base2026-evidence-search.css?v=20260901-evidence-search-v1">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Base2026 Evidence Search","url":"https://base2026.dev/tools/evidence-search/","description":"Search a bounded public corpus of attributed SEO, GEO and AEO public-source video evidence and inspect the available original sources.","applicationCategory":"BusinessApplication","operatingSystem":"Any","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Base2026","item":"https://base2026.dev/"},{"@type":"ListItem","position":2,"name":"Evidence Search","item":"https://base2026.dev/tools/evidence-search/"}]}</script>
+</head>
+<body class="b26-form-page b26-evidence-search-page">
+  {{STARTUP_HEADER}}
+  <main class="b26-evidence-search" data-evidence-search data-search-endpoint="https://base2026.dev/api/search/multi-search">
+    <nav class="b26-evidence-search__breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Base2026</a><span aria-hidden="true">/</span><span>Evidence Search</span>
+    </nav>
+
+    <section class="b26-evidence-search__hero" aria-labelledby="evidence-search-title">
+      <div class="b26-evidence-search__intro">
+        <p class="b26-eyebrow">Free public evidence search</p>
+        <h1 id="evidence-search-title">Find attributed SEO, GEO and AEO advice</h1>
+        <p class="b26-evidence-search__lede">Search a bounded corpus of admitted public-source video evidence by question, topic or creator. Inspect what the record says, open the stable Base2026 record and follow the original source where attribution and the original link are available.</p>
+        <p class="b26-evidence-search__trust">Free to use. No browser API key. Bounded coverage, available attribution and available original links—not a verdict on whether a recommendation works.</p>
+      </div>
+
+      <form class="b26-evidence-search__form" action="/tools/evidence-search/" method="get" data-search-form>
+        <label for="evidence-search-query">What advice or practice are you researching?</label>
+        <div class="b26-evidence-search__input-row">
+          <input id="evidence-search-query" name="q" type="search" required minlength="2" maxlength="200" placeholder="Example: internal linking" autocomplete="off" data-search-input>
+          <button type="submit" data-search-submit>Search the evidence</button>
+        </div>
+        <div class="b26-evidence-search__examples" aria-label="Example searches">
+          <span>Try:</span>
+          <a href="#search?q=internal%20linking" data-example-query="internal linking">internal linking</a>
+          <a href="#search?q=Search%20Console" data-example-query="Search Console">Search Console</a>
+          <a href="#search?q=schema%20markup" data-example-query="schema markup">schema markup</a>
+          <a href="#search?q=content%20freshness" data-example-query="content freshness">content freshness</a>
+          <a href="#search?q=AI%20citations" data-example-query="AI citations">AI citations</a>
+          <a href="#search?q=repurpose%20expert%20content" data-example-query="repurpose expert content">repurpose expert content</a>
+        </div>
+        <noscript>
+          <p class="b26-evidence-search__noscript">Interactive D1 results are unavailable without JavaScript. Submitting keeps your query in this tool page URL and returns this honest static error; the method, worked example and boundaries remain readable. You can also <a href="/workspace/">open the existing Workspace</a> after enabling JavaScript.</p>
+        </noscript>
+      </form>
+    </section>
+
+    <section class="b26-evidence-search__outcomes" aria-labelledby="evidence-search-outcomes">
+      <h2 id="evidence-search-outcomes">What you get</h2>
+      <div class="b26-evidence-search__outcome-grid">
+        <div><h3>Attributed evidence</h3><p>See the public creator attached to each admitted record where attribution is available, with missing attribution left visibly unresolved.</p></div>
+        <div><h3>Two inspection paths</h3><p>Open the stable Base2026 source page, then follow the original-source link when it is available. If either path is unavailable, the gap stays visible.</p></div>
+        <div><h3>A research starting point</h3><p>Collect inspectable records for a brief, client note or follow-up check without treating search matches as proof.</p></div>
+      </div>
+    </section>
+
+    <section class="b26-evidence-search__results" aria-labelledby="evidence-results-title" data-results-section>
+      <div class="b26-evidence-search__results-heading">
+        <div>
+          <p class="b26-eyebrow">Public D1 evidence</p>
+          <h2 id="evidence-results-title">Search results</h2>
+        </div>
+        <button type="button" class="b26-evidence-search__retry" data-search-retry hidden>Retry search</button>
+      </div>
+      <p class="b26-evidence-search__status" role="status" aria-live="polite" aria-atomic="true" data-search-status>Enter one narrow question to search the admitted Base2026 corpus.</p>
+      <p class="b26-evidence-search__count-boundary" data-count-boundary hidden>Match counts are limited to the admitted Base2026 corpus and can change as the corpus changes. They are not web-wide totals or popularity measures.</p>
+      <div class="b26-evidence-search__result-list" data-search-results></div>
+    </section>
+
+    <section class="b26-evidence-search__method" aria-labelledby="evidence-search-method">
+      <p class="b26-eyebrow">Ten-minute method</p>
+      <h2 id="evidence-search-method">Leave with records you can inspect</h2>
+      <ol>
+        <li><span>01</span><div><h3>Ask one narrow question</h3><p>Search for the task, recommendation or claim you need to inspect. Start with a concrete phrase such as “internal linking” or “Search Console,” not a broad request for everything about SEO.</p></div></li>
+        <li><span>02</span><div><h3>Inspect the record and the original</h3><p>Read the attributed Base2026 evidence, open the stable source page and follow the original-source link. Confirm that the record actually addresses your question.</p></div></li>
+        <li><span>03</span><div><h3>Write down the boundary</h3><p>Keep two to five relevant record URLs in your working notes. For each one, write what the source says, what it does not prove and what you still need to verify.</p></div></li>
+      </ol>
+      <p class="b26-evidence-search__developer-note">Need machine-readable retrieval? <a href="/api">Use the public search API</a>. For the evidence boundary, read <a href="/methodology">how Base2026 admits and presents evidence</a>, or <a href="/topics/">browse the current topic index</a>.</p>
+    </section>
+
+    <section class="b26-evidence-search__example" aria-labelledby="evidence-search-example">
+      <div class="b26-evidence-search__example-intro">
+        <p class="b26-eyebrow">Worked example</p>
+        <h2 id="evidence-search-example">Research internal linking without treating recommendations as proof</h2>
+        <p>At the independent readback on 2026-09-01 at 16:49:09 UTC, the query “internal linking” returned an estimated 27 admitted matches. That count is corpus-scoped and time-sensitive. Two records show how to collect useful perspectives without converting them into a ranking claim.</p>
+      </div>
+      <div class="b26-evidence-search__example-records">
+        <article>
+          <p class="b26-evidence-search__creator">@webhivedigital</p>
+          <h3>What the source says</h3>
+          <p>The admitted record describes a practitioner recommendation about a Rank Math feature intended to make WordPress internal-linking work easier.</p>
+          <p class="b26-evidence-search__boundary">This supports attribution of the recommendation. It does not prove a ranking improvement, quantify time saved or establish that the feature fits every WordPress site.</p>
+          <div class="b26-evidence-search__actions"><a href="https://base2026.dev/sources/tiktok-video-7626280514139196694">Open Base2026 record</a><a href="https://www.tiktok.com/@webhivedigital/video/7626280514139196694" target="_blank" rel="noopener noreferrer">Open original source <span aria-hidden="true">↗</span></a></div>
+        </article>
+        <article>
+          <p class="b26-evidence-search__creator">@build_in_public</p>
+          <h3>What the source says</h3>
+          <p>The admitted record discusses using Screaming Frog to visualize information architecture and internal links and relates page distance from the homepage to importance.</p>
+          <p class="b26-evidence-search__boundary">Readers should inspect the original source and verify the crawl setup, site context and applicability. The record does not establish a universal crawl-depth rule.</p>
+          <div class="b26-evidence-search__actions"><a href="https://base2026.dev/sources/tiktok-video-7570069135560936726">Open Base2026 record</a><a href="https://www.tiktok.com/@build_in_public/video/7570069135560936726" target="_blank" rel="noopener noreferrer">Open original source <span aria-hidden="true">↗</span></a></div>
+        </article>
+      </div>
+      <p class="b26-evidence-search__takeaway"><strong>Defensible note:</strong> Two practitioners discuss related internal-linking methods; neither record proves a ranking result. Two records do not automatically establish independent corroboration or consensus.</p>
+    </section>
+
+    <section class="b26-evidence-search__limits" aria-labelledby="evidence-search-limits">
+      <div>
+        <p class="b26-eyebrow">What it is</p>
+        <h2 id="evidence-search-limits">A provenance path for research</h2>
+        <ul>
+          <li>A free public full-text search over a bounded corpus of admitted public-source video evidence.</li>
+          <li>A path from a search match to an attributed Base2026 record and its original public source.</li>
+          <li>A practical starting point for source-backed research, briefs and client notes.</li>
+        </ul>
+      </div>
+      <div>
+        <p class="b26-eyebrow">What it is not</p>
+        <h2>A verdict or universal index</h2>
+        <ul>
+          <li>Not a universal, real-time or TikTok-wide search engine.</li>
+          <li>Not a ranking, traffic, AI-visibility or recommendation-effectiveness checker.</li>
+          <li>Not a consensus detector, fact-check verdict, raw-media library or full-transcript database.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="b26-evidence-search__future" aria-labelledby="evidence-search-next">
+      <p class="b26-eyebrow">Next research steps</p>
+      <h2 id="evidence-search-next">Check and export are intentionally not active yet</h2>
+      <p>Evidence Search ships first. The source-origin check and source-backed brief will become available only after their deterministic contracts and QA pass.</p>
+      <div><span aria-disabled="true">Source diversity check · planned</span><span aria-disabled="true">Source-backed brief · planned</span></div>
+    </section>
+
+    <section class="b26-evidence-search__faq" aria-labelledby="evidence-search-faq">
+      <p class="b26-eyebrow">FAQ</p>
+      <h2 id="evidence-search-faq">Boundaries before conclusions</h2>
+      <div>
+        <details><summary>What does Base2026 Evidence Search cover?</summary><p>It searches public records admitted to the current Base2026 public-source video evidence index. Coverage is bounded, not universal or real time, and a missing result is not evidence that no relevant source exists elsewhere.</p></details>
+        <details><summary>Does no result mean the topic has no evidence?</summary><p>No. It means the current query did not match an admitted public Base2026 record. Try a shorter phrase or a related term, then continue research outside Base2026 when the corpus does not cover the question.</p></details>
+        <details><summary>Are creator recommendations verified or endorsed by Base2026?</summary><p>No. Base2026 preserves attribution and an inspection path. A record can show that a creator made a recommendation; it does not prove the recommendation is correct, effective or suitable for your case.</p></details>
+        <details><summary>Do several matching records mean experts agree?</summary><p>No. Several records may repeat one origin, rely on the same assumption or discuss different claims. Record count, creator count and source independence are separate questions.</p></details>
+        <details><summary>Can I search all of TikTok or read full transcripts here?</summary><p>No. TikTok is an original-source type inside the admitted corpus. Base2026 is not a TikTok-wide search engine and does not publish raw media, raw captions or full transcripts.</p></details>
+        <details><summary>Is the tool free, and do I need an API key?</summary><p>The public search is free to use and has no paywall. The browser search does not require an API key. Its public endpoint is read-only and does not expose write, moderation, credential or private-data functions.</p></details>
+      </div>
+    </section>
+  </main>
+  {{STARTUP_FOOTER}}
+  <script src="/static/base2026-evidence-search.js?v=20260901-evidence-search-v1" defer></script>
+</body>
+</html>
