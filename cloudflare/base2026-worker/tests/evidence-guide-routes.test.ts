@@ -238,6 +238,8 @@ describe("guide routes with real public SQLite fixtures", () => {
       MEMBER_AUTH_ENABLED: "false",
       get INBOX_DB(): D1Database { throw new Error("Guide must not read Inbox"); },
       get OUTREACH_DB(): D1Database { throw new Error("Guide must not read Outreach"); },
+      get AUTH_DB(): D1Database { throw new Error("Guide must not read member auth"); },
+      get MCP_RATE_LIMIT(): RateLimit { throw new Error("Guide must not read MCP rate limits"); },
     };
     const response = await worker.fetch(new Request(ORIGIN + "/topics/internal-linking"), fullEnv, {} as ExecutionContext);
     expect(response.status).toBe(200);

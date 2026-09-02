@@ -92,6 +92,11 @@ DEFAULT_ROADMAP_PAGE = PROJECT_ROOT / "web" / "static" / "roadmap.html"
 DEFAULT_ANALYTICS_PAGE = PROJECT_ROOT / "web" / "static" / "analytics.html"
 DEFAULT_API_PAGE = PROJECT_ROOT / "web" / "static" / "api.html"
 DEFAULT_API_INDEX = PROJECT_ROOT / "web" / "static" / "api-index.json"
+DEFAULT_MCP_PAGE = PROJECT_ROOT / "web" / "static" / "mcp.html"
+DEFAULT_INTEGRATIONS_PAGE = PROJECT_ROOT / "web" / "static" / "integrations.html"
+DEFAULT_DATA_DICTIONARY = PROJECT_ROOT / "web" / "static" / "data-dictionary.json"
+DEFAULT_LLMS = PROJECT_ROOT / "web" / "static" / "llms.txt"
+DEFAULT_ROOT_LLMS = PROJECT_ROOT / "web" / "static" / "llms-root.txt"
 DEFAULT_GITHUB_ICON = PROJECT_ROOT / "static" / "brand" / "github.svg"
 DEFAULT_X_ICON = PROJECT_ROOT / "static" / "brand" / "x.svg"
 DEFAULT_MARK_ICON = PROJECT_ROOT / "static" / "base2026-mark.svg"
@@ -2031,6 +2036,11 @@ def build_release(
             write_tracked_public_overlay("analytics.html", DEFAULT_ANALYTICS_PAGE)
             write_tracked_public_overlay("api.html", DEFAULT_API_PAGE)
             write_tracked_public_overlay("api-index.json", DEFAULT_API_INDEX)
+            write_tracked_public_overlay("mcp.html", DEFAULT_MCP_PAGE)
+            write_tracked_public_overlay("integrations.html", DEFAULT_INTEGRATIONS_PAGE)
+            write_tracked_public_overlay("data-dictionary.json", DEFAULT_DATA_DICTIONARY)
+            write_tracked_public_overlay("llms.txt", DEFAULT_LLMS)
+            write_tracked_public_overlay("root-llms.txt", DEFAULT_ROOT_LLMS)
             write_generated_public_file("static/brand/github.svg", DEFAULT_GITHUB_ICON.read_bytes())
             write_generated_public_file("static/brand/x.svg", DEFAULT_X_ICON.read_bytes())
             write_generated_public_file("static/base2026-mark.svg", DEFAULT_MARK_ICON.read_bytes())

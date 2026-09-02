@@ -5,7 +5,7 @@ endpoint. The compatible setup is deliberately small: add one read-only
 server, then let the client discover the six public tools. No API key, OAuth
 secret, local daemon or private package is required. The endpoint is protected
 by a Cloudflare per-edge-identity rate limit; it fails closed if that binding is
-not configured, so this local candidate is not a release-ready live service.
+not configured.
 
 ## Codex
 

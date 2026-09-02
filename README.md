@@ -38,8 +38,8 @@ Base2026 creates a public evidence layer that keeps those connections visible.
 ## Developer access
 
 The public developer surface is read-only and keyless. The compatible search
-API remains available for bounded retrieval; this candidate also adds a
-stateless MCP endpoint for AI-agent lookups when the Worker is deployed:
+API provides bounded retrieval, and the stateless MCP endpoint provides
+AI-agent lookups over the same public evidence boundary:
 
 ```bash
 curl -sS -X POST https://base2026.dev/api/search/multi-search \

@@ -18,10 +18,8 @@ creator, original source, topic, date, and correction path.
 - Public JSONL exports, the dataset landing page, machine-readable catalog, API
   quickstart, data dictionary, API index, `llms.txt`, source pages, topic pages,
   and creator pages provide human- and machine-readable access.
-- The September 1 developer-distribution candidate adds a bounded stateless
-  MCP route and setup guidance for AI-agent clients; this remains a release
-  candidate until the worker, static, browser and publication-boundary gates
-  pass.
+- The September 1 developer-distribution release adds a bounded stateless MCP
+  route and setup guidance for AI-agent clients.
 - The topic-enrichment configuration in
   `data/base2026_topic_traffic_pages.json` is subject to per-entry review of
   source support, public routes and indexation status. A configuration entry
@@ -75,8 +73,7 @@ review packets are never part of the public website or API.
 - Public AI-generated answers are not live. The current product retrieves
   source-backed records and excerpts.
 - Creator claims, public change history and richer usage analytics remain
-  unfinished. The MCP implementation is present in the current candidate but
-  is not a deployment receipt or a claim of a live endpoint.
+  unfinished.
 
 # Development sequence
 
@@ -117,13 +114,14 @@ tracking, suppression receipts, and a public change log remain planned.
 
 ## Phase 5 — Developer and research distribution
 
-**Status:** Live foundation; MCP/API distribution candidate in review
+**Status:** Live
 
 Public JSONL, dataset landing page, machine-readable catalog, data dictionary,
-API index, `llms.txt`, D1 search API, reproducible query examples, and GitHub
-source are live. The current candidate adds a read-only MCP contract, source,
-topic, creator and deterministic signal lookups, plus truthful client setup
-surfaces. Next: repeat the release gates and dated corpus release notes.
+API index, `llms.txt`, D1 search API, reproducible query examples, GitHub
+source, and the read-only MCP contract are live. MCP provides bounded source,
+topic, creator and deterministic signal lookups plus truthful client setup
+surfaces. Next: repeat release gates for every change and publish dated corpus
+release notes.
 
 ## Phase 6 — Sustainable open product
 
@@ -146,8 +144,8 @@ rights, transparent boundaries, and useful free access.
 
 - Dated corpus changelog and manifest diffs.
 - Better creator/correction workflows.
-- Read-only MCP tools for source, topic, creator and deterministic signal lookup
-  after the current candidate passes its release gates.
+- Additional bounded integrations that preserve the same public evidence and
+  privacy boundary.
 
 ## Later
 

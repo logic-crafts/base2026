@@ -98,9 +98,9 @@ original creator video remains the canonical source for the full content.
 - public writes, corrections, or moderation through the search endpoint;
 - replacing the original creator channel.
 
-## Read-only MCP contract in the current candidate
+## Read-only MCP contract
 
-The candidate adds `POST /api/mcp`, a stateless JSON-RPC surface over public D1.
+`POST /api/mcp` is a stateless JSON-RPC surface over public D1.
 It supports the current MCP discovery and legacy `2025-11-25` initialization
 compatibility, with bounded calls to:
 
@@ -120,10 +120,6 @@ media, inbox data and pipeline control state are never returned.
 The Worker configuration includes a `MCP_RATE_LIMIT` binding at 60 requests per
 minute per edge identity. Exhausted clients receive `429` with a retry hint;
 when the binding is missing or unavailable, the route fails closed with `503`.
-The binding still needs live deployment/readback before this candidate can be
-called release-ready.
-
-The route is source-complete in this candidate but is not a deployment receipt.
-Use the [MCP guide](mcp.html) and
-[integration guide](integrations.html) after the worker, static,
-browser and publication-boundary release gates pass.
+Production releases verify the binding through Cloudflare version readback and
+exercise the endpoint after deployment. Use the [MCP guide](mcp.html) and
+[integration guide](integrations.html) for request examples and client setup.

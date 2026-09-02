@@ -307,6 +307,18 @@ def test_startup_homepage_overlay_preserves_search_as_workspace(tmp_path: Path) 
     assert "GET /api/stats" in api_page
     assert "D1 FTS5" in api_page
     assert "server-side Meilisearch proxy" not in api_page
+    mcp_page = (output / "mcp.html").read_text(encoding="utf-8")
+    assert "POST https://base2026.dev/api/mcp" in mcp_page
+    assert "search_sources" in mcp_page
+    integrations_page = (output / "integrations.html").read_text(encoding="utf-8")
+    assert "codex mcp add base2026" in integrations_page
+    assert "claude mcp add --transport http base2026" in integrations_page
+    data_dictionary = json.loads((output / "data-dictionary.json").read_text(encoding="utf-8"))
+    assert "full private transcripts" in data_dictionary["public_boundary"]["not_public"]
+    llms = (output / "llms.txt").read_text(encoding="utf-8")
+    root_llms = (output / "root-llms.txt").read_text(encoding="utf-8")
+    assert "https://base2026.dev/api/mcp" in llms
+    assert "https://base2026.dev/api/mcp" in root_llms
     api_index = json.loads((output / "api-index.json").read_text(encoding="utf-8"))
     endpoint_urls = {endpoint["url"] for endpoint in api_index["endpoints"]}
     assert "https://base2026.dev/api/stats" in endpoint_urls
@@ -362,7 +374,7 @@ def test_startup_homepage_overlay_preserves_search_as_workspace(tmp_path: Path) 
     # Blog files plus guide-only CSS/JS are additive; retained assets stay intact.
     # Blog files, guide assets, and the isolated Evidence Search tool are
     # additive; retained assets stay intact.
-    assert receipt["artifact"]["file_count"] == 50
+    assert receipt["artifact"]["file_count"] == 55
     blog = (output / "blog.html").read_text(encoding="utf-8")
     assert '<link rel="canonical" href="https://base2026.dev/blog">' in blog
     assert 'data-b26-blog-schema' in blog

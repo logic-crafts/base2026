@@ -169,6 +169,8 @@ function environment(db = new SqliteD1(), assets = new Assets()): Env {
   return { DB: db, ASSETS: assets, MEMBER_AUTH_ENABLED: "false",
     get INBOX_DB(): D1Database { throw new Error("Editorial routes must not inspect Inbox"); },
     get OUTREACH_DB(): D1Database { throw new Error("Editorial routes must not inspect Outreach"); },
+    get AUTH_DB(): D1Database { throw new Error("Editorial routes must not inspect member auth"); },
+    get MCP_RATE_LIMIT(): RateLimit { throw new Error("Editorial routes must not inspect MCP rate limits"); },
   };
 }
 
@@ -461,6 +463,8 @@ describe("editorial fail-closed and HTTP/RPC boundaries", () => {
       get ASSETS(): Fetcher { bindingReads += 1; throw new Error("Unexpected asset access"); },
       get INBOX_DB(): D1Database { throw new Error("Unexpected Inbox access"); },
       get OUTREACH_DB(): D1Database { throw new Error("Unexpected Outreach access"); },
+      get AUTH_DB(): D1Database { throw new Error("Unexpected member auth access"); },
+      get MCP_RATE_LIMIT(): RateLimit { throw new Error("Unexpected MCP rate-limit access"); },
     };
     for (const path of ["/blog", "/blog/", "/blog/fixture-source-check/", "/api/blog", "/api/blog/fixture-source-check", "/api/blog/publish", "/blog/feed.xml", "/sitemap-blog.xml", "/sitemaps/blog-1.xml"]) {
       const response = await route(path, env, method);

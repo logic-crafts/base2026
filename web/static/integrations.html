@@ -78,7 +78,7 @@
       </section>
 
 
-      <section class="content-section"><p>Base2026 is usable from agent clients through its public remote HTTP MCP endpoint. The compatible setup is deliberately small: add one read-only server, then let the client discover the six public tools. No API key, OAuth secret, local daemon or private package is required. The endpoint is protected by a Cloudflare per-edge-identity rate limit; it fails closed if that binding is not configured, so this local candidate is not a release-ready live service.</p></section>
+      <section class="content-section"><p>Base2026 is usable from agent clients through its public remote HTTP MCP endpoint. The compatible setup is deliberately small: add one read-only server, then let the client discover the six public tools. No API key, OAuth secret, local daemon or private package is required. The endpoint is protected by a Cloudflare per-edge-identity rate limit; it fails closed if that binding is not configured.</p></section>
 <section class="content-section"><h2>Codex</h2><pre><code class="language-bash">codex mcp add base2026 --url https://base2026.dev/api/mcp</code></pre><p>This uses Codex&#x27;s remote Streamable HTTP MCP configuration. The command changes the local Codex configuration; inspect it before sharing a machine or project.</p></section>
 <section class="content-section"><h2>Claude Code</h2><pre><code class="language-bash">claude mcp add --transport http base2026 https://base2026.dev/api/mcp</code></pre><p>For a project-local Claude Code configuration, the equivalent <code>.mcp.json</code> shape is:</p><pre><code class="language-json">{
   &quot;mcpServers&quot;: {

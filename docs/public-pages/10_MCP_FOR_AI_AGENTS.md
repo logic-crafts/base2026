@@ -81,9 +81,10 @@ page URL.
 
 Agents should cite the original source URL and any returned Base2026 source
 page. Do not present a bounded result as a real-time ranking, complete corpus,
-full transcript or independent confirmation of the creator's claim. The
-implementation is a local release candidate until the rate-limit binding is
-configured and read back in a deployment receipt.
+full transcript or independent confirmation of the creator's claim. Every
+production release verifies the rate-limit binding through Cloudflare version
+readback and then exercises discovery and a bounded tool call against the live
+endpoint.
 
 ## Privacy boundary
 
