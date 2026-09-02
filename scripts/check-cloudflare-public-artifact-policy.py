@@ -19,7 +19,10 @@ from pathlib import Path
 from typing import Any
 
 from public_manifest_contract import (
+    CLAIM_RECEIPT_JSONL_FILENAME,
+    CLAIM_RECEIPT_MANIFEST_FILENAME,
     CLOUDFLARE_PUBLIC_DATASET_FILES,
+    validate_claim_receipt_sidecars,
     validate_public_dataset_manifest,
 )
 
@@ -149,6 +152,30 @@ def validate_artifact(artifact_dir: Path) -> dict[str, Any]:
             }
         )
 
+    claim_receipt_jsonl = static_dir / CLAIM_RECEIPT_JSONL_FILENAME
+    claim_receipt_manifest = static_dir / CLAIM_RECEIPT_MANIFEST_FILENAME
+    claim_receipt_sidecars = None
+    if claim_receipt_jsonl.exists() or claim_receipt_manifest.exists():
+        if not claim_receipt_jsonl.is_file() or not claim_receipt_manifest.is_file():
+            raise ArtifactGateError(
+                "claim-receipt sidecars require both claim_receipts.jsonl and claim_receipts_manifest.json"
+            )
+        try:
+            issues = validate_claim_receipt_sidecars(
+                claim_receipt_jsonl.read_text(encoding="utf-8"),
+                json.loads(claim_receipt_manifest.read_text(encoding="utf-8")),
+            )
+        except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+            raise ArtifactGateError("claim-receipt sidecars could not be read") from exc
+        if issues:
+            summary = ", ".join(f"{item['pointer']}:{item['reason']}" for item in issues[:20])
+            raise ArtifactGateError(f"claim-receipt sidecars rejected: {summary}")
+        claim_receipt_sidecars = {
+            "jsonl_bytes": claim_receipt_jsonl.stat().st_size,
+            "jsonl_sha256": sha256_file(claim_receipt_jsonl),
+            "manifest_sha256": sha256_file(claim_receipt_manifest),
+        }
+
     insight_rows = row_counts["insight_cards.jsonl"]
     if manifest.get("insight_cards") != insight_rows:
         raise ArtifactGateError("static manifest insight_cards count does not match file")
@@ -167,6 +194,7 @@ def validate_artifact(artifact_dir: Path) -> dict[str, Any]:
         "static_manifest_sha256": sha256_file(manifest_path),
         "public_data_files": file_receipts,
         "public_data_profile": "cloudflare-reviewed-readonly-v1",
+        "claim_receipt_sidecars": claim_receipt_sidecars,
     }
 
 

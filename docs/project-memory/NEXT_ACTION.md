@@ -1,5 +1,32 @@
 # Next Action
 
+## Claim Receipt Ledger public canary candidate — September 1, 2026
+
+The isolated public implementation candidate is independently reviewed on branch
+`codex/base2026-claim-receipt-canary-20260901` from the reviewed public main
+baseline. It adds the additive public D1 migration `0005_claim_receipt_ledger.sql`,
+the service-binding-only admission/read/rollback lane, the strict read route,
+deterministic public-D1 readback exporter, sidecar publication gates, schema,
+API and correction documentation, and focused tests. No public migration,
+Worker deploy, sidecar publication, sitemap submission or external mutation
+was performed.
+
+The first independent review found five release blockers and all five were
+fixed before integration: secondary exporter privacy scanning, shared
+JavaScript/Python timecode canonicalization, a broken documentation link,
+concurrent rollback idempotency, and missing-table fail-closed behavior. The
+reviewer returned GO for commit/push/merge only as an undeployed held
+candidate. Full verification now passes 632 Worker tests, 173 Python tests,
+TypeScript typecheck and local migration application.
+
+The route remains fail-closed until an exact ten-row public-D1 candidate is
+available. The current live public-D1 check found zero applied cards whose
+normalized topic is `internal-linking` or `internal-linking-*`; no synonym
+inference, relabeling or padding is allowed. The remaining gate is the
+private-owner typed wrapper and its review/audit integration in the protected
+pipeline-control repository, followed by separately authorized migration,
+deployment and public-D1/export readbacks.
+
 ## Public API/MCP release — September 1, 2026
 
 PR34 is merged and Worker `f8781f4d-30fd-4d70-ab96-a4e8d718226a` is live at

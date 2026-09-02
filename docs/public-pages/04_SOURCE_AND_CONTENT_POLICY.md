@@ -203,7 +203,18 @@ The project should respond by:
 
 ---
 
-## 13. Public disclaimer
+## 13. Claim receipt correction and removal
+
+The internal-linking claim-receipt canary is read-only. Creators use the same
+email-only correction or removal path above; there is no public correction
+endpoint. A correction is accepted only after the source identity and exact
+public projection are reviewed. A removal suppresses the source and rolls
+back affected public projections; old receipts remain in the append-only
+ledger with a non-active state, and a replacement must pass the complete
+admission policy again. If fewer than ten receipts remain active, the canary
+is unavailable rather than padded.
+
+## 14. Public disclaimer
 
 Suggested public disclaimer:
 

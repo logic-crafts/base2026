@@ -1,5 +1,35 @@
 # Prompt Log
 
+## 2026-09-01 — Claim Receipt Ledger public canary candidate
+
+Implemented the reviewed public-repository slice in isolated worktree
+`/Users/alexyarosh/.codex/worktrees/base2026-claim-receipt-canary-20260901`:
+additive public D1 migration `0005_claim_receipt_ledger.sql`, deterministic
+claim-receipt ledger admission/read/rollback module, strict read-only route and
+service-binding methods, public-D1 readback exporter, sidecar/builder/policy
+validation, public schema/API/correction docs and exhaustive focused tests.
+The public boundary excludes private import hashes, source vault text, raw
+captions/ASR/transcripts, media, contact, inbox, Outreach and pipeline-control
+state. The private typed wrapper remains an explicit owner integration gate.
+
+Verification: focused Worker tests 6/6, full Worker tests 631/631, focused
+Python publication/export tests 26/26, full Python tests 173/173,
+`npm run typecheck`, `git diff --check` and publication-boundary audit all
+passed. Live public D1 was not mutated and no Worker/deploy/remote migration,
+push, sitemap or external publication action was performed. Current live
+eligibility is held at zero exact internal-linking cards, so the route remains
+503 until separately reviewed public content exists.
+
+Independent review initially returned NO-GO with five concrete blockers. Root
+fixed all five: exporter/sidecar contact and secret scanning, millisecond-only
+cross-runtime timecodes, the broken public contract link, rollback race
+handling using D1 affected-row receipts, and controlled missing-table hold
+behavior for both HTTP read and service-binding admission. Re-review returned
+GO for repository integration as an undeployed held candidate. Updated full
+verification: 632/632 Worker tests, 173/173 Python tests, typecheck, focused
+publication tests and local migrations all pass; live eligibility remains
+exactly zero and no public D1 or Worker mutation was made.
+
 ## 2026-09-01 — Public API/MCP production release completed
 
 Continued the integrated growth release through root and independent review.

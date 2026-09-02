@@ -34,6 +34,12 @@ from pathlib import Path
 from typing import Iterable, Mapping, Sequence
 from urllib.parse import urlsplit, urlunsplit
 
+try:
+    from public_manifest_contract import validate_claim_receipt_sidecars
+except ModuleNotFoundError:  # pragma: no cover - direct module loading in tests
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from public_manifest_contract import validate_claim_receipt_sidecars
+
 
 SCHEMA = "base2026.cloudflare-public-release-receipt/v1"
 RECEIPT_FILENAME = ".base2026-cloudflare-release-receipt.json"
@@ -2205,6 +2211,7 @@ def build_release(
         redirecting_canonical_markers = 0
         redirecting_sitemap_markers = 0
         manifest_files_match = True
+        claim_receipt_sidecars_checked = False
         manifest_checked = False
         for relative_path in _artifact_files(stage, {ASSETSIGNORE_FILENAME, RECEIPT_FILENAME}):
             payload = (stage / relative_path).read_bytes()
@@ -2252,11 +2259,31 @@ def build_release(
                     actual_jsonl = sorted(
                         candidate.name
                         for candidate in (stage / "static").glob("*.jsonl")
-                        if candidate.is_file()
+                        if candidate.is_file() and candidate.name != "claim_receipts.jsonl"
                     )
                     manifest_files_match = manifest.get("files") == actual_jsonl
                 except (OSError, json.JSONDecodeError, AttributeError):
                     manifest_files_match = False
+        claim_receipt_jsonl = stage / "static" / "claim_receipts.jsonl"
+        claim_receipt_manifest = stage / "static" / "claim_receipts_manifest.json"
+        if claim_receipt_jsonl.exists() or claim_receipt_manifest.exists():
+            claim_receipt_sidecars_checked = True
+            if not claim_receipt_jsonl.is_file() or not claim_receipt_manifest.is_file():
+                raise ReleaseBuildError(
+                    "claim-receipt sidecars require both claim_receipts.jsonl and claim_receipts_manifest.json"
+                )
+            try:
+                sidecar_issues = validate_claim_receipt_sidecars(
+                    claim_receipt_jsonl.read_text(encoding="utf-8"),
+                    json.loads(claim_receipt_manifest.read_text(encoding="utf-8")),
+                )
+            except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+                raise ReleaseBuildError("claim-receipt sidecars could not be read") from exc
+            if sidecar_issues:
+                summary = ", ".join(
+                    f"{item['pointer']}:{item['reason']}" for item in sidecar_issues[:12]
+                )
+                raise ReleaseBuildError(f"claim-receipt sidecars rejected: {summary}")
         if remaining_old_origin or remaining_knowledge:
             raise ReleaseBuildError(
                 "final artifact contains stale Base2026 paths: "
@@ -2315,6 +2342,7 @@ def build_release(
             "redirecting_html_sitemap_markers_remaining": redirecting_sitemap_markers,
             "static_manifest_files_match": manifest_files_match,
             "static_manifest_checked": manifest_checked,
+            "claim_receipt_sidecars_checked": claim_receipt_sidecars_checked,
             "intentional_redirect_documentation_files": redirect_docs,
             "binary_bytes_preserved": binary_preserved,
             "artifact_files_include_required_root_metadata": all(
