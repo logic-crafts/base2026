@@ -1,17 +1,16 @@
 # Next Action
 
-## Integrated growth candidate — September 1, 2026
+## Public API/MCP release — September 1, 2026
 
-The isolated branch `codex/base2026-growth-integration-20260901` starts at the
-reviewed member/auth base `561a917eb` and integrates the reviewed organic-growth,
-reliability-contract, evidence-map-canary and public API/MCP candidate slices.
-Member auth, Evidence Search, the current Base2026 shell and public/private
-boundary remain preserved. This candidate is local only: no push, merge,
-deployment, D1 write, sitemap submission or external publication occurred.
+PR34 is merged and Worker `f8781f4d-30fd-4d70-ab96-a4e8d718226a` is live at
+100%. API, MCP, integrations, member-auth preservation, rate limiting, D1
+counts and desktop/mobile browser behavior passed live readback. IndexNow
+accepted exactly `/mcp` and `/integrations`; this is not indexing or traffic.
 
-Next action: root review the exact diff and test receipts, then decide whether
-the bounded static evidence-map overlay and public MCP/API additions belong in
-a separately approved release. Do not deploy this candidate directly.
+Next action: measure discovery and real tool use, then build the bounded Claim
+Receipt Ledger canary from reviewed public evidence. Keep it in a separate
+implementation/review contour and do not publish or auto-index claims that fail
+source integrity, attribution, limitation or public-boundary gates.
 
 The integrated reliability manifest is an observed, redacted receipt with
 `release_ready=false`; its unresolved commit/binding and private-incident
@@ -24,14 +23,9 @@ been materialized in this candidate. Re-fetch current public D1 topic exports
 into an ephemeral location before any approved generation; keep the canary
 outside the live release until root completes the final review.
 
-The public API/MCP source, docs and integration pages are also candidate-only.
-Worker typecheck, MCP route tests, static-page generation and publication
-boundary checks must pass before root considers a release. Keep the endpoint
-read-only and public-D1-only; no live route claim, MCP client registration or
-deployment is authorized by this checkpoint.
-The Cloudflare `MCP_RATE_LIMIT` binding is configured in the Worker manifest
-and enforced fail-closed in code, but its live account binding/readback is
-unverified; this is a release blocker for a public no-key endpoint.
+The public API/MCP candidate section is complete. Its source, artifact, live
+version, tests, binding readback and rollback are recorded in
+[the production handoff](HANDOFF_2026-09-01_PUBLIC_API_MCP_PRODUCTION_RELEASE.md).
 
 ## Evidence Search production release — September 1, 20:10 UTC
 

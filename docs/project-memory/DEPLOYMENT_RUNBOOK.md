@@ -15,22 +15,22 @@ public-before-private deployment order in the canonical manual.
 Current Workers Static Assets release:
 
 - Domain: `https://base2026.dev/`
-- Public Worker: `7522595a-13bf-4437-8955-fd14816b2569`
-- Compatible rollback: `a63f4c74-b6b2-4935-a392-61003d28567a`, the first
-  maintained-guide release. Never restore a pre-guide Worker over guide rows.
+- Public Worker: `f8781f4d-30fd-4d70-ab96-a4e8d718226a`
+- Compatible immediate rollback: `0337f7d6-ebe4-4bcc-8b4a-e23317a99a8e`.
+  It preserves member auth and Evidence Search but does not expose public MCP.
 - Artifact tree SHA-256:
-  `ed0a9371e0471d13006b62b250d458c7f3b3fdbcc8530fc938dd32c758fe46e2`
+  `eb7538f97e322a88f87ec08578fd9477c3da4d13320dea1086bb4959362838ba`
 - Canonical source repository: `https://github.com/offflinerpsy/base2026`
-- Reviewed public source commit: `316a39f64190d9e2133aba600ea22a5008c604ef`,
-  merged through PR31 at09:27:49 UTC. Correction/closure follow PR32; verify
-  its GitHub merge receipt before further release. Final integration is tracked in
-  `BASE2026_OFFICE_CLOSURE_2026_08_31.md`. Generated artifact/export inputs and
-  live D1/private state remain separate restore requirements; cloning is not
-  a full production restore.
-- Branch: `codex/base2026-seo-evidence-engine-20260830`
-- Current source correction: `4960c99bd84a9384e3f3083e18b0389a4f21967c`.
-- Live release receipt: `BASE2026_ROADMAP_CORRECTION_2026_08_31.md`;
-  original runtime contract remains in the August30 evidence-guide receipt.
+- Reviewed public source commit: `16884d148fa01da970e334396c17bcf4acc9429f`,
+  merged through PR34 as `98bfb65efd5940e01ecff13e4095ad9442a53986`.
+- Live release receipt:
+  `HANDOFF_2026-09-01_PUBLIC_API_MCP_PRODUCTION_RELEASE.md`.
+
+Before every public deploy, dry-run and live version readback must retain
+`AUTH_DB`, all three member-auth secret names and `MEMBER_AUTH_ENABLED=true`.
+Public MCP additionally requires `MCP_RATE_LIMIT`; absence or failure must
+leave `/api/mcp` closed. Do not deploy a config that reconstructs only the
+older four-binding public surface.
 
 Always pass the exact reviewed candidate to Wrangler with `--assets`; the
 ignored output path in the checked-in config is not an implicit release

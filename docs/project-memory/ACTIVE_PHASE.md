@@ -1,20 +1,18 @@
 # Active Phase
 
-Phase 22 — release reproducibility and archive-backed editorial closure.
-Current checkpoint: 2026-08-31 10:17 UTC. Root owns final public documentation
-and PR32 integration; the main source, roadmap correction, two archive
-articles and private reliability implementation have real release receipts.
+Phase 24 — public developer distribution live; claim-receipt canary next.
+Current checkpoint: 2026-09-02 00:44 UTC. PR34 is merged, public Worker
+`f8781f4d-30fd-4d70-ab96-a4e8d718226a` is selected at 100%, and the reviewed
+API/MCP artifact has live readback.
 
-## Local integration candidate — public API/MCP distribution (2026-09-01)
+## Public API/MCP distribution — released (2026-09-01)
 
-The isolated growth candidate is based on the reviewed member-auth commit
-`561a917eb` and adds the organic-growth contract, reliability receipts,
-public-safe evidence-map canary and a read-only public API/MCP surface. The
-candidate preserves the member-auth, Evidence Search and current visual shell.
-It is local and review-only: no deployment, push, merge, D1 write, sitemap
-submission or external publication is implied by these files. The public
-no-key MCP route is fail-closed behind `MCP_RATE_LIMIT`; account binding and
-live readback remain unverified release gates.
+The isolated growth integration is now merged through PR34. The public no-key
+MCP route reads only public D1, is fail-closed behind `MCP_RATE_LIMIT`, and has
+live discovery/tool/readback proof. Member auth, Evidence Search, the current
+visual shell and public/private boundary remain intact. Exact release and
+rollback receipts are in
+[the production handoff](HANDOFF_2026-09-01_PUBLIC_API_MCP_PRODUCTION_RELEASE.md).
 
 ## Completed scope
 
@@ -29,7 +27,10 @@ live readback remain unverified release gates.
 
 ## Remaining work
 
-- Finish independent final-doc review and PR32 integration; do not preclaim merge.
+- Measure discovery and real API/MCP use; accepted IndexNow submission is not
+  indexing or traffic.
+- Build and independently review the bounded Claim Receipt Ledger canary before
+  any new route or automatic indexation release.
 - Observe the bounded cohort and fail-closed holds/retries. At 10:16, 27 admitted
   yielded 6 media, 5 transcripts and one verified projection, not 27 completions.
 - Continue two distinct unfinished archive candidates with separate author and

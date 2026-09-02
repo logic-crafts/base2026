@@ -2,12 +2,29 @@
 
 Status: authoritative architecture and operations reference
 
-Public production verified through 2026-08-31 10:17 UTC; aggregate counters are dated10:15. The two-roadmap-asset release is unchanged.
+Public production verified through 2026-09-02 00:44 UTC. Public Worker
+`f8781f4d-30fd-4d70-ab96-a4e8d718226a` serves the reviewed API/MCP artifact;
+aggregate counters are 2198/1589/65/106/zero full transcripts.
 Private production: reliability release57 and diagnostic release58 deployed; cohort observation is dated10:16. Private deployment identifiers remain in protected receipts.
 
 Applies to: TikTok discovery, cloud acquisition, private processing, automatic excerpt-card publication, public Base2026 search, deployment, rollback, and agent handoff
 
 > **All agents start here for Base2026 Cloudflare or TikTok-pipeline work.** Repository files and live Cloudflare receipts override chat memory. This document defines the system; dated counters and version IDs are only a verified snapshot and must be refreshed before a production change.
+
+## Current public developer-distribution checkpoint — 2026-09-02 00:44 UTC
+
+PR34 is merged at `98bfb65efd5940e01ecff13e4095ad9442a53986`.
+Public Worker `f8781f4d-30fd-4d70-ab96-a4e8d718226a` serves artifact tree
+`eb7538f97e322a88f87ec08578fd9477c3da4d13320dea1086bb4959362838ba`.
+Immediate rollback is `0337f7d6-ebe4-4bcc-8b4a-e23317a99a8e`.
+
+The public Worker exposes stateless `POST /api/mcp` with six bounded read-only
+tools over `DB`. It does not expose member, inbox, outreach or private-pipeline
+records and has no write tool. `MCP_RATE_LIMIT` namespace `20260901` permits 60
+requests per 60 seconds per edge identity and fails closed when unavailable.
+`AUTH_DB`, the three member-auth secret bindings and
+`MEMBER_AUTH_ENABLED=true` remain present. Exact release proof is in
+[the production handoff](project-memory/HANDOFF_2026-09-01_PUBLIC_API_MCP_PRODUCTION_RELEASE.md).
 
 ## Current reliability and editorial checkpoint — 2026-08-31 10:17 UTC
 
@@ -288,7 +305,7 @@ flowchart LR
 
 | Worker | Responsibility | Public surface | Authoritative bindings |
 | --- | --- | --- | --- |
-| `base2026` | Serves the startup site and Workspace, executes D1 FTS5 search, accepts Support/Partner forms, and exposes the private `PublicProjectionEntrypoint` RPC class | `base2026.dev`, public APIs and static assets | `ASSETS`, `DB`, `INBOX_DB`, `OUTREACH_DB` |
+| `base2026` | Serves the startup site and Workspace, executes D1 FTS5 search, exposes bounded public MCP, accepts Support/Partner forms, serves private member research, and exposes the private `PublicProjectionEntrypoint` RPC class | `base2026.dev`, public APIs/MCP and static assets | `ASSETS`, `DB`, `INBOX_DB`, `OUTREACH_DB`, `AUTH_DB`, `MCP_RATE_LIMIT`, member-auth secrets and `MEMBER_AUTH_ENABLED` |
 | `base2026-pipeline-control` | Owns discovery, admission, capture, private artifacts, queues, workflows, Workers AI, machine publication, retention, receipts, and private admin operations | Minimal health endpoint; all control operations are HMAC-authenticated | `PIPELINE_DB`, `PIPELINE_ARTIFACTS`, `PIPELINE_JOBS`, `PIPELINE_AI_JOBS`, `PIPELINE_WORKFLOW`, `AI`, `BROWSER`, `CAPTURE_CONTAINER`, `PUBLIC_PROJECTION` |
 | `base2026-www-redirect` | Preserves path and query while sending `www` to the canonical apex | `www.base2026.dev` | No database or storage binding |
 

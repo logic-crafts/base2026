@@ -1,5 +1,20 @@
 # Prompt Log
 
+## 2026-09-01 — Public API/MCP production release completed
+
+Continued the integrated growth release through root and independent review.
+Found and fixed two release blockers before deployment: the manifest would
+have regressed live Google auth, and the release builder did not actually copy
+the repository's MCP/integrations/machine-contract pages into the production
+artifact. Generated types, fixture bindings and regression tests were updated.
+
+PR34 merged to main. Exact artifact
+`eb7538f97e322a88f87ec08578fd9477c3da4d13320dea1086bb4959362838ba`
+deployed as Worker `f8781f4d-30fd-4d70-ab96-a4e8d718226a`. Full tests,
+100-file publication audit, binding readback, live D1/search/MCP/auth and
+desktop/mobile gates passed. IndexNow accepted only the two new URLs. See
+[the production receipt](HANDOFF_2026-09-01_PUBLIC_API_MCP_PRODUCTION_RELEASE.md).
+
 ## 2026-09-01 — Integrated growth candidate from the reviewed auth base
 
 Built the isolated worktree
