@@ -69,9 +69,16 @@ The same public boundary also covers these bounded, read-only routes:
 - `GET /api/blog` and `GET /api/blog/{slug}` for approved editorial metadata;
 - `GET /api/guides` and `GET /api/guides/{slug}` for maintained task guides
   whose public-source dependencies are checked before serving.
+- `GET /api/claim-receipts/v1?canary=base2026.internal-linking.canary.v1&topic=internal-linking`
+  for the bounded ten-receipt internal-linking canary. The route is held with
+  `503 CLAIM_RECEIPT_CANARY_NOT_READY` until public D1 contains exactly ten
+  validated active receipts; it has no public write or correction method.
 
 Editorial and guide records are separate from source-corpus counts. No public
 route writes, approves or moderates content.
+
+The claim-receipt schema, deterministic static sidecars and owner-only
+admission boundary are documented in the [claim-receipt ledger contract](/claim-receipt-ledger).
 
 ## Indexable public projection
 

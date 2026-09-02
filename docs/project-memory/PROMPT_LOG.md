@@ -1,5 +1,25 @@
 # Prompt Log
 
+## 2026-09-01 — Claim Receipt Ledger public canary candidate
+
+Implemented the reviewed public-repository slice in isolated worktree
+`/Users/alexyarosh/.codex/worktrees/base2026-claim-receipt-canary-20260901`:
+additive public D1 migration `0005_claim_receipt_ledger.sql`, deterministic
+claim-receipt ledger admission/read/rollback module, strict read-only route and
+service-binding methods, public-D1 readback exporter, sidecar/builder/policy
+validation, public schema/API/correction docs and exhaustive focused tests.
+The public boundary excludes private import hashes, source vault text, raw
+captions/ASR/transcripts, media, contact, inbox, Outreach and pipeline-control
+state. The private typed wrapper remains an explicit owner integration gate.
+
+Verification: focused Worker tests 6/6, full Worker tests 631/631, focused
+Python publication/export tests 26/26, full Python tests 173/173,
+`npm run typecheck`, `git diff --check` and publication-boundary audit all
+passed. Live public D1 was not mutated and no Worker/deploy/remote migration,
+push, sitemap or external publication action was performed. Current live
+eligibility is held at zero exact internal-linking cards, so the route remains
+503 until separately reviewed public content exists.
+
 ## 2026-09-01 — Public API/MCP production release completed
 
 Continued the integrated growth release through root and independent review.

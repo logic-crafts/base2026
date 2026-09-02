@@ -11,6 +11,13 @@ import {
   rollbackPublicProjection,
   verifyPublicProjection,
 } from "./public-projection";
+import {
+  admitClaimReceiptCanary,
+  ClaimReceiptLedgerError,
+  parseClaimReceiptReadRequest,
+  readClaimReceiptLedger,
+  rollbackClaimReceiptCanary,
+} from "./claim-receipt-ledger";
 import { handlePublicMcp } from "./mcp";
 
 const INDEX_UID = "base2026_public_tiktok" as const;
@@ -1931,6 +1938,54 @@ async function handleInboxForm(request: Request, env: EnvWithBindings, kind: For
   );
 }
 
+function claimReceiptResponse(request: Request, payload: unknown, status: number): Response {
+  return request.method === "HEAD"
+    ? new Response(null, { status, headers: withPublicResponseHeaders(JSON_HEADERS) })
+    : jsonResponse(payload, status);
+}
+
+async function handleClaimReceiptRoute(request: Request, env: EnvWithBindings, url: URL): Promise<Response> {
+  if (request.method !== "GET" && request.method !== "HEAD") {
+    throw methodError(request.method, "GET, HEAD");
+  }
+  const queryKeys = [...url.searchParams.keys()];
+  if (
+    queryKeys.length !== 2
+    || new Set(queryKeys).size !== 2
+    || !queryKeys.includes("canary")
+    || !queryKeys.includes("topic")
+  ) {
+    throw new RequestError(400, "CLAIM_RECEIPT_QUERY_INVALID", "canary and topic are required query parameters");
+  }
+  if (url.searchParams.get("canary") !== "base2026.internal-linking.canary.v1") {
+    throw new RequestError(400, "CLAIM_RECEIPT_CANARY_INVALID", "unknown claim-receipt canary");
+  }
+  if (url.searchParams.get("topic") !== "internal-linking") {
+    throw new RequestError(400, "CLAIM_RECEIPT_TOPIC_INVALID", "claim-receipt topic must be internal-linking");
+  }
+  if (!env.DB) throw new RequestError(503, "DB_NOT_CONFIGURED", "D1 binding DB is not configured");
+  try {
+    const result = await readClaimReceiptLedger(env.DB);
+    if (result.status === "held") {
+      return claimReceiptResponse(
+        request,
+        { error: { code: "CLAIM_RECEIPT_CANARY_NOT_READY", message: "claim-receipt canary is not ready" } },
+        503,
+      );
+    }
+    return claimReceiptResponse(request, result.payload, 200);
+  } catch (error) {
+    if (error instanceof ClaimReceiptLedgerError) {
+      throw new RequestError(
+        error.status === 400 ? 400 : 503,
+        error.code,
+        "claim-receipt canary is temporarily unavailable",
+      );
+    }
+    throw new RequestError(503, "CLAIM_RECEIPT_LEDGER_UNAVAILABLE", "claim-receipt canary is temporarily unavailable");
+  }
+}
+
 /**
  * Service-binding/RPC entrypoint for the separately authorized public
  * projection lane.  The default export below remains the existing public
@@ -1965,6 +2020,22 @@ export class PublicProjectionEntrypoint extends WorkerEntrypoint<Env> {
 
   async rollbackProjection(input: unknown) {
     return rollbackPublicProjection(this.env.DB, input);
+  }
+
+  /** Service-binding-only claim-receipt admission; no public HTTP write exists. */
+  async admitClaimReceiptCanary(input: unknown) {
+    return admitClaimReceiptCanary(this.env.DB, input);
+  }
+
+  /** Service-binding-only claim-receipt read used by the private owner wrapper. */
+  async readClaimReceiptCanary(input: unknown) {
+    parseClaimReceiptReadRequest(input);
+    return readClaimReceiptLedger(this.env.DB);
+  }
+
+  /** Service-binding-only append-only state transition for the exact ledger digest. */
+  async rollbackClaimReceiptCanary(input: unknown) {
+    return rollbackClaimReceiptCanary(this.env.DB, input);
   }
 }
 
@@ -2024,6 +2095,7 @@ export default {
       }
       if (url.pathname === "/api/health") return await handleHealth(env);
       if (url.pathname === "/api/stats") return await handlePublicStats(request, env);
+      if (url.pathname === "/api/claim-receipts/v1") return await handleClaimReceiptRoute(request, env, url);
       if (url.pathname === "/api/evidence-brief") return await handleEvidenceBrief(request, env, url);
       if (url.pathname === "/api/evidence-brief/v2") return await handleEvidenceBriefV2(request, env, url);
       if (url.pathname === "/api/mcp") return await handlePublicMcp(request, env);
