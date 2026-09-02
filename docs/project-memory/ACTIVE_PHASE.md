@@ -1,9 +1,18 @@
 # Active Phase
 
-Phase 24 — public developer distribution live; claim-receipt canary next.
-Current checkpoint: 2026-09-02 00:44 UTC. PR34 is merged, public Worker
+Phase 25 — claim-receipt source merged; production held on zero eligibility.
+Current checkpoint: 2026-09-02 01:48 UTC. PR34 remains live, public Worker
 `f8781f4d-30fd-4d70-ab96-a4e8d718226a` is selected at 100%, and the reviewed
 API/MCP artifact has live readback.
+
+## Claim Receipt Ledger — source integrated, not released (2026-09-02)
+
+PR36 merged at `25bca067514fb5efd9bbc84c36c6b3cd73f43d3f` after an independent
+NO-GO found five blockers, root fixed all five, and re-review returned GO for
+source integration only. The live eligibility read is zero and the live route
+is 404, so no remote migration, deploy, sidecar publication, sitemap or
+IndexNow action occurred. Exact receipts are in
+[the source-integration handoff](HANDOFF_2026-09-02_CLAIM_RECEIPT_SOURCE_INTEGRATION.md).
 
 ## Public API/MCP distribution — released (2026-09-01)
 
@@ -29,8 +38,8 @@ rollback receipts are in
 
 - Measure discovery and real API/MCP use; accepted IndexNow submission is not
   indexing or traffic.
-- Build and independently review the bounded Claim Receipt Ledger canary before
-  any new route or automatic indexation release.
+- Integrate the protected private typed wrapper and wait for exactly ten
+  genuine eligible cards before any Claim Receipt migration/deploy/export.
 - Observe the bounded cohort and fail-closed holds/retries. At 10:16, 27 admitted
   yielded 6 media, 5 transcripts and one verified projection, not 27 completions.
 - Continue two distinct unfinished archive candidates with separate author and

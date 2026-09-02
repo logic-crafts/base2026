@@ -1,5 +1,17 @@
 # Decisions
 
+## 2026-09-02 — Merge Claim Receipt source but hold production at zero eligibility
+
+Merge the independently reviewed public-repository implementation so the
+schema, tests, exporter and fail-closed route are versioned, but do not apply
+migration0005 or deploy the route while live public D1 has zero exact eligible
+`internal-linking` cards. No relabeling, synonym inference, padding or filler
+is allowed to manufacture the ten-row canary. Production requires both the
+protected private typed wrapper and exactly ten genuine public projections.
+
+Reason: source integration is reversible and reviewable; a live empty or
+fabricated claim surface would create false product and SEO signals.
+
 ## 2026-09-01 — Release the bounded public MCP without weakening member auth
 
 Ship the reviewed MCP only after the release builder includes every developer
