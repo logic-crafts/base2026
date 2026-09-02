@@ -25,6 +25,7 @@ Base2026 has two layers:
 - `scripts/`
 - `contracts/`
 - public-safe test fixtures under `tests/fixtures/public-export-*`
+- the reviewed loopback-only synthetic member UI fixture at `tests/fixtures/member-ui-preview.mjs` and its static contract test; neither contains Google credentials, production data, or a public listener
 - `web/static/` source shell files, shared assets, public info pages, API metadata, and runtime JS/CSS
 - `10_agent-instructions/`
 - reviewed public-safe documentation under `12_knowledge-base/`
