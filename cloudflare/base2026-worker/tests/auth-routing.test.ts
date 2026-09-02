@@ -117,10 +117,16 @@ describe("member routing isolation in the public Worker", () => {
     expect(memberHandler).not.toHaveBeenCalled();
   });
 
-  it("keeps production activation explicit and OAuth callback URLs out of invocation logs", () => {
+  it("pins the reviewed production auth binding and keeps OAuth callback URLs out of invocation logs", () => {
     const config = JSON.parse(readFileSync(new URL("../wrangler.jsonc", import.meta.url), "utf8"));
-    expect(config.vars.MEMBER_AUTH_ENABLED).toBe("false");
-    expect(config.d1_databases.some((binding: { binding: string }) => binding.binding === "AUTH_DB")).toBe(false);
+    expect(config.vars.MEMBER_AUTH_ENABLED).toBe("true");
+    expect(config.d1_databases).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        binding: "AUTH_DB",
+        database_name: "base2026-member-auth",
+        migrations_dir: "migrations-members",
+      }),
+    ]));
     expect(config.observability.logs.invocation_logs).toBe(false);
     expect(config.assets.run_worker_first).toEqual(expect.arrayContaining(["/api/*", "/my-research", "/my-research/*"]));
   });
