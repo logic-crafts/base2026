@@ -1,5 +1,14 @@
 # Decisions
 
+## 2026-09-01 — Release the bounded public MCP without weakening member auth
+
+Ship the reviewed MCP only after the release builder includes every developer
+surface, generated Worker types match the manifest, `AUTH_DB` and
+`MEMBER_AUTH_ENABLED=true` survive dry-run/version readback, and a unique
+account-scoped rate-limit namespace is present. MCP remains stateless,
+public-D1-only and read-only. Production release receipts, not source presence,
+control any claim that the endpoint is live.
+
 ## 2026-09-01 — Keep public API/MCP additive and read-only
 
 Integrate the public API/MCP contract around the newer member-auth and
