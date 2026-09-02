@@ -30,6 +30,8 @@ projection receipt hash, and the admission policy version.
 The receipt digest is SHA-256 over canonical sorted-key JSONL. Mutable ledger
 state and timestamps are excluded from receipt and ledger digests. The static
 export therefore has the same digest as a validated public-D1 readback.
+Evidence timecodes are bounded to one day and millisecond precision; values
+outside that shared JavaScript/Python canonical range fail closed.
 
 ## Static export
 

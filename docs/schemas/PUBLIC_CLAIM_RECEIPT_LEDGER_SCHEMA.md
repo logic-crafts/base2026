@@ -42,7 +42,10 @@ public_projection_receipt_sha256, policy_version
 The `receipt_id` is the SHA-256 of the canonical immutable row with
 `receipt_id` omitted. `ledger_sha256` is the SHA-256 of those canonical rows,
 one JSON object per line with a final newline. Ledger state and D1 timestamps
-are intentionally absent from the public digest.
+are intentionally absent from the public digest. Evidence timecodes are
+bounded to 0–86,400 seconds and millisecond precision so JavaScript and Python
+produce the same canonical JSON numeric representation; more precise values
+are rejected rather than rounded silently.
 
 ## Static sidecar manifest
 

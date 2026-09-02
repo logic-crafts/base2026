@@ -48,6 +48,7 @@ class SqlitePrepared {
 
 class SqliteD1 {
   readonly sqlite = new DatabaseSync(":memory:");
+  private batchTail: Promise<void> = Promise.resolve();
 
   constructor() {
     for (const migration of [
@@ -66,16 +67,21 @@ class SqliteD1 {
   }
 
   async batch(statements: SqlitePrepared[]): Promise<unknown[]> {
-    this.sqlite.exec("BEGIN");
-    try {
-      const results = [];
-      for (const statement of statements) results.push(await statement.run());
-      this.sqlite.exec("COMMIT");
-      return results;
-    } catch (error) {
-      this.sqlite.exec("ROLLBACK");
-      throw error;
-    }
+    const run = async (): Promise<unknown[]> => {
+      this.sqlite.exec("BEGIN");
+      try {
+        const results = [];
+        for (const statement of statements) results.push(await statement.run());
+        this.sqlite.exec("COMMIT");
+        return results;
+      } catch (error) {
+        this.sqlite.exec("ROLLBACK");
+        throw error;
+      }
+    };
+    const result = this.batchTail.then(run, run);
+    this.batchTail = result.then(() => undefined, () => undefined);
+    return result;
   }
 
   row<T extends SqliteRow = SqliteRow>(sql: string, ...parameters: unknown[]): T | null {
@@ -238,7 +244,7 @@ describe("public claim-receipt canary", () => {
   });
 
   it("is service-binding-only for writes and strict at the public HTTP boundary", async () => {
-    const { db } = await fixture();
+    const { db, request } = await fixture();
     const unavailable = await worker.fetch(
       new Request(`https://base2026.dev/api/claim-receipts/v1?canary=${CLAIM_RECEIPT_CANARY_ID}&topic=${CLAIM_RECEIPT_TOPIC}`),
       env(db),
@@ -260,6 +266,23 @@ describe("public claim-receipt canary", () => {
     );
     expect(mutation.status).toBe(405);
     expect(mutation.headers.get("allow")).toBe("GET, HEAD");
+
+    const missingTableDb = new SqliteD1();
+    missingTableDb.sqlite.exec("DROP TABLE public_claim_receipts");
+    const missingTable = await worker.fetch(
+      new Request(`https://base2026.dev/api/claim-receipts/v1?canary=${CLAIM_RECEIPT_CANARY_ID}&topic=${CLAIM_RECEIPT_TOPIC}`),
+      env(missingTableDb),
+      {} as ExecutionContext,
+    );
+    expect(missingTable.status).toBe(503);
+    expect(await missingTable.json()).toEqual({
+      error: { code: "CLAIM_RECEIPT_CANARY_NOT_READY", message: "claim-receipt canary is not ready" },
+    });
+    await expect(admitClaimReceiptCanary(missingTableDb as unknown as D1Database, request)).resolves.toEqual({
+      status: "held",
+      code: "CLAIM_RECEIPT_CANARY_NOT_READY",
+      count: 0,
+    });
   });
 
   it("keeps old rows and makes exact rollback idempotent", async () => {
@@ -286,6 +309,22 @@ describe("public claim-receipt canary", () => {
     })).resolves.toMatchObject({ status: "already_rolled_back", count: 10 });
   });
 
+  it("returns one transition and one idempotent receipt for concurrent rollback", async () => {
+    const { db, request } = await fixture();
+    const admitted = await admitClaimReceiptCanary(db as unknown as D1Database, request);
+    if (admitted.status !== "admitted") throw new Error("fixture did not admit");
+    const rollbackRequest = {
+      schema_version: "base2026.claim-receipt-rollback.v1",
+      canary_id: CLAIM_RECEIPT_CANARY_ID,
+      ledger_sha256: admitted.ledger_sha256,
+    };
+    const results = await Promise.all([
+      rollbackClaimReceiptCanary(db as unknown as D1Database, rollbackRequest),
+      rollbackClaimReceiptCanary(db as unknown as D1Database, rollbackRequest),
+    ]);
+    expect(results.map((result) => result.status).sort()).toEqual(["already_rolled_back", "rolled_back"]);
+  });
+
   it("rejects private fields, wrong topic and duplicate ranks at the service boundary", async () => {
     const { db, request } = await fixture();
     const privateField = JSON.parse(JSON.stringify(request)) as Record<string, unknown>;
@@ -297,6 +336,12 @@ describe("public claim-receipt canary", () => {
     duplicate.candidates[1].selection_rank = 1;
     await expect(admitClaimReceiptCanary(db as unknown as D1Database, duplicate)).rejects.toMatchObject({
       code: "CLAIM_RECEIPT_DUPLICATE_SELECTION_RANK",
+    });
+
+    const unstableNumber = JSON.parse(JSON.stringify(request)) as ClaimReceiptAdmissionRequest;
+    unstableNumber.candidates[0].evidence_start_seconds = 1e-7;
+    await expect(admitClaimReceiptCanary(db as unknown as D1Database, unstableNumber)).rejects.toMatchObject({
+      code: "CLAIM_RECEIPT_EVIDENCE_START_INVALID",
     });
   });
 });

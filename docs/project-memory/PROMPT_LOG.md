@@ -20,6 +20,16 @@ push, sitemap or external publication action was performed. Current live
 eligibility is held at zero exact internal-linking cards, so the route remains
 503 until separately reviewed public content exists.
 
+Independent review initially returned NO-GO with five concrete blockers. Root
+fixed all five: exporter/sidecar contact and secret scanning, millisecond-only
+cross-runtime timecodes, the broken public contract link, rollback race
+handling using D1 affected-row receipts, and controlled missing-table hold
+behavior for both HTTP read and service-binding admission. Re-review returned
+GO for repository integration as an undeployed held candidate. Updated full
+verification: 632/632 Worker tests, 173/173 Python tests, typecheck, focused
+publication tests and local migrations all pass; live eligibility remains
+exactly zero and no public D1 or Worker mutation was made.
+
 ## 2026-09-01 — Public API/MCP production release completed
 
 Continued the integrated growth release through root and independent review.

@@ -47,7 +47,7 @@ def readback():
             "evidence_excerpt": f"The public source provides internal-linking evidence example {index}.",
             "evidence_start_seconds": 1,
             "evidence_end_seconds": 8,
-            "public_projection_receipt_sha256": format(index + 7, "x") * 64,
+            "public_projection_receipt_sha256": format((index + 7) % 16, "x") * 64,
             "policy_version": exporter.POLICY_VERSION,
         }
         immutable = dict(receipt)
@@ -86,6 +86,20 @@ def test_export_is_deterministic_and_matches_public_manifest_contract(tmp_path):
     contract_spec.loader.exec_module(contract)
     assert contract.validate_claim_receipt_sidecars(rows, manifest) == []
 
+    leaked_rows = [json.loads(line) for line in rows.splitlines()]
+    leaked_rows[0]["creator_display_name"] = "private@example.com"
+    leaked_immutable = dict(leaked_rows[0])
+    leaked_immutable.pop("receipt_id")
+    leaked_rows[0]["receipt_id"] = exporter.sha256_text(exporter.canonical_json(leaked_immutable))
+    leaked_jsonl = "".join(f"{exporter.canonical_json(item)}\n" for item in leaked_rows)
+    leaked_manifest = dict(manifest)
+    leaked_manifest["ledger_sha256"] = exporter.sha256_text(leaked_jsonl)
+    leaked_manifest["jsonl_sha256"] = exporter.sha256_text(leaked_jsonl)
+    assert any(
+        issue["reason"] == "private_or_secret_marker"
+        for issue in contract.validate_claim_receipt_sidecars(leaked_jsonl, leaked_manifest)
+    )
+
 
 def test_export_rejects_partial_private_tampered_and_overwrite_inputs(tmp_path):
     payload = readback()
@@ -99,6 +113,22 @@ def test_export_rejects_partial_private_tampered_and_overwrite_inputs(tmp_path):
         private = json.loads(json.dumps(payload))
         private["receipts"][0]["private_import_hash"] = "secret"
         exporter.validate_readback(private)
+
+    with pytest.raises(exporter.ExportError):
+        contact = json.loads(json.dumps(payload))
+        contact["receipts"][0]["creator_display_name"] = "private@example.com"
+        immutable = dict(contact["receipts"][0])
+        immutable.pop("receipt_id")
+        contact["receipts"][0]["receipt_id"] = exporter.sha256_text(exporter.canonical_json(immutable))
+        contact["ledger_sha256"] = exporter.sha256_text(
+            "".join(f"{exporter.canonical_json(item)}\n" for item in contact["receipts"])
+        )
+        exporter.validate_readback(contact)
+
+    with pytest.raises(exporter.ExportError):
+        unstable_number = json.loads(json.dumps(payload))
+        unstable_number["receipts"][0]["evidence_start_seconds"] = 1e-7
+        exporter.validate_readback(unstable_number)
 
     with pytest.raises(exporter.ExportError):
         tampered = json.loads(json.dumps(payload))

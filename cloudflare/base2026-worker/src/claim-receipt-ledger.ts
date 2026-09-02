@@ -202,10 +202,14 @@ function integerValue(value: unknown, code: string, min: number, max: number): n
 }
 
 function finiteNumber(value: unknown, code: string): number {
-  if (typeof value !== "number" || !Number.isFinite(value) || value < 0 || value > Number.MAX_SAFE_INTEGER) {
+  if (typeof value !== "number" || !Number.isFinite(value) || value < 0 || value > 86_400) {
     throw new ClaimReceiptLedgerError(400, code);
   }
-  return value;
+  const milliseconds = Math.round(value * 1_000);
+  if (Math.abs(milliseconds / 1_000 - value) > Number.EPSILON * Math.max(1, value)) {
+    throw new ClaimReceiptLedgerError(400, code);
+  }
+  return milliseconds / 1_000;
 }
 
 function assertPublicText(value: string): void {
@@ -561,7 +565,7 @@ async function rowMatchesCandidate(row: Row, candidate: ClaimReceiptCandidate): 
       && candidate.card_id === expectedCardId
       && candidate.search_id === expectedSearchId
       && row.source_id === row.receipt_source_id
-    && row.projection_id === row.receipt_projection_id
+      && row.projection_id === row.receipt_projection_id
       && row.search_id === row.document_id
       && row.card_source_id === row.source_id
       && row.card_projection_id === row.projection_id
@@ -596,6 +600,14 @@ async function rowMatchesCandidate(row: Row, candidate: ClaimReceiptCandidate): 
 async function queryRows(db: D1Database, sql: string, ...parameters: unknown[]): Promise<Row[]> {
   const result = await db.prepare(sql).bind(...parameters).all<Row>();
   return result.results;
+}
+
+async function claimReceiptLedgerTableReady(db: D1Database): Promise<boolean> {
+  const rows = await queryRows(
+    db,
+    "SELECT COUNT(*) AS count FROM sqlite_master WHERE type='table' AND name='public_claim_receipts'",
+  );
+  return Number(rows[0]?.count ?? 0) === 1;
 }
 
 const PROJECTION_CANDIDATE_SQL = `
@@ -814,6 +826,9 @@ export async function readClaimReceiptLedger(
   db: D1Database,
   generatedAt = new Date().toISOString(),
 ): Promise<ClaimReceiptReadResult> {
+  if (!await claimReceiptLedgerTableReady(db)) {
+    return { status: "held", code: "CLAIM_RECEIPT_CANARY_NOT_READY", count: 0 };
+  }
   return makeLedgerResponse(db, generatedAt);
 }
 
@@ -822,6 +837,9 @@ export async function admitClaimReceiptCanary(
   value: unknown,
 ): Promise<ClaimReceiptAdmissionResult> {
   const request = parseClaimReceiptAdmissionRequest(value);
+  if (!await claimReceiptLedgerTableReady(db)) {
+    return { status: "held", code: "CLAIM_RECEIPT_CANARY_NOT_READY", count: 0 };
+  }
   let selected: ClaimReceiptCandidate[];
   try {
     selected = await deterministicEligibleCandidates(db);
@@ -946,6 +964,9 @@ export async function rollbackClaimReceiptCanary(
   value: unknown,
 ): Promise<ClaimReceiptRollbackResult> {
   const request = parseClaimReceiptRollbackRequest(value);
+  if (!await claimReceiptLedgerTableReady(db)) {
+    throw new ClaimReceiptLedgerError(409, "CLAIM_RECEIPT_CANARY_CONFLICT");
+  }
   const rows = await allLedgerRows(db, request.canary_id);
   if (rows.length !== CLAIM_RECEIPT_CANARY_SIZE || rows.some((row) => row.ledger_sha256 !== request.ledger_sha256)) {
     throw new ClaimReceiptLedgerError(409, "CLAIM_RECEIPT_CANARY_CONFLICT");
@@ -963,13 +984,33 @@ export async function rollbackClaimReceiptCanary(
     throw new ClaimReceiptLedgerError(409, "CLAIM_RECEIPT_CANARY_CONFLICT");
   }
   const updatedAt = new Date().toISOString();
-  await db.batch([
+  const [updateResult] = await db.batch([
     db.prepare(
       `UPDATE public_claim_receipts
           SET state = 'rolled_back', updated_at = ?
         WHERE canary_id = ? AND ledger_sha256 = ? AND state = 'active'`,
     ).bind(updatedAt, request.canary_id, request.ledger_sha256),
   ]);
+  const changed = Number((updateResult as D1Result).meta?.changes ?? 0);
+  if (changed === 0) {
+    const replayRows = await allLedgerRows(db, request.canary_id);
+    if (
+      replayRows.length === CLAIM_RECEIPT_CANARY_SIZE
+      && replayRows.every((row) => row.ledger_sha256 === request.ledger_sha256 && row.state === "rolled_back")
+    ) {
+      return {
+        schema_version: CLAIM_RECEIPT_ROLLBACK_SCHEMA,
+        canary_id: CLAIM_RECEIPT_CANARY_ID,
+        ledger_sha256: request.ledger_sha256,
+        status: "already_rolled_back",
+        count: CLAIM_RECEIPT_CANARY_SIZE,
+      };
+    }
+    throw new ClaimReceiptLedgerError(409, "CLAIM_RECEIPT_CANARY_CONFLICT");
+  }
+  if (changed !== CLAIM_RECEIPT_CANARY_SIZE) {
+    throw new ClaimReceiptLedgerError(500, "CLAIM_RECEIPT_LEDGER_CORRUPT");
+  }
   return {
     schema_version: CLAIM_RECEIPT_ROLLBACK_SCHEMA,
     canary_id: CLAIM_RECEIPT_CANARY_ID,

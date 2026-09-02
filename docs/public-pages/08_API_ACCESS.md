@@ -78,7 +78,8 @@ Editorial and guide records are separate from source-corpus counts. No public
 route writes, approves or moderates content.
 
 The claim-receipt schema, deterministic static sidecars and owner-only
-admission boundary are documented in the [claim-receipt ledger contract](/claim-receipt-ledger).
+admission boundary are documented in the
+[claim-receipt ledger contract](https://github.com/offflinerpsy/base2026/blob/main/docs/BASE2026_CLAIM_RECEIPT_LEDGER.md).
 
 ## Indexable public projection
 

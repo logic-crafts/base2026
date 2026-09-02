@@ -48,6 +48,23 @@ PRIVATE_VALUE_RE = re.compile(
     r"(?:file://|/Users/|/private/var/|/var/www/|(?:^|[/\\])(?:\.planning|\.hermes|meili_data|private)(?:[/\\]|$)|(?:raw[ _-]*(?:transcript|caption|asr)|not[ _-]*for[ _-]*public))",
     re.IGNORECASE,
 )
+EMAIL_RE = re.compile(r"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b", re.IGNORECASE)
+PHONE_RE = re.compile(
+    r"(?<!\d)(?:\+?\d{1,3}[\s().-])?(?:\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}|\d{10})(?!\d)"
+)
+SECRET_RE = re.compile(
+    r"\b(?:api|access|auth|authentication|client|app|webhook)?[_\s-]*(?:key|token|secret|password|passwd|credential|cookie|session[_\s-]*id)\s*[:=]\s*\S+",
+    re.IGNORECASE,
+)
+SECRET_PHRASE_RE = re.compile(
+    r"\b(?:api|access|auth|authentication|client|app|webhook)[_\s-]*(?:key|token|secret|password|passwd|credential)\s*(?:is\s+|[:=]\s*)\S+",
+    re.IGNORECASE,
+)
+TOKEN_FORMAT_RE = re.compile(
+    r"\b(?:sk_(?:live|test)_[A-Z0-9]{8,}|(?:ghp|github_pat|xox[baprs])[-_][A-Z0-9-]{8,}|AIza[A-Z0-9_-]{20,})\b",
+    re.IGNORECASE,
+)
+BEARER_RE = re.compile(r"\bbearer\s+[A-Z0-9._~+/=-]{8,}\b", re.IGNORECASE)
 
 RECEIPT_KEYS = {
     "schema_version",
@@ -144,6 +161,26 @@ def string_value(value: Any, name: str, minimum: int, maximum: int) -> str:
     return result
 
 
+def public_text_value(value: Any, name: str, minimum: int, maximum: int) -> str:
+    result = string_value(value, name, minimum, maximum)
+    require(
+        not any(
+            pattern.search(result)
+            for pattern in (
+                PRIVATE_VALUE_RE,
+                EMAIL_RE,
+                PHONE_RE,
+                SECRET_RE,
+                SECRET_PHRASE_RE,
+                TOKEN_FORMAT_RE,
+                BEARER_RE,
+            )
+        ),
+        f"{name} contains a private or secret marker",
+    )
+    return result
+
+
 def hash_value(value: Any, name: str) -> str:
     result = string_value(value, name, 64, 64).lower()
     require(bool(HASH_RE.fullmatch(result)), f"{name} must be a lowercase SHA-256")
@@ -202,27 +239,28 @@ def validate_receipt(value: Any) -> dict[str, Any]:
     require(bool(VIDEO_RE.fullmatch(video_id)) and video_id == source_match.group(2), "video_id is not canonical")
     creator_handle = string_value(value["creator_handle"], "creator_handle", 3, 257)
     require(creator_handle == f"@{handle}", "creator_handle does not match source_id")
-    creator_display_name = string_value(value["creator_display_name"], "creator_display_name", 0, 256)
+    creator_display_name = public_text_value(value["creator_display_name"], "creator_display_name", 0, 256)
     creator_url = validate_url(value["creator_url"], "creator_url", f"https://www.tiktok.com/@{handle}", 512)
     original_url = validate_url(value["original_url"], "original_url", f"https://www.tiktok.com/@{handle}/video/{video_id}")
     base_url = validate_url(value["base2026_url"], "base2026_url", f"https://base2026.dev/sources/tiktok-video-{video_id}", 512)
     published_at = date_value(value["published_at"], "published_at")
     published_date = date_value(value["published_date"], "published_date")
     require(published_at == published_date, "published date mismatch")
-    claim = string_value(value["claim_text"], "claim_text", 20, 360)
-    action = string_value(value["suggested_action"], "suggested_action", 20, 360)
-    topic_label = string_value(value["topic_label"], "topic_label", 2, 120)
-    evidence = string_value(value["evidence_excerpt"], "evidence_excerpt", 20, 520)
+    claim = public_text_value(value["claim_text"], "claim_text", 20, 360)
+    action = public_text_value(value["suggested_action"], "suggested_action", 20, 360)
+    topic_label = public_text_value(value["topic_label"], "topic_label", 2, 120)
+    evidence = public_text_value(value["evidence_excerpt"], "evidence_excerpt", 20, 520)
     normalized_topic = re.sub(r"[^\w]+", "-", topic_label.casefold(), flags=re.UNICODE).strip("-")
     require(bool(re.fullmatch(r"internal-linking(?:-[a-z0-9]+)*", normalized_topic)), "topic label is outside the canary")
     ordinal = value["card_ordinal"]
     require(isinstance(ordinal, int) and not isinstance(ordinal, bool) and 0 <= ordinal <= 2, "card_ordinal is invalid")
     start = value["evidence_start_seconds"]
     end = value["evidence_end_seconds"]
-    require(isinstance(start, (int, float)) and not isinstance(start, bool) and math.isfinite(start) and start >= 0, "evidence start is invalid")
-    require(isinstance(end, (int, float)) and not isinstance(end, bool) and math.isfinite(end) and end >= start, "evidence end is invalid")
-    for text in (creator_display_name, claim, action, topic_label, evidence):
-        require(not PRIVATE_VALUE_RE.search(text), "private evidence marker is not exportable")
+    require(isinstance(start, (int, float)) and not isinstance(start, bool) and math.isfinite(start) and 0 <= start <= 86_400, "evidence start is invalid")
+    require(isinstance(end, (int, float)) and not isinstance(end, bool) and math.isfinite(end) and start <= end <= 86_400, "evidence end is invalid")
+    require(abs(round(start * 1_000) / 1_000 - start) <= sys.float_info.epsilon * max(1, start), "evidence start precision is invalid")
+    require(abs(round(end * 1_000) / 1_000 - end) <= sys.float_info.epsilon * max(1, end), "evidence end precision is invalid")
+    hash_value(value["public_projection_receipt_sha256"], "public_projection_receipt_sha256")
     immutable = dict(value)
     # The Worker derives receipt_id from all immutable fields except the id.
     immutable.pop("receipt_id")

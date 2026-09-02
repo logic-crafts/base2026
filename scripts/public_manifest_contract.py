@@ -5,6 +5,8 @@ from __future__ import annotations
 import re
 import hashlib
 import json
+import math
+from datetime import date
 from typing import Any
 
 
@@ -69,6 +71,24 @@ CLAIM_RECEIPT_TOPIC = "internal-linking"
 CLAIM_RECEIPT_POLICY_VERSION = "base2026.claim-receipt-admission.v1"
 CLAIM_RECEIPT_COUNT = 10
 CLAIM_RECEIPT_HASH_RE = re.compile(r"^[a-f0-9]{64}$")
+CLAIM_RECEIPT_DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+CLAIM_RECEIPT_EMAIL_RE = re.compile(r"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b", re.I)
+CLAIM_RECEIPT_PHONE_RE = re.compile(
+    r"(?<!\d)(?:\+?\d{1,3}[\s().-])?(?:\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}|\d{10})(?!\d)"
+)
+CLAIM_RECEIPT_SECRET_RE = re.compile(
+    r"\b(?:api|access|auth|authentication|client|app|webhook)?[_\s-]*(?:key|token|secret|password|passwd|credential|cookie|session[_\s-]*id)\s*[:=]\s*\S+",
+    re.I,
+)
+CLAIM_RECEIPT_SECRET_PHRASE_RE = re.compile(
+    r"\b(?:api|access|auth|authentication|client|app|webhook)[_\s-]*(?:key|token|secret|password|passwd|credential)\s*(?:is\s+|[:=]\s*)\S+",
+    re.I,
+)
+CLAIM_RECEIPT_TOKEN_RE = re.compile(
+    r"\b(?:sk_(?:live|test)_[A-Z0-9]{8,}|(?:ghp|github_pat|xox[baprs])[-_][A-Z0-9-]{8,}|AIza[A-Z0-9_-]{20,})\b",
+    re.I,
+)
+CLAIM_RECEIPT_BEARER_RE = re.compile(r"\bbearer\s+[A-Z0-9._~+/=-]{8,}\b", re.I)
 CLAIM_RECEIPT_ROW_KEYS = {
     "schema_version",
     "receipt_id",
@@ -361,13 +381,62 @@ def validate_claim_receipt_sidecars(
         if not re.fullmatch(r"internal-linking(?:-[a-z0-9]+)*", normalized_topic):
             issue(f"/jsonl/{line_number}/topic_label", "topic_outside_canary")
         for key, minimum, maximum in (
+            ("creator_display_name", 0, 256),
             ("claim_text", 20, 360),
             ("suggested_action", 20, 360),
+            ("topic_label", 2, 120),
             ("evidence_excerpt", 20, 520),
         ):
             value = row.get(key)
             if not isinstance(value, str) or not minimum <= len(value.strip()) <= maximum:
                 issue(f"/jsonl/{line_number}/{key}", "invalid_public_text_length")
+            elif any(
+                pattern.search(value)
+                for pattern in (
+                    CLAIM_RECEIPT_EMAIL_RE,
+                    CLAIM_RECEIPT_PHONE_RE,
+                    CLAIM_RECEIPT_SECRET_RE,
+                    CLAIM_RECEIPT_SECRET_PHRASE_RE,
+                    CLAIM_RECEIPT_TOKEN_RE,
+                    CLAIM_RECEIPT_BEARER_RE,
+                )
+            ):
+                issue(f"/jsonl/{line_number}/{key}", "private_or_secret_marker")
+        published_at = row.get("published_at")
+        published_date = row.get("published_date")
+        if (
+            not isinstance(published_at, str)
+            or not CLAIM_RECEIPT_DATE_RE.fullmatch(published_at)
+            or published_date != published_at
+        ):
+            issue(f"/jsonl/{line_number}/published_at", "invalid_published_date")
+        else:
+            try:
+                date.fromisoformat(published_at)
+            except ValueError:
+                issue(f"/jsonl/{line_number}/published_at", "invalid_published_date")
+        projection_hash = row.get("public_projection_receipt_sha256")
+        if not isinstance(projection_hash, str) or not CLAIM_RECEIPT_HASH_RE.fullmatch(projection_hash):
+            issue(f"/jsonl/{line_number}/public_projection_receipt_sha256", "must_be_lowercase_sha256")
+        ordinal = row.get("card_ordinal")
+        if not isinstance(ordinal, int) or isinstance(ordinal, bool) or not 0 <= ordinal <= 2:
+            issue(f"/jsonl/{line_number}/card_ordinal", "invalid_card_ordinal")
+        start = row.get("evidence_start_seconds")
+        end = row.get("evidence_end_seconds")
+        if (
+            isinstance(start, bool)
+            or not isinstance(start, (int, float))
+            or not math.isfinite(start)
+            or isinstance(end, bool)
+            or not isinstance(end, (int, float))
+            or not math.isfinite(end)
+            or start < 0
+            or end < start
+            or end > 86_400
+            or abs(round(start * 1_000) / 1_000 - start) > math.ulp(max(1.0, float(start)))
+            or abs(round(end * 1_000) / 1_000 - end) > math.ulp(max(1.0, float(end)))
+        ):
+            issue(f"/jsonl/{line_number}/evidence_start_seconds", "invalid_evidence_range")
         rows.append(row)
 
     if len(rows) == CLAIM_RECEIPT_COUNT:
