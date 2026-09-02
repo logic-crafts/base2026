@@ -23,6 +23,13 @@ Worker `0337f7d6-ebe4-4bcc-8b4a-e23317a99a8e` is the immediate rollback.
 The free tool and developer surfaces are live, canonical and browser/D1 tested.
 Git source, static artifact and live D1/private state are separate restore inputs.
 
+PR36 merged the independently reviewed Claim Receipt Ledger source at
+`25bca067514fb5efd9bbc84c36c6b3cd73f43d3f`. It is intentionally not deployed:
+live public D1 has zero exact qualifying `internal-linking` projection cards and
+the live claim route remains 404. Migration0005, Worker deployment, sidecars,
+sitemap and IndexNow were not executed. The source is ready to stay held until
+the private typed wrapper and ten genuine eligible rows both exist.
+
 Private reliability release57 and additive migration0016 are deployed.
 Diagnostic-only release58 followed at10:15:41.832 UTC. The 10:16 cohort
 contains27 admitted /6 media /5 transcripts /one verified projection;

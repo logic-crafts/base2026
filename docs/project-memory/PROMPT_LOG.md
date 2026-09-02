@@ -1,5 +1,16 @@
 # Prompt Log
 
+## 2026-09-02 — Claim Receipt Ledger source integration closed
+
+Pushed reviewed head `88eda1544c1a5d56c63d18d7d06ed81ea44f6730`, opened
+[PR36](https://github.com/offflinerpsy/base2026/pull/36), confirmed its exact
+16-file diff is mergeable, and merged at
+`25bca067514fb5efd9bbc84c36c6b3cd73f43d3f`. Source integration is complete;
+production release is not. Live health remains200, the undeployed claim route
+remains404, and exact live eligibility remains0 cards/0 sources/0 creators.
+No remote migration, Worker deployment, sidecar generation/publication,
+sitemap change, IndexNow action or private wrapper mutation occurred.
+
 ## 2026-09-01 — Claim Receipt Ledger public canary candidate
 
 Implemented the reviewed public-repository slice in isolated worktree

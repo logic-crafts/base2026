@@ -8,6 +8,13 @@ Older dated receipts are history, not current counters.
 
 ## Live product
 
+- Claim Receipt Ledger source is merged through
+  [PR36](https://github.com/offflinerpsy/base2026/pull/36), merge
+  `25bca067514fb5efd9bbc84c36c6b3cd73f43d3f`, but it is not live. Exact
+  public-D1 eligibility is 0 cards /0 sources /0 creators and the live route
+  returns404. Migration0005, Worker deploy, sidecars, sitemap and IndexNow were
+  deliberately withheld; no claim pages or traffic are asserted.
+
 - Public Worker `f8781f4d-30fd-4d70-ab96-a4e8d718226a` is at 100%. It adds
   live read-only MCP, API/integration guidance and `MCP_RATE_LIMIT` while
   preserving Evidence Search, member auth/My Research, four D1 bindings, three
