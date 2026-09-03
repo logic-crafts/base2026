@@ -1,12 +1,22 @@
 # Base2026 Current Status
 
-Verified 2026-09-02 through 00:44 UTC. Public counters below are the current
+Verified 2026-09-03 through 00:26 UTC. Public counters below are the current
 live read. [API/MCP production receipt](HANDOFF_2026-09-01_PUBLIC_API_MCP_PRODUCTION_RELEASE.md)
 and [closure receipt](BASE2026_OFFICE_CLOSURE_2026_08_31.md)
 separates completed releases from remaining observation and external blockers.
 Older dated receipts are history, not current counters.
 
 ## Live product
+
+- Public Worker `60429ef4-b1b8-47dc-9af4-b4b882ac2390` is live at 100% with
+  the crawl-derived SEO/GEO repair. Recursive sitemap readback is 1,874/1,874
+  unique with zero duplicate membership. Source catalog, source pagination,
+  representative static/dynamic source pages, API/MCP, Evidence Search and
+  My Research all pass live. The exact audit and release receipt is
+  [HANDOFF_2026-09-03_DATAFORSEO_SEO_GEO_PRODUCTION_RELEASE.md](HANDOFF_2026-09-03_DATAFORSEO_SEO_GEO_PRODUCTION_RELEASE.md).
+- Rejected canary `f298cd98-6125-4bfe-ab72-afd98467b8ad` was rolled back after
+  `/sources/` 503 and `/my-research/` 404. Never restore it. Immediate healthy
+  rollback is `f8781f4d-30fd-4d70-ab96-a4e8d718226a`.
 
 - Claim Receipt Ledger source is merged through
   [PR36](https://github.com/offflinerpsy/base2026/pull/36), merge
@@ -15,11 +25,10 @@ Older dated receipts are history, not current counters.
   returns404. Migration0005, Worker deploy, sidecars, sitemap and IndexNow were
   deliberately withheld; no claim pages or traffic are asserted.
 
-- Public Worker `f8781f4d-30fd-4d70-ab96-a4e8d718226a` is at 100%. It adds
-  live read-only MCP, API/integration guidance and `MCP_RATE_LIMIT` while
-  preserving Evidence Search, member auth/My Research, four D1 bindings, three
-  remote member secret names and both `/guides` aliases. Immediate rollback is
-  `0337f7d6-ebe4-4bcc-8b4a-e23317a99a8e`.
+- Previous API/MCP Worker `f8781f4d-30fd-4d70-ab96-a4e8d718226a` remains the
+  immediate healthy rollback. Its read-only MCP, API/integration guidance,
+  rate limit, Evidence Search, member auth/My Research and binding contract are
+  preserved by the current `60429ef4-b1b8-47dc-9af4-b4b882ac2390` release.
 - `/api`, `/mcp` and `/integrations` are live200, canonical and indexable.
   Modern discovery, six-tool listing, bounded search, legacy initialization,
   invalid-header rejection and no-id notification behavior passed live.

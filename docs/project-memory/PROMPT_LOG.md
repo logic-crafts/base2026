@@ -9912,3 +9912,27 @@ Actions and receipts:
   `HANDOFF_2026-09-01_BASE2026_EVIDENCE_SEARCH_PRODUCTION_RELEASE.md` with the
   artifact hashes, deployment receipt, rollback and remaining measurement/Git
   work. The earlier undeployed-candidate entry is superseded by this release.
+## 2026-09-03 — Full DataForSEO crawl, independent SEO/GEO review and production repair
+
+Prompt: crawl the whole Base2026 site and all articles with DataForSEO, find
+errors, repair confirmed defects with bounded workers, run an independent
+ChatGPT Pro SEO/GEO/AI-visibility audit, deploy only after QA and report the
+real result.
+
+Actions and receipts:
+
+- Completed a 3,782-request DataForSEO baseline crawl, a ten-template rendered
+  probe, a separate exhaustive sitemap/link-graph crawl and an independent
+  ChatGPT Pro reasoning audit. Distinguished real defects from expected
+  redirects, private/noindex routes, the intentionally absent full transcripts,
+  decorative-image and crawler-defined orphan false positives.
+- Repaired source-title/H1 differentiation, canonical internal links, source
+  pagination, sitemap ownership, dynamic favicon coverage, invalid VideoObject
+  markup and editorial schema image fallback. Local artifact, Python, Worker,
+  type, publication and independent-review gates passed.
+- The first live canary exposed a source-shell/member-assets integration defect
+  and was immediately rolled back. Added a regression test, rebuilt with the
+  explicit member workspace and redeployed Worker
+  `60429ef4-b1b8-47dc-9af4-b4b882ac2390`. Live public, source, sitemap,
+  API/MCP, auth/member and held-claim boundaries pass. A second full DataForSEO
+  crawl is running under task `09030026-1882-0216-0000-a8712b158b1e`.
