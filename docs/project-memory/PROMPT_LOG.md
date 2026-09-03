@@ -9912,6 +9912,31 @@ Actions and receipts:
   `HANDOFF_2026-09-01_BASE2026_EVIDENCE_SEARCH_PRODUCTION_RELEASE.md` with the
   artifact hashes, deployment receipt, rollback and remaining measurement/Git
   work. The earlier undeployed-candidate entry is superseded by this release.
+
+## 2026-09-03 — DataForSEO full crawl and controlled SEO/GEO repair closure
+
+Prompt: run a deep DataForSEO crawl over the whole site and all articles, have
+bounded Luna workers fix confirmed defects, obtain an independent ChatGPT Pro
+SEO/GEO/AI-visibility audit, deploy only after verification and report the real
+result.
+
+Actions and receipts:
+
+- DataForSEO task `09030308-1882-0216-0000-a23b751416e6` finished by empty
+  queue after `4,061` URL states with score `96.22`; hard technical defects were
+  zero after excluding the three deliberately wrong priority probes.
+- An independent full sitemap crawl proved `1,876/1,876` URLs 200, indexable and
+  self-canonical. ChatGPT Pro confirmed that provenance is the product strength
+  and controlled indexation is the correct boundary.
+- PR41 merged the single confirmed fix: range-specific descriptions for the 20
+  source-catalog pages. The first asset release exposed a 19-URL sitemap drift;
+  post-deploy QA caught it, a one-asset corrective release restored all URLs,
+  and PR42 added a fail-closed builder guard.
+- Final Worker `64c7065b-a4b4-4f31-a2ac-b8a0ccfebff4`; final artifact
+  `5bbe22a3a6c8276043206bf3e2898b2268a6fd990da997c40d1b57c3c12c516f`.
+  DataForSEO task `09030442-1882-0216-0000-2212eb17023f` verified 20/20 source
+  pages with duplicate descriptions, broken links/resources, redirects,
+  4xx/5xx, non-indexable and orphan counts all zero.
 ## 2026-09-03 — Full DataForSEO crawl, independent SEO/GEO review and production repair
 
 Prompt: crawl the whole Base2026 site and all articles with DataForSEO, find
