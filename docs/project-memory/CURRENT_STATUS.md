@@ -14,6 +14,9 @@ Older dated receipts are history, not current counters.
   representative static/dynamic source pages, API/MCP, Evidence Search and
   My Research all pass live. The exact audit and release receipt is
   [HANDOFF_2026-09-03_DATAFORSEO_SEO_GEO_PRODUCTION_RELEASE.md](HANDOFF_2026-09-03_DATAFORSEO_SEO_GEO_PRODUCTION_RELEASE.md).
+  Final source correction is merged through
+  [PR39](https://github.com/offflinerpsy/base2026/pull/39), merge
+  `fa9d30bfdb0489bc031164101aebfeae5fecb55c`.
 - Rejected canary `f298cd98-6125-4bfe-ab72-afd98467b8ad` was rolled back after
   `/sources/` 503 and `/my-research/` 404. Never restore it. Immediate healthy
   rollback is final pre-description Worker `14174d46-c237-4ad9-897c-7952060f3e70`;
