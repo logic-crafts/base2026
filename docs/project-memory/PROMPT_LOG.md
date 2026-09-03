@@ -9940,4 +9940,6 @@ Actions and receipts:
   Live public, source, sitemap, API/MCP, auth/member and held-claim boundaries
   pass. Fresh DataForSEO probes show title61, schema fatal/error/warning0 and
   redirect/link-to-redirect0. The mixed-version follow-up task was stopped at
-  2,260 pages and is not used as final evidence.
+  2,260 pages and is not used as final evidence. Final source correction PR39
+  merged as `fa9d30bfdb0489bc031164101aebfeae5fecb55c`; the exact held-claim-safe
+  production patch is local commit `e152e73ae`.

@@ -29,8 +29,12 @@ Verified through 2026-09-03 01:08 UTC.
 
 ## Release identity and safety
 
-- Git source commits: `16c9ee84b` and `56f78605e` on `codex/base2026-dataforseo-audit-fixes-20260902`.
-- Production-only selected patch base: last released API/MCP source `b91fc124f`, commits `bef53ad94` and `d51d5156b`. This prevents the held Claim Receipt Ledger source from being accidentally deployed before migration and eligibility approval.
+- Git source commits: `16c9ee84b`, `56f78605e` and final correction
+  `d541d0aa8`; PR39 merged them to main as `fa9d30bfdb0489bc031164101aebfeae5fecb55c`.
+- Production-only selected patch base: last released API/MCP source `b91fc124f`,
+  commits `bef53ad94`, `d51d5156b` and final runtime patch `e152e73ae`.
+  This prevents the held Claim Receipt Ledger source from being accidentally
+  deployed before migration and eligibility approval.
 - Final asset: 4,272 served files, tree SHA-256 `0b547f531bcbcd4543d89ebcc55050d78697bcf7b670ef884ec50d25278669d4`.
 - Final asset invariants: 1,724 unique source titles/H1s, title maximum 65, 19 pagination pages, 1,763 unique static sitemap URLs, zero duplicate sitemap membership, zero internal relative `.html` links and zero `VideoObject` pages.
 - Member-safe build flag was explicit. `my-research/index.html`, member CSS and member JavaScript are present; member CSS/JavaScript hashes match the retained reviewed member release.
