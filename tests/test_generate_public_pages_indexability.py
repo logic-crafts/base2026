@@ -113,6 +113,37 @@ class SourceIndexabilityTests(unittest.TestCase):
         self.assertIn('rel="next" href="page-3.html"', middle)
         self.assertEqual(pages.source_index_pagination(1, 1), "")
 
+    def test_source_index_descriptions_are_unique_and_match_visible_metadata(self) -> None:
+        total = 1_525
+        page_size = 80
+        page_count = (total + page_size - 1) // page_size
+        descriptions = [
+            pages.source_index_description(page_number, page_size, total)
+            for page_number in range(1, page_count + 1)
+        ]
+
+        self.assertEqual(page_count, 20)
+        self.assertEqual(len(set(descriptions)), page_count)
+        self.assertIn("1–80 of 1,525", descriptions[0])
+        self.assertIn("1,521–1,525 of 1,525", descriptions[-1])
+        self.assertTrue(all(len(description) <= 159 for description in descriptions))
+
+        rendered = (
+            pages.index_page("Source Records", descriptions[0], "", current="sources", canonical_path="sources/"),
+            pages.index_page(
+                "Source Records — Page 20 | Base2026",
+                descriptions[-1],
+                "",
+                current="sources",
+                canonical_path="sources/page-20.html",
+            ),
+        )
+        for html, description in zip(rendered, (descriptions[0], descriptions[-1])):
+            self.assertIn(f'<p class="lead">{description}</p>', html)
+            self.assertIn(f'<meta name="description" content="{description}" />', html)
+            self.assertIn(f'<meta property="og:description" content="{description}" />', html)
+            self.assertIn(f'<meta name="twitter:description" content="{description}" />', html)
+
 
 if __name__ == "__main__":
     unittest.main()
