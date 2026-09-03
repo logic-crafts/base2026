@@ -72,3 +72,40 @@ Fresh bounded DataForSEO evidence after the final corrections:
 Immediate rollback is `14174d46-c237-4ad9-897c-7952060f3e70`; second-level
 rollback is `60429ef4-b1b8-47dc-9af4-b4b882ac2390`. Do not use the rejected
 `f298cd98-6125-4bfe-ab72-afd98467b8ad`.
+
+## Final clean post-fix crawl and release closure
+
+The clean DataForSEO task `09030308-1882-0216-0000-a23b751416e6` ran from
+03:08:20 to 04:38:36 UTC and finished by `empty_queue` after `4,061` URL states.
+Final score was `96.22`. Broken internal links, broken resources, 5xx, redirect
+loops, recursive canonicals and canonicals to broken/redirect targets were zero.
+The one 404 (`/evidence-search`) and two redirects (`/blog/`, `/guides/`) were
+explicitly supplied priority probes outside the sitemap, not discovered defects.
+
+The crawler found 1,196 intentional non-indexable states: private My Research,
+one cursor state, 1,117 held topics, Workspace and 76 Workspace queries. The
+only repairable finding was the same description on `/sources/` and pages 2–20.
+PR41 merged range-specific descriptions as `85398d6565a4f4bb95fa4a8f85115a30837b18bf`.
+
+Release `d0ab9295-162a-4fbf-886a-c8337402c0c6` shipped the descriptions, but a
+full post-deploy crawl caught its inherited static sitemap at 1,857 URLs, missing
+the 19 pagination URLs. The corrective release uploaded exactly one sitemap
+asset. Final Worker `64c7065b-a4b4-4f31-a2ac-b8a0ccfebff4` is at 100%; final
+artifact is `5bbe22a3a6c8276043206bf3e2898b2268a6fd990da997c40d1b57c3c12c516f`.
+PR42 merged a fail-closed release guard as
+`6edfab3ed412312eb16ebd76f3b942ea88a1b900` so an indexable generated source
+pagination URL may no longer be missing, duplicated or owned by a runtime sitemap.
+
+The final independent live crawl fetched 1,889 pages/control forms and all 1,876
+sitemap URLs. Every sitemap URL returned 200, was indexable and self-canonical;
+sitemap duplicates, broken sampled internal targets, orphan candidates, invalid
+JSON-LD and old-origin markers were zero. DataForSEO task
+`09030442-1882-0216-0000-2212eb17023f` then verified the exact 20 source pages:
+20/20 200 and self-canonical, duplicate descriptions/titles 0, broken links and
+resources 0, redirects and 4xx/5xx 0, non-indexable and orphan 0. Task-post cost
+was `$0.006`.
+
+Operational receipts are under
+`/Users/alexyarosh/Projects/base2026-growth-operations-20260830/office/audits/20260903/`.
+Immediate rollback is Worker `d0ab9295-162a-4fbf-886a-c8337402c0c6`; the last
+known-good pre-description rollback is `99849d8e-802d-4e8e-a840-8d352f176da6`.

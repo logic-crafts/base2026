@@ -179,3 +179,20 @@ Public Worker `7522595a-13bf-4437-8955-fd14816b2569` serves tree
 Compatible public rollback: `a63f4c74-b6b2-4935-a392-61003d28567a`.
 Never restore a pre-guide Worker over guide-kind data. Routine editorial work
 does not deploy code or change design, DNS, credentials, budgets or private intake.
+
+## 2026-09-03 — Current SEO/GEO technical state
+
+Public Worker `64c7065b-a4b4-4f31-a2ac-b8a0ccfebff4` is at 100% and serves
+artifact `5bbe22a3a6c8276043206bf3e2898b2268a6fd990da997c40d1b57c3c12c516f`.
+The clean DataForSEO full crawl finished `4,061` URL states by empty queue with
+score `96.22`; broken internal links/resources, 5xx, redirect loops and broken
+canonicals were zero. Its one 404 and two redirects were deliberately supplied
+wrong probes, not site links. A post-release 20-page DataForSEO probe confirms
+the source catalog now has zero duplicate descriptions and zero hard errors.
+
+The final live sitemap has `1,876` unique URLs; all `1,876` return 200, are
+indexable and self-canonical. Do not re-add noindex topic/search states merely
+to increase page count. The next SEO action is measurement and selective
+admission: reconcile GSC crawl/index/click evidence and AI citations, then admit
+only complete, materially distinct citation units. PR41 contains the description
+fix; PR42 makes future releases fail closed on pagination/sitemap drift.
