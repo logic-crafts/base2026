@@ -2046,6 +2046,19 @@ def index_page(
     )
 
 
+def source_index_description(page_number: int, page_size: int, total: int) -> str:
+    total_count = max(0, int(total))
+    page_start = max(0, (page_number - 1) * page_size)
+    if total_count == 0 or page_start >= total_count:
+        return "No source records are currently available; attribution and original links will appear here."
+    first = page_start + 1
+    last = min(page_start + page_size, total_count)
+    return (
+        f"Excerpt-first source records {first:,}–{last:,} of {total_count:,}, "
+        "with attribution and original links."
+    )
+
+
 def source_index_pagination(page_number: int, page_count: int) -> str:
     if page_count <= 1:
         return ""
@@ -2415,6 +2428,7 @@ def main() -> int:
     for page_number in range(1, source_page_count + 1):
         start = (page_number - 1) * source_page_size
         page_cards = "".join(source_cards[start : start + source_page_size])
+        page_description = source_index_description(page_number, source_page_size, len(source_cards))
         page_title = "Source Records" if page_number == 1 else f"Source Records — Page {page_number} | Base2026"
         canonical_path = "sources/" if page_number == 1 else f"sources/page-{page_number}.html"
         output_name = "index.html" if page_number == 1 else f"page-{page_number}.html"
@@ -2422,7 +2436,7 @@ def main() -> int:
             out / "sources" / output_name,
             index_page(
                 page_title,
-                "Excerpt-first source records with attribution and original links.",
+                page_description,
                 page_cards,
                 current="sources",
                 canonical_path=canonical_path,
