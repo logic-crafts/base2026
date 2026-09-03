@@ -1,5 +1,22 @@
 # Next Action
 
+## Crawl-derived SEO/GEO repair live — September 3, 2026
+
+Worker `60429ef4-b1b8-47dc-9af4-b4b882ac2390` is live at 100%. It preserves
+API/MCP, Evidence Search, Google member auth/My Research and the public/private
+boundary while fixing verified source-title/H1, sitemap ownership, canonical
+link, favicon and structured-data defects. The first invalid canary was rolled
+back and must never be restored. Exact audit, artifact, test, rollback and live
+readbacks are in
+[HANDOFF_2026-09-03_DATAFORSEO_SEO_GEO_PRODUCTION_RELEASE.md](HANDOFF_2026-09-03_DATAFORSEO_SEO_GEO_PRODUCTION_RELEASE.md).
+
+Next action: finish and reconcile post-release DataForSEO task
+`09030026-1882-0216-0000-a8712b158b1e`, then compare only like-for-like defect
+classes. Do not treat crawler spelling/image-title flags or crawler-defined
+orphans as defects without a reproducible page/link example. Do not resubmit
+unchanged URLs or widen programmatic indexation. Claim Receipt migration and
+deployment remain separately held on their existing eligibility gate.
+
 ## Claim Receipt Ledger source integrated and held — September 2, 2026
 
 PR36 is merged to public main at
@@ -30,10 +47,12 @@ deployment and public-D1/export readbacks.
 
 ## Public API/MCP release — September 1, 2026
 
-PR34 is merged and Worker `f8781f4d-30fd-4d70-ab96-a4e8d718226a` is live at
-100%. API, MCP, integrations, member-auth preservation, rate limiting, D1
-counts and desktop/mobile browser behavior passed live readback. IndexNow
-accepted exactly `/mcp` and `/integrations`; this is not indexing or traffic.
+PR34 is merged and its API/MCP capabilities remain live through current Worker
+`60429ef4-b1b8-47dc-9af4-b4b882ac2390`; prior Worker
+`f8781f4d-30fd-4d70-ab96-a4e8d718226a` is the healthy rollback. API, MCP,
+integrations, member-auth preservation, rate limiting, D1 counts and browser
+behavior passed live readback. IndexNow accepted exactly `/mcp` and
+`/integrations`; this is not indexing or traffic.
 
 Next action: measure discovery and real tool use, then build the bounded Claim
 Receipt Ledger canary from reviewed public evidence. Keep it in a separate

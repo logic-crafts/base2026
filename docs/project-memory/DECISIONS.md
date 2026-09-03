@@ -908,3 +908,19 @@ readback without a usable composer is not permission to click blind.
 Reason: preserve the verified account and follow the selected interaction
 channel after repeated security checks. X's reviewed official Buffer route
 and Medium's normal-browser publication route are unchanged.
+## 2026-09-03 — SEO releases preserve held features and explicit member assets
+
+Decision: when `main` contains a reviewed but production-held feature, a
+different authorized repair may be deployed as a selected patch over the exact
+last-live source base. The Git source still integrates normally, but the
+production build must not activate the held feature, migration or route. Any
+member-enabled Base2026 release must pass `--members-workspace`, prove all three
+member UI assets are present and live-check `/my-research/` plus its private
+headers. Builder canonicalization and runtime shell validators require a shared
+compatibility test.
+
+Reason: the first SEO canary correctly failed the live gate after an omitted
+member build flag and a source-shell assumption collided with extensionless
+link normalization. Immediate rollback prevented the defect from remaining
+live; explicit release invariants prevent recurrence without activating the
+separately held Claim Receipt contour.

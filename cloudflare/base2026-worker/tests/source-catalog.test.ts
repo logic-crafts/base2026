@@ -162,6 +162,14 @@ describe("source catalog navigation", () => {
     expect(response.headers.get("Last-Modified")).toBeNull();
   });
 
+  it("accepts the extensionless legacy links emitted by the release builder", async () => {
+    assets.html = shell(3).replaceAll('.html">Open', '">Open');
+    const response = await get();
+    const html = await response.text();
+    expect(response.status).toBe(200);
+    expect(html.match(/href="tiktok-video-\d+"/gu)).toHaveLength(3);
+  });
+
   it("lists valid applied projections once per source without rendering claims or receipt details", async () => {
     const first = await seed(1, "2026-08-20", 3); await seed(2, "", 1);
     const response = await get(); const html = await response.text(); const cloud = cloudHtml(html);

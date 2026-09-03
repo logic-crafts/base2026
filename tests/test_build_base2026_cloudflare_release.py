@@ -170,12 +170,59 @@ def test_transform_maps_boundaries_and_preserves_external_creator_urls() -> None
 
     standalone = builder.transform_text(
         '<link rel="canonical" href="https://base2026.dev/roadmap.html">'
-        '<a href="/api.html">API</a>',
+        '<a href="/api.html">API</a>'
+        '<a href="../topics/internal-linking.html#sources">Topic</a>'
+        '<a href="creators/example.html">Creator</a>',
         standalone_startup=True,
     )
     assert 'href="https://base2026.dev/roadmap"' in standalone.text
     assert 'href="/api"' in standalone.text
-    assert standalone.replacements.html_urls_to_extensionless == 2
+    assert 'href="../topics/internal-linking#sources"' in standalone.text
+    assert 'href="creators/example"' in standalone.text
+    assert standalone.replacements.html_urls_to_extensionless == 4
+
+
+def test_runtime_guides_are_removed_from_static_sitemap_only() -> None:
+    guide = builder.RUNTIME_GUIDE_ROUTES[0]
+    other = "/topics/another-public-topic"
+    sitemap = (
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+        f'<url><loc>https://base2026.dev{other}-before</loc></url>'
+        f'<url><loc>https://base2026.dev{guide}</loc></url>'
+        f'<url><loc>https://base2026.dev{other}</loc></url>'
+        '</urlset>'
+    )
+    cleaned = builder._remove_runtime_owned_urls_from_static_sitemap(sitemap)
+    assert guide not in cleaned
+    assert other in cleaned
+    assert f"{other}-before" in cleaned
+
+
+def test_hub_urls_are_owned_only_by_the_hub_sitemap() -> None:
+    route = "/analytics"
+    sitemap = (
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+        '<url><loc>https://base2026.dev/keep</loc></url>'
+        f'<url><loc>https://base2026.dev{route}</loc></url>'
+        '</urlset>'
+    )
+    cleaned = builder._remove_runtime_owned_urls_from_static_sitemap(sitemap)
+    assert route not in cleaned
+    assert "/keep" in cleaned
+
+
+def test_excluded_route_removal_never_consumes_adjacent_sitemap_entries() -> None:
+    sitemap = (
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+        '<url><loc>https://base2026.dev/keep-before</loc></url>'
+        '<url><loc>https://base2026.dev/retired</loc></url>'
+        '<url><loc>https://base2026.dev/keep-after</loc></url>'
+        '</urlset>'
+    )
+    cleaned = builder._remove_excluded_startup_route_references(sitemap, ["/retired"])
+    assert "/retired" not in cleaned
+    assert "/keep-before" in cleaned
+    assert "/keep-after" in cleaned
 
 
 def test_build_excludes_private_stale_inputs_and_emits_root_contract(tmp_path: Path) -> None:

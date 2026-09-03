@@ -1,9 +1,22 @@
 # Active Phase
 
-Phase 25 — claim-receipt source merged; production held on zero eligibility.
-Current checkpoint: 2026-09-02 01:48 UTC. PR34 remains live, public Worker
-`f8781f4d-30fd-4d70-ab96-a4e8d718226a` is selected at 100%, and the reviewed
-API/MCP artifact has live readback.
+Phase 26 — crawl-derived SEO/GEO repair released; post-release crawl active.
+Current checkpoint: 2026-09-03 00:26 UTC. Public Worker
+`60429ef4-b1b8-47dc-9af4-b4b882ac2390` is selected at 100%. The full baseline
+crawl, independent crawl, rendered probe, repaired asset and live product/member
+readbacks are recorded in
+[the production handoff](HANDOFF_2026-09-03_DATAFORSEO_SEO_GEO_PRODUCTION_RELEASE.md).
+Claim Receipt source remains merged but intentionally absent from production.
+
+## SEO/GEO crawl repair — released (2026-09-03)
+
+DataForSEO completed 3,782 baseline requests with score 95.30 and no broken
+internal links, resources, redirect loops or 5xx pages. Confirmed source-title,
+H1, sitemap, canonical-link, favicon and schema defects were repaired. The first
+canary failed the source/member live gate and was immediately rolled back; the
+corrected member-safe release passed all live checks. Post-release DataForSEO
+task `09030026-1882-0216-0000-a8712b158b1e` is still a measurement task until
+its state becomes `finished`.
 
 ## Claim Receipt Ledger — source integrated, not released (2026-09-02)
 

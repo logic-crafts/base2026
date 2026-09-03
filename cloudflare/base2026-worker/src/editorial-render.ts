@@ -33,6 +33,12 @@ export function editorialEscape(value: string): string {
   })[character]!);
 }
 
+function truncateEditorialTitle(value: string, limit: number): string {
+  const compact = value.replace(/\s+/gu, " ").trim();
+  if (compact.length <= limit) return compact;
+  return compact.slice(0, Math.max(0, limit - 1)).trimEnd() + "…";
+}
+
 export function editorialJson(value: unknown): string {
   return JSON.stringify(value).replace(/</gu, "\\u003c").replace(/>/gu, "\\u003e")
     .replace(/&/gu, "\\u0026").replace(/\u2028/gu, "\\u2028").replace(/\u2029/gu, "\\u2029");
@@ -287,7 +293,8 @@ export function renderEditorialArticle(shell: string, article: StoredEditorialAr
   let result = replaceOne(shell, /<main id="b26-blog-main"[^>]*>[\s\S]*?<\/main>/u,
     '<main id="b26-blog-main" class="b26-blog-article' + (guide ? " b26-evidence-guide" : "") + '">'
     + renderEditorialArticleBody(article) + "</main>");
-  result = replaceOne(result, /<title>[\s\S]*?<\/title>/u, "<title>" + editorialEscape(payload.title) + " | Base2026</title>");
+  const browserTitle = truncateEditorialTitle(payload.title + " | Base2026", 65);
+  result = replaceOne(result, /<title>[\s\S]*?<\/title>/u, "<title>" + editorialEscape(browserTitle) + "</title>");
   result = replaceOne(result, /<link rel="canonical" href="[^"]*">/u, '<link rel="canonical" href="' + canonical + '">');
   for (const [attribute, name, value] of [
     ["name", "description", payload.description],
@@ -311,7 +318,7 @@ export function renderEditorialArticle(shell: string, article: StoredEditorialAr
       dateModified: payload.updated_at, inLanguage: "en", isAccessibleForFree: true,
       author: { "@type": "Person", name: payload.author.name, url: EDITORIAL_ORIGIN + "/founder" },
       publisher: { "@type": "Organization", name: "Base2026", url: EDITORIAL_ORIGIN + "/" },
-      ...(payload.hero ? { image: EDITORIAL_ORIGIN + payload.hero.path } : {}),
+      image: EDITORIAL_ORIGIN + (payload.hero?.path ?? DEFAULT_IMAGE),
       citation: payload.sources.map((source) => source.url),
     }, {
       "@type": "BreadcrumbList", itemListElement: [

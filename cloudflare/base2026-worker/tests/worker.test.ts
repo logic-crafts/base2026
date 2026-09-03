@@ -386,6 +386,12 @@ describe("Base2026 search Worker", () => {
     expect(html).toContain('property="og:image" content="https://base2026.dev/static/assets/base2026-ai-visibility-card.png"');
     expect(html).toContain('name="twitter:image" content="https://base2026.dev/static/assets/base2026-ai-visibility-card.png"');
     expect(html).toContain('/static/base2026-core.css?v=20260820-b26v1');
+    expect(html).toContain('rel="icon" type="image/png" sizes="32x32"');
+    expect(html).toContain('rel="apple-touch-icon" sizes="180x180"');
+    const browserTitle = html.match(/<title>([^<]+)<\/title>/u)?.[1] ?? "";
+    expect(browserTitle.length).toBeLessThanOrEqual(65);
+    expect(browserTitle).toContain("2864223510");
+    expect(html).toContain("Useful &lt;AI&gt; source evidence — source 2864223510");
     expect(html).toContain('--accent:#315eea');
     expect(html).not.toContain('#ff5a36');
     expect(html).not.toContain("Useful <AI> source evidence");

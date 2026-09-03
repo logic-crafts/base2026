@@ -185,6 +185,19 @@ def compact(value: str, limit: int = 520) -> str:
     return candidate.rstrip(" ,;:.") + "..."
 
 
+def seo_title_with_suffix(value: str, suffix: str, limit: int = 65) -> str:
+    return f"{compact(value, max(8, limit - len(suffix)))}{suffix}"[:limit]
+
+
+def compact_words(value: str, limit: int) -> str:
+    text = re.sub(r"\s+", " ", unescape(value or "")).strip()
+    if len(text) <= limit:
+        return text
+    candidate = text[:limit].rstrip(" ,;:.-")
+    word_cut = candidate.rfind(" ")
+    return candidate[:word_cut].rstrip(" ,;:.-") if word_cut >= max(8, limit // 2) else candidate
+
+
 def format_count(value: object) -> str:
     try:
         return f"{int(value or 0):,}"
@@ -1135,14 +1148,21 @@ def source_record_heading(source: dict) -> str:
 
 
 def source_schema_name(source: dict) -> str:
-    return f"{source_record_heading(source)} source record"
+    return f"{source_display_lead(source, 110)} — source {source_record_id(source)}"
 
 
 def source_display_lead(source: dict, limit: int = 260) -> str:
     title = source.get("title") or ""
     if title and not is_truncated_metadata(title, source.get("title_status")):
         return compact(title, limit)
-    return compact(source.get("excerpt") or source.get("source_id") or "", limit)
+    return compact(
+        source.get("source_summary_short")
+        or source.get("excerpt")
+        or source.get("source_id")
+        or source.get("item_id")
+        or "Source record",
+        limit,
+    )
 
 
 def source_seo_topic(source: dict) -> str:
@@ -1155,9 +1175,22 @@ def source_seo_topic(source: dict) -> str:
     return "creator evidence"
 
 
+def source_record_id(source: dict) -> str:
+    identity = " ".join(
+        str(source.get(field) or "")
+        for field in ("video_id", "item_id", "source_id", "source_url")
+    )
+    video_match = re.search(r"(?<!\d)(\d{10,30})(?!\d)", identity)
+    return video_match.group(1)[-10:] if video_match else slug(identity, "source")[-10:]
+
+
 def source_seo_title(source: dict, handle: str) -> str:
     topic = source_seo_topic(source)
-    return compact(f"{handle} source record about {topic} | Base2026", 70)
+    record_id = source_record_id(source)
+    visible_handle = compact_words(handle, 18)
+    suffix = f" · {record_id} | Base2026"
+    topic_budget = max(8, 65 - len(visible_handle) - len(suffix) - 3)
+    return f"{visible_handle} · {compact_words(topic, topic_budget)}{suffix}"[:65]
 
 
 def source_seo_description(source: dict, handle: str) -> str:
@@ -1272,12 +1305,13 @@ def source_identity_markup(
     if platform and variant != "source":
         meta_items.append(platform_icon_only(platform))
     meta_html = "".join(meta_items)
+    heading_tag = "p" if variant == "source" else "h1"
     return (
         f'<div class="source-identity source-identity--{escape(variant)}">'
         f'{avatar_html}'
         '<div class="source-identity__body">'
         '<div class="source-identity__line">'
-        f'<h1 class="source-identity__handle">{escape(handle)}</h1>'
+        f'<{heading_tag} class="source-identity__handle">{escape(handle)}</{heading_tag}>'
         f'{meta_html}'
         '</div>'
         '</div>'
@@ -1455,14 +1489,6 @@ def source_page(source: dict, passages: list[dict], insights: list[dict]) -> str
                 "isBasedOn": source.get("source_url") or "",
                 "about": source_seo_topic(source),
             },
-            {
-                "@type": "VideoObject",
-                "name": source_schema_name(source),
-                "description": compact(summary_long or source.get("excerpt") or "", 260),
-                "uploadDate": source.get("published_date") or source.get("published_at") or "",
-                "contentUrl": source.get("source_url") or "",
-                "embedUrl": source.get("source_url") or "",
-            },
         ],
     }
     return page_shell(
@@ -1472,6 +1498,7 @@ def source_page(source: dict, passages: list[dict], insights: list[dict]) -> str
         <div class="source-hero-main">
           <p class="eyebrow">{escape(hero_eyebrow)}</p>
           {source_identity_markup(handle, avatar_html, source.get('published_date') or source.get('published_at') or 'No date', source.get('platform') or source.get('source_type') or 'tiktok', variant="source")}
+          <h1 class="source-record-title">{escape(source_display_lead(source, 110))} — source {escape(source_record_id(source))}</h1>
           <p class="lead">{escape(summary_short)}</p>
           {f'<p class="source-detail-lead">{escape(summary_long)}</p>' if show_summary_long else ''}
           <div class="hero-actions">
@@ -1858,7 +1885,11 @@ def topic_page(
                 )
             ],
         }
-    seo_title = traffic.get("seo_title") or f"{label} creator evidence | Base2026"
+    seo_title = (
+        compact(traffic.get("seo_title"), 65)
+        if traffic.get("seo_title")
+        else seo_title_with_suffix(label, " Evidence | Base2026")
+    )
     seo_description = traffic.get("meta_description") or topic.get("definition") or f"Source-backed creator evidence and viewpoints related to {label}."
     return page_shell(
         seo_title,
@@ -1953,7 +1984,7 @@ def compare_page(topic: dict, insights: list[dict]) -> str:
         "about": label,
     }
     return page_shell(
-        f"{label} creator viewpoint comparison | Base2026",
+        seo_title_with_suffix(label, " | Creator Views | Base2026"),
         f"""
       <section class="page-hero">
         <p class="eyebrow">Creator viewpoint comparison</p>
@@ -1983,6 +2014,7 @@ def index_page(
     cards: str,
     current: str = "",
     canonical_path: str | None = None,
+    pagination: str = "",
 ) -> str:
     if canonical_path is None:
         canonical_path = {
@@ -2004,12 +2036,25 @@ def index_page(
       <section class="content-section" aria-labelledby="{escape(slug(title, 'index'))}-list-heading">
         <h2 id="{escape(slug(title, 'index'))}-list-heading">Available {escape(title.lower())}</h2>
         <div class="card-grid">{cards}</div>
+        {pagination}
       </section>
         """,
         current=current,
         description=intro,
         canonical_path=canonical_path,
     )
+
+
+def source_index_pagination(page_number: int, page_count: int) -> str:
+    if page_count <= 1:
+        return ""
+    links = []
+    if page_number > 1:
+        previous = "./" if page_number == 2 else f"page-{page_number - 1}.html"
+        links.append(f'<a class="button-link" rel="prev" href="{previous}">Newer source records</a>')
+    if page_number < page_count:
+        links.append(f'<a class="button-link" rel="next" href="page-{page_number + 1}.html">Older source records</a>')
+    return f'<nav class="source-index-pagination" aria-label="Source record pages">{"".join(links)}</nav>'
 
 
 def analytics_stat(label: str, value: object, detail: str = "") -> str:
@@ -2364,10 +2409,25 @@ def main() -> int:
         out / "creators" / "index.html",
         index_page("Creator Source Profiles", "Creator-level attribution pages for indexed public source records.", "".join(creator_cards), current="creators"),
     )
-    write_text(
-        out / "sources" / "index.html",
-        index_page("Source Records", "Excerpt-first source records with attribution and original links.", "".join(source_cards[:80]), current="sources"),
-    )
+    source_page_size = 80
+    source_page_count = max(1, (len(source_cards) + source_page_size - 1) // source_page_size)
+    for page_number in range(1, source_page_count + 1):
+        start = (page_number - 1) * source_page_size
+        page_cards = "".join(source_cards[start : start + source_page_size])
+        page_title = "Source Records" if page_number == 1 else f"Source Records — Page {page_number} | Base2026"
+        canonical_path = "sources/" if page_number == 1 else f"sources/page-{page_number}.html"
+        output_name = "index.html" if page_number == 1 else f"page-{page_number}.html"
+        write_text(
+            out / "sources" / output_name,
+            index_page(
+                page_title,
+                "Excerpt-first source records with attribution and original links.",
+                page_cards,
+                current="sources",
+                canonical_path=canonical_path,
+                pagination=source_index_pagination(page_number, source_page_count),
+            ),
+        )
     write_text(
         out / "topics" / "index.html",
         index_page("Topic Evidence Pages", "Topic-level evidence pages with source-backed insights and creator comparison links.", "".join(topic_cards[:80]), current="topics"),
