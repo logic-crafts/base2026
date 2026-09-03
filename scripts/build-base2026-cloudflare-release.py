@@ -19,6 +19,7 @@ output directories are refused so a dirty release cannot be overwritten.
 from __future__ import annotations
 
 import argparse
+from collections import Counter
 import hashlib
 import html
 import json
@@ -30,9 +31,11 @@ import sys
 import tempfile
 from dataclasses import dataclass, field
 from datetime import datetime
+from html.parser import HTMLParser
 from pathlib import Path
 from typing import Iterable, Mapping, Sequence
 from urllib.parse import urlsplit, urlunsplit
+from xml.etree import ElementTree
 
 try:
     from public_manifest_contract import validate_claim_receipt_sidecars
@@ -1522,6 +1525,147 @@ def _remove_runtime_owned_urls_from_static_sitemap(text: str) -> str:
     return text
 
 
+class _SourcePageMetadataParser(HTMLParser):
+    """Read the metadata needed for the generated source pagination contract."""
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.canonical: str | None = None
+        self.robots: list[str] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        values = {name.casefold(): (value or "") for name, value in attrs}
+        if tag.casefold() == "meta" and values.get("name", "").casefold() == "robots":
+            self.robots.append(values.get("content", ""))
+        if tag.casefold() == "link" and "canonical" in values.get("rel", "").casefold().split():
+            self.canonical = self.canonical or values.get("href") or None
+
+
+def _source_page_metadata(path: Path) -> _SourcePageMetadataParser:
+    parser = _SourcePageMetadataParser()
+    parser.feed(path.read_text(encoding="utf-8", errors="ignore"))
+    parser.close()
+    return parser
+
+
+def _sitemap_locs(path: Path) -> list[str]:
+    """Parse sitemap locations and reject malformed release sitemap XML."""
+
+    try:
+        root = ElementTree.parse(path).getroot()
+    except (ElementTree.ParseError, OSError, UnicodeError) as exc:
+        raise ReleaseBuildError(f"sitemap XML could not be parsed: {path.name}") from exc
+    locations: list[str] = []
+    for element in root.iter():
+        if element.tag.rsplit("}", 1)[-1].casefold() != "loc":
+            continue
+        location = (element.text or "").strip()
+        if not location:
+            raise ReleaseBuildError(f"sitemap XML contains an empty <loc>: {path.name}")
+        locations.append(html.unescape(location))
+    return locations
+
+
+SOURCE_PAGINATION_ROUTE_RE = re.compile(r"^/sources/page-[0-9]+$")
+
+
+def _is_source_pagination_url(url: str) -> bool:
+    parsed = urlsplit(url)
+    return (
+        parsed.scheme.casefold() == "https"
+        and parsed.netloc.casefold() == "base2026.dev"
+        and not parsed.query
+        and not parsed.fragment
+        and bool(SOURCE_PAGINATION_ROUTE_RE.fullmatch(parsed.path))
+    )
+
+
+def _validate_source_pagination_sitemap_contract(stage: Path) -> dict[str, int]:
+    """Require each indexable generated source page in one static shard only."""
+
+    expected: list[str] = []
+    source_dir = stage / "sources"
+    if source_dir.is_dir():
+        for page in sorted(source_dir.glob("page-*.html")):
+            metadata = _source_page_metadata(page)
+            directives = {
+                directive.strip().casefold()
+                for content in metadata.robots
+                for directive in content.split(",")
+            }
+            if "noindex" in directives:
+                continue
+            relative_path = page.relative_to(stage)
+            expected_url = BASE2026_ORIGIN + _extensionless_html_path(
+                _public_route_for_file(relative_path)
+            )
+            canonical = html.unescape(metadata.canonical or "").strip()
+            if not canonical:
+                raise ReleaseBuildError(
+                    "source pagination sitemap contract failed: "
+                    f"indexable page has no canonical ({relative_path.as_posix()})"
+                )
+            if canonical.rstrip("/") != expected_url.rstrip("/"):
+                raise ReleaseBuildError(
+                    "source pagination sitemap contract failed: "
+                    f"canonical mismatch ({relative_path.as_posix()}): "
+                    f"expected={expected_url} actual={canonical}"
+                )
+            expected.append(expected_url)
+
+    expected_counts = Counter(expected)
+    if any(count != 1 for count in expected_counts.values()):
+        raise ReleaseBuildError(
+            "source pagination sitemap contract failed: generated pages map to duplicate canonicals"
+        )
+    expected_set = set(expected)
+
+    sitemap_dir = stage / "sitemaps"
+    static_sitemaps = sorted(
+        path
+        for path in sitemap_dir.glob("base2026-*.xml")
+        if path.name != Path(HUB_SITEMAP_FILENAME).name
+    ) if sitemap_dir.is_dir() else []
+    static_locs = [location for path in static_sitemaps for location in _sitemap_locs(path)]
+    static_source_locs = [location for location in static_locs if _is_source_pagination_url(location)]
+    static_counts = Counter(static_source_locs)
+    static_source_set = set(static_counts)
+
+    missing = sorted(expected_set - static_source_set)
+    extra = sorted(static_source_set - expected_set)
+    duplicate = sorted(url for url, count in static_counts.items() if count != 1)
+
+    runtime_owned_locs: list[str] = []
+    sitemap_candidates = [
+        path for path in stage.glob("sitemap*.xml") if path.is_file()
+    ]
+    if sitemap_dir.is_dir():
+        sitemap_candidates.extend(
+            path
+            for path in sitemap_dir.glob("*.xml")
+            if path.is_file() and path not in static_sitemaps
+        )
+    for path in sorted(set(sitemap_candidates)):
+        runtime_owned_locs.extend(_sitemap_locs(path))
+    runtime_overlap = sorted(expected_set & set(runtime_owned_locs))
+
+    if missing or extra or duplicate or runtime_overlap:
+        raise ReleaseBuildError(
+            "source pagination sitemap contract failed: "
+            f"missing={','.join(missing) or '-'} "
+            f"extra={','.join(extra) or '-'} "
+            f"duplicate={','.join(duplicate) or '-'} "
+            f"runtime_owned={','.join(runtime_overlap) or '-'}"
+        )
+
+    return {
+        "source_pagination_indexable_pages": len(expected),
+        "source_pagination_static_sitemap_urls": len(static_source_locs),
+        "source_pagination_static_sitemap_shards": len(static_sitemaps),
+        "source_pagination_runtime_owned_urls": len(runtime_overlap),
+    }
+
+
 def _public_route_for_file(relative_path: Path) -> str:
     path = relative_path.as_posix()
     if path == "index.html":
@@ -2239,6 +2383,10 @@ def build_release(
         ).encode("utf-8")
         _write_bytes(stage / ASSETSIGNORE_FILENAME, assetsignore_payload, 0o644)
 
+        source_pagination_sitemap_verification: dict[str, int] = {}
+        if standalone_startup:
+            source_pagination_sitemap_verification = _validate_source_pagination_sitemap_contract(stage)
+
         # Verify the staged artifact, excluding only generated metadata.  The
         # marker exception is file-local and cannot hide stale paths elsewhere.
         remaining_old_origin = 0
@@ -2372,6 +2520,7 @@ def build_release(
             raise ReleaseBuildError("one or more binary files changed during transformation")
 
         verification = {
+            **source_pagination_sitemap_verification,
             "old_base2026_canonical_origin_remaining": remaining_old_origin,
             "broken_knowledge_product_paths_remaining": remaining_knowledge,
             "local_path_markers_remaining": local_path_markers,
