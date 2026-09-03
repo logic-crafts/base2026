@@ -1000,7 +1000,7 @@ function renderProjectedSourcePage(videoId: string, rows: ProjectedSourcePageRow
   const sourceId = videoId.slice(-10);
   const pageTitle = `${title} — source ${sourceId}`;
   const browserTitle = `${truncateText(title, 38)} | ${sourceId} | Base2026`;
-  const description = truncateText(first.evidence_excerpt || first.claim_text, 160);
+  const description = `${truncateText(first.evidence_excerpt || first.claim_text, 138)} Source ${sourceId}.`;
   const topics = Array.from(new Set(rows.map((row) => row.topic_label).filter(Boolean)));
   const jsonLd = JSON.stringify({
     "@context": "https://schema.org",

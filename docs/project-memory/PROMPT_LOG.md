@@ -9933,6 +9933,11 @@ Actions and receipts:
 - The first live canary exposed a source-shell/member-assets integration defect
   and was immediately rolled back. Added a regression test, rebuilt with the
   explicit member workspace and redeployed Worker
-  `60429ef4-b1b8-47dc-9af4-b4b882ac2390`. Live public, source, sitemap,
-  API/MCP, auth/member and held-claim boundaries pass. A second full DataForSEO
-  crawl is running under task `09030026-1882-0216-0000-a8712b158b1e`.
+  `60429ef4-b1b8-47dc-9af4-b4b882ac2390`, then applied title, schema-image,
+  direct-workspace-link and unique source-description corrections. Final Worker
+  `99849d8e-802d-4e8e-a840-8d352f176da6`, artifact
+  `0b547f531bcbcd4543d89ebcc55050d78697bcf7b670ef884ec50d25278669d4`.
+  Live public, source, sitemap, API/MCP, auth/member and held-claim boundaries
+  pass. Fresh DataForSEO probes show title61, schema fatal/error/warning0 and
+  redirect/link-to-redirect0. The mixed-version follow-up task was stopped at
+  2,260 pages and is not used as final evidence.

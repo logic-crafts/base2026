@@ -1196,11 +1196,12 @@ def source_seo_title(source: dict, handle: str) -> str:
 def source_seo_description(source: dict, handle: str) -> str:
     date = source.get("published_date") or source.get("published_at") or "undated"
     topic = source_seo_topic(source)
+    record_id = source_record_id(source)
     excerpt = compact(source.get("source_summary_short") or source.get("excerpt") or "", 130)
-    base = f"Attributed Base2026 source record from {handle}, published {date}, with public evidence about {topic}."
+    base = f"Base2026 source {record_id} by {handle}, published {date}: attributed public evidence about {topic}."
     if excerpt:
-        return compact(f"{base} Excerpt: {excerpt}", 180)
-    return compact(f"{base} Includes original-source attribution, related passages, topics, and correction controls.", 180)
+        return compact(f"{base} Excerpt: {excerpt}", 160)
+    return compact(f"{base} Includes original-source attribution and correction controls.", 160)
 
 
 def source_href(source: dict, prefix: str = "../sources") -> str:

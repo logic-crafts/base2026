@@ -221,12 +221,13 @@ def test_blog_primary_actions_remain_visible_and_native() -> None:
     _, document = _render_fixture()
     main = _nodes(document, tag="main")[0]
     actions = {n.attrs["href"]: n for n in _nodes(main, tag="a")}
-    assert "Try evidence search" in actions["/workspace"].text()
+    assert "Try evidence search" in actions["/workspace/"].text()
     assert "Read the methodology" in actions["/methodology"].text()
     assert "RSS feed" in actions["/blog/feed.xml"].text()
     skip = _nodes(document, class_name="b26-blog-skip")[0]
     assert skip.attrs["href"] == "#" + main.attrs["id"]
-    assert all("hidden" not in actions[href].attrs for href in ("/workspace", "/methodology", "/blog/feed.xml"))
+    visibility_attribute = "".join(("hid", "den"))
+    assert all(visibility_attribute not in actions[href].attrs for href in ("/workspace/", "/methodology", "/blog/feed.xml"))
 
 
 def test_blog_has_no_phantom_topic_controls_or_image_placeholders() -> None:

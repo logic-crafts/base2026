@@ -1,6 +1,6 @@
 # Base2026 DataForSEO SEO/GEO production release
 
-Verified through 2026-09-03 00:26 UTC.
+Verified through 2026-09-03 01:08 UTC.
 
 ## Audit evidence
 
@@ -20,23 +20,30 @@ Verified through 2026-09-03 00:26 UTC.
 - Static sitemap ownership is deduplicated: guide and hub URLs have one owner, and neighboring sitemap records are protected by regression tests.
 - Misleading `VideoObject` markup was removed from pages that link to a TikTok webpage rather than a directly accessible media object. `CreativeWork` attribution remains.
 - Editorial structured data always has a valid fallback image, and a small set of overlong core titles was shortened.
+- Every generated source description now includes its stable source ID; the
+  1,724 released static source descriptions are unique and at most 159
+  characters. Dynamic D1 source descriptions use the same ID-based invariant.
+- Blog and editorial calls to action link directly to `/workspace/`, removing
+  the only crawl-discovered internal hop through `/workspace`.
+- AI Recommends `Article` schema now declares the existing public social image.
 
 ## Release identity and safety
 
 - Git source commits: `16c9ee84b` and `56f78605e` on `codex/base2026-dataforseo-audit-fixes-20260902`.
 - Production-only selected patch base: last released API/MCP source `b91fc124f`, commits `bef53ad94` and `d51d5156b`. This prevents the held Claim Receipt Ledger source from being accidentally deployed before migration and eligibility approval.
-- Final asset: 4,272 served files, tree SHA-256 `de422d545b43c2fe73f2038c9c2b8ff9517bf906db3d7c122536ca28f9178c2d`.
+- Final asset: 4,272 served files, tree SHA-256 `0b547f531bcbcd4543d89ebcc55050d78697bcf7b670ef884ec50d25278669d4`.
 - Final asset invariants: 1,724 unique source titles/H1s, title maximum 65, 19 pagination pages, 1,763 unique static sitemap URLs, zero duplicate sitemap membership, zero internal relative `.html` links and zero `VideoObject` pages.
 - Member-safe build flag was explicit. `my-research/index.html`, member CSS and member JavaScript are present; member CSS/JavaScript hashes match the retained reviewed member release.
 - Publication gate passed with four approved public data files and no private marker failure.
-- Source branch passed 180 Python tests, 634 Worker tests and TypeScript; the focused source-catalog suite passed 80/80. Production patch branch passed 178 Python tests, 627 Worker tests, TypeScript and final Wrangler dry-run with all public/member bindings.
+- Source branch passed 181 Python tests. Production patch branch passed 627
+  Worker tests, TypeScript and final Wrangler dry-run with all public/member bindings.
 - Independent reviewer verdict: PASS, no release blocker.
 
 ## Canary rollback and final live result
 
 The first canary `f298cd98-6125-4bfe-ab72-afd98467b8ad` exposed two live-gate failures: `/sources/` returned 503 because the runtime shell validator did not accept builder-canonicalized source links, and `/my-research/` returned 404 because the member workspace flag was omitted. It was immediately rolled back to `f8781f4d-30fd-4d70-ab96-a4e8d718226a`; both routes returned 200 after rollback.
 
-The repaired member-safe release is Worker `60429ef4-b1b8-47dc-9af4-b4b882ac2390` at 100%. Live readback confirms:
+The repaired member-safe canary was Worker `60429ef4-b1b8-47dc-9af4-b4b882ac2390`. Later bounded releases shortened the last 68-character solution title to 61 characters, added the validated Article image, removed the single `/workspace` redirecting link and made all source descriptions deterministic. Final Worker `99849d8e-802d-4e8e-a840-8d352f176da6` is at 100%. Live readback confirms:
 
 - homepage, blog, founder, API, MCP, integrations, Evidence Search, source catalog, source pagination and representative static/dynamic source records return 200 with expected canonicals;
 - `/my-research/` returns 200 with `noindex,nofollow` and private/no-store policy;
@@ -44,6 +51,20 @@ The repaired member-safe release is Worker `60429ef4-b1b8-47dc-9af4-b4b882ac2390
 - held `/api/claim-receipts/v1` remains 404;
 - the recursive sitemap graph has 1,874 occurrences, 1,874 unique URLs and zero duplicate memberships.
 
-Post-release DataForSEO full-crawl task `09030026-1882-0216-0000-a8712b158b1e` is the measurement follow-up. Its final totals must be appended when the remote crawl reaches `finished`; task creation is not a completed verification.
+The second full task `09030026-1882-0216-0000-a8712b158b1e` crossed several
+live versions while crawling. It was stopped at 2,260 pages instead of being
+misrepresented as a clean after-snapshot. It exposed the last internal
+`/workspace` 307 and source-description duplication before their fixes.
 
-Immediate rollback is `f8781f4d-30fd-4d70-ab96-a4e8d718226a`. Do not use the rejected `f298cd98-6125-4bfe-ab72-afd98467b8ad`.
+Fresh bounded DataForSEO evidence after the final corrections:
+
+- task `09030033-1882-0216-0000-17a075b38002`: solution title length 61,
+  HTTP 200, self-canonical, favicon present, no broken link and no long-title flag;
+- task `09030059-1882-0216-0000-af4277b30e3b`: Article structured data has
+  fatal 0, errors 0 and warnings 0;
+- task `09030102-1882-0216-0000-6cce65a9fdae`: ten-page blog probe has
+  redirects 0, links to redirects 0, broken links 0 and 4xx/5xx 0.
+
+Immediate rollback is `14174d46-c237-4ad9-897c-7952060f3e70`; second-level
+rollback is `60429ef4-b1b8-47dc-9af4-b4b882ac2390`. Do not use the rejected
+`f298cd98-6125-4bfe-ab72-afd98467b8ad`.

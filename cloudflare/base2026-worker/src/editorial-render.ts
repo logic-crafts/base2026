@@ -280,7 +280,7 @@ export function renderEditorialArticleBody(article: StoredEditorialArticle): str
     + '<p class="b26-blog-eyebrow">Read, then investigate</p>'
     + '<h2 id="blog-bridge-title">Keep the source in view.</h2>'
     + "<p>Search the public evidence library, follow the original material, and see how each record is prepared.</p>"
-    + '</div><div class="b26-blog-bridge__actions"><a class="b26-button--primary" href="/workspace">'
+    + '</div><div class="b26-blog-bridge__actions"><a class="b26-button--primary" href="/workspace/">'
     + 'Try evidence search <span aria-hidden="true">→</span></a>'
     + '<a class="b26-blog-text-link" href="/methodology">Read the methodology <span aria-hidden="true">→</span></a>'
     + "</div></aside>";

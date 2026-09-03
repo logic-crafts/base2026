@@ -220,8 +220,8 @@ describe("ordinary blog byte compatibility", () => {
     const digest = createHash("sha256").update(html).digest("hex");
     // Captured from the renderer before any guide changes, not a live article.
     expect(digest).toBe(illustrated
-      ? "84a53b94fcb73d16f2bb69eb7f0a4bbb879e455364372ce2566d85bed039563f"
-      : "da9b5b68f82e62ccc4d556c8a25d4fe57c4a3d8b400d000b3afa9fabff9d1218");
+      ? "655f7b6e1996d795982fa800038614167f09fb975e3d15a795980508e3981210"
+      : "8725aafba48be3f7d58bbbd30817751844e7595665d59c2e67015ae8bf5635e6");
     expect(html).not.toContain("base2026-evidence-guide");
   });
 });

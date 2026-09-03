@@ -176,6 +176,14 @@ class AIRecommendsSolutionTests(unittest.TestCase):
         self.assertNotIn("http://", script)
         self.assertNotIn("https://", script)
 
+    def test_solution_article_schema_has_public_image(self) -> None:
+        report = validate_solution(self.solution, self.context)
+        html = generator.solution_page(self.solution, report)
+        self.assertIn(
+            '"image": "https://aggressorbulkit.online/knowledge/static/assets/base2026-ai-visibility-card.png"',
+            html,
+        )
+
     def test_solution_shell_explains_base2026_jobs_without_legacy_apply_link(self) -> None:
         report = validate_solution(self.solution, self.context)
         html = generator.solution_page(self.solution, report)

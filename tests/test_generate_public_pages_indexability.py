@@ -71,6 +71,13 @@ class SourceIndexabilityTests(unittest.TestCase):
         self.assertIn("2864223510", title_one)
         self.assertNotIn("...", title_one)
 
+        description_one = pages.source_seo_description(first, "@creator_with_a_long_handle")
+        description_two = pages.source_seo_description(second, "@creator_with_a_long_handle")
+        self.assertLessEqual(len(description_one), 160)
+        self.assertLessEqual(len(description_two), 160)
+        self.assertNotEqual(description_one, description_two)
+        self.assertIn("2864223510", description_one)
+
     def test_source_schema_does_not_claim_a_video_embed_without_media_metadata(self) -> None:
         source = {**self.source, "item_id": "tiktok-video-7657638702864223510"}
         html = pages.source_page(source, self.passages, self.insights)

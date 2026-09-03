@@ -1,6 +1,6 @@
 # Base2026 Current Status
 
-Verified 2026-09-03 through 00:26 UTC. Public counters below are the current
+Verified 2026-09-03 through 01:08 UTC. Public counters below are the current
 live read. [API/MCP production receipt](HANDOFF_2026-09-01_PUBLIC_API_MCP_PRODUCTION_RELEASE.md)
 and [closure receipt](BASE2026_OFFICE_CLOSURE_2026_08_31.md)
 separates completed releases from remaining observation and external blockers.
@@ -8,7 +8,7 @@ Older dated receipts are history, not current counters.
 
 ## Live product
 
-- Public Worker `60429ef4-b1b8-47dc-9af4-b4b882ac2390` is live at 100% with
+- Public Worker `99849d8e-802d-4e8e-a840-8d352f176da6` is live at 100% with
   the crawl-derived SEO/GEO repair. Recursive sitemap readback is 1,874/1,874
   unique with zero duplicate membership. Source catalog, source pagination,
   representative static/dynamic source pages, API/MCP, Evidence Search and
@@ -16,7 +16,8 @@ Older dated receipts are history, not current counters.
   [HANDOFF_2026-09-03_DATAFORSEO_SEO_GEO_PRODUCTION_RELEASE.md](HANDOFF_2026-09-03_DATAFORSEO_SEO_GEO_PRODUCTION_RELEASE.md).
 - Rejected canary `f298cd98-6125-4bfe-ab72-afd98467b8ad` was rolled back after
   `/sources/` 503 and `/my-research/` 404. Never restore it. Immediate healthy
-  rollback is `f8781f4d-30fd-4d70-ab96-a4e8d718226a`.
+  rollback is final pre-description Worker `14174d46-c237-4ad9-897c-7952060f3e70`;
+  member-safe SEO Worker `60429ef4-b1b8-47dc-9af4-b4b882ac2390` is a second-level rollback.
 
 - Claim Receipt Ledger source is merged through
   [PR36](https://github.com/offflinerpsy/base2026/pull/36), merge
@@ -28,7 +29,7 @@ Older dated receipts are history, not current counters.
 - Previous API/MCP Worker `f8781f4d-30fd-4d70-ab96-a4e8d718226a` remains the
   immediate healthy rollback. Its read-only MCP, API/integration guidance,
   rate limit, Evidence Search, member auth/My Research and binding contract are
-  preserved by the current `60429ef4-b1b8-47dc-9af4-b4b882ac2390` release.
+  preserved by the current `99849d8e-802d-4e8e-a840-8d352f176da6` release.
 - `/api`, `/mcp` and `/integrations` are live200, canonical and indexable.
   Modern discovery, six-tool listing, bounded search, legacy initialization,
   invalid-header rejection and no-id notification behavior passed live.
