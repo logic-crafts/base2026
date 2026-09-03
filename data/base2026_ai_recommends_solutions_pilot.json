@@ -271,7 +271,7 @@
     },
     {
       "slug": "measure-ai-search-visibility",
-      "title": "Measure AI Search Visibility Without Invented Attribution",
+      "title": "Measure AI Visibility Without Invented Attribution",
       "meta_description": "A measurement framework combining GA4 referrals, Search Console trends and manual citation checks while separating visibility from attributable traffic.",
       "updated_at": "2026-07-10",
       "audience": "Marketing and analytics operators who need a credible AI-visibility baseline without treating every direct visit, branded search or tool score as proven AI traffic.",

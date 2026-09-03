@@ -500,6 +500,10 @@ ROOT_HTML_ROUTE_RE = re.compile(
     r"(?<![A-Za-z0-9_:/.-])(?P<path>/(?:[A-Za-z0-9._~!$&()*+,;=:@%/-]+\.html))(?P<suffix>[?#][^\s\"'<>]*)?",
     re.IGNORECASE,
 )
+RELATIVE_HTML_HREF_RE = re.compile(
+    r"(?P<prefix>\b(?:href|action)\s*=\s*)(?P<quote>[\"'])(?P<path>(?![/]|[A-Za-z][A-Za-z0-9+.-]*:)(?:\.\.?/)?[^\"'?#<>]+\.html)(?P<suffix>[?#][^\"'<>]*)?(?P=quote)",
+    re.IGNORECASE,
+)
 
 
 def _normalize_base2026_static_urls(text: str, counts: ReplacementCounts | None = None) -> str:
@@ -525,7 +529,22 @@ def _normalize_base2026_static_urls(text: str, counts: ReplacementCounts | None 
             counts.html_urls_to_extensionless += 1
         return mapped_path + (match.group("suffix") or "")
 
-    return ROOT_HTML_ROUTE_RE.sub(replace_root, normalized)
+    normalized = ROOT_HTML_ROUTE_RE.sub(replace_root, normalized)
+
+    def replace_relative_href(match: re.Match[str]) -> str:
+        path = match.group("path")
+        mapped_path = path[: -len(".html")]
+        if counts is not None:
+            counts.html_urls_to_extensionless += 1
+        return (
+            match.group("prefix")
+            + match.group("quote")
+            + mapped_path
+            + (match.group("suffix") or "")
+            + match.group("quote")
+        )
+
+    return RELATIVE_HTML_HREF_RE.sub(replace_relative_href, normalized)
 
 
 def _map_old_origin_url(full_url: str, counts: ReplacementCounts) -> str:
@@ -848,6 +867,13 @@ HUB_SITEMAP_ROUTES = (
     "/journal/source-backed-video-search-cloudflare/",
     "/journal/source-diversity-check/",
     "/tools/evidence-search/",
+)
+RUNTIME_GUIDE_ROUTES = (
+    "/topics/content-freshness",
+    "/topics/internal-linking",
+    "/topics/llms-txt-risk",
+    "/topics/schema-ai-citations",
+    "/topics/search-console-low-hanging-fruit",
 )
 
 # These are generated at the publication boundary rather than inherited from
@@ -1480,6 +1506,22 @@ def _add_hub_sitemap_to_index(text: str) -> str:
     return text.replace("</sitemapindex>", entry + "</sitemapindex>", 1)
 
 
+def _remove_runtime_owned_urls_from_static_sitemap(text: str) -> str:
+    """Keep hub and maintained-guide URLs in exactly one sitemap each."""
+
+    if "<urlset" not in text:
+        return text
+    for route in (*RUNTIME_GUIDE_ROUTES, *HUB_SITEMAP_ROUTES):
+        escaped_url = re.escape(BASE2026_ORIGIN + route)
+        text = re.sub(
+            rf"\s*<url>(?:(?!</url>).)*?<loc>{escaped_url}</loc>(?:(?!</url>).)*?</url>",
+            "",
+            text,
+            flags=re.IGNORECASE | re.DOTALL,
+        )
+    return text
+
+
 def _public_route_for_file(relative_path: Path) -> str:
     path = relative_path.as_posix()
     if path == "index.html":
@@ -1496,7 +1538,7 @@ def _remove_excluded_startup_route_references(text: str, routes: Iterable[str]) 
         escaped_url = re.escape(BASE2026_ORIGIN + route)
         if "<urlset" in text:
             text = re.sub(
-                rf"\s*<url>.*?<loc>{escaped_url}</loc>.*?</url>",
+                rf"\s*<url>(?:(?!</url>).)*?<loc>{escaped_url}</loc>(?:(?!</url>).)*?</url>",
                 "",
                 text,
                 flags=re.IGNORECASE | re.DOTALL,
@@ -1873,6 +1915,8 @@ def build_release(
                 replacements.add(transformed.replacements)
                 artifact_text = _rewrite_public_api_docs(relative_path, transformed.text)
                 artifact_text = _rewrite_legacy_base_styles(relative_path, artifact_text)
+                if standalone_startup and relative_path.suffix.casefold() == ".xml":
+                    artifact_text = _remove_runtime_owned_urls_from_static_sitemap(artifact_text)
                 if standalone_startup:
                     artifact_text = _remove_excluded_startup_route_references(
                         artifact_text, startup_excluded_routes

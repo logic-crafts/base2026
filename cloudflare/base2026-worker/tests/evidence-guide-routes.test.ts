@@ -221,7 +221,7 @@ describe("ordinary blog byte compatibility", () => {
     // Captured from the renderer before any guide changes, not a live article.
     expect(digest).toBe(illustrated
       ? "84a53b94fcb73d16f2bb69eb7f0a4bbb879e455364372ce2566d85bed039563f"
-      : "b18773436d98ec7f6b408dc8c6c711dedccbdb753e84d373e0b182a1263dae3b");
+      : "da9b5b68f82e62ccc4d556c8a25d4fe57c4a3d8b400d000b3afa9fabff9d1218");
     expect(html).not.toContain("base2026-evidence-guide");
   });
 });

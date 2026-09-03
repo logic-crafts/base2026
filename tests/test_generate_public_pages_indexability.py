@@ -14,6 +14,7 @@ SPEC.loader.exec_module(pages)
 class SourceIndexabilityTests(unittest.TestCase):
     def setUp(self) -> None:
         self.source = {
+            "creator_handle": "@creator",
             "public_source_text": "A useful attributed source excerpt.",
             "topics": ["ai-visibility"],
             "topic_labels": ["AI Visibility"],
@@ -58,6 +59,52 @@ class SourceIndexabilityTests(unittest.TestCase):
             "../?topic=internal-linking&q=Internal+Linking",
         )
         self.assertNotIn("#search?", pages.workspace_href(source="tiktok-video-123"))
+
+    def test_source_titles_are_unique_and_fit_search_result_limits(self) -> None:
+        first = {**self.source, "item_id": "tiktok-video-7657638702864223510"}
+        second = {**self.source, "item_id": "tiktok-video-7657638702864223511"}
+        title_one = pages.source_seo_title(first, "@creator_with_a_long_handle")
+        title_two = pages.source_seo_title(second, "@creator_with_a_long_handle")
+        self.assertLessEqual(len(title_one), 65)
+        self.assertLessEqual(len(title_two), 65)
+        self.assertNotEqual(title_one, title_two)
+        self.assertIn("2864223510", title_one)
+        self.assertNotIn("...", title_one)
+
+    def test_source_schema_does_not_claim_a_video_embed_without_media_metadata(self) -> None:
+        source = {**self.source, "item_id": "tiktok-video-7657638702864223510"}
+        html = pages.source_page(source, self.passages, self.insights)
+        self.assertIn('"@type": "CreativeWork"', html)
+        self.assertNotIn('"@type": "VideoObject"', html)
+        self.assertEqual(html.count("<h1"), 1)
+        self.assertIn('<p class="source-identity__handle">@creator</p>', html)
+
+    def test_topic_and_compare_browser_titles_fit_search_result_limits(self) -> None:
+        topic = {
+            "topic_id": "local-seo-operations-and-google-business-profile-maintenance",
+            "topic": "Local SEO operations and Google Business Profile maintenance",
+            "definition": "A public test definition.",
+            "public_insight_count": 1,
+            "source_count": 1,
+            "creator_count": 1,
+        }
+        pages.PUBLISHED_TOPIC_IDS = {topic["topic_id"]}
+        for rendered in (
+            pages.topic_page(topic, [], [], [], [], {}),
+            pages.compare_page(topic, []),
+        ):
+            title = rendered.split("<title>", 1)[1].split("</title>", 1)[0]
+            self.assertLessEqual(len(title), 65)
+
+    def test_source_index_pagination_is_bidirectional_and_crawlable(self) -> None:
+        self.assertEqual(
+            pages.source_index_pagination(1, 3),
+            '<nav class="source-index-pagination" aria-label="Source record pages"><a class="button-link" rel="next" href="page-2.html">Older source records</a></nav>',
+        )
+        middle = pages.source_index_pagination(2, 3)
+        self.assertIn('rel="prev" href="./"', middle)
+        self.assertIn('rel="next" href="page-3.html"', middle)
+        self.assertEqual(pages.source_index_pagination(1, 1), "")
 
 
 if __name__ == "__main__":

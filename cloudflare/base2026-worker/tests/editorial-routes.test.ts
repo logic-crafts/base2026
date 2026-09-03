@@ -276,6 +276,17 @@ describe("editorial HTML and public DTO integration", () => {
     expect(article.citation).toEqual(payload().sources.map((source) => source.url));
     expect(article.headline).toBe(payload().title);
     expect(article.isAccessibleForFree).toBe(true);
+    expect(article.image).toBe(ORIGIN + "/static/assets/base2026-ai-visibility-card.png");
+  });
+
+  it("keeps browser titles within the search-result contract without changing the article headline", async () => {
+    const longTitle = "A deliberately long public research title that should remain intact in the article heading and structured data";
+    const db = new SqliteD1(); const env = environment(db); await seed(db, payload({ title: longTitle }));
+    const html = await (await route("/blog/fixture-source-check/", env)).text();
+    const browserTitle = html.match(/<title>([^<]+)<\/title>/u)?.[1] ?? "";
+    expect(browserTitle.length).toBeLessThanOrEqual(65);
+    expect(schemaFrom(html)["@graph"][0].headline).toBe(longTitle);
+    expect(html).toContain(longTitle);
   });
 
   it("retains the approved evidence-search bridge on a rendered article", async () => {
