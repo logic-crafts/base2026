@@ -211,6 +211,105 @@ def test_hub_urls_are_owned_only_by_the_hub_sitemap() -> None:
     assert "/keep" in cleaned
 
 
+def _write_source_pagination_page(root: Path, page_number: int, *, old_origin: bool = False) -> None:
+    canonical = (
+        f"https://aggressorbulkit.online/knowledge/sources/page-{page_number}.html"
+        if old_origin
+        else f"https://base2026.dev/sources/page-{page_number}"
+    )
+    path = root / "sources" / f"page-{page_number}.html"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        "<!doctype html><html><head>"
+        '<meta name="robots" content="index,follow">'
+        f'<link rel="canonical" href="{canonical}">'
+        f"</head><body>Source page {page_number}</body></html>\n",
+        encoding="utf-8",
+    )
+
+
+def _write_source_pagination_sitemap(root: Path, locations: list[str]) -> None:
+    (root / "sitemaps").mkdir(parents=True, exist_ok=True)
+    urls = "".join(f"<url><loc>{location}</loc></url>" for location in locations)
+    (root / "sitemaps" / "base2026-001.xml").write_text(
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+        f"{urls}</urlset>\n",
+        encoding="utf-8",
+    )
+
+
+def test_source_pagination_sitemap_contract_is_exactly_once_and_not_hub_owned(
+    tmp_path: Path,
+) -> None:
+    stage = tmp_path / "stage"
+    _write_source_pagination_page(stage, 2)
+    _write_source_pagination_page(stage, 20)
+    page_urls = [
+        "https://base2026.dev/sources/page-2",
+        "https://base2026.dev/sources/page-20",
+    ]
+    _write_source_pagination_sitemap(stage, page_urls)
+    hub_sitemap = stage / builder.HUB_SITEMAP_FILENAME
+    hub_sitemap.write_text(
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+        "<url><loc>https://base2026.dev/</loc></url></urlset>\n",
+        encoding="utf-8",
+    )
+
+    verification = builder._validate_source_pagination_sitemap_contract(stage)
+
+    assert verification == {
+        "source_pagination_indexable_pages": 2,
+        "source_pagination_static_sitemap_urls": 2,
+        "source_pagination_static_sitemap_shards": 1,
+        "source_pagination_runtime_owned_urls": 0,
+    }
+    static_sitemap = builder._sitemap_locs(stage / "sitemaps/base2026-001.xml")
+    assert all(static_sitemap.count(url) == 1 for url in page_urls)
+    assert all(url not in hub_sitemap.read_text(encoding="utf-8") for url in page_urls)
+
+    hub_sitemap.write_text(
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+        f"<url><loc>{page_urls[0]}</loc></url></urlset>\n",
+        encoding="utf-8",
+    )
+    with pytest.raises(builder.ReleaseBuildError, match="source pagination sitemap contract failed"):
+        builder._validate_source_pagination_sitemap_contract(stage)
+
+    hub_sitemap.write_text(
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+        "<url><loc>https://base2026.dev/</loc></url></urlset>\n",
+        encoding="utf-8",
+    )
+
+    _write_source_pagination_sitemap(stage, page_urls + [page_urls[0]])
+    with pytest.raises(builder.ReleaseBuildError, match="source pagination sitemap contract failed"):
+        builder._validate_source_pagination_sitemap_contract(stage)
+
+
+def test_startup_release_fails_closed_when_source_pagination_is_missing_from_static_sitemap(
+    tmp_path: Path,
+) -> None:
+    source = tmp_path / "source-web"
+    write_fixture(source)
+    _write_source_pagination_page(source, 2, old_origin=True)
+    _write_source_pagination_page(source, 20, old_origin=True)
+    _write_source_pagination_sitemap(
+        source,
+        ["https://aggressorbulkit.online/knowledge/sources/page-2.html"],
+    )
+
+    output = tmp_path / "release"
+    with pytest.raises(builder.ReleaseBuildError, match="source pagination sitemap contract failed"):
+        builder.build_release(
+            source,
+            output,
+            homepage_template=builder.DEFAULT_HOMEPAGE_TEMPLATE,
+            homepage_stylesheet=builder.DEFAULT_HOMEPAGE_STYLESHEET,
+        )
+    assert not output.exists()
+
+
 def test_excluded_route_removal_never_consumes_adjacent_sitemap_entries() -> None:
     sitemap = (
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
