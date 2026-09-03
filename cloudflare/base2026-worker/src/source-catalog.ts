@@ -244,7 +244,9 @@ function renderShell(html: string, rows: SourceRow[], cursor: Cursor | null, nex
   if ((legacyHtml.match(/<section\b/giu) ?? []).length !== 1
     || (legacyHtml.match(/<\/section\s*>/giu) ?? []).length !== 1) throw new Error("SOURCE_CATALOG_SHELL_INVALID");
   const legacyCards = [...legacyHtml.matchAll(/<article class="intelligence-card">/gu)].length;
-  const legacyLinks = [...legacyHtml.matchAll(/href="tiktok-video-([0-9]{10,30})\.html"/gu)].map((match) => match[1]);
+  // The release builder canonicalizes internal `.html` aliases. Accept both
+  // the retained pre-build shell and its extensionless production form.
+  const legacyLinks = [...legacyHtml.matchAll(/href="tiktok-video-([0-9]{10,30})(?:\.html)?"/gu)].map((match) => match[1]);
   if (legacyCards < 1 || legacyCards > 200 || legacyLinks.length !== legacyCards || new Set(legacyLinks).size !== legacyCards
     || (legacyHtml.match(/<\/article\s*>/giu) ?? []).length !== legacyCards) throw new Error("SOURCE_CATALOG_SHELL_INVALID");
 
