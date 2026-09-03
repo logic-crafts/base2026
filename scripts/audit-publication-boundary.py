@@ -209,6 +209,7 @@ PUBLIC_SAFE_EXACT = {
     "tests/test_apply_base2026_editorial_decisions.py",
     "tests/test_base2026_apply_chatgpt_review.py",
     "tests/test_base2026_apply_chatgpt_transcript_status.py",
+    "tests/test_base2026_blog_index.py",
     "tests/test_base2026_pipeline_controller.py",
     "tests/test_base2026_review_insight_candidates.py",
     "tests/test_base2026_solution_backlog_portfolio.py",

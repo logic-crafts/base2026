@@ -193,6 +193,7 @@ def article_schema(solution: dict[str, Any], resolved: list[dict[str, Any]]) -> 
         "author": {"@type": "Person", "name": "Alex Yarosh", "url": "https://aggressorbulkit.online/about/"},
         "publisher": {"@type": "Organization", "name": "Logic Crafts LLC"},
         "mainEntityOfPage": canonical,
+        "image": "https://aggressorbulkit.online/knowledge/static/assets/base2026-ai-visibility-card.png",
         "about": solution.get("primary_query"),
         "citation": [url for url in citations if url],
         "isBasedOn": [url for url in citations if url],

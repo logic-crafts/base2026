@@ -391,6 +391,9 @@ describe("Base2026 search Worker", () => {
     const browserTitle = html.match(/<title>([^<]+)<\/title>/u)?.[1] ?? "";
     expect(browserTitle.length).toBeLessThanOrEqual(65);
     expect(browserTitle).toContain("2864223510");
+    const description = html.match(/<meta name="description" content="([^"]+)"/u)?.[1] ?? "";
+    expect(description.length).toBeLessThanOrEqual(160);
+    expect(description).toContain("Source 2864223510.");
     expect(html).toContain("Useful &lt;AI&gt; source evidence — source 2864223510");
     expect(html).toContain('--accent:#315eea');
     expect(html).not.toContain('#ff5a36');

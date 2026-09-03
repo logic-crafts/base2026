@@ -294,7 +294,7 @@ describe("editorial HTML and public DTO integration", () => {
     const html = await (await route("/blog/fixture-source-check/", env)).text();
     expect(html.includes('class="b26-blog-bridge"'), "Article must retain the shared evidence-search bridge").toBe(true);
     expect(html).toContain("Try evidence search");
-    expect(html).toContain('href="/workspace"');
+    expect(html).toContain('href="/workspace/"');
   });
 
   it("does not duplicate heading IDs when a new blog slug matches a journal slug", async () => {
