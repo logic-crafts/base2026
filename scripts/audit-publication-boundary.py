@@ -72,6 +72,7 @@ PUBLIC_SAFE_PREFIXES = {
     "cloudflare/base2026-www-redirect/",
     "contracts/",
     "docs/",
+    "examples/public-evidence-workflow/",
     "static/brand/",
     "templates/base2026-",
     "tests/fixtures/public-export-leaky/",
