@@ -1,11 +1,15 @@
 # Active Phase
 
 Phase 27 — free-tool acquisition loop released; 72-hour measurement active.
-Current checkpoint: 2026-09-04 19:48 UTC. Public Worker
-`da308428-5609-43ab-8b31-88deb124dc7b` is selected at 100% with
-`60613464-db66-4575-8963-e1c6e5e0ffd9` as the immediate rollback. Source
+Current checkpoint: 2026-09-04 20:16 UTC. Public Worker
+`327a21a5-ca54-457c-8099-aa2447a7fe1a` is selected at 100% with
+`da308428-5609-43ab-8b31-88deb124dc7b` as the immediate rollback. Source
 Diversity Check, its live MCP read path and its canonical/sitemap/mobile gates
 pass. PR47 also places the reproducible public Evidence Pack on GitHub.
+
+Evidence Search now uses the DataForSEO-validated, truthful job wording
+“search inside expert videos” while retaining its bounded-corpus and
+attribution limits. This was a one-asset release, not a new doorway page.
 
 The active objective is the first verified non-owner visit and successful tool
 action from the 257-impression/zero-click baseline. Build the deterministic
@@ -24,6 +28,14 @@ independence or quality checker. IndexNow accepted only its new canonical URL;
 indexing, discovery traffic and activation are not yet proved. Exact release
 evidence is in
 [the production handoff](HANDOFF_2026-09-04_SOURCE_DIVERSITY_PRODUCTION_RELEASE.md).
+
+## Evidence Search intent alignment — released (2026-09-04)
+
+The existing route retains its canonical and functionality but now states the
+actual free-tool job in its title, description, H1 and structured data. The
+release changed one served asset and did not repeat IndexNow. Exact QA,
+artifact and rollback evidence is in
+[the intent release handoff](HANDOFF_2026-09-04_EVIDENCE_SEARCH_INTENT_RELEASE.md).
 
 ## SEO/GEO crawl repair — released (2026-09-03)
 

@@ -1,5 +1,22 @@
 # Data Sources
 
+## 2026-09-04 Evidence Search intent and live release evidence
+
+A bounded US-English DataForSEO packet checked candidate free-tool language.
+`search inside video` returned approximate volume 90 and a mixed but relevant
+in-video-search SERP. `free research tool` and `tiktok research tool` were
+rejected for current routes because their live intent is keyword research and
+TikTok's research/product ecosystem. `tiktok transcript generator` returned
+approximate volume 2,900, but its exact SERP expects a working paste-URL
+transcriber; it is not evidence that an article or renamed tool would rank.
+
+Worker `327a21a5-ca54-457c-8099-aa2447a7fe1a` now serves the aligned Evidence
+Search copy. The route is HTTP 200 and self-canonical; health, home, Source
+Diversity and MCP remain 200. Counts are unchanged at 2,259 documents, 1,638
+sources, 114 evidence routes, 167 cards and zero public full transcripts.
+
+Last updated: 2026-09-04
+
 ## 2026-09-04 Source Diversity Check production evidence
 
 Worker `da308428-5609-43ab-8b31-88deb124dc7b` serves the reviewed free Source

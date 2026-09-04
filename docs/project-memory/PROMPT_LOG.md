@@ -1,5 +1,23 @@
 # Prompt Log
 
+## 2026-09-04 — Evidence Search intent alignment released
+
+Used a bounded DataForSEO demand and exact-SERP check to separate real product
+jobs from attractive but false-intent phrases. Rejected generic `free research
+tool`, `tiktok research tool` and a misleading rename of Source Diversity.
+Changed the existing Evidence Search title, description, structured data, H1
+and lede to the accurate promise “search inside expert videos,” retaining the
+bounded processed-corpus and attribution limits.
+
+The release builder changed one served file. Thirty-four focused tests,
+typecheck, target-account dry-run and the public artifact gate passed. An
+initial deploy inherited the legacy local Cloudflare account and failed before
+version creation; the working account was then explicitly read back and pinned.
+Worker `327a21a5-ca54-457c-8099-aa2447a7fe1a` is live at 100%, with
+`da308428-5609-43ab-8b31-88deb124dc7b` as rollback. Live page, health, home,
+Source Diversity and MCP checks pass; stats and the member-auth fail-closed
+state are unchanged. IndexNow was not repeated for the unchanged canonical.
+
 ## 2026-09-04 — Source Diversity Check released; public Evidence Pack merged
 
 Merged the reviewed free-tool source through PR46, rebuilt a fresh public
