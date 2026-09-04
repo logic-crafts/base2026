@@ -1,62 +1,36 @@
 # Next Action
 
-## Source-backed Brief candidate — September 4, 2026
+## Three-tool acquisition loop live — September 4, 2026
 
-The reviewed Source-backed Brief source has been merged into `main`; its
-production release is intentionally paired with the activation-measurement
-candidate below so the new public tool is measurable at launch.
+Public Worker `3ecddaf3-f594-4b4a-91d4-fd409bd62e4a` now serves Evidence
+Search, Source Diversity Check and Source-backed Brief at 100%; compatible
+rollback is `327a21a5-ca54-457c-8099-aa2447a7fe1a`. Source-backed Brief
+resolves at most eight selected public IDs through the bounded read-only MCP,
+keeps unresolved records explicit and exports deterministic Markdown/JSON.
 
-## Public tool activation measurement candidate — September 4, 2026
+The first-party `POST /api/analytics/event` sink is live on the price-$0
+Cloudflare Analytics Engine entitlement. Route/event/property allowlists,
+same-origin enforcement and coarse enum-only storage passed live checks. SQL
+readback proved the dataset and the initial brief events; those events are QA
+smoke, not visitors or traffic. Member auth remains deliberately fail-closed
+during the migrated-account contour.
 
-The isolated branch `codex/base2026-activation-measurement-20260904` adds a
-strict first-party `POST /api/analytics/event` candidate backed by a new
-Analytics Engine binding. It closes the verified listener/dataLayer gap for
-Evidence Search and Source Diversity Check while recording only allowlisted
-event names, exact tool routes, server UTC-hour buckets and coarse properties.
-The candidate is committed locally but not deployed, pushed, merged, or used
-to create a remote dataset; no D1 migration was added.
-
-Next action: root reviews the exact commit and
-`HANDOFF_2026-09-04_ACTIVATION_MEASUREMENT.md`. If approved, build the exact
-public artifact, run the binding/dry-run/publication gates and authorize a
-separate deployment. Then verify both live HTML script tags, one
-non-sensitive `204` canary and aggregate Analytics Engine readback. Do not
-claim unique visitors or traffic from this event count.
-
-## Source-backed Brief release candidate — September 4, 2026
-
-The isolated branch `codex/base2026-source-backed-brief-20260904` adds the
-public `/tools/source-backed-brief/` utility on top of current `origin/main`
-at `946b771fd`. It accepts a question, audience, format and up to eight
-already-selected canonical public record/source IDs, then performs bounded
-anonymous `get_source` lookups and renders the same deterministic
-record/creator/original-source/excerpt/unknowns snapshot as Markdown or JSON.
-Source IDs follow the public MCP 200-character maximum; passages are copied
-only when their own public boundary and exact `search_passage` policy pass. The
-form does not use GET/query prefill or URL serialization, and its no-JS
-explanation remains available. It does not infer truth, consensus or
-independence, call an LLM, read private or raw media/transcript fields, write
-D1, or deploy. Evidence Search and the resource hub carry one contextual link
-each; Source Diversity behavior and member/auth bindings remain unchanged.
-
-Next action: root command center reviews the exact implementation commit,
-focused tests and public-boundary receipt. If approved, build a fresh reviewed
-Cloudflare candidate and authorize deployment separately, then verify the live
-route, API readback, canonical, sitemap, mobile behavior and the four bounded
-analytics events. Do not treat this local candidate as live traffic or
-indexing evidence. Details:
-[HANDOFF_2026-09-04_SOURCE_BACKED_BRIEF.md](HANDOFF_2026-09-04_SOURCE_BACKED_BRIEF.md).
+Next action: distribute the exact three-tool workflow to qualified external
+audiences, then measure owner-excluded referrals and successful tool actions
+over the existing 72-hour window. Do not generate generic article quotas,
+keyword-swapped pages or false `best`/`verified`/consensus claims. Details:
+[HANDOFF_2026-09-04_SOURCE_BRIEF_ACTIVATION_RELEASE.md](HANDOFF_2026-09-04_SOURCE_BRIEF_ACTIVATION_RELEASE.md).
 
 ## Evidence Search intent aligned; acquisition measurement active — September 4, 2026
 
-Public Worker `327a21a5-ca54-457c-8099-aa2447a7fe1a` now serves the existing
-Evidence Search with the truthful user job “search inside expert videos” in
+The current public Worker retains the Evidence Search user job “search inside
+expert videos” in
 its title, description, H1 and WebApplication data. The successful deployment
 uploaded one changed asset; health and the adjacent tool/API routes pass. The
-immediate rollback is `da308428-5609-43ab-8b31-88deb124dc7b`.
+original intent-release rollback is recorded in the linked handoff.
 
-Next action: compare CTR and activation against the existing baseline, publish
-the reviewed Evidence Pulse worked example and complete Source-Backed Brief.
+Next action: compare CTR and real activation against the existing baseline and
+distribute the reviewed Evidence Pulse worked example plus the now-live Brief.
 Treat the larger `tiktok transcript generator` demand as a separate gated
 product build, never as a keyword-only landing page. Details:
 [HANDOFF_2026-09-04_EVIDENCE_SEARCH_INTENT_RELEASE.md](HANDOFF_2026-09-04_EVIDENCE_SEARCH_INTENT_RELEASE.md).

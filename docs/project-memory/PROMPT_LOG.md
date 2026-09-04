@@ -1,5 +1,29 @@
 # Prompt Log
 
+## 2026-09-04 — Source-backed Brief and activation measurement released
+
+Merged the hardened Brief through PR50 and the integrated measurement release
+through PR51. Built the reviewed 4281-file artifact, passed Worker/Python,
+typecheck, publication-boundary, dry-run and browser gates, then attempted the
+target-account deployment. Cloudflare correctly stopped the first attempts
+before version creation: Analytics Engine was disabled, and after its price-$0
+entitlement propagated the checked config still named former-account D1 UUIDs.
+
+Enabled Analytics Engine in the exact `hello@base2026.dev` account and pinned
+all four current D1 UUIDs. Worker
+`3ecddaf3-f594-4b4a-91d4-fd409bd62e4a` is now live at 100%, with
+`327a21a5-ca54-457c-8099-aa2447a7fe1a` as rollback. All three tools, public MCP,
+health and the member fail-closed boundary passed live readback. A live Brief
+resolved 2 selected public records, retained 1 unresolved record and rendered
+3 bounded excerpts without URL serialization or console errors.
+
+Analytics rejected a mismatched route/event with 400 and a wrong origin with
+403, accepted a bounded canary with 204, and SQL readback showed the
+`base2026_activation_v1` table plus the first three brief event classes. These
+are QA events, not visitors. IndexNow accepted only the new Brief canonical
+once with HTTP 200. Exact hashes, tests, bindings and rollback are in
+`HANDOFF_2026-09-04_SOURCE_BRIEF_ACTIVATION_RELEASE.md`.
+
 ## 2026-09-04 — Source-backed Brief utility candidate
 
 Implemented the bounded public `/tools/source-backed-brief/` utility in an

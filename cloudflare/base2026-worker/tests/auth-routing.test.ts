@@ -117,9 +117,9 @@ describe("member routing isolation in the public Worker", () => {
     expect(memberHandler).not.toHaveBeenCalled();
   });
 
-  it("pins the reviewed production auth binding and keeps OAuth callback URLs out of invocation logs", () => {
+  it("pins the migrated production auth binding in fail-closed mode and keeps OAuth callback URLs out of invocation logs", () => {
     const config = JSON.parse(readFileSync(new URL("../wrangler.jsonc", import.meta.url), "utf8"));
-    expect(config.vars.MEMBER_AUTH_ENABLED).toBe("true");
+    expect(config.vars.MEMBER_AUTH_ENABLED).toBe("false");
     expect(config.d1_databases).toEqual(expect.arrayContaining([
       expect.objectContaining({
         binding: "AUTH_DB",

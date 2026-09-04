@@ -15,29 +15,30 @@ public-before-private deployment order in the canonical manual.
 Current Workers Static Assets release:
 
 - Domain: `https://base2026.dev/`
-- Public Worker: `da308428-5609-43ab-8b31-88deb124dc7b`
-- Compatible immediate rollback: `60613464-db66-4575-8963-e1c6e5e0ffd9`.
+- Public Worker: `3ecddaf3-f594-4b4a-91d4-fd409bd62e4a`
+- Compatible immediate rollback: `327a21a5-ca54-457c-8099-aa2447a7fe1a`.
 - Artifact tree SHA-256:
-  `0f225c3cfb86b4b89dc0325c70e81d289f79457fa2123f9407d7a7ae819e21c8`
+  `bffcbbd3502daa38a6ca14282a456a0a9663e8447a66c133faec7ee0e7383405`
 - Canonical source repository: `https://github.com/offflinerpsy/base2026`
-- Reviewed free-tool source merged through PR46 as
-  `ad976a4ffd0d9ad324f504d214a9f3591abed2c5`; the separate public Evidence
-  Pack is merged through PR47 as
-  `0341b8911a3df42b51285816e3d3e07e615ed96e`.
+- Source-backed Brief merged through PR50; the integrated activation release
+  merged through PR51 as `36e4c26ca44611cb09b633802f8baddeafd52d90`.
 - Live release receipt:
-  `HANDOFF_2026-09-04_SOURCE_DIVERSITY_PRODUCTION_RELEASE.md`.
+  `HANDOFF_2026-09-04_SOURCE_BRIEF_ACTIVATION_RELEASE.md`.
 
 Before every public deploy, dry-run and live version readback must retain all
-four D1 bindings (`DB`, `INBOX_DB`, `OUTREACH_DB`, `AUTH_DB`) plus
-`MCP_RATE_LIMIT`. On the current migrated account `MEMBER_AUTH_ENABLED=false`
+four D1 bindings (`DB`, `INBOX_DB`, `OUTREACH_DB`, `AUTH_DB`) plus `ANALYTICS`,
+`MCP_RATE_LIMIT` and `ASSETS`. The current D1 UUIDs are recorded in the live
+release receipt and checked into `wrangler.jsonc`; former-account UUIDs are not
+valid rollback inputs. On the current migrated account `MEMBER_AUTH_ENABLED=false`
 is intentional until the Google/member contour is explicitly re-enabled;
 `/api/auth/session` must fail closed and `/my-research/` must remain noindex.
 Do not silently flip the auth flag or reconstruct an older binding surface.
 
-Always pass the exact reviewed candidate to Wrangler with `--assets`; the
-ignored output path in the checked-in config is not an implicit release
-selection. The current config is pinned to `base2026-enrichment-retirement-20260831-v2`;
-verify that pin and the actual tree hash before every deploy. Rebuilt candidates
+Always pass the exact reviewed candidate to Wrangler through the checked
+asset-directory pin; an ignored output directory is not release permission.
+The current config is pinned to
+`base2026-brief-activation-20260904-v2`; verify that pin and the actual tree
+hash before every deploy. Rebuilt candidates
 must exclude previous builder receipts and keep
 the Workspace Project Story link on `/about`. `/sources/*` must remain
 Worker-first so static and projected source routes share canonical redirects

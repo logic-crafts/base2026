@@ -9,19 +9,25 @@ Continue from [CURRENT_STATUS.md](CURRENT_STATUS.md),
 [NEXT_ACTION.md](NEXT_ACTION.md) and the
 [closure receipt](BASE2026_OFFICE_CLOSURE_2026_08_31.md), not old chat or counters.
 
-The 2026-09-02 00:44 UTC public snapshot is 2,198 documents / 1,589 sources /
-65 evidence routes / 106 projected cards / zero full transcripts. Blog5 and five
-unchanged maintained guides are separate counts. Two archive-backed articles
-are published. The 09:16 withdrawal total2173/1572/48/81/0 is history; private
-evidence for both withdrawn cards was preserved.
+The 2026-09-04 21:23 UTC public snapshot is 2,268 documents / 1,644 sources /
+120 evidence routes / 176 projected cards / zero full transcripts. Blog and
+maintained-guide counts are separate. Older counters are release history, not
+the current operating snapshot.
 
-PR34 merged source to `origin/main` at `98bfb65e`. Current public Worker
-`f8781f4d-30fd-4d70-ab96-a4e8d718226a` adds the reviewed public MCP,
-API/integration pages and unique rate-limit binding while retaining Evidence
-Search, Google member auth, all four D1 bindings and the guide aliases.
-Worker `0337f7d6-ebe4-4bcc-8b4a-e23317a99a8e` is the immediate rollback.
-The free tool and developer surfaces are live, canonical and browser/D1 tested.
-Git source, static artifact and live D1/private state are separate restore inputs.
+Public Worker `3ecddaf3-f594-4b4a-91d4-fd409bd62e4a` serves the complete free
+acquisition loop: Evidence Search, Source Diversity Check and Source-backed
+Brief. The three exact routes use bounded public MCP reads. Privacy-safe
+activation events write to `base2026_activation_v1`; first SQL counts are QA
+smoke, not traffic. Immediate rollback is
+`327a21a5-ca54-457c-8099-aa2447a7fe1a`. Exact artifact, D1 bindings and live
+checks are in
+`HANDOFF_2026-09-04_SOURCE_BRIEF_ACTIVATION_RELEASE.md`.
+
+PR34's public MCP remains live through the current Worker. The migrated account
+retains all four D1 bindings and the unique rate-limit binding, while member
+auth is deliberately fail-closed with `MEMBER_AUTH_ENABLED=false` until its
+separate Google contour is re-enabled. Git source, static artifact, Analytics
+Engine, public D1 and private state remain separate restore inputs.
 
 PR36 merged the independently reviewed Claim Receipt Ledger source at
 `25bca067514fb5efd9bbc84c36c6b3cd73f43d3f`. It is intentionally not deployed:

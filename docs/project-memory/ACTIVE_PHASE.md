@@ -1,22 +1,36 @@
 # Active Phase
 
-Phase 27 — free-tool acquisition loop released; 72-hour measurement active.
-Current checkpoint: 2026-09-04 20:16 UTC. Public Worker
-`327a21a5-ca54-457c-8099-aa2447a7fe1a` is selected at 100% with
-`da308428-5609-43ab-8b31-88deb124dc7b` as the immediate rollback. Source
-Diversity Check, its live MCP read path and its canonical/sitemap/mobile gates
-pass. PR47 also places the reproducible public Evidence Pack on GitHub.
+Phase 28 — three-tool acquisition loop released; 72-hour measurement active.
+Current checkpoint: 2026-09-04 21:27 UTC. Public Worker
+`3ecddaf3-f594-4b4a-91d4-fd409bd62e4a` is selected at 100% with
+`327a21a5-ca54-457c-8099-aa2447a7fe1a` as the immediate rollback. Evidence
+Search, Source Diversity Check and Source-backed Brief pass their live public
+MCP, canonical, sitemap and browser gates. Their privacy-safe first-party
+activation sink is live in Analytics Engine; its first events are QA smoke,
+not visitors or traffic. PR47 also places the reproducible public Evidence
+Pack on GitHub.
 
 Evidence Search now uses the DataForSEO-validated, truthful job wording
 “search inside expert videos” while retaining its bounded-corpus and
 attribution limits. This was a one-asset release, not a new doorway page.
 
 The active objective is the first verified non-owner visit and successful tool
-action from the 257-impression/zero-click baseline. Build the deterministic
-Source-Backed Brief and distribute one native Evidence Pulse demonstration;
-do not widen the already-large programmatic corpus or manufacture authority
-language. The crawl-derived repair remains the stable technical baseline, and
-Claim Receipt source remains merged but intentionally absent from production.
+action from the 257-impression/zero-click baseline. Distribute the live
+three-tool workflow and Evidence Pulse demonstration, then read real activation
+separately from deployment canaries. Do not widen the already-large
+programmatic corpus or manufacture authority language. The crawl-derived repair
+remains the stable technical baseline, and Claim Receipt source remains merged
+but intentionally absent from production.
+
+## Source-backed Brief and activation sink — released (2026-09-04)
+
+PR50 and PR51 are merged. `/tools/source-backed-brief/` is live, deterministic
+and public-boundary gated. The price-$0 Analytics Engine entitlement is active
+in the migrated account and the checked release configuration now uses the four
+current D1 UUIDs. SQL readback proved the dataset and bounded brief events.
+IndexNow accepted only the new Brief canonical once. Exact release, rollback,
+artifact and failure-recovery evidence is in
+[the combined release handoff](HANDOFF_2026-09-04_SOURCE_BRIEF_ACTIVATION_RELEASE.md).
 
 ## Source Diversity Check — released (2026-09-04)
 

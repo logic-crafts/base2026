@@ -1,12 +1,35 @@
 # Base2026 Current Status
 
-Verified 2026-09-03 through 01:08 UTC. Public counters below are the current
-live read. [API/MCP production receipt](HANDOFF_2026-09-01_PUBLIC_API_MCP_PRODUCTION_RELEASE.md)
-and [closure receipt](BASE2026_OFFICE_CLOSURE_2026_08_31.md)
-separates completed releases from remaining observation and external blockers.
-Older dated receipts are history, not current counters.
+Verified 2026-09-04 through 21:27 UTC. Public Worker
+`3ecddaf3-f594-4b4a-91d4-fd409bd62e4a` is live at 100%; compatible immediate
+rollback is `327a21a5-ca54-457c-8099-aa2447a7fe1a`. The current public counters
+are 2,268 documents / 1,644 distinct sources / 120 evidence routes / 176
+projected cards / zero full transcripts.
 
-## Live product
+Evidence Search, Source Diversity Check and Source-backed Brief are live. Their
+bounded first-party activation sink is live in Analytics Engine dataset
+`base2026_activation_v1`; initial counts are QA smoke, not visitors. Member auth
+remains deliberately fail-closed during the migrated-account contour. Current
+artifact, bindings, IndexNow and live QA are in
+[the combined release receipt](HANDOFF_2026-09-04_SOURCE_BRIEF_ACTIVATION_RELEASE.md).
+Older dated receipts and counters below are history, not the current release.
+
+## Current live product
+
+- Three-tool workflow: Evidence Search -> Source Diversity Check ->
+  Source-backed Brief. All three routes are HTTP 200, self-contained and use
+  only bounded public MCP reads.
+- `POST /api/mcp` lists six read-only tools; `GET /api/mcp` correctly returns
+  405. `/api/auth/session` correctly returns 503 `MEMBER_AUTH_DISABLED`.
+- Source-backed Brief live QA resolved two public records, kept one unresolved
+  record explicit, rendered three bounded excerpts and preserved a query-free
+  URL with Markdown/JSON export controls.
+- Analytics rejects route/event mismatch with 400 and wrong origins with 403;
+  SQL readback proved the dataset and brief event classes.
+- IndexNow accepted only the new Brief canonical once. Notification acceptance
+  is not indexing, traffic or conversion.
+
+## Historical product baseline through 2026-09-03
 
 - Public Worker `99849d8e-802d-4e8e-a840-8d352f176da6` is live at 100% with
   the crawl-derived SEO/GEO repair. Recursive sitemap readback is 1,874/1,874
