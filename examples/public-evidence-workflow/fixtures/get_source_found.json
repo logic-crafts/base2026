@@ -1,0 +1,71 @@
+{
+  "schema": "base2026.mcp.get_source.v1",
+  "found": true,
+  "id": "tiktok-video-1234567890123456789",
+  "source_id": "tiktok:example_creator:1234567890123456789",
+  "item_id": "tiktok-video-1234567890123456789",
+  "video_id": "1234567890123456789",
+  "platform": "tiktok",
+  "title": "Fixture source: document the decision before choosing a tactic",
+  "creator": {
+    "handle": "@example_creator",
+    "display_name": "Example Creator",
+    "url": "https://www.tiktok.com/@example_creator"
+  },
+  "published_date": "2026-08-30",
+  "source_url": "https://www.tiktok.com/@example_creator/video/1234567890123456789",
+  "source_page_url": "https://base2026.dev/sources/tiktok-video-1234567890123456789",
+  "topics": [
+    {
+      "id": "decision-documentation",
+      "label": "Decision documentation"
+    }
+  ],
+  "passages": [
+    {
+      "id": "chunk-fixture-1234567890123456789-0000",
+      "chunk_index": 0,
+      "excerpt": "Fixture excerpt: write down the decision and the evidence before choosing a tactic.",
+      "public_policy": "search_passage",
+      "public_boundary": {
+        "access": "public_read_only",
+        "raw_captions": false,
+        "raw_asr": false,
+        "media_files": false,
+        "private_data": false,
+        "writes": false
+      }
+    }
+  ],
+  "applied_projection_cards": [
+    {
+      "ordinal": 1,
+      "claim": "A decision note should keep the supporting evidence visible.",
+      "suggested_action": "Attach the source link before publishing a recommendation.",
+      "topic": "Decision documentation",
+      "evidence_excerpt": "Write down the decision and the evidence before choosing a tactic.",
+      "evidence_start_seconds": 2,
+      "evidence_end_seconds": 8,
+      "public_boundary": {
+        "access": "public_read_only",
+        "raw_captions": false,
+        "raw_asr": false,
+        "media_files": false,
+        "private_data": false,
+        "writes": false
+      }
+    }
+  ],
+  "attribution": {
+    "original_source_url": "https://www.tiktok.com/@example_creator/video/1234567890123456789",
+    "base2026_source_url": "https://base2026.dev/sources/tiktok-video-1234567890123456789"
+  },
+  "public_boundary": {
+    "access": "public_read_only",
+    "raw_captions": false,
+    "raw_asr": false,
+    "media_files": false,
+    "private_data": false,
+    "writes": false
+  }
+}
