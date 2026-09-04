@@ -845,3 +845,14 @@ def test_tree_hash_changes_for_text_but_not_binary_bytes(tmp_path: Path) -> None
     assert (output / "asset.bin").read_bytes() == binary
     assert hashlib.sha256((output / "asset.bin").read_bytes()).hexdigest() == hashlib.sha256(binary).hexdigest()
     assert (output / "index.html").read_text(encoding="utf-8") == "<a href='/'>Base</a>"
+
+
+def test_startup_footer_keeps_cloudflare_provenance_mark() -> None:
+    footer = (ROOT / "templates" / "base2026-startup-footer.html").read_text(encoding="utf-8")
+    stylesheet = (ROOT / "templates" / "base2026-core.css").read_text(encoding="utf-8")
+
+    assert footer.count('class="b26-cloudflare-mark"') == 1
+    assert footer.count("Powered by") == 2
+    assert 'href="https://www.cloudflare.com/"' in footer
+    assert 'src="https://www.cloudflare.com/img/logo-cloudflare-dark.svg"' in footer
+    assert stylesheet.count(".b26-cloudflare-mark") == 5
