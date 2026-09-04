@@ -40,7 +40,7 @@ def test_evidence_search_build_is_additive_and_indexable(tmp_path: Path) -> None
     assert receipt["verification"]["private_token_markers_remaining"] == 0
 
 
-def test_evidence_search_page_has_one_h1_honest_boundaries_and_no_future_routes() -> None:
+def test_evidence_search_page_has_one_h1_honest_boundaries_and_contextual_check_link() -> None:
     page = builder.DEFAULT_EVIDENCE_SEARCH_TEMPLATE.read_text(encoding="utf-8")
 
     assert len(re.findall(r"<h1(?:\s|>)", page)) == 1
@@ -56,9 +56,8 @@ def test_evidence_search_page_has_one_h1_honest_boundaries_and_no_future_routes(
     assert "when it is available" in page
     assert "not a TikTok-wide search engine" in page
     assert "full-transcript database" in page
-    assert "Source diversity check · planned" in page
     assert "Source-backed brief · planned" in page
-    assert 'href="/tools/source-diversity-check/' not in page
+    assert 'href="/tools/source-diversity-check/"' in page
     assert 'href="/tools/source-backed-brief/' not in page
     assert 'href="/methodology"' in page
     assert 'href="/api"' in page
@@ -102,5 +101,8 @@ def test_evidence_search_runtime_uses_public_bounded_read_only_contract() -> Non
     assert "Creator attribution unavailable in this record" in script
     assert 'topicIndexLink.href = "/topics/";' in script
     assert '"/topics/" + encodeURIComponent(topic.slug)' not in script
+    assert "function sourceDiversityHandoff(rows)" in script
+    assert ".slice(0, 10)" in script
+    assert '"/tools/source-diversity-check/?ids=" + encodeURIComponent(ids.join(","))' in script
     assert "/knowledge/" not in script
     assert "evidence_record_selected" not in script

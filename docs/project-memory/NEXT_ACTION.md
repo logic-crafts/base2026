@@ -1,5 +1,22 @@
 # Next Action
 
+## Source Diversity Check candidate — September 4, 2026
+
+The isolated branch `codex/base2026-source-diversity-check-20260904` adds the
+public `/tools/source-diversity-check/` utility on top of the current
+`origin/main` PR44 baseline. It performs bounded read-only `get_source`
+lookups, separates exact record/source/creator counts, preserves unresolved
+metadata, and exports Markdown/JSON without consensus or truth claims. The
+candidate is committed locally but not deployed, pushed, merged, indexed or
+used to mutate D1/Cloudflare.
+
+Next action: root command center reviews the exact commit and public-boundary
+receipt. If approved, build a fresh reviewed Cloudflare candidate and authorize
+deployment separately, then verify the live route, API readback, canonical,
+sitemap, mobile behavior and the four bounded analytics events. Do not treat
+this candidate as live traffic or indexing evidence. Details:
+[HANDOFF_2026-09-04_SOURCE_DIVERSITY_CHECK.md](HANDOFF_2026-09-04_SOURCE_DIVERSITY_CHECK.md).
+
 ## Crawl-derived SEO/GEO repair live — September 3, 2026
 
 Worker `99849d8e-802d-4e8e-a840-8d352f176da6` is live at 100%. It preserves

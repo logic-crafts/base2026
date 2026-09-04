@@ -9968,3 +9968,21 @@ Actions and receipts:
   2,260 pages and is not used as final evidence. Final source correction PR39
   merged as `fa9d30bfdb0489bc031164101aebfeae5fecb55c`; the exact held-claim-safe
   production patch is local commit `e152e73ae`.
+
+## 2026-09-04 — Source Diversity Check utility candidate
+
+Implemented the first demand-backed Base2026 utility on branch
+`codex/base2026-source-diversity-check-20260904`, based on `origin/main` PR44
+(`09a24a6f2`). Added the isolated `/tools/source-diversity-check/` template,
+scoped design/runtime, deterministic public `get_source` lookup and
+Markdown/JSON export; connected one Evidence Search handoff and one honest
+resource-hub link. The candidate keeps exact record IDs, canonical source IDs,
+creator groups, normalized original URLs and unresolved states separate, with
+no transcript/passages, crawl/rank/LLM verdict, score or write path.
+
+Focused Python/build/public-artifact tests passed (`37`), Worker tests passed
+(`634`), Worker typecheck passed, JavaScript/Python syntax and diff checks
+passed. Wrangler dry-run was attempted but the configured generated release
+asset directory is absent in this source checkout; no deploy, push, merge,
+IndexNow, D1 or Cloudflare mutation occurred. Handoff:
+`HANDOFF_2026-09-04_SOURCE_DIVERSITY_CHECK.md`.

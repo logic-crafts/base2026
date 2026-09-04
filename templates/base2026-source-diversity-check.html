@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Source Diversity Check | Base2026</title>
+  <meta name="description" content="Compare valid Base2026 public source records by record ID, creator and normalized original source URL. Export a bounded Markdown or JSON note without treating repetition as consensus.">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://base2026.dev/tools/source-diversity-check/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="/static/base2026-startup-shell.css?v=20260820-b26v1">
+  <link rel="stylesheet" href="/static/base2026-source-diversity-check.css?v=20260904-source-diversity-v1">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Base2026 Source Diversity Check","url":"https://base2026.dev/tools/source-diversity-check/","description":"Compare valid Base2026 public source records by record ID, creator and normalized original source URL with bounded Markdown and JSON export.","applicationCategory":"BusinessApplication","operatingSystem":"Any","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Base2026","item":"https://base2026.dev/"},{"@type":"ListItem","position":2,"name":"Evidence Search","item":"https://base2026.dev/tools/evidence-search/"},{"@type":"ListItem","position":3,"name":"Source Diversity Check","item":"https://base2026.dev/tools/source-diversity-check/"}]}</script>
+</head>
+<body class="b26-form-page b26-source-diversity-page">
+  {{STARTUP_HEADER}}
+  <main class="b26-source-diversity" data-source-diversity-check data-mcp-endpoint="/api/mcp">
+    <nav class="b26-source-diversity__breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Base2026</a><span aria-hidden="true">/</span><a href="/tools/evidence-search/">Evidence Search</a><span aria-hidden="true">/</span><span>Source Diversity Check</span>
+    </nav>
+
+    <section class="b26-source-diversity__hero" aria-labelledby="source-diversity-title">
+      <div class="b26-source-diversity__intro">
+        <p class="b26-eyebrow">Free public source check</p>
+        <h1 id="source-diversity-title">Check whether a source set is actually varied.</h1>
+        <p class="b26-source-diversity__lede">Paste a bounded set of public Base2026 record IDs or canonical public source IDs. This check keeps three questions separate: how many exact records you selected, how many attributed creators appear, and how many normalized original-source URLs are represented.</p>
+        <p class="b26-source-diversity__trust">The output describes metadata relationships visible in the selected public records. Diversity is not consensus or truth; this check does not assign a truth score or independence verdict.</p>
+      </div>
+
+      <form class="b26-source-diversity__form" action="/tools/source-diversity-check/" method="get" data-source-check-form>
+        <label for="source-diversity-ids">Paste public Base2026 record or source IDs</label>
+        <textarea id="source-diversity-ids" name="ids" rows="7" maxlength="600" required placeholder="tiktok-video-7626280514139196694&#10;tiktok:creator:7626280514139196694" data-source-check-input></textarea>
+        <p class="b26-source-diversity__field-help">Use up to 12 canonical record or source IDs, separated by commas, spaces or new lines. Evidence Search hands off validated record IDs here; arbitrary URLs, claims and transcript text are rejected.</p>
+        <div class="b26-source-diversity__form-actions">
+          <button type="submit" data-source-check-submit>Check these records</button>
+          <a class="b26-button--secondary" href="/tools/evidence-search/">Find public records</a>
+        </div>
+        <noscript>
+          <p class="b26-source-diversity__noscript">This check needs JavaScript to read the existing public read-only record endpoint. No records are submitted to Base2026 for storage. You can still <a href="/tools/evidence-search/">search the public evidence</a> and inspect each source record manually.</p>
+        </noscript>
+      </form>
+    </section>
+
+    <section class="b26-source-diversity__results" aria-labelledby="source-diversity-results-title" data-source-check-results hidden>
+      <div class="b26-source-diversity__section-heading">
+        <div>
+          <p class="b26-eyebrow">Deterministic readout</p>
+          <h2 id="source-diversity-results-title">Source relationships in this set</h2>
+        </div>
+          <p class="b26-source-diversity__status" role="status" aria-live="polite" aria-atomic="true" data-source-check-status></p>
+      </div>
+
+      <div class="b26-source-diversity__count-grid" data-source-check-counts aria-label="Source set counts"></div>
+      <p class="b26-source-diversity__summary-note">Record count, creator count and original-source count answer different questions. Unresolved metadata remains in the readout and export.</p>
+
+      <div class="b26-source-diversity__export" data-source-check-exports hidden>
+        <div>
+          <p class="b26-eyebrow">Portable result</p>
+          <h3>Copy or download the same fixed result</h3>
+          <p>Markdown and JSON use the same sorted records, groups and unresolved states. They contain only public metadata and inspectable links.</p>
+        </div>
+        <div class="b26-source-diversity__export-actions">
+          <button type="button" class="b26-button--primary" data-source-check-copy-markdown>Copy Markdown</button>
+          <button type="button" class="b26-button--secondary" data-source-check-export-markdown>Download Markdown</button>
+          <button type="button" class="b26-button--secondary" data-source-check-copy-json>Copy JSON</button>
+          <button type="button" class="b26-button--secondary" data-source-check-export-json>Download JSON</button>
+        </div>
+        <p class="b26-source-diversity__export-status" role="status" aria-live="polite" data-source-diversity-export-status></p>
+      </div>
+
+      <div class="b26-source-diversity__groups" data-source-check-summary>
+        <section class="b26-source-diversity__group-section" aria-labelledby="source-diversity-creators-title">
+          <p class="b26-eyebrow">Attribution grouping</p>
+          <h3 id="source-diversity-creators-title">Attributed creator groups</h3>
+          <p class="b26-source-diversity__group-help">A group means the selected public records carry the same normalized creator handle or name. It is not an identity or expertise judgment.</p>
+          <div data-group-list="creators"></div>
+        </section>
+        <section class="b26-source-diversity__group-section" aria-labelledby="source-diversity-originals-title">
+          <p class="b26-eyebrow">Original-source grouping</p>
+          <h3 id="source-diversity-originals-title">Normalized original-source URL groups</h3>
+          <p class="b26-source-diversity__group-help">URLs are normalized only for stable comparison: HTTPS TikTok host case, trailing slash and fragment/query noise are removed. The original link remains inspectable on each record card.</p>
+          <div data-group-list="originals"></div>
+        </section>
+      </div>
+
+      <section class="b26-source-diversity__records" aria-labelledby="source-diversity-records-title">
+        <div class="b26-source-diversity__section-heading">
+          <div>
+            <p class="b26-eyebrow">Record-level provenance</p>
+            <h3 id="source-diversity-records-title">Exact selected record IDs</h3>
+          </div>
+        </div>
+        <div class="b26-source-diversity__record-list" data-source-check-records></div>
+      </section>
+
+      <section class="b26-source-diversity__unresolved" aria-labelledby="source-diversity-unresolved-title" data-source-check-unresolved-section hidden>
+        <p class="b26-eyebrow">Known gaps</p>
+        <h3 id="source-diversity-unresolved-title">Unresolved metadata stays visible</h3>
+        <div data-source-check-unresolved></div>
+      </section>
+
+      <section class="b26-source-diversity__decision" aria-labelledby="source-diversity-decision-title">
+        <div>
+          <p class="b26-eyebrow">Your next research step</p>
+          <h3 id="source-diversity-decision-title">Record a follow-up without turning this into a verdict.</h3>
+          <p>Choose the next action that fits the evidence boundary. This is a local, non-persistent note and does not change the public records.</p>
+        </div>
+        <form data-source-diversity-decision-form>
+          <label for="source-diversity-decision">Next step</label>
+          <select id="source-diversity-decision" data-source-diversity-decision>
+            <option value="">Choose a next step</option>
+            <option value="inspect_originals">Inspect each original source</option>
+            <option value="find_independent_evidence">Find another public source</option>
+            <option value="keep_unknowns">Keep unresolved items as unknowns</option>
+          </select>
+          <button type="submit" class="b26-button--secondary">Record next step</button>
+          <p class="b26-source-diversity__decision-status" role="status" aria-live="polite" data-source-diversity-decision-status></p>
+        </form>
+      </section>
+    </section>
+
+    <section class="b26-source-diversity__method" aria-labelledby="source-diversity-method-title">
+      <div>
+        <p class="b26-eyebrow">How the check works</p>
+        <h2 id="source-diversity-method-title">Keep the source path attached.</h2>
+      </div>
+      <ol>
+        <li><span aria-hidden="true">ID</span><div><h3>Start with public IDs</h3><p>Search the admitted public corpus first. This tool accepts canonical <code>tiktok-video-...</code> record IDs and <code>tiktok:creator:video_id</code> source IDs, not uploads, credentials or arbitrary URLs.</p></div></li>
+        <li><span aria-hidden="true">GROUP</span><div><h3>Compare observable metadata</h3><p>Records, attributed creators and normalized original URLs are grouped independently. Missing attribution, missing URLs and unavailable records are not silently dropped.</p></div></li>
+        <li><span aria-hidden="true">LINK</span><div><h3>Inspect before deciding</h3><p>Open each Base2026 record and original source. Repeated metadata can guide the next check, but it does not establish consensus, truth, quality or independence.</p></div></li>
+      </ol>
+    </section>
+
+    <section class="b26-source-diversity__limits" aria-labelledby="source-diversity-limits-title">
+      <div>
+        <p class="b26-eyebrow">What it is</p>
+        <h2 id="source-diversity-limits-title">A small provenance utility.</h2>
+        <ul>
+          <li>A bounded read-only lookup over public Base2026 source records.</li>
+          <li>A deterministic comparison of exact IDs, creator attribution and original-source URLs.</li>
+          <li>A Markdown/JSON card that keeps links and unknowns together.</li>
+        </ul>
+      </div>
+      <div>
+        <p class="b26-eyebrow">What it is not</p>
+        <h2>A consensus or truth checker.</h2>
+        <ul>
+          <li>Not a fact-check, ranking, quality or independence score.</li>
+          <li>Not an external crawl, rank, backlink or Search Console measurement.</li>
+          <li>Not an LLM verdict, login, storage, private-data, raw-transcript or media workflow.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="b26-source-diversity__faq" aria-labelledby="source-diversity-faq-title">
+      <p class="b26-eyebrow">FAQ</p>
+      <h2 id="source-diversity-faq-title">Boundaries before conclusions</h2>
+      <div>
+        <details><summary>What counts as one selected record?</summary><p>One unique canonical public Base2026 record ID counts once, even if the same ID is pasted repeatedly. The check never invents IDs from a title or source URL.</p></details>
+        <details><summary>Why are creator and original-source counts separate?</summary><p>A creator may have multiple records, and a record may have missing or unresolved attribution. A normalized original URL is another relationship field; neither count is a substitute for the exact record list.</p></details>
+        <details><summary>Does a repeated creator or URL prove the records are dependent?</summary><p>No. It only reports a relationship visible in the selected public metadata. Read the records and originals, then decide what additional evidence is needed.</p></details>
+        <details><summary>What happens when metadata is missing?</summary><p>The record remains in the selected set with an unresolved creator or original-source state. Missing metadata is included in the export instead of being treated as a match or silently removed.</p></details>
+        <details><summary>Does the tool save my IDs or export?</summary><p>No. The route uses the existing read-only public record endpoint and creates the export in your browser. It does not require an account or submit a write request.</p></details>
+      </div>
+    </section>
+  </main>
+  {{STARTUP_FOOTER}}
+  <script src="/static/base2026-source-diversity-check.js?v=20260904-source-diversity-v1" defer></script>
+</body>
+</html>

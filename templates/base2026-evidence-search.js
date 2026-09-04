@@ -347,6 +347,22 @@
     }
   }
 
+  function sourceDiversityHandoff(rows) {
+    const ids = rows.map(function (row) {
+      return row && row.record ? row.record.id : "";
+    }).filter(function (id) {
+      return /^tiktok-video-\d{10,30}$/.test(id);
+    }).slice(0, 10);
+    if (!ids.length) return null;
+
+    const handoff = element("div", "b26-evidence-search__handoff");
+    handoff.appendChild(element("p", "", "Want to compare this bounded public set? Keep the record IDs attached, then inspect creator and original-source relationships separately."));
+    const link = element("a", "b26-button--primary", "Run the source diversity check");
+    link.href = "/tools/source-diversity-check/?ids=" + encodeURIComponent(ids.join(","));
+    handoff.appendChild(link);
+    return handoff;
+  }
+
   function renderMatches(normalized, query, wallTime) {
     const nodes = normalized.rows.map(function (row, index) {
       return renderResult(row, index + 1);
@@ -371,6 +387,8 @@
     const shown = Math.min(nodes.length, normalized.estimated || nodes.length);
     const countNote = element("p", "b26-evidence-search__result-count", "Showing " + shown + " of an estimated " + normalized.estimated + " admitted matches. Results are deduplicated by public source record.");
     results.prepend(countNote);
+    const handoff = sourceDiversityHandoff(normalized.rows);
+    if (handoff) results.appendChild(handoff);
 
     emitAnalytics("evidence_search_results_returned", {
       result_count_bucket: countBucket(normalized.estimated, true),
