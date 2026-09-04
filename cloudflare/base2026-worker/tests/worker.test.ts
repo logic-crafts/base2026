@@ -976,6 +976,52 @@ describe("Base2026 privacy-safe activation measurement", () => {
     expect(analytics.points).toHaveLength(0);
   });
 
+  it("rejects event and route mismatches in both directions", async () => {
+    const cases = [
+      {
+        event: "source_check_run",
+        route: "/tools/evidence-search/",
+        properties: { input_source: "typed", input_mode: "delimited_ids" },
+      },
+      {
+        event: "evidence_search_submitted",
+        route: "/tools/source-diversity-check/",
+        properties: { input_source: "typed", query_length_bucket: "1_20", query_token_bucket: "1", render_mode: "enhanced" },
+      },
+    ];
+    for (const body of cases) {
+      const analytics = new FakeAnalytics();
+      const response = await handleAnalyticsEvent(
+        new Request("https://base2026.dev/api/analytics/event", {
+          method: "POST",
+          headers: { "content-type": "application/json", origin: "https://base2026.dev" },
+          body: JSON.stringify(body),
+        }),
+        { ANALYTICS: analytics as unknown as AnalyticsEngineDataset, MCP_RATE_LIMIT: new FakeRateLimit() },
+      );
+      expect(response.status).toBe(400);
+      expect(analytics.points).toHaveLength(0);
+    }
+  });
+
+  it("accepts the evidence-search partial failure bucket emitted by the browser", async () => {
+    const analytics = new FakeAnalytics();
+    const response = await handleAnalyticsEvent(
+      new Request("https://base2026.dev/api/analytics/event", {
+        method: "POST",
+        headers: { "content-type": "application/json", origin: "https://base2026.dev" },
+        body: JSON.stringify({
+          event: "evidence_search_partial",
+          route: "/tools/evidence-search/",
+          properties: { loaded_count_bucket: "2_5", failed_count_bucket: "6_plus", error_class: "record_validation" },
+        }),
+      }),
+      { ANALYTICS: analytics as unknown as AnalyticsEngineDataset, MCP_RATE_LIMIT: new FakeRateLimit() },
+    );
+    expect(response.status).toBe(204);
+    expect(analytics.points[0]?.blobs).toContain('{"error_class":"record_validation","failed_count_bucket":"6_plus","loaded_count_bucket":"2_5"}');
+  });
+
   it("fails closed for cross-origin requests, missing bindings, and a rate-limit decision", async () => {
     const crossOriginRate = new FakeRateLimit();
     const crossOrigin = await handleAnalyticsEvent(

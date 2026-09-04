@@ -67,7 +67,7 @@ const VALUE_SETS: Readonly<Record<string, ReadonlySet<string>>> = Object.freeze(
   record_id_bucket: COUNT_BUCKETS,
   source_id_bucket: COUNT_BUCKETS,
   loaded_count_bucket: COUNT_BUCKETS,
-  failed_count_bucket: COUNT_BUCKETS,
+  failed_count_bucket: new Set(["1", "2_5", "6_plus"]),
   query_length_bucket: new Set(["1_20", "21_50", "51_100", "101_plus"]),
   query_token_bucket: new Set(["1", "2_3", "4_7", "8_plus"]),
 });
@@ -97,10 +97,25 @@ const EVENT_PROPERTIES: Readonly<Record<string, ReadonlySet<string>>> = Object.f
   source_check_card_copied: new Set(["copy_format", "count_bucket", "position_bucket", "metadata_resolution"]),
 });
 
-const ALLOWED_ROUTES = new Set([
-  "/tools/evidence-search/",
-  "/tools/source-diversity-check/",
-]);
+const ROUTE_EVENTS: Readonly<Record<string, ReadonlySet<string>>> = Object.freeze({
+  "/tools/evidence-search/": new Set([
+    "evidence_search_viewed",
+    "evidence_search_submitted",
+    "evidence_search_results_returned",
+    "evidence_source_record_opened",
+    "evidence_original_source_clicked",
+    "evidence_search_completed",
+    "evidence_search_empty",
+    "evidence_search_partial",
+    "evidence_search_error",
+  ]),
+  "/tools/source-diversity-check/": new Set([
+    "source_check_run",
+    "source_check_completed",
+    "source_check_decision_recorded",
+    "source_check_card_copied",
+  ]),
+});
 
 interface RateLimitBinding {
   limit(options: { key: string }): Promise<{ success: boolean }>;
@@ -224,8 +239,9 @@ function validateEvent(body: Record<string, unknown>, now: Date): AnalyticsEngin
   const keys = Object.keys(body);
   if (keys.some((key) => key !== "event" && key !== "route" && key !== "properties")) throw new MeasurementError(400);
   if (!safeString(body.event) || !Object.prototype.hasOwnProperty.call(EVENT_PROPERTIES, body.event)) throw new MeasurementError(400);
-  if (!safeString(body.route) || !ALLOWED_ROUTES.has(body.route)) throw new MeasurementError(400);
+  if (!safeString(body.route) || !Object.prototype.hasOwnProperty.call(ROUTE_EVENTS, body.route)) throw new MeasurementError(400);
   const event = body.event;
+  if (!ROUTE_EVENTS[body.route]?.has(event)) throw new MeasurementError(400);
   const properties = normalizedProperties(event, body.properties);
   return {
     blobs: [event, body.route, timestampBucket(now), properties],
