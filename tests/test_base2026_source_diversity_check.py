@@ -166,12 +166,12 @@ def test_source_diversity_runtime_uses_bounded_public_record_contract() -> None:
     assert "unresolved_lookups" in script
     assert "base2026.source-diversity-check.v1" in script
     assert '"source_check_run"' in script
-    assert '"source_check_completed"' in script
-    assert '"source_check_decision_recorded"' in script
-    assert '"source_check_card_copied"' in script
-    assert 'emitAnalytics("source_check_completed"' in script
-    assert 'emitAnalytics("source_check_decision_recorded"' in script
-    assert 'emitAnalytics("source_check_card_copied"' in script
+    assert '"completed"' in script
+    assert '"decision_recorded"' in script
+    assert '"card_copied"' in script
+    assert 'emitAnalytics("completed"' in script
+    assert 'emitAnalytics("decision_recorded"' in script
+    assert 'emitAnalytics("card_copied"' in script
     assert "downloadText" in script
     assert "markdownSnapshot" in script
     assert "jsonSnapshot" in script
