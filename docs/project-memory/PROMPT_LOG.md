@@ -21,6 +21,17 @@ were left unchanged. The unique handoff is
 `HANDOFF_2026-09-04_SOURCE_BACKED_BRIEF.md`; the local candidate is not live,
 indexed or traffic evidence.
 
+Independent review hardening kept the route additive and deterministic. Passage
+normalization now requires each passage's live public boundary and exact
+`public_policy: "search_passage"`, then fails closed on visibility,
+needs-review, full-transcript, raw, private and related signals instead of
+trusting the record-level metadata. Input validation matches MCP's 200-character
+`source_id` maximum and rejects overlong IDs before lookup. The form no longer
+has a GET fallback, URL-serializable field names, query prefill or auto-run;
+without JavaScript it keeps the explanatory content without submitting framing.
+Focused regression tests cover these cases. PR #50 remains an undeployed,
+unmerged candidate pending root review.
+
 ## 2026-09-04 — Evidence Search intent alignment released
 
 Used a bounded DataForSEO demand and exact-SERP check to separate real product

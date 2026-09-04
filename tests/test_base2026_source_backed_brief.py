@@ -21,6 +21,8 @@ def run_source_backed_brief_runtime() -> dict:
     parseIds,
     publicBoundaryIsSafe,
     unsafePublicMetadata,
+    passagePublicMetadataIsSafe,
+    safePassages,
     normalizeResolved,
     unresolvedRecord,
     buildSnapshot,
@@ -38,10 +40,9 @@ def run_source_backed_brief_runtime() -> dict:
 const vm = require("node:vm");
 const source = {json.dumps(script)};
 const context = {{
-  window: {{ location: {{ origin: "https://base2026.dev", search: "" }}, innerWidth: 1200 }},
+  window: {{ location: {{ origin: "https://base2026.dev" }}, innerWidth: 1200 }},
   document: {{ querySelector: () => ({{ dataset: {{ mcpEndpoint: "/api/mcp" }}, querySelector: () => ({{}}) }}) }},
   URL,
-  URLSearchParams,
   console
 }};
 context.globalThis = context;
@@ -80,10 +81,10 @@ const recordOne = api.normalizeResolved({{
   title: "<script>alert(1)</script> & pipe |",
   published_date: "2026-09-01",
   passages: [
-    {{ id: "p1", chunk_index: 0, excerpt: "A bounded <script>alert(1)</script> excerpt & pipe |" }},
-    {{ id: "p2", chunk_index: 1, excerpt: "A second public excerpt" }},
-    {{ id: "p3", chunk_index: 2, excerpt: "A third public excerpt" }},
-    {{ id: "p4", chunk_index: 3, excerpt: "This fourth excerpt must not be included" }}
+    {{ id: "p1", chunk_index: 0, excerpt: "A bounded <script>alert(1)</script> excerpt & pipe |", public_policy: "search_passage", public_boundary: boundary }},
+    {{ id: "p2", chunk_index: 1, excerpt: "A second public excerpt", public_policy: "search_passage", public_boundary: boundary }},
+    {{ id: "p3", chunk_index: 2, excerpt: "A third public excerpt", public_policy: "search_passage", public_boundary: boundary }},
+    {{ id: "p4", chunk_index: 3, excerpt: "This fourth excerpt must not be included", public_policy: "search_passage", public_boundary: boundary }}
   ]
 }}, parsed.accepted[0]);
 const recordTwo = api.normalizeResolved({{
@@ -105,6 +106,24 @@ const snapshot = api.buildSnapshot(
   outcomes
 );
 const unsafeBoundary = {{ ...boundary, raw_captions: true }};
+const passageBase = {{ id: "policy-case", chunk_index: 0, excerpt: "Safe search passage", public_policy: "search_passage", public_boundary: boundary }};
+const passageCases = {{
+  safe: api.safePassages({{ passages: [passageBase] }}).length,
+  needs_review: api.safePassages({{ passages: [{{ ...passageBase, needs_review: true }}] }}).length,
+  raw: api.safePassages({{ passages: [{{ ...passageBase, raw: true }}] }}).length,
+  raw_captions: api.safePassages({{ passages: [{{ ...passageBase, raw_captions: true }}] }}).length,
+  private: api.safePassages({{ passages: [{{ ...passageBase, private: true }}] }}).length,
+  private_data: api.safePassages({{ passages: [{{ ...passageBase, private_data: true }}] }}).length,
+  full_transcript_public: api.safePassages({{ passages: [{{ ...passageBase, full_transcript_public: true }}] }}).length,
+  public_false: api.safePassages({{ passages: [{{ ...passageBase, public: false }}] }}).length,
+  visibility: api.safePassages({{ passages: [{{ ...passageBase, visibility: "private" }}] }}).length,
+  policy: api.safePassages({{ passages: [{{ ...passageBase, policy: "raw" }}] }}).length,
+  missing_policy: api.safePassages({{ passages: [{{ ...passageBase, public_policy: undefined }}] }}).length,
+  mixed: api.safePassages({{ passages: [{{ ...passageBase, private_data: true }}, passageBase] }}).map((passage) => passage.excerpt)
+}};
+const longCreatorSourceId = "tiktok:" + "a".repeat(201) + ":2222222222";
+const overMcpSourceId = "tiktok:" + "b".repeat(185) + ":2222222222";
+const overMcpIds = api.parseIds([longCreatorSourceId, overMcpSourceId].join("\\n"));
 console.log(JSON.stringify({{
   parsed,
   snapshot,
@@ -115,7 +134,10 @@ console.log(JSON.stringify({{
   safeBase: api.safeBase2026Url("https://base2026.dev/sources/tiktok-video-1111111111"),
   boundarySafe: api.publicBoundaryIsSafe({{ public_boundary: boundary }}),
   boundaryUnsafe: api.publicBoundaryIsSafe({{ public_boundary: unsafeBoundary }}),
-  metadataUnsafe: api.unsafePublicMetadata({{ public_boundary: boundary, full_transcript_public: true }})
+  metadataUnsafe: api.unsafePublicMetadata({{ public_boundary: boundary, full_transcript_public: true }}),
+  passageSafe: api.passagePublicMetadataIsSafe(passageBase),
+  passageCases,
+  overMcpIds
 }}));
 """
     result = subprocess.run(["node", "-e", harness], cwd=ROOT, check=True, capture_output=True, text=True)
@@ -130,14 +152,19 @@ def test_source_backed_brief_route_is_one_indexable_public_tool() -> None:
     assert '<meta name="robots" content="index,follow">' in page
     assert '<link rel="canonical" href="https://base2026.dev/tools/source-backed-brief/">' in page
     assert 'data-mcp-endpoint="/api/mcp"' in page
-    assert 'action="/tools/source-backed-brief/"' in page
-    assert 'name="question"' in page and 'name="audience"' in page
-    assert 'name="deliverable"' in page and 'name="ids"' in page
+    assert 'method="get"' not in page.lower()
+    assert 'action="/tools/source-backed-brief/"' not in page
+    assert 'name="question"' not in page
+    assert 'name="audience"' not in page
+    assert 'name="deliverable"' not in page
+    assert 'name="ids"' not in page
     assert 'maxlength="240"' in page and 'maxlength="120"' in page
     assert 'maxlength="1200"' in page
     assert '<option value="brief">Brief</option>' in page
     assert '<option value="memo">Memo</option>' in page
     assert '<option value="outline">Outline</option>' in page
+    assert '<button type="submit" data-brief-submit>' in page
+    assert 'does not submit your framing or put it in a URL' in page
     assert page.count("<button") == page.count('type="submit"') + page.count('type="button"')
     assert "bounded public excerpts" in page.lower()
     assert "truth, consensus or independence" in page
@@ -161,6 +188,7 @@ def test_source_backed_brief_runtime_uses_exact_bounded_public_contract() -> Non
 
     assert 'const MCP_PROTOCOL_VERSION = "2026-07-28";' in script
     assert "const MAX_RECORD_IDS = 8;" in script
+    assert "const MAX_SOURCE_ID_CHARS = 200;" in script
     assert "const MAX_EXCERPT_CHARS = 360;" in script
     assert 'method: "POST"' in script
     assert 'credentials: "omit"' in script
@@ -178,14 +206,24 @@ def test_source_backed_brief_runtime_uses_exact_bounded_public_contract() -> Non
     assert "passages" in script
     assert "MAX_EXCERPTS_PER_RECORD" in script
     assert "publicBoundaryIsSafe" in script
+    assert 'const PASSAGE_PUBLIC_POLICY = "search_passage";' in script
+    assert "passagePublicMetadataIsSafe" in script
+    assert "publicSignalIsUnsafe" in script
     assert "truth_consensus_independence" in script
     assert "innerHTML" not in script
     assert "localStorage" not in script
     assert "sessionStorage" not in script
     assert "Authorization" not in script
-    assert "raw_transcript" not in script
+    assert "raw_transcript" in script
+    assert "passage.body" not in script
     assert "fetch(endpoint" in script
     assert 'method: "GET"' not in script
+    assert "URLSearchParams" not in script
+    assert "window.location.search" not in script
+    assert "prefillFromQuery" not in script
+    assert 'runBrief("query")' not in script
+    assert 'submit.addEventListener("click"' not in script
+    assert 'form.addEventListener("submit"' in script
 
 
 def test_source_backed_brief_runtime_caps_escapes_and_keeps_unresolved_records() -> None:
@@ -249,6 +287,53 @@ def test_source_backed_brief_runtime_caps_escapes_and_keeps_unresolved_records()
     decoded = json.loads(result["json"])
     assert decoded["schema"] == snapshot["schema"]
     assert decoded["counts"] == snapshot["counts"]
+
+
+def test_source_backed_brief_passage_policy_is_fail_closed_for_each_public_signal() -> None:
+    result = run_source_backed_brief_runtime()
+
+    assert result["passageSafe"] is True
+    assert result["passageCases"] == {
+        "safe": 1,
+        "needs_review": 0,
+        "raw": 0,
+        "raw_captions": 0,
+        "private": 0,
+        "private_data": 0,
+        "full_transcript_public": 0,
+        "public_false": 0,
+        "visibility": 0,
+        "policy": 0,
+        "missing_policy": 0,
+        "mixed": ["Safe search passage"],
+    }
+
+
+def test_source_backed_brief_rejects_source_ids_over_the_mcp_200_character_limit() -> None:
+    result = run_source_backed_brief_runtime()
+
+    assert result["overMcpIds"]["accepted"] == []
+    assert result["overMcpIds"]["invalidCount"] == 2
+    assert result["overMcpIds"]["submittedIdCount"] == 0
+
+
+def test_source_backed_brief_never_prefills_or_serializes_framing_in_a_get_url() -> None:
+    page = TEMPLATE.read_text(encoding="utf-8")
+    script = SCRIPT.read_text(encoding="utf-8")
+
+    assert 'method="get"' not in page.lower()
+    assert 'action="/tools/source-backed-brief/"' not in page
+    assert 'name="question"' not in page
+    assert 'name="audience"' not in page
+    assert 'name="deliverable"' not in page
+    assert 'name="ids"' not in page
+    assert "URLSearchParams" not in script
+    assert "window.location.search" not in script
+    assert "prefillFromQuery" not in script
+    assert 'runBrief("query")' not in script
+    assert 'submit.addEventListener("click"' not in script
+    assert 'form.addEventListener("submit"' in script
+    assert "does not submit your framing or put it in a URL" in page
 
 
 def test_source_backed_brief_stylesheet_observes_visual_and_accessibility_contract() -> None:

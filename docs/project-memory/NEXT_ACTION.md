@@ -8,10 +8,13 @@ at `946b771fd`. It accepts a question, audience, format and up to eight
 already-selected canonical public record/source IDs, then performs bounded
 anonymous `get_source` lookups and renders the same deterministic
 record/creator/original-source/excerpt/unknowns snapshot as Markdown or JSON.
-It does not infer truth, consensus or independence, call an LLM, read private
-or raw media/transcript fields, write D1, or deploy. Evidence Search and the
-resource hub carry one contextual link each; Source Diversity behavior and
-member/auth bindings remain unchanged.
+Source IDs follow the public MCP 200-character maximum; passages are copied
+only when their own public boundary and exact `search_passage` policy pass. The
+form does not use GET/query prefill or URL serialization, and its no-JS
+explanation remains available. It does not infer truth, consensus or
+independence, call an LLM, read private or raw media/transcript fields, write
+D1, or deploy. Evidence Search and the resource hub carry one contextual link
+each; Source Diversity behavior and member/auth bindings remain unchanged.
 
 Next action: root command center reviews the exact implementation commit,
 focused tests and public-boundary receipt. If approved, build a fresh reviewed

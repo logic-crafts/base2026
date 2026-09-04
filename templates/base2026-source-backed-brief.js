@@ -33,7 +33,8 @@
   const MAX_AUDIENCE_CHARS = 120;
   const MAX_INPUT_CHARS = 1200;
   const MAX_RECORD_IDS = 8;
-  const MAX_SOURCE_ID_CHARS = 256;
+  const MAX_SOURCE_ID_CHARS = 200;
+  const PASSAGE_PUBLIC_POLICY = "search_passage";
   const MAX_EXCERPT_CHARS = 360;
   const MAX_EXCERPTS_PER_RECORD = 3;
   const REQUEST_TIMEOUT_MS = 12000;
@@ -99,7 +100,8 @@
   }
 
   function canonicalRecordId(value) {
-    const raw = cleanText(value, MAX_SOURCE_ID_CHARS);
+    const raw = cleanText(value, MAX_SOURCE_ID_CHARS + 1);
+    if (raw.length > MAX_SOURCE_ID_CHARS) return "";
     const canonical = raw.match(/^tiktok-video-(\d{10,30})$/u);
     if (canonical) return "tiktok-video-" + canonical[1];
     if (/^\d{10,30}$/u.test(raw)) return "tiktok-video-" + raw;
@@ -107,15 +109,18 @@
   }
 
   function canonicalSourceId(value) {
-    const raw = cleanText(value, MAX_SOURCE_ID_CHARS);
-    const canonical = raw.match(/^tiktok:([A-Za-z0-9._-]{2,256}):(\d{10,30})$/u);
+    const raw = cleanText(value, MAX_SOURCE_ID_CHARS + 1);
+    if (raw.length > MAX_SOURCE_ID_CHARS) return "";
+    const canonical = raw.match(/^tiktok:([A-Za-z0-9._-]{2,200}):(\d{10,30})$/u);
     return canonical ? "tiktok:" + canonical[1] + ":" + canonical[2] : "";
   }
 
   function validInputId(value) {
-    const recordId = canonicalRecordId(value);
+    const candidate = typeof value === "string" ? value.replace(/\s+/gu, " ").trim() : "";
+    if (!candidate || candidate.length > MAX_SOURCE_ID_CHARS) return null;
+    const recordId = canonicalRecordId(candidate);
     if (recordId) return { lookupId: recordId, acceptedId: recordId, inputKind: "record_id" };
-    const sourceId = canonicalSourceId(value);
+    const sourceId = canonicalSourceId(candidate);
     return sourceId ? { lookupId: sourceId, acceptedId: sourceId, inputKind: "source_id" } : null;
   }
 
@@ -182,7 +187,7 @@
     let invalidCount = truncated ? 1 : 0;
     let duplicateCount = 0;
     tokens.forEach(function (token) {
-      const parsed = validInputId(cleanText(token, MAX_SOURCE_ID_CHARS));
+      const parsed = validInputId(token);
       if (!parsed) {
         invalidCount += 1;
         return;
@@ -274,11 +279,56 @@
 
   function unsafePublicMetadata(data) {
     if (!publicBoundaryIsSafe(data)) return true;
-    if (data.full_transcript_public === true || data.full_transcript_public === 1 || data.full_transcript_public === "1" || data.public === false || data.needs_review === true) return true;
+    if (publicFalseSignal(data.public) || publicSignalIsUnsafe(data.full_transcript_public) || publicSignalIsUnsafe(data.needs_review)) return true;
     const policyFields = [data.public_policy, data.policy, data.visibility].filter(function (value) { return typeof value === "string"; });
-    return policyFields.some(function (value) {
+    if (policyFields.some(function (value) {
       return /(?:private|needs[_-]?review|raw|full[_-]?transcript|asr|media)/iu.test(value);
+    })) return true;
+    return ["raw", "private", "private_data", "raw_captions", "raw_asr", "media", "media_files", "raw_transcript", "full_transcript", "transcript", "captions"].some(function (field) {
+      return publicSignalIsUnsafe(data[field]);
     });
+  }
+
+  function publicSignalIsUnsafe(value) {
+    if (value === true || value === 1) return true;
+    if (value && typeof value === "object") return true;
+    if (typeof value !== "string") return false;
+    const normalized = value.trim().toLowerCase();
+    return Boolean(normalized && !/^(?:0|false|no)$/u.test(normalized));
+  }
+
+  function publicFalseSignal(value) {
+    if (value === false || value === 0) return true;
+    return typeof value === "string" && /^(?:0|false|no)$/iu.test(value.trim());
+  }
+
+  function passagePublicMetadataIsSafe(passage) {
+    if (!passage || typeof passage !== "object") return false;
+    if (!publicBoundaryIsSafe(passage)) return false;
+    if (passage.public_policy !== PASSAGE_PUBLIC_POLICY) return false;
+    for (const field of ["policy", "visibility"]) {
+      if (passage[field] !== undefined && passage[field] !== null && passage[field] !== PASSAGE_PUBLIC_POLICY) return false;
+    }
+    if (publicFalseSignal(passage.public) || publicSignalIsUnsafe(passage.needs_review) || publicSignalIsUnsafe(passage.full_transcript_public)) return false;
+    for (const field of [
+      "raw",
+      "private",
+      "private_data",
+      "raw_captions",
+      "raw_asr",
+      "media",
+      "media_files",
+      "raw_transcript",
+      "full_transcript",
+      "transcript",
+      "captions"
+    ]) {
+      if (publicSignalIsUnsafe(passage[field])) return false;
+    }
+    for (const key of Object.keys(passage)) {
+      if (/(?:^|_)(?:raw|private)(?:_|$)/iu.test(key) && publicSignalIsUnsafe(passage[key])) return false;
+    }
+    return true;
   }
 
   function safeCreator(data) {
@@ -312,7 +362,7 @@
     const seen = new Set();
     const output = [];
     passages.slice(0, 8).forEach(function (passage) {
-      if (!passage || typeof passage !== "object" || (passage.public_boundary && !publicBoundaryIsSafe(passage))) return;
+      if (!passagePublicMetadataIsSafe(passage)) return;
       const excerpt = boundedText(passage.excerpt, MAX_EXCERPT_CHARS);
       if (!excerpt) return;
       const passageId = cleanText(passage.id || passage.passage_id, 120);
@@ -995,19 +1045,6 @@
     }
   }
 
-  function prefillFromQuery() {
-    const parameters = new URLSearchParams(window.location.search);
-    const question = parameters.get("question");
-    const audience = parameters.get("audience");
-    const deliverable = parameters.get("deliverable");
-    const ids = parameters.get("ids");
-    if (question) questionInput.value = question.slice(0, MAX_QUESTION_CHARS);
-    if (audience) audienceInput.value = audience.slice(0, MAX_AUDIENCE_CHARS);
-    if (deliverable && DELIVERABLES.has(deliverable)) deliverableInput.value = deliverable;
-    if (ids) idsInput.value = ids.slice(0, MAX_INPUT_CHARS);
-    return Boolean(question && audience && deliverable && ids);
-  }
-
   form.addEventListener("submit", function (event) {
     event.preventDefault();
     runBrief("typed");
@@ -1018,7 +1055,6 @@
   downloadJson.addEventListener("click", function () { exportSnapshot("json", "download"); });
 
   document.documentElement.classList.add("source-backed-brief-enhanced");
-  if (prefillFromQuery()) window.setTimeout(function () { runBrief("query"); }, 0);
 
   /* Test-only exports can be enabled by a harness before this runtime starts. */
   if (globalThis.__sourceBackedBriefTestApi) {
@@ -1026,6 +1062,8 @@
       parseIds: parseIds,
       publicBoundaryIsSafe: publicBoundaryIsSafe,
       unsafePublicMetadata: unsafePublicMetadata,
+      passagePublicMetadataIsSafe: passagePublicMetadataIsSafe,
+      safePassages: safePassages,
       normalizeResolved: normalizeResolved,
       unresolvedRecord: unresolvedRecord,
       buildSnapshot: buildSnapshot,

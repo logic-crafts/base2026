@@ -29,20 +29,20 @@
         <p class="b26-source-backed-brief__trust">This is a deterministic reading scaffold, not an answer engine. It does not infer truth, consensus or independence, and it does not save your request or call an LLM.</p>
       </div>
 
-      <form class="b26-source-backed-brief__form" action="/tools/source-backed-brief/" method="get" data-brief-form>
+      <form class="b26-source-backed-brief__form" data-brief-form>
         <div class="b26-source-backed-brief__form-grid">
           <div class="b26-source-backed-brief__field b26-source-backed-brief__field--wide">
             <label for="source-backed-brief-question">Question</label>
-            <textarea id="source-backed-brief-question" name="question" rows="3" maxlength="240" minlength="3" required placeholder="What do these records say about a specific practice?" data-brief-question></textarea>
-            <p class="b26-source-backed-brief__field-help">Keep the question narrow enough to inspect record by record. The wording is copied into your local export; it is not sent to an inference service.</p>
+            <textarea id="source-backed-brief-question" rows="3" maxlength="240" minlength="3" required placeholder="What do these records say about a specific practice?" data-brief-question></textarea>
+            <p class="b26-source-backed-brief__field-help">Keep the question narrow enough to inspect record by record. The wording is copied into your local export; it is not sent to an inference service or placed in a URL.</p>
           </div>
           <div class="b26-source-backed-brief__field">
             <label for="source-backed-brief-audience">Audience</label>
-            <input id="source-backed-brief-audience" name="audience" type="text" maxlength="120" minlength="2" required placeholder="Example: content team" data-brief-audience>
+            <input id="source-backed-brief-audience" type="text" maxlength="120" minlength="2" required placeholder="Example: content team" data-brief-audience>
           </div>
           <div class="b26-source-backed-brief__field">
             <label for="source-backed-brief-deliverable">Deliverable type</label>
-            <select id="source-backed-brief-deliverable" name="deliverable" required data-brief-deliverable>
+            <select id="source-backed-brief-deliverable" required data-brief-deliverable>
               <option value="">Choose a format</option>
               <option value="brief">Brief</option>
               <option value="memo">Memo</option>
@@ -51,8 +51,8 @@
           </div>
           <div class="b26-source-backed-brief__field b26-source-backed-brief__field--wide">
             <label for="source-backed-brief-ids">Selected public record/source IDs</label>
-            <textarea id="source-backed-brief-ids" name="ids" rows="6" maxlength="1200" required placeholder="tiktok-video-7626280514139196694&#10;tiktok:creator:7626280514139196694" data-brief-ids></textarea>
-            <p class="b26-source-backed-brief__field-help">Use up to 8 canonical IDs, separated by commas, spaces or new lines. Evidence Search and the Source Diversity Check can help you select IDs; arbitrary URLs, claims and source text are rejected.</p>
+            <textarea id="source-backed-brief-ids" rows="6" maxlength="1200" required placeholder="tiktok-video-7626280514139196694&#10;tiktok:creator:7626280514139196694" data-brief-ids></textarea>
+            <p class="b26-source-backed-brief__field-help">Use up to 8 canonical IDs, separated by commas, spaces or new lines. Each submitted ID must fit the public MCP contract's 200-character limit. Evidence Search and the Source Diversity Check can help you select IDs; arbitrary URLs, claims and source text are rejected.</p>
           </div>
         </div>
         <div class="b26-source-backed-brief__form-actions">
@@ -61,7 +61,7 @@
           <a class="b26-button--secondary" href="/tools/source-diversity-check/">Check source diversity</a>
         </div>
         <noscript>
-          <p class="b26-source-backed-brief__noscript">The public record lookups and preview need JavaScript, but this page remains useful without it: the method, input limits and evidence boundaries are below. Search public records in <a href="/tools/evidence-search/">Evidence Search</a>, inspect each source and keep the IDs for a local brief.</p>
+          <p class="b26-source-backed-brief__noscript">The public record lookups and preview need JavaScript. Without it, this page does not submit your framing or put it in a URL, but it remains useful: the method, input limits and evidence boundaries are below. Search public records in <a href="/tools/evidence-search/">Evidence Search</a>, inspect each source and keep the IDs for a local brief.</p>
         </noscript>
       </form>
     </section>
@@ -157,7 +157,7 @@
         <details><summary>What does the preview actually contain?</summary><p>It contains your question, audience and format, exact selected record IDs, safe public attribution, available creator and original-source links, and up to three short public excerpts per resolved record. It does not synthesize a conclusion.</p></details>
         <details><summary>What happens when a record cannot be resolved?</summary><p>The submitted ID remains in the preview and exports with an unresolved status and reason. The builder does not invent a title, creator, source link or excerpt for it.</p></details>
         <details><summary>Does a brief prove that the records agree?</summary><p>No. The tool does not infer truth, consensus or independence. Repeated wording, creators or source URLs need separate human inspection and do not become a score.</p></details>
-        <details><summary>Does this save my question or source IDs?</summary><p>No. Lookups are read-only public MCP requests, and Markdown or JSON exports are created in your browser. This page has no D1 write, account requirement, private binding or LLM call.</p></details>
+        <details><summary>Does this save my question or source IDs?</summary><p>No. Lookups are read-only public MCP requests, and Markdown or JSON exports are created in your browser. This page does not use GET/query prefill and its controls do not serialize your framing into a URL. It has no D1 write, account requirement, private binding or LLM call.</p></details>
       </div>
     </section>
   </main>

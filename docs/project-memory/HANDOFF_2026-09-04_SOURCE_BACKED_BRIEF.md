@@ -24,7 +24,9 @@ up to eight unique canonical public record IDs
 (`tiktok:<creator>:<video_id>`). Each accepted ID is resolved through the
 existing anonymous, read-only `/api/mcp` `get_source` call using protocol
 version `2026-07-28`, at most three concurrent requests and a 12-second
-per-request timeout.
+per-request timeout. The client applies the MCP `source_id` maximum of 200
+characters, including the creator segment, and rejects overlong IDs before
+any lookup is attempted.
 
 The output contract is `base2026.source-backed-brief.v1`:
 
@@ -34,7 +36,10 @@ The output contract is `base2026.source-backed-brief.v1`:
   URL when available;
 - only the `excerpt` field from up to three public passages is copied per
   resolved record, bounded to 360 characters; passage IDs and chunk indexes
-  remain attached when returned;
+  remain attached when returned. Every passage must carry the exact
+  `public_policy: "search_passage"` policy and the live public boundary;
+  passage-level visibility, review, transcript, raw and private signals fail
+  closed;
 - unresolved records stay in input order with a visible status, lookup reason
   and unknown rather than a fabricated title, link or excerpt;
 - missing attribution, source links, Base2026 links and excerpts are explicit
@@ -42,11 +47,15 @@ The output contract is `base2026.source-backed-brief.v1`:
 - Markdown and JSON exports are generated locally from the same rendered
   snapshot, with Markdown escaping for user/record text and safe HTTPS links.
 
-The public boundary is fail-closed: the response must prove
+The public boundary is fail-closed: the response and each copied passage must prove
 `public_read_only`, `raw_captions=false`, `raw_asr=false`,
 `media_files=false`, `private_data=false` and `writes=false`. Full public
 transcripts, private/needs-review/raw/media policy signals and non-HTTPS links
-are rejected or omitted. The tool does not crawl, rank, compare source
+are rejected or omitted; top-level metadata cannot authorize an unsafe
+passage. The form has no action/method or URL-serializable field names, and the
+runtime has no query prefill; with JavaScript disabled it retains the
+method/boundary guidance without submitting the framing. The tool does not
+crawl, rank, compare source
 independence, infer truth/consensus/agreement, call an LLM, use D1 directly,
 write data, access auth/member state, or publish raw captions/transcripts or
 media.
@@ -65,20 +74,22 @@ sent to analytics.
   constants and generated route/static/sitemap/LLMS wiring; recognize the
   public `tools` route family during path transformation.
 - `templates/base2026-source-backed-brief.html` — canonical indexable route
-  shell, no-JS method/boundary content, input form, result/export containers
-  and WebApplication/BreadcrumbList schema.
+  shell, no-JS method/boundary content, non-serializing input form,
+  result/export containers and WebApplication/BreadcrumbList schema.
 - `templates/base2026-source-backed-brief.css` — scoped responsive styling
   using the existing `b26-independent-v1` tokens, mobile wrapping and reduced
   motion behavior.
 - `templates/base2026-source-backed-brief.js` — bounded `get_source` lookup,
-  public-boundary checks, deterministic normalization, unresolved handling,
-  DOM-safe rendering, analytics and Markdown/JSON export.
+  MCP-aligned ID validation, passage-level fail-closed public-boundary/policy
+  checks, deterministic normalization, unresolved handling, DOM-safe rendering,
+  analytics and Markdown/JSON export without query prefill.
 - `templates/base2026-evidence-search.html` — replace the planned placeholder
   with one link to the implemented brief route.
 - `templates/base2026-ai-visibility-resources.html` — add one honest resource
   hub link to the implemented brief route.
 - `tests/test_base2026_source_backed_brief.py` — focused route/runtime/CSS,
-  builder, escaping, eight-ID cap, unresolved-state, boundary and link tests.
+  builder, escaping, eight-ID cap, unresolved-state, passage-policy signal,
+  MCP 200-character limit, no-GET/query-prefill, boundary and link tests.
 - `tests/test_base2026_evidence_search_tool.py` — update the planned-link
   expectation to the implemented handoff.
 - `tests/test_build_base2026_cloudflare_release.py` — update the additive
@@ -97,8 +108,9 @@ automation was changed.
 
 ## Verification
 
-- Focused Python tests: `15 passed` across the new brief, Evidence Search and
-  Source Diversity suites.
+- Focused Python tests: `46 passed` across the new brief, Evidence Search,
+  Source Diversity and fixture-builder suites, including the independent
+  review regressions.
 - JavaScript syntax: `node --check templates/base2026-source-backed-brief.js`
   passed.
 - Python syntax: `python3 -m py_compile` passed for the builder and focused
@@ -107,8 +119,11 @@ automation was changed.
   hub sitemap and both LLMS entry points.
 - Design authority check: `python3 scripts/check-base2026-design-authority.py`
   passed.
-- Publication-boundary audit: `13` changed files, zero forbidden paths, zero
-  needs-review paths and zero secret findings; `ok_to_stage_public_safe_candidates=true`.
+- Publication-boundary audit for the independent-review delta: `6` staged
+  files, zero forbidden paths, zero needs-review paths and zero secret findings;
+  `ok_to_stage_public_safe_candidates=true`. The original 13-file candidate
+  audit was also clean; the full branch manifest remains the 13 files listed
+  above.
 - No Wrangler run or deployment was performed. Live HTTP, API/MCP,
   canonical/sitemap, analytics, mobile browser, indexation and traffic remain
   unverified for this local candidate.
