@@ -1,0 +1,58 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "base2026-projection-relay",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-09-04",
+  "compatibility_flags": ["nodejs_compat"],
+  // The owner must choose a target-account route before production deploy.
+  // Keep workers.dev off in production; env.internal is the sole test route.
+  "workers_dev": false,
+  "d1_databases": [
+    {
+      "binding": "RELAY_DB",
+      "database_name": "base2026-projection-relay",
+      "database_id": "2df3df60-812d-40f6-9877-2756cc423749",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "services": [
+    {
+      "binding": "PUBLIC_PROJECTION_TARGET",
+      "service": "base2026",
+      "entrypoint": "PublicProjectionEntrypoint"
+    }
+  ],
+  "vars": {
+    "RELAY_ENABLED": "false"
+  },
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1,
+    "logs": {
+      "invocation_logs": false
+    }
+  },
+  "env": {
+    "internal": {
+      "workers_dev": true,
+      "d1_databases": [
+        {
+          "binding": "RELAY_DB",
+          "database_name": "base2026-projection-relay",
+          "database_id": "2df3df60-812d-40f6-9877-2756cc423749",
+          "migrations_dir": "migrations"
+        }
+      ],
+      "services": [
+        {
+          "binding": "PUBLIC_PROJECTION_TARGET",
+          "service": "base2026",
+          "entrypoint": "PublicProjectionEntrypoint"
+        }
+      ],
+      "vars": {
+        "RELAY_ENABLED": "true"
+      }
+    }
+  }
+}
