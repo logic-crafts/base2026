@@ -219,6 +219,7 @@ PUBLIC_SAFE_EXACT = {
     "tests/test_build_kb_reviewed_candidate_replay.py",
     "tests/test_build_base2026_cloudflare_release.py",
     "tests/test_base2026_evidence_search_tool.py",
+    "tests/test_base2026_activation_measurement.py",
     "tests/test_base2026_source_diversity_check.py",
     "tests/test_base2026_source_backed_brief.py",
     "tests/test_base2026_homepage_motion.py",

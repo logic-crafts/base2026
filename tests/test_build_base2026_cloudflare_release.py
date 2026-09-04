@@ -517,10 +517,9 @@ def test_startup_homepage_overlay_preserves_search_as_workspace(tmp_path: Path) 
     assert receipt["replacements"]["html_urls_to_extensionless"] > 0
     assert receipt["verification"]["redirecting_html_canonical_markers_remaining"] == 0
     assert receipt["verification"]["redirecting_html_sitemap_markers_remaining"] == 0
-    # Blog files, guide assets, and the isolated Evidence Search and Source
-    # Diversity and source-backed brief tools are additive; retained assets stay
-    # intact.
-    assert receipt["artifact"]["file_count"] == 61
+    # Blog files, guide assets, the three public tools, and activation
+    # measurement are additive; retained assets stay intact.
+    assert receipt["artifact"]["file_count"] == 62
     blog = (output / "blog.html").read_text(encoding="utf-8")
     assert '<link rel="canonical" href="https://base2026.dev/blog">' in blog
     assert 'data-b26-blog-schema' in blog
@@ -539,6 +538,7 @@ def test_startup_homepage_overlay_preserves_search_as_workspace(tmp_path: Path) 
     assert "sitemap-guides.xml" not in (output / "sitemap.xml").read_text(encoding="utf-8")
     assert (output / "static/base2026-evidence-guide.css").read_bytes() == builder.DEFAULT_EVIDENCE_GUIDE_STYLESHEET.read_bytes()
     assert (output / "static/base2026-evidence-guide.js").read_bytes() == builder.DEFAULT_EVIDENCE_GUIDE_SCRIPT.read_bytes()
+    assert (output / "static/base2026-activation-measurement.js").read_bytes() == builder.DEFAULT_ACTIVATION_MEASUREMENT_SCRIPT.read_bytes()
     source_diversity_page = output / "tools/source-diversity-check/index.html"
     assert source_diversity_page.is_file()
     assert (output / "static/base2026-source-diversity-check.css").read_bytes() == builder.DEFAULT_SOURCE_DIVERSITY_CHECK_STYLESHEET.read_bytes()

@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import worker from "../src/index";
+import { handleAnalyticsEvent } from "../src/analytics";
 
 type FakeRow = Record<string, unknown> & {
   id: string;
@@ -270,11 +271,39 @@ class FakeOutreachDatabase {
   }
 }
 
+class FakeRateLimit {
+  success = true;
+  keys: string[] = [];
+
+  async limit(options: { key: string }): Promise<{ success: boolean }> {
+    this.keys.push(options.key);
+    return { success: this.success };
+  }
+}
+
+class FakeAnalytics {
+  points: AnalyticsEngineDataPoint[] = [];
+  fail = false;
+
+  writeDataPoint(point?: AnalyticsEngineDataPoint): void {
+    if (this.fail) throw new Error("analytics unavailable");
+    if (point) this.points.push(point);
+  }
+}
+
 function env(db = new FakeDatabase(), inbox = new FakeInboxDatabase(), outreach?: FakeOutreachDatabase): Env {
   return {
     DB: db as unknown as D1Database,
     INBOX_DB: inbox as unknown as D1Database,
     ...(outreach ? { OUTREACH_DB: outreach as unknown as D1Database } : {}),
+  } as unknown as Env;
+}
+
+function activationEnv(analytics = new FakeAnalytics(), rateLimit = new FakeRateLimit()): Env {
+  return {
+    ...env(),
+    ANALYTICS: analytics as unknown as AnalyticsEngineDataset,
+    MCP_RATE_LIMIT: rateLimit as unknown as RateLimit,
   } as unknown as Env;
 }
 
@@ -869,5 +898,204 @@ describe("Base2026 search Worker", () => {
     );
     expect(response.status).toBe(202);
     expect(inbox.rows).toHaveLength(0);
+  });
+});
+
+describe("Base2026 privacy-safe activation measurement", () => {
+  const route = "/tools/evidence-search/";
+  const requestBody = {
+    event: "evidence_search_submitted",
+    route,
+    properties: {
+      input_source: "typed",
+      query_length_bucket: "1_20",
+      query_token_bucket: "1",
+      render_mode: "enhanced",
+    },
+  };
+
+  it("writes only the allowlisted event, route, server hour bucket, and coarse properties", async () => {
+    const analytics = new FakeAnalytics();
+    const rateLimit = new FakeRateLimit();
+    const response = await handleAnalyticsEvent(
+      new Request("https://base2026.dev/api/analytics/event", {
+        method: "POST",
+        headers: { "content-type": "application/json", origin: "https://base2026.dev", "CF-Connecting-IP": "198.51.100.10" },
+        body: JSON.stringify(requestBody),
+      }),
+      { ANALYTICS: analytics as unknown as AnalyticsEngineDataset, MCP_RATE_LIMIT: rateLimit },
+      new Date("2026-09-04T15:42:18.000Z"),
+    );
+    expect(response.status).toBe(204);
+    expect(analytics.points).toEqual([{
+      blobs: [
+        "evidence_search_submitted",
+        route,
+        "2026-09-04T15:00:00Z",
+        '{"input_source":"typed","query_length_bucket":"1_20","query_token_bucket":"1","render_mode":"enhanced"}',
+      ],
+      doubles: [1],
+      indexes: ["base2026:activation:v1"],
+    }]);
+    expect(rateLimit.keys).toEqual(["base2026:activation:v1:198.51.100.10"]);
+    expect(JSON.stringify(analytics.points)).not.toContain("198.51.100.10");
+  });
+
+  it("routes the endpoint through the Worker and keeps a storage failure fail-open", async () => {
+    const analytics = new FakeAnalytics();
+    analytics.fail = true;
+    const response = await worker.fetch(
+      new Request("https://base2026.dev/api/analytics/event", {
+        method: "POST",
+        headers: { "content-type": "application/json", origin: "https://base2026.dev" },
+        body: JSON.stringify(requestBody),
+      }),
+      activationEnv(analytics),
+      {} as ExecutionContext,
+    );
+    expect(response.status).toBe(204);
+    expect(response.headers.get("referrer-policy")).toBe("no-referrer");
+  });
+
+  it("rejects raw identifiers, referrer fields, and unknown top-level fields before a write", async () => {
+    const analytics = new FakeAnalytics();
+    const body = {
+      ...requestBody,
+      properties: { ...requestBody.properties, public_record_id: "tiktok-video-7657638702864223510" },
+      timestamp: "2026-09-04T15:42:18.000Z",
+    };
+    const response = await handleAnalyticsEvent(
+      new Request("https://base2026.dev/api/analytics/event", {
+        method: "POST",
+        headers: { "content-type": "application/json", origin: "https://base2026.dev" },
+        body: JSON.stringify(body),
+      }),
+      { ANALYTICS: analytics as unknown as AnalyticsEngineDataset, MCP_RATE_LIMIT: new FakeRateLimit() },
+    );
+    expect(response.status).toBe(400);
+    expect(analytics.points).toHaveLength(0);
+  });
+
+  it("rejects event and route mismatches in both directions", async () => {
+    const cases = [
+      {
+        event: "source_check_run",
+        route: "/tools/evidence-search/",
+        properties: { input_source: "typed", input_mode: "delimited_ids" },
+      },
+      {
+        event: "evidence_search_submitted",
+        route: "/tools/source-diversity-check/",
+        properties: { input_source: "typed", query_length_bucket: "1_20", query_token_bucket: "1", render_mode: "enhanced" },
+      },
+      {
+        event: "brief_preview_created",
+        route: "/tools/evidence-search/",
+        properties: { deliverable: "brief", response_class: "complete", selected_count_bucket: "2_5", resolved_count_bucket: "2_5", viewport_class: "large" },
+      },
+      {
+        event: "source_check_completed",
+        route: "/tools/source-backed-brief/",
+        properties: { completion_mode: "lookup_complete", count_bucket: "2_5", response_class: "complete", viewport_class: "large" },
+      },
+    ];
+    for (const body of cases) {
+      const analytics = new FakeAnalytics();
+      const response = await handleAnalyticsEvent(
+        new Request("https://base2026.dev/api/analytics/event", {
+          method: "POST",
+          headers: { "content-type": "application/json", origin: "https://base2026.dev" },
+          body: JSON.stringify(body),
+        }),
+        { ANALYTICS: analytics as unknown as AnalyticsEngineDataset, MCP_RATE_LIMIT: new FakeRateLimit() },
+      );
+      expect(response.status).toBe(400);
+      expect(analytics.points).toHaveLength(0);
+    }
+  });
+
+  it("accepts the evidence-search partial failure bucket emitted by the browser", async () => {
+    const analytics = new FakeAnalytics();
+    const response = await handleAnalyticsEvent(
+      new Request("https://base2026.dev/api/analytics/event", {
+        method: "POST",
+        headers: { "content-type": "application/json", origin: "https://base2026.dev" },
+        body: JSON.stringify({
+          event: "evidence_search_partial",
+          route: "/tools/evidence-search/",
+          properties: { loaded_count_bucket: "2_5", failed_count_bucket: "6_plus", error_class: "record_validation" },
+        }),
+      }),
+      { ANALYTICS: analytics as unknown as AnalyticsEngineDataset, MCP_RATE_LIMIT: new FakeRateLimit() },
+    );
+    expect(response.status).toBe(204);
+    expect(analytics.points[0]?.blobs).toContain('{"error_class":"record_validation","failed_count_bucket":"6_plus","loaded_count_bucket":"2_5"}');
+  });
+
+  it("accepts one coarse source-backed-brief event without request or source content", async () => {
+    const analytics = new FakeAnalytics();
+    const response = await handleAnalyticsEvent(
+      new Request("https://base2026.dev/api/analytics/event", {
+        method: "POST",
+        headers: { "content-type": "application/json", origin: "https://base2026.dev" },
+        body: JSON.stringify({
+          event: "brief_preview_created",
+          route: "/tools/source-backed-brief/",
+          properties: {
+            deliverable: "brief",
+            response_class: "partial",
+            selected_count_bucket: "6_10",
+            resolved_count_bucket: "2_5",
+            viewport_class: "large",
+          },
+        }),
+      }),
+      { ANALYTICS: analytics as unknown as AnalyticsEngineDataset, MCP_RATE_LIMIT: new FakeRateLimit() },
+    );
+    expect(response.status).toBe(204);
+    expect(analytics.points).toHaveLength(1);
+    expect(analytics.points[0]?.blobs).toEqual([
+      "brief_preview_created",
+      "/tools/source-backed-brief/",
+      expect.stringMatching(/^\d{4}-\d{2}-\d{2}T\d{2}:00:00Z$/u),
+      '{"deliverable":"brief","resolved_count_bucket":"2_5","response_class":"partial","selected_count_bucket":"6_10","viewport_class":"large"}',
+    ]);
+  });
+
+  it("fails closed for cross-origin requests, missing bindings, and a rate-limit decision", async () => {
+    const crossOriginRate = new FakeRateLimit();
+    const crossOrigin = await handleAnalyticsEvent(
+      new Request("https://base2026.dev/api/analytics/event", {
+        method: "POST",
+        headers: { "content-type": "application/json", origin: "https://example.com" },
+        body: JSON.stringify(requestBody),
+      }),
+      { ANALYTICS: new FakeAnalytics() as unknown as AnalyticsEngineDataset, MCP_RATE_LIMIT: crossOriginRate },
+    );
+    expect(crossOrigin.status).toBe(403);
+    expect(crossOriginRate.keys).toHaveLength(0);
+
+    const missingAnalytics = await handleAnalyticsEvent(
+      new Request("https://base2026.dev/api/analytics/event", {
+        method: "POST",
+        headers: { "content-type": "application/json", origin: "https://base2026.dev" },
+        body: JSON.stringify(requestBody),
+      }),
+      { MCP_RATE_LIMIT: new FakeRateLimit() },
+    );
+    expect(missingAnalytics.status).toBe(503);
+
+    const rateLimit = new FakeRateLimit();
+    rateLimit.success = false;
+    const limited = await handleAnalyticsEvent(
+      new Request("https://base2026.dev/api/analytics/event", {
+        method: "POST",
+        headers: { "content-type": "application/json", origin: "https://base2026.dev" },
+        body: JSON.stringify(requestBody),
+      }),
+      { ANALYTICS: new FakeAnalytics() as unknown as AnalyticsEngineDataset, MCP_RATE_LIMIT: rateLimit },
+    );
+    expect(limited.status).toBe(429);
+    expect(limited.headers.get("retry-after")).toBe("60");
   });
 });

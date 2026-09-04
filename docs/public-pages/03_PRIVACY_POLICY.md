@@ -1,6 +1,6 @@
 # Privacy Policy
 
-_Last updated: 2026-06-09_
+_Last updated: 2026-09-04_
 
 This Privacy Policy explains how Base2026 handles information when you visit the website or contact the project.
 
@@ -33,7 +33,11 @@ We do not intentionally collect sensitive personal information from visitors.
 
 Base2026 uses necessary cookies or local browser storage to remember cookie preferences and keep the site working.
 
-Base2026 may use basic privacy-friendly analytics or server-side logs to understand whether the project is working and which pages are useful.
+When enabled, Base2026 may use a first-party activation measurement endpoint for the two public tools at `/tools/evidence-search/` and `/tools/source-diversity-check/`. It records only an allowlisted event name, the tool route, a server-generated UTC hour bucket, and coarse allowlisted properties such as a count or response bucket. It does not claim unique visitors.
+
+The activation measurement does not persist raw queries, public record/source IDs, notes, IP addresses, browser/user-agent strings, referrers, authentication or member data, or private acquisition-pipeline data. It does not use cookies, local storage, session storage, fingerprinting, or a third-party analytics beacon. Cloudflare's edge may use an IP address transiently as a rate-limit key; that key is not written to the measurement point or an application database. If enabled, the aggregate measurement points use Cloudflare Analytics Engine's current three-month retention window. The resulting counts are best-effort product signals, not proof of human actions or unique visitors.
+
+The allowlisted activation event names are `evidence_search_viewed`, `evidence_search_submitted`, `evidence_search_results_returned`, `evidence_source_record_opened`, `evidence_original_source_clicked`, `evidence_search_completed`, `evidence_search_empty`, `evidence_search_partial`, `evidence_search_error`, `source_check_run`, `source_check_completed`, `source_check_decision_recorded`, and `source_check_card_copied`.
 
 Optional analytics and marketing cookies are not currently active by default. If they are added later, they should only run after the visitor allows them where consent is required.
 

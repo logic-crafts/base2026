@@ -112,19 +112,6 @@
     return output;
   }
 
-  function referrerClass() {
-    if (!document.referrer) return "direct";
-    try {
-      const host = new URL(document.referrer).hostname.toLowerCase();
-      if (host === window.location.hostname) return "internal";
-      if (/google|bing|duckduckgo|yahoo|yandex|baidu/.test(host)) return "search";
-      if (/tiktok|linkedin|facebook|instagram|x\.com|twitter|youtube/.test(host)) return "social";
-      return "other";
-    } catch (_error) {
-      return "other";
-    }
-  }
-
   function viewportClass() {
     if (window.innerWidth < 640) return "small";
     if (window.innerWidth < 1024) return "medium";
@@ -179,9 +166,6 @@
     if (!ALLOWED_ANALYTICS_EVENTS.has(name)) return;
     const detail = { name: name, properties: Object.assign({}, properties) };
     window.dispatchEvent(new CustomEvent("base2026:analytics", { detail: detail }));
-    if (Array.isArray(window.dataLayer)) {
-      window.dataLayer.push(Object.assign({ event: name }, properties));
-    }
   }
 
   function setStatus(state, message) {
@@ -311,7 +295,7 @@
     const baseLink = element("a", "", "Open Base2026 record");
     baseLink.href = record.url;
     baseLink.addEventListener("click", function () {
-      recordInspection("evidence_source_record_opened", "base2026_record_opened", record.id, type, position);
+      recordInspection("evidence_source_record_opened", "base2026_record_opened", position);
     });
     actions.appendChild(baseLink);
 
@@ -321,7 +305,7 @@
       originalLink.target = "_blank";
       originalLink.rel = "noopener noreferrer";
       originalLink.addEventListener("click", function () {
-        recordInspection("evidence_original_source_clicked", "original_source_opened", record.id, type, position);
+        recordInspection("evidence_original_source_clicked", "original_source_opened", position);
       });
       actions.appendChild(originalLink);
     } else {
@@ -331,11 +315,9 @@
     return card;
   }
 
-  function recordInspection(eventName, completionMode, recordId, type, position) {
+  function recordInspection(eventName, completionMode, position) {
     emitAnalytics(eventName, {
-      public_record_id: recordId,
-      result_position_bucket: positionBucket(position),
-      source_type: type || "unavailable"
+      position_bucket: positionBucket(position)
     });
     if (!completedForResultSet) {
       completedForResultSet = true;
@@ -470,7 +452,6 @@
       retry.hidden = false;
       emitAnalytics("evidence_search_error", {
         error_class: details.errorClass,
-        http_status_bucket: details.statusBucket,
         render_mode: "enhanced"
       });
     } finally {
@@ -522,7 +503,6 @@
 
   emitAnalytics("evidence_search_viewed", {
     render_mode: "enhanced",
-    referrer_class: referrerClass(),
     viewport_class: viewportClass()
   });
 

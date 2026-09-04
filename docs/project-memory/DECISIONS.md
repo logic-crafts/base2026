@@ -26,6 +26,22 @@ valid acquisition hook only where the utility is genuinely usable for free.
 Reason: the technical foundation already produces impressions; the missing
 step is an inspectable reason to click, use and cite Base2026.
 
+## 2026-09-04 — Use a bounded first-party Analytics Engine sink for public tool activation
+
+The two public acquisition tools may emit only the allowlisted activation
+events defined in `src/analytics.ts`, for the two exact tool routes. Store
+event name, route, server UTC-hour bucket and coarse enum properties in
+Analytics Engine; never store raw query/record/source IDs, notes, IP,
+user-agent, referrer, cookies, fingerprint, auth/member or private-pipeline
+data. Reuse the existing `MCP_RATE_LIMIT` binding under a separate key prefix,
+cap events per browser page and keep the write fail-open for product UX.
+
+Choose Analytics Engine over D1 because it is a native non-blocking custom-event
+sink without a schema migration or scheduler; do not use Cloudflare Web
+Analytics because it does not accept custom events. Do not claim unique
+visitors. The source candidate is not a deployment, remote dataset creation,
+or permission to mutate the live Worker.
+
 ## 2026-09-02 — Merge Claim Receipt source but hold production at zero eligibility
 
 Merge the independently reviewed public-repository implementation so the

@@ -98,6 +98,10 @@
         </div>
         <p data-b26-stats-status aria-live="polite">Verified 2026-08-29 snapshot. Live public-D1 totals refresh automatically.</p>
       </section>
+      <section class="content-section analytics-section" aria-labelledby="activation-measurement-title">
+        <div class="section-title-row"><h2 id="activation-measurement-title">Public tool activation measurement</h2></div>
+        <p>When enabled, the Evidence Search and Source Diversity Check tools can send aggregate, first-party activation events. The measurement uses only allowlisted event names, tool routes, a server UTC-hour bucket and coarse count/response properties; it does not use cookies, raw queries, public IDs, referrers or unique-visitor tracking. See the <a href="/privacy">privacy notice</a> for the full boundary. This is separate from the historical public-index totals below.</p>
+      </section>
       <section class="content-section analytics-section" aria-labelledby="historical-release-title">
         <div class="section-title-row"><h2 id="historical-release-title">Historical release analytics</h2></div>
         <p>The summary totals below were generated from the verified 2026-07-29 static release. They remain available for research context and are not the current D1 corpus total. Detailed historical rankings are not embedded in this source-synchronized release.</p>
@@ -237,7 +241,7 @@
         </div>
         <div class="cookie-options">
           <label><input type="checkbox" checked disabled> Necessary <span>Always on. Required for site operation, security, forms, and preference storage.</span></label>
-          <label><input type="checkbox" data-cookie-analytics> Analytics <span>Optional. Not currently active. Reserved for privacy-friendly page usefulness analytics.</span></label>
+          <label><input type="checkbox" data-cookie-analytics> Analytics <span>Optional cookie-based analytics are not currently active. Public tool activation measurement, when enabled, does not use this cookie.</span></label>
           <label><input type="checkbox" data-cookie-marketing> Marketing <span>Optional. Not currently active. Reserved for future pixels only if explicitly enabled.</span></label>
         </div>
         <div class="cookie-actions">

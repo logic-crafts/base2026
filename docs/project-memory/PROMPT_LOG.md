@@ -76,6 +76,33 @@ supported by Evidence Pulse #001 and the GitHub Evidence Pack. Generic article
 volume, fake consensus wording, doorway pages and link spam are not substitutes
 for a non-owner visit and successful tool action.
 
+## 2026-09-04 — Public tool activation measurement candidate
+
+Prompt: verify the uncollected `base2026:analytics` events in Evidence Search
+and Source Diversity Check, compare first-party Cloudflare sinks, and make the
+smallest privacy-safe implementation candidate without deployment or private
+pipeline changes.
+
+Actions and receipts:
+
+- Verified from clean `origin/main` and live HTML that both tools emitted DOM
+  events but had no listener, dataLayer bootstrap, GA/GTM, beacon or
+  `/api/analytics/event` route; live endpoint returned 404.
+- Compared D1, Analytics Engine and Cloudflare Web Analytics against current
+  official pricing/limits. Chose a native Analytics Engine custom-event sink;
+  reused the existing 60-per-minute MCP rate-limit binding and added no D1
+  migration, scheduler or external analytics service.
+- Added strict event/route/property allowlists, server UTC-hour bucketing, 4 KiB
+  body bound, 24 events/page cap, same-origin/no-credentials sender, no raw
+  IDs/queries/notes/referrers/IP/user-agent/cookies/fingerprint/auth/member or
+  private-pipeline data, fail-open writes and privacy/analytics copy.
+- Local gates passed: 638 Worker tests, 42 focused Python/build/tool tests,
+  200 full Python tests, Worker typecheck, JavaScript/diff checks and
+  publication-boundary audit. The Wrangler dry-run was held only because this
+  clean checkout has no generated release directory; no deployment, remote
+  dataset/D1 mutation, push, merge, PR or external publication occurred. See
+  `HANDOFF_2026-09-04_ACTIVATION_MEASUREMENT.md`.
+
 ## 2026-09-02 — Claim Receipt Ledger source integration closed
 
 Pushed reviewed head `88eda1544c1a5d56c63d18d7d06ed81ea44f6730`, opened

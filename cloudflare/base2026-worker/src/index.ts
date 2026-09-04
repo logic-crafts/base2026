@@ -19,6 +19,7 @@ import {
   rollbackClaimReceiptCanary,
 } from "./claim-receipt-ledger";
 import { handlePublicMcp } from "./mcp";
+import { handleAnalyticsEvent } from "./analytics";
 
 const INDEX_UID = "base2026_public_tiktok" as const;
 const OUTREACH_INDEX_UID = "base2026_public_outreach" as const;
@@ -2102,6 +2103,7 @@ export default {
       if (url.pathname === "/api/claim-receipts/v1") return await handleClaimReceiptRoute(request, env, url);
       if (url.pathname === "/api/evidence-brief") return await handleEvidenceBrief(request, env, url);
       if (url.pathname === "/api/evidence-brief/v2") return await handleEvidenceBriefV2(request, env, url);
+      if (url.pathname === "/api/analytics/event") return await handleAnalyticsEvent(request, env);
       if (url.pathname === "/api/mcp") return await handlePublicMcp(request, env);
       if (url.pathname === "/sitemap-dynamic.xml") return await handleDynamicSitemap(request, env);
       if (url.pathname === "/api/forms/support") return await handleInboxForm(request, env, "support");

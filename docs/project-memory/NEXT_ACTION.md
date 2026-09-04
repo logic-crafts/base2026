@@ -2,6 +2,29 @@
 
 ## Source-backed Brief candidate — September 4, 2026
 
+The reviewed Source-backed Brief source has been merged into `main`; its
+production release is intentionally paired with the activation-measurement
+candidate below so the new public tool is measurable at launch.
+
+## Public tool activation measurement candidate — September 4, 2026
+
+The isolated branch `codex/base2026-activation-measurement-20260904` adds a
+strict first-party `POST /api/analytics/event` candidate backed by a new
+Analytics Engine binding. It closes the verified listener/dataLayer gap for
+Evidence Search and Source Diversity Check while recording only allowlisted
+event names, exact tool routes, server UTC-hour buckets and coarse properties.
+The candidate is committed locally but not deployed, pushed, merged, or used
+to create a remote dataset; no D1 migration was added.
+
+Next action: root reviews the exact commit and
+`HANDOFF_2026-09-04_ACTIVATION_MEASUREMENT.md`. If approved, build the exact
+public artifact, run the binding/dry-run/publication gates and authorize a
+separate deployment. Then verify both live HTML script tags, one
+non-sensitive `204` canary and aggregate Analytics Engine readback. Do not
+claim unique visitors or traffic from this event count.
+
+## Source-backed Brief release candidate — September 4, 2026
+
 The isolated branch `codex/base2026-source-backed-brief-20260904` adds the
 public `/tools/source-backed-brief/` utility on top of current `origin/main`
 at `946b771fd`. It accepts a question, audience, format and up to eight

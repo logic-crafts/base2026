@@ -573,8 +573,7 @@
   function countBucket(count) {
     if (count <= 1) return "0_1";
     if (count <= 5) return "2_5";
-    if (count <= 8) return "6_8";
-    return "9_plus";
+    return "6_10";
   }
 
   function viewportClass() {
@@ -587,7 +586,6 @@
     if (!ALLOWED_ANALYTICS_EVENTS.has(name)) return;
     const detail = { name: name, properties: Object.assign({}, properties) };
     window.dispatchEvent(new CustomEvent("base2026:analytics", { detail: detail }));
-    if (Array.isArray(window.dataLayer)) window.dataLayer.push(Object.assign({ event: name }, properties));
   }
 
   function buildSnapshot(request, parsed, outcomes) {
@@ -845,18 +843,18 @@
     setStatus(snapshot.status === "complete" ? "success" : snapshot.status === "partial" ? "partial" : "error", statusMessage);
     emitAnalytics("brief_preview_created", {
       deliverable: snapshot.request.deliverable,
-      status: snapshot.status,
-      selected_id_count: countBucket(snapshot.counts.submitted_ids),
-      resolved_record_count: countBucket(snapshot.counts.resolved_records),
-      viewport: viewportClass()
+      response_class: snapshot.status,
+      selected_count_bucket: countBucket(snapshot.counts.submitted_ids),
+      resolved_count_bucket: countBucket(snapshot.counts.resolved_records),
+      viewport_class: viewportClass()
     });
     if (!completedForRun) {
       completedForRun = true;
       emitAnalytics("brief_completed", {
-        outcome: snapshot.status,
+        response_class: snapshot.status,
         deliverable: snapshot.request.deliverable,
-        selected_id_count: countBucket(snapshot.counts.submitted_ids),
-        viewport: viewportClass()
+        selected_count_bucket: countBucket(snapshot.counts.submitted_ids),
+        viewport_class: viewportClass()
       });
     }
   }
@@ -980,11 +978,11 @@
         exportStatus.textContent = format.toUpperCase() + " download prepared in your browser.";
       }
       emitAnalytics("brief_exported", {
-        format: format,
-        action: action,
-        selected_id_count: countBucket(currentSnapshot.counts.submitted_ids),
-        resolved_record_count: countBucket(currentSnapshot.counts.resolved_records),
-        viewport: viewportClass()
+        export_format: format,
+        export_action: action,
+        selected_count_bucket: countBucket(currentSnapshot.counts.submitted_ids),
+        resolved_count_bucket: countBucket(currentSnapshot.counts.resolved_records),
+        viewport_class: viewportClass()
       });
     } catch (_error) {
       exportStatus.textContent = "The browser did not permit that export action; the preview remains available for manual selection.";
@@ -1019,15 +1017,15 @@
     resultTitle.textContent = "Inspectable source-backed preview";
     if (requestData.invalidFields.length) {
       setStatus("error", "Complete the required fields and add at least one canonical public record/source ID.");
-      emitAnalytics("brief_completed", { outcome: "input_rejected", invalid_field_count: requestData.invalidFields.length, input_source: inputSource || "typed", viewport: viewportClass() });
+      emitAnalytics("brief_completed", { response_class: "invalid_input", invalid_field_bucket: countBucket(requestData.invalidFields.length), input_source: inputSource || "typed", viewport_class: viewportClass() });
       completedForRun = true;
       return;
     }
     emitAnalytics("brief_required_fields_completed", {
       deliverable: requestData.request.deliverable,
-      selected_id_count: countBucket(requestData.parsed.submittedIdCount),
+      selected_count_bucket: countBucket(requestData.parsed.submittedIdCount),
       input_source: inputSource || "typed",
-      viewport: viewportClass()
+      viewport_class: viewportClass()
     });
     setLoading(true);
     setStatus("loading", "Resolving selected public records…");
