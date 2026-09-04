@@ -1,0 +1,13 @@
+{
+  "schema": "base2026.mcp.get_source.v1",
+  "found": false,
+  "source_id": "tiktok:fixture_creator:0000000000000000000",
+  "public_boundary": {
+    "access": "public_read_only",
+    "raw_captions": false,
+    "raw_asr": false,
+    "media_files": false,
+    "private_data": false,
+    "writes": false
+  }
+}
