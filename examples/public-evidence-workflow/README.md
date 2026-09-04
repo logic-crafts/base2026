@@ -97,7 +97,7 @@ rights.
 
 For a human starting point, use the live [Base2026 Evidence Search tool](https://base2026.dev/tools/evidence-search/).
 For the separate methodology caveat about independent voices, see the live
-[Source Diversity Check](https://base2026.dev/journal/source-diversity-check/).
+[Source Diversity Check](https://base2026.dev/tools/source-diversity-check/).
 
 The current public developer contract is documented in
 [`docs/public-pages/10_MCP_FOR_AI_AGENTS.md`](../../docs/public-pages/10_MCP_FOR_AI_AGENTS.md).
