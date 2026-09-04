@@ -70,6 +70,12 @@
       }
     }
   ],
+  "analytics_engine_datasets": [
+    {
+      "binding": "ANALYTICS",
+      "dataset": "base2026_activation_v1"
+    }
+  ],
   "vars": {
     "MEMBER_AUTH_ENABLED": "true"
   },

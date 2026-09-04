@@ -7,7 +7,7 @@
     "test": "vitest run",
     "test:members": "vitest run --config vitest.members.config.ts",
     "test:watch": "vitest",
-    "wrangler:types": "wrangler types",
+    "wrangler:types": "wrangler types --strict-vars=false",
     "wrangler:dry-run": "wrangler deploy --dry-run",
     "import:dry-run": "node scripts/import-public-chunks.mjs --dry-run"
   },

@@ -112,6 +112,7 @@ DEFAULT_MARK_ICON = PROJECT_ROOT / "static" / "base2026-mark.svg"
 DEFAULT_EVIDENCE_SEARCH_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-evidence-search.html"
 DEFAULT_EVIDENCE_SEARCH_STYLESHEET = PROJECT_ROOT / "templates" / "base2026-evidence-search.css"
 DEFAULT_EVIDENCE_SEARCH_SCRIPT = PROJECT_ROOT / "templates" / "base2026-evidence-search.js"
+DEFAULT_ACTIVATION_MEASUREMENT_SCRIPT = PROJECT_ROOT / "templates" / "base2026-activation-measurement.js"
 DEFAULT_SOURCE_DIVERSITY_CHECK_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-source-diversity-check.html"
 DEFAULT_SOURCE_DIVERSITY_CHECK_STYLESHEET = PROJECT_ROOT / "templates" / "base2026-source-diversity-check.css"
 DEFAULT_SOURCE_DIVERSITY_CHECK_SCRIPT = PROJECT_ROOT / "templates" / "base2026-source-diversity-check.js"
@@ -2328,6 +2329,10 @@ def build_release(
             write_generated_public_file(
                 "static/base2026-evidence-search.js",
                 DEFAULT_EVIDENCE_SEARCH_SCRIPT.read_bytes(),
+            )
+            write_generated_public_file(
+                "static/base2026-activation-measurement.js",
+                DEFAULT_ACTIVATION_MEASUREMENT_SCRIPT.read_bytes(),
             )
             write_generated_public_file(
                 "tools/evidence-search/index.html",

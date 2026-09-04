@@ -473,6 +473,12 @@
     return "11_plus";
   }
 
+  function positionBucket(position) {
+    if (position <= 3) return "1_3";
+    if (position <= 10) return "4_10";
+    return "11_plus";
+  }
+
   function viewportClass() {
     if (window.innerWidth < 640) return "small";
     if (window.innerWidth < 1024) return "medium";
@@ -483,7 +489,6 @@
     if (!ALLOWED_ANALYTICS_EVENTS.has(name)) return;
     const detail = { name: name, properties: Object.assign({}, properties) };
     window.dispatchEvent(new CustomEvent("base2026:analytics", { detail: detail }));
-    if (Array.isArray(window.dataLayer)) window.dataLayer.push(Object.assign({ event: name }, properties));
   }
 
   function buildSnapshot(parsed, outcomes) {
@@ -676,7 +681,7 @@
       try {
         await copyText(recordMarkdown(record));
         copyButton.textContent = "Copied";
-        emitAnalytics("source_check_card_copied", { record_position_bucket: countBucket(position), metadata_resolution: record.metadata_resolution, copy_format: "record_card" });
+        emitAnalytics("source_check_card_copied", { position_bucket: positionBucket(position), metadata_resolution: record.metadata_resolution, copy_format: "record_card" });
       } catch (_error) {
         copyButton.textContent = "Copy failed";
       } finally {
@@ -704,7 +709,7 @@
     select.addEventListener("change", function () {
       record.decision = select.value || null;
       if (record.decision) {
-        emitAnalytics("source_check_decision_recorded", { decision: record.decision, record_position_bucket: countBucket(position), metadata_resolution: record.metadata_resolution, scope: "record" });
+        emitAnalytics("source_check_decision_recorded", { decision: record.decision, position_bucket: positionBucket(position), metadata_resolution: record.metadata_resolution, scope: "record" });
       }
     });
     decision.appendChild(select);
@@ -763,7 +768,7 @@
     }
     if (!completedForRun) {
       completedForRun = true;
-      emitAnalytics("source_check_completed", { completion_mode: "lookup_complete", record_count_bucket: countBucket(snapshot.counts.distinct_records), response_class: snapshot.status, viewport_class: viewportClass() });
+      emitAnalytics("source_check_completed", { completion_mode: "lookup_complete", count_bucket: countBucket(snapshot.counts.distinct_records), response_class: snapshot.status, viewport_class: viewportClass() });
     }
   }
 
@@ -894,7 +899,7 @@
       button.textContent = successLabel;
       emitAnalytics("source_check_card_copied", {
         copy_format: copyFormat,
-        record_count_bucket: currentSnapshot ? countBucket(currentSnapshot.counts.distinct_records) : "0"
+        count_bucket: currentSnapshot ? countBucket(currentSnapshot.counts.distinct_records) : "0_1"
       });
     } catch (_error) {
       button.textContent = "Copy failed";
@@ -926,7 +931,7 @@
       completedForRun = true;
       emitAnalytics("source_check_completed", {
         completion_mode: "input_rejected",
-        record_count_bucket: "0_1",
+        count_bucket: "0_1",
         response_class: "invalid_input",
         viewport_class: viewportClass()
       });
@@ -973,7 +978,7 @@
       emitAnalytics("source_check_decision_recorded", {
         decision: decisionSelect.value,
         scope: "record_set",
-        record_count_bucket: countBucket(currentSnapshot.counts.distinct_records),
+        count_bucket: countBucket(currentSnapshot.counts.distinct_records),
         viewport_class: viewportClass()
       });
       decisionStatus.textContent = "Follow-up step recorded locally for this browser view.";
