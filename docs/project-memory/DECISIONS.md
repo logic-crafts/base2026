@@ -1,5 +1,18 @@
 # Decisions
 
+## 2026-09-04 — Release the complete three-tool loop with first-party measurement
+
+Release Evidence Search -> Source Diversity Check -> Source-backed Brief as one
+measurable acquisition path. Keep Brief deterministic and limited to selected
+public records, bounded excerpts, attribution and explicit unknowns. Activation
+may use only the allowlisted first-party Analytics Engine contract; deployment
+canaries must remain distinguishable from non-owner product use.
+
+The migrated Cloudflare account's four D1 UUIDs are now the checked deployment
+authority. `MEMBER_AUTH_ENABLED=false` remains intentional until the Google
+member contour is separately re-enabled; never restore an old-account UUID or
+silently flip the auth flag. Failed pre-version deployments are not releases.
+
 ## 2026-09-04 — Align claims to live intent; never relabel a different tool
 
 Use “search inside expert videos” for the existing Evidence Search because the
@@ -28,8 +41,8 @@ step is an inspectable reason to click, use and cite Base2026.
 
 ## 2026-09-04 — Use a bounded first-party Analytics Engine sink for public tool activation
 
-The two public acquisition tools may emit only the allowlisted activation
-events defined in `src/analytics.ts`, for the two exact tool routes. Store
+The three public acquisition tools may emit only the allowlisted activation
+events defined in `src/analytics.ts`, for the three exact tool routes. Store
 event name, route, server UTC-hour bucket and coarse enum properties in
 Analytics Engine; never store raw query/record/source IDs, notes, IP,
 user-agent, referrer, cookies, fingerprint, auth/member or private-pipeline
@@ -39,8 +52,9 @@ cap events per browser page and keep the write fail-open for product UX.
 Choose Analytics Engine over D1 because it is a native non-blocking custom-event
 sink without a schema migration or scheduler; do not use Cloudflare Web
 Analytics because it does not accept custom events. Do not claim unique
-visitors. The source candidate is not a deployment, remote dataset creation,
-or permission to mutate the live Worker.
+visitors. Production activation is recorded in
+`HANDOFF_2026-09-04_SOURCE_BRIEF_ACTIVATION_RELEASE.md`; the earlier candidate
+receipt remains implementation history, not current deployment state.
 
 ## 2026-09-02 — Merge Claim Receipt source but hold production at zero eligibility
 

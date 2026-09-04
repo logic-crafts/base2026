@@ -1,8 +1,23 @@
 # Phases
 
-Phase 22 and CURRENT_STATUS are current. Lower phases preserve their dated
-release checkpoints; old blog counts and uncommitted-source notes are historical
-and superseded by Phase 22, not outstanding duplicate instructions.
+Phase 28 and CURRENT_STATUS are current. Lower phases preserve their dated
+release checkpoints; old counters and candidate notes are historical, not
+outstanding duplicate instructions.
+
+## Phase 28 — Three-tool acquisition loop and activation measurement
+
+Status: deployed / 72-hour measurement active, checkpoint 2026-09-04 21:27 UTC.
+Worker `3ecddaf3-f594-4b4a-91d4-fd409bd62e4a` serves Evidence Search, Source
+Diversity Check and Source-backed Brief. The first-party Analytics Engine sink
+stores only allowlisted coarse activation events; SQL readback is live. Initial
+events are QA smoke, not users or traffic.
+
+PR50 and PR51 are merged. The migrated-account Wrangler authority uses the four
+current D1 UUIDs and `MEMBER_AUTH_ENABLED=false`. IndexNow accepted only the new
+Brief canonical once. Next: distribute the exact workflow and measure
+owner-excluded referrals and successful tool actions without doorway pages or
+fabricated authority claims. Exact release:
+[HANDOFF_2026-09-04_SOURCE_BRIEF_ACTIVATION_RELEASE.md](HANDOFF_2026-09-04_SOURCE_BRIEF_ACTIVATION_RELEASE.md).
 
 ## Phase 22 — Release reproducibility and archive-backed editorial closure
 

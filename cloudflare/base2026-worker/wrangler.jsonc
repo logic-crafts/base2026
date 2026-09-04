@@ -38,25 +38,25 @@
     {
       "binding": "DB",
       "database_name": "base2026-public-search",
-      "database_id": "ac034130-4169-43c2-9a17-4b72d05457b0",
+      "database_id": "3ec00e3b-0d92-4ab6-9ae9-3acfc27c6e80",
       "migrations_dir": "migrations"
     },
     {
       "binding": "INBOX_DB",
       "database_name": "base2026-inbox",
-      "database_id": "542a77ef-da00-4522-8b7a-3d78fc646c72",
+      "database_id": "fabcf17d-b9ed-4932-9b6b-ef678705d622",
       "migrations_dir": "migrations-inbox"
     },
     {
       "binding": "OUTREACH_DB",
       "database_name": "base2026-outreach-search",
-      "database_id": "ffbef187-67ef-491f-8fae-62f625636ed5",
+      "database_id": "054440bd-b91e-41f7-aa70-45a148462cac",
       "migrations_dir": "migrations-outreach"
     },
     {
       "binding": "AUTH_DB",
       "database_name": "base2026-member-auth",
-      "database_id": "53b0adf1-39ac-40a7-93b8-84c08881ff43",
+      "database_id": "8b5c2f98-164f-43f1-bb12-d9eda96d289a",
       "migrations_dir": "migrations-members"
     }
   ],

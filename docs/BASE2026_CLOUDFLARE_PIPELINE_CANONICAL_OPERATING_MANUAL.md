@@ -2,16 +2,40 @@
 
 Status: authoritative architecture and operations reference
 
-Public production verified through 2026-09-02 00:44 UTC. Public Worker
-`f8781f4d-30fd-4d70-ab96-a4e8d718226a` serves the reviewed API/MCP artifact;
-aggregate counters are 2198/1589/65/106/zero full transcripts.
+Public production verified through 2026-09-04 21:27 UTC. Public Worker
+`3ecddaf3-f594-4b4a-91d4-fd409bd62e4a` serves the reviewed three-tool,
+API/MCP and first-party activation artifact; aggregate counters are
+2268/1644/120/176/zero full transcripts.
 Private production: reliability release57 and diagnostic release58 deployed; cohort observation is dated10:16. Private deployment identifiers remain in protected receipts.
 
 Applies to: TikTok discovery, cloud acquisition, private processing, automatic excerpt-card publication, public Base2026 search, deployment, rollback, and agent handoff
 
 > **All agents start here for Base2026 Cloudflare or TikTok-pipeline work.** Repository files and live Cloudflare receipts override chat memory. This document defines the system; dated counters and version IDs are only a verified snapshot and must be refreshed before a production change.
 
-## Current public developer-distribution checkpoint — 2026-09-02 00:44 UTC
+## Current public acquisition checkpoint — 2026-09-04 21:27 UTC
+
+PR50 and PR51 are merged. Public Worker
+`3ecddaf3-f594-4b4a-91d4-fd409bd62e4a` serves Evidence Search, Source
+Diversity Check and Source-backed Brief; immediate rollback is
+`327a21a5-ca54-457c-8099-aa2447a7fe1a`. Artifact tree SHA-256 is
+`bffcbbd3502daa38a6ca14282a456a0a9663e8447a66c133faec7ee0e7383405`.
+
+The three public tools read only bounded admitted records through the existing
+six-tool MCP. `POST /api/analytics/event` writes only allowlisted coarse events
+to Analytics Engine dataset `base2026_activation_v1`; typed text, IDs, IP,
+user-agent, referrer, cookies, auth/member and private-pipeline data are not
+stored. SQL readback proved the dataset, but the first counts are QA smoke, not
+users or traffic.
+
+The migrated `hello@base2026.dev` account owns the four current D1 UUIDs stored
+in `cloudflare/base2026-worker/wrangler.jsonc`. Analytics Engine has a price-$0
+account subscription. `MEMBER_AUTH_ENABLED=false` remains intentional during
+the separate Google/member migration contour; `/api/auth/session` fails closed
+and `/my-research/` remains private/noindex. Exact bindings, live checks and
+rollback procedure are in
+[the combined release handoff](project-memory/HANDOFF_2026-09-04_SOURCE_BRIEF_ACTIVATION_RELEASE.md).
+
+## Historical public developer-distribution checkpoint — 2026-09-02 00:44 UTC
 
 PR34 is merged at `98bfb65efd5940e01ecff13e4095ad9442a53986`.
 Public Worker `f8781f4d-30fd-4d70-ab96-a4e8d718226a` serves artifact tree

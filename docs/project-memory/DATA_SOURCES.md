@@ -1,5 +1,20 @@
 # Data Sources
 
+## Current public acquisition and measurement snapshot — 2026-09-04 21:27 UTC
+
+Public D1 reports 2,268 documents, 1,644 distinct sources, 120 public evidence
+routes, 176 projected cards and zero published full transcripts. The three live
+tools read only the admitted public corpus through bounded MCP contracts.
+Source-backed Brief does not persist typed framing or selected IDs.
+
+Activation measurement is a separate first-party Analytics Engine dataset,
+`base2026_activation_v1`. It accepts only event name, exact tool route, server
+UTC-hour bucket and allowlisted coarse enum properties. The first SQL readback
+contains deployment/QA smoke and must not be counted as users, traffic or
+conversion. Exact public/private boundaries, current D1 UUIDs and release
+evidence are in
+`HANDOFF_2026-09-04_SOURCE_BRIEF_ACTIVATION_RELEASE.md`.
+
 ## 2026-09-04 Evidence Search intent and live release evidence
 
 A bounded US-English DataForSEO packet checked candidate free-tool language.
