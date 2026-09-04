@@ -51,7 +51,7 @@
         }
       ],
       "vars": {
-        "RELAY_ENABLED": "false"
+        "RELAY_ENABLED": "true"
       }
     }
   }

@@ -1,8 +1,9 @@
 # Target-account projection relay receipt
 
 Date: 2026-09-04
-Status: local candidate only; no deploy, migration apply, stage, commit, or
-private-producer wiring performed.
+Status: target relay deployed and authenticated presence canary passed;
+private-producer wiring and projection reconciliation remain held pending one
+exact already-authorized apply/verify canary.
 
 ## Exact delta
 
@@ -26,6 +27,8 @@ Added the dedicated package at
 
 No existing public Worker or private producer source was modified.
 
+The reviewed package was committed on the isolated branch as `3fb7905c3`.
+
 ## Binding decision
 
 The receiver binds `PUBLIC_PROJECTION_TARGET` to service `base2026` at
@@ -42,8 +45,9 @@ Wrangler D1/service binding arrays are repeated under `env.internal` because
 named environments do not inherit those arrays. The default environment has
 `RELAY_ENABLED=false`, `workers_dev=false`, and no production route; the
 internal environment has `workers_dev=true` but remains disabled by default.
-The HMAC secret is intentionally absent from source/config and must be set as
-an out-of-band `RELAY_HMAC_SECRET` secret before an owner-approved canary.
+The HMAC secret is absent from source/config and was set out-of-band as
+`RELAY_HMAC_SECRET`. Its local recovery copy is stored only in macOS Keychain;
+the value was not printed, logged or written to Git.
 The internal workers.dev environment is the sole bounded test route; it is not
 a production endpoint, and both environments remain disabled by default.
 
@@ -79,11 +83,31 @@ target failure audit, and no request-data logging.
 - The package does not update repository project-memory files because this
   isolated candidate is not yet integrated into the root branch.
 
-## Root rollout decision
+## Target deployment and live canary
 
-Review the package and migration, apply the target D1 migration, set the
-dedicated secret, and deploy the `internal` workers.dev environment once with
-the relay disabled. After the disabled readback, enable only that environment
-and run a signed presence canary followed by one already-authorized
-apply/verify canary. A signed canary cannot run while `RELAY_ENABLED=false`;
-producer wiring remains held until the exact target receipts are accepted.
+- Migration `0001_relay.sql` applied to target D1 and read back both tables
+  with zero rows before the canary.
+- Disabled internal deployment: version
+  `3b460045-8820-4f87-bc47-aed0b6735de6`; exact signed path returned
+  `relay_disabled` with HTTP 404.
+- Enabled authenticated internal deployment: version
+  `96a5f58c-5800-4882-80e7-b4104ea7dfd2` at
+  `https://base2026-projection-relay-internal.white-dust-fdaa.workers.dev`.
+- A signed `projection_presence` request for a nonexistent fixture returned a
+  valid `absent` receipt from the target public RPC. Repeating the same nonce
+  returned HTTP 409 `relay_nonce_replay`.
+- Target relay D1 readback after the canary: one nonce; one `presence` audit
+  receipt; one `replay_rejected` audit receipt. No public projection/editorial
+  row was written by this fixture canary.
+
+Before the enabled deployment, 9/9 tests, TypeScript and an internal Wrangler
+dry-run passed again with `RELAY_ENABLED=true` and the exact D1/service
+bindings.
+
+## Root next action
+
+Select one of the exact 17 already-verified private projection tuples, confirm
+target presence, then perform exactly one apply/verify canary through the
+reviewed client. A timeout is unconfirmed and is not retried blindly. Producer
+wiring and the remaining 16 tuples stay held until the exact target receipt,
+row count and relay hash-only audit all match.

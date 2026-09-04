@@ -1,8 +1,10 @@
 # Base2026 target-account projection relay
 
-This directory is a local, owner-reviewable target-account Worker candidate.
-It is not deployed, staged, committed, or wired into the private producer.
-The receiver is deliberately small: it authenticates one fixed POST contract,
+This directory contains the owner-reviewable target-account relay Worker.
+Deployment and canary state is recorded in
+`PROJECTION_RELAY_TARGET_RECEIPT.md`; source presence here is not evidence that
+the private producer is wired. The receiver is deliberately small: it
+authenticates one fixed POST contract,
 reserves a hashed nonce in its own D1, calls a fixed service-binding RPC, and
 returns only a bounded receipt or safe error code.
 
