@@ -1,5 +1,26 @@
 # Next Action
 
+## Source-backed Brief candidate — September 4, 2026
+
+The isolated branch `codex/base2026-source-backed-brief-20260904` adds the
+public `/tools/source-backed-brief/` utility on top of current `origin/main`
+at `946b771fd`. It accepts a question, audience, format and up to eight
+already-selected canonical public record/source IDs, then performs bounded
+anonymous `get_source` lookups and renders the same deterministic
+record/creator/original-source/excerpt/unknowns snapshot as Markdown or JSON.
+It does not infer truth, consensus or independence, call an LLM, read private
+or raw media/transcript fields, write D1, or deploy. Evidence Search and the
+resource hub carry one contextual link each; Source Diversity behavior and
+member/auth bindings remain unchanged.
+
+Next action: root command center reviews the exact implementation commit,
+focused tests and public-boundary receipt. If approved, build a fresh reviewed
+Cloudflare candidate and authorize deployment separately, then verify the live
+route, API readback, canonical, sitemap, mobile behavior and the four bounded
+analytics events. Do not treat this local candidate as live traffic or
+indexing evidence. Details:
+[HANDOFF_2026-09-04_SOURCE_BACKED_BRIEF.md](HANDOFF_2026-09-04_SOURCE_BACKED_BRIEF.md).
+
 ## Evidence Search intent aligned; acquisition measurement active — September 4, 2026
 
 Public Worker `327a21a5-ca54-457c-8099-aa2447a7fe1a` now serves the existing
