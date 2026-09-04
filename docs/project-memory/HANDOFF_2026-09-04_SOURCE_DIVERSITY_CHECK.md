@@ -42,9 +42,10 @@ The output contract is `base2026.source-diversity-check.v1`:
   response; passages and applied cards are ignored.
 
 The page states visibly that diversity is not consensus or truth. Decisions
-are local browser notes only. Analytics emits only the requested bounded event
-names: `source_check_run`, `decision_recorded`, `card_copied` and `completed`,
-without record IDs or source text in event properties.
+are local browser notes only. Analytics emits only the bounded event names
+`source_check_run`, `source_check_completed`,
+`source_check_decision_recorded` and `source_check_card_copied`, without record
+IDs or source text in event properties.
 
 ## Changed files
 

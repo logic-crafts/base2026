@@ -43,9 +43,9 @@
   ];
   const ALLOWED_ANALYTICS_EVENTS = new Set([
     "source_check_run",
-    "decision_recorded",
-    "card_copied",
-    "completed"
+    "source_check_completed",
+    "source_check_decision_recorded",
+    "source_check_card_copied"
   ]);
 
   let activeController = null;
@@ -676,7 +676,7 @@
       try {
         await copyText(recordMarkdown(record));
         copyButton.textContent = "Copied";
-        emitAnalytics("card_copied", { record_position_bucket: countBucket(position), metadata_resolution: record.metadata_resolution, copy_format: "record_card" });
+        emitAnalytics("source_check_card_copied", { record_position_bucket: countBucket(position), metadata_resolution: record.metadata_resolution, copy_format: "record_card" });
       } catch (_error) {
         copyButton.textContent = "Copy failed";
       } finally {
@@ -704,7 +704,7 @@
     select.addEventListener("change", function () {
       record.decision = select.value || null;
       if (record.decision) {
-        emitAnalytics("decision_recorded", { decision: record.decision, record_position_bucket: countBucket(position), metadata_resolution: record.metadata_resolution, scope: "record" });
+        emitAnalytics("source_check_decision_recorded", { decision: record.decision, record_position_bucket: countBucket(position), metadata_resolution: record.metadata_resolution, scope: "record" });
       }
     });
     decision.appendChild(select);
@@ -763,7 +763,7 @@
     }
     if (!completedForRun) {
       completedForRun = true;
-      emitAnalytics("completed", { completion_mode: "lookup_complete", record_count_bucket: countBucket(snapshot.counts.distinct_records), response_class: snapshot.status, viewport_class: viewportClass() });
+      emitAnalytics("source_check_completed", { completion_mode: "lookup_complete", record_count_bucket: countBucket(snapshot.counts.distinct_records), response_class: snapshot.status, viewport_class: viewportClass() });
     }
   }
 
@@ -892,7 +892,7 @@
     try {
       await copyText(value);
       button.textContent = successLabel;
-      emitAnalytics("card_copied", {
+      emitAnalytics("source_check_card_copied", {
         copy_format: copyFormat,
         record_count_bucket: currentSnapshot ? countBucket(currentSnapshot.counts.distinct_records) : "0"
       });
@@ -924,7 +924,7 @@
     if (!parsed.accepted.length) {
       setStatus("error", "Paste at least one valid Base2026 public record ID or source ID. Arbitrary URLs and prose are not accepted.");
       completedForRun = true;
-      emitAnalytics("completed", {
+      emitAnalytics("source_check_completed", {
         completion_mode: "input_rejected",
         record_count_bucket: "0_1",
         response_class: "invalid_input",
@@ -970,7 +970,7 @@
         decisionStatus.textContent = "Run a check and choose a follow-up step first.";
         return;
       }
-      emitAnalytics("decision_recorded", {
+      emitAnalytics("source_check_decision_recorded", {
         decision: decisionSelect.value,
         scope: "record_set",
         record_count_bucket: countBucket(currentSnapshot.counts.distinct_records),
