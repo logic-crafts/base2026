@@ -112,6 +112,9 @@ DEFAULT_MARK_ICON = PROJECT_ROOT / "static" / "base2026-mark.svg"
 DEFAULT_EVIDENCE_SEARCH_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-evidence-search.html"
 DEFAULT_EVIDENCE_SEARCH_STYLESHEET = PROJECT_ROOT / "templates" / "base2026-evidence-search.css"
 DEFAULT_EVIDENCE_SEARCH_SCRIPT = PROJECT_ROOT / "templates" / "base2026-evidence-search.js"
+DEFAULT_SOURCE_DIVERSITY_CHECK_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-source-diversity-check.html"
+DEFAULT_SOURCE_DIVERSITY_CHECK_STYLESHEET = PROJECT_ROOT / "templates" / "base2026-source-diversity-check.css"
+DEFAULT_SOURCE_DIVERSITY_CHECK_SCRIPT = PROJECT_ROOT / "templates" / "base2026-source-diversity-check.js"
 
 OLD_WORDPRESS_ORIGIN = "https://aggressorbulkit.online"
 BASE2026_ORIGIN = "https://base2026.dev"
@@ -870,6 +873,7 @@ HUB_SITEMAP_ROUTES = (
     "/journal/source-backed-video-search-cloudflare/",
     "/journal/source-diversity-check/",
     "/tools/evidence-search/",
+    "/tools/source-diversity-check/",
 )
 RUNTIME_GUIDE_ROUTES = (
     "/topics/content-freshness",
@@ -2322,6 +2326,22 @@ def build_release(
                 "tools/evidence-search/index.html",
                 _render_startup_page(
                     DEFAULT_EVIDENCE_SEARCH_TEMPLATE.read_text(encoding="utf-8"),
+                    startup_header,
+                    startup_footer,
+                ),
+            )
+            write_generated_public_file(
+                "static/base2026-source-diversity-check.css",
+                DEFAULT_SOURCE_DIVERSITY_CHECK_STYLESHEET.read_bytes(),
+            )
+            write_generated_public_file(
+                "static/base2026-source-diversity-check.js",
+                DEFAULT_SOURCE_DIVERSITY_CHECK_SCRIPT.read_bytes(),
+            )
+            write_generated_public_file(
+                "tools/source-diversity-check/index.html",
+                _render_startup_page(
+                    DEFAULT_SOURCE_DIVERSITY_CHECK_TEMPLATE.read_text(encoding="utf-8"),
                     startup_header,
                     startup_footer,
                 ),
