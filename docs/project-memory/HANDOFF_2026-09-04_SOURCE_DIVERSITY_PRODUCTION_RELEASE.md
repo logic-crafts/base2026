@@ -1,7 +1,7 @@
 # Base2026 Source Diversity Check — production release
 
-Date: 2026-09-04  
-Status: live and verified  
+Date: 2026-09-04
+Status: live and verified
 Public domain: `https://base2026.dev/`
 
 ## Outcome
