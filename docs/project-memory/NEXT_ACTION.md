@@ -1,21 +1,23 @@
 # Next Action
 
-## Source Diversity Check candidate — September 4, 2026
+## Source Diversity Check and Evidence Pack are live — September 4, 2026
 
-The isolated branch `codex/base2026-source-diversity-check-20260904` adds the
-public `/tools/source-diversity-check/` utility on top of the current
-`origin/main` PR44 baseline. It performs bounded read-only `get_source`
-lookups, separates exact record/source/creator counts, preserves unresolved
-metadata, and exports Markdown/JSON without consensus or truth claims. The
-candidate is committed locally but not deployed, pushed, merged, indexed or
-used to mutate D1/Cloudflare.
+`/tools/source-diversity-check/` is live on public Worker
+`da308428-5609-43ab-8b31-88deb124dc7b`. It performs bounded public
+`get_source` lookups, separates record/original-source/creator counts, keeps
+unresolved states visible, and exports deterministic Markdown/JSON without a
+truth, quality, consensus or independence score. PR46 merged the tool source;
+PR47 merged a dependency-free public Evidence Pack into the canonical GitHub
+repository. The one new canonical URL received one accepted IndexNow request;
+that is discovery notification, not indexing or traffic proof.
 
-Next action: root command center reviews the exact commit and public-boundary
-receipt. If approved, build a fresh reviewed Cloudflare candidate and authorize
-deployment separately, then verify the live route, API readback, canonical,
-sitemap, mobile behavior and the four bounded analytics events. Do not treat
-this candidate as live traffic or indexing evidence. Details:
-[HANDOFF_2026-09-04_SOURCE_DIVERSITY_CHECK.md](HANDOFF_2026-09-04_SOURCE_DIVERSITY_CHECK.md).
+Next action: run the 72-hour acquisition experiment from the verified
+`257 impressions / 0 clicks / position 14.9` baseline. Publish one
+platform-native worked example from Evidence Pulse #001, measure non-owner
+tool runs and referral sessions, and build the deterministic Source-Backed
+Brief as the next product step. Do not create keyword-swapped pages or count
+impressions, directory submissions or IndexNow acceptance as users. Details:
+[HANDOFF_2026-09-04_SOURCE_DIVERSITY_PRODUCTION_RELEASE.md](HANDOFF_2026-09-04_SOURCE_DIVERSITY_PRODUCTION_RELEASE.md).
 
 ## Crawl-derived SEO/GEO repair live — September 3, 2026
 

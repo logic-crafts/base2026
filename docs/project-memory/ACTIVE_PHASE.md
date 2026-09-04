@@ -1,12 +1,29 @@
 # Active Phase
 
-Phase 26 — crawl-derived SEO/GEO repair released and verified.
-Current checkpoint: 2026-09-03 01:08 UTC. Public Worker
-`99849d8e-802d-4e8e-a840-8d352f176da6` is selected at 100%. The full baseline
-crawl, independent crawl, rendered probe, repaired asset and live product/member
-readbacks are recorded in
-[the production handoff](HANDOFF_2026-09-03_DATAFORSEO_SEO_GEO_PRODUCTION_RELEASE.md).
+Phase 27 — free-tool acquisition loop released; 72-hour measurement active.
+Current checkpoint: 2026-09-04 19:48 UTC. Public Worker
+`da308428-5609-43ab-8b31-88deb124dc7b` is selected at 100% with
+`60613464-db66-4575-8963-e1c6e5e0ffd9` as the immediate rollback. Source
+Diversity Check, its live MCP read path and its canonical/sitemap/mobile gates
+pass. PR47 also places the reproducible public Evidence Pack on GitHub.
+
+The active objective is the first verified non-owner visit and successful tool
+action from the 257-impression/zero-click baseline. Build the deterministic
+Source-Backed Brief and distribute one native Evidence Pulse demonstration;
+do not widen the already-large programmatic corpus or manufacture authority
+language. The crawl-derived repair remains the stable technical baseline, and
 Claim Receipt source remains merged but intentionally absent from production.
+
+## Source Diversity Check — released (2026-09-04)
+
+The free tool resolves at most twelve admitted public record/source IDs through
+the existing read-only MCP endpoint. It reports exact record, original-source
+and creator relationships, preserves unavailable and missing metadata, and
+generates local Markdown/JSON. It is explicitly not a consensus, truth,
+independence or quality checker. IndexNow accepted only its new canonical URL;
+indexing, discovery traffic and activation are not yet proved. Exact release
+evidence is in
+[the production handoff](HANDOFF_2026-09-04_SOURCE_DIVERSITY_PRODUCTION_RELEASE.md).
 
 ## SEO/GEO crawl repair — released (2026-09-03)
 

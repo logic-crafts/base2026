@@ -15,22 +15,24 @@ public-before-private deployment order in the canonical manual.
 Current Workers Static Assets release:
 
 - Domain: `https://base2026.dev/`
-- Public Worker: `f8781f4d-30fd-4d70-ab96-a4e8d718226a`
-- Compatible immediate rollback: `0337f7d6-ebe4-4bcc-8b4a-e23317a99a8e`.
-  It preserves member auth and Evidence Search but does not expose public MCP.
+- Public Worker: `da308428-5609-43ab-8b31-88deb124dc7b`
+- Compatible immediate rollback: `60613464-db66-4575-8963-e1c6e5e0ffd9`.
 - Artifact tree SHA-256:
-  `eb7538f97e322a88f87ec08578fd9477c3da4d13320dea1086bb4959362838ba`
+  `0f225c3cfb86b4b89dc0325c70e81d289f79457fa2123f9407d7a7ae819e21c8`
 - Canonical source repository: `https://github.com/offflinerpsy/base2026`
-- Reviewed public source commit: `16884d148fa01da970e334396c17bcf4acc9429f`,
-  merged through PR34 as `98bfb65efd5940e01ecff13e4095ad9442a53986`.
+- Reviewed free-tool source merged through PR46 as
+  `ad976a4ffd0d9ad324f504d214a9f3591abed2c5`; the separate public Evidence
+  Pack is merged through PR47 as
+  `0341b8911a3df42b51285816e3d3e07e615ed96e`.
 - Live release receipt:
-  `HANDOFF_2026-09-01_PUBLIC_API_MCP_PRODUCTION_RELEASE.md`.
+  `HANDOFF_2026-09-04_SOURCE_DIVERSITY_PRODUCTION_RELEASE.md`.
 
-Before every public deploy, dry-run and live version readback must retain
-`AUTH_DB`, all three member-auth secret names and `MEMBER_AUTH_ENABLED=true`.
-Public MCP additionally requires `MCP_RATE_LIMIT`; absence or failure must
-leave `/api/mcp` closed. Do not deploy a config that reconstructs only the
-older four-binding public surface.
+Before every public deploy, dry-run and live version readback must retain all
+four D1 bindings (`DB`, `INBOX_DB`, `OUTREACH_DB`, `AUTH_DB`) plus
+`MCP_RATE_LIMIT`. On the current migrated account `MEMBER_AUTH_ENABLED=false`
+is intentional until the Google/member contour is explicitly re-enabled;
+`/api/auth/session` must fail closed and `/my-research/` must remain noindex.
+Do not silently flip the auth flag or reconstruct an older binding surface.
 
 Always pass the exact reviewed candidate to Wrangler with `--assets`; the
 ignored output path in the checked-in config is not an implicit release
