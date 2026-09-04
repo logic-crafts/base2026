@@ -46,6 +46,9 @@ def test_evidence_search_page_has_one_h1_honest_boundaries_and_contextual_check_
     assert len(re.findall(r"<h1(?:\s|>)", page)) == 1
     assert '<link rel="canonical" href="https://base2026.dev/tools/evidence-search/">' in page
     assert '<meta name="robots" content="index,follow">' in page
+    assert "Search Inside Expert Videos | Base2026 Evidence Search" in page
+    assert "Search inside Base2026's bounded corpus of processed" in page
+    assert "Search inside expert videos for attributable evidence" in page
     assert 'action="/tools/evidence-search/"' in page
     assert "Interactive D1 results are unavailable without JavaScript" in page
     assert "keeps your query in this tool page URL" in page

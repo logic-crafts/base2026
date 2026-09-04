@@ -1,9 +1,23 @@
 # Next Action
 
+## Evidence Search intent aligned; acquisition measurement active — September 4, 2026
+
+Public Worker `327a21a5-ca54-457c-8099-aa2447a7fe1a` now serves the existing
+Evidence Search with the truthful user job “search inside expert videos” in
+its title, description, H1 and WebApplication data. The successful deployment
+uploaded one changed asset; health and the adjacent tool/API routes pass. The
+immediate rollback is `da308428-5609-43ab-8b31-88deb124dc7b`.
+
+Next action: compare CTR and activation against the existing baseline, publish
+the reviewed Evidence Pulse worked example and complete Source-Backed Brief.
+Treat the larger `tiktok transcript generator` demand as a separate gated
+product build, never as a keyword-only landing page. Details:
+[HANDOFF_2026-09-04_EVIDENCE_SEARCH_INTENT_RELEASE.md](HANDOFF_2026-09-04_EVIDENCE_SEARCH_INTENT_RELEASE.md).
+
 ## Source Diversity Check and Evidence Pack are live — September 4, 2026
 
 `/tools/source-diversity-check/` is live on public Worker
-`da308428-5609-43ab-8b31-88deb124dc7b`. It performs bounded public
+`327a21a5-ca54-457c-8099-aa2447a7fe1a`. It performs bounded public
 `get_source` lookups, separates record/original-source/creator counts, keeps
 unresolved states visible, and exports deterministic Markdown/JSON without a
 truth, quality, consensus or independence score. PR46 merged the tool source;

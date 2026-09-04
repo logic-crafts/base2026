@@ -1,5 +1,18 @@
 # Decisions
 
+## 2026-09-04 — Align claims to live intent; never relabel a different tool
+
+Use “search inside expert videos” for the existing Evidence Search because the
+route really searches Base2026's processed expert-video corpus. Preserve the
+bounded-corpus, attribution and non-verdict language. Do not rename Source
+Diversity Check as a source reliability checker: that SERP expects URL/DOI,
+publisher credibility or bias analysis. Do not create a TikTok transcript
+generator landing page until the product can actually accept a public URL and
+return a private, policy-controlled result.
+
+Reason: a precise high-intent promise can improve discovery without deceptive
+doorway pages, false facts or a mismatch between query and product.
+
 ## 2026-09-04 — Compete with a narrow free-tool loop, not page volume
 
 Use the sequence Evidence Search -> Source Diversity Check -> Source-Backed
