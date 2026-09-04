@@ -1,5 +1,26 @@
 # Data Sources
 
+## 2026-09-04 Source Diversity Check production evidence
+
+Worker `da308428-5609-43ab-8b31-88deb124dc7b` serves the reviewed free Source
+Diversity Check at `https://base2026.dev/tools/source-diversity-check/`. The
+route is HTTP 200, self-canonical, indexable and present exactly once in the hub
+sitemap. A live browser run with two existing IDs and one nonexistent ID
+resolved two public records and retained the third as explicit unresolved
+metadata on desktop and 390 px mobile. The same run had no console/page errors
+or horizontal overflow. The public MCP `get_source` readback remained inside
+the documented public read-only boundary.
+
+The release artifact tree is
+`0f225c3cfb86b4b89dc0325c70e81d289f79457fa2123f9407d7a7ae819e21c8`.
+Live public counts remained 2,259 documents, 1,638 distinct sources, 114 public
+evidence routes, 167 projected cards and zero public full transcripts. One
+IndexNow request for the exact new canonical returned HTTP 200; this proves
+notification only. PR47 merged the separate public Evidence Pack at
+`0341b8911a3df42b51285816e3d3e07e615ed96e`.
+
+Last updated: 2026-09-04
+
 ## 2026-09-01 Evidence Search production release
 
 Worker `0337f7d6-ebe4-4bcc-8b4a-e23317a99a8e` serves the reviewed Evidence

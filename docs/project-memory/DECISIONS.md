@@ -1,5 +1,18 @@
 # Decisions
 
+## 2026-09-04 — Compete with a narrow free-tool loop, not page volume
+
+Use the sequence Evidence Search -> Source Diversity Check -> Source-Backed
+Brief as the primary acquisition product test. Pair it with a reproducible
+GitHub Evidence Pack and one platform-native original-data demonstration.
+Measure non-owner referrals and successful tool actions over 72 hours. Do not
+expand the existing 4,000-plus HTML corpus with keyword-swapped doorway pages,
+fake `verified`/`best`/consensus language or promotional link spam. `Free` is a
+valid acquisition hook only where the utility is genuinely usable for free.
+
+Reason: the technical foundation already produces impressions; the missing
+step is an inspectable reason to click, use and cite Base2026.
+
 ## 2026-09-02 — Merge Claim Receipt source but hold production at zero eligibility
 
 Merge the independently reviewed public-repository implementation so the

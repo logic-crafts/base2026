@@ -1,5 +1,31 @@
 # Prompt Log
 
+## 2026-09-04 — Source Diversity Check released; public Evidence Pack merged
+
+Merged the reviewed free-tool source through PR46, rebuilt a fresh public
+artifact, passed the publication gate, 634 Worker tests, typecheck, Wrangler
+dry-run and 36 focused release tests, then deployed Worker
+`da308428-5609-43ab-8b31-88deb124dc7b` to the target Base2026 account. Live
+HTTP/API/MCP and 1440/390 browser checks passed; a two-found/one-unresolved
+input retained the unknown state and produced no console/page errors or
+horizontal overflow. The previous compatible Worker
+`60613464-db66-4575-8963-e1c6e5e0ffd9` remains the immediate rollback.
+
+Submitted exactly the new tool canonical once to IndexNow and received HTTP
+200; no indexing or traffic claim is made. PR47 then merged the deterministic,
+dependency-free public Evidence Pack as
+`0341b8911a3df42b51285816e3d3e07e615ed96e`. Public D1 was not written by
+the static release and remained 2,259 documents / 1,638 sources / 114 evidence
+routes / 167 cards / zero public full transcripts. Member auth remains
+deliberately fail-closed on the migrated account; `/api/auth/session` returns
+`MEMBER_AUTH_DISABLED` and `/my-research/` remains private/noindex.
+
+The acquisition decision is now one narrow product loop plus measured
+distribution: Evidence Search -> Source Diversity Check -> Source-Backed Brief,
+supported by Evidence Pulse #001 and the GitHub Evidence Pack. Generic article
+volume, fake consensus wording, doorway pages and link spam are not substitutes
+for a non-owner visit and successful tool action.
+
 ## 2026-09-02 — Claim Receipt Ledger source integration closed
 
 Pushed reviewed head `88eda1544c1a5d56c63d18d7d06ed81ea44f6730`, opened
