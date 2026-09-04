@@ -35,6 +35,7 @@ const VALUE_SETS: Readonly<Record<string, ReadonlySet<string>>> = Object.freeze(
     "input_rejected",
   ]),
   copy_format: new Set(["record_card", "markdown", "json"]),
+  deliverable: new Set(["brief", "memo", "outline"]),
   decision: new Set([
     "use",
     "investigate",
@@ -53,6 +54,8 @@ const VALUE_SETS: Readonly<Record<string, ReadonlySet<string>>> = Object.freeze(
   ]),
   input_mode: new Set(["delimited_ids", "json_records"]),
   input_source: new Set(["typed", "example", "evidence_search_handoff", "direct"]),
+  export_action: new Set(["copy", "download"]),
+  export_format: new Set(["markdown", "json"]),
   latency_bucket_ms: new Set(["under_500", "500_1499", "1500_2999", "3000_plus"]),
   metadata_resolution: new Set(["complete", "partial", "unresolved"]),
   position_bucket: new Set(["1_3", "4_10", "11_plus"]),
@@ -66,6 +69,9 @@ const VALUE_SETS: Readonly<Record<string, ReadonlySet<string>>> = Object.freeze(
   duplicate_input_bucket: COUNT_BUCKETS,
   record_id_bucket: COUNT_BUCKETS,
   source_id_bucket: COUNT_BUCKETS,
+  selected_count_bucket: COUNT_BUCKETS,
+  resolved_count_bucket: COUNT_BUCKETS,
+  invalid_field_bucket: COUNT_BUCKETS,
   loaded_count_bucket: COUNT_BUCKETS,
   failed_count_bucket: new Set(["1", "2_5", "6_plus"]),
   query_length_bucket: new Set(["1_20", "21_50", "51_100", "101_plus"]),
@@ -95,6 +101,10 @@ const EVENT_PROPERTIES: Readonly<Record<string, ReadonlySet<string>>> = Object.f
   source_check_completed: new Set(["completion_mode", "count_bucket", "response_class", "viewport_class"]),
   source_check_decision_recorded: new Set(["decision", "scope", "count_bucket", "position_bucket", "metadata_resolution", "viewport_class"]),
   source_check_card_copied: new Set(["copy_format", "count_bucket", "position_bucket", "metadata_resolution"]),
+  brief_required_fields_completed: new Set(["deliverable", "selected_count_bucket", "input_source", "viewport_class"]),
+  brief_preview_created: new Set(["deliverable", "response_class", "selected_count_bucket", "resolved_count_bucket", "viewport_class"]),
+  brief_exported: new Set(["export_format", "export_action", "selected_count_bucket", "resolved_count_bucket", "viewport_class"]),
+  brief_completed: new Set(["response_class", "deliverable", "selected_count_bucket", "invalid_field_bucket", "input_source", "viewport_class"]),
 });
 
 const ROUTE_EVENTS: Readonly<Record<string, ReadonlySet<string>>> = Object.freeze({
@@ -114,6 +124,12 @@ const ROUTE_EVENTS: Readonly<Record<string, ReadonlySet<string>>> = Object.freez
     "source_check_completed",
     "source_check_decision_recorded",
     "source_check_card_copied",
+  ]),
+  "/tools/source-backed-brief/": new Set([
+    "brief_required_fields_completed",
+    "brief_preview_created",
+    "brief_exported",
+    "brief_completed",
   ]),
 });
 
@@ -251,7 +267,7 @@ function validateEvent(body: Record<string, unknown>, now: Date): AnalyticsEngin
 }
 
 /**
- * Collect one bounded, first-party activation event for the two public tools.
+ * Collect one bounded, first-party activation event for the three public tools.
  *
  * The endpoint intentionally has no read API, cookie/session state, client
  * timestamp, request logging, or fallback storage. A failed write returns 204

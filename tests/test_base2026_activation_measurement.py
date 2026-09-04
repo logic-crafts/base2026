@@ -10,20 +10,25 @@ from test_build_base2026_cloudflare_release import builder
 ROOT = Path(__file__).resolve().parents[1]
 EVIDENCE_PAGE = ROOT / "templates" / "base2026-evidence-search.html"
 SOURCE_PAGE = ROOT / "templates" / "base2026-source-diversity-check.html"
+BRIEF_PAGE = ROOT / "templates" / "base2026-source-backed-brief.html"
 EVIDENCE_SCRIPT = ROOT / "templates" / "base2026-evidence-search.js"
 SOURCE_SCRIPT = ROOT / "templates" / "base2026-source-diversity-check.js"
+BRIEF_SCRIPT = ROOT / "templates" / "base2026-source-backed-brief.js"
 MEASUREMENT_SCRIPT = ROOT / "templates" / "base2026-activation-measurement.js"
 
 
-def test_measurement_listener_is_loaded_before_both_public_tool_runtimes() -> None:
+def test_measurement_listener_is_loaded_before_all_public_tool_runtimes() -> None:
     measurement_tag = '<script src="/static/base2026-activation-measurement.js?v=20260904-activation-measurement-v1" defer></script>'
     evidence = EVIDENCE_PAGE.read_text(encoding="utf-8")
     source = SOURCE_PAGE.read_text(encoding="utf-8")
+    brief = BRIEF_PAGE.read_text(encoding="utf-8")
 
     assert measurement_tag in evidence
     assert measurement_tag in source
+    assert measurement_tag in brief
     assert evidence.index(measurement_tag) < evidence.index("base2026-evidence-search.js")
     assert source.index(measurement_tag) < source.index("base2026-source-diversity-check.js")
+    assert brief.index(measurement_tag) < brief.index("base2026-source-backed-brief.js")
 
 
 def test_measurement_contract_is_first_party_bounded_and_non_identifying() -> None:
@@ -45,13 +50,15 @@ def test_measurement_contract_is_first_party_bounded_and_non_identifying() -> No
     assert "public_record_id" not in script
     assert '"/tools/evidence-search/"' in script
     assert '"/tools/source-diversity-check/"' in script
+    assert '"/tools/source-backed-brief/"' in script
 
 
 def test_tool_emitters_have_no_third_party_data_layer_or_raw_identifiers() -> None:
     evidence = EVIDENCE_SCRIPT.read_text(encoding="utf-8")
     source = SOURCE_SCRIPT.read_text(encoding="utf-8")
+    brief = BRIEF_SCRIPT.read_text(encoding="utf-8")
 
-    for script in (evidence, source):
+    for script in (evidence, source, brief):
         assert 'new CustomEvent("base2026:analytics"' in script
         assert "window.dataLayer" not in script
         assert "localStorage" not in script
@@ -63,6 +70,7 @@ def test_tool_emitters_have_no_third_party_data_layer_or_raw_identifiers() -> No
     assert "referrer_class" not in evidence
     assert "http_status_bucket" not in evidence
     assert "source_type: type" not in evidence
+    assert "window.dataLayer" not in brief
 
 
 def test_privacy_and_analytics_copy_describes_the_candidate_without_unique_visitor_claims() -> None:
@@ -119,4 +127,43 @@ console.log(JSON.stringify(calls));
         "query_length_bucket": "1_20",
         "query_token_bucket": "1",
         "render_mode": "enhanced",
+    }
+
+
+def test_shared_listener_accepts_only_coarse_source_backed_brief_properties() -> None:
+    source = MEASUREMENT_SCRIPT.read_text(encoding="utf-8")
+    harness = f"""
+const vm = require("node:vm");
+const source = {json.dumps(source)};
+const listeners = {{}};
+const calls = [];
+const context = {{
+  window: {{
+    location: {{ pathname: "/tools/source-backed-brief/" }},
+    addEventListener: (name, listener) => {{ listeners[name] = listener; }},
+    fetch: (url, options) => {{ calls.push({{ url, options }}); return Promise.resolve({{ ok: true }}); }}
+  }}
+}};
+context.globalThis = context;
+vm.runInNewContext(source, context, {{ filename: "base2026-activation-measurement.js" }});
+listeners["base2026:analytics"]({{ detail: {{
+  name: "brief_preview_created",
+  properties: {{ deliverable: "brief", response_class: "partial", selected_count_bucket: "6_10", resolved_count_bucket: "2_5", viewport_class: "large", question: "raw question", source_id: "tiktok:private:1" }}
+}} }});
+console.log(JSON.stringify(calls));
+"""
+    result = subprocess.run(["node", "-e", harness], cwd=ROOT, check=True, capture_output=True, text=True)
+    calls = json.loads(result.stdout)
+    assert len(calls) == 1
+    body = json.loads(calls[0]["options"]["body"])
+    assert body == {
+        "event": "brief_preview_created",
+        "route": "/tools/source-backed-brief/",
+        "properties": {
+            "deliverable": "brief",
+            "resolved_count_bucket": "2_5",
+            "response_class": "partial",
+            "selected_count_bucket": "6_10",
+            "viewport_class": "large",
+        },
     }

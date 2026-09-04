@@ -988,6 +988,16 @@ describe("Base2026 privacy-safe activation measurement", () => {
         route: "/tools/source-diversity-check/",
         properties: { input_source: "typed", query_length_bucket: "1_20", query_token_bucket: "1", render_mode: "enhanced" },
       },
+      {
+        event: "brief_preview_created",
+        route: "/tools/evidence-search/",
+        properties: { deliverable: "brief", response_class: "complete", selected_count_bucket: "2_5", resolved_count_bucket: "2_5", viewport_class: "large" },
+      },
+      {
+        event: "source_check_completed",
+        route: "/tools/source-backed-brief/",
+        properties: { completion_mode: "lookup_complete", count_bucket: "2_5", response_class: "complete", viewport_class: "large" },
+      },
     ];
     for (const body of cases) {
       const analytics = new FakeAnalytics();
@@ -1020,6 +1030,36 @@ describe("Base2026 privacy-safe activation measurement", () => {
     );
     expect(response.status).toBe(204);
     expect(analytics.points[0]?.blobs).toContain('{"error_class":"record_validation","failed_count_bucket":"6_plus","loaded_count_bucket":"2_5"}');
+  });
+
+  it("accepts one coarse source-backed-brief event without request or source content", async () => {
+    const analytics = new FakeAnalytics();
+    const response = await handleAnalyticsEvent(
+      new Request("https://base2026.dev/api/analytics/event", {
+        method: "POST",
+        headers: { "content-type": "application/json", origin: "https://base2026.dev" },
+        body: JSON.stringify({
+          event: "brief_preview_created",
+          route: "/tools/source-backed-brief/",
+          properties: {
+            deliverable: "brief",
+            response_class: "partial",
+            selected_count_bucket: "6_10",
+            resolved_count_bucket: "2_5",
+            viewport_class: "large",
+          },
+        }),
+      }),
+      { ANALYTICS: analytics as unknown as AnalyticsEngineDataset, MCP_RATE_LIMIT: new FakeRateLimit() },
+    );
+    expect(response.status).toBe(204);
+    expect(analytics.points).toHaveLength(1);
+    expect(analytics.points[0]?.blobs).toEqual([
+      "brief_preview_created",
+      "/tools/source-backed-brief/",
+      expect.stringMatching(/^\d{4}-\d{2}-\d{2}T\d{2}:00:00Z$/u),
+      '{"deliverable":"brief","resolved_count_bucket":"2_5","response_class":"partial","selected_count_bucket":"6_10","viewport_class":"large"}',
+    ]);
   });
 
   it("fails closed for cross-origin requests, missing bindings, and a rate-limit decision", async () => {

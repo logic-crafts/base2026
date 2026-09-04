@@ -20,6 +20,12 @@
       "source_check_completed",
       "source_check_decision_recorded",
       "source_check_card_copied"
+    ]),
+    "/tools/source-backed-brief/": new Set([
+      "brief_required_fields_completed",
+      "brief_preview_created",
+      "brief_exported",
+      "brief_completed"
     ])
   });
   const EVENT_PROPERTIES = Object.freeze({
@@ -44,15 +50,22 @@
     ]),
     source_check_completed: new Set(["completion_mode", "count_bucket", "response_class", "viewport_class"]),
     source_check_decision_recorded: new Set(["decision", "scope", "count_bucket", "position_bucket", "metadata_resolution", "viewport_class"]),
-    source_check_card_copied: new Set(["copy_format", "count_bucket", "position_bucket", "metadata_resolution"])
+    source_check_card_copied: new Set(["copy_format", "count_bucket", "position_bucket", "metadata_resolution"]),
+    brief_required_fields_completed: new Set(["deliverable", "selected_count_bucket", "input_source", "viewport_class"]),
+    brief_preview_created: new Set(["deliverable", "response_class", "selected_count_bucket", "resolved_count_bucket", "viewport_class"]),
+    brief_exported: new Set(["export_format", "export_action", "selected_count_bucket", "resolved_count_bucket", "viewport_class"]),
+    brief_completed: new Set(["response_class", "deliverable", "selected_count_bucket", "invalid_field_bucket", "input_source", "viewport_class"])
   });
   const VALUE_SETS = Object.freeze({
     completion_mode: new Set(["base2026_record_opened", "original_source_opened", "lookup_complete", "input_rejected"]),
     copy_format: new Set(["record_card", "markdown", "json"]),
+    deliverable: new Set(["brief", "memo", "outline"]),
     decision: new Set(["use", "investigate", "exclude", "inspect_originals", "find_independent_evidence", "keep_unknowns"]),
     error_class: new Set(["record_validation", "timeout", "http_error", "invalid_response", "network", "unknown"]),
     input_mode: new Set(["delimited_ids", "json_records"]),
     input_source: new Set(["typed", "example", "evidence_search_handoff", "direct"]),
+    export_action: new Set(["copy", "download"]),
+    export_format: new Set(["markdown", "json"]),
     latency_bucket_ms: new Set(["under_500", "500_1499", "1500_2999", "3000_plus"]),
     metadata_resolution: new Set(["complete", "partial", "unresolved"]),
     position_bucket: new Set(["1_3", "4_10", "11_plus"]),
@@ -66,6 +79,9 @@
     duplicate_input_bucket: new Set(["0_1", "1", "2_5", "6_10", "11_plus"]),
     record_id_bucket: new Set(["0_1", "1", "2_5", "6_10", "11_plus"]),
     source_id_bucket: new Set(["0_1", "1", "2_5", "6_10", "11_plus"]),
+    selected_count_bucket: new Set(["0_1", "1", "2_5", "6_10", "11_plus"]),
+    resolved_count_bucket: new Set(["0_1", "1", "2_5", "6_10", "11_plus"]),
+    invalid_field_bucket: new Set(["0_1", "1", "2_5", "6_10", "11_plus"]),
     loaded_count_bucket: new Set(["1", "2_5", "6_10", "11_plus"]),
     failed_count_bucket: new Set(["1", "2_5", "6_plus"]),
     query_length_bucket: new Set(["1_20", "21_50", "51_100", "101_plus"]),

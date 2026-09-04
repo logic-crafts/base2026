@@ -7,6 +7,9 @@ Built and maintained by solo founder Alex Yarosh.
 - Product: <https://base2026.dev/>
 - Repository: <https://github.com/offflinerpsy/base2026>
 - Search workspace: <https://base2026.dev/workspace/>
+- Search inside expert videos: <https://base2026.dev/tools/evidence-search/>
+- Source diversity check: <https://base2026.dev/tools/source-diversity-check/>
+- Source-backed brief builder: <https://base2026.dev/tools/source-backed-brief/>
 - Public dataset: <https://base2026.dev/dataset>
 - Live source catalog: <https://base2026.dev/sources/>
 - Maintained guides API: <https://base2026.dev/api/guides>
@@ -58,14 +61,11 @@ the [API guide](docs/public-pages/08_API_ACCESS.md),
 [MCP guide](docs/public-pages/10_MCP_FOR_AI_AGENTS.md) and
 [integration guide](docs/public-pages/11_PLUGINS_AND_INTEGRATIONS.md).
 
-The current release is a working public prototype. The 2026-08-31 10:15 UTC
-snapshot contains 2,175 search documents across 1,573 distinct sources, with
-49 public evidence routes, 83 projected cards and zero public full transcripts.
-Two unsupported historical claim/excerpt pairs were narrowly withdrawn with
-private history preserved. These
-are dated database dimensions, not users, revenue, universal coverage or
-commercial traction. Current totals are available from the read-only
-[`/api/stats`](https://base2026.dev/api/stats) endpoint.
+The current release is a working public prototype. Live corpus dimensions are
+available from the read-only [`/api/stats`](https://base2026.dev/api/stats)
+endpoint and must not be treated as users, revenue, universal coverage or
+commercial traction. Public full transcripts remain disabled by design; the
+public product exposes bounded excerpts with attribution instead.
 
 Five maintained task guides are live as of August 31, 2026: internal linking,
 content refresh, Search Console opportunity selection, structured-data checks
@@ -73,7 +73,7 @@ and llms.txt consumer evaluation. They are original, source-linked decision
 workflows at existing topic URLs, separate from the blog. The first recurring
 editorial run published four of them without a Worker redeploy; see the
 [data-only publication receipt](docs/project-memory/BASE2026_EDITORIAL_OFFICE_RUN_2026_08_31.md).
-Five original blog articles are live, including an
+More than two dozen original research articles are live, including an
 [evidence-first content backlog](https://base2026.dev/blog/evidence-first-content-backlog/)
 and a [comparison-page evidence check](https://base2026.dev/blog/comparison-page-evidence-check/),
 both built from existing reviewed sources. The same editorial office can produce
