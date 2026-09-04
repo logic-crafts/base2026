@@ -115,6 +115,9 @@ DEFAULT_EVIDENCE_SEARCH_SCRIPT = PROJECT_ROOT / "templates" / "base2026-evidence
 DEFAULT_SOURCE_DIVERSITY_CHECK_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-source-diversity-check.html"
 DEFAULT_SOURCE_DIVERSITY_CHECK_STYLESHEET = PROJECT_ROOT / "templates" / "base2026-source-diversity-check.css"
 DEFAULT_SOURCE_DIVERSITY_CHECK_SCRIPT = PROJECT_ROOT / "templates" / "base2026-source-diversity-check.js"
+DEFAULT_SOURCE_BACKED_BRIEF_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-source-backed-brief.html"
+DEFAULT_SOURCE_BACKED_BRIEF_STYLESHEET = PROJECT_ROOT / "templates" / "base2026-source-backed-brief.css"
+DEFAULT_SOURCE_BACKED_BRIEF_SCRIPT = PROJECT_ROOT / "templates" / "base2026-source-backed-brief.js"
 
 OLD_WORDPRESS_ORIGIN = "https://aggressorbulkit.online"
 BASE2026_ORIGIN = "https://base2026.dev"
@@ -615,6 +618,7 @@ def _base_root_segments(public_root_names: Iterable[str] | None) -> set[str]:
         "sources",
         "static",
         "topics",
+        "tools",
     }
     if public_root_names:
         names.update(str(name).casefold() for name in public_root_names)
@@ -874,6 +878,7 @@ HUB_SITEMAP_ROUTES = (
     "/journal/source-diversity-check/",
     "/tools/evidence-search/",
     "/tools/source-diversity-check/",
+    "/tools/source-backed-brief/",
 )
 RUNTIME_GUIDE_ROUTES = (
     "/topics/content-freshness",
@@ -897,6 +902,7 @@ schema, content structure and entity trust.
 
 - Home: https://base2026.dev/
 - Search workspace: https://base2026.dev/workspace/
+- Source-backed brief builder: https://base2026.dev/tools/source-backed-brief/
 - Topics: https://base2026.dev/topics/
 - Creators: https://base2026.dev/creators/
 - Methodology: https://base2026.dev/methodology
@@ -936,6 +942,7 @@ site or a private client workspace.
 ## Primary public entry points
 
 - Search workspace: https://base2026.dev/workspace/
+- Source-backed brief builder: https://base2026.dev/tools/source-backed-brief/
 - Topic index: https://base2026.dev/topics/
 - Creator index: https://base2026.dev/creators/
 - Source index: https://base2026.dev/sources/
@@ -2342,6 +2349,22 @@ def build_release(
                 "tools/source-diversity-check/index.html",
                 _render_startup_page(
                     DEFAULT_SOURCE_DIVERSITY_CHECK_TEMPLATE.read_text(encoding="utf-8"),
+                    startup_header,
+                    startup_footer,
+                ),
+            )
+            write_generated_public_file(
+                "static/base2026-source-backed-brief.css",
+                DEFAULT_SOURCE_BACKED_BRIEF_STYLESHEET.read_bytes(),
+            )
+            write_generated_public_file(
+                "static/base2026-source-backed-brief.js",
+                DEFAULT_SOURCE_BACKED_BRIEF_SCRIPT.read_bytes(),
+            )
+            write_generated_public_file(
+                "tools/source-backed-brief/index.html",
+                _render_startup_page(
+                    DEFAULT_SOURCE_BACKED_BRIEF_TEMPLATE.read_text(encoding="utf-8"),
                     startup_header,
                     startup_footer,
                 ),

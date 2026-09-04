@@ -220,6 +220,7 @@ PUBLIC_SAFE_EXACT = {
     "tests/test_build_base2026_cloudflare_release.py",
     "tests/test_base2026_evidence_search_tool.py",
     "tests/test_base2026_source_diversity_check.py",
+    "tests/test_base2026_source_backed_brief.py",
     "tests/test_base2026_homepage_motion.py",
     "tests/test_base2026_live_stats.py",
     "tests/test_base2026_members_ui.py",

@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Source-backed Brief Builder | Base2026</title>
+  <meta name="description" content="Build a deterministic public-source brief, memo or outline from up to eight selected Base2026 records with bounded excerpts, attribution and visible limitations.">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://base2026.dev/tools/source-backed-brief/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="/static/base2026-startup-shell.css?v=20260820-b26v1">
+  <link rel="stylesheet" href="/static/base2026-source-backed-brief.css?v=20260904-source-backed-brief-v1">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Base2026 Source-backed Brief Builder","url":"https://base2026.dev/tools/source-backed-brief/","description":"Build a deterministic public-source brief, memo or outline from up to eight selected Base2026 records with bounded excerpts, attribution and visible limitations.","applicationCategory":"BusinessApplication","operatingSystem":"Any","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Base2026","item":"https://base2026.dev/"},{"@type":"ListItem","position":2,"name":"Evidence Search","item":"https://base2026.dev/tools/evidence-search/"},{"@type":"ListItem","position":3,"name":"Source-backed Brief Builder","item":"https://base2026.dev/tools/source-backed-brief/"}]}</script>
+</head>
+<body class="b26-form-page b26-source-backed-brief-page">
+  {{STARTUP_HEADER}}
+  <main class="b26-source-backed-brief" data-source-backed-brief data-mcp-endpoint="/api/mcp">
+    <nav class="b26-source-backed-brief__breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Base2026</a><span aria-hidden="true">/</span><a href="/tools/evidence-search/">Evidence Search</a><span aria-hidden="true">/</span><span>Source-backed Brief</span>
+    </nav>
+
+    <section class="b26-source-backed-brief__hero" aria-labelledby="source-backed-brief-title">
+      <div class="b26-source-backed-brief__intro">
+        <p class="b26-eyebrow">Free public-source builder</p>
+        <h1 id="source-backed-brief-title">Build a source-backed brief from records you can inspect.</h1>
+        <p class="b26-source-backed-brief__lede">Describe the question, audience and format, then add up to eight public Base2026 record or source IDs you have already selected. The builder assembles an inspectable brief, memo or outline from attribution, original-source links and short public excerpts.</p>
+        <p class="b26-source-backed-brief__trust">This is a deterministic reading scaffold, not an answer engine. It does not infer truth, consensus or independence, and it does not save your request or call an LLM.</p>
+      </div>
+
+      <form class="b26-source-backed-brief__form" data-brief-form>
+        <div class="b26-source-backed-brief__form-grid">
+          <div class="b26-source-backed-brief__field b26-source-backed-brief__field--wide">
+            <label for="source-backed-brief-question">Question</label>
+            <textarea id="source-backed-brief-question" rows="3" maxlength="240" minlength="3" required placeholder="What do these records say about a specific practice?" data-brief-question></textarea>
+            <p class="b26-source-backed-brief__field-help">Keep the question narrow enough to inspect record by record. The wording is copied into your local export; it is not sent to an inference service or placed in a URL.</p>
+          </div>
+          <div class="b26-source-backed-brief__field">
+            <label for="source-backed-brief-audience">Audience</label>
+            <input id="source-backed-brief-audience" type="text" maxlength="120" minlength="2" required placeholder="Example: content team" data-brief-audience>
+          </div>
+          <div class="b26-source-backed-brief__field">
+            <label for="source-backed-brief-deliverable">Deliverable type</label>
+            <select id="source-backed-brief-deliverable" required data-brief-deliverable>
+              <option value="">Choose a format</option>
+              <option value="brief">Brief</option>
+              <option value="memo">Memo</option>
+              <option value="outline">Outline</option>
+            </select>
+          </div>
+          <div class="b26-source-backed-brief__field b26-source-backed-brief__field--wide">
+            <label for="source-backed-brief-ids">Selected public record/source IDs</label>
+            <textarea id="source-backed-brief-ids" rows="6" maxlength="1200" required placeholder="tiktok-video-7626280514139196694&#10;tiktok:creator:7626280514139196694" data-brief-ids></textarea>
+            <p class="b26-source-backed-brief__field-help">Use up to 8 canonical IDs, separated by commas, spaces or new lines. Each submitted ID must fit the public MCP contract's 200-character limit. Evidence Search and the Source Diversity Check can help you select IDs; arbitrary URLs, claims and source text are rejected.</p>
+          </div>
+        </div>
+        <div class="b26-source-backed-brief__form-actions">
+          <button type="submit" data-brief-submit>Build the preview</button>
+          <a class="b26-button--secondary" href="/tools/evidence-search/">Find public records</a>
+          <a class="b26-button--secondary" href="/tools/source-diversity-check/">Check source diversity</a>
+        </div>
+        <noscript>
+          <p class="b26-source-backed-brief__noscript">The public record lookups and preview need JavaScript. Without it, this page does not submit your framing or put it in a URL, but it remains useful: the method, input limits and evidence boundaries are below. Search public records in <a href="/tools/evidence-search/">Evidence Search</a>, inspect each source and keep the IDs for a local brief.</p>
+        </noscript>
+      </form>
+    </section>
+
+    <section class="b26-source-backed-brief__results" aria-labelledby="source-backed-brief-results-title" data-brief-results hidden>
+      <div class="b26-source-backed-brief__section-heading">
+        <div>
+          <p class="b26-eyebrow">Deterministic preview</p>
+          <h2 id="source-backed-brief-results-title" data-brief-result-title>Inspectable source-backed brief</h2>
+        </div>
+        <p class="b26-source-backed-brief__status" role="status" aria-live="polite" aria-atomic="true" data-brief-status></p>
+      </div>
+
+      <dl class="b26-source-backed-brief__request" data-brief-request aria-label="Brief request"></dl>
+      <div class="b26-source-backed-brief__count-grid" data-brief-counts aria-label="Brief record counts"></div>
+
+      <div class="b26-source-backed-brief__export" data-brief-export hidden>
+        <div>
+          <p class="b26-eyebrow">Portable result</p>
+          <h3>Copy or download the same fixed preview</h3>
+          <p>Markdown and JSON contain the selected request, public metadata, bounded excerpts, unresolved records and limitations. Nothing is stored by this page.</p>
+        </div>
+        <div class="b26-source-backed-brief__export-actions">
+          <button type="button" class="b26-button--primary" data-brief-copy-markdown>Copy Markdown</button>
+          <button type="button" class="b26-button--secondary" data-brief-download-markdown>Download Markdown</button>
+          <button type="button" class="b26-button--secondary" data-brief-copy-json>Copy JSON</button>
+          <button type="button" class="b26-button--secondary" data-brief-download-json>Download JSON</button>
+        </div>
+        <p class="b26-source-backed-brief__export-status" role="status" aria-live="polite" data-brief-export-status></p>
+      </div>
+
+      <section class="b26-source-backed-brief__records" aria-labelledby="source-backed-brief-records-title">
+        <div class="b26-source-backed-brief__section-heading">
+          <div>
+            <p class="b26-eyebrow">Record-level inspection</p>
+            <h3 id="source-backed-brief-records-title">Selected public records</h3>
+          </div>
+        </div>
+        <div class="b26-source-backed-brief__record-list" data-brief-records></div>
+      </section>
+
+      <section class="b26-source-backed-brief__unknowns" aria-labelledby="source-backed-brief-unknowns-title">
+        <p class="b26-eyebrow">Known gaps</p>
+        <h3 id="source-backed-brief-unknowns-title">Unknowns stay attached to the record path</h3>
+        <div data-brief-unknowns></div>
+      </section>
+
+      <section class="b26-source-backed-brief__limitations" aria-labelledby="source-backed-brief-limitations-title">
+        <p class="b26-eyebrow">Use with care</p>
+        <h3 id="source-backed-brief-limitations-title">Limitations</h3>
+        <ul data-brief-limitations></ul>
+      </section>
+    </section>
+
+    <section class="b26-source-backed-brief__method" aria-labelledby="source-backed-brief-method-title">
+      <div>
+        <p class="b26-eyebrow">How the builder works</p>
+        <h2 id="source-backed-brief-method-title">Keep every note close to its source.</h2>
+      </div>
+      <ol>
+        <li><span aria-hidden="true">01</span><div><h3>Frame one question</h3><p>Choose the audience and a brief, memo or outline format. The builder records your framing but does not answer it for you.</p></div></li>
+        <li><span aria-hidden="true">02</span><div><h3>Resolve selected IDs</h3><p>Each exact public record or source ID is sent to the existing read-only <code>get_source</code> contract. At most eight lookups run, with bounded public metadata and short excerpts.</p></div></li>
+        <li><span aria-hidden="true">03</span><div><h3>Inspect before reuse</h3><p>Open the Base2026 record, creator link and original source where available. Unknown links, unavailable records and missing excerpts remain explicit in the preview and exports.</p></div></li>
+      </ol>
+    </section>
+
+    <section class="b26-source-backed-brief__limits" aria-labelledby="source-backed-brief-limits-title">
+      <div>
+        <p class="b26-eyebrow">What it is</p>
+        <h2 id="source-backed-brief-limits-title">A local reading scaffold.</h2>
+        <ul>
+          <li>A deterministic way to organize up to eight already-selected public records.</li>
+          <li>A visible path from record ID to creator, original source and bounded public excerpts.</li>
+          <li>A portable Markdown or JSON note for your own review workflow.</li>
+        </ul>
+      </div>
+      <div>
+        <p class="b26-eyebrow">What it is not</p>
+        <h2>A truth or consensus engine.</h2>
+        <ul>
+          <li>Not a fact-check, ranking, quality, effectiveness or independence verdict.</li>
+          <li>Not an external crawl, web-wide search, recommendation or citation measurement.</li>
+          <li>Not an LLM answer, private-data workflow, raw-transcript or media surface.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="b26-source-backed-brief__faq" aria-labelledby="source-backed-brief-faq-title">
+      <p class="b26-eyebrow">FAQ</p>
+      <h2 id="source-backed-brief-faq-title">Boundaries before conclusions</h2>
+      <div>
+        <details><summary>How many records can I use?</summary><p>The builder accepts at most eight unique canonical Base2026 record or source IDs. Extra, malformed or arbitrary items are rejected and shown as input unknowns instead of being silently added.</p></details>
+        <details><summary>What does the preview actually contain?</summary><p>It contains your question, audience and format, exact selected record IDs, safe public attribution, available creator and original-source links, and up to three short public excerpts per resolved record. It does not synthesize a conclusion.</p></details>
+        <details><summary>What happens when a record cannot be resolved?</summary><p>The submitted ID remains in the preview and exports with an unresolved status and reason. The builder does not invent a title, creator, source link or excerpt for it.</p></details>
+        <details><summary>Does a brief prove that the records agree?</summary><p>No. The tool does not infer truth, consensus or independence. Repeated wording, creators or source URLs need separate human inspection and do not become a score.</p></details>
+        <details><summary>Does this save my question or source IDs?</summary><p>No. Lookups are read-only public MCP requests, and Markdown or JSON exports are created in your browser. This page does not use GET/query prefill and its controls do not serialize your framing into a URL. It has no D1 write, account requirement, private binding or LLM call.</p></details>
+      </div>
+    </section>
+  </main>
+  {{STARTUP_FOOTER}}
+  <script src="/static/base2026-source-backed-brief.js?v=20260904-source-backed-brief-v1" defer></script>
+</body>
+</html>

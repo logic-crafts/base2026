@@ -518,8 +518,9 @@ def test_startup_homepage_overlay_preserves_search_as_workspace(tmp_path: Path) 
     assert receipt["verification"]["redirecting_html_canonical_markers_remaining"] == 0
     assert receipt["verification"]["redirecting_html_sitemap_markers_remaining"] == 0
     # Blog files, guide assets, and the isolated Evidence Search and Source
-    # Diversity tools are additive; retained assets stay intact.
-    assert receipt["artifact"]["file_count"] == 58
+    # Diversity and source-backed brief tools are additive; retained assets stay
+    # intact.
+    assert receipt["artifact"]["file_count"] == 61
     blog = (output / "blog.html").read_text(encoding="utf-8")
     assert '<link rel="canonical" href="https://base2026.dev/blog">' in blog
     assert 'data-b26-blog-schema' in blog

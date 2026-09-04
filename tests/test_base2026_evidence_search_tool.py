@@ -59,9 +59,9 @@ def test_evidence_search_page_has_one_h1_honest_boundaries_and_contextual_check_
     assert "when it is available" in page
     assert "not a TikTok-wide search engine" in page
     assert "full-transcript database" in page
-    assert "Source-backed brief · planned" in page
+    assert "Build a source-backed brief" in page
     assert 'href="/tools/source-diversity-check/"' in page
-    assert 'href="/tools/source-backed-brief/' not in page
+    assert page.count('href="/tools/source-backed-brief/"') == 1
     assert 'href="/methodology"' in page
     assert 'href="/api"' in page
     assert 'href="/topics/"' in page
