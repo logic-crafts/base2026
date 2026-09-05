@@ -1,5 +1,43 @@
 # Base2026 Current Status
 
+## Current — September 5 Studio continuation
+
+This checkpoint supersedes the September 4 status below. Resume through
+[the Studio operating guide](../BASE2026_STUDIO_OPERATING_GUIDE.md),
+[PROJECT_STATE.md](PROJECT_STATE.md), [NEXT_ACTION.md](NEXT_ACTION.md) and
+[the current handoff](HANDOFF_2026-09-05_PRODUCT_STUDIO.md).
+
+Tools Studio and the installable WordPress Evidence Sidebar beta are live
+on public Worker `ab2589fa-36a4-4bdb-985f-e66a383c8d6d`. Public routes,
+exact download identity and signed-out private guards passed release readback.
+[PR54](https://github.com/offflinerpsy/base2026/pull/54) merged at
+2026-09-05 18:37:53 UTC as
+`d5116a3f06ecfa0bd4888b4417d4e6227b728f8f`; source publication is complete.
+
+Auth is enabled and Google consent is complete. The actual application error
+is `account_not_linked`; the earlier Chrome block hid that result. Existing
+member data and saved research remain intact. There is no newly established
+owner-login action and no successful current Google round-trip receipt.
+The four-file error-UX/native-regression candidate is not deployed and does
+not repair identity binding. HQ now holds the authenticated browser lease
+after Identity Engineering released it for a supported-tool limitation;
+Identity continues CLI/source and transfer diagnostics.
+
+Separate Product Engineering and Design & Media departments join the existing
+Identity, Editorial & Distribution, Directories and Chief Engineering owners.
+HQ owns decisions, integration, merges and public releases. AgencyOS remains
+the existing operational registry with one supervisor and designated writers.
+An old worktree or local candidate is not the deployed product.
+
+Page Readiness Check has an accepted safe HTML-input source-check scope;
+implementation/release is not established by that acceptance, and the full
+arbitrary-URL live audit is unfinished. Design's factory is an
+illustration, visibly separate from timestamped public inventory data.
+Growth departments continue their existing tasks and send history. Release,
+submission and QA do not establish accepted links, visitors or repeat use.
+
+## Historical checkpoint — September 4, 21:27 UTC
+
 Verified 2026-09-04 through 21:27 UTC. Public Worker
 `3ecddaf3-f594-4b4a-91d4-fd409bd62e4a` is live at 100%; compatible immediate
 rollback is `327a21a5-ca54-457c-8099-aa2447a7fe1a`. The current public counters
@@ -14,7 +52,7 @@ artifact, bindings, IndexNow and live QA are in
 [the combined release receipt](HANDOFF_2026-09-04_SOURCE_BRIEF_ACTIVATION_RELEASE.md).
 Older dated receipts and counters below are history, not the current release.
 
-## Current live product
+### Product at the September 4 checkpoint
 
 - Three-tool workflow: Evidence Search -> Source Diversity Check ->
   Source-backed Brief. All three routes are HTTP 200, self-contained and use

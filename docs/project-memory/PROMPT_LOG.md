@@ -1,5 +1,35 @@
 # Prompt Log
 
+## 2026-09-05 — Studio departments and corrected continuation
+
+The owner resumed separate departments while retaining HQ decisions,
+integration and public release ownership. Product Engineering and Design &
+Media use separate clean worktrees; existing Identity, Editorial & Distribution,
+Directories and Chief Engineering tasks continue without duplicate queues.
+AgencyOS remains the operational registry and one supervisor is retained.
+
+Updated the compact public state, phase, next action, phase-29 board row and
+Product Studio handoff; added the public Studio operating guide. HQ explicitly
+assigned CURRENT_STATUS to the same writer after its stale first-read pointer
+was identified. Source base is verified main
+`d5116a3f06ecfa0bd4888b4417d4e6227b728f8f` after merged PR54.
+Tools Studio and the exact WordPress beta download are live on Worker
+`ab2589fa-36a4-4bdb-985f-e66a383c8d6d`; source publication is complete.
+
+Google consent succeeded; the observed error is `account_not_linked`, with
+existing saved data intact. The error-UX/native-regression patch is an
+undeployed candidate. Identity continues CLI/source diagnostics; HQ holds
+the browser lease after a department tooling limitation. This supplies no
+evidence for a new owner-login wait. Page Readiness Check has an accepted safe
+HTML-input work scope, not implementation proof or a completed arbitrary-URL
+live audit. Factory media
+remains illustration with separately labelled public data.
+
+This documentation pass leaves merge and deployment to HQ. Continue from
+[the Studio guide](../BASE2026_STUDIO_OPERATING_GUIDE.md) and
+[the current handoff](HANDOFF_2026-09-05_PRODUCT_STUDIO.md). Earlier entries
+below preserve their dated observations, including the superseded login wait.
+
 ## 2026-09-05 — Free product studio and existing Hello Google-login recovery
 
 Owner asked for real useful free tools/platform integrations, product discovery,
