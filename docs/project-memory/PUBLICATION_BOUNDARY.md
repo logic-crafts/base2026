@@ -60,9 +60,13 @@ Base2026 has two layers:
 
 ## Deployable but not committed
 
-- the deterministic `downloads/base2026-evidence-sidebar-v0.1.0.zip`, generated
-  from the four reviewed plugin source files only; no other archive is admitted
-  by this exception, and old archive bytes are never inherited by a rebuild
+- the deterministic `downloads/base2026-evidence-sidebar-v0.1.1.zip`, always
+  generated from the four reviewed plugin source files; it never inherits a
+  current archive, and the retained `downloads/base2026-evidence-sidebar-v0.1.0.zip`
+  is copied byte-exact with pinned SHA-256
+  `f588eddae0df5b91da4d70576b6cdec01d3a637b003ea076b9357cace6cb7e2a`, never
+  rebuilt from current sources; both generated ZIPs are deployable but never
+  committed, and no other archive is admitted by this exception
 - `public-data/tiktok`
 - release folder under `output/releases`
 - `web/static/documents.jsonl` inside release package
