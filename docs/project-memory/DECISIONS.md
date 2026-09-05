@@ -1,5 +1,23 @@
 # Decisions
 
+## 2026-09-05 — Make applied research the product; measure repeat value
+
+Retain the Cloudflare supply/search architecture and current design. Test a
+narrow practitioner job with a usable source-attributed SEO experiment, starting
+with content-refresh diagnosis. Do not equate corpus size, article output,
+directory submission or an aggregate event with demand or customer value.
+Prefer delivered work artifacts, maintained useful topics, repeat agent workflows
+and reproducible original research over arbitrary page quotas.
+
+AgencyOS remains the management authority. Reuse the existing supervisor and
+transactional reconciler; add only a read-only decision evaluator and bounded
+optional measurement tags. Status readiness is not authorization. Preserve
+unknown effects, channel-specific gates and the private/public boundary. A local
+heartbeat is not laptop-independent execution. Document full cloud autonomy and
+market validation as unfinished until directly demonstrated.
+
+The complete contract is `../BASE2026_SELF_GROWTH_OPERATING_MODEL.md`.
+
 ## 2026-09-04 — Release the complete three-tool loop with first-party measurement
 
 Release Evidence Search -> Source Diversity Check -> Source-backed Brief as one

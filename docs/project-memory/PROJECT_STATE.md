@@ -5,23 +5,32 @@ https://base2026.dev/. Cloudflare serves attributed evidence, original blog
 articles and source-dependent task guides. Public readability is not a grant
 of third-party redistribution rights.
 
-Continue from [CURRENT_STATUS.md](CURRENT_STATUS.md),
-[NEXT_ACTION.md](NEXT_ACTION.md) and the
-[closure receipt](BASE2026_OFFICE_CLOSURE_2026_08_31.md), not old chat or counters.
+Continue from [ACTIVE_PHASE.md](ACTIVE_PHASE.md), [NEXT_ACTION.md](NEXT_ACTION.md)
+and [the self-growth handoff](HANDOFF_2026-09-05_SELF_GROWTH_RETHINK.md), not old
+chat or counters. The earlier closure/release notes are dated receipts.
 
-The 2026-09-04 21:23 UTC public snapshot is 2,268 documents / 1,644 sources /
-120 evidence routes / 176 projected cards / zero full transcripts. Blog and
+The 2026-09-05 13:35 UTC public snapshot is 2,275 documents / 1,649 sources /
+125 evidence routes / 183 projected cards / zero full transcripts. Blog and
 maintained-guide counts are separate. Older counters are release history, not
 the current operating snapshot.
 
-Public Worker `3ecddaf3-f594-4b4a-91d4-fd409bd62e4a` serves the complete free
-acquisition loop: Evidence Search, Source Diversity Check and Source-backed
+Public Worker `3ecddaf3-f594-4b4a-91d4-fd409bd62e4a` serves the free
+research workflow: Evidence Search, Source Diversity Check and Source-backed
 Brief. The three exact routes use bounded public MCP reads. Privacy-safe
 activation events write to `base2026_activation_v1`; first SQL counts are QA
 smoke, not traffic. Immediate rollback is
 `327a21a5-ca54-457c-8099-aa2447a7fe1a`. Exact artifact, D1 bindings and live
 checks are in
 `HANDOFF_2026-09-04_SOURCE_BRIEF_ACTIVATION_RELEASE.md`.
+
+The September 5 viability review does not establish product-market fit or
+automatic acquisition. Its selected test is a source-attributed, usable SEO
+experiment for practitioners. The new worksheet, measurement context and
+operating contract are reviewed source work, not a new production release.
+Fresh authenticated two-day Analytics Engine readback returned only the same
+11 known QA events; it cannot establish zero visitors or external retention.
+The private evaluator reads AgencyOS and suggests one bounded action; it is
+not a network publisher, new scheduler or cloud office.
 
 PR34's public MCP remains live through the current Worker. The migrated account
 retains all four D1 bindings and the unique rate-limit binding, while member

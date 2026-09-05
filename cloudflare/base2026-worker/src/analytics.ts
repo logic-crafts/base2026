@@ -27,6 +27,22 @@ const COUNT_BUCKETS = new Set([
   "101_plus",
 ]);
 
+const DEFAULT_CONTEXT = Object.freeze({ cohort: "unattributed", campaign: "none" });
+const CONTEXT_VALUE_SETS: Readonly<Record<string, ReadonlySet<string>>> = Object.freeze({
+  cohort: new Set(["unattributed", "experiment", "operator_qa"]),
+  campaign: new Set(["none", "evidence_pulse", "worked_example", "agent_workflow"]),
+});
+const CONTEXT_PAIRS = new Set([
+  "unattributed:none",
+  "experiment:evidence_pulse",
+  "experiment:worked_example",
+  "experiment:agent_workflow",
+  "operator_qa:none",
+  "operator_qa:evidence_pulse",
+  "operator_qa:worked_example",
+  "operator_qa:agent_workflow",
+]);
+
 const VALUE_SETS: Readonly<Record<string, ReadonlySet<string>>> = Object.freeze({
   completion_mode: new Set([
     "base2026_record_opened",
@@ -229,6 +245,22 @@ function safeString(value: unknown): value is string {
     && !/[\u0000-\u001f\u007f-\u009f]/u.test(value);
 }
 
+function normalizedContext(value: unknown): { cohort: string; campaign: string } {
+  if (value === undefined) return { ...DEFAULT_CONTEXT };
+  if (!value || typeof value !== "object" || Array.isArray(value)) throw new MeasurementError(400);
+
+  const context = value as Record<string, unknown>;
+  const keys = Object.keys(context);
+  if (keys.some((key) => key !== "cohort" && key !== "campaign")) throw new MeasurementError(400);
+
+  const cohort = Object.prototype.hasOwnProperty.call(context, "cohort") ? context.cohort : DEFAULT_CONTEXT.cohort;
+  const campaign = Object.prototype.hasOwnProperty.call(context, "campaign") ? context.campaign : DEFAULT_CONTEXT.campaign;
+  if (!safeString(cohort) || !CONTEXT_VALUE_SETS.cohort.has(cohort)) throw new MeasurementError(400);
+  if (!safeString(campaign) || !CONTEXT_VALUE_SETS.campaign.has(campaign)) throw new MeasurementError(400);
+  if (!CONTEXT_PAIRS.has(`${cohort}:${campaign}`)) throw new MeasurementError(400);
+  return { cohort, campaign };
+}
+
 function normalizedProperties(event: string, value: unknown): string {
   if (!value || typeof value !== "object" || Array.isArray(value)) throw new MeasurementError(400);
   const properties = value as Record<string, unknown>;
@@ -253,14 +285,17 @@ function timestampBucket(now: Date): string {
 
 function validateEvent(body: Record<string, unknown>, now: Date): AnalyticsEngineDataPoint {
   const keys = Object.keys(body);
-  if (keys.some((key) => key !== "event" && key !== "route" && key !== "properties")) throw new MeasurementError(400);
+  if (keys.some((key) => key !== "event" && key !== "route" && key !== "properties" && key !== "context")) throw new MeasurementError(400);
   if (!safeString(body.event) || !Object.prototype.hasOwnProperty.call(EVENT_PROPERTIES, body.event)) throw new MeasurementError(400);
   if (!safeString(body.route) || !Object.prototype.hasOwnProperty.call(ROUTE_EVENTS, body.route)) throw new MeasurementError(400);
   const event = body.event;
   if (!ROUTE_EVENTS[body.route]?.has(event)) throw new MeasurementError(400);
   const properties = normalizedProperties(event, body.properties);
+  const context = normalizedContext(body.context);
   return {
-    blobs: [event, body.route, timestampBucket(now), properties],
+    // Keep the original four blobs stable for existing Analytics Engine reads;
+    // attribution is appended as coarse, non-identifying dimensions only.
+    blobs: [event, body.route, timestampBucket(now), properties, context.cohort, context.campaign],
     doubles: [1],
     indexes: [ANALYTICS_INDEX],
   };

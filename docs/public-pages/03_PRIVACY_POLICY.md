@@ -1,6 +1,6 @@
 # Privacy Policy
 
-_Last updated: 2026-09-04_
+_Last updated: 2026-09-05_
 
 This Privacy Policy explains how Base2026 handles information when you visit the website or contact the project.
 
@@ -33,9 +33,11 @@ We do not intentionally collect sensitive personal information from visitors.
 
 Base2026 uses necessary cookies or local browser storage to remember cookie preferences and keep the site working.
 
-When enabled, Base2026 may use a first-party activation measurement endpoint for the two public tools at `/tools/evidence-search/` and `/tools/source-diversity-check/`. It records only an allowlisted event name, the tool route, a server-generated UTC hour bucket, and coarse allowlisted properties such as a count or response bucket. It does not claim unique visitors.
+When enabled, Base2026 may use a first-party activation measurement endpoint for the three public tools at `/tools/evidence-search/`, `/tools/source-diversity-check/`, and `/tools/source-backed-brief/`. It records only an allowlisted event name, the exact tool route, a server-generated UTC hour bucket, and coarse allowlisted properties such as a count or response bucket. It does not claim unique visitors.
 
-The activation measurement does not persist raw queries, public record/source IDs, notes, IP addresses, browser/user-agent strings, referrers, authentication or member data, or private acquisition-pipeline data. It does not use cookies, local storage, session storage, fingerprinting, or a third-party analytics beacon. Cloudflare's edge may use an IP address transiently as a rate-limit key; that key is not written to the measurement point or an application database. If enabled, the aggregate measurement points use Cloudflare Analytics Engine's current three-month retention window. The resulting counts are best-effort product signals, not proof of human actions or unique visitors.
+Controlled links may optionally carry two fixed URL tags: `b26_campaign` with one of `none`, `evidence_pulse`, `worked_example`, or `agent_workflow`, and `b26_qa=1`. These are coarse, self-declared cohort/campaign labels for experiment analysis and operator QA, not identity signals. A named campaign maps to the `experiment` cohort, `b26_campaign=none` leaves the event `unattributed`, a valid QA tag maps to `operator_qa`, and an untagged event is `unattributed/none`; duplicate or unknown values do not produce that dimension, and invalid context supplied directly to the endpoint is rejected. The labels do not prove that a request came from a human, a unique or returning visitor, or all traffic.
+
+The activation measurement does not persist raw URLs or query parameters, raw queries, public record/source IDs, notes, IP addresses, browser/user-agent strings, referrers, authentication or member data, or private acquisition-pipeline data. The browser reads only those exact fixed tags and propagates valid labels on same-origin navigation among the three routes; it never sends the complete URL or raw tag string as an event field. It does not use cookies, local storage, session storage, fingerprinting, or a third-party analytics beacon. Cloudflare's edge may use an IP address transiently as a rate-limit key; that key is not written to the measurement point or an application database. If enabled, the aggregate measurement points use Cloudflare Analytics Engine's current three-month retention window. The resulting counts are best-effort product signals, not proof of human actions or unique visitors.
 
 The allowlisted activation event names are `evidence_search_viewed`, `evidence_search_submitted`, `evidence_search_results_returned`, `evidence_source_record_opened`, `evidence_original_source_clicked`, `evidence_search_completed`, `evidence_search_empty`, `evidence_search_partial`, `evidence_search_error`, `source_check_run`, `source_check_completed`, `source_check_decision_recorded`, and `source_check_card_copied`.
 

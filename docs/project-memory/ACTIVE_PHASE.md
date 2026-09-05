@@ -1,6 +1,22 @@
 # Active Phase
 
-Phase 28 — three-tool acquisition loop released; 72-hour measurement active.
+Phase 29 — standalone-product viability and research-to-action pilot.
+Current checkpoint: 2026-09-05. The working site and native intake are retained.
+The three tools are a research workflow, not a demonstrated acquisition loop.
+The product hypothesis is a usable, source-attributed SEO experiment for a
+practitioner with a real task. The first content-refresh worksheet and the
+coarse campaign/QA measurement extension are source candidates, not deployed
+features or measured customer outcomes.
+
+Start with [the operating model](../BASE2026_SELF_GROWTH_OPERATING_MODEL.md)
+and [the phase handoff](HANDOFF_2026-09-05_SELF_GROWTH_RETHINK.md).
+AgencyOS remains the operational authority; no new database or scheduler.
+Observe delivery and useful output before expanding articles, indexable pages,
+integrations or runtime. Local office recovery is not cloud independence.
+
+## Historical release checkpoint — phase 28
+
+Three-tool research workflow released; initial measurement active.
 Current checkpoint: 2026-09-04 21:27 UTC. Public Worker
 `3ecddaf3-f594-4b4a-91d4-fd409bd62e4a` is selected at 100% with
 `327a21a5-ca54-457c-8099-aa2447a7fe1a` as the immediate rollback. Evidence

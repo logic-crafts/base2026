@@ -40,6 +40,23 @@ Base2026 creates a public evidence layer that keeps those connections visible.
 
 ## Developer access
 
+### Free SEO Experiment Planner skill
+
+Use Base2026 in an existing agent workflow: investigate a content page's decline
+and produce one source-attributed experiment with a measurement worksheet.
+The pack is free; your agent/provider costs are separate. It does not promise
+rankings, invent keyword volumes or upload private GSC exports to Base2026.
+
+```bash
+npx skills add offflinerpsy/base2026 --skill base2026-seo-experiment-planner --agent codex
+```
+
+[Install for Codex or Claude Code](docs/BASE2026_FREE_SKILLS.md) ·
+[See a complete worked example](docs/examples/content-refresh-experiment.md) ·
+[Inspect the skill](.agents/skills/base2026-seo-experiment-planner/SKILL.md)
+
+### Public API and MCP
+
 The public developer surface is read-only and keyless. The compatible search
 API provides bounded retrieval, and the stateless MCP endpoint provides
 AI-agent lookups over the same public evidence boundary:

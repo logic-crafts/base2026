@@ -1,5 +1,30 @@
 # Next Action
 
+## Current — September 5: test a useful result, not publication volume
+
+Use [the research-to-action operating model](../BASE2026_SELF_GROWTH_OPERATING_MODEL.md)
+and [the current handoff](HANDOFF_2026-09-05_SELF_GROWTH_RETHINK.md).
+
+1. Continue the existing AgencyOS growth experiment: a content-refresh worksheet
+   for SEO practitioners, with explicit synthetic example and exact query/date
+   controls. Inspect the actual task status and linked artifact before delivery.
+2. The owner subsequently authorized practical free-skill/MCP distribution.
+   Publish only the reviewed source package; its installation guide is
+   `../BASE2026_FREE_SKILLS.md`. A Worker rollout remains a separate operation:
+   verify the migrated account/bindings and retained live artifact before any
+   deploy/readback. Do not restore the dirty historical tree or overwrite the
+   legacy CLI/browser identity. A Git release does not deploy website telemetry.
+3. Separate known QA and self-declared campaign labels from observed external
+   use. Fresh September 5 SQL readback still contains only the 11 known QA events
+   in the two-day interval. Missing measurement is unknown, not zero visitors.
+4. Deliver a reviewed useful example through an authorized, relevant channel;
+   capture exact destination/result and inspect unknown effects before retry.
+   Ask for a real task and subsequent use, not a testimonial or fabricated review.
+5. Reuse one supervisor and the existing read-only evaluator/reconciler. No new
+   hierarchy, blind six-hour waiting, duplicate watchdog or generic article quota.
+
+The sections below are historical release receipts, not competing current plans.
+
 ## Three-tool acquisition loop live — September 4, 2026
 
 Public Worker `3ecddaf3-f594-4b4a-91d4-fd409bd62e4a` now serves Evidence

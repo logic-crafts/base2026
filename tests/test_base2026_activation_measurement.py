@@ -167,3 +167,178 @@ console.log(JSON.stringify(calls));
             "viewport_class": "large",
         },
     }
+
+
+def test_shared_listener_derives_fixed_attribution_and_preserves_same_origin_fragments() -> None:
+    source = MEASUREMENT_SCRIPT.read_text(encoding="utf-8")
+    harness = f"""
+const vm = require("node:vm");
+const {{ URL, URLSearchParams }} = require("node:url");
+const source = {json.dumps(source)};
+const listeners = {{}};
+const calls = [];
+const location = {{
+  origin: "https://base2026.dev",
+  pathname: "/tools/evidence-search/",
+  search: "?b26_campaign=worked_example&b26_qa=1",
+  href: "https://base2026.dev/tools/evidence-search/?b26_campaign=worked_example&b26_qa=1"
+}};
+const context = {{
+  URL,
+  URLSearchParams,
+  window: {{
+    location,
+    addEventListener: (name, listener) => {{ listeners[name] = listener; }},
+    fetch: (url, options) => {{ calls.push({{ url, options }}); return Promise.resolve({{ ok: true }}); }}
+  }}
+}};
+context.globalThis = context;
+vm.runInNewContext(source, context, {{ filename: "base2026-activation-measurement.js" }});
+const internalLink = {{
+  href: "https://base2026.dev/tools/source-diversity-check/?ids=abc%2Cdef&b26_campaign=agent_workflow&b26_qa=0#record",
+  closest: () => internalLink,
+  setAttribute: (name, value) => {{ if (name === "href") internalLink.href = new URL(value, location.href).href; }}
+}};
+listeners.click({{ target: internalLink }});
+listeners["base2026:analytics"]({{ detail: {{
+  name: "evidence_search_submitted",
+  properties: {{ input_source: "typed", query_length_bucket: "1_20", query_token_bucket: "1", render_mode: "enhanced" }}
+}} }});
+const externalLink = {{
+  href: "https://example.com/tools/source-diversity-check/?b26_campaign=agent_workflow#external",
+  closest: () => externalLink,
+  setAttribute: (name, value) => {{ if (name === "href") externalLink.href = value; }}
+}};
+listeners.click({{ target: externalLink }});
+const destination = new URL(internalLink.href);
+console.log(JSON.stringify({{
+  destination: {{ href: destination.href, hash: destination.hash, ids: destination.searchParams.getAll("ids"), campaigns: destination.searchParams.getAll("b26_campaign"), qa: destination.searchParams.getAll("b26_qa") }},
+  external: externalLink.href,
+  calls
+}}));
+"""
+    result = subprocess.run(["node", "-e", harness], cwd=ROOT, check=True, capture_output=True, text=True)
+    output = json.loads(result.stdout)
+    assert output["destination"]["ids"] == ["abc,def"]
+    assert output["destination"]["campaigns"] == ["worked_example"]
+    assert output["destination"]["qa"] == ["1"]
+    assert output["destination"]["hash"] == "#record"
+    assert output["external"] == "https://example.com/tools/source-diversity-check/?b26_campaign=agent_workflow#external"
+    assert len(output["calls"]) == 1
+    body = json.loads(output["calls"][0]["options"]["body"])
+    assert body["context"] == {"cohort": "operator_qa", "campaign": "worked_example"}
+    assert "https://base2026.dev" not in output["calls"][0]["options"]["body"]
+    assert "source_id" not in output["calls"][0]["options"]["body"]
+
+
+def test_shared_listener_drops_duplicate_or_invalid_tags_without_claiming_experiments() -> None:
+    source = MEASUREMENT_SCRIPT.read_text(encoding="utf-8")
+    harness = f"""
+const vm = require("node:vm");
+const {{ URL, URLSearchParams }} = require("node:url");
+const source = {json.dumps(source)};
+const listeners = {{}};
+const calls = [];
+const location = {{
+  origin: "https://base2026.dev",
+  pathname: "/tools/evidence-search/",
+  search: "?b26_campaign=worked_example&b26_campaign=agent_workflow&b26_qa=1&b26_qa=0",
+  href: "https://base2026.dev/tools/evidence-search/?b26_campaign=worked_example&b26_campaign=agent_workflow&b26_qa=1&b26_qa=0"
+}};
+const context = {{
+  URL,
+  URLSearchParams,
+  window: {{
+    location,
+    addEventListener: (name, listener) => {{ listeners[name] = listener; }},
+    fetch: (url, options) => {{ calls.push({{ url, options }}); return Promise.resolve({{ ok: true }}); }}
+  }}
+}};
+context.globalThis = context;
+vm.runInNewContext(source, context, {{ filename: "base2026-activation-measurement.js" }});
+const internalLink = {{
+  href: "https://base2026.dev/tools/source-backed-brief/?ids=abc#brief",
+  closest: () => internalLink,
+  setAttribute: (name, value) => {{ if (name === "href") internalLink.href = new URL(value, location.href).href; }}
+}};
+listeners.click({{ target: internalLink }});
+listeners["base2026:analytics"]({{ detail: {{
+  name: "evidence_search_submitted",
+  properties: {{ input_source: "typed", query_length_bucket: "1_20", query_token_bucket: "1", render_mode: "enhanced" }}
+}} }});
+console.log(JSON.stringify({{ href: internalLink.href, calls }}));
+"""
+    result = subprocess.run(["node", "-e", harness], cwd=ROOT, check=True, capture_output=True, text=True)
+    output = json.loads(result.stdout)
+    assert output["href"] == "https://base2026.dev/tools/source-backed-brief/?ids=abc#brief"
+    assert len(output["calls"]) == 1
+    body = json.loads(output["calls"][0]["options"]["body"])
+    assert "context" not in body
+
+
+def test_shared_listener_clears_stale_opposing_tag_for_one_tag_sources() -> None:
+    source = MEASUREMENT_SCRIPT.read_text(encoding="utf-8")
+    harness = f"""
+const vm = require("node:vm");
+const {{ URL, URLSearchParams }} = require("node:url");
+const source = {json.dumps(source)};
+
+function runScenario(search, destinationHref) {{
+  const listeners = {{}};
+  const calls = [];
+  const location = {{
+    origin: "https://base2026.dev",
+    pathname: "/tools/evidence-search/",
+    search,
+    href: "https://base2026.dev/tools/evidence-search/" + search
+  }};
+  const context = {{
+    URL,
+    URLSearchParams,
+    window: {{
+      location,
+      addEventListener: (name, listener) => {{ listeners[name] = listener; }},
+      fetch: (url, options) => {{ calls.push({{ url, options }}); return Promise.resolve({{ ok: true }}); }}
+    }}
+  }};
+  context.globalThis = context;
+  vm.runInNewContext(source, context, {{ filename: "base2026-activation-measurement.js" }});
+  const link = {{
+    href: destinationHref,
+    closest: () => link,
+    setAttribute: (name, value) => {{ if (name === "href") link.href = new URL(value, location.href).href; }}
+  }};
+  listeners.click({{ target: link }});
+  const destination = new URL(link.href);
+  return {{
+    campaigns: destination.searchParams.getAll("b26_campaign"),
+    qa: destination.searchParams.getAll("b26_qa"),
+    ids: destination.searchParams.getAll("ids"),
+    hash: destination.hash,
+    calls
+  }};
+}}
+
+console.log(JSON.stringify({{
+  campaignOnly: runScenario(
+    "?b26_campaign=evidence_pulse",
+    "https://base2026.dev/tools/source-backed-brief/?ids=abc&b26_qa=1#brief"
+  ),
+  qaOnly: runScenario(
+    "?b26_qa=1",
+    "https://base2026.dev/tools/source-diversity-check/?ids=def&b26_campaign=agent_workflow#record"
+  )
+}}));
+"""
+    result = subprocess.run(["node", "-e", harness], cwd=ROOT, check=True, capture_output=True, text=True)
+    output = json.loads(result.stdout)
+    assert output["campaignOnly"]["campaigns"] == ["evidence_pulse"]
+    assert output["campaignOnly"]["qa"] == []
+    assert output["campaignOnly"]["ids"] == ["abc"]
+    assert output["campaignOnly"]["hash"] == "#brief"
+    assert output["campaignOnly"]["calls"] == []
+    assert output["qaOnly"]["campaigns"] == []
+    assert output["qaOnly"]["qa"] == ["1"]
+    assert output["qaOnly"]["ids"] == ["def"]
+    assert output["qaOnly"]["hash"] == "#record"
+    assert output["qaOnly"]["calls"] == []
