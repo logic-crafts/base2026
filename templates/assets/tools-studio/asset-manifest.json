@@ -1,0 +1,76 @@
+{
+  "schema": "base2026.tools-studio-media.v1",
+  "status": "reviewed_source_candidate_not_deployed",
+  "createdAt": "2026-09-05T19:01:18.820Z",
+  "artDirection": "Paper-blue evidence workbench: attributed source cards to a working brief.",
+  "assets": [
+    {
+      "file": "evidence-workbench.webp",
+      "purpose": "Hero and overview illustration",
+      "width": 1200,
+      "height": 800,
+      "bytes": 46250,
+      "sha256": "052a11dcc069209560dccb4cc8da893e837390339735eb9b75ed2c1275e8e5d2",
+      "candidateUrl": "https://base2026.dev/static/assets/tools-studio/evidence-workbench.webp",
+      "alt": "Paper source cards, a highlighted passage with an attached attribution slip, and an open brief on a blue drafting table.",
+      "source": "Created with the built-in imagegen tool on 2026-09-05. Model version was not selectable or verified. Selected master resized to WebP; no third-party images.",
+      "accessibility": "Conceptual illustration; not a live operational diagram.",
+      "metadata": {
+        "exif": false,
+        "iptc": false,
+        "xmp": false
+      }
+    },
+    {
+      "file": "evidence-search-interface.webp",
+      "purpose": "Actual product UI in the featured search card",
+      "width": 1203,
+      "height": 744,
+      "bytes": 42796,
+      "sha256": "6a42d51d9d40d0b6a0cc549e4d3c43d54bf4b20896267a1a9cf5eb2bc04ed588",
+      "candidateUrl": "https://base2026.dev/static/assets/tools-studio/evidence-search-interface.webp",
+      "alt": "Evidence Search before a query: a question field, Search the evidence button and example searches.",
+      "source": "Screenshot of the public https://base2026.dev/tools/evidence-search/ form, captured 2026-09-05T18:54:57.021Z in an isolated signed-out browser at 3x. No query submitted.",
+      "accessibility": "Actual interface before a query; no result, private data or user activity claim.",
+      "metadata": {
+        "exif": false,
+        "iptc": false,
+        "xmp": false
+      }
+    },
+    {
+      "file": "tools-studio-social.png",
+      "purpose": "Landscape product overview and Tools social preview",
+      "width": 1200,
+      "height": 630,
+      "bytes": 241571,
+      "sha256": "ad7fb89756702a4106e12761f717642103c21cb09d55134abb6e93b8872964f1",
+      "candidateUrl": "https://base2026.dev/static/assets/tools-studio/tools-studio-social.png",
+      "alt": "Base2026 free research tools: find the source, keep the context, build the brief. Conceptual paper evidence workbench.",
+      "source": "Browser-rendered Base2026-authored typography and layout using evidence-workbench.webp.",
+      "accessibility": "Conceptual illustration labelled in the image; not an editor screenshot.",
+      "metadata": {
+        "exif": false,
+        "iptc": false,
+        "xmp": false
+      }
+    },
+    {
+      "file": "evidence-search-card.png",
+      "purpose": "Square Evidence Search product card",
+      "width": 1080,
+      "height": 1080,
+      "bytes": 162507,
+      "sha256": "74b6b131697d65d5982abeba0c2564013db14cb7e42d032347711123bcece692",
+      "candidateUrl": "https://base2026.dev/static/assets/tools-studio/evidence-search-card.png",
+      "alt": "A question in. Sources you can inspect. Base2026 Evidence Search, with its actual question form before a query.",
+      "source": "Browser-rendered Base2026-authored typography and layout using evidence-search-interface.webp.",
+      "accessibility": "Actual pre-query product UI; not a WordPress editor demonstration.",
+      "metadata": {
+        "exif": false,
+        "iptc": false,
+        "xmp": false
+      }
+    }
+  ]
+}

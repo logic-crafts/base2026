@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <title>Page Source Check — find a concrete HTML fix | Base2026</title>
+  <meta name="description" content="Check a public page's supplied HTML for titles, headings, robots meta, canonicals, links and JSON-LD syntax. Get a concrete correction and compare fresh source. Free, no signup.">
+  <link rel="canonical" href="https://base2026.dev/tools/page-readiness/">
+  <link rel="stylesheet" href="/static/base2026-startup-shell.css?v=20260820-b26v1">
+  <link rel="stylesheet" href="/static/base2026-page-readiness.css?v=20260905-v1">
+</head>
+<body class="b26-form-page">
+  {{STARTUP_HEADER}}
+  <main class="b26-page-readiness" data-page-readiness>
+    <nav aria-label="Breadcrumb"><a href="/tools/">Tools Studio</a> / Page Source Check</nav>
+    <header class="b26-page-readiness__intro">
+      <p class="b26-eyebrow">Free · No account needed · Supplied HTML only</p>
+      <h1>Find one useful fix in your page source.</h1>
+      <p>Paste the HTML of a public page. See what is present, choose a correction, then check fresh source to see what changed.</p>
+      <p class="b26-page-readiness__scope">This version reads the source you supply. It does not visit the URL, run page scripts or check live HTTP, crawl eligibility or indexing.</p>
+    </header>
+    <div class="b26-page-readiness__workspace">
+      <form data-check-form method="post" action="/api/page-readiness/v1">
+        <h2>Start with your public HTML</h2>
+        <p>Open a public page in your browser, choose <strong>View Page Source</strong>, then copy the source or save it as an HTML file. Use the complete source, up to 256 KiB.</p>
+        <label for="page-source">Page HTML</label>
+        <textarea id="page-source" rows="12" required spellcheck="false" autocomplete="off" aria-describedby="source-privacy" placeholder="Paste the complete HTML source here…" data-html></textarea>
+        <label for="page-file">Or choose an HTML file</label>
+        <input id="page-file" type="file" accept=".html,.htm,text/html" data-file>
+        <label for="page-url">Public HTTPS page URL <span>(optional)</span></label>
+        <input id="page-url" type="url" maxlength="2048" autocomplete="off" placeholder="https://example.com/your-page" aria-describedby="url-help" data-url>
+        <p id="url-help">Used only to resolve relative links and canonicals. Without it, relative destinations may remain unknown. Omit query strings and fragments.</p>
+        <p id="source-privacy">Clicking Check sends this HTML and optional URL to Base2026 for temporary analysis. This tool does not save or log them. Supply only public page source; exclude private pages and secrets.</p>
+        <div class="b26-page-readiness__actions">
+          <button type="submit" data-submit disabled>Check supplied source</button>
+          <button type="button" class="secondary" data-clear>Clear source &amp; results</button>
+        </div>
+        <noscript><p>JavaScript is needed for this source check. The form is disabled so your source will not be submitted as a normal page navigation.</p></noscript>
+      </form>
+      <aside aria-labelledby="example-title">
+        <p class="b26-eyebrow">Try it in a minute</p>
+        <h2 id="example-title">A page with an empty title.</h2>
+        <p>This editable, fictional service page has an empty title. Run it, add a descriptive title, then compare the results. It is an example, not a live website check.</p>
+        <button type="button" class="secondary" data-example>Load example source</button>
+        <button type="button" class="secondary" data-fixed>Load corrected example</button>
+        <p>Checking the corrected example should change the title finding from “Review” to “Observed”. It proves a source change, not a ranking improvement.</p>
+        <details><summary>What can this check tell me?</summary><p>Title and H1 elements, robots meta declarations, canonical syntax, ordinary HTTP(S) anchors and JSON-LD parseability. It does not validate schema meaning, rendered visibility, linked pages or search results. Missing structured data is not automatically a problem.</p></details>
+      </aside>
+    </div>
+    <p class="b26-page-readiness__status" role="status" aria-live="polite" aria-atomic="true" data-status></p>
+    <section class="b26-page-readiness__results" data-results hidden aria-labelledby="result-title" tabindex="-1">
+      <p class="b26-eyebrow">Observed source · Clear next action</p>
+      <h2 id="result-title">Your source check</h2>
+      <p data-provenance></p>
+      <p data-comparison></p>
+      <div class="b26-page-readiness__next" data-next></div>
+      <div data-checks></div>
+      <p>To repeat: make the change on your page, copy its fresh source and check again. Comparison uses only the last successful check in this tab. It clears when you reload or choose Clear.</p>
+    </section>
+  </main>
+  {{STARTUP_FOOTER}}
+  <script src="/static/base2026-page-readiness.js?v=20260905-v1" defer></script>
+</body>
+</html>
