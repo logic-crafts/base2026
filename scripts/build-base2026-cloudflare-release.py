@@ -2389,6 +2389,20 @@ def build_release(
                 ),
             )
             write_generated_public_file(WORDPRESS_PLUGIN_DOWNLOAD, _wordpress_plugin_package(), kind="binary")
+            # Source-only Page Source Check; no shared Tools Studio or auth changes.
+            for extension in ("css", "js"):
+                write_generated_public_file(
+                    f"static/base2026-page-readiness.{extension}",
+                    (PROJECT_ROOT / "templates" / f"base2026-page-readiness.{extension}").read_bytes(),
+                )
+            write_generated_public_file(
+                "tools/page-readiness/index.html",
+                _render_startup_page(
+                    (PROJECT_ROOT / "templates" / "base2026-page-readiness.html").read_text(encoding="utf-8"),
+                    startup_header,
+                    startup_footer,
+                ),
+            )
             write_generated_public_file(
                 "static/base2026-evidence-search.css",
                 DEFAULT_EVIDENCE_SEARCH_STYLESHEET.read_bytes(),
