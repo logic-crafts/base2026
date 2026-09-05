@@ -581,7 +581,16 @@ def test_startup_homepage_overlay_preserves_search_as_workspace(tmp_path: Path) 
     assert "https://base2026.dev/tools/" in hub_sitemap
     assert (output / "static" / "base2026-tools-studio.css").read_bytes() == builder.DEFAULT_TOOLS_STUDIO_STYLESHEET.read_bytes()
     assert (output / "static" / "base2026-tools-studio.js").read_bytes() == builder.DEFAULT_TOOLS_STUDIO_SCRIPT.read_bytes()
-    assert receipt["artifact"]["file_count"] == 67
+    page_source = (output / "tools/page-readiness/index.html").read_text(encoding="utf-8")
+    assert "Page Source Check" in page_source
+    assert '<link rel="canonical" href="https://base2026.dev/tools/page-readiness/">' in page_source
+    assert page_source.count('class="b26-site-header"') == 1
+    assert builder.STARTUP_CORE_LINK in page_source
+    for extension in ("css", "js"):
+        assert (output / f"static/base2026-page-readiness.{extension}").read_bytes() == (
+            ROOT / f"templates/base2026-page-readiness.{extension}"
+        ).read_bytes()
+    assert receipt["artifact"]["file_count"] == 70
     blog = (output / "blog.html").read_text(encoding="utf-8")
     assert '<link rel="canonical" href="https://base2026.dev/blog">' in blog
     assert 'data-b26-blog-schema' in blog
