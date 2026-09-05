@@ -26,7 +26,8 @@ def test_php_header_and_editor_hooks_are_versioned_and_gpl() -> None:
     source = PHP.read_text(encoding="utf-8")
 
     assert "Plugin Name: Base2026 Evidence Sidebar" in source
-    assert "Version: 0.1.0" in source
+    assert "Version: 0.1.1" in source
+    assert "const VERSION = '0.1.1'" in source
     assert "Requires at least: 6.5" in source
     assert "Requires PHP: 7.4" in source
     assert "License: GPLv2 or later" in source
@@ -68,6 +69,7 @@ def test_rest_input_is_strictly_authenticated_and_bounded() -> None:
     assert "'query' must be text" not in source
     assert "preg_match( '//u', $query )" in source
     assert "wp_safe_remote_get(\n\t\t\t$upstream_url" in source
+    assert "'user-agent'          => 'Base2026-Evidence-Sidebar/0.1.1'" in source
     assert "$_GET" not in source
     assert "$_POST" not in source
     assert "$_REQUEST" not in source
@@ -125,7 +127,21 @@ def test_editor_is_native_gutenberg_click_to_search_and_click_to_insert() -> Non
     assert "core/quote" not in source
     assert "What the source says" not in source
     assert "before you search" in source.lower()
+    assert '"details"' in source
+    assert "Request details" in source
     assert "not whole-web verification" in source
+    assert "WordPress REST nonce" in source
+    assert "nonce stays local" in source
+    assert "neutral plugin user-agent" in source
+    assert "server IP" in source
+    assert "full post" in source
+    assert "post ID" in source
+    assert "WordPress credentials" in source
+    assert "persistent query storage or analytics" in source
+    assert "public service may cache responses" in source
+    assert "Cloudflare operational-metadata logging and retention" in source
+    assert "no zero-logging or retention-duration guarantee" in source
+    assert "Do not enter confidential information" in source
 
 
 def test_editor_has_no_background_collection_or_arbitrary_network_surface() -> None:
@@ -178,25 +194,46 @@ def test_readme_documents_external_service_boundaries_and_release_state() -> Non
         "https://base2026.dev/privacy",
         "https://base2026.dev/api",
         "https://base2026.dev/source-policy",
+        "https://base2026.dev/tools/wordpress-evidence-sidebar/",
+        "https://github.com/offflinerpsy/base2026/tree/main/plugins/wordpress/base2026-evidence-sidebar",
+        "https://github.com/offflinerpsy/base2026/issues",
+        "hello@base2026.dev",
+        "Research a short topic in Gutenberg, inspect attributed sources, and optionally insert an editable research note.",
+        "Tested up to: 7.1",
         "up to 160 characters",
         "does not send the full post",
-        "does not use cookies",
+        "does not set or inspect cookies for tracking or plugin storage",
+        "normal WordPress session credentials locally",
+        "no browser cookies are forwarded upstream",
         "not a whole-web search",
         "not proof that a recommendation works",
         "evidence_excerpt",
         "claim that the excerpt is verbatim",
         "When no excerpt is returned",
         "optional and is never inserted",
-        "0.1.0",
+        "0.1.1",
+        "= 0.1.1 =",
+        "= 0.1.0 =",
         "== Changelog ==",
         "manual-install beta",
-        "Only the short topic you submit is sent",
+        "WordPress REST nonce",
+        "the nonce is used locally and is not forwarded upstream",
+        "Base2026-Evidence-Sidebar/0.1.1",
+        "server's IP address",
+        "ordinary server-network metadata",
+        "persistent query storage or analytics",
+        "public service may cache responses",
+        "External operational logging follows Base2026/Cloudflare service policy",
+        "Cloudflare operational-metadata logging and retention for these requests have not yet been verified",
+        "no zero-logging or retention-duration guarantee",
+        "Do not enter confidential information",
     ):
         assert required in source
 
     assert "API key" in source
     assert "raw media or full private transcripts" in source
     assert "automatic rewrite" in source
+    assert "Only the short topic you submit is sent" not in source
 
 
 def test_license_is_gplv2_text() -> None:
@@ -226,7 +263,7 @@ function findAll(node, predicate, output) {{
   return output;
 }}
 
-async function scenario(payload, restUrl) {{
+async function scenario(payload, restUrl, optInBase2026) {{
   const calls = [];
   const inserted = [];
   const state = [];
@@ -293,6 +330,12 @@ async function scenario(payload, restUrl) {{
   searchButton.props.onClick();
   await new Promise(function (resolve) {{ setTimeout(resolve, 0); }});
   tree = render();
+  if (optInBase2026) {{
+    const checkbox = findAll(tree, function (node) {{ return node.type === CheckboxControl; }})[0];
+    if (!checkbox) throw new Error("optional Base2026 link control unavailable");
+    checkbox.props.onChange(true);
+    tree = render();
+  }}
   const insertButtons = findAll(tree, function (node) {{ return node.type === Button && (node.children[0] === "Insert research note" || node.children[0] === "No excerpt to insert"); }});
   return {{
     callCount: calls.length,
@@ -310,6 +353,8 @@ async function scenario(payload, restUrl) {{
   const titleOnlyInserted = titleOnly.clickInsert().length;
   const excerpt = await scenario({{results: [{{title: "A source claim label", excerpt: "A bounded source excerpt with a useful research detail.", excerpt_kind: "public_evidence_excerpt", provenance: "Base2026 Evidence Brief v2 · public source finding", creator: "@creator", original_url: "https://www.tiktok.com/@creator/video/1234567890123", base2026_url: "https://base2026.dev/sources/tiktok-video-1234567890123"}}]}}, "https://wp.test/wp-json/base2026/v1/search");
   const excerptInserted = excerpt.clickInsert();
+  const excerptOptIn = await scenario({{results: [{{title: "A source claim label", excerpt: "A bounded source excerpt with a useful research detail.", excerpt_kind: "public_evidence_excerpt", provenance: "Base2026 Evidence Brief v2 · public source finding", creator: "@creator", original_url: "https://www.tiktok.com/@creator/video/1234567890123", base2026_url: "https://base2026.dev/sources/tiktok-video-1234567890123"}}]}}, "https://wp.test/wp-json/base2026/v1/search", true);
+  const excerptOptInInserted = excerptOptIn.clickInsert();
   const malformed = await scenario({{results: [{{title: "A source claim label", excerpt: "A bounded source excerpt.", excerpt_kind: "public_evidence_excerpt", provenance: "Base2026 Evidence Brief v2 · public source finding", creator: "@creator", original_url: "javascript:alert(1)", base2026_url: "https://evil.example/sources/tiktok-video-1234567890123"}}]}}, "https://wp.test/wp-json/base2026/v1/search");
   const plainPermalink = await scenario({{results: [{{title: "A source claim label", excerpt: "", excerpt_kind: "source_claim_only", provenance: "Base2026 Evidence Brief v2 · public source finding", creator: "@creator", original_url: "https://www.tiktok.com/@creator/video/1234567890123", base2026_url: "https://base2026.dev/sources/tiktok-video-1234567890123"}}]}}, "https://wp.test/?rest_route=%2Fbase2026%2Fv1%2Fsearch");
   const proxyPath = await scenario({{results: [{{title: "A source claim label", excerpt: "A bounded source excerpt.", excerpt_kind: "public_evidence_excerpt", provenance: "Base2026 Evidence Brief v2 · public source finding", creator: "@creator", original_url: "https://www.tiktok.com/@creator/video/1234567890123", base2026_url: "https://base2026.dev/sources/tiktok-video-1234567890123"}}]}}, "https://wp.test/proxy/base2026/v1/search");
@@ -317,6 +362,7 @@ async function scenario(payload, restUrl) {{
   console.log(JSON.stringify({{
     titleOnly: {{calls: titleOnly.callCount, body: titleOnly.requestBody, label: titleOnly.insertLabel, disabled: titleOnly.insertDisabled, inserted: titleOnlyInserted}},
     excerpt: {{calls: excerpt.callCount, body: excerpt.requestBody, label: excerpt.insertLabel, disabled: excerpt.insertDisabled, blocks: excerptInserted}},
+    excerptOptIn: {{calls: excerptOptIn.callCount, body: excerptOptIn.requestBody, label: excerptOptIn.insertLabel, disabled: excerptOptIn.insertDisabled, blocks: excerptOptInInserted}},
     malformed: {{calls: malformed.callCount, label: malformed.insertLabel, disabled: malformed.insertDisabled, body: malformed.requestBody}},
     plainPermalink: {{calls: plainPermalink.callCount, url: plainPermalink.requestUrl, body: plainPermalink.requestBody}},
     proxyPath: {{calls: proxyPath.callCount, url: proxyPath.requestUrl, body: proxyPath.requestBody}},
@@ -351,9 +397,13 @@ def test_editor_behavior_rejects_title_only_and_malformed_links_and_inserts_note
     assert len(behavior["excerpt"]["blocks"]) == 1
     inserted_blocks = behavior["excerpt"]["blocks"][0]
     assert [block["name"] for block in inserted_blocks] == ["core/paragraph", "core/paragraph"]
-    assert "Base2026 research note" in inserted_blocks[0]["attributes"]["content"]
+    assert "Research note — bounded source excerpt (not a verbatim quotation or independent verification)" in inserted_blocks[0]["attributes"]["content"]
+    assert "Base2026 research note" not in inserted_blocks[0]["attributes"]["content"]
     assert "not a verbatim quotation" in inserted_blocks[0]["attributes"]["content"]
     assert "Original source" in inserted_blocks[1]["attributes"]["content"]
+    default_inserted_content = "\n".join(block["attributes"]["content"] for block in inserted_blocks)
+    assert "Base2026" not in default_inserted_content
+    assert "base2026.dev" not in default_inserted_content
     assert "core/quote" not in {block["name"] for block in inserted_blocks}
     assert behavior["malformed"] == {
         "calls": 1,
@@ -361,6 +411,18 @@ def test_editor_behavior_rejects_title_only_and_malformed_links_and_inserts_note
         "disabled": True,
         "body": {"query": "internal linking"},
     }
+    assert behavior["excerptOptIn"]["calls"] == 1
+    assert behavior["excerptOptIn"]["body"] == {"query": "internal linking"}
+    assert behavior["excerptOptIn"]["label"] == "Insert research note"
+    assert behavior["excerptOptIn"]["disabled"] is False
+    opt_in_blocks = behavior["excerptOptIn"]["blocks"][0]
+    assert len(opt_in_blocks) == 2
+    assert opt_in_blocks[0]["attributes"]["content"] == inserted_blocks[0]["attributes"]["content"]
+    opt_in_attribution = opt_in_blocks[1]["attributes"]["content"]
+    assert opt_in_attribution.count("<a href=") == 2
+    assert opt_in_attribution.count("Original source") == 1
+    assert opt_in_attribution.count("Base2026 source record") == 1
+    assert opt_in_attribution.count("https://base2026.dev/sources/tiktok-video-1234567890123") == 1
 
 
 def test_editor_behavior_accepts_pretty_and_plain_permalink_rest_routes_only() -> None:

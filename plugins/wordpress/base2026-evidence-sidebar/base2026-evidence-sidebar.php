@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Base2026 Evidence Sidebar
  * Description: Add a bounded, source-attributed public expert-video lookup to the block editor.
- * Version: 0.1.0
+ * Version: 0.1.1
  * Requires at least: 6.5
  * Requires PHP: 7.4
  * Author: Base2026 contributors
@@ -21,7 +21,7 @@ defined( 'ABSPATH' ) || exit;
  * clicks Search and goes to the fixed public Base2026 endpoint below.
  */
 final class Base2026_Evidence_Sidebar {
-	const VERSION = '0.1.0';
+	const VERSION = '0.1.1';
 	const REST_NAMESPACE = 'base2026/v1';
 	const REST_ROUTE = '/search';
 	const EVIDENCE_BRIEF_ENDPOINT = 'https://base2026.dev/api/evidence-brief/v2';
@@ -198,6 +198,7 @@ final class Base2026_Evidence_Sidebar {
 		$response = wp_safe_remote_get(
 			$upstream_url,
 			array(
+				'user-agent'          => 'Base2026-Evidence-Sidebar/0.1.1',
 				'timeout'             => self::REQUEST_TIMEOUT_SECONDS,
 				'redirection'        => 0,
 				'blocking'            => true,

@@ -190,7 +190,7 @@
 
 	function makeResearchNoteBlocks(card, includeBase2026) {
 		var note = blocks.createBlock("core/paragraph", {
-			content: "<strong>Base2026 research note — bounded source excerpt (not a verbatim quotation or independent verification)</strong><br>" + escapeHtml(card.excerpt)
+			content: "<strong>Research note — bounded source excerpt (not a verbatim quotation or independent verification)</strong><br>" + escapeHtml(card.excerpt)
 		});
 		var attribution = "Source: " + escapeHtml(card.creator || "Public source") + " — <a href=\"" + escapeHtml(card.originalUrl) + "\" rel=\"nofollow noopener noreferrer\">Original source</a>";
 		if (includeBase2026 && card.base2026Url) {
@@ -221,12 +221,22 @@
 			createElement(
 				"p",
 				null,
-				"Before you search: this sends only the short topic you submit to Base2026's public search service. It does not send the rest of this post, a post ID, or account data to Base2026. Base2026 is free and read-only; its excerpts are attributed source claims, not whole-web verification. ",
+				"Before you search: after your explicit Search action, the WordPress server sends the short topic to Base2026's public Evidence Brief v2 endpoint with a neutral plugin user-agent. Base2026 and Cloudflare may observe ordinary server-network metadata, including the server IP. The plugin does not automatically read or send the full post. Cloudflare operational-metadata logging and retention for these requests have not yet been verified, so no zero-logging or retention-duration guarantee is made. Do not enter confidential information. Base2026 is free and read-only; its excerpts are attributed source claims, not whole-web verification. ",
 				createElement(Link, {href: docsUrl(config.privacyUrl, DEFAULT_PRIVACY_URL)}, "Privacy"),
 				" · ",
 				createElement(Link, {href: docsUrl(config.serviceLimitsUrl, DEFAULT_LIMITS_URL)}, "API boundary & limits"),
 				" · ",
 				createElement(Link, {href: docsUrl(config.sourcePolicyUrl, DEFAULT_SOURCE_POLICY_URL)}, "Source policy")
+			),
+			createElement(
+				"details",
+				null,
+				createElement("summary", null, "Request details"),
+				createElement(
+					"p",
+					null,
+					"Your browser sends the short topic and the WordPress REST nonce to this local WordPress installation; the nonce stays local. The authenticated same-origin request may use the site's normal WordPress session credentials locally, but browser cookies are not forwarded upstream. The server sends the short query and plugin user-agent; the full post, post ID, WordPress credentials, REST nonce, and browser cookies are not sent upstream. The plugin adds no persistent query storage or analytics. The public service may cache responses. External operational logging follows Base2026/Cloudflare service policy. Cloudflare operational-metadata logging and retention for these requests have not yet been verified; no zero-logging or retention-duration guarantee is made."
+				)
 			)
 		);
 	}
