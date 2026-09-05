@@ -14,6 +14,8 @@ Date: 2026-06-06
   exact staged diff passes redaction and secret review
 - `scripts/`
 - `scripts/tiktok-source-review-audit.py`
+- the four reviewed UTF-8 source files under `plugins/wordpress/base2026-evidence-sidebar/`
+  (`base2026-evidence-sidebar.php`, `assets/editor.js`, `readme.txt`, `LICENSE`)
 - `web/static/` source shell files, shared assets, public info pages, API metadata, and runtime JS/CSS
 - `10_agent-instructions/`
 - `.agents/skills/`
@@ -53,6 +55,11 @@ Date: 2026-06-06
   audit explicitly admits each file
 - live operational receipts that expose private Worker hosts, account/database
   identifiers, Container image identifiers, signed requests, or raw D1/R2 rows
+
+The installable WordPress beta ZIP is a generated download, not a Git source
+file. Its release builder uses only the four reviewed plugin files above;
+it never packages the repository, operational state, tests or a release tree.
+The single exact download path is regenerated, not inherited from old assets.
 
 Non-secret Worker roles, binding names, table/state contracts, schedules,
 fail-closed gates, and redacted deployment snapshots may be documented in the

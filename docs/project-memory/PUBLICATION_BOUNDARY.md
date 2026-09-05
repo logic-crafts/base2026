@@ -23,6 +23,8 @@ Base2026 has two layers:
 - `docs/`
 - `docs/public-pages/` public Markdown used to generate site info pages
 - `scripts/`
+- the four explicitly reviewed source files of `plugins/wordpress/base2026-evidence-sidebar/`
+  (PHP entrypoint, `assets/editor.js`, `readme.txt`, `LICENSE`), without generated archives
 - `contracts/`
 - public-safe test fixtures under `tests/fixtures/public-export-*`
 - the reviewed loopback-only synthetic member UI fixture at `tests/fixtures/member-ui-preview.mjs` and its static contract test; neither contains Google credentials, production data, or a public listener
@@ -58,6 +60,9 @@ Base2026 has two layers:
 
 ## Deployable but not committed
 
+- the deterministic `downloads/base2026-evidence-sidebar-v0.1.0.zip`, generated
+  from the four reviewed plugin source files only; no other archive is admitted
+  by this exception, and old archive bytes are never inherited by a rebuild
 - `public-data/tiktok`
 - release folder under `output/releases`
 - `web/static/documents.jsonl` inside release package

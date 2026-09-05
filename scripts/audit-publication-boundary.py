@@ -80,6 +80,14 @@ PUBLIC_SAFE_PREFIXES = {
 }
 
 PUBLIC_SAFE_EXACT = {
+    "plugins/wordpress/base2026-evidence-sidebar/base2026-evidence-sidebar.php",
+    "plugins/wordpress/base2026-evidence-sidebar/assets/editor.js",
+    "plugins/wordpress/base2026-evidence-sidebar/readme.txt",
+    "plugins/wordpress/base2026-evidence-sidebar/LICENSE",
+    "tests/base2026_tools_studio_runtime.test.js",
+    "tests/test_base2026_tools_studio.py",
+    "tests/test_base2026_wordpress_landing.py",
+    "tests/test_base2026_wordpress_plugin.py",
     ".env.example",
     ".gitignore",
     ".agents/product-marketing.md",

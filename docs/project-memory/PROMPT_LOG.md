@@ -1,5 +1,30 @@
 # Prompt Log
 
+## 2026-09-05 — Free product studio and existing Hello Google-login recovery
+
+Owner asked for real useful free tools/platform integrations, product discovery,
+an honest factory illustration and completed Google registration; clarified
+that Hello and Offliner are separate Chrome profiles and Hello is the working
+identity. Root retained the current design/runtime and reused three bounded
+Luna Max executors for primary-source product comparison, implementation and
+independent artifact review. Root owns UI direction, browser identity,
+integration, credential handling and release.
+
+Released a tools hub, WordPress beta landing and exact four-file installer.
+Review removed a title-as-quotation defect and fixed plain-permalink handling.
+Native WordPress handler and bounded release/auth tests pass. Hello project
+access and private credentials were recovered; target member data is preserved.
+The owner dismissed the extension popup and authorized ordinary popup dismissal
+through supported Computer Use. Test-user Save was read back, WordPress editor
+search/insertion/saved-draft reload passed, and the exact V3 Worker release and
+live download were verified. Root corrected the release-flag assertion and
+reran all 645 Worker tests successfully. Google accepted Hello/basic consent,
+but Chrome then blocked the callback; no live signed-in session is claimed.
+Owner was asked for a normal-browser check; tools/source work continues.
+The owner reports Google Cloud credits; balance/eligibility are unverified and
+this release uses none. Details and continuation:
+[HANDOFF_2026-09-05_PRODUCT_STUDIO.md](HANDOFF_2026-09-05_PRODUCT_STUDIO.md).
+
 ## 2026-09-05 — Source published, distribution sent, AgencyOS reconciled
 
 PR53 merged the 28-file reviewed source package at

@@ -1,8 +1,16 @@
 # Phases
 
-Phase 28 and CURRENT_STATUS are current. Lower phases preserve their dated
+Phase29 and ACTIVE_PHASE are current. Lower phases preserve their dated
 release checkpoints; old counters and candidate notes are historical, not
 outstanding duplicate instructions.
+
+## Phase29 — Applied research and free product adoption
+
+The free SEO Experiment Planner source is published. A Tools Studio hub and
+free WordPress Evidence Sidebar have tested source/native-handler candidates;
+the current Google-login and website-release gates remain incomplete. Use
+[the latest handoff](HANDOFF_2026-09-05_PRODUCT_STUDIO.md) and AgencyOS tasks
+102/112/113/114. Do not confuse supply, implementation, delivery and real use.
 
 ## Phase 28 — Three-tool acquisition loop and activation measurement
 

@@ -6,7 +6,7 @@ articles and source-dependent task guides. Public readability is not a grant
 of third-party redistribution rights.
 
 Continue from [ACTIVE_PHASE.md](ACTIVE_PHASE.md), [NEXT_ACTION.md](NEXT_ACTION.md)
-and [the self-growth handoff](HANDOFF_2026-09-05_SELF_GROWTH_RETHINK.md), not old
+and [the Product Studio handoff](HANDOFF_2026-09-05_PRODUCT_STUDIO.md), not old
 chat or counters. The earlier closure/release notes are dated receipts.
 
 The 2026-09-05 13:35 UTC public snapshot is 2,275 documents / 1,649 sources /
@@ -14,14 +14,15 @@ The 2026-09-05 13:35 UTC public snapshot is 2,275 documents / 1,649 sources /
 maintained-guide counts are separate. Older counters are release history, not
 the current operating snapshot.
 
-Public Worker `3ecddaf3-f594-4b4a-91d4-fd409bd62e4a` serves the free
+Public Worker `ab2589fa-36a4-4bdb-985f-e66a383c8d6d` serves the free
 research workflow: Evidence Search, Source Diversity Check and Source-backed
-Brief. The three exact routes use bounded public MCP reads. Privacy-safe
+Brief, plus the Tools Studio hub and installable WordPress Evidence Sidebar
+beta. The three hosted tools use bounded public MCP reads. Privacy-safe
 activation events write to `base2026_activation_v1`; first SQL counts are QA
 smoke, not traffic. Immediate rollback is
-`327a21a5-ca54-457c-8099-aa2447a7fe1a`. Exact artifact, D1 bindings and live
+`3ecddaf3-f594-4b4a-91d4-fd409bd62e4a`. Exact current artifact and live
 checks are in
-`HANDOFF_2026-09-04_SOURCE_BRIEF_ACTIVATION_RELEASE.md`.
+`HANDOFF_2026-09-05_PRODUCT_STUDIO.md`.
 
 The September 5 viability review does not establish product-market fit or
 automatic acquisition. Its selected test is a source-attributed, usable SEO
@@ -40,8 +41,9 @@ not a network publisher, new scheduler or cloud office.
 
 PR34's public MCP remains live through the current Worker. The migrated account
 retains all four D1 bindings and the unique rate-limit binding, while member
-auth is deliberately fail-closed with `MEMBER_AUTH_ENABLED=false` until its
-separate Google contour is re-enabled. Git source, static artifact, Analytics
+auth has its exact secrets and `MEMBER_AUTH_ENABLED=true` for the real Google
+check. Google accepted Hello/basic consent, but Chrome blocked the callback;
+no signed-in session is proved and OAuth audience remains Testing. Git source, static artifact, Analytics
 Engine, public D1 and private state remain separate restore inputs.
 
 PR36 merged the independently reviewed Claim Receipt Ledger source at

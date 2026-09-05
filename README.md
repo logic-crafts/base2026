@@ -40,6 +40,19 @@ Base2026 creates a public evidence layer that keeps those connections visible.
 
 ## Developer access
 
+### Free WordPress Evidence Sidebar beta
+
+Research one SEO/GEO question from Gutenberg, inspect an original source and
+optionally insert an editable attributed research note. There is no Base2026
+account, API key or paid AI setup. Only the short topic is sent after Search;
+the plugin does not automatically upload a draft or publish a post.
+
+The [plugin source and installation instructions](plugins/wordpress/base2026-evidence-sidebar/readme.txt)
+are available for review. The [installable beta and guide](https://base2026.dev/tools/wordpress-evidence-sidebar/)
+are live. WordPress 6.5+, PHP 7.4+, GPL-2.0-or-later.
+The website download, directory acceptance and real user adoption are separate
+release outcomes; see the [Product Studio handoff](docs/project-memory/HANDOFF_2026-09-05_PRODUCT_STUDIO.md).
+
 ### Free SEO Experiment Planner skill
 
 Use Base2026 in an existing agent workflow: investigate a content page's decline

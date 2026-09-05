@@ -1,5 +1,19 @@
 # Decisions
 
+## 2026-09-05 — Bring the research workflow into an editor people already use
+
+Ship one small, free WordPress companion to the existing public evidence API,
+not a second corpus, paid authoring service or automatic publishing system.
+Explicit short-topic search and explicit editable-note insertion preserve
+source attribution and user control. Titles are never treated as quotations;
+the optional project backlink is opt-in. Publish only a deterministic exact
+four-file plugin ZIP, not arbitrary release archives.
+
+Use an honest illustrative factory with separate live public totals. Preserve
+the established light-blue/white visual system and existing search. Keep the
+two authorized Chrome identities separate and isolate CLI account credentials;
+recovery of an existing OAuth client does not require replacing it.
+
 ## 2026-09-05 — Make applied research the product; measure repeat value
 
 Retain the Cloudflare supply/search architecture and current design. Test a
