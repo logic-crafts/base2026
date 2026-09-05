@@ -8,9 +8,9 @@ and [the current handoff](HANDOFF_2026-09-05_SELF_GROWTH_RETHINK.md).
 1. Continue the existing AgencyOS growth experiment: a content-refresh worksheet
    for SEO practitioners, with explicit synthetic example and exact query/date
    controls. Inspect the actual task status and linked artifact before delivery.
-2. The owner subsequently authorized practical free-skill/MCP distribution.
-   Publish only the reviewed source package; its installation guide is
-   `../BASE2026_FREE_SKILLS.md`. A Worker rollout remains a separate operation:
+2. PR53 already published the free-skill source package. Its installation guide
+   is `../BASE2026_FREE_SKILLS.md`; public-main installation passed in Codex and
+   Claude Code. Do not republish this release. A Worker rollout remains separate:
    verify the migrated account/bindings and retained live artifact before any
    deploy/readback. Do not restore the dirty historical tree or overwrite the
    legacy CLI/browser identity. A Git release does not deploy website telemetry.
@@ -22,6 +22,14 @@ and [the current handoff](HANDOFF_2026-09-05_SELF_GROWTH_RETHINK.md).
    Ask for a real task and subsequent use, not a testimonial or fabricated review.
 5. Reuse one supervisor and the existing read-only evaluator/reconciler. No new
    hierarchy, blind six-hour waiting, duplicate watchdog or generic article quota.
+6. Build one novice-friendly single-page readiness check from the existing
+   product/task contract, with bounded safe fetches, explicit observations and
+   corrections. It is not live yet. Do not multiply domains or claim AI scores.
+
+Distribution receipts: AgentsIndex accepted one free submission, pending review;
+[Awesome MCP Servers PR13704](https://github.com/punkpeye/awesome-mcp-servers/pull/13704)
+is open. Neither proves an accepted backlink or users. Do not repeat either
+submission; continue a different useful action while moderation is pending.
 
 The sections below are historical release receipts, not competing current plans.
 

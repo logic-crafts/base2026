@@ -2,6 +2,20 @@
 
 ## Status and exact boundaries
 
+Source delivery is complete: [PR53](https://github.com/offflinerpsy/base2026/pull/53)
+merged at 15:18:42 UTC, merge `ab0597dc9fb0f321c8b290365fc965d3e6112418`,
+reviewed head `02b9f8881f529b25b3ce2cf4097a3c7cf31dd2d3`. Installation from
+public main into isolated Codex/Claude Code projects passed with telemetry off;
+all six files match the reviewed source. No Worker rollout occurred.
+
+One new free AgentsIndex submission is accepted/pending. One community listing
+request is [PR13704](https://github.com/punkpeye/awesome-mcp-servers/pull/13704),
+open with exactly one README line. Do not repeat them or infer backlinks/users.
+The existing AgencyOS received the applied-use pilot and one scoped novice
+page-check task. Its read-only evaluator correctly recommends distribution for
+the ready pilot while keeping absent observations unknown. The same hourly
+supervisor was updated; no new scheduler or database was created.
+
 Strategy and first useful example complete; code and public-documentation
 candidate prepared in branch `codex/base2026-self-growth-20260905`, based on
 `779970e9d8ce2a2a522204f7500f1661138b1cfb`. The pre-existing dirty checkout was

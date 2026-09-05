@@ -5,8 +5,11 @@ Current checkpoint: 2026-09-05. The working site and native intake are retained.
 The three tools are a research workflow, not a demonstrated acquisition loop.
 The product hypothesis is a usable, source-attributed SEO experiment for a
 practitioner with a real task. The first content-refresh worksheet and the
-coarse campaign/QA measurement extension are source candidates, not deployed
-features or measured customer outcomes.
+coarse campaign/QA measurement extension are published source, not deployed
+website features or measured customer outcomes. PR53 merged the free SEO
+Experiment Planner at `ab0597dc9fb0f321c8b290365fc965d3e6112418`; an isolated
+installation from public main into Codex and Claude Code passed. The next step
+is a real applied-use pilot and one scoped novice page-check implementation.
 
 Start with [the operating model](../BASE2026_SELF_GROWTH_OPERATING_MODEL.md)
 and [the phase handoff](HANDOFF_2026-09-05_SELF_GROWTH_RETHINK.md).

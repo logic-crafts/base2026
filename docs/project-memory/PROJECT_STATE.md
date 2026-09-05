@@ -27,6 +27,12 @@ The September 5 viability review does not establish product-market fit or
 automatic acquisition. Its selected test is a source-attributed, usable SEO
 experiment for practitioners. The new worksheet, measurement context and
 operating contract are reviewed source work, not a new production release.
+PR53 merged that source and the free SEO Experiment Planner at
+`ab0597dc9fb0f321c8b290365fc965d3e6112418`. Remote installation from public main
+passed for Codex and Claude Code with telemetry disabled. These installs are QA,
+not organic adoption. One free AgentsIndex submission and one community MCP PR
+were sent; acceptance/use remain separate. Existing AgencyOS and the single
+supervisor now carry the applied-use pilot and scoped page-check next task.
 Fresh authenticated two-day Analytics Engine readback returned only the same
 11 known QA events; it cannot establish zero visitors or external retention.
 The private evaluator reads AgencyOS and suggests one bounded action; it is
