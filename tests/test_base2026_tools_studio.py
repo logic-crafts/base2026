@@ -119,14 +119,77 @@ class ToolsStudioContractTests(unittest.TestCase):
             self.assertEqual(attrs.get("type"), "button")
             self.assertEqual(attrs.get("aria-controls"), "station-panel")
             self.assertIn(attrs.get("aria-selected"), {"true", "false"})
-            self.assertNotIn("tabindex", attrs, "JS should add roving tab stops without harming no-JS access")
+            self.assertIn("disabled", attrs, "static markup must keep station controls inert until JS is ready")
+            self.assertNotIn("tabindex", attrs, "JS should add roving tab stops after enabling the controls")
         toggle = next(attrs for tag, attrs in self.parser.tags if attrs.get("data-factory-toggle") is not None)
         self.assertEqual(toggle.get("type"), "button")
         self.assertEqual(toggle.get("aria-pressed"), "false")
+        self.assertIn("hidden", toggle, "the pause affordance should appear only after JS initializes it")
         self.assertIn("Pause illustration", self.html)
         self.assertIn("Pipeline illustration · public counters below update live", self.html)
         self.assertIn('data-factory-playing="true"', self.html)
         self.assertIn('data-factory-visible="false"', self.html)
+        publish_button = re.search(
+            r'<button[^>]+data-station-button="publish"[^>]*>.*?</button>',
+            self.html,
+            re.DOTALL,
+        )
+        self.assertIsNotNone(publish_button)
+        self.assertIn('class="b26-tools-station__name">Use</span>', publish_button.group(0))
+
+    def test_reviewed_media_uses_real_dimensions_and_bounded_loading(self) -> None:
+        images = {
+            attrs.get("src"): attrs
+            for tag, attrs in self.parser.tags
+            if tag == "img" and attrs.get("src")
+        }
+        self.assertEqual(
+            set(images),
+            {
+                "/static/assets/tools-studio/evidence-workbench.webp",
+                "/static/assets/tools-studio/evidence-search-interface.webp",
+            },
+        )
+        for src in images:
+            asset_path = ROOT / "templates" / src.removeprefix("/static/")
+            self.assertTrue(asset_path.is_file(), f"reviewed asset is missing: {asset_path}")
+            self.assertGreater(asset_path.stat().st_size, 0, f"reviewed asset is empty: {asset_path}")
+        hero = images["/static/assets/tools-studio/evidence-workbench.webp"]
+        self.assertEqual((hero.get("width"), hero.get("height")), ("1200", "800"))
+        self.assertTrue(hero.get("alt"), "hero image needs a meaningful alt")
+        self.assertEqual(hero.get("fetchpriority"), "high")
+        self.assertNotIn("loading", hero)
+
+        search = images["/static/assets/tools-studio/evidence-search-interface.webp"]
+        self.assertEqual((search.get("width"), search.get("height")), ("1203", "744"))
+        self.assertTrue(search.get("alt"), "search screenshot needs a meaningful alt")
+        self.assertEqual(search.get("loading"), "lazy")
+        self.assertNotIn("fetchpriority", search)
+        self.assertEqual(
+            sum(attrs.get("fetchpriority") == "high" for attrs in images.values()),
+            1,
+            "only the hero asset may be high priority",
+        )
+
+    def test_cards_are_progressive_reveals_with_focus_fallback(self) -> None:
+        cards = [
+            attrs
+            for tag, attrs in self.parser.tags
+            if tag == "article" and "b26-tools-card" in attrs.get("class", "").split()
+        ]
+        self.assertEqual(len(cards), 5)
+        self.assertTrue(all("data-reveal" in attrs for attrs in cards))
+        self.assertIn(".b26-tools-studio.is-motion-ready [data-reveal]", self.css)
+        self.assertRegex(
+            self.css,
+            r"\.b26-tools-studio\.is-motion-ready\s+\[data-reveal\]:focus-within\s*\{[^}]*opacity:\s*1;[^}]*transform:\s*none;",
+        )
+
+    def test_scripts_are_local_and_no_animation_library_is_loaded(self) -> None:
+        script_srcs = [attrs.get("src") for tag, attrs in self.parser.tags if tag == "script" and attrs.get("src")]
+        self.assertEqual(len(script_srcs), 1)
+        self.assertTrue(script_srcs[0].startswith("/static/"))
+        self.assertNotIn("gsap", (self.html + self.css + self.js).lower())
 
     def test_stats_markup_uses_only_current_public_contract_fields(self) -> None:
         keys = re.findall(r'data-stat-value="([^"]+)"', self.html)
@@ -176,6 +239,11 @@ class ToolsStudioContractTests(unittest.TestCase):
         self.assertIn('"(prefers-reduced-motion: reduce)"', self.js)
         self.assertIn("data-factory-visible", self.js)
         self.assertIn("data-factory-playing", self.js)
+        self.assertIn('button.removeAttribute("disabled")', self.js)
+        self.assertIn('factoryToggle.removeAttribute("hidden")', self.js)
+        self.assertIn('factoryToggle.setAttribute("disabled", "")', self.js)
+        self.assertIn('"Replay illustration"', self.js)
+        self.assertIn('"Motion reduced"', self.js)
         self.assertIn('event.key === "ArrowRight"', self.js)
         self.assertIn('event.key === "Home"', self.js)
         self.assertIn('event.key === "End"', self.js)
@@ -194,6 +262,8 @@ class ToolsStudioContractTests(unittest.TestCase):
     def test_required_contract_literals_are_not_silently_renamed(self) -> None:
         for key in ("documents_indexed", "distinct_sources", "public_evidence_routes", "projected_cards"):
             self.assertIn(f'"{key}"', self.js)
+        self.assertIn('index: "04 / USE"', self.js)
+        self.assertIn('title: "Build a brief. Choose the next move."', self.js)
         self.assertIn("payload.generated_at", self.js)
         self.assertIn('"Public counters stale', self.js)
         self.assertIn('"Public counters unavailable · no zero inferred."', self.js)
