@@ -130,7 +130,14 @@ DEFAULT_TOOLS_STUDIO_MEDIA_ROOT = (
 DEFAULT_TOOLS_STUDIO_MEDIA_MANIFEST = DEFAULT_TOOLS_STUDIO_MEDIA_ROOT / "asset-manifest.json"
 DEFAULT_WORDPRESS_PLUGIN_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-wordpress-evidence-sidebar.html"
 WORDPRESS_PLUGIN_ROOT = PROJECT_ROOT / "plugins" / "wordpress" / "base2026-evidence-sidebar"
-WORDPRESS_PLUGIN_DOWNLOAD = "downloads/base2026-evidence-sidebar-v0.1.0.zip"
+WORDPRESS_PLUGIN_DOWNLOAD = "downloads/base2026-evidence-sidebar-v0.1.1.zip"
+WORDPRESS_PLUGIN_LEGACY_DOWNLOAD = "downloads/base2026-evidence-sidebar-v0.1.0.zip"
+WORDPRESS_PLUGIN_LEGACY_DOWNLOAD_SHA256 = (
+    "f588eddae0df5b91da4d70576b6cdec01d3a637b003ea076b9357cace6cb7e2a"
+)
+WORDPRESS_PLUGIN_DOWNLOAD_PATHS = frozenset(
+    {WORDPRESS_PLUGIN_DOWNLOAD, WORDPRESS_PLUGIN_LEGACY_DOWNLOAD}
+)
 WORDPRESS_PLUGIN_FILES = (
     "LICENSE",
     "assets/editor.js",
@@ -268,8 +275,8 @@ EXCLUDED_SOURCE_EXACT = {
     # source records when a reviewed candidate is rebuilt.
     ASSETSIGNORE_FILENAME,
     RECEIPT_FILENAME,
-    # This one public product archive is always rebuilt from the exact reviewed
-    # source allowlist below. Never inherit any archive bytes from an old release.
+    # The current product archive is always rebuilt from the exact reviewed
+    # source allowlist below. Never inherit its bytes from an old release.
     WORDPRESS_PLUGIN_DOWNLOAD,
     # The manifest is review provenance, not a served product asset.  A
     # retained copy is checked against the reviewed repository manifest before
@@ -484,7 +491,10 @@ def _validate_public_relative_path(relative_path: Path) -> None:
         raise ReleaseBuildError(
             f"private file is not a public web artifact: {relative_path.as_posix()}"
         )
-    if relative_path.suffix.casefold() in PRIVATE_SUFFIXES and relative_path.as_posix() != WORDPRESS_PLUGIN_DOWNLOAD:
+    if (
+        relative_path.suffix.casefold() in PRIVATE_SUFFIXES
+        and relative_path.as_posix() not in WORDPRESS_PLUGIN_DOWNLOAD_PATHS
+    ):
         raise ReleaseBuildError(
             f"private/database/archive file is not a public web artifact: {relative_path.as_posix()}"
         )
@@ -498,6 +508,36 @@ def _is_excluded_source_path(relative_path: Path) -> bool:
 
 def _sha256(payload: bytes) -> str:
     return hashlib.sha256(payload).hexdigest()
+
+
+def _validate_legacy_wordpress_plugin_download(source: Path, *, required: bool) -> bool:
+    """Validate the retained 0.1.0 archive without rebuilding it from 0.1.1 sources."""
+
+    legacy_path = source / WORDPRESS_PLUGIN_LEGACY_DOWNLOAD
+    present = legacy_path.is_symlink() or legacy_path.exists()
+    if not present:
+        if required:
+            raise ReleaseBuildError(
+                f"standalone release requires the retained legacy WordPress plugin archive: {legacy_path}"
+            )
+        return False
+    if legacy_path.is_symlink() or not legacy_path.is_file():
+        raise ReleaseBuildError(
+            f"retained legacy WordPress plugin archive is not a regular file: {legacy_path}"
+        )
+    try:
+        payload = legacy_path.read_bytes()
+    except OSError as exc:
+        raise ReleaseBuildError(
+            f"retained legacy WordPress plugin archive could not be read: {legacy_path}"
+        ) from exc
+    actual_sha256 = _sha256(payload)
+    if actual_sha256 != WORDPRESS_PLUGIN_LEGACY_DOWNLOAD_SHA256:
+        raise ReleaseBuildError(
+            "retained legacy WordPress plugin archive hash does not match the pinned 0.1.0 release: "
+            f"expected={WORDPRESS_PLUGIN_LEGACY_DOWNLOAD_SHA256}, actual={actual_sha256}"
+        )
+    return True
 
 
 def _load_reviewed_tools_studio_media() -> tuple[bytes, tuple[dict[str, object], ...]]:
@@ -2298,6 +2338,9 @@ def build_release(
     scanned_files = _relative_files(source)
     for relative_path in scanned_files:
         _validate_public_relative_path(relative_path)
+    legacy_wordpress_plugin_download_present = _validate_legacy_wordpress_plugin_download(
+        source, required=standalone_startup
+    )
     startup_excluded_pages: set[Path] = set()
     if standalone_startup:
         for relative_path in scanned_files:
@@ -2985,6 +3028,28 @@ def build_release(
                     "staged Tools Studio media does not match the reviewed manifest/provenance"
                 )
 
+        legacy_wordpress_plugin_download_verified = False
+        legacy_wordpress_plugin_download_sha256: str | None = None
+        if legacy_wordpress_plugin_download_present:
+            legacy_source_path = source / WORDPRESS_PLUGIN_LEGACY_DOWNLOAD
+            legacy_artifact_path = stage / WORDPRESS_PLUGIN_LEGACY_DOWNLOAD
+            if legacy_artifact_path.is_symlink() or not legacy_artifact_path.is_file():
+                raise ReleaseBuildError(
+                    "staged legacy WordPress plugin archive is not a regular file"
+                )
+            legacy_source_payload = legacy_source_path.read_bytes()
+            legacy_artifact_payload = legacy_artifact_path.read_bytes()
+            legacy_wordpress_plugin_download_sha256 = _sha256(legacy_artifact_payload)
+            if (
+                legacy_artifact_payload != legacy_source_payload
+                or legacy_wordpress_plugin_download_sha256
+                != WORDPRESS_PLUGIN_LEGACY_DOWNLOAD_SHA256
+            ):
+                raise ReleaseBuildError(
+                    "staged legacy WordPress plugin archive does not match the pinned 0.1.0 release"
+                )
+            legacy_wordpress_plugin_download_verified = True
+
         # Binary records are checked against source hashes before publication.
         binary_records = [
             record for record in records
@@ -3010,6 +3075,15 @@ def build_release(
             "wordpress_plugin_package_verified": (
                 (stage / WORDPRESS_PLUGIN_DOWNLOAD).read_bytes() == _wordpress_plugin_package()
                 if standalone_startup else None
+            ),
+            "wordpress_plugin_legacy_download_present": (
+                legacy_wordpress_plugin_download_present
+            ),
+            "wordpress_plugin_legacy_download_verified": (
+                legacy_wordpress_plugin_download_verified
+            ),
+            "wordpress_plugin_legacy_download_sha256": (
+                legacy_wordpress_plugin_download_sha256
             ),
             **source_pagination_sitemap_verification,
             "old_base2026_canonical_origin_remaining": remaining_old_origin,

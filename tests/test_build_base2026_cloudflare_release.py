@@ -94,6 +94,29 @@ def write_fixture(root: Path) -> None:
     )
 
 
+def write_legacy_plugin_fixture(
+    root: Path, monkeypatch: pytest.MonkeyPatch
+) -> bytes:
+    """Add a tiny deterministic retained-archive fixture for standalone tests."""
+
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(buffer, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
+        entry = zipfile.ZipInfo(
+            "base2026-evidence-sidebar/readme.txt", (2026, 9, 5, 0, 0, 0)
+        )
+        entry.create_system = 3
+        entry.external_attr = 0o100644 << 16
+        archive.writestr(entry, b"legacy fixture\n", compress_type=zipfile.ZIP_DEFLATED, compresslevel=9)
+    payload = buffer.getvalue()
+    legacy_path = root / builder.WORDPRESS_PLUGIN_LEGACY_DOWNLOAD
+    legacy_path.parent.mkdir(parents=True, exist_ok=True)
+    legacy_path.write_bytes(payload)
+    monkeypatch.setattr(
+        builder, "WORDPRESS_PLUGIN_LEGACY_DOWNLOAD_SHA256", hashlib.sha256(payload).hexdigest()
+    )
+    return payload
+
+
 def test_tree_digest_is_independent_of_walk_order() -> None:
     records = [
         builder.FileRecord(name, digest, digest, 4, 4, "text", False)
@@ -105,8 +128,8 @@ def test_tree_digest_is_independent_of_walk_order() -> None:
 def test_wordpress_download_is_deterministic_and_exact_source_only() -> None:
     payload = builder._wordpress_plugin_package()
     assert payload == builder._wordpress_plugin_package()
-    assert len(payload) == 19096
-    assert hashlib.sha256(payload).hexdigest() == "f588eddae0df5b91da4d70576b6cdec01d3a637b003ea076b9357cace6cb7e2a"
+    assert len(payload) == 20165
+    assert hashlib.sha256(payload).hexdigest() == "0909cd308c94b356b7831113891dac55e6039225a3c1f5c603730b0502c8eea4"
     with zipfile.ZipFile(io.BytesIO(payload)) as archive:
         assert archive.namelist() == [f"base2026-evidence-sidebar/{name}" for name in builder.WORDPRESS_PLUGIN_FILES]
         for entry, relative in zip(archive.infolist(), builder.WORDPRESS_PLUGIN_FILES):
@@ -114,7 +137,9 @@ def test_wordpress_download_is_deterministic_and_exact_source_only() -> None:
             assert entry.date_time == (2026, 9, 5, 0, 0, 0)
             assert entry.flag_bits & 1 == 0
     assert builder._is_excluded_source_path(Path(builder.WORDPRESS_PLUGIN_DOWNLOAD))
+    assert not builder._is_excluded_source_path(Path(builder.WORDPRESS_PLUGIN_LEGACY_DOWNLOAD))
     builder._validate_public_relative_path(Path(builder.WORDPRESS_PLUGIN_DOWNLOAD))
+    builder._validate_public_relative_path(Path(builder.WORDPRESS_PLUGIN_LEGACY_DOWNLOAD))
     with pytest.raises(builder.ReleaseBuildError, match="archive"):
         builder._validate_public_relative_path(Path("downloads/arbitrary-release.zip"))
 
@@ -125,10 +150,59 @@ def test_wordpress_download_rejects_header_filename_version_mismatch(
     monkeypatch.setattr(
         builder,
         "WORDPRESS_PLUGIN_DOWNLOAD",
-        "downloads/base2026-evidence-sidebar-v0.1.1.zip",
+        "downloads/base2026-evidence-sidebar-v0.1.0.zip",
     )
     with pytest.raises(builder.ReleaseBuildError, match="version"):
         builder._wordpress_plugin_package()
+
+
+def test_standalone_release_requires_retained_legacy_plugin_zip(tmp_path: Path) -> None:
+    source = tmp_path / "source"
+    source.mkdir()
+    write_fixture(source)
+
+    with pytest.raises(builder.ReleaseBuildError, match="requires the retained legacy"):
+        builder.build_release(
+            source,
+            tmp_path / "release",
+            homepage_template=builder.DEFAULT_HOMEPAGE_TEMPLATE,
+            homepage_stylesheet=builder.DEFAULT_HOMEPAGE_STYLESHEET,
+        )
+
+
+def test_standalone_release_rejects_tampered_retained_legacy_plugin_zip(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    source = tmp_path / "source"
+    source.mkdir()
+    write_fixture(source)
+    payload = write_legacy_plugin_fixture(source, monkeypatch)
+    (source / builder.WORDPRESS_PLUGIN_LEGACY_DOWNLOAD).write_bytes(payload + b"tampered")
+
+    with pytest.raises(builder.ReleaseBuildError, match="legacy WordPress plugin archive hash"):
+        builder.build_release(
+            source,
+            tmp_path / "release",
+            homepage_template=builder.DEFAULT_HOMEPAGE_TEMPLATE,
+            homepage_stylesheet=builder.DEFAULT_HOMEPAGE_STYLESHEET,
+        )
+
+
+def test_nonstandalone_release_preserves_pinned_legacy_plugin_zip(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    source = tmp_path / "source"
+    source.mkdir()
+    write_fixture(source)
+    payload = write_legacy_plugin_fixture(source, monkeypatch)
+
+    receipt = builder.build_release(source, tmp_path / "release")
+    output_path = tmp_path / "release" / builder.WORDPRESS_PLUGIN_LEGACY_DOWNLOAD
+    assert output_path.read_bytes() == payload
+    assert builder.WORDPRESS_PLUGIN_LEGACY_DOWNLOAD not in receipt["excluded_source_paths"]
+    assert receipt["verification"]["wordpress_plugin_legacy_download_present"] is True
+    assert receipt["verification"]["wordpress_plugin_legacy_download_verified"] is True
+    assert receipt["verification"]["wordpress_plugin_legacy_download_sha256"] == hashlib.sha256(payload).hexdigest()
 
 
 def test_wordpress_package_rejects_symlink_and_private_source(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -145,12 +219,15 @@ def test_wordpress_package_rejects_symlink_and_private_source(tmp_path: Path, mo
         builder._wordpress_plugin_package()
 
 
-def test_old_plugin_zip_is_never_inherited(tmp_path: Path) -> None:
+def test_current_plugin_zip_is_never_inherited(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     source = tmp_path / "source"
     source.mkdir()
     write_fixture(source)
+    write_legacy_plugin_fixture(source, monkeypatch)
     old_archive = source / builder.WORDPRESS_PLUGIN_DOWNLOAD
-    old_archive.parent.mkdir()
+    old_archive.parent.mkdir(exist_ok=True)
     old_archive.write_bytes(b"untrusted old archive bytes must never be served")
     result = builder.build_release(
         source, tmp_path / "candidate",
@@ -159,6 +236,9 @@ def test_old_plugin_zip_is_never_inherited(tmp_path: Path) -> None:
     )
     assert builder.WORDPRESS_PLUGIN_DOWNLOAD in result["excluded_source_paths"]
     assert (tmp_path / "candidate" / builder.WORDPRESS_PLUGIN_DOWNLOAD).read_bytes() == builder._wordpress_plugin_package()
+    legacy_output = tmp_path / "candidate" / builder.WORDPRESS_PLUGIN_LEGACY_DOWNLOAD
+    assert legacy_output.read_bytes() == (source / builder.WORDPRESS_PLUGIN_LEGACY_DOWNLOAD).read_bytes()
+    assert result["verification"]["wordpress_plugin_legacy_download_verified"] is True
 
 
 def test_member_assets_are_additive_idempotent_and_require_complete_html() -> None:
@@ -177,10 +257,13 @@ def test_member_assets_are_additive_idempotent_and_require_complete_html() -> No
         builder._with_member_workspace_assets("<main>Incomplete source</main>")
 
 
-def test_member_workspace_requires_explicit_shell_and_preserves_public_bytes(tmp_path: Path) -> None:
+def test_member_workspace_requires_explicit_shell_and_preserves_public_bytes(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     source = tmp_path / "source"
     source.mkdir()
     write_fixture(source)
+    write_legacy_plugin_fixture(source, monkeypatch)
     (source / "search.html").write_text(
         '<html><head><title>Search</title></head><body>'
         '<main id="hits">Public results</main>'
@@ -357,10 +440,11 @@ def test_source_pagination_sitemap_contract_is_exactly_once_and_not_hub_owned(
 
 
 def test_startup_release_fails_closed_when_source_pagination_is_missing_from_static_sitemap(
-    tmp_path: Path,
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     source = tmp_path / "source-web"
     write_fixture(source)
+    write_legacy_plugin_fixture(source, monkeypatch)
     _write_source_pagination_page(source, 2, old_origin=True)
     _write_source_pagination_page(source, 20, old_origin=True)
     _write_source_pagination_sitemap(
@@ -444,12 +528,15 @@ def test_static_cache_headers_keep_html_and_jsonl_rules_disjoint() -> None:
     ) in headers
 
 
-def test_startup_homepage_overlay_preserves_search_as_workspace(tmp_path: Path) -> None:
+def test_startup_homepage_overlay_preserves_search_as_workspace(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     source = tmp_path / "source-web"
     output = tmp_path / "release"
     homepage = tmp_path / "startup-homepage.html"
     stylesheet = tmp_path / "startup-homepage.css"
     write_fixture(source)
+    write_legacy_plugin_fixture(source, monkeypatch)
     (source / "index.html").write_text(
         (source / "index.html").read_text(encoding="utf-8").replace(
             '/wp-admin/admin-post.php', '/support.html'
@@ -647,7 +734,13 @@ def test_startup_homepage_overlay_preserves_search_as_workspace(tmp_path: Path) 
     assert receipt["verification"]["reviewed_repository_media_verified"] is True
     assert receipt["verification"]["reviewed_repository_media_count"] == 4
     assert receipt["verification"]["reviewed_repository_media_manifest_sha256"] == builder.TOOLS_STUDIO_REVIEWED_MEDIA_MANIFEST_SHA256
-    assert receipt["artifact"]["file_count"] == 74
+    current_plugin_output = output / builder.WORDPRESS_PLUGIN_DOWNLOAD
+    legacy_plugin_output = output / builder.WORDPRESS_PLUGIN_LEGACY_DOWNLOAD
+    assert current_plugin_output.read_bytes() == builder._wordpress_plugin_package()
+    assert legacy_plugin_output.read_bytes() == (source / builder.WORDPRESS_PLUGIN_LEGACY_DOWNLOAD).read_bytes()
+    assert receipt["verification"]["wordpress_plugin_package_verified"] is True
+    assert receipt["verification"]["wordpress_plugin_legacy_download_verified"] is True
+    assert receipt["artifact"]["file_count"] == 75
     blog = (output / "blog.html").read_text(encoding="utf-8")
     assert '<link rel="canonical" href="https://base2026.dev/blog">' in blog
     assert 'data-b26-blog-schema' in blog
@@ -676,10 +769,13 @@ def test_startup_homepage_overlay_preserves_search_as_workspace(tmp_path: Path) 
     assert (output / "static/assets/base2026-ai-visibility-measurement.png").read_bytes() == builder.DEFAULT_EDITORIAL_MEASUREMENT_IMAGE.read_bytes()
 
 
-def test_startup_release_rejects_tampered_retained_tools_studio_media(tmp_path: Path) -> None:
+def test_startup_release_rejects_tampered_retained_tools_studio_media(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     source = tmp_path / "source-web"
     output = tmp_path / "release"
     write_fixture(source)
+    write_legacy_plugin_fixture(source, monkeypatch)
     retained = source / builder.TOOLS_STUDIO_MEDIA_OUTPUT_PREFIX / "evidence-workbench.webp"
     retained.parent.mkdir(parents=True)
     retained.write_bytes(b"tampered retained media")
@@ -694,10 +790,13 @@ def test_startup_release_rejects_tampered_retained_tools_studio_media(tmp_path: 
     assert not output.exists()
 
 
-def test_startup_release_accepts_exact_retained_tools_studio_media(tmp_path: Path) -> None:
+def test_startup_release_accepts_exact_retained_tools_studio_media(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     source = tmp_path / "source-web"
     output = tmp_path / "release"
     write_fixture(source)
+    write_legacy_plugin_fixture(source, monkeypatch)
     retained_root = source / builder.TOOLS_STUDIO_MEDIA_OUTPUT_PREFIX
     retained_root.mkdir(parents=True)
     repository_root = ROOT / "templates/assets/tools-studio"
@@ -714,15 +813,18 @@ def test_startup_release_accepts_exact_retained_tools_studio_media(tmp_path: Pat
         homepage_stylesheet=builder.DEFAULT_HOMEPAGE_STYLESHEET,
     )
 
-    assert receipt["artifact"]["file_count"] == 74
+    assert receipt["artifact"]["file_count"] == 75
     assert receipt["verification"]["reviewed_repository_media_verified"] is True
     assert not (output / builder.TOOLS_STUDIO_MEDIA_MANIFEST_OUTPUT).exists()
 
 
-def test_startup_release_rejects_incomplete_retained_tools_studio_media(tmp_path: Path) -> None:
+def test_startup_release_rejects_incomplete_retained_tools_studio_media(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     source = tmp_path / "source-web"
     output = tmp_path / "release"
     write_fixture(source)
+    write_legacy_plugin_fixture(source, monkeypatch)
     retained_root = source / builder.TOOLS_STUDIO_MEDIA_OUTPUT_PREFIX
     retained_root.mkdir(parents=True)
     repository_root = ROOT / "templates/assets/tools-studio"
@@ -740,10 +842,13 @@ def test_startup_release_rejects_incomplete_retained_tools_studio_media(tmp_path
     assert not output.exists()
 
 
-def test_startup_release_rejects_tampered_retained_tools_studio_manifest(tmp_path: Path) -> None:
+def test_startup_release_rejects_tampered_retained_tools_studio_manifest(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     source = tmp_path / "source-web"
     output = tmp_path / "release"
     write_fixture(source)
+    write_legacy_plugin_fixture(source, monkeypatch)
     retained_manifest = source / builder.TOOLS_STUDIO_MEDIA_MANIFEST_OUTPUT
     retained_manifest.parent.mkdir(parents=True)
     retained_manifest.write_text("{}\n", encoding="utf-8")
@@ -790,6 +895,7 @@ def test_startup_release_rejects_missing_reviewed_tools_studio_source(
     )
     source = tmp_path / "source-web"
     write_fixture(source)
+    write_legacy_plugin_fixture(source, monkeypatch)
 
     with pytest.raises(builder.ReleaseBuildError, match="media source is missing"):
         builder.build_release(
@@ -806,6 +912,7 @@ def test_startup_release_rejects_wrong_reviewed_tools_studio_manifest(
     _patch_tools_studio_media_fixture(tmp_path, monkeypatch, tamper_manifest=True)
     source = tmp_path / "source-web"
     write_fixture(source)
+    write_legacy_plugin_fixture(source, monkeypatch)
 
     with pytest.raises(builder.ReleaseBuildError, match="media manifest hash"):
         builder.build_release(
