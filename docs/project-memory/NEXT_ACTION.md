@@ -11,8 +11,8 @@ Checkpoint: 2026-09-05 — continue the active Studio departments from
    HQ holds the authenticated browser lease; Identity continues CLI/source
    diagnostics after releasing the lease for a supported-tool limitation.
    Do not return to the old owner-login wait without newly observed evidence
-   of a non-delegable challenge. The four-file error-UX candidate has not
-   been deployed and is not itself the identity repair.
+   of a non-delegable challenge. PR55 merged the four-file error-UX source;
+   it has not been deployed and is not itself the identity repair.
 2. Product Engineering continues the no-signup Page Readiness Check from its
    accepted safe HTML-input source-check scope, not a completed implementation.
    A full arbitrary-URL live audit remains unfinished and requires bounded
@@ -25,7 +25,8 @@ Checkpoint: 2026-09-05 — continue the active Studio departments from
 4. Editorial & Distribution delivers a reproducible WordPress use case.
    Directories continues relevant free targets. Each resumes its existing
    task, reads the previous send/result before another action, and records
-   delivery, moderation, accepted links and observed use separately.
+   delivery, moderation, accepted links and observed use separately. The latest
+   mcpservers.org submission is pending review, not an accepted listing/link.
 5. HQ reviews each scoped PR and accepted receipt, integrates changes and
    owns any merge or public release. Before an auth release, require evidence
    for successful login, preserved research, save/revisit/export and logout

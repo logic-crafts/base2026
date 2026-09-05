@@ -33,8 +33,10 @@ No current password, CAPTCHA or owner-only login action is established.
 Existing member data and saved research remain intact; a successful current
 Google round trip has not been demonstrated.
 
-The reviewed four-file error-UX and native-regression candidate is not
-deployed and does not repair identity binding. Identity Engineering continues
+The four-file error-UX and native-regression change merged through
+[PR55](https://github.com/offflinerpsy/base2026/pull/55) at 19:02:37 UTC as
+`1fdd877022277f1f4387f543168f3944e174b9c0`. It is not deployed and does not
+repair identity binding. Identity Engineering continues
 CLI/source and transfer diagnostics; HQ holds the authenticated browser lease
 after the department released it for a supported-tool limitation. This is not
 an owner-login blocker. Preserve the existing identity setup, saved research

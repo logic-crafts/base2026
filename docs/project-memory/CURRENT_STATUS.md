@@ -18,7 +18,9 @@ Auth is enabled and Google consent is complete. The actual application error
 is `account_not_linked`; the earlier Chrome block hid that result. Existing
 member data and saved research remain intact. There is no newly established
 owner-login action and no successful current Google round-trip receipt.
-The four-file error-UX/native-regression candidate is not deployed and does
+The four-file error-UX/native-regression source merged through
+[PR55](https://github.com/offflinerpsy/base2026/pull/55) at 19:02:37 UTC as
+`1fdd877022277f1f4387f543168f3944e174b9c0`; it is not deployed and does
 not repair identity binding. HQ now holds the authenticated browser lease
 after Identity Engineering released it for a supported-tool limitation;
 Identity continues CLI/source and transfer diagnostics.
@@ -33,8 +35,12 @@ Page Readiness Check has an accepted safe HTML-input source-check scope;
 implementation/release is not established by that acceptance, and the full
 arbitrary-URL live audit is unfinished. Design's factory is an
 illustration, visibly separate from timestamped public inventory data.
-Growth departments continue their existing tasks and send history. Release,
-submission and QA do not establish accepted links, visitors or repeat use.
+Growth departments continue their existing tasks and send history. One free
+mcpservers.org submission showed success at 19:01:23 UTC and awaits review;
+there is no accepted listing/backlink receipt. The cloud research returned
+a final summary, but the full referenced report remains inaccessible; HQ
+requested that existing report as plain text without repeating the research.
+Release, submission and QA do not establish visitors or repeat use.
 
 ## Historical checkpoint — September 4, 21:27 UTC
 

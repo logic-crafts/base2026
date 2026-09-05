@@ -21,7 +21,8 @@ The existing tools and approved visual system remain the product baseline.
 - Identity Engineering: diagnose `account_not_linked` after completed
   Google consent; preserve existing saved research and prove the repaired
   session/save/revisit/export/logout flow. HQ holds the browser lease; Identity
-  continues CLI/source diagnostics. The error-UX candidate is undeployed.
+  continues CLI/source diagnostics. PR55 merged the error-UX source only;
+  it is undeployed and does not repair identity binding.
 - Product Engineering: implement the separate no-signup Page Readiness Check
   with actionable observations. The safe HTML-input source-check is an accepted
   partial work scope, not implementation/release proof; the full arbitrary-URL

@@ -63,7 +63,8 @@ do not demonstrate adoption.
 
 The accepted September 5 checkpoint has live Tools Studio/WordPress surfaces
 and merged PR54 source. Google consent succeeded, but login returns
-`account_not_linked`; the error-UX candidate is undeployed. Page Readiness
+`account_not_linked`; PR55 merged the error-UX source, but it is undeployed
+and does not repair identity binding. Page Readiness
 Check has an accepted safe HTML-input slice; its full arbitrary-URL live audit
 remains unfinished. The accepted slice defines work scope, not a completed
 implementation or live-release receipt. Check [the handoff](project-memory/HANDOFF_2026-09-05_PRODUCT_STUDIO.md)
