@@ -21,9 +21,9 @@ owner-login action and no successful current Google round-trip receipt.
 The four-file error-UX/native-regression source merged through
 [PR55](https://github.com/offflinerpsy/base2026/pull/55) at 19:02:37 UTC as
 `1fdd877022277f1f4387f543168f3944e174b9c0`; it is not deployed and does
-not repair identity binding. HQ now holds the authenticated browser lease
-after Identity Engineering released it for a supported-tool limitation;
-Identity continues CLI/source and transfer diagnostics.
+not repair identity binding. Identity continues its separate private source
+diagnostic; browser allocation is tracked by Chief in the existing private
+operations registry, not inferred from an earlier handoff.
 
 Separate Product Engineering and Design & Media departments join the existing
 Identity, Editorial & Distribution, Directories and Chief Engineering owners.
@@ -31,15 +31,27 @@ HQ owns decisions, integration, merges and public releases. AgencyOS remains
 the existing operational registry with one supervisor and designated writers.
 An old worktree or local candidate is not the deployed product.
 
-Page Readiness Check has an accepted safe HTML-input source-check scope;
-implementation/release is not established by that acceptance, and the full
-arbitrary-URL live audit is unfinished. Design's factory is an
+Chief has built one clean combined candidate from main `8dd92483`, exact
+PR57 `b3c1326a` and PR58 `b5dd2fb9`, with reviewed media, a sixth Page Source
+Check card/sitemap and the completed temporary Playground demo link. It is
+not merged or deployed. The retained-data RC2 contains 4,293 files; exact
+identity, tests and review limits are in the
+[integration handoff](HANDOFF_2026-09-05_STUDIO_INTEGRATION.md).
+Page Source Check inspects supplied HTML; the full
+arbitrary-URL live audit remains unfinished. Design's factory is an
 illustration, visibly separate from timestamped public inventory data.
 Growth departments continue their existing tasks and send history. One free
 mcpservers.org submission showed success at 19:01:23 UTC and awaits review;
 there is no accepted listing/backlink receipt. The cloud research returned
-a final summary, but the full referenced report remains inaccessible; HQ
-requested that existing report as plain text without repeating the research.
+the full existing report as plain text after its earlier artifact-reference
+limitation. Direct readback verified retrieval without repeating the research;
+the report's external claims still require action-time source checks.
+Media Office now owns the pilot and two next episode cards, using the existing
+video renderer. Prepared cards and one submitted take are not final videos.
+The existing X assistant is under bounded local repair with public effects
+OFF; original publishing remains Growth-owned. A separate ClaudeRules
+submission is pending review. Medium publication is held at sign-in with no
+draft or publish effect; other authorized Growth work continues.
 Release, submission and QA do not establish visitors or repeat use.
 
 ## Historical checkpoint — September 4, 21:27 UTC

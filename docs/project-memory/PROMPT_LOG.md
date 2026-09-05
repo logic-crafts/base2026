@@ -1,5 +1,37 @@
 # Prompt Log
 
+## 2026-09-05 — Combined Studio release candidate
+
+HQ lifted the temporary engineering integration pause and assigned Chief one
+clean combined candidate, retaining final HQ review/merge/deploy ownership.
+Started from fresh main `8dd92483`, which contains PR55/56; imported exact
+PR57 `b3c1326a` and PR58 `b5dd2fb9` without rewriting their source branches.
+Two bounded Luna Max executors own non-overlapping builder/tests and UI/tests;
+Chief owns integration, public/private review, current docs and verification.
+
+Scope: exact four reviewed media with provenance/hash/byte checks and negative
+tests; sixth honest Page Source Check card and sitemap; the existing verified
+temporary Playground demo CTA with limitations. Reuse retained V3, not a
+synthetic fixture. Preserve plugin 0.1.0 bytes and fail closed on source-version/
+download-name mismatch. Product's future plugin/privacy changes and Identity's
+diagnostic remain separate. No D1, private-pipeline, credentials or remote
+runtime changes belong to this candidate.
+
+The four previously preserved cloud-report status hunks were carried into this
+clean branch. The report was retrieved; no repeated research was needed.
+Integrated verification and exact candidate identity are recorded in the
+[scoped candidate handoff](HANDOFF_2026-09-05_STUDIO_INTEGRATION.md).
+RC1 presentation QA found one desktop orphan-card row; HQ accepted the
+bounded CSS-only full-row correction above 720px. RC2 preserves mobile DOM
+order; 18 focused Python checks passed, with only a visual delta recheck.
+Media Office now owns the three prepared episode cards and the existing
+renderer; one submitted take is not a final video. The separate existing X
+assistant is in local repair/tone QA with public effects OFF. Chief carries
+owners and real receipts into the existing AgencyOS registry; no new timer.
+Source preparation is not release or
+real-user adoption. Next action: exact candidate review by HQ, not another
+generic audit or an autonomous deployment.
+
 ## 2026-09-05 — Studio departments and corrected continuation
 
 The owner resumed separate departments while retaining HQ decisions,
@@ -28,8 +60,9 @@ remains illustration with separately labelled public data.
 
 The latest directory action is one successful mcpservers.org submission,
 pending moderation, not an accepted listing or backlink. Cloud research
-returned a final summary; the full referenced report is inaccessible and HQ
-requested the existing text without re-research. HQ retains the current
+returned its full existing report as plain text at 19:02:58 UTC; direct readback
+confirmed untruncated retrieval after the earlier artifact-reference limit.
+No new research was started. HQ retains the current
 live-outcome registry/board checkpoint before future supervisor reconciliation.
 
 This documentation pass leaves merge and deployment to HQ. Continue from
