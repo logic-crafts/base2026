@@ -32,6 +32,97 @@ const memberMigrations = [
   { name: "0002_member_research.sql", queries: splitMigration(memberResearchMigration) },
 ];
 
+interface SyntheticGoogleProfile {
+  sub: string;
+  email: string;
+  name: string;
+}
+
+async function seedSavedResearch(userId: string, timestamp: number): Promise<void> {
+  await authDb.batch([
+    authDb.prepare(
+      "INSERT INTO research_collections (id, userId, name, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?)",
+    ).bind(`${userId}-collection`, userId, "Existing research", timestamp, timestamp),
+    authDb.prepare(
+      "INSERT INTO research_items (id, userId, collectionId, kind, referenceId, title, url, note, createdAt, updatedAt) VALUES (?, ?, ?, 'evidence', ?, ?, ?, ?, ?, ?)",
+    ).bind(`${userId}-item`, userId, `${userId}-collection`, "synthetic-public-reference", "Saved source", "https://base2026.dev/sources/synthetic", "Keep this private note", timestamp, timestamp),
+  ]);
+}
+
+async function readSavedResearch(userId: string): Promise<unknown> {
+  const collections = await authDb.prepare("SELECT * FROM research_collections WHERE userId = ? ORDER BY id").bind(userId).all();
+  const items = await authDb.prepare("SELECT * FROM research_items WHERE userId = ? ORDER BY id").bind(userId).all();
+  return { collections: collections.results, items: items.results };
+}
+
+async function completeSyntheticGoogleCallback(profile: SyntheticGoogleProfile, ip: string): Promise<{
+  callback: Response;
+  sessionCookie: string | undefined;
+}> {
+  const payload = {
+    iss: "https://accounts.google.com",
+    aud: "synthetic-google-client-id.apps.googleusercontent.com",
+    sub: profile.sub,
+    email: profile.email,
+    email_verified: true,
+    name: profile.name,
+    picture: "https://example.test/avatar.svg",
+  };
+  const base64Url = (value: string): string => {
+    const bytes = new TextEncoder().encode(value);
+    let binary = "";
+    for (const byte of bytes) binary += String.fromCharCode(byte);
+    return btoa(binary).replace(/\+/gu, "-").replace(/\//gu, "_").replace(/=+$/u, "");
+  };
+  const idToken = `${base64Url(JSON.stringify({ alg: "none", typ: "JWT" }))}.${base64Url(JSON.stringify(payload))}.synthetic-signature`;
+  const originalFetch = globalThis.fetch;
+  const fetchMock = vi.spyOn(globalThis, "fetch").mockImplementation(async (input, init) => {
+    const target = typeof input === "string" ? input : input instanceof URL ? input.toString() : input.url;
+    if (target === "https://oauth2.googleapis.com/token") {
+      expect(init?.method).toBe("POST");
+      return new Response(JSON.stringify({
+        access_token: "synthetic-access-token",
+        refresh_token: "synthetic-refresh-token",
+        id_token: idToken,
+        token_type: "Bearer",
+        scope: "openid email profile",
+      }), { headers: { "Content-Type": "application/json" } });
+    }
+    return originalFetch(input, init);
+  });
+
+  try {
+    const signIn = await SELF.fetch("https://base2026.dev/api/auth/sign-in/social", {
+      method: "POST",
+      headers: {
+        Origin: "https://base2026.dev",
+        "Content-Type": "application/json",
+        "CF-Connecting-IP": ip,
+      },
+      body: JSON.stringify({ provider: "google", callbackURL: "/workspace/" }),
+      redirect: "manual",
+    });
+    expect(signIn.status).toBe(200);
+    const signInBody = await signIn.json() as { url?: string };
+    const authorization = new URL(signInBody.url ?? "");
+    const state = authorization.searchParams.get("state");
+    expect(state).toBeTruthy();
+    const signInCookies = responseCookies(signIn);
+    const stateCookie = signInCookies.find((value) => /(?:__Secure-)?better-auth\.state=/u.test(value))?.match(/((?:__Secure-)?better-auth\.state=[^;]+)/u)?.[1];
+    expect(stateCookie).toBeTruthy();
+
+    const callback = await SELF.fetch(
+      `https://base2026.dev/api/auth/callback/google?code=synthetic-code&state=${encodeURIComponent(state!)}`,
+      { headers: { Cookie: stateCookie! }, redirect: "manual" },
+    );
+    const callbackCookies = responseCookies(callback);
+    const sessionCookie = callbackCookies.find((value) => /(?:__Secure-)?better-auth\.session_token=/u.test(value))?.match(/((?:__Secure-)?better-auth\.session_token=[^;]+)/u)?.[1];
+    return { callback, sessionCookie };
+  } finally {
+    fetchMock.mockRestore();
+  }
+}
+
 beforeAll(async () => {
   await applyD1Migrations(authDb, memberMigrations);
 });
@@ -222,6 +313,125 @@ describe("native D1 member auth prototype", () => {
     } finally {
       fetchMock.mockRestore();
     }
+  });
+
+  it("reuses an exact existing Google account key without changing its user or binding tuple", async () => {
+    const userId = "synthetic-returning-user";
+    // Google subjects are opaque strings, including values beyond JS's safe
+    // integer range. Numeric coercion must never change the binding key.
+    const accountId = "123456789012345678901";
+    const email = "synthetic-returning-user@example.test";
+    const timestamp = Date.now();
+    await authDb.batch([
+      authDb.prepare(
+        "INSERT INTO user (id, name, email, emailVerified, image, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?, ?)",
+      ).bind(userId, "Returning Synthetic User", email, 1, null, timestamp, timestamp),
+      authDb.prepare(
+        "INSERT INTO account (id, issuer, accountId, providerId, userId, accessToken, refreshToken, idToken, accessTokenExpiresAt, refreshTokenExpiresAt, scope, password, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      ).bind("synthetic-returning-account", "https://accounts.google.com", accountId, "google", userId, null, null, null, null, null, "openid email profile", null, timestamp, timestamp),
+    ]);
+    await seedSavedResearch(userId, timestamp);
+    const beforeResearch = await readSavedResearch(userId);
+    const beforeUser = await authDb.prepare(
+      "SELECT id, name, email, emailVerified, image, createdAt, updatedAt FROM user WHERE id = ?",
+    ).bind(userId).first();
+    const beforeAccount = await authDb.prepare(
+      "SELECT id, issuer, accountId, providerId, userId, accessToken, refreshToken, idToken, accessTokenExpiresAt, refreshTokenExpiresAt, scope, password, createdAt, updatedAt FROM account WHERE id = ?",
+    ).bind("synthetic-returning-account").first();
+
+    const result = await completeSyntheticGoogleCallback({ sub: accountId, email, name: "Provider Returned Name" }, "198.51.100.201");
+    expect(result.callback.status).toBeGreaterThanOrEqual(300);
+    expect(result.callback.status).toBeLessThan(400);
+    expect(result.callback.headers.get("location")).toBe("/workspace/");
+    expect(result.sessionCookie).toBeTruthy();
+    const session = await SELF.fetch("https://base2026.dev/api/my-research/session", {
+      headers: { Cookie: result.sessionCookie! },
+    });
+    expect(session.status).toBe(200);
+    expect(await session.json()).toMatchObject({
+      enabled: true,
+      user: { id: userId, email, name: "Returning Synthetic User" },
+    });
+
+    const afterUser = await authDb.prepare(
+      "SELECT id, name, email, emailVerified, image, createdAt, updatedAt FROM user WHERE id = ?",
+    ).bind(userId).first();
+    const afterAccount = await authDb.prepare(
+      "SELECT id, issuer, accountId, providerId, userId, accessToken, refreshToken, idToken, accessTokenExpiresAt, refreshTokenExpiresAt, scope, password, createdAt, updatedAt FROM account WHERE id = ?",
+    ).bind("synthetic-returning-account").first();
+    expect(afterUser).toEqual(beforeUser);
+    expect(afterAccount).toEqual(beforeAccount);
+    expect(await readSavedResearch(userId)).toEqual(beforeResearch);
+    expect(afterAccount).toMatchObject({
+      issuer: "https://accounts.google.com",
+      accountId,
+      providerId: "google",
+      userId,
+      accessToken: null,
+      refreshToken: null,
+      idToken: null,
+    });
+  });
+
+  it.each([
+    { mismatch: "subject", storedIssuer: "https://accounts.google.com", storedSubject: "123456789012345678902", incomingSubject: "123456789012345678903" },
+    { mismatch: "issuer", storedIssuer: "https://other-issuer.example.test", storedSubject: "123456789012345678904", incomingSubject: "123456789012345678904" },
+  ])("denies a different $mismatch for an existing email without auto-linking or changing saved research", async ({ mismatch, storedIssuer, storedSubject, incomingSubject }) => {
+    const userId = `synthetic-mismatch-${mismatch}-user`;
+    const accountRowId = `synthetic-mismatch-${mismatch}-account`;
+    const accountId = storedSubject;
+    const email = `synthetic-mismatch-${mismatch}-user@example.test`;
+    const timestamp = Date.now();
+    await authDb.batch([
+      authDb.prepare(
+        "INSERT INTO user (id, name, email, emailVerified, image, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?, ?)",
+      ).bind(userId, "Mismatch Synthetic User", email, 1, null, timestamp, timestamp),
+      authDb.prepare(
+        "INSERT INTO account (id, issuer, accountId, providerId, userId, accessToken, refreshToken, idToken, accessTokenExpiresAt, refreshTokenExpiresAt, scope, password, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      ).bind(accountRowId, storedIssuer, accountId, "google", userId, null, null, null, null, null, "openid email profile", null, timestamp, timestamp),
+    ]);
+    await seedSavedResearch(userId, timestamp);
+    const beforeResearch = await readSavedResearch(userId);
+    const beforeUsers = await authDb.prepare(
+      "SELECT id, name, email, emailVerified, image, createdAt, updatedAt FROM user WHERE email = ? ORDER BY id",
+    ).bind(email).all();
+    const beforeAccounts = await authDb.prepare(
+      "SELECT id, issuer, accountId, providerId, userId, accessToken, refreshToken, idToken, accessTokenExpiresAt, refreshTokenExpiresAt, scope, password, createdAt, updatedAt FROM account WHERE userId = ? ORDER BY id",
+    ).bind(userId).all();
+
+    const result = await completeSyntheticGoogleCallback({
+      sub: incomingSubject,
+      email,
+      name: "Different Provider User",
+    }, "198.51.100.202");
+    expect(result.callback.status).toBeGreaterThanOrEqual(300);
+    expect(result.callback.status).toBeLessThan(400);
+    const location = new URL(result.callback.headers.get("location") ?? "", "https://base2026.dev");
+    expect(location.origin).toBe("https://base2026.dev");
+    expect(location.pathname).toBe("/my-research/");
+    expect(location.searchParams.get("error")).toBe("account_not_linked");
+    expect(location.searchParams.has("error_description")).toBe(false);
+    expect(result.sessionCookie).toBeUndefined();
+
+    const afterUsers = await authDb.prepare(
+      "SELECT id, name, email, emailVerified, image, createdAt, updatedAt FROM user WHERE email = ? ORDER BY id",
+    ).bind(email).all();
+    const afterAccounts = await authDb.prepare(
+      "SELECT id, issuer, accountId, providerId, userId, accessToken, refreshToken, idToken, accessTokenExpiresAt, refreshTokenExpiresAt, scope, password, createdAt, updatedAt FROM account WHERE userId = ? ORDER BY id",
+    ).bind(userId).all();
+    expect(afterUsers.results).toEqual(beforeUsers.results);
+    expect(afterAccounts.results).toEqual(beforeAccounts.results);
+    expect(afterAccounts.results).toHaveLength(1);
+    expect(await readSavedResearch(userId)).toEqual(beforeResearch);
+    expect(afterAccounts.results[0]).toMatchObject({
+      issuer: storedIssuer,
+      accountId,
+      providerId: "google",
+      userId,
+      accessToken: null,
+      refreshToken: null,
+      idToken: null,
+    });
   });
 
   it("applies the native D1 schema with isolated member tables", async () => {

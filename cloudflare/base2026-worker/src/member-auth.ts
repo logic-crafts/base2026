@@ -184,6 +184,11 @@ export function createMemberAuth(env: MemberAuthEnv): Auth<any> {
     // OAuth callback errors can include provider response payloads. Do not
     // pass them to Worker invocation logs at all.
     logger: { disabled: true },
+    // Keep Better Auth's failure redirect on the private page. The member
+    // client allowlists the displayed message and removes OAuth query fields;
+    // the default /api/auth/error page would expose an unhelpful public error
+    // surface and can be blocked by browser extensions.
+    onAPIError: { errorURL: `${MEMBER_AUTH_ORIGIN}/my-research/` },
     rateLimit: {
       enabled: true,
       window: 60,
