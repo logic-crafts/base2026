@@ -1,37 +1,43 @@
 # Next Action
 
-Checkpoint: 2026-09-05 — continue the active Studio departments from
+Checkpoint: 2026-09-05, combined Studio RC2 review — continue from
 [the current handoff](HANDOFF_2026-09-05_PRODUCT_STUDIO.md) and
 [operating guide](../BASE2026_STUDIO_OPERATING_GUIDE.md).
 
-1. Identity Engineering owns the observed `account_not_linked` error.
-   Google consent and prerequisite setup are complete. Diagnose the exact
-   identity match privately, preserve existing accounts and saved research,
-   and return a justified narrow repair with regression evidence to HQ.
-   HQ holds the authenticated browser lease; Identity continues CLI/source
-   diagnostics after releasing the lease for a supported-tool limitation.
-   Do not return to the old owner-login wait without newly observed evidence
-   of a non-delegable challenge. PR55 merged the four-file error-UX source;
-   it has not been deployed and is not itself the identity repair.
-2. Product Engineering continues the no-signup Page Readiness Check from its
-   accepted safe HTML-input source-check scope, not a completed implementation.
-   A full arbitrary-URL live audit remains unfinished and requires bounded
-   fetch behavior and useful corrections.
-   The live WordPress companion does not satisfy its acceptance criteria.
-3. Design & Media polishes the existing Tools Studio and prepares a product
-   demonstration using approved visual assets and real product behavior.
-   Keep the factory illustration separate from public counters; never present
-   it as private pipeline activity or a measured customer outcome.
-4. Editorial & Distribution delivers a reproducible WordPress use case.
-   Directories continues relevant free targets. Each resumes its existing
-   task, reads the previous send/result before another action, and records
-   delivery, moderation, accepted links and observed use separately. The latest
-   mcpservers.org submission is pending review, not an accepted listing/link.
-5. HQ reviews each scoped PR and accepted receipt, integrates changes and
-   owns any merge or public release. Before an auth release, require evidence
-   for successful login, preserved research, save/revisit/export and logout
-   denial. Reconcile the existing AgencyOS registry and human board through
-   their designated writer.
+1. Chief Engineering has built one combined release candidate from fresh main
+   `8dd92483`, exact PR57 `b3c1326a` and PR58 `b5dd2fb9`: reviewed four-media
+   provenance, sixth Page Source Check card/sitemap and temporary Playground
+   demo CTA. Preserve the retained V3 corpus, member protections and exact
+   released WordPress 0.1.0 ZIP. RC2 tests, artifact/dry-run and final
+   desktop/mobile visual-delta review pass. Return the scoped source PR and
+   [integration handoff](HANDOFF_2026-09-05_STUDIO_INTEGRATION.md) to HQ.
+   A candidate or PR is not a deployment.
+2. HQ owns the final candidate review, merge and deployment decision. Design
+   has accepted the exact isolated RC2 without editing integration source.
+   Keep illustrations separate from public inventory and user activity.
+3. Identity Engineering continues the separate local diagnostic for
+   `account_not_linked`, with synthetic verifier tests and a bounded operation
+   proposal. No production activation, implicit linking or data deletion is
+   authorized by the Studio candidate. PR55 error UX is already on main but
+   is not a binding repair. Require a real preserved-research login flow before
+   claiming the identity issue resolved; no new owner challenge is established.
+4. Product Engineering's WordPress 0.1.1 readiness work remains separate and
+   unmerged until an atomic versioned release is reviewed. Never package new
+   plugin bytes under the released 0.1.0 filename. The Page Source Check
+   implementation inspects supplied HTML only; arbitrary live-URL auditing,
+   crawl eligibility and indexing remain outside its acceptance.
+5. Growth and Directories continue their existing authorized deliveries with
+   exclusive browser leases and exact receipts. The completed temporary demo
+   and a delivered announcement do not establish adoption. Do not repeat
+   pending submissions or prior posts. Chief is the sole existing AgencyOS/
+   human-board writer; the existing hourly supervisor is a recovery fallback.
+6. Media Office owns the pilot and next two concrete episode cards; the
+   existing renderer alone owns capture, provider submission and final MP4.
+   A submitted take, prepared card or image candidate is not video acceptance
+   or publication. The existing X assistant continues local repair and tone
+   tests with unattended public effects OFF; original X publication remains
+   Growth-owned. Record real artifacts and unavailable metrics honestly in
+   the existing AgencyOS registry, with no second database or timer.
 
 Source publication for Tools Studio and the plugin is complete through
 [PR54](https://github.com/offflinerpsy/base2026/pull/54); do not repeat it.

@@ -122,7 +122,7 @@ class FakeRoot extends FakeElement {
 
   querySelectorAll(selector) {
     if (selector === "[data-station-button]") return this.elements.stations;
-    if (selector === "[data-reveal]") return [this.elements.reveal];
+    if (selector === "[data-reveal]") return this.elements.reveals;
     return [];
   }
 }
@@ -197,14 +197,15 @@ function makeHarness({ visibilityState = "visible", reducedMotion = false, respo
     id: `station-tab-${key}`,
     "data-station-button": key,
     "aria-selected": index === 0 ? "true" : "false",
+    disabled: "",
   }));
   const factory = new FakeElement({ "data-factory": "", "data-factory-playing": "true", "data-factory-visible": "false" });
-  const factoryToggle = new FakeElement({ "data-factory-toggle": "", "aria-pressed": "false" });
+  const factoryToggle = new FakeElement({ "data-factory-toggle": "", hidden: "", "aria-pressed": "false" });
   const factorySignal = new FakeElement({ "data-factory-signal": "" });
   const liveStats = new FakeElement({ "data-live-stats": "" });
   const liveStatus = new FakeElement({ "data-live-stats-status": "" });
   const generated = new FakeElement({ "data-stat-generated": "" });
-  const reveal = new FakeElement({ "data-reveal": "" });
+  const reveals = Array.from({ length: 6 }, (_, index) => new FakeElement({ "data-reveal": "", id: `reveal-${index}` }));
   const stats = {};
   ["documents_indexed", "distinct_sources", "public_evidence_routes", "projected_cards"].forEach((key) => {
     stats[key] = new FakeElement({ "data-stat-value": key });
@@ -225,7 +226,8 @@ function makeHarness({ visibilityState = "visible", reducedMotion = false, respo
     liveStats,
     liveStatus,
     generated,
-    reveal,
+    reveals,
+    reveal: reveals[0],
     stats,
   };
   const root = new FakeRoot(elements);
@@ -246,6 +248,17 @@ function makeHarness({ visibilityState = "visible", reducedMotion = false, respo
   const timers = { timeouts: [], intervals: [] };
   const fetchCalls = [];
   const queue = responses.slice();
+  const motionListeners = [];
+  const motionQuery = {
+    matches: reducedMotion,
+    addEventListener(type, callback) {
+      if (type === "change") motionListeners.push(callback);
+    },
+    setMatches(nextMatches) {
+      this.matches = Boolean(nextMatches);
+      motionListeners.forEach((callback) => callback({ matches: this.matches }));
+    },
+  };
   function fetchStub(url, options) {
     fetchCalls.push({ url, options });
     const next = queue.shift();
@@ -269,7 +282,7 @@ function makeHarness({ visibilityState = "visible", reducedMotion = false, respo
     String,
   };
   context.window = context;
-  context.matchMedia = () => ({ matches: reducedMotion, addEventListener() {} });
+  context.matchMedia = () => motionQuery;
   context.setTimeout = (callback, delay) => {
     const timer = { callback, delay, cleared: false };
     timers.timeouts.push(timer);
@@ -294,6 +307,9 @@ function makeHarness({ visibilityState = "visible", reducedMotion = false, respo
     fetchCalls,
     timers,
     observer: FakeIntersectionObserver.current,
+    setReducedMotion(nextState) {
+      motionQuery.setMatches(nextState);
+    },
     triggerVisibility(nextState) {
       document.visibilityState = nextState;
       document.dispatch("visibilitychange");
@@ -347,12 +363,23 @@ test("a failed refresh is stale and retains the last complete public read", asyn
   harness.observer.trigger(harness.liveStats, true);
   await flushPromises();
   assert.equal(harness.stats.documents_indexed.textContent, "17");
+  assert.equal(harness.stats.distinct_sources.textContent, "11");
+  assert.equal(harness.stats.public_evidence_routes.textContent, "5");
+  assert.equal(harness.stats.projected_cards.textContent, "4");
   assert.equal(harness.generated.textContent, "2026-09-05T12:00:00Z");
 
   harness.runIntervals();
   await flushPromises();
-  assert.equal(harness.stats.documents_indexed.textContent, "17");
-  assert.equal(harness.stats.distinct_sources.textContent, "11");
+  assert.deepEqual(
+    Object.fromEntries(Object.entries(harness.stats).map(([key, node]) => [key, node.textContent])),
+    {
+      documents_indexed: "17",
+      distinct_sources: "11",
+      public_evidence_routes: "5",
+      projected_cards: "4",
+    },
+    "a failed refresh must preserve every last-good metric",
+  );
   assert.equal(harness.generated.textContent, "2026-09-05T12:00:00Z");
   assert.equal(harness.liveStatus.getAttribute("data-state"), "stale");
   assert.match(harness.liveStatus.textContent, /last server read/);
@@ -395,16 +422,21 @@ test("factory pause, hidden-tab and offscreen gates preserve the animation class
 
   harness.factorySignal.dispatchEvent({ type: "animationend", animationName: "b26-tools-factory-signal" });
   assert.equal(harness.factorySignal.classList.contains("is-running"), false);
+  assert.equal(harness.factoryToggle.textContent, "Replay illustration");
   harness.observer.trigger(harness.factory, false);
   harness.observer.trigger(harness.factory, true);
   assert.equal(harness.factorySignal.classList.contains("is-running"), false, "completed illustration must not auto-replay");
   harness.factoryToggle.dispatchEvent({ type: "click" });
-  harness.factoryToggle.dispatchEvent({ type: "click" });
-  assert.equal(harness.factorySignal.classList.contains("is-running"), true, "only explicit play may replay completion");
+  assert.equal(harness.factorySignal.classList.contains("is-running"), true, "one explicit replay click must restart completion");
+  assert.equal(harness.factory.hasAttribute("data-factory-complete"), false);
+  assert.equal(harness.factoryToggle.textContent, "Pause illustration");
+  assert.equal(harness.factorySignal.style.animationPlayState, "running");
 });
 
 test("station tabs use progressive roving tab stops and keyboard selection", () => {
   const harness = makeHarness();
+  assert.deepEqual(harness.stations.map((station) => station.hasAttribute("disabled")), [false, false, false, false]);
+  assert.equal(harness.factoryToggle.hasAttribute("hidden"), false);
   assert.deepEqual(harness.stations.map((station) => station.getAttribute("tabindex")), ["0", "-1", "-1", "-1"]);
   const event = {
     type: "keydown",
@@ -417,11 +449,42 @@ test("station tabs use progressive roving tab stops and keyboard selection", () 
   assert.equal(harness.stations[1].getAttribute("tabindex"), "0");
   assert.equal(harness.stations[1].focused, true);
   assert.match(harness.panelTitle.textContent, /Extract/);
+
+  harness.stations[3].dispatchEvent({ type: "click" });
+  assert.equal(harness.panelKicker.textContent, "04 / USE");
+  assert.equal(harness.panelTitle.textContent, "Build a brief. Choose the next move.");
 });
 
-test("reduced motion keeps the factory static", () => {
+test("every observed progressive reveal target becomes visible", () => {
+  const harness = makeHarness();
+  assert.equal(harness.reveals.length, 6, "the workbench has six product cards");
+  harness.reveals.forEach((target) => harness.observer.trigger(target, true));
+  harness.reveals.forEach((target) => assert.equal(target.classList.contains("is-visible"), true));
+});
+
+test("reduced motion keeps the factory static and disables its toggle", () => {
   const harness = makeHarness({ reducedMotion: true });
   harness.observer.trigger(harness.factory, true);
   assert.equal(harness.factorySignal.classList.contains("is-running"), false);
   assert.equal(harness.factorySignal.style.animationPlayState, "paused");
+  assert.equal(harness.factoryToggle.hasAttribute("disabled"), true);
+  assert.equal(harness.factoryToggle.textContent, "Motion reduced");
+});
+
+test("a reduced-motion preference change updates the illustration at runtime", () => {
+  const harness = makeHarness();
+  harness.observer.trigger(harness.factory, true);
+  assert.equal(harness.factorySignal.classList.contains("is-running"), true);
+
+  harness.setReducedMotion(true);
+  assert.equal(harness.factoryToggle.hasAttribute("disabled"), true);
+  assert.equal(harness.factoryToggle.textContent, "Motion reduced");
+  assert.equal(harness.factorySignal.classList.contains("is-running"), false);
+  assert.equal(harness.factorySignal.style.animationPlayState, "paused");
+
+  harness.setReducedMotion(false);
+  assert.equal(harness.factoryToggle.hasAttribute("disabled"), false);
+  assert.equal(harness.factoryToggle.textContent, "Pause illustration");
+  assert.equal(harness.factorySignal.classList.contains("is-running"), true);
+  assert.equal(harness.factorySignal.style.animationPlayState, "running");
 });

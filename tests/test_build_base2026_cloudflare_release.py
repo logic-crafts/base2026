@@ -105,6 +105,8 @@ def test_tree_digest_is_independent_of_walk_order() -> None:
 def test_wordpress_download_is_deterministic_and_exact_source_only() -> None:
     payload = builder._wordpress_plugin_package()
     assert payload == builder._wordpress_plugin_package()
+    assert len(payload) == 19096
+    assert hashlib.sha256(payload).hexdigest() == "f588eddae0df5b91da4d70576b6cdec01d3a637b003ea076b9357cace6cb7e2a"
     with zipfile.ZipFile(io.BytesIO(payload)) as archive:
         assert archive.namelist() == [f"base2026-evidence-sidebar/{name}" for name in builder.WORDPRESS_PLUGIN_FILES]
         for entry, relative in zip(archive.infolist(), builder.WORDPRESS_PLUGIN_FILES):
@@ -115,6 +117,18 @@ def test_wordpress_download_is_deterministic_and_exact_source_only() -> None:
     builder._validate_public_relative_path(Path(builder.WORDPRESS_PLUGIN_DOWNLOAD))
     with pytest.raises(builder.ReleaseBuildError, match="archive"):
         builder._validate_public_relative_path(Path("downloads/arbitrary-release.zip"))
+
+
+def test_wordpress_download_rejects_header_filename_version_mismatch(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(
+        builder,
+        "WORDPRESS_PLUGIN_DOWNLOAD",
+        "downloads/base2026-evidence-sidebar-v0.1.1.zip",
+    )
+    with pytest.raises(builder.ReleaseBuildError, match="version"):
+        builder._wordpress_plugin_package()
 
 
 def test_wordpress_package_rejects_symlink_and_private_source(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -579,9 +593,61 @@ def test_startup_homepage_overlay_preserves_search_as_workspace(tmp_path: Path) 
     assert "Free tools. Real next steps." in tools_studio
     assert 'href="/tools/"' in rendered_homepage
     assert "https://base2026.dev/tools/" in hub_sitemap
+    assert hub_sitemap.count("https://base2026.dev/tools/page-readiness/") == 1
     assert (output / "static" / "base2026-tools-studio.css").read_bytes() == builder.DEFAULT_TOOLS_STUDIO_STYLESHEET.read_bytes()
     assert (output / "static" / "base2026-tools-studio.js").read_bytes() == builder.DEFAULT_TOOLS_STUDIO_SCRIPT.read_bytes()
-    assert receipt["artifact"]["file_count"] == 67
+    page_source = (output / "tools/page-readiness/index.html").read_text(encoding="utf-8")
+    assert "Page Source Check" in page_source
+    assert '<link rel="canonical" href="https://base2026.dev/tools/page-readiness/">' in page_source
+    assert page_source.count('class="b26-site-header"') == 1
+    assert builder.STARTUP_CORE_LINK in page_source
+    for extension in ("css", "js"):
+        assert (output / f"static/base2026-page-readiness.{extension}").read_bytes() == (
+            ROOT / f"templates/base2026-page-readiness.{extension}"
+        ).read_bytes()
+    media_manifest_path = ROOT / "templates/assets/tools-studio/asset-manifest.json"
+    media_manifest = json.loads(media_manifest_path.read_text(encoding="utf-8"))
+    media_entries = {entry["file"]: entry for entry in media_manifest["assets"]}
+    media_records = {
+        record["path"]: record
+        for record in receipt["files"]
+        if record["path"].startswith("static/assets/tools-studio/")
+    }
+    assert not (output / builder.TOOLS_STUDIO_MEDIA_MANIFEST_OUTPUT).exists()
+    assert set(media_records) == {
+        f"static/assets/tools-studio/{name}"
+        for name in builder.TOOLS_STUDIO_REVIEWED_MEDIA_NAMES
+    }
+    for name in builder.TOOLS_STUDIO_REVIEWED_MEDIA_NAMES:
+        manifest_entry = media_entries[name]
+        expected_path = f"static/assets/tools-studio/{name}"
+        expected_payload = (ROOT / "templates/assets/tools-studio" / name).read_bytes()
+        assert (output / expected_path).read_bytes() == expected_payload
+        record = media_records[expected_path]
+        assert record["kind"] == "binary"
+        assert record["changed"] is False
+        assert record["source_bytes"] == manifest_entry["bytes"]
+        assert record["artifact_bytes"] == manifest_entry["bytes"]
+        assert record["source_sha256"] == manifest_entry["sha256"]
+        assert record["artifact_sha256"] == manifest_entry["sha256"]
+    provenance = receipt["reviewed_repository_media"]
+    assert sorted(entry["output_path"] for entry in provenance) == sorted(media_records)
+    for entry in provenance:
+        manifest_entry = media_entries[entry["file"]]
+        assert entry["source_path"] == f"templates/assets/tools-studio/{entry['file']}"
+        assert entry["manifest_path"] == "templates/assets/tools-studio/asset-manifest.json"
+        assert entry["source_sha256"] == manifest_entry["sha256"]
+        assert entry["artifact_sha256"] == manifest_entry["sha256"]
+        assert entry["source_bytes"] == manifest_entry["bytes"]
+        assert entry["artifact_bytes"] == manifest_entry["bytes"]
+        assert entry["manifest_sha256"] == builder.TOOLS_STUDIO_REVIEWED_MEDIA_MANIFEST_SHA256
+        assert entry["candidate_url"] == manifest_entry["candidateUrl"]
+        assert entry["provenance"] == manifest_entry["source"]
+        assert entry["kind"] == "binary"
+    assert receipt["verification"]["reviewed_repository_media_verified"] is True
+    assert receipt["verification"]["reviewed_repository_media_count"] == 4
+    assert receipt["verification"]["reviewed_repository_media_manifest_sha256"] == builder.TOOLS_STUDIO_REVIEWED_MEDIA_MANIFEST_SHA256
+    assert receipt["artifact"]["file_count"] == 74
     blog = (output / "blog.html").read_text(encoding="utf-8")
     assert '<link rel="canonical" href="https://base2026.dev/blog">' in blog
     assert 'data-b26-blog-schema' in blog
@@ -608,6 +674,146 @@ def test_startup_homepage_overlay_preserves_search_as_workspace(tmp_path: Path) 
     assert '<link rel="canonical" href="https://base2026.dev/tools/source-diversity-check/">' in source_diversity_page.read_text(encoding="utf-8")
     assert "https://base2026.dev/tools/source-diversity-check/" in hub_sitemap
     assert (output / "static/assets/base2026-ai-visibility-measurement.png").read_bytes() == builder.DEFAULT_EDITORIAL_MEASUREMENT_IMAGE.read_bytes()
+
+
+def test_startup_release_rejects_tampered_retained_tools_studio_media(tmp_path: Path) -> None:
+    source = tmp_path / "source-web"
+    output = tmp_path / "release"
+    write_fixture(source)
+    retained = source / builder.TOOLS_STUDIO_MEDIA_OUTPUT_PREFIX / "evidence-workbench.webp"
+    retained.parent.mkdir(parents=True)
+    retained.write_bytes(b"tampered retained media")
+
+    with pytest.raises(builder.ReleaseBuildError, match="retained Tools Studio media hash/bytes mismatch"):
+        builder.build_release(
+            source,
+            output,
+            homepage_template=builder.DEFAULT_HOMEPAGE_TEMPLATE,
+            homepage_stylesheet=builder.DEFAULT_HOMEPAGE_STYLESHEET,
+        )
+    assert not output.exists()
+
+
+def test_startup_release_accepts_exact_retained_tools_studio_media(tmp_path: Path) -> None:
+    source = tmp_path / "source-web"
+    output = tmp_path / "release"
+    write_fixture(source)
+    retained_root = source / builder.TOOLS_STUDIO_MEDIA_OUTPUT_PREFIX
+    retained_root.mkdir(parents=True)
+    repository_root = ROOT / "templates/assets/tools-studio"
+    for name in builder.TOOLS_STUDIO_REVIEWED_MEDIA_NAMES:
+        (retained_root / name).write_bytes((repository_root / name).read_bytes())
+    (retained_root / "asset-manifest.json").write_bytes(
+        (repository_root / "asset-manifest.json").read_bytes()
+    )
+
+    receipt = builder.build_release(
+        source,
+        output,
+        homepage_template=builder.DEFAULT_HOMEPAGE_TEMPLATE,
+        homepage_stylesheet=builder.DEFAULT_HOMEPAGE_STYLESHEET,
+    )
+
+    assert receipt["artifact"]["file_count"] == 74
+    assert receipt["verification"]["reviewed_repository_media_verified"] is True
+    assert not (output / builder.TOOLS_STUDIO_MEDIA_MANIFEST_OUTPUT).exists()
+
+
+def test_startup_release_rejects_incomplete_retained_tools_studio_media(tmp_path: Path) -> None:
+    source = tmp_path / "source-web"
+    output = tmp_path / "release"
+    write_fixture(source)
+    retained_root = source / builder.TOOLS_STUDIO_MEDIA_OUTPUT_PREFIX
+    retained_root.mkdir(parents=True)
+    repository_root = ROOT / "templates/assets/tools-studio"
+    (retained_root / "evidence-workbench.webp").write_bytes(
+        (repository_root / "evidence-workbench.webp").read_bytes()
+    )
+
+    with pytest.raises(builder.ReleaseBuildError, match="media set is incomplete"):
+        builder.build_release(
+            source,
+            output,
+            homepage_template=builder.DEFAULT_HOMEPAGE_TEMPLATE,
+            homepage_stylesheet=builder.DEFAULT_HOMEPAGE_STYLESHEET,
+        )
+    assert not output.exists()
+
+
+def test_startup_release_rejects_tampered_retained_tools_studio_manifest(tmp_path: Path) -> None:
+    source = tmp_path / "source-web"
+    output = tmp_path / "release"
+    write_fixture(source)
+    retained_manifest = source / builder.TOOLS_STUDIO_MEDIA_MANIFEST_OUTPUT
+    retained_manifest.parent.mkdir(parents=True)
+    retained_manifest.write_text("{}\n", encoding="utf-8")
+
+    with pytest.raises(builder.ReleaseBuildError, match="retained Tools Studio media manifest"):
+        builder.build_release(
+            source,
+            output,
+            homepage_template=builder.DEFAULT_HOMEPAGE_TEMPLATE,
+            homepage_stylesheet=builder.DEFAULT_HOMEPAGE_STYLESHEET,
+        )
+    assert not output.exists()
+
+
+def _patch_tools_studio_media_fixture(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    *,
+    missing: str | None = None,
+    tamper_manifest: bool = False,
+) -> None:
+    media_root = tmp_path / "reviewed-tools-studio-media"
+    media_root.mkdir()
+    source_root = ROOT / "templates/assets/tools-studio"
+    for name in builder.TOOLS_STUDIO_REVIEWED_MEDIA_NAMES:
+        if name != missing:
+            (media_root / name).write_bytes((source_root / name).read_bytes())
+    manifest_bytes = (source_root / "asset-manifest.json").read_bytes()
+    if tamper_manifest:
+        manifest = json.loads(manifest_bytes.decode("utf-8"))
+        manifest["assets"][0]["sha256"] = "0" * 64
+        manifest_bytes = (json.dumps(manifest, indent=2) + "\n").encode("utf-8")
+    manifest_path = media_root / "asset-manifest.json"
+    manifest_path.write_bytes(manifest_bytes)
+    monkeypatch.setattr(builder, "DEFAULT_TOOLS_STUDIO_MEDIA_ROOT", media_root)
+    monkeypatch.setattr(builder, "DEFAULT_TOOLS_STUDIO_MEDIA_MANIFEST", manifest_path)
+
+
+def test_startup_release_rejects_missing_reviewed_tools_studio_source(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _patch_tools_studio_media_fixture(
+        tmp_path, monkeypatch, missing="evidence-search-card.png"
+    )
+    source = tmp_path / "source-web"
+    write_fixture(source)
+
+    with pytest.raises(builder.ReleaseBuildError, match="media source is missing"):
+        builder.build_release(
+            source,
+            tmp_path / "release",
+            homepage_template=builder.DEFAULT_HOMEPAGE_TEMPLATE,
+            homepage_stylesheet=builder.DEFAULT_HOMEPAGE_STYLESHEET,
+        )
+
+
+def test_startup_release_rejects_wrong_reviewed_tools_studio_manifest(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _patch_tools_studio_media_fixture(tmp_path, monkeypatch, tamper_manifest=True)
+    source = tmp_path / "source-web"
+    write_fixture(source)
+
+    with pytest.raises(builder.ReleaseBuildError, match="media manifest hash"):
+        builder.build_release(
+            source,
+            tmp_path / "release",
+            homepage_template=builder.DEFAULT_HOMEPAGE_TEMPLATE,
+            homepage_stylesheet=builder.DEFAULT_HOMEPAGE_STYLESHEET,
+        )
 
 
 def test_startup_homepage_exposes_product_first_evidence_brief_search() -> None:

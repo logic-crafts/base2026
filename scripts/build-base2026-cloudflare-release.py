@@ -124,6 +124,10 @@ DEFAULT_SOURCE_BACKED_BRIEF_SCRIPT = PROJECT_ROOT / "templates" / "base2026-sour
 DEFAULT_TOOLS_STUDIO_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-tools-studio.html"
 DEFAULT_TOOLS_STUDIO_STYLESHEET = PROJECT_ROOT / "templates" / "base2026-tools-studio.css"
 DEFAULT_TOOLS_STUDIO_SCRIPT = PROJECT_ROOT / "templates" / "base2026-tools-studio.js"
+DEFAULT_TOOLS_STUDIO_MEDIA_ROOT = (
+    PROJECT_ROOT / "templates" / "assets" / "tools-studio"
+)
+DEFAULT_TOOLS_STUDIO_MEDIA_MANIFEST = DEFAULT_TOOLS_STUDIO_MEDIA_ROOT / "asset-manifest.json"
 DEFAULT_WORDPRESS_PLUGIN_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-wordpress-evidence-sidebar.html"
 WORDPRESS_PLUGIN_ROOT = PROJECT_ROOT / "plugins" / "wordpress" / "base2026-evidence-sidebar"
 WORDPRESS_PLUGIN_DOWNLOAD = "downloads/base2026-evidence-sidebar-v0.1.0.zip"
@@ -133,6 +137,7 @@ WORDPRESS_PLUGIN_FILES = (
     "base2026-evidence-sidebar.php",
     "readme.txt",
 )
+WORDPRESS_PLUGIN_MAIN_FILE = "base2026-evidence-sidebar.php"
 
 OLD_WORDPRESS_ORIGIN = "https://aggressorbulkit.online"
 BASE2026_ORIGIN = "https://base2026.dev"
@@ -141,6 +146,41 @@ NEW_BASE2026_PREFIX = ""
 OLD_SEARCH_PREFIX = "/knowledge-search"
 NEW_SEARCH_PREFIX = "/api/search"
 ASSET_VERSION = "base2026-cloudflare-20260819-01"
+
+# These are the only reviewed Design & Media exports admitted to a public
+# release.  Keep the output mapping explicit: the repository also contains
+# private/raw media that must never be discovered by a glob or directory copy.
+TOOLS_STUDIO_MEDIA_OUTPUT_PREFIX = "static/assets/tools-studio"
+TOOLS_STUDIO_MEDIA_MANIFEST_OUTPUT = (
+    f"{TOOLS_STUDIO_MEDIA_OUTPUT_PREFIX}/asset-manifest.json"
+)
+TOOLS_STUDIO_REVIEWED_MEDIA_NAMES = (
+    "evidence-workbench.webp",
+    "evidence-search-interface.webp",
+    "tools-studio-social.png",
+    "evidence-search-card.png",
+)
+TOOLS_STUDIO_REVIEWED_MEDIA_MANIFEST_SHA256 = (
+    "965ca2c9edc649002af694f92926d56ce135b116f81ec186588af7e143d2c367"
+)
+TOOLS_STUDIO_REVIEWED_MEDIA_ALLOWLIST = {
+    "evidence-workbench.webp": {
+        "bytes": 46250,
+        "sha256": "052a11dcc069209560dccb4cc8da893e837390339735eb9b75ed2c1275e8e5d2",
+    },
+    "evidence-search-interface.webp": {
+        "bytes": 42796,
+        "sha256": "6a42d51d9d40d0b6a0cc549e4d3c43d54bf4b20896267a1a9cf5eb2bc04ed588",
+    },
+    "tools-studio-social.png": {
+        "bytes": 241571,
+        "sha256": "ad7fb89756702a4106e12761f717642103c21cb09d55134abb6e93b8872964f1",
+    },
+    "evidence-search-card.png": {
+        "bytes": 162507,
+        "sha256": "74b6b131697d65d5982abeba0c2564013db14cb7e42d032347711123bcece692",
+    },
+}
 
 # Public web text is intentionally broader than the sample's extension set so
 # this remains useful for future static assets.  Content-based detection below
@@ -231,6 +271,10 @@ EXCLUDED_SOURCE_EXACT = {
     # This one public product archive is always rebuilt from the exact reviewed
     # source allowlist below. Never inherit any archive bytes from an old release.
     WORDPRESS_PLUGIN_DOWNLOAD,
+    # The manifest is review provenance, not a served product asset.  A
+    # retained copy is checked against the reviewed repository manifest before
+    # it is excluded from the artifact.
+    TOOLS_STUDIO_MEDIA_MANIFEST_OUTPUT,
 }
 EXCLUDED_SOURCE_PREFIXES = {"knowledge"}
 STARTUP_PERSONAL_ASSET_PATHS = {
@@ -454,6 +498,169 @@ def _is_excluded_source_path(relative_path: Path) -> bool:
 
 def _sha256(payload: bytes) -> str:
     return hashlib.sha256(payload).hexdigest()
+
+
+def _load_reviewed_tools_studio_media() -> tuple[bytes, tuple[dict[str, object], ...]]:
+    """Load the exact reviewed Tools Studio media allowlist.
+
+    The media manifest is a checked-in review boundary, not an input index to
+    discover arbitrary files.  Pinning its bytes and the four explicit output
+    names means a changed, incomplete or redirected manifest fails before any
+    release staging begins.
+    """
+
+    manifest_path = DEFAULT_TOOLS_STUDIO_MEDIA_MANIFEST
+    media_root = DEFAULT_TOOLS_STUDIO_MEDIA_ROOT
+    if manifest_path.is_symlink() or not manifest_path.is_file():
+        raise ReleaseBuildError(
+            f"reviewed Tools Studio media manifest is missing or not a regular file: {manifest_path}"
+        )
+    try:
+        manifest_bytes = manifest_path.read_bytes()
+    except OSError as exc:
+        raise ReleaseBuildError(
+            f"reviewed Tools Studio media manifest could not be read: {manifest_path}"
+        ) from exc
+    if _sha256(manifest_bytes) != TOOLS_STUDIO_REVIEWED_MEDIA_MANIFEST_SHA256:
+        raise ReleaseBuildError(
+            "reviewed Tools Studio media manifest hash does not match the pinned review"
+        )
+    try:
+        manifest_text = manifest_bytes.decode("utf-8")
+        manifest = json.loads(manifest_text)
+    except (UnicodeError, json.JSONDecodeError) as exc:
+        raise ReleaseBuildError(
+            "reviewed Tools Studio media manifest is not valid UTF-8 JSON"
+        ) from exc
+    if not isinstance(manifest, dict):
+        raise ReleaseBuildError("reviewed Tools Studio media manifest must be a JSON object")
+    if manifest.get("schema") != "base2026.tools-studio-media.v1":
+        raise ReleaseBuildError("reviewed Tools Studio media manifest has an unsupported schema")
+    if manifest.get("status") != "reviewed_source_candidate_not_deployed":
+        raise ReleaseBuildError("reviewed Tools Studio media manifest has an unexpected status")
+    assets = manifest.get("assets")
+    if not isinstance(assets, list) or len(assets) != len(TOOLS_STUDIO_REVIEWED_MEDIA_NAMES):
+        raise ReleaseBuildError(
+            "reviewed Tools Studio media manifest must contain exactly four assets"
+        )
+    names = tuple(
+        asset.get("file") if isinstance(asset, dict) else None for asset in assets
+    )
+    if names != TOOLS_STUDIO_REVIEWED_MEDIA_NAMES:
+        raise ReleaseBuildError(
+            "reviewed Tools Studio media manifest does not match the explicit four-file allowlist"
+        )
+    try:
+        manifest_root = manifest_path.parent.resolve(strict=True)
+        expected_root = media_root.resolve(strict=True)
+    except OSError as exc:
+        raise ReleaseBuildError(
+            "reviewed Tools Studio media manifest/source directory could not be resolved"
+        ) from exc
+    if manifest_root != expected_root:
+        raise ReleaseBuildError(
+            "reviewed Tools Studio media manifest/source directory mapping is not explicit"
+        )
+
+    reviewed_assets: list[dict[str, object]] = []
+    for asset in assets:
+        assert isinstance(asset, dict)  # names validation above establishes this
+        name = asset["file"]
+        expected = TOOLS_STUDIO_REVIEWED_MEDIA_ALLOWLIST[name]
+        output_path = f"{TOOLS_STUDIO_MEDIA_OUTPUT_PREFIX}/{name}"
+        candidate_url = f"{BASE2026_ORIGIN}/{output_path}"
+        if asset.get("bytes") != expected["bytes"] or asset.get("sha256") != expected["sha256"]:
+            raise ReleaseBuildError(
+                f"reviewed Tools Studio media manifest hash/bytes mismatch: {name}"
+            )
+        if asset.get("candidateUrl") != candidate_url:
+            raise ReleaseBuildError(
+                f"reviewed Tools Studio media manifest candidate URL mismatch: {name}"
+            )
+        source_path = media_root / name
+        if source_path.is_symlink() or not source_path.is_file():
+            raise ReleaseBuildError(
+                f"reviewed Tools Studio media source is missing or not a regular file: {source_path}"
+            )
+        try:
+            source_payload = source_path.read_bytes()
+        except OSError as exc:
+            raise ReleaseBuildError(
+                f"reviewed Tools Studio media source could not be read: {source_path}"
+            ) from exc
+        actual_bytes = len(source_payload)
+        actual_sha256 = _sha256(source_payload)
+        if actual_bytes != expected["bytes"] or actual_sha256 != expected["sha256"]:
+            raise ReleaseBuildError(
+                f"reviewed Tools Studio media source hash/bytes mismatch: {name}"
+            )
+        reviewed_assets.append(
+            {
+                "file": name,
+                "output_path": output_path,
+                "source_path": f"templates/assets/tools-studio/{name}",
+                "manifest_path": "templates/assets/tools-studio/asset-manifest.json",
+                "source_sha256": actual_sha256,
+                "source_bytes": actual_bytes,
+                "candidate_url": candidate_url,
+                "provenance": asset["source"],
+            }
+        )
+    return manifest_bytes, tuple(reviewed_assets)
+
+
+def _validate_retained_tools_studio_media(
+    source: Path,
+    manifest_bytes: bytes,
+    reviewed_assets: Sequence[Mapping[str, object]],
+) -> None:
+    """Reject tampered retained media before the generated overlay can replace it."""
+
+    retained_manifest = source / TOOLS_STUDIO_MEDIA_MANIFEST_OUTPUT
+    retained_manifest_present = retained_manifest.is_symlink() or retained_manifest.exists()
+    if retained_manifest_present:
+        if retained_manifest.is_symlink() or not retained_manifest.is_file():
+            raise ReleaseBuildError(
+                f"retained Tools Studio media manifest is not a regular file: {retained_manifest}"
+            )
+        try:
+            retained_manifest_bytes = retained_manifest.read_bytes()
+        except OSError as exc:
+            raise ReleaseBuildError(
+                f"retained Tools Studio media manifest could not be read: {retained_manifest}"
+            ) from exc
+        if retained_manifest_bytes != manifest_bytes:
+            raise ReleaseBuildError(
+                "retained Tools Studio media manifest does not match the reviewed repository manifest"
+            )
+
+    retained_paths = [
+        source / Path(str(asset["output_path"])) for asset in reviewed_assets
+    ]
+    retained_presence = [path.is_symlink() or path.exists() for path in retained_paths]
+    for asset in reviewed_assets:
+        relative_path = Path(str(asset["output_path"]))
+        retained = source / relative_path
+        if not retained.is_symlink() and not retained.exists():
+            continue
+        if retained.is_symlink() or not retained.is_file():
+            raise ReleaseBuildError(
+                f"retained Tools Studio media is not a regular file: {relative_path.as_posix()}"
+            )
+        try:
+            payload = retained.read_bytes()
+        except OSError as exc:
+            raise ReleaseBuildError(
+                f"retained Tools Studio media could not be read: {relative_path.as_posix()}"
+            ) from exc
+        if len(payload) != asset["source_bytes"] or _sha256(payload) != asset["source_sha256"]:
+            raise ReleaseBuildError(
+                f"retained Tools Studio media hash/bytes mismatch: {relative_path.as_posix()}"
+            )
+    if (retained_manifest_present or any(retained_presence)) and not all(retained_presence):
+        raise ReleaseBuildError(
+            "retained Tools Studio media set is incomplete; expected all four reviewed files"
+        )
 
 
 def _is_text_file(relative_path: Path, payload: bytes) -> bool:
@@ -895,6 +1102,7 @@ HUB_SITEMAP_ROUTES = (
     "/journal/source-backed-video-search-cloudflare/",
     "/journal/source-diversity-check/",
     "/tools/",
+    "/tools/page-readiness/",
     "/tools/wordpress-evidence-sidebar/",
     "/tools/evidence-search/",
     "/tools/source-diversity-check/",
@@ -1899,9 +2107,35 @@ def _artifact_files(root: Path, excluded: set[str]) -> list[Path]:
     )
 
 
+def _validate_wordpress_plugin_download_version(source_text: str) -> None:
+    """Keep the installable archive name bound to its reviewed PHP header."""
+
+    download_name = Path(WORDPRESS_PLUGIN_DOWNLOAD).name
+    filename_match = re.fullmatch(
+        r"base2026-evidence-sidebar-v(?P<version>[0-9]+(?:\.[0-9]+)*)\.zip",
+        download_name,
+    )
+    header_versions = re.findall(
+        r"(?mi)^\s*\*\s*Version:\s*(?P<version>[0-9]+(?:\.[0-9]+)*)\s*$",
+        source_text,
+    )
+    if filename_match is None or len(header_versions) != 1:
+        raise ReleaseBuildError(
+            "WordPress plugin download filename/header version could not be verified"
+        )
+    filename_version = filename_match.group("version")
+    header_version = header_versions[0]
+    if filename_version != header_version:
+        raise ReleaseBuildError(
+            "WordPress plugin download filename version does not match the PHP header version: "
+            f"filename={filename_version}, header={header_version}"
+        )
+
+
 def _wordpress_plugin_package() -> bytes:
     """Build one deterministic installable ZIP, never a repository/release dump."""
     buffer = io.BytesIO()
+    version_checked = False
     with zipfile.ZipFile(buffer, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
         for relative_name in WORDPRESS_PLUGIN_FILES:
             source = WORDPRESS_PLUGIN_ROOT / relative_name
@@ -1916,11 +2150,16 @@ def _wordpress_plugin_package() -> bytes:
                 raise ReleaseBuildError("plugin package accepts reviewed UTF-8 source only") from exc
             if any(_public_safety_findings(source_text).values()):
                 raise ReleaseBuildError(f"plugin source contains a private marker: {relative_name}")
+            if relative_name == WORDPRESS_PLUGIN_MAIN_FILE:
+                _validate_wordpress_plugin_download_version(source_text)
+                version_checked = True
             entry = zipfile.ZipInfo(f"base2026-evidence-sidebar/{relative_name}", (2026, 9, 5, 0, 0, 0))
             entry.create_system = 3
             entry.external_attr = 0o100644 << 16
             entry.compress_type = zipfile.ZIP_DEFLATED
             archive.writestr(entry, payload, compress_type=zipfile.ZIP_DEFLATED, compresslevel=9)
+    if WORDPRESS_PLUGIN_MAIN_FILE in WORDPRESS_PLUGIN_FILES and not version_checked:
+        raise ReleaseBuildError("WordPress plugin package did not verify its PHP header version")
     return buffer.getvalue()
 
 
@@ -1935,6 +2174,7 @@ def _receipt(
     replacements: ReplacementCounts,
     verification: Mapping[str, object],
     output_file_count: int,
+    reviewed_repository_media: Sequence[Mapping[str, object]] = (),
 ) -> dict[str, object]:
     source_file_count = source_scanned_file_count
     source_public_file_count = len(source_records)
@@ -1989,6 +2229,7 @@ def _receipt(
         },
         "replacements": replacements.as_dict(),
         "verification": dict(verification),
+        "reviewed_repository_media": [dict(item) for item in reviewed_repository_media],
         "excluded_source_paths": list(excluded_source_files),
         "files": file_entries,
     }
@@ -2046,6 +2287,10 @@ def build_release(
         raise ReleaseBuildError("member workspace requires the current startup shell")
     if not members_workspace and (source / "my-research" / "index.html").exists():
         raise ReleaseBuildError("member-enabled input requires explicit --members-workspace")
+    reviewed_media_manifest_bytes = b""
+    reviewed_media_assets: tuple[dict[str, object], ...] = ()
+    if standalone_startup:
+        reviewed_media_manifest_bytes, reviewed_media_assets = _load_reviewed_tools_studio_media()
     startup_header = DEFAULT_STARTUP_HEADER.read_text(encoding="utf-8").strip() if standalone_startup else ""
     startup_footer = DEFAULT_STARTUP_FOOTER.read_text(encoding="utf-8").strip() if standalone_startup else ""
     startup_shell_css = DEFAULT_STARTUP_SHELL_STYLESHEET.read_bytes() if standalone_startup else b""
@@ -2080,6 +2325,10 @@ def build_release(
     ]
     if not relative_files:
         raise ReleaseBuildError("source-web contains no includable public files")
+    if standalone_startup:
+        _validate_retained_tools_studio_media(
+            source, reviewed_media_manifest_bytes, reviewed_media_assets
+        )
 
     public_root_names = {
         child.name.casefold()
@@ -2091,6 +2340,7 @@ def build_release(
 
     stage = Path(tempfile.mkdtemp(prefix=f".{output.name}.build-", dir=str(output.parent)))
     records: list[FileRecord] = []
+    reviewed_repository_media_provenance: list[dict[str, object]] = []
     replacements = ReplacementCounts()
     source_bytes = 0
     artifact_bytes = 0
@@ -2146,7 +2396,12 @@ def build_release(
                 )
             )
 
-        def write_generated_public_file(relative_name: str, payload: bytes, *, kind: str = "text") -> None:
+        def write_generated_public_file(
+            relative_name: str,
+            payload: bytes,
+            *,
+            kind: str = "text",
+        ) -> None:
             """Write a required root file and update its audit record."""
 
             nonlocal artifact_bytes
@@ -2188,6 +2443,60 @@ def build_release(
                 )
             artifact_bytes += len(payload) - previous_size
             _write_bytes(destination, payload, 0o644)
+
+        def write_reviewed_repository_media(
+            asset: Mapping[str, object], payload: bytes
+        ) -> None:
+            """Write one explicitly allowlisted binary and bind its provenance."""
+
+            name = str(asset["file"])
+            expected = TOOLS_STUDIO_REVIEWED_MEDIA_ALLOWLIST.get(name)
+            expected_path = f"{TOOLS_STUDIO_MEDIA_OUTPUT_PREFIX}/{name}"
+            if (
+                expected is None
+                or asset.get("output_path") != expected_path
+                or asset.get("source_path") != f"templates/assets/tools-studio/{name}"
+                or asset.get("manifest_path") != "templates/assets/tools-studio/asset-manifest.json"
+                or asset.get("source_bytes") != expected["bytes"]
+                or asset.get("source_sha256") != expected["sha256"]
+                or asset.get("candidate_url") != f"{BASE2026_ORIGIN}/{expected_path}"
+                or len(payload) != expected["bytes"]
+                or _sha256(payload) != expected["sha256"]
+            ):
+                raise ReleaseBuildError(
+                    f"unreviewed or changed binary cannot be emitted as Tools Studio media: {name}"
+                )
+            write_generated_public_file(expected_path, payload, kind="binary")
+            for index, existing in enumerate(records):
+                if existing.relative_path != expected_path:
+                    continue
+                if existing.source_sha256 and existing.source_sha256 != expected["sha256"]:
+                    raise ReleaseBuildError(
+                        f"retained Tools Studio media provenance mismatch: {expected_path}"
+                    )
+                records[index] = FileRecord(
+                    relative_path=expected_path,
+                    source_sha256=str(expected["sha256"]),
+                    artifact_sha256=_sha256(payload),
+                    source_size=int(expected["bytes"]),
+                    artifact_size=len(payload),
+                    kind="binary",
+                    changed=False,
+                )
+                break
+            else:  # pragma: no cover - write_generated_public_file always records the path
+                raise ReleaseBuildError(
+                    f"reviewed Tools Studio media record was not created: {expected_path}"
+                )
+            reviewed_repository_media_provenance.append(
+                {
+                    **asset,
+                    "manifest_sha256": _sha256(reviewed_media_manifest_bytes),
+                    "artifact_sha256": _sha256(payload),
+                    "artifact_bytes": len(payload),
+                    "kind": "binary",
+                }
+            )
 
         def write_tracked_public_overlay(relative_name: str, source_path: Path) -> None:
             """Publish a reviewed repository page through the normal release transforms."""
@@ -2372,6 +2681,22 @@ def build_release(
             write_generated_public_file(
                 "static/base2026-tools-studio.js", DEFAULT_TOOLS_STUDIO_SCRIPT.read_bytes()
             )
+            # Only the four reviewed repository exports may cross into the
+            # public asset tree.  Their manifest/source hashes are attached to
+            # the generated records so the existing binary preservation gate
+            # remains strict for every binary, including generated overlays.
+            for asset in reviewed_media_assets:
+                name = str(asset["file"])
+                source_path = DEFAULT_TOOLS_STUDIO_MEDIA_ROOT / name
+                media_payload = source_path.read_bytes()
+                if (
+                    len(media_payload) != asset["source_bytes"]
+                    or _sha256(media_payload) != asset["source_sha256"]
+                ):
+                    raise ReleaseBuildError(
+                        f"reviewed Tools Studio media changed during build: {name}"
+                    )
+                write_reviewed_repository_media(asset, media_payload)
             write_generated_public_file(
                 "tools/index.html",
                 _render_startup_page(
@@ -2389,6 +2714,20 @@ def build_release(
                 ),
             )
             write_generated_public_file(WORDPRESS_PLUGIN_DOWNLOAD, _wordpress_plugin_package(), kind="binary")
+            # Source-only Page Source Check; no shared Tools Studio or auth changes.
+            for extension in ("css", "js"):
+                write_generated_public_file(
+                    f"static/base2026-page-readiness.{extension}",
+                    (PROJECT_ROOT / "templates" / f"base2026-page-readiness.{extension}").read_bytes(),
+                )
+            write_generated_public_file(
+                "tools/page-readiness/index.html",
+                _render_startup_page(
+                    (PROJECT_ROOT / "templates" / "base2026-page-readiness.html").read_text(encoding="utf-8"),
+                    startup_header,
+                    startup_footer,
+                ),
+            )
             write_generated_public_file(
                 "static/base2026-evidence-search.css",
                 DEFAULT_EVIDENCE_SEARCH_STYLESHEET.read_bytes(),
@@ -2625,6 +2964,27 @@ def build_release(
         if not manifest_files_match:
             raise ReleaseBuildError("static/manifest.json files[] does not match static/*.jsonl")
 
+        reviewed_media_outputs_match = True
+        if standalone_startup:
+            if len(reviewed_repository_media_provenance) != len(TOOLS_STUDIO_REVIEWED_MEDIA_NAMES):
+                reviewed_media_outputs_match = False
+            for asset in reviewed_media_assets:
+                output_path = Path(str(asset["output_path"]))
+                destination = stage / output_path
+                if not destination.is_file() or destination.is_symlink():
+                    reviewed_media_outputs_match = False
+                    continue
+                output_payload = destination.read_bytes()
+                if (
+                    len(output_payload) != asset["source_bytes"]
+                    or _sha256(output_payload) != asset["source_sha256"]
+                ):
+                    reviewed_media_outputs_match = False
+            if not reviewed_media_outputs_match:
+                raise ReleaseBuildError(
+                    "staged Tools Studio media does not match the reviewed manifest/provenance"
+                )
+
         # Binary records are checked against source hashes before publication.
         binary_records = [
             record for record in records
@@ -2636,6 +2996,15 @@ def build_release(
         )
         if not binary_preserved:
             raise ReleaseBuildError("one or more binary files changed during transformation")
+
+        reviewed_media_verified = (
+            (len(reviewed_repository_media_provenance) == len(TOOLS_STUDIO_REVIEWED_MEDIA_NAMES))
+            and reviewed_media_outputs_match
+            and _sha256(reviewed_media_manifest_bytes)
+            == TOOLS_STUDIO_REVIEWED_MEDIA_MANIFEST_SHA256
+            if standalone_startup
+            else None
+        )
 
         verification = {
             "wordpress_plugin_package_verified": (
@@ -2660,6 +3029,11 @@ def build_release(
             "claim_receipt_sidecars_checked": claim_receipt_sidecars_checked,
             "intentional_redirect_documentation_files": redirect_docs,
             "binary_bytes_preserved": binary_preserved,
+            "reviewed_repository_media_manifest_sha256": (
+                _sha256(reviewed_media_manifest_bytes) if standalone_startup else None
+            ),
+            "reviewed_repository_media_count": len(reviewed_repository_media_provenance),
+            "reviewed_repository_media_verified": reviewed_media_verified,
             "artifact_files_include_required_root_metadata": all(
                 (stage / required).is_file() for required in (ROBOTS_FILENAME, HEADERS_FILENAME)
             ),
@@ -2678,6 +3052,7 @@ def build_release(
             replacements=replacements,
             verification=verification,
             output_file_count=len(records) + 2,
+            reviewed_repository_media=reviewed_repository_media_provenance,
         )
         _write_bytes(stage / RECEIPT_FILENAME, _format_json(receipt), 0o644)
 

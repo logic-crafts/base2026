@@ -13,6 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 LANDING_PATH = ROOT / "templates" / "base2026-wordpress-evidence-sidebar.html"
 STUDIO_PATH = ROOT / "templates" / "base2026-tools-studio.html"
 CSS_PATH = ROOT / "templates" / "base2026-tools-studio.css"
+PLAYGROUND_DEMO_URL = "https://playground.wordpress.net/?storage=temp#eyIkc2NoZW1hIjoiaHR0cHM6Ly9wbGF5Z3JvdW5kLndvcmRwcmVzcy5uZXQvYmx1ZXByaW50LXNjaGVtYS5qc29uIiwibWV0YSI6eyJ0aXRsZSI6IkFkZCBvbmUgaW5zcGVjdGFibGUgc291cmNlIG5vdGUiLCJhdXRob3IiOiJiYXNlMjAyNiIsImRlc2NyaXB0aW9uIjoiRGlzcG9zYWJsZSBHdXRlbmJlcmcgcHJhY3RpY2Ugd2l0aCB0aGUgcmVsZWFzZWQgQmFzZTIwMjYgRXZpZGVuY2UgU2lkZWJhciBiZXRhLiBTeW50aGV0aWMgZHJhZnQgb25seS4gU2VhcmNoIGFuZCBpbnNlcnQgcmVxdWlyZSB5b3VyIGV4cGxpY2l0IGNsaWNrczsgcmVzZWFyY2gsIG5vdCBmYWN0LWNoZWNraW5nLiJ9LCJwcmVmZXJyZWRWZXJzaW9ucyI6eyJwaHAiOiI4LjMiLCJ3cCI6ImxhdGVzdCJ9LCJmZWF0dXJlcyI6eyJuZXR3b3JraW5nIjp0cnVlfSwibG9naW4iOnRydWUsImxhbmRpbmdQYWdlIjoiL3dwLWFkbWluL3Bvc3QucGhwP3Bvc3Q9MTIzJmFjdGlvbj1lZGl0Iiwic2l0ZU9wdGlvbnMiOnsiYmxvZ25hbWUiOiJTb3VyY2Ugbm90ZSBwcmFjdGljZSDigJQgc3ludGhldGljIGRlbW8iLCJibG9nX3B1YmxpYyI6IjAifSwic3RlcHMiOlt7InN0ZXAiOiJpbnN0YWxsUGx1Z2luIiwicGx1Z2luRGF0YSI6eyJyZXNvdXJjZSI6InVybCIsInVybCI6Imh0dHBzOi8vYmFzZTIwMjYuZGV2L2Rvd25sb2Fkcy9iYXNlMjAyNi1ldmlkZW5jZS1zaWRlYmFyLXYwLjEuMC56aXAifSwib3B0aW9ucyI6eyJhY3RpdmF0ZSI6dHJ1ZSwidGFyZ2V0Rm9sZGVyTmFtZSI6ImJhc2UyMDI2LWV2aWRlbmNlLXNpZGViYXIifSwicHJvZ3Jlc3MiOnsiY2FwdGlvbiI6Ikluc3RhbGwgdGhlIHJlbGVhc2VkIEV2aWRlbmNlIFNpZGViYXIgYmV0YSJ9fSx7InN0ZXAiOiJydW5QSFAiLCJjb2RlIjoiPD9waHBcbnJlcXVpcmUgJy93b3JkcHJlc3Mvd3AtbG9hZC5waHAnO1xuaWYgKGdldF9wb3N0KDEyMykpIHsgdGhyb3cgbmV3IEV4Y2VwdGlvbignRGVtbyBkcmFmdCBJRCBhbHJlYWR5IGV4aXN0czsgb3BlbiBhIGZyZXNoIFBsYXlncm91bmQuJyk7IH1cbiRjb250ZW50ID0gJzwhLS0gd3A6cGFyYWdyYXBoIC0tPjxwPjxzdHJvbmc+U3ludGhldGljIHByYWN0aWNlIGRyYWZ0Ljwvc3Ryb25nPiBUaGlzIGlzIG5vdCBhIGNsaWVudCBhcnRpY2xlIG9yIGEgcmVhbCBTRU8gcmVzdWx0LiBLZWVwIHByaXZhdGUgbWF0ZXJpYWwgb3V0IG9mIHRoaXMgdGVtcG9yYXJ5IGRlbW8uPC9wPjwhLS0gL3dwOnBhcmFncmFwaCAtLT48IS0tIHdwOnBhcmFncmFwaCAtLT48cD5EcmFmdCB0byByZWZyZXNoOiBhZGQgYSByZWxhdGVkIGludGVybmFsIGxpbmsgb25seSBhZnRlciBkZWNpZGluZyB3aGF0IHRoZSByZWFkZXIgY2FuIGRvIG5leHQuIFJlcGxhY2UgdGhpcyBwcmFjdGljZSBwYXJhZ3JhcGggd2l0aCB5b3VyIG93biB3b3JkaW5nIGlmIHVzZWZ1bC48L3A+PCEtLSAvd3A6cGFyYWdyYXBoIC0tPjwhLS0gd3A6cGFyYWdyYXBoIC0tPjxwPlByYWN0aWNlOiBvcGVuIEJhc2UyMDI2IEV2aWRlbmNlIGZyb20gdGhlIGVkaXRvciBPcHRpb25zIG1lbnUsIHNlYXJjaCBpbnRlcm5hbCBsaW5raW5nLCBvcGVuIGFuIG9yaWdpbmFsIHNvdXJjZSBhbmQganVkZ2UgaXRzIHJlbGV2YW5jZS4gT25seSB0aGVuIG9wdGlvbmFsbHkgaW5zZXJ0IGEgcmVzZWFyY2ggbm90ZS4gTGVhdmUgdGhlIG9wdGlvbmFsIEJhc2UyMDI2IGxpbmsgb2ZmLCBjaG9vc2UgU2F2ZSBkcmFmdCBhbmQgcmVsb2FkLiBEbyBub3QgcHVibGlzaC4gVGhlIHNvdXJjZSBzdGF0ZW1lbnQgaXMgbm90IGEgZmFjdCBjaGVjayBvciBhIHJhbmtpbmcgcHJvbWlzZS48L3A+PCEtLSAvd3A6cGFyYWdyYXBoIC0tPic7XG4kaWQgPSB3cF9pbnNlcnRfcG9zdChhcnJheSgnaW1wb3J0X2lkJz0+MTIzLCdwb3N0X3RpdGxlJz0+J1ByYWN0aWNlIHJlZnJlc2g6IG9uZSB1c2VmdWwgaW50ZXJuYWwgbGluaycsJ3Bvc3RfY29udGVudCc9PiRjb250ZW50LCdwb3N0X3N0YXR1cyc9PidkcmFmdCcsJ3Bvc3RfdHlwZSc9Pidwb3N0JywncG9zdF9hdXRob3InPT4xKSx0cnVlKTtcbmlmIChpc193cF9lcnJvcigkaWQpIHx8ICRpZCAhPT0gMTIzKSB7IHRocm93IG5ldyBFeGNlcHRpb24oJ0NvdWxkIG5vdCBjcmVhdGUgdGhlIHN5bnRoZXRpYyBkcmFmdC4nKTsgfVxuIn1dfQ=="
 
 
 class LandingParser(HTMLParser):
@@ -57,7 +58,7 @@ class WordPressLandingTests(unittest.TestCase):
         self.assertIn('<meta name="robots" content="index,follow">', self.html)
         self.assertIn('<link rel="canonical" href="https://base2026.dev/tools/wordpress-evidence-sidebar/">', self.html)
         self.assertIn('/static/base2026-startup-shell.css?v=20260820-b26v1', self.html)
-        self.assertIn('/static/base2026-tools-studio.css?v=20260905-tools-studio-v1', self.html)
+        self.assertIn('/static/base2026-tools-studio.css?v=20260905-tools-media-v2', self.html)
         self.assertIn("Research from Gutenberg. Keep the source attached.", self.html)
         self.assertIn("Research one SEO or GEO question without leaving Gutenberg", self.html)
 
@@ -101,6 +102,29 @@ class WordPressLandingTests(unittest.TestCase):
         self.assertIn("This is a product flow example, not a Base2026 result.", self.html)
         self.assertIn("Illustrative preview · search results depend on your question.", self.html)
         self.assertIn("Example structure · review and edit your note before publishing.", self.html)
+
+    def test_playground_demo_cta_is_explicit_and_disclosed(self) -> None:
+        demo_links = [
+            attrs for tag, attrs in self.parser.tags
+            if tag == "a" and attrs.get("href") == PLAYGROUND_DEMO_URL
+        ]
+        self.assertEqual(len(PLAYGROUND_DEMO_URL), 2883)
+        self.assertTrue(PLAYGROUND_DEMO_URL.startswith("https://playground.wordpress.net/?storage=temp#"))
+        self.assertEqual(len(demo_links), 1)
+        demo = demo_links[0]
+        self.assertEqual(demo.get("target"), "_blank")
+        self.assertEqual(demo.get("rel"), "noopener noreferrer")
+        self.assertEqual(demo.get("aria-describedby"), "wordpress-demo-disclosure")
+        for phrase in (
+            "Disposable temporary WordPress.",
+            "opens only when you click",
+            "discarded on close",
+            "does not auto-search, insert research or publish",
+            "official Playground CORS proxy",
+            "Supply no private material.",
+            "Attribution is not a fact check.",
+        ):
+            self.assertIn(phrase, self.html)
 
     def test_schema_is_truthful_software_application_and_breadcrumb(self) -> None:
         schemas = [json.loads(script) for script in self.parser.scripts if script.startswith("{")]
