@@ -9,6 +9,21 @@
   const API_ROOT = "/api/my-research";
   const AUTH_SOCIAL_PATH = "/api/auth/sign-in/social";
   const AUTH_SIGN_OUT_PATH = "/api/auth/sign-out";
+  const OAUTH_ERROR_QUERY_PARAMS = ["error", "error_description", "state", "code"];
+  const GENERIC_OAUTH_ERROR_MESSAGE = "Google sign-in could not be completed. Your saved research is unchanged.";
+  const OAUTH_ERROR_MESSAGES = Object.freeze({
+    account_not_linked: "Google sign-in could not match this account to the existing Base2026 account. Your saved research is intact. Contact Hello support for account help instead of retrying sign-in.",
+    state_not_found: "This Google sign-in link has expired. Start sign-in again from Base2026.",
+    state_mismatch: "This Google sign-in link could not be verified. Start sign-in again from Base2026.",
+    access_denied: "Google sign-in was canceled. Your saved research is unchanged.",
+    invalid_code: GENERIC_OAUTH_ERROR_MESSAGE,
+    no_code: GENERIC_OAUTH_ERROR_MESSAGE,
+    oauth_provider_not_found: GENERIC_OAUTH_ERROR_MESSAGE,
+    unable_to_get_user_info: GENERIC_OAUTH_ERROR_MESSAGE,
+    email_not_found: "Google did not provide the verified email needed for sign-in. Your saved research is unchanged.",
+    email_not_verified: "Google did not provide a verified email for sign-in. Your saved research is unchanged.",
+    internal_server_error: GENERIC_OAUTH_ERROR_MESSAGE,
+  });
   const PENDING_STORAGE_KEY = "base2026.pendingResearchSave";
   const PENDING_VERSION = 1;
   const PENDING_TTL_MS = 30 * 60 * 1000;
@@ -344,6 +359,59 @@
     region.textContent = trimText(message, 500);
     if (status) region.setAttribute("data-state", status);
     else region.removeAttribute("data-state");
+  }
+
+  function oauthErrorMessage(code) {
+    const key = trimText(code, 100);
+    return Object.prototype.hasOwnProperty.call(OAUTH_ERROR_MESSAGES, key)
+      ? OAUTH_ERROR_MESSAGES[key]
+      : GENERIC_OAUTH_ERROR_MESSAGE;
+  }
+
+  function currentPageURL() {
+    const location = window.location || {};
+    const origin = String(location.origin || "https://base2026.dev");
+    const fallback = `${origin}${String(location.pathname || "/")}${String(location.search || "")}${String(location.hash || "")}`;
+    return new URL(String(location.href || fallback), origin);
+  }
+
+  function scrubOAuthCallbackQuery(url) {
+    let changed = false;
+    OAUTH_ERROR_QUERY_PARAMS.forEach((name) => {
+      if (!url.searchParams.has(name)) return;
+      url.searchParams.delete(name);
+      changed = true;
+    });
+    if (!changed) return false;
+    try {
+      if (window.history && typeof window.history.replaceState === "function") {
+        window.history.replaceState(window.history.state || null, document.title, `${url.pathname}${url.search}${url.hash}`);
+      }
+    } catch (_error) {
+      // A restricted history object must not prevent the safe message.
+    }
+    return true;
+  }
+
+  function consumeOAuthCallbackError() {
+    if (!isResearchPage || String(window.location?.pathname || "") !== "/my-research/") return "";
+    let url;
+    try {
+      url = currentPageURL();
+    } catch (_error) {
+      return "";
+    }
+    if (!url.searchParams.has("error")) return "";
+    const message = oauthErrorMessage(url.searchParams.get("error"));
+    scrubOAuthCallbackQuery(url);
+    return message;
+  }
+
+  function reportOAuthCallbackError() {
+    const message = consumeOAuthCallbackError();
+    if (!message) return false;
+    announce(message, "error");
+    return true;
   }
 
   function userFacingError(error, fallback = "Private research request failed. Try again.") {
@@ -764,6 +832,7 @@
       } : null;
       state.sessionKnown = true;
       renderMemberPage();
+      reportOAuthCallbackError();
       if (state.user && state.enabled && isResearchPage) {
         try {
           await loadCollections();
@@ -785,7 +854,7 @@
       state.user = null;
       state.session = null;
       renderMemberPage();
-      announce(userFacingError(error, "Private research session could not be checked."), "error");
+      if (!reportOAuthCallbackError()) announce(userFacingError(error, "Private research session could not be checked."), "error");
       return null;
     }
   }
@@ -1337,6 +1406,8 @@
     buildCallbackURL,
     isSafeRelativeCallback,
     isGoogleAuthorizationURL,
+    oauthErrorMessage,
+    consumeOAuthCallbackError,
     PENDING_STORAGE_KEY,
     PENDING_TTL_MS,
   };

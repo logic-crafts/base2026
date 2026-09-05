@@ -196,3 +196,74 @@ def test_member_script_handles_stale_collection_loads_and_fresh_delete_reauth() 
     assert 'Sign out and sign in again' in TEMPLATE.read_text(encoding="utf-8")
     assert 'function openSignIn(trigger, message = "", status = "")' in source
     assert 'setInlineStatus("members-sign-in-status", message, status)' in source
+
+
+def test_member_script_allowlists_oauth_errors_and_scrubs_only_private_callback_query() -> None:
+    node_script = r'''
+globalThis.window = {
+  location: {
+    href: "https://base2026.dev/my-research/?error=account_not_linked&error_description=provider-secret&state=oauth-state&code=oauth-code&q=keep#research",
+    origin: "https://base2026.dev",
+    pathname: "/my-research/",
+    search: "?error=account_not_linked&error_description=provider-secret&state=oauth-state&code=oauth-code&q=keep",
+    hash: "#research",
+  },
+  history: {
+    state: null,
+    calls: [],
+    replaceState(state, title, url) { this.calls.push({ state, title, url }); },
+  },
+};
+const privatePage = {};
+globalThis.document = {
+  readyState: "loading",
+  title: "My Research — Base2026",
+  querySelector(selector) {
+    if (selector === "#members-signed-out" || selector === ".b26-members-main") return privatePage;
+    return null;
+  },
+  addEventListener() {},
+};
+require("./templates/base2026-members.js");
+const api = window.Base2026Members;
+const generic = "Google sign-in could not be completed. Your saved research is unchanged.";
+for (const inheritedKey of ["toString", "constructor", "__proto__"]) {
+  if (api.oauthErrorMessage(inheritedKey) !== generic) throw new Error(`${inheritedKey} escaped the own-key allowlist`);
+}
+const recognized = api.consumeOAuthCallbackError();
+if (!recognized.includes("existing Base2026 account") || !recognized.includes("saved research is intact")) throw new Error("recognized message missing safe explanation");
+if (recognized.includes("provider-secret") || recognized.includes("oauth-state") || recognized.includes("oauth-code")) throw new Error("recognized message echoed raw OAuth data");
+if (window.history.calls.length !== 1) throw new Error("recognized callback was not scrubbed once");
+const clean = new URL(window.history.calls[0].url, window.location.origin);
+if (clean.searchParams.get("q") !== "keep" || clean.hash !== "#research") throw new Error("legitimate query/hash was not preserved");
+for (const key of ["error", "error_description", "state", "code"]) {
+  if (clean.searchParams.has(key)) throw new Error(`${key} was not scrubbed`);
+}
+
+window.location.href = "https://base2026.dev/my-research/?error=untrusted-provider-code&error_description=raw-provider-text&q=keep-two#second";
+window.location.search = "?error=untrusted-provider-code&error_description=raw-provider-text&q=keep-two";
+window.location.hash = "#second";
+const unknown = api.consumeOAuthCallbackError();
+if (unknown !== generic) throw new Error("unknown error was not reduced to the generic message");
+if (unknown.includes("raw-provider-text")) throw new Error("unknown error echoed raw provider text");
+if (window.history.calls.length !== 2) throw new Error("unknown callback was not scrubbed once");
+const unknownClean = new URL(window.history.calls[1].url, window.location.origin);
+if (unknownClean.searchParams.get("q") !== "keep-two" || unknownClean.hash !== "#second") throw new Error("unknown callback did not preserve legitimate query/hash");
+for (const key of ["error", "error_description", "state", "code"]) {
+  if (unknownClean.searchParams.has(key)) throw new Error(`${key} survived unknown callback scrub`);
+}
+
+window.location.pathname = "/workspace/";
+window.location.href = "https://base2026.dev/workspace/?error=account_not_linked&q=workspace";
+window.location.search = "?error=account_not_linked&q=workspace";
+const outsidePrivatePage = api.consumeOAuthCallbackError();
+if (outsidePrivatePage !== "" || window.history.calls.length !== 2) throw new Error("non-private URL was treated as a callback result");
+'''
+    result = subprocess.run(
+        ["node", "-e", node_script],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert result.returncode == 0, result.stderr or result.stdout
