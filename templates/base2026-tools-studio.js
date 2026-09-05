@@ -31,8 +31,8 @@
         action: "Open the originals before treating a pattern as a consensus."
       },
       publish: {
-        index: "04 / PUBLISH",
-        title: "Publish a next step only after a human decision.",
+        index: "04 / USE",
+        title: "Build a brief. Choose the next move.",
         description: "Turn selected, attributed evidence into a local brief or a measured SEO experiment handoff. The public tools do not edit or publish a site for you.",
         input: "Selected public IDs, audience and one concrete work question.",
         output: "A portable brief or Experiment Card with measurement unknowns visible.",
@@ -53,9 +53,10 @@
     }) || stationButtons[0];
     var initialStationKey = initialStationButton ? initialStationButton.getAttribute("data-station-button") : "find";
 
-    // Apply roving tab stops only after JavaScript is available; no-JS keeps
-    // every native button reachable in the normal document tab order.
+    // Enable interactive station controls only when JS is ready. Without JS,
+    // the illustration stays static and ordinary product links remain usable.
     stationButtons.forEach(function (button) {
+      button.removeAttribute("disabled");
       button.setAttribute("tabindex", button === initialStationButton ? "0" : "-1");
     });
 
@@ -127,7 +128,10 @@
       factory.setAttribute("data-factory-visible", factoryVisible ? "true" : "false");
       factory.setAttribute("data-factory-page-visible", documentVisible ? "true" : "false");
       if (factoryToggle) {
-        factoryToggle.textContent = factoryPlaying ? "Pause illustration" : "Play illustration";
+        factoryToggle.removeAttribute("hidden");
+        if (reducedMotion()) factoryToggle.setAttribute("disabled", "");
+        else factoryToggle.removeAttribute("disabled");
+        factoryToggle.textContent = reducedMotion() ? "Motion reduced" : factoryCompleted ? "Replay illustration" : factoryPlaying ? "Pause illustration" : "Play illustration";
         factoryToggle.setAttribute("aria-pressed", factoryPlaying ? "false" : "true");
       }
       if (!factorySignal) return;
@@ -143,7 +147,8 @@
 
     if (factoryToggle) {
       factoryToggle.addEventListener("click", function () {
-        factoryPlaying = !factoryPlaying;
+        if (reducedMotion()) return;
+        factoryPlaying = factoryCompleted || !factoryPlaying;
         if (factoryPlaying && factoryCompleted) restartFactorySignal();
         syncFactory();
       });
@@ -154,6 +159,7 @@
         factoryCompleted = true;
         factorySignal.classList.remove("is-running");
         if (factory) factory.setAttribute("data-factory-complete", "true");
+        syncFactory();
       });
     }
     if (motionQuery && motionQuery.addEventListener) {
@@ -348,8 +354,8 @@
         });
       }, { threshold: 0.12 });
 
+      root.classList.add("is-motion-ready");
       if (!reducedMotion()) {
-        root.classList.add("is-motion-ready");
         revealTargets.forEach(function (target) { observer.observe(target); });
       } else {
         revealTargets.forEach(function (target) { target.classList.add("is-visible"); });
