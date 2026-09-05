@@ -1,69 +1,65 @@
 # Project State
 
-Base2026 is a free, open-source video research engine at
-https://base2026.dev/. Cloudflare serves attributed evidence, original blog
-articles and source-dependent task guides. Public readability is not a grant
-of third-party redistribution rights.
+Checkpoint: 2026-09-05, following the Product Studio release and department
+handoff. Base2026 is a free, open-source video research engine at
+[base2026.dev](https://base2026.dev/).
 
-Continue from [ACTIVE_PHASE.md](ACTIVE_PHASE.md), [NEXT_ACTION.md](NEXT_ACTION.md)
-and [the Product Studio handoff](HANDOFF_2026-09-05_PRODUCT_STUDIO.md), not old
-chat or counters. The earlier closure/release notes are dated receipts.
+Continue from [the Studio operating guide](../BASE2026_STUDIO_OPERATING_GUIDE.md),
+[ACTIVE_PHASE.md](ACTIVE_PHASE.md), [NEXT_ACTION.md](NEXT_ACTION.md) and
+[the September 5 handoff](HANDOFF_2026-09-05_PRODUCT_STUDIO.md). These replace
+the earlier owner-login wait and single-chat execution instructions.
+Older snapshots describe their own checkpoints.
 
-The 2026-09-05 13:35 UTC public snapshot is 2,275 documents / 1,649 sources /
-125 evidence routes / 183 projected cards / zero full transcripts. Blog and
-maintained-guide counts are separate. Older counters are release history, not
-the current operating snapshot.
+## Verified product and source
 
-Public Worker `ab2589fa-36a4-4bdb-985f-e66a383c8d6d` serves the free
-research workflow: Evidence Search, Source Diversity Check and Source-backed
-Brief, plus the Tools Studio hub and installable WordPress Evidence Sidebar
-beta. The three hosted tools use bounded public MCP reads. Privacy-safe
-activation events write to `base2026_activation_v1`; first SQL counts are QA
-smoke, not traffic. Immediate rollback is
-`3ecddaf3-f594-4b4a-91d4-fd409bd62e4a`. Exact current artifact and live
-checks are in
-`HANDOFF_2026-09-05_PRODUCT_STUDIO.md`.
+[PR54](https://github.com/offflinerpsy/base2026/pull/54) merged at
+2026-09-05 18:37:53 UTC as
+`d5116a3f06ecfa0bd4888b4417d4e6227b728f8f`.
+Public Worker `ab2589fa-36a4-4bdb-985f-e66a383c8d6d` serves Tools Studio
+and the installable WordPress Evidence Sidebar beta alongside Evidence Search,
+Source Diversity Check and Source-backed Brief. The plugin source is on
+public main; source publication is complete. The dated handoff records the
+release, exact download and public/private route checks.
 
-The September 5 viability review does not establish product-market fit or
-automatic acquisition. Its selected test is a source-attributed, usable SEO
-experiment for practitioners. The new worksheet, measurement context and
-operating contract are reviewed source work, not a new production release.
-PR53 merged that source and the free SEO Experiment Planner at
-`ab0597dc9fb0f321c8b290365fc965d3e6112418`. Remote installation from public main
-passed for Codex and Claude Code with telemetry disabled. These installs are QA,
-not organic adoption. One free AgentsIndex submission and one community MCP PR
-were sent; acceptance/use remain separate. Existing AgencyOS and the single
-supervisor now carry the applied-use pilot and scoped page-check next task.
-Fresh authenticated two-day Analytics Engine readback returned only the same
-11 known QA events; it cannot establish zero visitors or external retention.
-The private evaluator reads AgencyOS and suggests one bounded action; it is
-not a network publisher, new scheduler or cloud office.
+The factory scene is an illustration. Its separate timestamped public
+inventory totals are not private pipeline telemetry or user activity.
+Product release and QA do not establish external adoption or repeat value.
 
-PR34's public MCP remains live through the current Worker. The migrated account
-retains all four D1 bindings and the unique rate-limit binding, while member
-auth has its exact secrets and `MEMBER_AUTH_ENABLED=true` for the real Google
-check. Google accepted Hello/basic consent, but Chrome blocked the callback;
-no signed-in session is proved and OAuth audience remains Testing. Git source, static artifact, Analytics
-Engine, public D1 and private state remain separate restore inputs.
+## Current identity issue
 
-PR36 merged the independently reviewed Claim Receipt Ledger source at
-`25bca067514fb5efd9bbc84c36c6b3cd73f43d3f`. It is intentionally not deployed:
-live public D1 has zero exact qualifying `internal-linking` projection cards and
-the live claim route remains 404. Migration0005, Worker deployment, sidecars,
-sitemap and IndexNow were not executed. The source is ready to stay held until
-the private typed wrapper and ten genuine eligible rows both exist.
+Google consent is complete. The observed callback error is
+`account_not_linked`; the earlier Chrome block hid that application error.
+No current password, CAPTCHA or owner-only login action is established.
+Existing member data and saved research remain intact; a successful current
+Google round trip has not been demonstrated.
 
-Private reliability release57 and additive migration0016 are deployed.
-Diagnostic-only release58 followed at10:15:41.832 UTC. The 10:16 cohort
-contains27 admitted /6 media /5 transcripts /one verified projection;
-this proves a natural end-to-end path, not completion of all27 or creator truth.
-Release57 is the diagnostic rollback; release56 requires the ownership/ledger
-fences in the deployment runbook. Holds, bounded retry and cleanup follow-up remain.
+The four-file error-UX and native-regression change merged through
+[PR55](https://github.com/offflinerpsy/base2026/pull/55) at 19:02:37 UTC as
+`1fdd877022277f1f4387f543168f3944e174b9c0`. It is not deployed and does not
+repair identity binding. Identity Engineering continues
+CLI/source and transfer diagnostics; HQ holds the authenticated browser lease
+after the department released it for a supported-tool limitation. This is not
+an owner-login blocker. Preserve the existing identity setup, saved research
+and disabled implicit linking.
 
-Editorial work continues from two unfinished archive candidates, not forced
-guide revisions. Private fallback is four daily incident checks; native
-five-minute doctor is unchanged. External total-outage detection can take
-six hours plus host availability; authoring/review/refill need the Codex host.
+## Work ownership
 
-Golem deployment access, Instagram clearance, dataset rights and measured
-traffic growth remain open. Direct GPT Work incident delivery is not verified.
+HQ owns priorities, integration, merges and public releases. Identity
+Engineering, Product Engineering, Design & Media, Editorial & Distribution,
+Directories, and Chief Engineering work in separate assigned scopes. Fresh
+implementation work starts from verified current main in a clean worktree;
+an old checkout, local candidate or illustration is not release evidence.
+
+AgencyOS remains the existing operational task/event/artifact registry.
+Public project-memory and the status board summarize accepted receipts;
+chats dispatch work. Keep one writer per file, checkout and leased resource,
+and retain the existing supervisor.
+
+Page Readiness Check is a separate unfinished Product Engineering deliverable.
+An accepted safe HTML-input source-check is only a partial slice; the full
+arbitrary-URL live audit remains unfinished. Acceptance here defines the
+partial work scope; it is not a receipt for completed implementation or release.
+The WordPress plugin does not complete it. Editorial and directory work reuse
+existing tasks and prior sends. Source rights, private-pipeline holds and
+other dated release boundaries remain with their established owners; this
+Studio split does not reopen them.

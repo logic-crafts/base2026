@@ -1,115 +1,110 @@
-# Product Studio and Google login recovery — 2026-09-05
+# Product Studio — September 5 continuation
 
-Status: Product Studio and the installable plugin are live. Google settings
-are deployed, but the real browser round-trip is not yet confirmed. This is the current scoped
-continuation of phase29, not a second strategy or a new office.
+This checkpoint supersedes the earlier owner-login wait and single-chat
+execution model. Resume through [the Studio operating guide](../BASE2026_STUDIO_OPERATING_GUIDE.md)
+and [NEXT_ACTION.md](NEXT_ACTION.md). AgencyOS retains operational ownership;
+this public handoff contains only the information needed to continue safely.
 
-## Delivered source
+## Released product and merged source
 
-- A `/tools/` landing page groups the three existing public tools, the free
-  SEO Experiment Planner skill, MCP and the new WordPress companion.
-- A pauseable blueprint/pixel factory explains four research stages. It is
-  explicitly an illustration. Separate public inventory counters use only
-  same-origin `/api/stats`; they are not queue activity, visitors or traffic.
-  Hidden/offscreen/reduced-motion states stop unnecessary work.
-- The WordPress Evidence Sidebar beta searches a short explicitly submitted
-  topic through the existing public Evidence Brief v2 endpoint. It inserts an
-  editable, attributed research note only on a separate click. No whole-post
-  upload, paid AI, automatic publishing, title-as-quotation or forced backlink.
-- `/tools/wordpress-evidence-sidebar/` is the product landing. The installable
-  ZIP contains exactly the PHP entrypoint, editor JS, readme and GPL license.
-  The builder regenerates this single download from reviewed source, never
-  from an arbitrary repository/archive. Other ZIPs remain forbidden.
+Tools Studio and WordPress Evidence Sidebar beta are live on public Worker
+`ab2589fa-36a4-4bdb-985f-e66a383c8d6d`; the preceding release is
+`3ecddaf3-f594-4b4a-91d4-fd409bd62e4a`.
+[PR54](https://github.com/offflinerpsy/base2026/pull/54) merged at
+2026-09-05 18:37:53 UTC as
+`d5116a3f06ecfa0bd4888b4417d4e6227b728f8f`, incorporating source
+`e05b2ac4866322aa6915c77f7b9ffc4dbf02b373`.
 
-The existing header gains a Tools link and the home secondary CTA points to
-the hub. Existing homepage/core CSS, search renderer, public data, founder,
-footer, Worker source and private member implementation are preserved.
+- [Tools Studio](https://base2026.dev/tools/) groups the existing research
+  tools, free SEO Experiment Planner skill, public MCP and WordPress companion.
+- [WordPress Evidence Sidebar](https://base2026.dev/tools/wordpress-evidence-sidebar/)
+  searches an explicitly submitted short topic, then inserts an editable
+  attributed note on a separate user action. Whole posts are not uploaded;
+  automatic publishing and forced backlinks are absent.
+- The factory scene illustrates Find → Extract → Attribute → Publish.
+  Public inventory totals are shown separately with their timestamp.
+  Pause, reduced-motion and no-JS behavior preserve the approved design;
+  the illustration does not expose or simulate private telemetry.
+- The [public plugin source](https://github.com/offflinerpsy/base2026/tree/main/plugins/wordpress/base2026-evidence-sidebar)
+  is now on main. Its earlier pre-merge 404 is historical.
 
-## Verification
+## Release evidence and limits
 
-- 69 focused Python release/UI/plugin tests; 6 executable Tools Studio JS tests.
-- Worker typecheck, 645 Worker tests and 13 native member tests pass.
-  After the release flag changed, its configuration-pinning assertion was
-  updated to the deliberately enabled state; all 645 Worker tests were rerun
-  successfully on that current config, including the 15 auth-routing tests.
-- Disposable native WordPress 7.1 / PHP 8.5.8: plugin loads; authorized search
-  returns five excerpt-bearing cards with original links; missing capability
-  and invalid nonce both deny with403; a synthetic title-only result never
-  becomes an excerpt. Editor insertion/route guards have executable JS tests.
-- The retained production artifact's 4,281 source files were rehashed against
-  their receipt with no mismatch. The tree-digest function now sorts paths
-  consistently, removing a walk-order discrepancy without changing source data.
-- Final source candidate v3 has4,286 served files,94,086,308 bytes and tree
-  `f8fc68906f0224940d74de6c786025f6e2a4916395794cf4c22bf19f984140db`.
-  Source tree is
-  `bffcbbd3502daa38a6ca14282a456a0a9663e8447a66c133faec7ee0e7383405`.
-- V3 passed the isolated four-public-data-file publication gate and
-  target-bound Wrangler dry-run. An independent review rehashed every served
-  file with zero mismatches. V2-to-V3 changes only the packaged readme.
-- Actual WordPress editor search returned five cards. Insertion created two
-  editable paragraphs with original attribution and no forced backlink.
-  Save draft and full editor-reload persistence both passed on a disposable
-  local WordPress site, not a client site.
-- Hello Chrome desktop checks at1512px passed for both new landings with zero
-  horizontal overflow. A current mobile-browser pass is not claimed.
-
-## Live website release
-
-Worker `ab2589fa-36a4-4bdb-985f-e66a383c8d6d` was deployed through the verified
-target account with the exact V3 artifact, all four existing D1 bindings and
-additive private auth secrets. Immediate previous version:
-`3ecddaf3-f594-4b4a-91d4-fd409bd62e4a`. No DNS, mail or private-pipeline change.
-
-Independent live readback passed: homepage, both new canonical/indexable
-landings, health, stats, bounded five-result search and the preserved workspace.
-The hub sitemap includes both new routes. The download is HTTP200 and
-byte-identical to the reviewed19,096-byte ZIP, SHA256
+The V3 artifact contains 4,286 served files, 94,086,308 bytes, with tree hash
+`f8fc68906f0224940d74de6c786025f6e2a4916395794cf4c22bf19f984140db`.
+The [installable download](https://base2026.dev/downloads/base2026-evidence-sidebar-v0.1.0.zip)
+is the reviewed four-file archive, 19,096 bytes, SHA-256
 `f588eddae0df5b91da4d70576b6cdec01d3a637b003ea076b9357cace6cb7e2a`.
-Unauthenticated private collections/export deny with401; session and private
-responses retain private/no-store and noindex/nofollow. Deployment is not proof
-of indexing, directory acceptance or external adoption.
 
-## Google and Cloudflare recovery
+The release receipt records 69 focused Python checks, six executable Tools
+Studio JS checks, Worker typecheck and 645 Worker tests. Native WordPress
+search, capability/nonce denial, attributed insertion, draft save and full
+editor-reload persistence passed on a disposable local installation.
+Desktop checks at 1512 px found no horizontal overflow; a current mobile
+browser pass is not claimed.
 
-The existing Hello Chrome session was reused. Offliner remains a separate,
-untouched session. Actual project-level Google OAuth permissions were repaired
-for Hello without changing project/client identity, origin/callback, broad
-organization permissions, DNS, mail or billing. Basic identity scopes only.
+Independent public readback confirmed both new landings, canonical/indexability,
+sitemap inclusion, download identity and bounded public search. Signed-out
+collections/export requests were denied; private responses retained no-store
+and noindex protections. The public GETs establish behavior and artifact
+identity; the Worker identifier comes from the separate deployment receipt.
+These checks do not establish indexing, directory acceptance or external use.
 
-The original OAuth client was preserved. A new secret was prepared privately
-without revoking the previous one. Target-account Wrangler authentication is
-isolated from the legacy default login. Target AUTH_DB migrations and preserved
-member rows were verified; target auth secrets were absent. The three required
-secrets were deployed privately and are never committed. The production Worker
-flag is now enabled for the real sign-in check. Missing prerequisites still
-fail closed in code. No current owner password challenge has been observed.
+## Actual auth issue and exclusive repair
 
-The ordinary extension popup was dismissed; Hello and the existing second test
-user were read back successfully. Google accepted the Hello account and consent
-for basic name/email/profile, but the redirect then showed Chrome
-`ERR_BLOCKED_BY_CLIENT`. Returning to My Research showed no authenticated
-session; do not claim successful login or retry the callback blindly. The owner
-was asked for a normal Hello-browser login check while other release work
-continues. OAuth audience is still External/Testing, not public Production.
-Do not switch profiles, disable security barriers, reconstruct browser tokens
-or create another OAuth client. Ordinary interfering popups may be dismissed
-through the supported, owner-authorized Computer Use flow.
+Google consent is complete. The observed application callback is
+`account_not_linked`; Chrome's earlier `ERR_BLOCKED_BY_CLIENT` obscured
+that result. Another normal attempt returned the same application code.
+No current password, CAPTCHA or owner-only action is established.
+Existing member data and saved research remain intact. No successful current
+Google session or production identity repair is claimed.
 
-## Concrete continuation
+Identity Engineering owns its assigned checkout and continues CLI/source and
+transfer diagnostics. HQ now holds the authenticated browser lease: the
+department released it because supported Chrome/Computer Use tools were not
+available in its context. This is a tooling limitation, not failed owner
+authentication. The four-file error-UX/native-regression source merged in
+[PR55](https://github.com/offflinerpsy/base2026/pull/55) at 19:02:37 UTC as
+`1fdd877022277f1f4387f543168f3944e174b9c0` and remains undeployed.
+Its reviewed own-property handling and exact
+identity-match regressions improve error handling; they do not fix the live
+binding failure. Diagnose the mismatch privately and preserve disabled
+implicit linking. Do not delete accounts/research or create another client
+to bypass the error.
 
-1. Resume the existing Hello My Research tab after the owner/browser redirect
-   check; the test users and settings are already saved. Never recreate them.
-2. Prove Google login, private save/revisit/export and logout denial. Publish
-   the basic-identity OAuth audience only as part of the verified public launch.
-3. Finish public-main source publication: the plugin landing's exact GitHub
-   source path was404 during initial live QA, while its download already passed.
-4. Submit only the real live new
-   canonical URLs to discovery once; directory acceptance and traffic are
-   separate. Do not replay the already-sent X skill announcement or pending MCP PR.
-5. Reconcile AgencyOS tasks102 and114 through the existing CAS/idempotent
-   reconciler. Task112 remains growth observation; task113 page check is not
-   this plugin and is still a separate unfinished build.
+The existing OAuth audience remains Testing. Complete real login, private
+save/revisit/export and logout-denial evidence before HQ accepts an auth
+release or an audience change. Secrets, account/database identifiers, provider
+payloads and member rows belong in private receipts only.
 
-Private exact receipts/credential locations belong in the existing operations
-repository, not in this public handoff. One existing supervisor continues the
-office; no additional scheduler or database was created.
+## Department continuation
+
+HQ retains decisions, integration, merges and one public-release owner.
+Product Engineering and Design & Media now have separate clean worktrees;
+existing Identity, Editorial & Distribution, Directories and Chief Engineering
+departments continue their assigned work. The first two new worktrees started
+at main `d5116a3f06ecfa0bd4888b4417d4e6227b728f8f`; their presence proves
+no implementation or release.
+
+Product Engineering's separate Page Readiness Check has an accepted safe
+HTML-input source-check slice; a full arbitrary-URL live audit is unfinished.
+This accepts the bounded scope, not completed implementation or deployment.
+Design polishes the existing studio and prepares demonstrations. Growth departments
+deliver the working plugin and pursue relevant free listings without replaying
+earlier sends. Chief Engineering maintains ownership and current handoffs.
+The existing supervisor was moved to Chief Engineering and the redundant
+directory timer was paused; the directory department continues its work.
+That supervisor and the existing AgencyOS registry coordinate these deliverables;
+their private locations and internal identifiers are not published here.
+
+At 19:01:23 UTC, one free mcpservers.org submission returned a successful
+submission message. Moderation is pending; the reported review estimate is
+about 12 hours, not a guaranteed completion time. No accepted listing or
+backlink is established. The department closed its owned tab and released
+its browser lease; do not repeat the submission.
+
+Cloud research returned its final summary. The full referenced artifact is
+currently inaccessible; HQ requested the existing report as plain text,
+without starting new research. Summary delivery is not full-report retrieval.
+HQ retains the current live-outcome registry/board checkpoint; future
+supervisor reconciliation resumes after that receipt.

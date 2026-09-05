@@ -1,299 +1,45 @@
 # Next Action
 
-## Current — September 5: finish Product Studio and the existing Google login
+Checkpoint: 2026-09-05 — continue the active Studio departments from
+[the current handoff](HANDOFF_2026-09-05_PRODUCT_STUDIO.md) and
+[operating guide](../BASE2026_STUDIO_OPERATING_GUIDE.md).
 
-Resume [the exact Product Studio handoff](HANDOFF_2026-09-05_PRODUCT_STUDIO.md).
-AgencyOS tasks102/114 hold the auth and product release state. Product Studio
-and the tested installable WordPress plugin are live in Worker
-`ab2589fa-36a4-4bdb-985f-e66a383c8d6d`; exact download and public/private routes
-passed live readback. Finish the plugin's public-main source link and distribute
-the usable product. Google settings/secrets are deployed, but Chrome blocked
-the real callback with ERR_BLOCKED_BY_CLIENT; no signed-in session was observed.
-The ordinary popup and test-user Save are already resolved. Keep the existing
-Hello session and OAuth client, wait for the requested normal-browser login
-check, then prove private save/revisit/export/logout before switching the
-basic-identity OAuth audience from Testing to Production.
+1. Identity Engineering owns the observed `account_not_linked` error.
+   Google consent and prerequisite setup are complete. Diagnose the exact
+   identity match privately, preserve existing accounts and saved research,
+   and return a justified narrow repair with regression evidence to HQ.
+   HQ holds the authenticated browser lease; Identity continues CLI/source
+   diagnostics after releasing the lease for a supported-tool limitation.
+   Do not return to the old owner-login wait without newly observed evidence
+   of a non-delegable challenge. PR55 merged the four-file error-UX source;
+   it has not been deployed and is not itself the identity repair.
+2. Product Engineering continues the no-signup Page Readiness Check from its
+   accepted safe HTML-input source-check scope, not a completed implementation.
+   A full arbitrary-URL live audit remains unfinished and requires bounded
+   fetch behavior and useful corrections.
+   The live WordPress companion does not satisfy its acceptance criteria.
+3. Design & Media polishes the existing Tools Studio and prepares a product
+   demonstration using approved visual assets and real product behavior.
+   Keep the factory illustration separate from public counters; never present
+   it as private pipeline activity or a measured customer outcome.
+4. Editorial & Distribution delivers a reproducible WordPress use case.
+   Directories continues relevant free targets. Each resumes its existing
+   task, reads the previous send/result before another action, and records
+   delivery, moderation, accepted links and observed use separately. The latest
+   mcpservers.org submission is pending review, not an accepted listing/link.
+5. HQ reviews each scoped PR and accepted receipt, integrates changes and
+   owns any merge or public release. Before an auth release, require evidence
+   for successful login, preserved research, save/revisit/export and logout
+   denial. Reconcile the existing AgencyOS registry and human board through
+   their designated writer.
 
-## Phase29 context — test a useful result, not publication volume
+Source publication for Tools Studio and the plugin is complete through
+[PR54](https://github.com/offflinerpsy/base2026/pull/54); do not repeat it.
+A department branch, old worktree or default CLI configuration is not a
+release baseline. Check current main, assigned ownership and the latest
+accepted release before preparing any further change.
 
-Use [the research-to-action operating model](../BASE2026_SELF_GROWTH_OPERATING_MODEL.md)
-and [the current handoff](HANDOFF_2026-09-05_SELF_GROWTH_RETHINK.md).
-
-1. Continue the existing AgencyOS growth experiment: a content-refresh worksheet
-   for SEO practitioners, with explicit synthetic example and exact query/date
-   controls. Inspect the actual task status and linked artifact before delivery.
-2. PR53 already published the free-skill source package. Its installation guide
-   is `../BASE2026_FREE_SKILLS.md`; public-main installation passed in Codex and
-   Claude Code. Do not republish this release. A Worker rollout remains separate:
-   verify the migrated account/bindings and retained live artifact before any
-   deploy/readback. Do not restore the dirty historical tree or overwrite the
-   legacy CLI/browser identity. A Git release does not deploy website telemetry.
-3. Separate known QA and self-declared campaign labels from observed external
-   use. Fresh September 5 SQL readback still contains only the 11 known QA events
-   in the two-day interval. Missing measurement is unknown, not zero visitors.
-4. Deliver a reviewed useful example through an authorized, relevant channel;
-   capture exact destination/result and inspect unknown effects before retry.
-   Ask for a real task and subsequent use, not a testimonial or fabricated review.
-5. Reuse one supervisor and the existing read-only evaluator/reconciler. No new
-   hierarchy, blind six-hour waiting, duplicate watchdog or generic article quota.
-6. Build one novice-friendly single-page readiness check from the existing
-   product/task contract, with bounded safe fetches, explicit observations and
-   corrections. It is not live yet. Do not multiply domains or claim AI scores.
-
-Distribution receipts: AgentsIndex accepted one free submission, pending review;
-[Awesome MCP Servers PR13704](https://github.com/punkpeye/awesome-mcp-servers/pull/13704)
-is open. Neither proves an accepted backlink or users. Do not repeat either
-submission; continue a different useful action while moderation is pending.
-
-The sections below are historical release receipts, not competing current plans.
-
-## Three-tool acquisition loop live — September 4, 2026
-
-Public Worker `3ecddaf3-f594-4b4a-91d4-fd409bd62e4a` now serves Evidence
-Search, Source Diversity Check and Source-backed Brief at 100%; compatible
-rollback is `327a21a5-ca54-457c-8099-aa2447a7fe1a`. Source-backed Brief
-resolves at most eight selected public IDs through the bounded read-only MCP,
-keeps unresolved records explicit and exports deterministic Markdown/JSON.
-
-The first-party `POST /api/analytics/event` sink is live on the price-$0
-Cloudflare Analytics Engine entitlement. Route/event/property allowlists,
-same-origin enforcement and coarse enum-only storage passed live checks. SQL
-readback proved the dataset and the initial brief events; those events are QA
-smoke, not visitors or traffic. Member auth remains deliberately fail-closed
-during the migrated-account contour.
-
-Next action: distribute the exact three-tool workflow to qualified external
-audiences, then measure owner-excluded referrals and successful tool actions
-over the existing 72-hour window. Do not generate generic article quotas,
-keyword-swapped pages or false `best`/`verified`/consensus claims. Details:
-[HANDOFF_2026-09-04_SOURCE_BRIEF_ACTIVATION_RELEASE.md](HANDOFF_2026-09-04_SOURCE_BRIEF_ACTIVATION_RELEASE.md).
-
-## Evidence Search intent aligned; acquisition measurement active — September 4, 2026
-
-The current public Worker retains the Evidence Search user job “search inside
-expert videos” in
-its title, description, H1 and WebApplication data. The successful deployment
-uploaded one changed asset; health and the adjacent tool/API routes pass. The
-original intent-release rollback is recorded in the linked handoff.
-
-Next action: compare CTR and real activation against the existing baseline and
-distribute the reviewed Evidence Pulse worked example plus the now-live Brief.
-Treat the larger `tiktok transcript generator` demand as a separate gated
-product build, never as a keyword-only landing page. Details:
-[HANDOFF_2026-09-04_EVIDENCE_SEARCH_INTENT_RELEASE.md](HANDOFF_2026-09-04_EVIDENCE_SEARCH_INTENT_RELEASE.md).
-
-## Source Diversity Check and Evidence Pack are live — September 4, 2026
-
-`/tools/source-diversity-check/` is live on public Worker
-`327a21a5-ca54-457c-8099-aa2447a7fe1a`. It performs bounded public
-`get_source` lookups, separates record/original-source/creator counts, keeps
-unresolved states visible, and exports deterministic Markdown/JSON without a
-truth, quality, consensus or independence score. PR46 merged the tool source;
-PR47 merged a dependency-free public Evidence Pack into the canonical GitHub
-repository. The one new canonical URL received one accepted IndexNow request;
-that is discovery notification, not indexing or traffic proof.
-
-Next action: run the 72-hour acquisition experiment from the verified
-`257 impressions / 0 clicks / position 14.9` baseline. Publish one
-platform-native worked example from Evidence Pulse #001, measure non-owner
-tool runs and referral sessions, and build the deterministic Source-Backed
-Brief as the next product step. Do not create keyword-swapped pages or count
-impressions, directory submissions or IndexNow acceptance as users. Details:
-[HANDOFF_2026-09-04_SOURCE_DIVERSITY_PRODUCTION_RELEASE.md](HANDOFF_2026-09-04_SOURCE_DIVERSITY_PRODUCTION_RELEASE.md).
-
-## Crawl-derived SEO/GEO repair live — September 3, 2026
-
-Worker `99849d8e-802d-4e8e-a840-8d352f176da6` is live at 100%. It preserves
-API/MCP, Evidence Search, Google member auth/My Research and the public/private
-boundary while fixing verified source-title/H1, sitemap ownership, canonical
-link, unique source descriptions, favicon and structured-data defects. The first invalid canary was rolled
-back and must never be restored. Exact audit, artifact, test, rollback and live
-readbacks are in
-[HANDOFF_2026-09-03_DATAFORSEO_SEO_GEO_PRODUCTION_RELEASE.md](HANDOFF_2026-09-03_DATAFORSEO_SEO_GEO_PRODUCTION_RELEASE.md).
-
-Next action: measure Google/Bing discovery, referral traffic and real API/MCP
-use from this fixed baseline. Do not treat crawler spelling/image-title flags
-or crawler-defined orphans as defects without a reproducible page/link example.
-Do not widen programmatic indexation. Claim Receipt migration and deployment
-remain separately held on their existing eligibility gate.
-
-## Claim Receipt Ledger source integrated and held — September 2, 2026
-
-PR36 is merged to public main at
-`25bca067514fb5efd9bbc84c36c6b3cd73f43d3f`. The reviewed source adds the
-additive public D1 migration `0005_claim_receipt_ledger.sql`,
-the service-binding-only admission/read/rollback lane, the strict read route,
-deterministic public-D1 readback exporter, sidecar publication gates, schema,
-API and correction documentation, and focused tests. No public migration,
-Worker deploy, sidecar publication, sitemap submission or external mutation
-was performed.
-
-The first independent review found five release blockers and all five were
-fixed before integration: secondary exporter privacy scanning, shared
-JavaScript/Python timecode canonicalization, a broken documentation link,
-concurrent rollback idempotency, and missing-table fail-closed behavior. The
-reviewer returned GO for commit/push/merge only as an undeployed held
-candidate. Full verification now passes 632 Worker tests, 173 Python tests,
-TypeScript typecheck and local migration application.
-
-Next action is not deployment. The route remains fail-closed until an exact
-ten-row public-D1 candidate is available. The current live public-D1 check
-found zero applied cards whose
-normalized topic is `internal-linking` or `internal-linking-*`; no synonym
-inference, relabeling or padding is allowed. The remaining gate is the
-private-owner typed wrapper and its review/audit integration in the protected
-pipeline-control repository, followed by separately authorized migration,
-deployment and public-D1/export readbacks.
-
-## Public API/MCP release — September 1, 2026
-
-PR34 is merged and its API/MCP capabilities remain live through current Worker
-`99849d8e-802d-4e8e-a840-8d352f176da6`; prior Worker
-`f8781f4d-30fd-4d70-ab96-a4e8d718226a` is the healthy rollback. API, MCP,
-integrations, member-auth preservation, rate limiting, D1 counts and browser
-behavior passed live readback. IndexNow accepted exactly `/mcp` and
-`/integrations`; this is not indexing or traffic.
-
-Next action: measure discovery and real tool use, then build the bounded Claim
-Receipt Ledger canary from reviewed public evidence. Keep it in a separate
-implementation/review contour and do not publish or auto-index claims that fail
-source integrity, attribution, limitation or public-boundary gates.
-
-The integrated reliability manifest is an observed, redacted receipt with
-`release_ready=false`; its unresolved commit/binding and private-incident
-recommendations remain holds. Channel reconciliation and member measurement
-contracts are staging/read-only artifacts, not external-action permission.
-
-The reviewed evidence-map canary generator, public-safe config, checker and
-visual template are integrated but no generated pages or sitemap overlay have
-been materialized in this candidate. Re-fetch current public D1 topic exports
-into an ephemeral location before any approved generation; keep the canary
-outside the live release until root completes the final review.
-
-The public API/MCP candidate section is complete. Its source, artifact, live
-version, tests, binding readback and rollback are recorded in
-[the production handoff](HANDOFF_2026-09-01_PUBLIC_API_MCP_PRODUCTION_RELEASE.md).
-
-## Evidence Search production release — September 1, 20:10 UTC
-
-Worker `0337f7d6-ebe4-4bcc-8b4a-e23317a99a8e` is live at 100% with
-`/tools/evidence-search/` returning HTTP 200. Real public D1 search, self
-canonical, indexability, hub sitemap, no-JS fallback, mobile render, provenance
-links, claim boundaries and zero-console-error browser QA passed. Member-auth,
-private headers and both `/guides` aliases remain intact. IndexNow accepted the
-single new URL with HTTP 200; indexing and traffic remain unproved.
-
-Release details are in
-[HANDOFF_2026-09-01_BASE2026_EVIDENCE_SEARCH_PRODUCTION_RELEASE.md](HANDOFF_2026-09-01_BASE2026_EVIDENCE_SEARCH_PRODUCTION_RELEASE.md).
-Safe rollback is `5a326a64-c755-4036-93af-1a1809e0aeb6`; never restore the
-regressed `da381253-2427-4b8d-9834-56ba86f46b9b`. Do not redeploy from the
-dirty candidate without freezing an exact reviewed tree.
-
-Next product action: measure discovery and use the live tool as the destination
-for the already reviewed supporting editorial package. Next source action:
-review the exact 45-file public candidate before any Git staging/commit/push.
-
-## Member auth plus guide alias checkpoint — September 1
-
-Worker `5a326a64-c755-4036-93af-1a1809e0aeb6` is live at 100%. It retains the
-exact reviewed member asset tree `1039f92aeae0195dee2dfb4c63bc905e41cee2fe41e60fe177b34785713fe361`,
-all member bindings and secrets, and adds only `/guides` and `/guides/` 308
-redirects to `/topics/`. Member/public route readbacks pass. The safe rollback
-is member version `5b72e529-a3af-467e-b6f1-bada347129d1`; never restore the
-regressed guide release `da381253-2427-4b8d-9834-56ba86f46b9b`.
-
-The post-deploy full observability readback has invocation logging and log/trace
-persistence off, traces disabled, Worker Logpush off and no tail consumer.
-`redact_query_string` is false, so do not claim query redaction; account, zone
-and instant Logpush inventory remains unverified under the current OAuth grant.
-Private receipt: `auth/20260831/member-guide-alias-hotfix-20260901T1601Z.json`.
-
-Identity A completed real Google login, private save/revisit/export and logout.
-Testing allowlist was not changed: the unsaved second row was closed with the
-count still at one. Google recognizes identity B and now waits at the owner's
-physical password screen. After the owner completes it, finish identity-B
-save/revisit/export/logout and cross-user deny without changing scopes, client,
-audience or publishing status. No secrets, OAuth codes or visitor data belong
-in Git or logs. The v4 shared-header candidate remains local and undeployed.
-
-## Evidence Search integration checkpoint — superseded by live release
-
-The reviewed Evidence Search slice is integrated into this dirty member-auth
-candidate as an additive, anonymous and read-only `/tools/evidence-search/`
-route around the existing public D1 FTS5 endpoint. The source candidate's
-4,248-file tree hash was `40d292499478b88228249f472e071d4393caf208285de6a9303dc030d135c622`;
-its implementation, builder and test hashes are recorded in the [integration
-handoff](HANDOFF_2026-09-01_BASE2026_EVIDENCE_SEARCH_MEMBER_AUTH_INTEGRATION.md).
-The member-auth source, bindings, templates and current live asset
-bundle remain otherwise untouched.
-
-The route requests only bounded public metadata from
-`base2026_public_tiktok`, caps public title summaries at 360 characters,
-keeps missing attribution/original links visibly unresolved, uses fragment
-query state, and retains a truthful no-JS fallback. This integration-only state
-is retained as history; the production handoff above now controls live claims.
-Git source remains uncommitted and must not be treated as synchronized merely
-because Cloudflare is live.
-
-## Retained public-office checkpoint
-
-Checkpoint: 2026-08-31 10:17 UTC.
-[Current state](CURRENT_STATUS.md) ·
-[Closure and receipts](BASE2026_OFFICE_CLOSURE_2026_08_31.md).
-
-PR31 is merged; correction/closure are tracked by PR32. Verify its GitHub
-merge receipt before further release; do not preclaim it or rewrite history.
-
-1. Observe deployed private release58 and the ongoing cohort at10:45 UTC; do not repeat
-   its completed migration/release as a test. At 10:16, 27 admitted yielded
-   6 media, 5 transcripts and one packet/import/verified projection. Keep
-   external capture retry bounded and semantic holds fail-closed.
-2. Preserve the rollback fence: release57 is the diagnostic rollback.
-   Release56 requires zero active capture leases and no reserved, settling
-   or uncertain operation. Keep migration0016/ledger; no automatic refund,
-   replay, tuple rearming or resurrection. Cleanup pagination/starvation
-   needs its separate bounded investigation, not broader deletion.
-3. Both archive articles are published revision1, recorded at 09:15:33.466
-   and 10:06:01.197 UTC. Do not replay them, the worksheet or completed guide
-   acceptances. Corrections need independent exact-payload review and explicit CAS.
-4. Comparison is complete; two archive candidates remain: research/expert
-   interviews and context-preserving repurposing. They are research tasks,
-   not approved publications. The six-hour office should finish useful pending
-   work even when guide snapshots are unchanged, with separate author/critic
-   and one publisher. Preserve truncation and source/rights caveats.
-5. Reconcile existing X IDs before refill. The 08:20 snapshot is four sent/
-   five scheduled/one queued thread; no new posts in this closure. Next slot:
-   August31 12:30 UTC. The first 24-hour launch window begins19:24 UTC.
-   LinkedIn remains Computer Use/action-time Post confirmation, never Buffer/stealth.
-6. Keep private fallback at 04:45/10:45/16:45/22:45 UTC and native doctor every
-   five minutes. Healthy unchanged checks stop cheaply. External total-outage
-   detection is up to six hours plus host availability. Direct GPT Work
-   incident delivery is unverified; do not report an unobserved dispatch.
-7. Golem remains blocked by Actions startup and unavailable authorized SSH;
-   merged code is not a live backlink. Preserve existing contextual references.
-   Instagram and dataset mirrors still require access/rights clearance.
-8. The orphan enrichment key is retired; 59 others are preserved, not
-   recertified. Matching roadmap HTML/JS is live. Do not invent a replacement page.
-
-Public Worker `7522595a-13bf-4437-8955-fd14816b2569` serves tree
-`ed0a9371e0471d13006b62b250d458c7f3b3fdbcc8530fc938dd32c758fe46e2`.
-Compatible public rollback: `a63f4c74-b6b2-4935-a392-61003d28567a`.
-Never restore a pre-guide Worker over guide-kind data. Routine editorial work
-does not deploy code or change design, DNS, credentials, budgets or private intake.
-
-## 2026-09-03 — Current SEO/GEO technical state
-
-Public Worker `64c7065b-a4b4-4f31-a2ac-b8a0ccfebff4` is at 100% and serves
-artifact `5bbe22a3a6c8276043206bf3e2898b2268a6fd990da997c40d1b57c3c12c516f`.
-The clean DataForSEO full crawl finished `4,061` URL states by empty queue with
-score `96.22`; broken internal links/resources, 5xx, redirect loops and broken
-canonicals were zero. Its one 404 and two redirects were deliberately supplied
-wrong probes, not site links. A post-release 20-page DataForSEO probe confirms
-the source catalog now has zero duplicate descriptions and zero hard errors.
-
-The final live sitemap has `1,876` unique URLs; all `1,876` return 200, are
-indexable and self-canonical. Do not re-add noindex topic/search states merely
-to increase page count. The next SEO action is measurement and selective
-admission: reconcile GSC crawl/index/click evidence and AI citations, then admit
-only complete, materially distinct citation units. PR41 contains the description
-fix; PR42 makes future releases fail closed on pagination/sitemap drift.
+If file ownership or a current handoff conflicts, send one concrete receipt
+to HQ and continue only independent assigned work. New operator tasks,
+database copies and supervisors are not needed. Runtime and private-data
+changes remain with their established owners and permissions.
