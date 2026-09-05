@@ -3,6 +3,9 @@
 
   const ENDPOINT = "/api/analytics/event";
   const MAX_EVENTS_PER_PAGE = 24;
+  const CAMPAIGN_PARAM = "b26_campaign";
+  const QA_PARAM = "b26_qa";
+  const CAMPAIGNS = new Set(["none", "evidence_pulse", "worked_example", "agent_workflow"]);
   const ROUTE_EVENTS = Object.freeze({
     "/tools/evidence-search/": new Set([
       "evidence_search_viewed",
@@ -110,6 +113,83 @@
     return ROUTE_EVENTS[pathname] ? pathname : "";
   }
 
+  function contextFromCurrentUrl() {
+    const fallback = {
+      cohort: "unattributed",
+      campaign: "none",
+      explicitCampaign: false,
+      explicitQa: false
+    };
+    if (!window.location || typeof URLSearchParams !== "function") return fallback;
+
+    let parameters;
+    try {
+      // Read only the two fixed tags. The complete URL is never placed in an
+      // event body, and an absent/invalid/duplicate value cannot claim its
+      // corresponding context dimension.
+      parameters = new URLSearchParams(window.location.search || "");
+    } catch (_error) {
+      return fallback;
+    }
+    const campaignValues = parameters.getAll(CAMPAIGN_PARAM);
+    const qaValues = parameters.getAll(QA_PARAM);
+    const explicitCampaign = campaignValues.length === 1 && CAMPAIGNS.has(campaignValues[0]);
+    const explicitQa = qaValues.length === 1 && qaValues[0] === "1";
+    const campaign = explicitCampaign ? campaignValues[0] : "none";
+    const cohort = explicitQa
+      ? "operator_qa"
+      : explicitCampaign && campaign !== "none"
+        ? "experiment"
+        : "unattributed";
+    return { cohort, campaign, explicitCampaign, explicitQa };
+  }
+
+  function eventContext() {
+    const context = contextFromCurrentUrl();
+    if (!context.explicitCampaign && !context.explicitQa) return null;
+    return { cohort: context.cohort, campaign: context.campaign };
+  }
+
+  function anchorFromClick(event) {
+    let target = event && event.target;
+    if (!target) return null;
+    if (typeof target.closest === "function") return target.closest("a[href]");
+    while (target && target !== window) {
+      if (String(target.tagName || "").toLowerCase() === "a" && typeof target.href === "string") return target;
+      target = target.parentElement;
+    }
+    return null;
+  }
+
+  function propagateTaggedContext(event) {
+    const context = contextFromCurrentUrl();
+    if (!context.explicitCampaign && !context.explicitQa) return;
+    const link = anchorFromClick(event);
+    if (!link || typeof link.href !== "string" || typeof URL !== "function") return;
+
+    let destination;
+    try {
+      destination = new URL(link.href, window.location.origin);
+    } catch (_error) {
+      return;
+    }
+    if (destination.origin !== window.location.origin || !ROUTE_EVENTS[destination.pathname]) return;
+
+    // A tagged source owns both fixed context dimensions. Clear destination
+    // copies first so a one-tag source cannot inherit a stale opposing tag.
+    destination.searchParams.delete(CAMPAIGN_PARAM);
+    destination.searchParams.delete(QA_PARAM);
+    if (context.explicitCampaign) {
+      destination.searchParams.append(CAMPAIGN_PARAM, context.campaign);
+    }
+    if (context.explicitQa) {
+      destination.searchParams.append(QA_PARAM, "1");
+    }
+    const nextHref = destination.pathname + destination.search + destination.hash;
+    if (typeof link.setAttribute === "function") link.setAttribute("href", nextHref);
+    else link.href = nextHref;
+  }
+
   function boundedProperties(name, rawProperties) {
     if (!rawProperties || typeof rawProperties !== "object" || Array.isArray(rawProperties)) return null;
     const allowed = EVENT_PROPERTIES[name];
@@ -134,6 +214,9 @@
     const properties = boundedProperties(name, detail.properties);
     if (!properties || typeof window.fetch !== "function") return;
     sentEvents += 1;
+    const context = eventContext();
+    const payload = { event: name, route: route, properties: properties };
+    if (context) payload.context = context;
     window.fetch(ENDPOINT, {
       method: "POST",
       mode: "same-origin",
@@ -142,11 +225,12 @@
       keepalive: true,
       referrerPolicy: "no-referrer",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ event: name, route: route, properties: properties })
+      body: JSON.stringify(payload)
     }).catch(function () {
       // Measurement is best effort and must never affect the tool UX.
     });
   }
 
+  window.addEventListener("click", propagateTaggedContext, true);
   window.addEventListener("base2026:analytics", sendActivationEvent, false);
 })();

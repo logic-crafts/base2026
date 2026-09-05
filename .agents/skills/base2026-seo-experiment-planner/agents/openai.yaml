@@ -1,0 +1,15 @@
+interface:
+  display_name: "Base2026 SEO Experiment Planner"
+  short_description: "Plan one evidence-backed SEO experiment"
+  default_prompt: "Use $base2026-seo-experiment-planner for one useful SEO next step. Use my GSC CSV if supplied; otherwise begin with planning-only checks and keep missing measurements unknown."
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "base2026"
+      description: "Verified public, read-only Base2026 MCP endpoint"
+      transport: "streamable_http"
+      url: "https://base2026.dev/api/mcp"
+
+policy:
+  allow_implicit_invocation: true

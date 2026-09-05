@@ -933,12 +933,111 @@ describe("Base2026 privacy-safe activation measurement", () => {
         route,
         "2026-09-04T15:00:00Z",
         '{"input_source":"typed","query_length_bucket":"1_20","query_token_bucket":"1","render_mode":"enhanced"}',
+        "unattributed",
+        "none",
       ],
       doubles: [1],
       indexes: ["base2026:activation:v1"],
     }]);
     expect(rateLimit.keys).toEqual(["base2026:activation:v1:198.51.100.10"]);
     expect(JSON.stringify(analytics.points)).not.toContain("198.51.100.10");
+  });
+
+  it("accepts only exact context enums and appends them after the stable four blobs", async () => {
+    const analytics = new FakeAnalytics();
+    const response = await handleAnalyticsEvent(
+      new Request("https://base2026.dev/api/analytics/event", {
+        method: "POST",
+        headers: { "content-type": "application/json", origin: "https://base2026.dev" },
+        body: JSON.stringify({
+          ...requestBody,
+          context: { cohort: "operator_qa", campaign: "worked_example" },
+        }),
+      }),
+      { ANALYTICS: analytics as unknown as AnalyticsEngineDataset, MCP_RATE_LIMIT: new FakeRateLimit() },
+      new Date("2026-09-04T15:42:18.000Z"),
+    );
+    expect(response.status).toBe(204);
+    expect(analytics.points[0]?.blobs).toEqual([
+      "evidence_search_submitted",
+      route,
+      "2026-09-04T15:00:00Z",
+      '{"input_source":"typed","query_length_bucket":"1_20","query_token_bucket":"1","render_mode":"enhanced"}',
+      "operator_qa",
+      "worked_example",
+    ]);
+  });
+
+  it("covers every known campaign and defaults omitted context members", async () => {
+    const cases = [
+      { context: {}, expected: ["unattributed", "none"] },
+      { context: { cohort: "experiment", campaign: "evidence_pulse" }, expected: ["experiment", "evidence_pulse"] },
+      { context: { cohort: "experiment", campaign: "worked_example" }, expected: ["experiment", "worked_example"] },
+      { context: { cohort: "experiment", campaign: "agent_workflow" }, expected: ["experiment", "agent_workflow"] },
+      { context: { cohort: "operator_qa", campaign: "none" }, expected: ["operator_qa", "none"] },
+      { context: { cohort: "operator_qa", campaign: "evidence_pulse" }, expected: ["operator_qa", "evidence_pulse"] },
+      { context: { cohort: "operator_qa", campaign: "agent_workflow" }, expected: ["operator_qa", "agent_workflow"] },
+      { context: { cohort: "operator_qa" }, expected: ["operator_qa", "none"] },
+      { context: { campaign: "none" }, expected: ["unattributed", "none"] },
+    ];
+    for (const testCase of cases) {
+      const analytics = new FakeAnalytics();
+      const response = await handleAnalyticsEvent(
+        new Request("https://base2026.dev/api/analytics/event", {
+          method: "POST",
+          headers: { "content-type": "application/json", origin: "https://base2026.dev" },
+          body: JSON.stringify({ ...requestBody, context: testCase.context }),
+        }),
+        { ANALYTICS: analytics as unknown as AnalyticsEngineDataset, MCP_RATE_LIMIT: new FakeRateLimit() },
+      );
+      expect(response.status).toBe(204);
+      expect(analytics.points[0]?.blobs?.slice(4)).toEqual(testCase.expected);
+    }
+  });
+
+  it("rejects incoherent context pairs after applying omitted-member defaults", async () => {
+    const incoherentContexts = [
+      { cohort: "experiment" },
+      { campaign: "evidence_pulse" },
+      { cohort: "unattributed", campaign: "evidence_pulse" },
+      { cohort: "experiment", campaign: "none" },
+    ];
+    for (const context of incoherentContexts) {
+      const analytics = new FakeAnalytics();
+      const response = await handleAnalyticsEvent(
+        new Request("https://base2026.dev/api/analytics/event", {
+          method: "POST",
+          headers: { "content-type": "application/json", origin: "https://base2026.dev" },
+          body: JSON.stringify({ ...requestBody, context }),
+        }),
+        { ANALYTICS: analytics as unknown as AnalyticsEngineDataset, MCP_RATE_LIMIT: new FakeRateLimit() },
+      );
+      expect(response.status).toBe(400);
+      expect(analytics.points).toHaveLength(0);
+    }
+  });
+
+  it("rejects hostile context keys and values without writing an event", async () => {
+    const hostileContexts = [
+      { cohort: "operator_qa", campaign: "not-a-campaign" },
+      { cohort: "experiment", campaign: "worked_example", extra: "unexpected" },
+      { cohort: "operator_qa", campaign: "worked_example", operator: "qa" },
+      { cohort: "operator qa", campaign: "worked_example" },
+      { cohort: "experiment", campaign: "worked_example", nested: { raw: "value" } },
+    ];
+    for (const context of hostileContexts) {
+      const analytics = new FakeAnalytics();
+      const response = await handleAnalyticsEvent(
+        new Request("https://base2026.dev/api/analytics/event", {
+          method: "POST",
+          headers: { "content-type": "application/json", origin: "https://base2026.dev" },
+          body: JSON.stringify({ ...requestBody, context }),
+        }),
+        { ANALYTICS: analytics as unknown as AnalyticsEngineDataset, MCP_RATE_LIMIT: new FakeRateLimit() },
+      );
+      expect(response.status).toBe(400);
+      expect(analytics.points).toHaveLength(0);
+    }
   });
 
   it("routes the endpoint through the Worker and keeps a storage failure fail-open", async () => {
@@ -1059,6 +1158,8 @@ describe("Base2026 privacy-safe activation measurement", () => {
       "/tools/source-backed-brief/",
       expect.stringMatching(/^\d{4}-\d{2}-\d{2}T\d{2}:00:00Z$/u),
       '{"deliverable":"brief","resolved_count_bucket":"2_5","response_class":"partial","selected_count_bucket":"6_10","viewport_class":"large"}',
+      "unattributed",
+      "none",
     ]);
   });
 

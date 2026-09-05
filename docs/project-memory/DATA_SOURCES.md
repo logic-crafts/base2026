@@ -1,5 +1,24 @@
 # Data Sources
 
+## Current viability-review snapshot — 2026-09-05
+
+Fresh public API read: 2,275 documents, 1,649 distinct sources, 125 public evidence
+routes, 183 projected cards, zero published full transcripts. Corpus results are
+supply, not search demand or endorsement. Existing public Outreach findings were
+queried separately from the private workbook. Official competitor/product pages
+and primary search documentation informed the hypothesis, not a market-size claim.
+
+Fresh authenticated Analytics Engine query grouped event/hour over the preceding
+two days. It returned 11 events, all at September 4 21:00 UTC, matching known QA.
+No additional event-hour bucket was returned. This does not establish zero site
+visitors. GSC 257 impressions/0 clicks remains the dated August 27–September 2
+snapshot; it was not refreshed as today's measurement.
+
+The optional cohort/campaign contract is a source candidate, not yet live.
+Historical rows without context are unclassified, never silently experiment
+traffic. Context values are self-declared fixed labels, not identity/human proof.
+See `../BASE2026_ACTIVATION_MEASUREMENT_CONTRACT.md` and the phase29 handoff.
+
 ## Current public acquisition and measurement snapshot — 2026-09-04 21:27 UTC
 
 Public D1 reports 2,268 documents, 1,644 distinct sources, 120 public evidence

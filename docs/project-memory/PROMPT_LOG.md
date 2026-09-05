@@ -1,5 +1,34 @@
 # Prompt Log
 
+## 2026-09-05 — Complete viability review and first self-growth slice
+
+The owner requested a full rethink of Base2026 as a standalone project that
+can learn from use and develop its own acquisition, accepting a rebuild if
+necessary. Root retained the working site/intake and coordinated three bounded
+Luna Max research/execution slices: market alternatives, admitted corpus demand,
+and runtime/measurement. The original dirty checkout was preserved; source work
+uses a clean branch from origin/main `779970e9d8ce2a2a522204f7500f1661138b1cfb`.
+
+Selected a narrow SEO research-to-action pilot rather than another generic
+content factory. Prepared a usable content-refresh worksheet with synthetic
+numbers, exact query/date controls and matched comparison rows. Added fixed
+optional campaign/QA context to the allowlisted activation candidate and
+updated its public privacy/schema disclosure. Independent review caught mixed
+navigation tags and clarified self-declared labels; no people/retention or
+causal-growth claim is made.
+
+Private operations gained a read-only AgencyOS evaluator and bounded controller
+fixes: ordinary authorized work no longer receives a generic extra approval,
+the documented LinkedIn-specific gate remains, and uncertain sends take priority
+over local visual repair. No new DB or scheduler. Source candidates were not
+deployed. The owner's subsequent request in the same turn explicitly added
+practical skill/MCP distribution and directory work: root prepared the free
+SEO Experiment Planner for reviewed public Git delivery and resumed the existing
+directory task for a bounded new target. Dispatch is not a submission or backlink.
+No DNS, credentials, public/private D1 or member-auth change belongs to this slice.
+
+See `HANDOFF_2026-09-05_SELF_GROWTH_RETHINK.md` for exact state and next action.
+
 ## 2026-09-04 — Source-backed Brief and activation measurement released
 
 Merged the hardened Brief through PR50 and the integrated measurement release
