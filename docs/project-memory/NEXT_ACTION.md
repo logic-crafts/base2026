@@ -1,6 +1,20 @@
 # Next Action
 
-## Current — September 5: test a useful result, not publication volume
+## Current — September 5: finish Product Studio and the existing Google login
+
+Resume [the exact Product Studio handoff](HANDOFF_2026-09-05_PRODUCT_STUDIO.md).
+AgencyOS tasks102/114 hold the auth and product release state. Product Studio
+and the tested installable WordPress plugin are live in Worker
+`ab2589fa-36a4-4bdb-985f-e66a383c8d6d`; exact download and public/private routes
+passed live readback. Finish the plugin's public-main source link and distribute
+the usable product. Google settings/secrets are deployed, but Chrome blocked
+the real callback with ERR_BLOCKED_BY_CLIENT; no signed-in session was observed.
+The ordinary popup and test-user Save are already resolved. Keep the existing
+Hello session and OAuth client, wait for the requested normal-browser login
+check, then prove private save/revisit/export/logout before switching the
+basic-identity OAuth audience from Testing to Production.
+
+## Phase29 context — test a useful result, not publication volume
 
 Use [the research-to-action operating model](../BASE2026_SELF_GROWTH_OPERATING_MODEL.md)
 and [the current handoff](HANDOFF_2026-09-05_SELF_GROWTH_RETHINK.md).

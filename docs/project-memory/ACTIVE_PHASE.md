@@ -1,6 +1,12 @@
 # Active Phase
 
 Phase 29 — standalone-product viability and research-to-action pilot.
+Latest scoped continuation: [Product Studio and Google recovery](HANDOFF_2026-09-05_PRODUCT_STUDIO.md).
+The tools hub and free WordPress companion are live with exact download and
+native/editor save-readback proof. Google settings are deployed but its real
+Chrome callback is client-blocked, so public sign-in is not complete. AgencyOS tasks102/114 own the
+continuation; task113 is not silently replaced or completed by this plugin.
+
 Current checkpoint: 2026-09-05. The working site and native intake are retained.
 The three tools are a research workflow, not a demonstrated acquisition loop.
 The product hypothesis is a usable, source-attributed SEO experiment for a

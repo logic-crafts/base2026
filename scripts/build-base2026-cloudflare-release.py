@@ -22,6 +22,7 @@ import argparse
 from collections import Counter
 import hashlib
 import html
+import io
 import json
 import os
 import re
@@ -29,6 +30,7 @@ import shutil
 import stat
 import sys
 import tempfile
+import zipfile
 from dataclasses import dataclass, field
 from datetime import datetime
 from html.parser import HTMLParser
@@ -119,6 +121,18 @@ DEFAULT_SOURCE_DIVERSITY_CHECK_SCRIPT = PROJECT_ROOT / "templates" / "base2026-s
 DEFAULT_SOURCE_BACKED_BRIEF_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-source-backed-brief.html"
 DEFAULT_SOURCE_BACKED_BRIEF_STYLESHEET = PROJECT_ROOT / "templates" / "base2026-source-backed-brief.css"
 DEFAULT_SOURCE_BACKED_BRIEF_SCRIPT = PROJECT_ROOT / "templates" / "base2026-source-backed-brief.js"
+DEFAULT_TOOLS_STUDIO_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-tools-studio.html"
+DEFAULT_TOOLS_STUDIO_STYLESHEET = PROJECT_ROOT / "templates" / "base2026-tools-studio.css"
+DEFAULT_TOOLS_STUDIO_SCRIPT = PROJECT_ROOT / "templates" / "base2026-tools-studio.js"
+DEFAULT_WORDPRESS_PLUGIN_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-wordpress-evidence-sidebar.html"
+WORDPRESS_PLUGIN_ROOT = PROJECT_ROOT / "plugins" / "wordpress" / "base2026-evidence-sidebar"
+WORDPRESS_PLUGIN_DOWNLOAD = "downloads/base2026-evidence-sidebar-v0.1.0.zip"
+WORDPRESS_PLUGIN_FILES = (
+    "LICENSE",
+    "assets/editor.js",
+    "base2026-evidence-sidebar.php",
+    "readme.txt",
+)
 
 OLD_WORDPRESS_ORIGIN = "https://aggressorbulkit.online"
 BASE2026_ORIGIN = "https://base2026.dev"
@@ -214,6 +228,9 @@ EXCLUDED_SOURCE_EXACT = {
     # source records when a reviewed candidate is rebuilt.
     ASSETSIGNORE_FILENAME,
     RECEIPT_FILENAME,
+    # This one public product archive is always rebuilt from the exact reviewed
+    # source allowlist below. Never inherit any archive bytes from an old release.
+    WORDPRESS_PLUGIN_DOWNLOAD,
 }
 EXCLUDED_SOURCE_PREFIXES = {"knowledge"}
 STARTUP_PERSONAL_ASSET_PATHS = {
@@ -423,7 +440,7 @@ def _validate_public_relative_path(relative_path: Path) -> None:
         raise ReleaseBuildError(
             f"private file is not a public web artifact: {relative_path.as_posix()}"
         )
-    if relative_path.suffix.casefold() in PRIVATE_SUFFIXES:
+    if relative_path.suffix.casefold() in PRIVATE_SUFFIXES and relative_path.as_posix() != WORDPRESS_PLUGIN_DOWNLOAD:
         raise ReleaseBuildError(
             f"private/database/archive file is not a public web artifact: {relative_path.as_posix()}"
         )
@@ -804,7 +821,7 @@ def scan_for_broken_paths(
 
 def _tree_digest(records: Sequence[FileRecord], *, source: bool) -> str:
     digest = hashlib.sha256()
-    for record in records:
+    for record in sorted(records, key=lambda item: item.relative_path):
         digest.update(record.relative_path.encode("utf-8"))
         digest.update(b"\0")
         digest.update((record.source_sha256 if source else record.artifact_sha256).encode("ascii"))
@@ -877,6 +894,8 @@ HUB_SITEMAP_ROUTES = (
     "/blog",
     "/journal/source-backed-video-search-cloudflare/",
     "/journal/source-diversity-check/",
+    "/tools/",
+    "/tools/wordpress-evidence-sidebar/",
     "/tools/evidence-search/",
     "/tools/source-diversity-check/",
     "/tools/source-backed-brief/",
@@ -1880,6 +1899,31 @@ def _artifact_files(root: Path, excluded: set[str]) -> list[Path]:
     )
 
 
+def _wordpress_plugin_package() -> bytes:
+    """Build one deterministic installable ZIP, never a repository/release dump."""
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(buffer, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
+        for relative_name in WORDPRESS_PLUGIN_FILES:
+            source = WORDPRESS_PLUGIN_ROOT / relative_name
+            if source.is_symlink() or not source.is_file() or not source.resolve().is_relative_to(WORDPRESS_PLUGIN_ROOT.resolve()):
+                raise ReleaseBuildError(f"plugin package requires a regular reviewed file: {relative_name}")
+            payload = source.read_bytes()
+            if len(payload) > 262144:
+                raise ReleaseBuildError(f"plugin source exceeds the public package limit: {relative_name}")
+            try:
+                source_text = payload.decode("utf-8")
+            except UnicodeError as exc:
+                raise ReleaseBuildError("plugin package accepts reviewed UTF-8 source only") from exc
+            if any(_public_safety_findings(source_text).values()):
+                raise ReleaseBuildError(f"plugin source contains a private marker: {relative_name}")
+            entry = zipfile.ZipInfo(f"base2026-evidence-sidebar/{relative_name}", (2026, 9, 5, 0, 0, 0))
+            entry.create_system = 3
+            entry.external_attr = 0o100644 << 16
+            entry.compress_type = zipfile.ZIP_DEFLATED
+            archive.writestr(entry, payload, compress_type=zipfile.ZIP_DEFLATED, compresslevel=9)
+    return buffer.getvalue()
+
+
 def _receipt(
     *,
     source_scanned_file_count: int,
@@ -2102,7 +2146,7 @@ def build_release(
                 )
             )
 
-        def write_generated_public_file(relative_name: str, payload: bytes) -> None:
+        def write_generated_public_file(relative_name: str, payload: bytes, *, kind: str = "text") -> None:
             """Write a required root file and update its audit record."""
 
             nonlocal artifact_bytes
@@ -2124,7 +2168,7 @@ def build_release(
                         artifact_sha256=_sha256(payload),
                         source_size=existing.source_size,
                         artifact_size=len(payload),
-                        kind="text",
+                        kind=kind,
                         # A generated page can receive another reviewed overlay
                         # in the same build without existing in the input tree.
                         changed=not existing.source_sha256 or _sha256(payload) != existing.source_sha256,
@@ -2138,7 +2182,7 @@ def build_release(
                         artifact_sha256=_sha256(payload),
                         source_size=0,
                         artifact_size=len(payload),
-                        kind="text",
+                        kind=kind,
                         changed=True,
                     )
                 )
@@ -2322,6 +2366,29 @@ def build_release(
             write_generated_public_file("static/base2026-blog-article.css", DEFAULT_BLOG_ARTICLE_STYLESHEET.read_bytes())
             write_generated_public_file("static/base2026-evidence-guide.css", DEFAULT_EVIDENCE_GUIDE_STYLESHEET.read_bytes())
             write_generated_public_file("static/base2026-evidence-guide.js", DEFAULT_EVIDENCE_GUIDE_SCRIPT.read_bytes())
+            write_generated_public_file(
+                "static/base2026-tools-studio.css", DEFAULT_TOOLS_STUDIO_STYLESHEET.read_bytes()
+            )
+            write_generated_public_file(
+                "static/base2026-tools-studio.js", DEFAULT_TOOLS_STUDIO_SCRIPT.read_bytes()
+            )
+            write_generated_public_file(
+                "tools/index.html",
+                _render_startup_page(
+                    DEFAULT_TOOLS_STUDIO_TEMPLATE.read_text(encoding="utf-8"),
+                    startup_header,
+                    startup_footer,
+                ),
+            )
+            write_generated_public_file(
+                "tools/wordpress-evidence-sidebar/index.html",
+                _render_startup_page(
+                    DEFAULT_WORDPRESS_PLUGIN_TEMPLATE.read_text(encoding="utf-8"),
+                    startup_header,
+                    startup_footer,
+                ),
+            )
+            write_generated_public_file(WORDPRESS_PLUGIN_DOWNLOAD, _wordpress_plugin_package(), kind="binary")
             write_generated_public_file(
                 "static/base2026-evidence-search.css",
                 DEFAULT_EVIDENCE_SEARCH_STYLESHEET.read_bytes(),
@@ -2559,7 +2626,10 @@ def build_release(
             raise ReleaseBuildError("static/manifest.json files[] does not match static/*.jsonl")
 
         # Binary records are checked against source hashes before publication.
-        binary_records = [record for record in records if record.kind == "binary"]
+        binary_records = [
+            record for record in records
+            if record.kind == "binary" and record.relative_path != WORDPRESS_PLUGIN_DOWNLOAD
+        ]
         binary_preserved = all(
             record.source_sha256 == record.artifact_sha256 and not record.changed
             for record in binary_records
@@ -2568,6 +2638,10 @@ def build_release(
             raise ReleaseBuildError("one or more binary files changed during transformation")
 
         verification = {
+            "wordpress_plugin_package_verified": (
+                (stage / WORDPRESS_PLUGIN_DOWNLOAD).read_bytes() == _wordpress_plugin_package()
+                if standalone_startup else None
+            ),
             **source_pagination_sitemap_verification,
             "old_base2026_canonical_origin_remaining": remaining_old_origin,
             "broken_knowledge_product_paths_remaining": remaining_knowledge,

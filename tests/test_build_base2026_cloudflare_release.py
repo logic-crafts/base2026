@@ -2,8 +2,10 @@ from __future__ import annotations
 
 import hashlib
 import importlib.util
+import io
 import json
 import sys
+import zipfile
 from pathlib import Path
 
 import pytest
@@ -90,6 +92,59 @@ def write_fixture(root: Path) -> None:
     (root / "knowledge" / "solutions" / "solutions" / "index.html").write_text(
         "stale", encoding="utf-8"
     )
+
+
+def test_tree_digest_is_independent_of_walk_order() -> None:
+    records = [
+        builder.FileRecord(name, digest, digest, 4, 4, "text", False)
+        for name, digest in (("z.html", "b" * 64), ("a/index.html", "a" * 64))
+    ]
+    assert builder._tree_digest(records, source=True) == builder._tree_digest(list(reversed(records)), source=False)
+
+
+def test_wordpress_download_is_deterministic_and_exact_source_only() -> None:
+    payload = builder._wordpress_plugin_package()
+    assert payload == builder._wordpress_plugin_package()
+    with zipfile.ZipFile(io.BytesIO(payload)) as archive:
+        assert archive.namelist() == [f"base2026-evidence-sidebar/{name}" for name in builder.WORDPRESS_PLUGIN_FILES]
+        for entry, relative in zip(archive.infolist(), builder.WORDPRESS_PLUGIN_FILES):
+            assert archive.read(entry) == (builder.WORDPRESS_PLUGIN_ROOT / relative).read_bytes()
+            assert entry.date_time == (2026, 9, 5, 0, 0, 0)
+            assert entry.flag_bits & 1 == 0
+    assert builder._is_excluded_source_path(Path(builder.WORDPRESS_PLUGIN_DOWNLOAD))
+    builder._validate_public_relative_path(Path(builder.WORDPRESS_PLUGIN_DOWNLOAD))
+    with pytest.raises(builder.ReleaseBuildError, match="archive"):
+        builder._validate_public_relative_path(Path("downloads/arbitrary-release.zip"))
+
+
+def test_wordpress_package_rejects_symlink_and_private_source(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    root = tmp_path / "plugin"
+    root.mkdir()
+    monkeypatch.setattr(builder, "WORDPRESS_PLUGIN_ROOT", root)
+    monkeypatch.setattr(builder, "WORDPRESS_PLUGIN_FILES", ("readme.txt",))
+    (root / "readme.txt").write_text("/Users/example/private/release.txt", encoding="utf-8")
+    with pytest.raises(builder.ReleaseBuildError, match="private marker"):
+        builder._wordpress_plugin_package()
+    (root / "readme.txt").unlink()
+    (root / "readme.txt").symlink_to(tmp_path / "outside.txt")
+    with pytest.raises(builder.ReleaseBuildError, match="regular reviewed"):
+        builder._wordpress_plugin_package()
+
+
+def test_old_plugin_zip_is_never_inherited(tmp_path: Path) -> None:
+    source = tmp_path / "source"
+    source.mkdir()
+    write_fixture(source)
+    old_archive = source / builder.WORDPRESS_PLUGIN_DOWNLOAD
+    old_archive.parent.mkdir()
+    old_archive.write_bytes(b"untrusted old archive bytes must never be served")
+    result = builder.build_release(
+        source, tmp_path / "candidate",
+        homepage_template=builder.DEFAULT_HOMEPAGE_TEMPLATE,
+        homepage_stylesheet=builder.DEFAULT_HOMEPAGE_STYLESHEET,
+    )
+    assert builder.WORDPRESS_PLUGIN_DOWNLOAD in result["excluded_source_paths"]
+    assert (tmp_path / "candidate" / builder.WORDPRESS_PLUGIN_DOWNLOAD).read_bytes() == builder._wordpress_plugin_package()
 
 
 def test_member_assets_are_additive_idempotent_and_require_complete_html() -> None:
@@ -517,9 +572,16 @@ def test_startup_homepage_overlay_preserves_search_as_workspace(tmp_path: Path) 
     assert receipt["replacements"]["html_urls_to_extensionless"] > 0
     assert receipt["verification"]["redirecting_html_canonical_markers_remaining"] == 0
     assert receipt["verification"]["redirecting_html_sitemap_markers_remaining"] == 0
-    # Blog files, guide assets, the three public tools, and activation
-    # measurement are additive; retained assets stay intact.
-    assert receipt["artifact"]["file_count"] == 62
+    # Blog files, guide assets, the three public tools, activation, and the
+    # tools hub's HTML/CSS/JS are additive; retained assets stay intact.
+    tools_studio = (output / "tools" / "index.html").read_text(encoding="utf-8")
+    assert '<link rel="canonical" href="https://base2026.dev/tools/">' in tools_studio
+    assert "Free tools. Real next steps." in tools_studio
+    assert 'href="/tools/"' in rendered_homepage
+    assert "https://base2026.dev/tools/" in hub_sitemap
+    assert (output / "static" / "base2026-tools-studio.css").read_bytes() == builder.DEFAULT_TOOLS_STUDIO_STYLESHEET.read_bytes()
+    assert (output / "static" / "base2026-tools-studio.js").read_bytes() == builder.DEFAULT_TOOLS_STUDIO_SCRIPT.read_bytes()
+    assert receipt["artifact"]["file_count"] == 67
     blog = (output / "blog.html").read_text(encoding="utf-8")
     assert '<link rel="canonical" href="https://base2026.dev/blog">' in blog
     assert 'data-b26-blog-schema' in blog
