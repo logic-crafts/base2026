@@ -120,3 +120,7 @@ fields, privacy rejection, or any public release-gate change. This relay has
 no unauthenticated public write route; its workers.dev ingress accepts only the
 fixed HMAC contract. The target public RPC remains the authority for public D1
 state and rollback semantics.
+
+## Editorial reviewer compatibility
+
+Reviewed packets accept the exact reviewer values `gpt-6-astra` and legacy `sol-max`. The relay preserves the reviewer returned by the public publisher during publish, inspect and idempotent replay; it never relabels an existing receipt. Unsupported reviewers and mismatched hashes, revisions or timestamps remain rejected. The imported public packet validator must include the same reviewer contract.
