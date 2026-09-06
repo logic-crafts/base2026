@@ -1,0 +1,306 @@
+{
+  "generated_at": "2026-09-06",
+  "first_play_budget_bytes": 5242880,
+  "first_play_selected_bytes": 366798,
+  "first_play_triangles_per_instance": 1066,
+  "bundled_runtime": "three@0.180.0",
+  "assets": {
+    "factory-floor-large.glb": {
+      "publisher": "Kenney",
+      "asset": "Factory Kit 3.0",
+      "archive": "factory-kit-3.0",
+      "source_member": "Models/GLB format/floor-large.glb",
+      "use": "room floor",
+      "stats": {
+        "bytes": 1804,
+        "sha256": "6d4cf453bcacd653389a4a3071468ae1167b98c2b13f042aba55e8fe3de21db0",
+        "triangles": 2,
+        "meshes": 1,
+        "materials": 1,
+        "embedded_images": 0,
+        "animations": [],
+        "external_images": 1,
+        "texture_uris": [
+          "Textures/colormap.png"
+        ]
+      }
+    },
+    "factory-structure-wall.glb": {
+      "publisher": "Kenney",
+      "asset": "Factory Kit 3.0",
+      "archive": "factory-kit-3.0",
+      "source_member": "Models/GLB format/structure-wall.glb",
+      "use": "roofless room back wall",
+      "stats": {
+        "bytes": 4236,
+        "sha256": "3bdcb31d693b4e97a9fa198e9de1a47bfd14e829520da08ceaacadbdb258582c",
+        "triangles": 26,
+        "meshes": 1,
+        "materials": 1,
+        "embedded_images": 0,
+        "animations": [],
+        "external_images": 1,
+        "texture_uris": [
+          "Textures/colormap.png"
+        ]
+      }
+    },
+    "factory-structure-doorway-wide.glb": {
+      "publisher": "Kenney",
+      "asset": "Factory Kit 3.0",
+      "archive": "factory-kit-3.0",
+      "source_member": "Models/GLB format/structure-doorway-wide.glb",
+      "use": "open room doorway",
+      "stats": {
+        "bytes": 5572,
+        "sha256": "588655c5594b55d6f715ca6251febb18f9636f6804e0e193e31d68643e7b2107",
+        "triangles": 46,
+        "meshes": 1,
+        "materials": 1,
+        "embedded_images": 0,
+        "animations": [],
+        "external_images": 1,
+        "texture_uris": [
+          "Textures/colormap.png"
+        ]
+      }
+    },
+    "factory-machine.glb": {
+      "publisher": "Kenney",
+      "asset": "Factory Kit 3.0",
+      "archive": "factory-kit-3.0",
+      "source_member": "Models/GLB format/machine.glb",
+      "use": "workshop machine",
+      "stats": {
+        "bytes": 25620,
+        "sha256": "a39e3042bcb7789274428357383317d70e1c31906e5301c99e7d9e90ac584863",
+        "triangles": 268,
+        "meshes": 1,
+        "materials": 1,
+        "embedded_images": 0,
+        "animations": [],
+        "external_images": 1,
+        "texture_uris": [
+          "Textures/colormap.png"
+        ]
+      }
+    },
+    "factory-conveyor-long.glb": {
+      "publisher": "Kenney",
+      "asset": "Factory Kit 3.0",
+      "archive": "factory-kit-3.0",
+      "source_member": "Models/GLB format/conveyor-long.glb",
+      "use": "pipeline/growth conveyor",
+      "stats": {
+        "bytes": 18688,
+        "sha256": "9087ec11d9dcc85ada9d14a66910244bfbb5df57c64b2647956a32525935dee3",
+        "triangles": 196,
+        "meshes": 1,
+        "materials": 1,
+        "embedded_images": 0,
+        "animations": [],
+        "external_images": 1,
+        "texture_uris": [
+          "Textures/colormap.png"
+        ]
+      }
+    },
+    "factory-scanner-low.glb": {
+      "publisher": "Kenney",
+      "asset": "Factory Kit 3.0",
+      "archive": "factory-kit-3.0",
+      "source_member": "Models/GLB format/scanner-low.glb",
+      "use": "product/creator scanner",
+      "stats": {
+        "bytes": 22192,
+        "sha256": "0baa337bc3c653522ce01baa09cc02b8810640225e823fe735dc8e4167a7913b",
+        "triangles": 240,
+        "meshes": 1,
+        "materials": 1,
+        "embedded_images": 0,
+        "animations": [],
+        "external_images": 1,
+        "texture_uris": [
+          "Textures/colormap.png"
+        ]
+      }
+    },
+    "factory-screen-wide.glb": {
+      "publisher": "Kenney",
+      "asset": "Factory Kit 3.0",
+      "archive": "factory-kit-3.0",
+      "source_member": "Models/GLB format/screen-wide.glb",
+      "use": "media/directories display",
+      "stats": {
+        "bytes": 13904,
+        "sha256": "220211ee38d51a521475caec06bb27aa231f5b1d43fd74cb93393cca47edfda3",
+        "triangles": 144,
+        "meshes": 1,
+        "materials": 1,
+        "embedded_images": 0,
+        "animations": [],
+        "external_images": 1,
+        "texture_uris": [
+          "Textures/colormap.png"
+        ]
+      }
+    },
+    "character-inspector.glb": {
+      "publisher": "Kenney",
+      "asset": "Blocky Characters 2.0",
+      "archive": "blocky-characters-2.0",
+      "source_member": "Models/GLB format/character-a.glb",
+      "use": "visit character (walk/idle)",
+      "stats": {
+        "bytes": 113596,
+        "sha256": "8ee5dae167ec589863f6bba222467eb90ace8be357a4c5abfcab289290181616",
+        "triangles": 72,
+        "meshes": 6,
+        "materials": 1,
+        "embedded_images": 0,
+        "animations": [
+          "static",
+          "idle",
+          "walk",
+          "sprint",
+          "sit",
+          "drive",
+          "die",
+          "pick-up",
+          "emote-yes",
+          "emote-no",
+          "holding-right",
+          "holding-left",
+          "holding-both",
+          "holding-right-shoot",
+          "holding-left-shoot",
+          "holding-both-shoot",
+          "attack-melee-right",
+          "attack-melee-left",
+          "attack-kick-right",
+          "attack-kick-left",
+          "interact-right",
+          "interact-left",
+          "wheelchair-sit",
+          "wheelchair-move-forward",
+          "wheelchair-move-back",
+          "wheelchair-move-left",
+          "wheelchair-move-right"
+        ],
+        "external_images": 1,
+        "texture_uris": [
+          "Textures/texture-a.png"
+        ]
+      }
+    },
+    "character-worker.glb": {
+      "publisher": "Kenney",
+      "asset": "Blocky Characters 2.0",
+      "archive": "blocky-characters-2.0",
+      "source_member": "Models/GLB format/character-b.glb",
+      "use": "ambient worker (idle)",
+      "stats": {
+        "bytes": 113596,
+        "sha256": "30ed390a741a1b285f587544819aa8a02c8f7f270e552ed742eb84785034f62a",
+        "triangles": 72,
+        "meshes": 6,
+        "materials": 1,
+        "embedded_images": 0,
+        "animations": [
+          "static",
+          "idle",
+          "walk",
+          "sprint",
+          "sit",
+          "drive",
+          "die",
+          "pick-up",
+          "emote-yes",
+          "emote-no",
+          "holding-right",
+          "holding-left",
+          "holding-both",
+          "holding-right-shoot",
+          "holding-left-shoot",
+          "holding-both-shoot",
+          "attack-melee-right",
+          "attack-melee-left",
+          "attack-kick-right",
+          "attack-kick-left",
+          "interact-right",
+          "interact-left",
+          "wheelchair-sit",
+          "wheelchair-move-forward",
+          "wheelchair-move-back",
+          "wheelchair-move-left",
+          "wheelchair-move-right"
+        ],
+        "external_images": 1,
+        "texture_uris": [
+          "Textures/texture-b.png"
+        ]
+      }
+    }
+  },
+  "source_archives": {
+    "factory-kit-3.0": {
+      "path": "assets/source/kenney_factory-kit_3.0.zip",
+      "bytes": 4511890,
+      "sha256": "7e31fb2308e90304672bd15cd18fa9d9f02c03731a8cbc57a8e3e1c181dfb0a7",
+      "license": "CC0 1.0",
+      "license_file": "License.txt"
+    },
+    "blocky-characters-2.0": {
+      "path": "assets/source/kenney_blocky-characters_20.zip",
+      "bytes": 2148510,
+      "sha256": "5e123859aa0c1598342b600c6db197024a1d63eb9ec531398b310725f589887e",
+      "license": "CC0 1.0",
+      "license_file": "License.txt"
+    }
+  },
+  "notes": [
+    "Selected GLBs use exact relative external texture URIs from the official archives; runtime copies preserve the Textures/* paths under public/assets/kenney and assets/glb.",
+    "The scene instances the modular kit across eight offices. The inspector and one worker are the only active animated characters.",
+    "Visible triangle and draw-call budgets are runtime targets; browser QA should measure the final scene on target hardware.",
+    "Static composition estimate: approximately 4,104 triangles and at most 72 visible draw calls before browser renderer overhead; confirm with renderer.info on target desktop and phone.",
+    "Asset integrity tests parse every selected GLB JSON chunk and verify each referenced external PNG exists in both staging and runtime paths."
+  ],
+  "estimated_scene_triangles": 4104,
+  "estimated_visible_draw_calls": 72,
+  "first_play_asset_triangles": 2432,
+  "external_textures": {
+    "Textures/colormap.png": {
+      "publisher": "Kenney",
+      "asset": "Factory Kit 3.0",
+      "archive": "factory-kit-3.0",
+      "source_member": "Models/GLB format/Textures/colormap.png",
+      "runtime_path": "public/assets/kenney/Textures/colormap.png",
+      "staging_path": "assets/glb/Textures/colormap.png",
+      "bytes": 11813,
+      "sha256": "35d7bd6900dde0208429eeaec87fa17fbf024ed59f3f4eab54bc92802eba9dd7",
+      "license": "CC0 1.0"
+    },
+    "Textures/texture-a.png": {
+      "publisher": "Kenney",
+      "asset": "Blocky Characters 2.0",
+      "archive": "blocky-characters-2.0",
+      "source_member": "Models/GLB format/Textures/texture-a.png",
+      "runtime_path": "public/assets/kenney/Textures/texture-a.png",
+      "staging_path": "assets/glb/Textures/texture-a.png",
+      "bytes": 20171,
+      "sha256": "257e944c582ce7cda206fbd8ceb717be648f9721756baf377a36478c11c0059a",
+      "license": "CC0 1.0"
+    },
+    "Textures/texture-b.png": {
+      "publisher": "Kenney",
+      "asset": "Blocky Characters 2.0",
+      "archive": "blocky-characters-2.0",
+      "source_member": "Models/GLB format/Textures/texture-b.png",
+      "runtime_path": "public/assets/kenney/Textures/texture-b.png",
+      "staging_path": "assets/glb/Textures/texture-b.png",
+      "bytes": 15606,
+      "sha256": "c614148428fbf63ab701ab95e2ebe0b6103ea0e2e6212c986d8931899bad7692",
+      "license": "CC0 1.0"
+    }
+  }
+}

@@ -214,6 +214,11 @@ function catalogSection(rows: SourceRow[], cursor: Cursor | null, next: Cursor |
   </section>\n`;
 }
 
+function hasShellClass(tag: string, className: string): boolean {
+  const attributes = [...tag.matchAll(/\sclass\s*=\s*(["'])([\s\S]*?)\1/giu)];
+  return attributes.length === 1 && attributes[0][2].split(/\s+/u).includes(className);
+}
+
 function renderShell(html: string, rows: SourceRow[], cursor: Cursor | null, next: Cursor | null): string {
   // The retained builder owns this exact seam. Unexpected/duplicated markup
   // must not produce a fragment or a second page/header inside the document.
@@ -232,7 +237,7 @@ function renderShell(html: string, rows: SourceRow[], cursor: Cursor | null, nex
   one(html, /<h2 id="source-records-list-heading">Available source records<\/h2>/gu);
   one(html, /<html\b[^>]*>/giu); one(html, /<\/html\s*>/giu);
   if (main[0] !== MAIN || heading[0] !== "<h1>Source Records</h1>"
-    || !header[0].includes('class="b26-site-header"') || !footer[0].includes('class="b26-site-footer"')
+    || !hasShellClass(header[0], "b26-site-header") || !hasShellClass(footer[0], "b26-site-footer")
     || html.includes("b26-source-catalog") || /<base\b/iu.test(html)
     || !(head.index! < endHead.index! && endHead.index! < body.index! && body.index! < header.index!
       && header.index! < endHeader.index! && endHeader.index! < main.index! && main.index! < heading.index!

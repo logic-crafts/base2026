@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#091b3d" />
+    <meta name="robots" content="noindex,follow" />
+    <link rel="canonical" href="https://base2026.dev/factory/" />
+    <meta name="description" content="Base2026 Factory — a playable authored scenario, not live operations." />
+    <title>Base2026 Factory — Scenario</title>
+  </head>
+  <body>
+    <main id="app" class="factory-shell">
+      <header class="factory-header">
+        <div class="brand-lockup">
+          <img class="brand-mark" src="./static/brand/b26-seal.webp" alt="Base2026" width="48" height="48" />
+          <div>
+            <p class="eyebrow">Base2026 / Factory</p>
+            <h1>Trace the work</h1>
+          </div>
+        </div>
+        <div class="mode-badge" aria-label="Mode: Scenario, not live operations">
+          <span class="mode-dot" aria-hidden="true"></span>
+          <span>Scenario — not live operations</span>
+        </div>
+      </header>
+
+      <section class="factory-stage" aria-label="Playable factory scene">
+        <div id="scene-shell" class="scene-shell">
+          <div id="loading-overlay" class="loading-overlay" role="status" aria-live="polite">
+            <div class="loading-card">
+              <span class="loading-kicker">Loading the factory</span>
+              <strong id="loading-label">Preparing the rooms…</strong>
+              <div class="progress-track" aria-hidden="true"><span id="loading-progress"></span></div>
+              <p id="loading-detail">Bundled low-poly assets stay on this device.</p>
+              <button id="retry-loading" class="button button-secondary" type="button" hidden>Retry loading</button>
+            </div>
+          </div>
+          <div id="webgl-fallback" class="fallback-card" hidden>
+            <span class="loading-kicker">3D preview unavailable</span>
+            <h2 id="fallback-title">Your room list is still usable</h2>
+            <p id="fallback-detail">This browser could not start WebGL. Use the room controls below to inspect the factory.</p>
+          </div>
+          <div id="canvas-root" class="canvas-root" aria-label="Three-dimensional factory scene"></div>
+          <div class="scene-chrome" aria-hidden="true">
+            <span class="scene-chip"><span class="scene-chip-dot"></span> Inspection view</span>
+            <span id="visit-status" class="scene-chip scene-chip-muted">Select a room to inspect</span>
+          </div>
+          <div id="qa-telemetry" class="qa-telemetry" hidden aria-live="off"></div>
+          <button id="cancel-visit" class="cancel-visit" type="button" hidden>Cancel visit</button>
+        </div>
+
+        <aside class="room-drawer" aria-label="Factory rooms">
+          <div class="drawer-heading">
+            <div>
+              <p class="eyebrow">Eight work areas</p>
+              <h2>Choose a room</h2>
+            </div>
+            <span id="room-count" class="count-badge">8</span>
+          </div>
+          <div id="room-list" class="room-list"></div>
+          <div class="keyboard-hint">
+            <span class="keycap">←</span><span class="keycap">→</span> choose
+            <span class="keycap">V</span> visit
+            <span class="keycap">R</span> reset
+          </div>
+        </aside>
+      </section>
+
+      <section class="control-strip" aria-label="Scene controls">
+        <div class="control-group">
+          <span class="control-label">Camera</span>
+          <button id="zoom-out" class="icon-button" type="button" aria-label="Zoom out">−</button>
+          <button id="zoom-in" class="icon-button" type="button" aria-label="Zoom in">+</button>
+          <button id="rotate-left" class="icon-button" type="button" aria-label="Rotate left">↶</button>
+          <button id="rotate-right" class="icon-button" type="button" aria-label="Rotate right">↷</button>
+          <button id="reset-camera" class="button button-secondary" type="button">Reset view</button>
+        </div>
+        <div class="control-group scenario-controls">
+          <span class="control-label">Scenario trace</span>
+          <button id="scenario-play" class="button button-primary" type="button">Play</button>
+          <button id="scenario-step" class="button button-secondary" type="button">Next stage</button>
+          <button id="scenario-reset" class="button button-secondary" type="button">Restart</button>
+        </div>
+      </section>
+
+      <section class="inspection-layout" aria-label="Factory inspection">
+        <div class="scenario-card">
+          <div class="scenario-card-top">
+            <div>
+              <p class="eyebrow">Authored trace</p>
+              <h2>Scout → Curation → Release</h2>
+            </div>
+            <span id="stage-state" class="state-pill">Held at review</span>
+          </div>
+          <p id="stage-description" class="scenario-description">The source is held until its use and context are clear.</p>
+          <div id="stage-list" class="stage-list" role="list" aria-label="Scenario stages"></div>
+          <p class="scenario-note"><strong>Scenario:</strong> this fixed story illustrates a process. Character movement and machine animation are visual cues, never proof that a live operation is running.</p>
+        </div>
+
+        <div class="tasks-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Inspection panel</p>
+              <h2 id="selected-room-title">Select a room</h2>
+            </div>
+            <span id="selected-room-time" class="panel-time">Authored scenario</span>
+          </div>
+          <div class="tab-list" role="tablist" aria-label="Room details">
+            <button class="tab-button is-active" type="button" role="tab" aria-selected="true" data-tab="tasks">Tasks</button>
+            <button class="tab-button" type="button" role="tab" aria-selected="false" data-tab="process">Process</button>
+            <button class="tab-button" type="button" role="tab" aria-selected="false" data-tab="receipts">Receipts</button>
+          </div>
+          <div id="panel-content" class="panel-content" role="tabpanel" tabindex="0"></div>
+          <div class="panel-actions">
+            <button id="visit-office" class="button button-primary" type="button">Visit office</button>
+            <span class="panel-constraint">Choose a room to inspect its trace.</span>
+          </div>
+        </div>
+      </section>
+
+      <footer class="factory-footer">
+        <span>Base2026 Factory · <a href="https://kenney.nl/" target="_blank" rel="noopener noreferrer">Assets by Kenney</a> · <a href="./licenses/three-MIT.txt">Runtime license</a></span>
+        <a href="https://base2026.dev/">Back to Base2026</a>
+      </footer>
+    </main>
+    <script type="module" src="./src/public.ts"></script>
+  </body>
+</html>

@@ -1,5 +1,24 @@
 # Prompt Log
 
+## 2026-09-06 — Product story, investor roadmap, 3D Factory and visual correction
+
+The owner requested four independent web ChatGPT 6 Pro investigations and
+one synthesis of the complete reports before planning and implementation.
+All five were completed, archived and reviewed in the existing strategy
+project. The resulting public product story, investor overview, roadmap,
+methodology, source policy and separate authored 3D Factory were deployed
+with the preserved private member runtime. A loopback Factory view reads
+the existing AgencyOS registry without publishing operational data.
+
+The owner then rejected the footer/menu and requested a complete Founder
+rebuild with web-design decisions explicitly assigned to Astra/max. Two
+bounded Astra/max seats rebuilt the shared navigation/footer and Founder;
+HQ owns the reviewed media boundary, integration, native review and release.
+Original generated art and actual public project screenshots are pinned by
+exact path and byte hash. The release status and verification remain in
+HANDOFF_2026-09-06_PRODUCT_EXPERIENCE.md; external adoption and the ongoing
+office work are not inferred from a website release.
+
 ## 2026-09-06 — Preserve truthful reviewer receipts through the target relay
 
 Completed the remaining target-relay compatibility for Astra-reviewed

@@ -1,5 +1,27 @@
 # Decisions
 
+## 2026-09-06 — Make the product and investor story inspectable
+
+The product turns selected practitioner videos into searchable, attributed
+passages with original links and context. Selection improves retrieval; it
+does not certify every recommendation. Founder/team selection remains closed
+to creator applications and paid placement. Publish a visible investor
+overview, a Now / Next / Exploring roadmap, and the actual tool workflow.
+Treat a commercial pilot, economics and repeat demand as hypotheses to test,
+without invented traction, pricing availability or fundraising commitments.
+
+Keep the public English 3D Factory as an explicitly authored scenario. Use
+licensed existing game assets, an accessible HTML interface and bounded
+motion. The separate local view may read current AgencyOS tasks; its database,
+implementation, adapter and snapshots remain private. AgencyOS may become a
+separate future product, but is not released through this website.
+
+After rejecting the earlier footer/menu and Founder presentation, the owner
+assigned all web-design and frontend-design decisions for the correction to
+Astra/max. Preserve routine Luna/max execution and bot routes. Ship the
+reviewed Founder portrait, real public case screenshots and social artwork
+through four exact image paths and hashes, not a general media-folder copy.
+
 ## 2026-09-06 — Store truthful reviewer identity without rewriting history
 
 New editorial approvals follow Astra ownership. Accept exact gpt-6-astra and

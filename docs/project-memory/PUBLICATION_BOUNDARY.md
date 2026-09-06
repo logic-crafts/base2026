@@ -23,6 +23,19 @@ Base2026 has two layers:
 - `docs/`
 - `docs/public-pages/` public Markdown used to generate site info pages
 - `scripts/`
+- `templates/base2026-*` reviewed public UI source and its contract tests
+- the three reviewed WebP Founder publication images under
+  `static/assets/founder-editorial-20260906/` and the social artwork atlas under
+  `static/brand/social-editorial-20260906/`; the release builder admits only
+  four exact paths and byte hashes, excluding original portrait inputs and
+  any private capture or generation notes
+- `packages/factory3d/` reviewed public Three.js source, authored scenario,
+  tests, package lock, selected Kenney models/textures, public brand asset and
+  license/provenance files; exclude `node_modules/`, `dist/`, private adapters,
+  snapshots and original asset archives
+- `templates/assets/factory3d/` the exact 20 reviewed public runtime files and
+  their `factory-release.json` hash manifest, imported by the release builder;
+  this bounded exception does not admit other generated release trees
 - the four explicitly reviewed source files of `plugins/wordpress/base2026-evidence-sidebar/`
   (PHP entrypoint, `assets/editor.js`, `readme.txt`, `LICENSE`), without generated archives
 - `contracts/`

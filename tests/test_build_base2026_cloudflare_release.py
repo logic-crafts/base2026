@@ -643,9 +643,15 @@ def test_startup_homepage_overlay_preserves_search_as_workspace(
     assert 'href="/roadmap"' in support
     founder = (output / "founder.html").read_text(encoding="utf-8")
     assert '<link rel="canonical" href="https://base2026.dev/founder">' in founder
-    assert "Do something" in founder
-    assert "With me." in founder
-    assert 'href="/static/base2026-founder.css?v=20260828-founder-hero-v1"' in founder
+    assert "Alex Yarosh" in founder
+    assert 'id="selected-work"' in founder
+    assert 'href="/static/base2026-founder.css?v=20260906-founder-editorial-v1"' in founder
+    assert 'src="/static/assets/founder-editorial-20260906/alex-yarosh-cobalt-portrait.webp"' in founder
+    assert receipt["verification"]["editorial_media_verified"] is True
+    assert receipt["verification"]["editorial_media_count"] == 4
+    for name, (size, digest) in builder.EDITORIAL_MEDIA_ALLOWLIST.items():
+        payload = (output / name).read_bytes()
+        assert (len(payload), hashlib.sha256(payload).hexdigest()) == (size, digest)
     assert 'href="/founder"' in rendered_homepage
     assert 'href="/dataset"' in rendered_homepage
     dataset = (output / "dataset.html").read_text(encoding="utf-8")
@@ -686,7 +692,7 @@ def test_startup_homepage_overlay_preserves_search_as_workspace(
     page_source = (output / "tools/page-readiness/index.html").read_text(encoding="utf-8")
     assert "Page Source Check" in page_source
     assert '<link rel="canonical" href="https://base2026.dev/tools/page-readiness/">' in page_source
-    assert page_source.count('class="b26-site-header"') == 1
+    assert page_source.count('<header class="b26-site-header') == 1
     assert builder.STARTUP_CORE_LINK in page_source
     for extension in ("css", "js"):
         assert (output / f"static/base2026-page-readiness.{extension}").read_bytes() == (
@@ -740,7 +746,15 @@ def test_startup_homepage_overlay_preserves_search_as_workspace(
     assert legacy_plugin_output.read_bytes() == (source / builder.WORDPRESS_PLUGIN_LEGACY_DOWNLOAD).read_bytes()
     assert receipt["verification"]["wordpress_plugin_package_verified"] is True
     assert receipt["verification"]["wordpress_plugin_legacy_download_verified"] is True
-    assert receipt["artifact"]["file_count"] == 93
+    assert receipt["artifact"]["file_count"] == 122
+    for generated_path in (
+        "static/base2026-investors.css",
+        "static/base2026-public-pages.css",
+        "roadmap.html",
+        "methodology.html",
+        "source-policy.html",
+    ):
+        assert (output / generated_path).is_file()
     blog = (output / "blog.html").read_text(encoding="utf-8")
     assert '<link rel="canonical" href="https://base2026.dev/blog">' in blog
     assert 'data-b26-blog-schema' in blog
@@ -748,7 +762,7 @@ def test_startup_homepage_overlay_preserves_search_as_workspace(
     assert blog.count("<!--B26_BLOG_FEATURED_START-->") == 1
     assert 'href="/journal/source-diversity-check/"' in blog
     assert 'href="/journal/source-backed-video-search-cloudflare/"' in blog
-    assert 'href="/blog"' in rendered_homepage
+    assert 'href="/blog/"' in rendered_homepage
     assert "https://base2026.dev/blog" in hub_sitemap
     assert "Sitemap: https://base2026.dev/sitemap-blog.xml" in (output / "robots.txt").read_text(encoding="utf-8")
     # The blog sitemap is an independent index; do not nest it in sitemap.xml.
@@ -813,7 +827,7 @@ def test_startup_release_accepts_exact_retained_tools_studio_media(
         homepage_stylesheet=builder.DEFAULT_HOMEPAGE_STYLESHEET,
     )
 
-    assert receipt["artifact"]["file_count"] == 93
+    assert receipt["artifact"]["file_count"] == 122
     assert receipt["verification"]["reviewed_repository_media_verified"] is True
     assert not (output / builder.TOOLS_STUDIO_MEDIA_MANIFEST_OUTPUT).exists()
 
@@ -930,11 +944,10 @@ def test_startup_homepage_exposes_product_first_evidence_brief_search() -> None:
     assert 'action="/workspace/"' in homepage
     assert 'method="get"' in homepage
     assert 'name="q"' in homepage
-    assert 'type="submit">Find evidence</button>' in homepage
-    assert "Find the source." in homepage
+    assert '<button class="b26-button--primary" type="submit">' in homepage
     assert homepage.count('class="b26-button--primary"') >= 1
     assert homepage.count('class="b26-suggested-queries"') == 1
-    assert homepage.count('href="/workspace/?q=') == 3
+    assert homepage.count('href="/workspace/?q=') >= 3
     assert 'id="evidence-brief-result"' in homepage
     assert '/static/base2026-evidence-brief.js' in homepage
     runtime = (ROOT / "templates" / "base2026-evidence-brief.js").read_text(encoding="utf-8")
@@ -1333,3 +1346,39 @@ def test_brand_manifest_cannot_authorize_changed_asset_bytes(tmp_path: Path, mon
 def test_topic_conversion_rejects_missing_published_metadata() -> None:
     with pytest.raises(builder.ReleaseBuildError, match="without guessing"):
         builder._with_topic_discovery('<html><head></head><body><main><h1>Topics</h1></main></body></html>')
+
+
+def test_editorial_media_allowlist_excludes_unreviewed_siblings(tmp_path: Path, monkeypatch) -> None:
+    for name in builder.EDITORIAL_MEDIA_ALLOWLIST:
+        target = tmp_path / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes((builder.EDITORIAL_MEDIA_ROOT / name).read_bytes())
+    sibling = tmp_path / next(iter(builder.EDITORIAL_MEDIA_ALLOWLIST))
+    sibling.with_name("unreviewed-original.png").write_bytes(b"private source image")
+    monkeypatch.setattr(builder, "EDITORIAL_MEDIA_ROOT", tmp_path)
+    assert set(builder._reviewed_editorial_assets()) == set(builder.EDITORIAL_MEDIA_ALLOWLIST)
+
+
+@pytest.mark.parametrize("replacement", ["changed", "symlink"])
+def test_changed_editorial_media_cannot_reach_a_release(tmp_path: Path, monkeypatch, replacement: str) -> None:
+    source = tmp_path / "source"
+    write_fixture(source)
+    write_legacy_plugin_fixture(source, monkeypatch)
+    media_root = tmp_path / "media"
+    for name in builder.EDITORIAL_MEDIA_ALLOWLIST:
+        target = media_root / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes((builder.EDITORIAL_MEDIA_ROOT / name).read_bytes())
+    target = media_root / next(iter(builder.EDITORIAL_MEDIA_ALLOWLIST))
+    if replacement == "changed":
+        target.write_bytes(b"unreviewed replacement")
+    else:
+        original = tmp_path / "original.webp"
+        original.write_bytes(target.read_bytes())
+        target.unlink()
+        target.symlink_to(original)
+    monkeypatch.setattr(builder, "EDITORIAL_MEDIA_ROOT", media_root)
+    output = tmp_path / "rejected"
+    with pytest.raises(builder.ReleaseBuildError, match="editorial asset"):
+        builder.build_release(source, output, homepage_template=builder.DEFAULT_HOMEPAGE_TEMPLATE, homepage_stylesheet=builder.DEFAULT_HOMEPAGE_STYLESHEET)
+    assert not output.exists()

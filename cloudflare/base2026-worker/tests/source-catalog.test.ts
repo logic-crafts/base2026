@@ -136,6 +136,21 @@ beforeEach(() => { db = new SqliteD1(); assets = new Assets(); });
 afterEach(() => { vi.restoreAllMocks(); for (const item of databases) item.sqlite.close(); databases.clear(); });
 
 describe("source catalog navigation", () => {
+  it("preserves the current shared mega-menu and compact footer around live source records", async () => {
+    await seed(1);
+    const currentHeader = readFileSync(new URL("../../../templates/base2026-startup-header.html", import.meta.url), "utf8").trim();
+    const currentFooter = readFileSync(new URL("../../../templates/base2026-startup-footer.html", import.meta.url), "utf8").trim();
+    assets.html = shell().replace(HEADER, currentHeader).replace(FOOTER, currentFooter);
+    const response = await get();
+    const html = await response.text();
+    expect(response.status).toBe(200);
+    expect(html).toContain(currentHeader);
+    expect(html).toContain(currentFooter);
+    expect(html).toContain('id="b26-mobile-sheet"');
+    expect(html).toContain('href="/investors"');
+    expect(ids(html)).toContain(packet(1).source.canonical_url.split("/").at(-1));
+  });
+
   it("labels a source's extracted topic without presenting its claim as a catalog fact", async () => {
     await seed(1);
     const response = await get();
@@ -366,6 +381,9 @@ describe("catalog cursor and shell boundaries", () => {
     ["missing legacy seam", (html: string) => html.replace('id="source-records-list-heading"', 'id="different"')],
     ["duplicate legacy heading", (html: string) => html.replace("</main>", '<h2 id="source-records-list-heading">Available source records</h2></main>')],
     ["missing footer", (html: string) => html.replace(FOOTER, "")],
+    ["header class prefix only", (html: string) => html.replace('class="b26-site-header"', 'class="b26-site-header-extra"')],
+    ["footer class suffix only", (html: string) => html.replace('class="b26-site-footer"', 'class="other-b26-site-footer"')],
+    ["duplicate header class attribute", (html: string) => html.replace('class="b26-site-header"', 'class="other" class="b26-site-header"')],
     ["misordered header closure", (html: string) => html.replace("</header>", "").replace("</main>", "</main></header>")],
     ["extra H1", (html: string) => html.replace("</main>", "<h1>Other page</h1></main>")],
     ["extra canonical", (html: string) => html.replace("</head>", `<link rel="canonical" href="${ORIGIN}/sources/"></head>`)],

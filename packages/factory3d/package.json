@@ -1,0 +1,23 @@
+{
+  "name": "base2026-factory3d-20260906",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc --noEmit && vite build",
+    "build:factory": "tsc --noEmit && vite build --base /factory/",
+    "test": "tsx tests/navigation.test.ts && tsx tests/asset-integrity.test.ts",
+    "check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "three": "0.180.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.29",
+    "@types/three": "0.180.0",
+    "tsx": "4.20.3",
+    "typescript": "5.9.2",
+    "vite": "7.1.3"
+  }
+}
