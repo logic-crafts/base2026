@@ -1,6 +1,7 @@
 # Base2026 editorial publishing — operating contract
 
-Status: live runtime and first exact publication/replay verified 2026-08-30.
+Status: public reviewer compatibility and receipt migration verified 2026-09-06.
+The original publication/replay acceptance below remains historical evidence.
 Production proof: [release receipt](project-memory/BASE2026_EDITORIAL_RUNTIME_RELEASE_2026_08_30.md).
 This governs the shared original-article and maintained-guide publisher.
 [Evidence-to-SEO operating manual](BASE2026_EVIDENCE_TO_SEO_OPERATING_MANUAL.md)
@@ -9,7 +10,7 @@ still governs raw-video intake and evidence-card projection.
 
 ## One publishing path
 
-Public evidence → original structured article → Sol Max review of the exact
+Public evidence → original structured article → Astra review of the exact
 payload → authenticated private ingress → existing PUBLIC_PROJECTION service
 binding → public validator → atomic D1 article/receipt → blog, RSS and sitemap.
 
@@ -27,6 +28,8 @@ binds the reviewed text.
 - cloudflare/base2026-worker/migrations/0004_editorial_articles.sql: additive
   editorial_articles and editorial_publication_receipts; search tables and
   corpus counters remain separate.
+- cloudflare/base2026-worker/migrations/0007_editorial_astra_review.sql: widens
+  only the receipt reviewer CHECK, retaining every legacy row in a backup table.
 - cloudflare/base2026-worker/src/editorial-catalog.json: two legacy articles.
 - cloudflare/base2026-worker/scripts/editorial-packet.mjs: local-only validation
   and packing, with a separately supplied exact-hash review; no network publish.
@@ -86,8 +89,11 @@ The exact TypeScript schema is authoritative. Packet is {payload, review}:
   Yarosh; visible truthful AI-assistance disclosure.
 - Optional reviewed /static/assets/ image with alt, credit and ai_generated.
   New image assets require an asset release; article text does not.
-- Review fields: reviewer sol-max, outcome pass, reviewed_at and exact
-  payload_sha256. Review cannot precede the update or source checks.
+- Review fields: reviewer gpt-6-astra or legacy sol-max, outcome pass,
+  reviewed_at and exact payload_sha256. New office reviews follow the owner's
+  Astra review policy. Preserve the actual reviewer in validation, storage and
+  readback; never relabel a review. Review cannot precede the update or source
+  checks. Unknown models and routine Luna executors cannot approve a packet.
 
 Reject unknown fields, unbounded input, arbitrary HTML, secret/contact/local
 material, transcript-shaped payloads and unresolved citations. Filters cannot
@@ -145,16 +151,21 @@ table: old validators cannot safely read the new kind. Restore a verified
 guide-compatible version, or use a separately reviewed compatibility/recovery
 procedure. Never erase article data or receipts to make an old build appear healthy.
 
+After an Astra receipt is stored, do not restore a Sol-only runtime or receipt
+schema. The supplied rollback fixture intentionally fails atomically if any
+Astra receipt exists. Before that boundary it copies every current Sol receipt
+and retains both backup tables. Never delete or relabel a receipt to permit an
+older runtime.
+
 ## Authoring, distribution and honest limits
 
-Sol Max research/writing currently runs in the owner's Codex office. It is not
-an unlimited cloud-only model API. Cloudflare serves approved articles without
-that host. Official Buffer handles X: queued posts publish in its cloud,
-refilling requires the office host and protected credentials.
+Astra owns planning, decisions and semantic review in the owner's Codex office;
+routine authoring and execution use Luna Max. This is not an unlimited
+cloud-only authoring API. Cloudflare serves approved articles without that
+host. Distribution uses each existing authorized account and channel workflow.
 
-LinkedIn is Computer Use-only under the current safety/confirmation rules,
-not Buffer or security-check evasion. Medium uses the original Base2026
-canonical. Owned-site links must be contextual, not repeated sitewide blocks.
+Use authenticated native tools for LinkedIn and preserve any encountered
+access checks. Medium uses the original Base2026 canonical. Owned-site links must be contextual, not repeated sitewide blocks.
 Measure articles, canonical readbacks, indexing, sessions and useful actions
 separately. Social views are not visitors; do not publish filler for a quota.
 
@@ -167,7 +178,10 @@ separately. Social views are not visitors; do not publish filler for a quota.
 4. Public-boundary gate, unchanged protected CSS/corpus, shell-only navigation
    diff, desktop/mobile/no-JS/canonical/RSS/sitemap checks.
 5. Apply additive migration 0004 only if not already applied; evidence guides
-   reuse those tables without another migration. Release the public candidate
+   reuse those tables without another migration. For reviewer compatibility,
+   inspect the live schema and dependencies, then apply 0007 as one atomic D1
+   batch only if absent. Compare every legacy receipt and article before/after.
+   Release the public candidate
    and separately reviewed private ingress; each owner deploys only its Worker.
 6. Publish one reviewed real article, verify RPC receipt, D1 aggregate, live
    canonical, API, RSS, sitemap and internal links.

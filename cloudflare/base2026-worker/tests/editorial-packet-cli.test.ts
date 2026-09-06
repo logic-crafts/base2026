@@ -59,12 +59,12 @@ function file(name: string, value: unknown): string {
   return path;
 }
 
-async function fixtures(candidate = payload()) {
+async function fixtures(candidate = payload(), reviewer: EditorialReview["reviewer"] = "sol-max") {
   const validated = await validateEditorialPayload(candidate, new Date().toISOString());
   if (!validated.ok) throw new Error("invalid CLI test fixture");
   // Synthetic test review data, supplied as an independent input file. The
   // CLI itself must never generate these fields or infer editorial approval.
-  const review: EditorialReview = { reviewer: "sol-max", outcome: "pass", reviewed_at: ago(60), payload_sha256: validated.payload_sha256 };
+  const review: EditorialReview = { reviewer, outcome: "pass", reviewed_at: ago(60), payload_sha256: validated.payload_sha256 };
   return {
     candidate, review, validated,
     draftPath: file("draft.json", candidate),
@@ -167,6 +167,14 @@ describe("local editorial packet CLI", () => {
     expect(readdirSync(scratch).sort()).toEqual(["draft.json", "review.json", "reviewed-packet.json"]);
   });
 
+  it("round-trips an externally supplied Astra reviewer without replacing its identity", async () => {
+    const input = await fixtures(payload(), "gpt-6-astra");
+    const result = await cli(packArgs(input));
+    expect(result.status).toBe(0);
+    expect(JSON.parse(readFileSync(input.outPath, "utf8")).review).toEqual(input.review);
+    expect(JSON.parse(result.stdout)).toMatchObject({ ok: true, status: "packed", payload_sha256: input.validated.payload_sha256 });
+  });
+
   it("rejects a payload changed after the supplied review hash was produced", async () => {
     const input = await fixtures();
     input.candidate.title = "A change the reviewer has not approved";
@@ -204,6 +212,13 @@ describe("local editorial packet CLI", () => {
     const input = await fixtures();
     file("review.json", { ...input.review, [key as string]: value });
     expect(failure(await cli(packArgs(input)), "EDITORIAL_CLI_VALIDATION_FAILED").issues[0].code).toBe(code);
+    expect(existsSync(input.outPath)).toBe(false);
+  });
+
+  it.each(["luna-max", "gpt-5.6-luna"])("rejects an unallowlisted Luna reviewer %s", async (reviewer) => {
+    const input = await fixtures();
+    file("review.json", { ...input.review, reviewer });
+    expect(failure(await cli(packArgs(input)), "EDITORIAL_CLI_VALIDATION_FAILED").issues).toEqual([{ code: "EDITORIAL_REVIEW_REQUIRED", field: "review" }]);
     expect(existsSync(input.outPath)).toBe(false);
   });
 

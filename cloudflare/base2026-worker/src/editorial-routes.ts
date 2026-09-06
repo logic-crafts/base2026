@@ -28,7 +28,7 @@ const SITEMAP_PAGE = /^\/sitemaps\/blog-([1-9]\d{0,4})\.xml$/u;
 const RECEIPTED_ARTICLES = "FROM editorial_articles a INNER JOIN editorial_publication_receipts r"
   + " ON r.slug=a.slug AND r.revision=a.revision AND r.payload_sha256=a.payload_sha256"
   + " AND r.published_at=a.published_at AND r.updated_at=a.updated_at"
-  + " AND r.recorded_at=a.stored_at AND r.reviewer='sol-max'"
+  + " AND r.recorded_at=a.stored_at AND r.reviewer IN ('sol-max','gpt-6-astra')"
   + " WHERE COALESCE(json_extract(a.payload_json, '$.kind'),'')<>'evidence_guide'";
 
 function response(request: Request, body: string, contentType: string, status = 200, extras: HeadersInit = {}): Response {
