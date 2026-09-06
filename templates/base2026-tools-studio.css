@@ -379,9 +379,8 @@
 .b26-tools-studio__sequence-intro h2 { max-width: 410px; }
 .b26-tools-studio__sequence-intro > p:last-child { max-width: 390px; margin: 18px 0 0; color: var(--b26-muted); font-size: 13px; }
 .b26-tools-studio__sequence-list { margin: 0; padding: 0; list-style: none; }
-.b26-tools-studio__sequence-list li { display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: 17px; padding: 20px 0; border-top: 1px solid var(--b26-line); }
+.b26-tools-studio__sequence-list li { display: block; padding: 20px 0; border-top: 1px solid var(--b26-line); }
 .b26-tools-studio__sequence-list li:first-child { padding-top: 0; border-top: 0; }
-.b26-tools-studio__sequence-list li > span { color: var(--b26-accent); font: 800 11px/1.3 "Geist Mono", ui-monospace, monospace; }
 .b26-tools-studio__sequence-list h3 { font-size: 17px; }
 .b26-tools-studio__sequence-list p { margin: 7px 0 0; color: var(--b26-muted); font-size: 13px; }
 

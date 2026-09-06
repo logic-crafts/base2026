@@ -1,0 +1,55 @@
+{
+  "schema": "base2026.source-lab.gsap-vendor.v1",
+  "package": "gsap",
+  "version": "3.15.0",
+  "registry": {
+    "url": "https://registry.npmjs.org/gsap",
+    "http_status": 200,
+    "response_sha256": "c81a211f7dab840dfee1bb6388d5aa12a56d83de1fd237f891a537f8b3faf74e",
+    "dist_integrity": "sha512-dMW4CWBTUK1AEEDeZc1g4xpPGIrSf9fJF960qbTZmN/QwZIWY5wgliS6JWl9/25fpTGJrMRtSjGtOmPnfjZB+A==",
+    "dist_shasum": "7851baaffc77642f2db3b1749d3634f9b5a19d14",
+    "tarball": "https://registry.npmjs.org/gsap/-/gsap-3.15.0.tgz"
+  },
+  "license": {
+    "official_url": "https://gsap.com/standard-license",
+    "final_url": "https://gsap.com/community/standard-license/",
+    "source_http_status": 200,
+    "source_sha256": "b39a1f3c0f53b0b283481600689d6e55ff730deba0af527c59af873bd098516b",
+    "source_bytes": 76456,
+    "local_file": "LICENSE",
+    "local_sha256": "adb322ddf867f8a98c1e9c82be9b32959fe677ebcf53a65f3c0eeaf2ec9765f5",
+    "local_bytes": 4103
+  },
+  "files": {
+    "gsap.min.js": {
+      "url": "https://unpkg.com/gsap@3.15.0/dist/gsap.min.js",
+      "final_url": "https://unpkg.com/gsap@3.15.0/dist/gsap.min.js",
+      "http_status": 200,
+      "content_type": "text/javascript",
+      "source": "npm package via unpkg",
+      "bytes": 72927,
+      "sha256": "92bb9a96476f983d212a2bc4f54c889039c1696dd4461d40a736860938570fbb"
+    },
+    "ScrollTrigger.min.js": {
+      "url": "https://unpkg.com/gsap@3.15.0/dist/ScrollTrigger.min.js",
+      "final_url": "https://unpkg.com/gsap@3.15.0/dist/ScrollTrigger.min.js",
+      "http_status": 200,
+      "content_type": "text/javascript",
+      "source": "npm package via unpkg",
+      "bytes": 44575,
+      "sha256": "b0b14d67b55b0c43c756ac0b106cfcb09d0879945f6ead64451065b0672916a2"
+    },
+    "LICENSE": {
+      "url": "https://gsap.com/standard-license",
+      "final_url": "https://gsap.com/community/standard-license/",
+      "http_status": 200,
+      "content_type": "text/plain",
+      "bytes": 4103,
+      "sha256": "adb322ddf867f8a98c1e9c82be9b32959fe677ebcf53a65f3c0eeaf2ec9765f5",
+      "source": "Plain-text vendor copy of legal sections from official standard-license page",
+      "source_sha256": "b39a1f3c0f53b0b283481600689d6e55ff730deba0af527c59af873bd098516b",
+      "source_bytes": 76456
+    }
+  },
+  "source_policy": "Only core, ScrollTrigger and the package license are vendored. No paid plugins, install scripts or runtime dependencies."
+}

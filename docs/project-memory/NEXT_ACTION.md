@@ -1,13 +1,18 @@
 # Next Action
 
-Checkpoint: 2026-09-06 — Source Laboratory is published and verified.
-Continue from [the release handoff](HANDOFF_2026-09-06_SOURCE_LAB.md).
-The active product phase remains Phase 29.
+Checkpoint: 2026-09-06 — the agency correction is published and verified.
+Continue from the [agency correction handoff](HANDOFF_2026-09-06_AGENCY_CORRECTION.md).
+The earlier [Source Laboratory release](HANDOFF_2026-09-06_SOURCE_LAB.md)
+is retained as history. The active product phase remains Phase 29.
 
-1. Preserve the accepted combined runtime and v4 public artifact. Future
-   releases must retain the current member script, both WordPress downloads,
-   public/private boundaries and the newer private auth implementation.
-   The source checkout's default asset path is not a deployment baseline.
+1. Preserve the accepted correction artifact and combined private runtime.
+   The released version is `f200b4b7-87b6-4174-a87e-c0d6eea69947`.
+   Keep the shared b26 identity, complete Blog and Topics discovery, finite
+   motion lifecycle, current member script, both WordPress ZIPs, bindings,
+   auth implementation and PR63/64 reviewer compatibility. Continue the
+   existing AgencyOS build/distribution/observation loop; next media
+   preproduction covers Page Source Check. The public checkout's default
+   asset path is not a deployment baseline.
 2. Truthful Astra reviewer compatibility is verified through the existing
    publisher, private ingress and target relay. Preserve the accepted reviewer
    values and all legacy receipts; a replay returns the original reviewer.

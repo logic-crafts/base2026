@@ -42,6 +42,8 @@ scripts/tmp_*.py
 11_dreamwood_offer/
 99_original_research/
 manifest.json
+# Reviewed vendor provenance is required by the canonical release builder.
+!/templates/vendor/gsap/manifest.json
 public-data/
 web/static/analytics_summary.json
 web/static/base2026_analytics.json

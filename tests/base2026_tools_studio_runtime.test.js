@@ -451,7 +451,7 @@ test("station tabs use progressive roving tab stops and keyboard selection", () 
   assert.match(harness.panelTitle.textContent, /Extract/);
 
   harness.stations[3].dispatchEvent({ type: "click" });
-  assert.equal(harness.panelKicker.textContent, "04 / USE");
+  assert.equal(harness.panelKicker.textContent, "Use");
   assert.equal(harness.panelTitle.textContent, "Build a brief. Choose the next move.");
 });
 

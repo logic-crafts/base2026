@@ -67,7 +67,7 @@ def check() -> list[dict[str, str]]:
 
     if WORKER.is_file():
         text = WORKER.read_text(encoding="utf-8")
-        if '/static/base2026-core.css?v=20260820-b26v1' not in text:
+        if '/static/base2026-core.css?v=' not in text:
             failures.append({"path": str(WORKER.relative_to(ROOT)), "reason": "dynamic source page does not load Base2026 core CSS"})
         if "#ff5a36" in text:
             failures.append({"path": str(WORKER.relative_to(ROOT)), "reason": "dynamic source page retains warm legacy accent"})

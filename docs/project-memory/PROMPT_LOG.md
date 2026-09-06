@@ -10310,3 +10310,24 @@ Published the reviewed v4 artifact, verified active version/content attribution,
 protected assets/bindings/flags and native live public/member behavior. Public
 source is tracked in PR62; full release facts are in the Source Lab handoff.
 No intake, schema, member-data mutation or growth/adoption claim was made.
+
+### 2026-09-06 — owner agency design correction
+
+The owner requested the actual b26 identity, perceptible source-to-result
+GSAP motion, useful Blog/Topics discovery, internal-page repairs and verified
+social/directory references. Implemented in an isolated checkout from fresh
+main after PR64, using bounded Luna/max workers and Astra integration/review.
+The final canonical candidate retains both WordPress ZIPs and the current
+public member script. Native playback revealed and resolved a real paused
+responsive-state bug. The 98 Python / 24 JS / 172 Worker tests, typecheck,
+explicit-assets dry run and native route/interaction checks pass.
+The [correction handoff](HANDOFF_2026-09-06_AGENCY_CORRECTION.md) records the
+frozen artifact, validation limits and HQ integration action. No commit,
+push, private-runtime mutation or deployment was performed by Design.
+
+HQ subsequently applied the narrow presentation delta to the current private
+runtime, passed 256 Worker and 27 member tests, and published the frozen
+artifact. Production version `f200b4b7-87b6-4174-a87e-c0d6eea69947` was verified
+at 100 percent with exact module/asset hashes and preserved bindings and auth.
+Native production checks include live Blog filtering, dynamic source rendering,
+mobile layout and the existing member session. See the correction handoff.

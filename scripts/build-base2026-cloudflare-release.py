@@ -45,6 +45,8 @@ except ModuleNotFoundError:  # pragma: no cover - direct module loading in tests
     sys.path.insert(0, str(Path(__file__).resolve().parent))
     from public_manifest_contract import validate_claim_receipt_sidecars
 
+from base2026_topic_discovery import render_topic_discovery
+
 
 SCHEMA = "base2026.cloudflare-public-release-receipt/v1"
 RECEIPT_FILENAME = ".base2026-cloudflare-release-receipt.json"
@@ -78,6 +80,7 @@ DEFAULT_EDITORIAL_MEASUREMENT_IMAGE = (
 )
 DEFAULT_BLOG_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-blog-index.html"
 DEFAULT_BLOG_STYLESHEET = PROJECT_ROOT / "templates" / "base2026-blog.css"
+DEFAULT_BLOG_SCRIPT = PROJECT_ROOT / "templates" / "base2026-blog-discovery.js"
 DEFAULT_BLOG_ARTICLE_STYLESHEET = PROJECT_ROOT / "templates" / "base2026-blog-article.css"
 DEFAULT_EVIDENCE_GUIDE_STYLESHEET = PROJECT_ROOT / "templates" / "base2026-evidence-guide.css"
 DEFAULT_EVIDENCE_GUIDE_SCRIPT = PROJECT_ROOT / "templates" / "base2026-evidence-guide.js"
@@ -101,6 +104,17 @@ SOURCE_LAB_MEDIA_ROOT = PROJECT_ROOT / "templates" / "assets" / "source-lab"
 SOURCE_LAB_MEDIA_ALLOWLIST = {
     "source-lab-hero.webp": (47562, "ccdc2dca2f1711c19bbc31484437ce454c8d9d61a381af1d425b64e26fb39087"),
     "source-lab-hero-mobile.webp": (19926, "af0bb1bbf6cbb1c70ce5f11ba0dd556394ec5bda85b6ad9c615763b060c7176d"),
+}
+BRAND_MEDIA_ROOT = PROJECT_ROOT / "templates" / "assets" / "brand"
+BRAND_MEDIA_ALLOWLIST = {
+    "b26-seal.webp": (15140, "92bce2a6e3b11dcb727e13eebf0d94365116c615ccdc1d67e8cbf4545f87eb2d"),
+    "b26-seal-32.png": (2073, "667e5cb05c4974138a5f434028a051579d6e62e7ff7c86937f6557816f54342a"),
+    "b26-seal-180.png": (40683, "b949abf6e1577e452a20e3d189bc84e967a57a493feb88ff46cea5e316127be6"),
+    "github.svg": (839, "512052926d7358816f366b7599f2b0a56de0beb94a8db9caddf8ae0c356f5e2f"),
+    "x.svg": (315, "0e6517c934848af3ef57a2009a93198292e48fd485b98eb10da2cf460aba1fb9"),
+    "tiktok.svg": (255, "0929b719dcc9099dad04deaf57a6777d9b775fd1774a2e683b18b7491e9e9af2"),
+    "youtube.svg": (258, "92ffcc58a104616a4868982584d15e5b4b2b186707ed97a90622f51b96df0020"),
+    "linkedin.svg": (343, "8fc5b2f0e066a1697eb964e269ddb77572f5c66402dcc8faa80c1d6307d4b812"),
 }
 DEFAULT_MEMBERS_PRIVACY = PROJECT_ROOT / "templates" / "base2026-members-privacy.html"
 DEFAULT_ROADMAP_SCRIPT = PROJECT_ROOT / "web" / "static" / "roadmap.js"
@@ -1457,8 +1471,9 @@ BODY_CLOSE_RE = re.compile(r"</body\s*>", re.IGNORECASE)
 HEAD_CLOSE_RE = re.compile(r"</head\s*>", re.IGNORECASE)
 DOCTYPE_RE = re.compile(r"<!doctype\s+html\s*>", re.IGNORECASE)
 STARTUP_SHELL_LINK = '<link rel="stylesheet" href="/static/base2026-startup-shell.css?v=20260820-b26v1">'
-STARTUP_CORE_LINK = '<link rel="stylesheet" href="/static/base2026-core.css?v=20260820-b26v1">'
-STARTUP_FAVICON_LINK = '<link rel="icon" href="/static/base2026-mark.svg" type="image/svg+xml">'
+STARTUP_CORE_LINK = '<link rel="stylesheet" href="/static/base2026-core.css?v=20260906-agency">'
+STARTUP_FAVICON_LINK = '<link rel="icon" href="/static/brand/b26-seal-32.png" type="image/png" sizes="32x32">'
+STARTUP_APPLE_ICON_LINK = '<link rel="apple-touch-icon" href="/static/brand/b26-seal-180.png" sizes="180x180">'
 PERSONAL_ASSET_TAG_RE = re.compile(
     r'\s*<(?:link|script)\b[^>]*(?:wordpress-v4|alex-v4-static-shell|base2026-personal-v4-presentation|data-shell-authority|data-presentation-authority)[^>]*>(?:\s*</script>)?',
     re.IGNORECASE,
@@ -1525,6 +1540,42 @@ PERSONAL_COMMERCIAL_MARKERS = (
 )
 
 
+def _with_brand_identity(text: str) -> str:
+    # Retained documents can carry an older personal or product favicon. One
+    # canonical icon of each kind prevents browsers choosing a stale identity.
+    text = re.sub(r'<link\b(?=[^>]*\brel=["\'](?:shortcut\s+icon|icon|apple-touch-icon)["\'])[^>]*>[ \t]*\n?', "", text, flags=re.IGNORECASE)
+    text = re.sub(r'(/static/base2026-(?:core|startup-homepage|tools-studio|blog)\.css)(?:\?[^"\'<>\s]*)?', r'\1?v=20260906-agency', text)
+    if "</head>" in text:
+        text = text.replace("</head>", STARTUP_FAVICON_LINK + "\n" + STARTUP_APPLE_ICON_LINK + "\n</head>", 1)
+    return text
+
+
+def _with_topic_discovery(text: str) -> str:
+    rendered = render_topic_discovery(text)
+    if "data-b26-topic-discovery" not in rendered:
+        raise ReleaseBuildError("topic index could not be transformed without guessing published metadata")
+    if "/static/base2026-topic-discovery.css" not in rendered:
+        rendered = rendered.replace("</head>", '<link rel="stylesheet" href="/static/base2026-topic-discovery.css?v=20260906-agency">\n<script src="/static/base2026-topic-discovery.js?v=20260906-agency" defer></script>\n</head>', 1)
+    return rendered
+
+
+def _reviewed_brand_assets() -> dict[str, bytes]:
+    manifest = json.loads((BRAND_MEDIA_ROOT / "b26-brand-manifest.json").read_text(encoding="utf-8"))
+    assets = manifest.get("assets", {})
+    if set(assets) != set(BRAND_MEDIA_ALLOWLIST):
+        raise ReleaseBuildError("brand manifest differs from the reviewed asset allowlist")
+    result = {}
+    for name, (size, digest) in BRAND_MEDIA_ALLOWLIST.items():
+        path = BRAND_MEDIA_ROOT / name
+        if path.is_symlink() or not path.is_file():
+            raise ReleaseBuildError(f"brand asset is not a regular file: {name}")
+        payload = path.read_bytes()
+        if (len(payload), _sha256(payload)) != (size, digest) or (assets[name].get("bytes"), assets[name].get("sha256")) != (size, digest):
+            raise ReleaseBuildError(f"brand asset differs from reviewed bytes: {name}")
+        result[name] = payload
+    return result
+
+
 def _with_source_lab_runtime(text: str) -> str:
     # One local enhancement entrypoint; the larger motion libraries are only
     # needed on pages with an illustrative scene or a scroll progress marker.
@@ -1533,7 +1584,7 @@ def _with_source_lab_runtime(text: str) -> str:
     if "data-lab-scene" in text or "data-lab-progress" in text:
         scripts.extend(["vendor/gsap/gsap.min", "vendor/gsap/ScrollTrigger.min"])
     scripts.append("base2026-source-lab")
-    enhancement_tags = "\n".join(f'<script src="/static/{name}.js" defer></script>' for name in scripts)
+    enhancement_tags = "\n".join(f'<script src="/static/{name}.js?v=20260906-agency" defer></script>' for name in scripts)
     if "</head>" in text:
         text = text.replace("</head>", enhancement_tags + "\n</head>", 1)
     return text
@@ -1542,6 +1593,7 @@ def _with_source_lab_runtime(text: str) -> str:
 def _apply_startup_shell(text: str, header_html: str, footer_html: str) -> str:
     """Replace the inherited personal-site chrome on a public HTML page."""
 
+    text = _with_brand_identity(text)
     if STARTUP_SHELL_LINK not in text:
         if "</head>" in text:
             text = text.replace("</head>", f"  {STARTUP_SHELL_LINK}\n</head>", 1)
@@ -1561,8 +1613,6 @@ def _apply_startup_shell(text: str, header_html: str, footer_html: str) -> str:
     text = LEGACY_COMMERCIAL_BRIDGE_RE.sub("", text)
     text = LEGACY_ROADMAP_CONTACT_RE.sub("\n" + ROADMAP_CONTACT_MARKUP, text)
     text = SOLUTION_STEP_NUMBER_RE.sub("", text)
-    if STARTUP_FAVICON_LINK not in text and "</head>" in text:
-        text = text.replace("</head>", f"  {STARTUP_FAVICON_LINK}\n</head>", 1)
     text = re.sub(
         r'(<a\b[^>]*href=["\'])/ai-visibility-audit/(?:[^"\']*)?(["\'][^>]*>)\s*Get free snapshot\s*</a>',
         r'\1/methodology.html\2Read the methodology</a>',
@@ -1646,8 +1696,7 @@ def _ensure_social_image_meta(text: str) -> str:
 def _render_startup_page(template: str, header_html: str, footer_html: str) -> bytes:
     if template.count("{{STARTUP_HEADER}}") != 1 or template.count("{{STARTUP_FOOTER}}") != 1:
         raise ReleaseBuildError("startup page template must contain one header and footer placeholder")
-    if STARTUP_FAVICON_LINK not in template and "</head>" in template:
-        template = template.replace("</head>", f"{STARTUP_FAVICON_LINK}</head>", 1)
+    template = _with_brand_identity(template)
     if STARTUP_CORE_LINK not in template:
         if "</head>" in template:
             template = template.replace("</head>", f"{STARTUP_CORE_LINK}</head>", 1)
@@ -2455,6 +2504,8 @@ def build_release(
                         artifact_text, startup_excluded_routes
                     )
                 if standalone_startup and relative_path.suffix.casefold() in {".html", ".htm", ".xhtml"}:
+                    if relative_path.as_posix() == "topics/index.html":
+                        artifact_text = _with_topic_discovery(artifact_text)
                     artifact_text = _apply_startup_shell(
                         artifact_text, startup_header, startup_footer
                     )
@@ -2710,6 +2761,18 @@ def build_release(
             write_tracked_public_overlay("root-llms.txt", DEFAULT_ROOT_LLMS)
             write_generated_public_file("static/brand/github.svg", DEFAULT_GITHUB_ICON.read_bytes())
             write_generated_public_file("static/brand/x.svg", DEFAULT_X_ICON.read_bytes())
+            for name, payload in _reviewed_brand_assets().items():
+                relative_name = f"static/brand/{name}"
+                kind = "text" if name.endswith(".svg") else "binary"
+                write_generated_public_file(relative_name, payload, kind=kind)
+                if kind == "binary":
+                    # Bind optimized identity media to independently reviewed
+                    # repository bytes, as for the existing artwork allowlist.
+                    for index, record in enumerate(records):
+                        if record.relative_path == relative_name:
+                            records[index] = FileRecord(relative_path=relative_name, source_sha256=_sha256(payload), artifact_sha256=_sha256(payload), source_size=len(payload), artifact_size=len(payload), kind=kind, changed=False)
+                            break
+            write_generated_public_file("static/brand/b26-brand-manifest.json", (BRAND_MEDIA_ROOT / "b26-brand-manifest.json").read_bytes())
             write_generated_public_file("static/base2026-mark.svg", DEFAULT_MARK_ICON.read_bytes())
             write_generated_public_file(
                 "static/base2026-founder.css", DEFAULT_FOUNDER_STYLESHEET.read_bytes()
@@ -2780,6 +2843,9 @@ def build_release(
             )
             write_generated_public_file("blog.html", _render_editorial_index(startup_header, startup_footer))
             write_generated_public_file("static/base2026-blog.css", DEFAULT_BLOG_STYLESHEET.read_bytes())
+            write_generated_public_file("static/base2026-blog-discovery.js", DEFAULT_BLOG_SCRIPT.read_bytes())
+            for extension in ("css", "js"):
+                write_generated_public_file(f"static/base2026-topic-discovery.{extension}", (PROJECT_ROOT / f"templates/base2026-topic-discovery.{extension}").read_bytes())
             write_generated_public_file("static/base2026-blog-article.css", DEFAULT_BLOG_ARTICLE_STYLESHEET.read_bytes())
             write_generated_public_file("static/base2026-evidence-guide.css", DEFAULT_EVIDENCE_GUIDE_STYLESHEET.read_bytes())
             write_generated_public_file("static/base2026-evidence-guide.js", DEFAULT_EVIDENCE_GUIDE_SCRIPT.read_bytes())

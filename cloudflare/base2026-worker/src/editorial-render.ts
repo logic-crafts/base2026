@@ -293,6 +293,9 @@ export function renderEditorialArticle(shell: string, article: StoredEditorialAr
   let result = replaceOne(shell, /<main id="b26-blog-main"[^>]*>[\s\S]*?<\/main>/u,
     '<main id="b26-blog-main" class="b26-blog-article' + (guide ? " b26-evidence-guide" : "") + '">'
     + renderEditorialArticleBody(article) + "</main>");
+  // Article pages reuse the index shell, but only the index needs corpus
+  // discovery. Keep article reading free of the unrelated index enhancement.
+  result = result.replace(/<script src="\/static\/base2026-blog-discovery\.js(?:\?[^"<>]*)?" defer><\/script>\s*/gu, "");
   const browserTitle = truncateEditorialTitle(payload.title + " | Base2026", 65);
   result = replaceOne(result, /<title>[\s\S]*?<\/title>/u, "<title>" + editorialEscape(browserTitle) + "</title>");
   result = replaceOne(result, /<link rel="canonical" href="[^"]*">/u, '<link rel="canonical" href="' + canonical + '">');
