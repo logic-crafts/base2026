@@ -740,7 +740,7 @@ def test_startup_homepage_overlay_preserves_search_as_workspace(
     assert legacy_plugin_output.read_bytes() == (source / builder.WORDPRESS_PLUGIN_LEGACY_DOWNLOAD).read_bytes()
     assert receipt["verification"]["wordpress_plugin_package_verified"] is True
     assert receipt["verification"]["wordpress_plugin_legacy_download_verified"] is True
-    assert receipt["artifact"]["file_count"] == 83
+    assert receipt["artifact"]["file_count"] == 93
     blog = (output / "blog.html").read_text(encoding="utf-8")
     assert '<link rel="canonical" href="https://base2026.dev/blog">' in blog
     assert 'data-b26-blog-schema' in blog
@@ -813,7 +813,7 @@ def test_startup_release_accepts_exact_retained_tools_studio_media(
         homepage_stylesheet=builder.DEFAULT_HOMEPAGE_STYLESHEET,
     )
 
-    assert receipt["artifact"]["file_count"] == 83
+    assert receipt["artifact"]["file_count"] == 93
     assert receipt["verification"]["reviewed_repository_media_verified"] is True
     assert not (output / builder.TOOLS_STUDIO_MEDIA_MANIFEST_OUTPUT).exists()
 
@@ -1246,9 +1246,9 @@ def test_source_lab_runtime_is_idempotent_and_vendor_loading_is_scoped() -> None
         text = '<html><head></head><body><main' + (' data-lab-scene' if scene else '') + '>Readable</main></body></html>'
         once = builder._apply_startup_shell(text, header, footer)
         twice = builder._apply_startup_shell(once, header, footer)
-        assert twice.count('src="/static/base2026-source-lab.js"') == 1
-        assert twice.count('src="/static/vendor/gsap/gsap.min.js"') == int(scene)
-        assert twice.count('src="/static/vendor/gsap/ScrollTrigger.min.js"') == int(scene)
+        assert twice.count('src="/static/base2026-source-lab.js?v=20260906-agency"') == 1
+        assert twice.count('src="/static/vendor/gsap/gsap.min.js?v=20260906-agency"') == int(scene)
+        assert twice.count('src="/static/vendor/gsap/ScrollTrigger.min.js?v=20260906-agency"') == int(scene)
         assert '<main' in twice and 'Readable</main>' in twice
 
 
@@ -1281,12 +1281,12 @@ def test_source_lab_rebuild_preserves_explicit_released_member_runtime(tmp_path:
         assert asset.stat().st_size == size
         assert hashlib.sha256(asset.read_bytes()).hexdigest() == digest
     homepage = (tmp_path / "retained/index.html").read_text()
-    assert homepage.count('src="/static/vendor/gsap/gsap.min.js"') == 1
-    assert homepage.count('src="/static/vendor/gsap/ScrollTrigger.min.js"') == 1
-    assert homepage.count('src="/static/base2026-source-lab.js"') == 1
+    assert homepage.count('src="/static/vendor/gsap/gsap.min.js?v=20260906-agency"') == 1
+    assert homepage.count('src="/static/vendor/gsap/ScrollTrigger.min.js?v=20260906-agency"') == 1
+    assert homepage.count('src="/static/base2026-source-lab.js?v=20260906-agency"') == 1
     for route in ("tools/index.html", "workspace/index.html", "my-research/index.html"):
         page = (tmp_path / "retained" / route).read_text()
-        assert page.count('src="/static/base2026-source-lab.js"') == 1
+        assert page.count('src="/static/base2026-source-lab.js?v=20260906-agency"') == 1
 
 
 def test_source_lab_asset_tampering_cannot_reach_output(tmp_path: Path, monkeypatch) -> None:
@@ -1302,3 +1302,34 @@ def test_source_lab_asset_tampering_cannot_reach_output(tmp_path: Path, monkeypa
     with pytest.raises(builder.ReleaseBuildError, match="differs from reviewed bytes"):
         builder.build_release(source, tmp_path / "rejected", homepage_template=builder.DEFAULT_HOMEPAGE_TEMPLATE, homepage_stylesheet=builder.DEFAULT_HOMEPAGE_STYLESHEET)
     assert not (tmp_path / "rejected").exists()
+
+
+def test_brand_icons_replace_inherited_identity_once() -> None:
+    original = '<html><head><link rel="icon" href="/old.svg"><link rel="apple-touch-icon" href="/personal.png"><link rel="stylesheet" href="/static/base2026-core.css?v=old"></head><body>Readable</body></html>'
+    once = builder._with_brand_identity(original)
+    assert builder._with_brand_identity(once) == once
+    assert '/old.svg' not in once and '/personal.png' not in once
+    assert once.count(builder.STARTUP_FAVICON_LINK) == 1
+    assert once.count(builder.STARTUP_APPLE_ICON_LINK) == 1
+    assert once.count(builder.STARTUP_CORE_LINK) == 1
+
+
+def test_brand_manifest_cannot_authorize_changed_asset_bytes(tmp_path: Path, monkeypatch) -> None:
+    media = tmp_path / "brand"
+    media.mkdir()
+    for name in (*builder.BRAND_MEDIA_ALLOWLIST, "b26-brand-manifest.json"):
+        (media / name).write_bytes((builder.BRAND_MEDIA_ROOT / name).read_bytes())
+    monkeypatch.setattr(builder, "BRAND_MEDIA_ROOT", media)
+    assert set(builder._reviewed_brand_assets()) == set(builder.BRAND_MEDIA_ALLOWLIST)
+    changed = b'not the approved mark'
+    (media / "b26-seal.webp").write_bytes(changed)
+    manifest = json.loads((media / "b26-brand-manifest.json").read_text())
+    manifest["assets"]["b26-seal.webp"].update(bytes=len(changed), sha256=hashlib.sha256(changed).hexdigest())
+    (media / "b26-brand-manifest.json").write_text(json.dumps(manifest))
+    with pytest.raises(builder.ReleaseBuildError, match="differs from reviewed bytes"):
+        builder._reviewed_brand_assets()
+
+
+def test_topic_conversion_rejects_missing_published_metadata() -> None:
+    with pytest.raises(builder.ReleaseBuildError, match="without guessing"):
+        builder._with_topic_discovery('<html><head></head><body><main><h1>Topics</h1></main></body></html>')

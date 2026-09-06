@@ -1,0 +1,81 @@
+{
+  "schema": "base2026-brand-assets-v1",
+  "generated": "2026-09-06",
+  "source_provenance": {
+    "label": "Owner-approved Base2026 YouTube avatar v1",
+    "sha256": "3442ff0d627c9057f1644e7618e59a1c708a08548048d5d80b42d4bae7581aab",
+    "dimensions": {
+      "width": 1254,
+      "height": 1254
+    },
+    "bytes": 1270364,
+    "transform": "Delivery optimization only: square resize and re-encode; the approved ceramic mark was not redrawn or altered."
+  },
+  "assets": {
+    "b26-seal.webp": {
+      "format": "image/webp",
+      "dimensions": {
+        "width": 384,
+        "height": 384
+      },
+      "bytes": 15140,
+      "sha256": "92bce2a6e3b11dcb727e13eebf0d94365116c615ccdc1d67e8cbf4545f87eb2d",
+      "use": "Header, footer and source-to-result presentation."
+    },
+    "b26-seal-32.png": {
+      "format": "image/png",
+      "dimensions": {
+        "width": 32,
+        "height": 32
+      },
+      "bytes": 2073,
+      "sha256": "667e5cb05c4974138a5f434028a051579d6e62e7ff7c86937f6557816f54342a",
+      "use": "Favicon."
+    },
+    "b26-seal-180.png": {
+      "format": "image/png",
+      "dimensions": {
+        "width": 180,
+        "height": 180
+      },
+      "bytes": 40683,
+      "sha256": "b949abf6e1577e452a20e3d189bc84e967a57a493feb88ff46cea5e316127be6",
+      "use": "Apple touch icon."
+    },
+    "github.svg": {
+      "format": "image/svg+xml",
+      "viewBox": "0 0 24 24",
+      "bytes": 839,
+      "sha256": "512052926d7358816f366b7599f2b0a56de0beb94a8db9caddf8ae0c356f5e2f",
+      "use": "Neutral labelled GitHub link."
+    },
+    "x.svg": {
+      "format": "image/svg+xml",
+      "viewBox": "0 0 24 24",
+      "bytes": 315,
+      "sha256": "0e6517c934848af3ef57a2009a93198292e48fd485b98eb10da2cf460aba1fb9",
+      "use": "Neutral labelled founder X link."
+    },
+    "tiktok.svg": {
+      "format": "image/svg+xml",
+      "viewBox": "0 0 24 24",
+      "bytes": 255,
+      "sha256": "0929b719dcc9099dad04deaf57a6777d9b775fd1774a2e683b18b7491e9e9af2",
+      "use": "Neutral labelled founder TikTok link."
+    },
+    "youtube.svg": {
+      "format": "image/svg+xml",
+      "viewBox": "0 0 24 24",
+      "bytes": 258,
+      "sha256": "92ffcc58a104616a4868982584d15e5b4b2b186707ed97a90622f51b96df0020",
+      "use": "Neutral labelled Base2026 YouTube link."
+    },
+    "linkedin.svg": {
+      "format": "image/svg+xml",
+      "viewBox": "0 0 24 24",
+      "bytes": 343,
+      "sha256": "8fc5b2f0e066a1697eb964e269ddb77572f5c66402dcc8faa80c1d6307d4b812",
+      "use": "Neutral labelled founder LinkedIn link."
+    }
+  }
+}

@@ -414,8 +414,8 @@ describe("Base2026 search Worker", () => {
     expect(html).toContain("https://www.tiktok.com/@test_creator/video/7657638702864223510");
     expect(html).toContain('property="og:image" content="https://base2026.dev/static/assets/base2026-ai-visibility-card.png"');
     expect(html).toContain('name="twitter:image" content="https://base2026.dev/static/assets/base2026-ai-visibility-card.png"');
-    expect(html).toContain('/static/base2026-core.css?v=20260820-b26v1');
-    expect(html).toContain('rel="icon" type="image/svg+xml" href="/static/base2026-mark.svg"');
+    expect(html).toContain('/static/base2026-core.css?v=20260906-agency');
+    expect(html).toContain('rel="icon" type="image/png" sizes="32x32" href="/static/brand/b26-seal-32.png"');
     expect(html).toContain('rel="apple-touch-icon" sizes="180x180"');
     expect(html).toContain('class="b26-projected-source"');
     expect(html).toContain('class="b26-source-record"');

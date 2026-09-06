@@ -66,14 +66,26 @@ shell or palette.
 The owner-authorized release keeps the independent palette and typography.
 Use a compact grouped navigation, a source-oriented hero, clear editorial
 rows and calm working forms. Context, attribution and unknowns remain visible.
-The conceptual paper/prism/action artwork is separate from measured data.
+The owner correction reuses the approved ceramic b26 seal through the pinned
+assets in `templates/assets/brand/`; header, footer, favicon and source-engine
+lens share this identity. Do not invent a replacement mark.
 
-Motion is an enhancement: a finite source-to-excerpt-to-action sequence and
-natural scroll progress on its explanatory section. Headlines, forms, results
+Motion is an enhancement: a finite 6–9 second DOM/SVG sequence moves source
+cards through the b26 lens, extracts an attributed excerpt and assembles a
+working brief. Keep one clear illustrative caption. It is not a validation
+score or measured product evidence. Headlines, forms, results
 and member data remain readable without JavaScript. Respect reduced motion;
 pause offscreen or in a hidden tab, preserve an explicit user pause across
 breakpoints and bfcache, and offer Pause, Resume and Replay. No scroll locking,
 pinning, snapping, infinite loops or progress claims based on illustrations.
+
+Blog discovery loads the complete paginated public corpus before presenting
+filtered totals. Its categories come from actual article metadata. Topics
+discovery uses existing topic labels and source counts, with search controls
+before collections, shareable query state and useful static fallbacks.
+Keep meaningful counts, versions and citations; remove decorative tool and
+section numbering. Internal headings, panels and anchor/focus offsets must
+fit the actual shared header at desktop and mobile sizes.
 
 ## Forbidden regression markers
 

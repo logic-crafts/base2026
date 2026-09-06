@@ -23,31 +23,53 @@
   <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600;700&amp;family=Manrope:wght@400;500;700;800&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/static/base2026-core.css?v=20260820-b26v1">
   <link rel="stylesheet" href="/static/base2026-blog.css?v=20260830-blog-v1">
+  <script src="/static/base2026-blog-discovery.js" defer></script>
   <script type="application/ld+json" data-b26-blog-schema>{{BLOG_SCHEMA}}</script>
 </head>
 <body class="b26-blog-page" data-b26-design-system="b26-independent-v1">
   <a class="b26-blog-skip" href="#b26-blog-main">Skip to blog</a>
   {{STARTUP_HEADER}}
-  <main id="b26-blog-main" class="b26-blog" data-b26-blog-index>
+  <main id="b26-blog-main" class="b26-blog" data-b26-blog-index data-blog-discovery>
     <header class="b26-blog-hero">
       <div class="b26-blog-masthead">
         <p class="b26-blog-eyebrow">Base2026 blog</p>
         <a class="b26-blog-rss" href="/blog/feed.xml">RSS feed <span aria-hidden="true">↗</span></a>
       </div>
       <div class="b26-blog-hero__grid">
-        <h1>Research notes. <span>Sources included.</span></h1>
-        <p class="b26-blog-hero__intro">Practical checks and engineering notes from building a source-first video research engine. Methods, decisions, and limitations kept in view.</p>
+        <h1>Research worth <span>building on.</span></h1>
+        <p class="b26-blog-hero__intro">Methods, experiments and engineering notes. Read the reasoning, follow the sources, and take a useful idea into your next piece of work.</p>
       </div>
     </header>
 
-    <section class="b26-blog-featured" aria-label="Featured article"><!--B26_BLOG_FEATURED_START-->{{BLOG_FEATURED}}<!--B26_BLOG_FEATURED_END--></section>
+    <div class="b26-blog-discovery" data-blog-controls hidden>
+      <form class="b26-blog-search" data-blog-search role="search">
+        <label for="blog-query">Search the blog</label>
+        <div class="b26-blog-search__field">
+          <input id="blog-query" name="q" type="search" maxlength="160" placeholder="A question, method or topic" autocomplete="off">
+          <button type="submit">Search articles <span aria-hidden="true">↗</span></button>
+        </div>
+      </form>
+      <div class="b26-blog-filter-row">
+        <div class="b26-blog-filters" role="group" aria-label="Filter articles by category" data-blog-categories></div>
+        <button class="b26-blog-reset" type="button" data-blog-reset>Reset filters</button>
+      </div>
+    </div>
+    <div class="b26-blog-index-status">
+      <p data-blog-load-status role="status">Latest published articles.</p>
+      <button type="button" class="b26-blog-reset" data-blog-retry hidden>Retry article index</button>
+    </div>
+    <noscript><p class="b26-blog-fallback">Browse the articles below and use Older articles when available. Search and category filters need JavaScript.</p></noscript>
+
+    <section class="b26-blog-featured" aria-label="Featured article" data-blog-featured><!--B26_BLOG_FEATURED_START-->{{BLOG_FEATURED}}<!--B26_BLOG_FEATURED_END--></section>
 
     <section class="b26-blog-latest" aria-labelledby="blog-latest-title">
       <header class="b26-blog-section__header">
-        <h2 id="blog-latest-title">More from the blog</h2>
+        <div><h2 id="blog-latest-title" tabindex="-1" data-blog-results-title>Latest articles</h2><p class="b26-blog-count" data-blog-count aria-live="polite" hidden></p></div>
         <nav class="b26-blog-topics" aria-label="Related research topics"><!--B26_BLOG_TOPIC_LINKS_START-->{{BLOG_TOPIC_LINKS}}<!--B26_BLOG_TOPIC_LINKS_END--></nav>
       </header>
-      <div class="b26-blog-grid"><!--B26_BLOG_CARDS_START-->{{BLOG_CARDS}}<!--B26_BLOG_CARDS_END--></div>
+      <div class="b26-blog-grid" data-blog-results><!--B26_BLOG_CARDS_START-->{{BLOG_CARDS}}<!--B26_BLOG_CARDS_END--></div>
+      <div class="b26-blog-empty" data-blog-empty hidden><h3>No matching articles</h3><p>Try a shorter search or explore another category.</p><button type="button" data-blog-reset>Clear search and filters</button></div>
+      <nav class="b26-blog-pagination" aria-label="Blog pagination" data-blog-pagination hidden><button type="button" data-blog-previous>← Newer articles</button><span data-blog-page-label></span><button type="button" data-blog-next>Older articles →</button></nav>
     </section>
 
     <aside class="b26-blog-bridge" aria-labelledby="blog-bridge-title">

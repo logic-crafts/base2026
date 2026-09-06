@@ -7,7 +7,7 @@
 
     var stationContent = {
       find: {
-        index: "01 / FIND",
+        label: "Find",
         title: "Find public evidence for one narrow question.",
         description: "Start with a question, topic or creator. Evidence Search returns a short list of public matches so you can open the Base2026 record and follow the original source where available.",
         input: "One narrow question, topic or creator.",
@@ -15,7 +15,7 @@
         action: "Read at least one record before repeating its recommendation."
       },
       extract: {
-        index: "02 / EXTRACT",
+        label: "Extract",
         title: "Extract the passage without losing its context.",
         description: "Use a selected public record to see the surrounding passage, record metadata and the limits of what that source actually says.",
         input: "One or more public record IDs.",
@@ -23,7 +23,7 @@
         action: "Keep the excerpt and its source together in your working note."
       },
       attribute: {
-        index: "03 / ATTRIBUTE",
+        label: "Attribute",
         title: "Attribute every useful claim to its source.",
         description: "Compare the creator, exact record and normalized original-source relationships before calling repeated material independent evidence.",
         input: "Up to 12 public record or source IDs.",
@@ -31,7 +31,7 @@
         action: "Open the originals before treating a pattern as a consensus."
       },
       publish: {
-        index: "04 / USE",
+        label: "Use",
         title: "Build a brief. Choose the next move.",
         description: "Turn selected, attributed evidence into a local brief or a measured SEO experiment handoff. The public tools do not edit or publish a site for you.",
         input: "Selected public IDs, audience and one concrete work question.",
@@ -71,7 +71,7 @@
         if (selected && moveFocus) button.focus();
       });
 
-      if (panelKicker) panelKicker.textContent = content.index;
+      if (panelKicker) panelKicker.textContent = content.label;
       if (panelTitle) panelTitle.textContent = content.title;
       if (panelDescription) panelDescription.textContent = content.description;
       if (panelInput) panelInput.textContent = content.input;

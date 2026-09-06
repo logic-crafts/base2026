@@ -207,28 +207,31 @@ def test_homepage_exposes_the_source_lab_and_functional_evidence_brief_contract(
     image_nodes = _nodes_with_tag(scene[0], "img")
     assert len(image_nodes) == 1
     image = image_nodes[0]
-    assert image.has_class("b26-lab-scene__image")
-    assert image.attrs.get("src") == "/static/assets/source-lab/source-lab-hero.webp"
-    assert image.attrs.get("width") == "1440"
-    assert image.attrs.get("height") == "810"
-    assert "Conceptual source laboratory" in (image.attrs.get("alt") or "")
+    assert image.has_class("b26-lab-lens__image")
+    assert image.attrs.get("src") == "/static/brand/b26-seal.webp"
+    assert image.attrs.get("width") == "116"
+    assert image.attrs.get("height") == "116"
+    assert "ceramic seal lens" in (image.attrs.get("alt") or "")
 
-    mobile_sources = [node for node in _nodes_with_tag(scene[0], "source") if "source-lab-hero-mobile.webp" in (node.attrs.get("srcset") or "")]
-    assert len(mobile_sources) == 1
-    assert mobile_sources[0].attrs.get("width") == "840"
-    assert mobile_sources[0].attrs.get("height") == "473"
+    stage = _nodes_with_attr(scene[0], "data-lab-stage")
+    assert len(stage) == 1
+    source_cards = _nodes_with_attr(scene[0], "data-lab-source-card")
+    assert len(source_cards) == 3
+    assert len(_nodes_with_attr(scene[0], "data-lab-lens")) == 1
+    assert len(_nodes_with_attr(scene[0], "data-lab-excerpt")) == 1
+    assert len(_nodes_with_attr(scene[0], "data-lab-action")) == 1
+    assert len(_nodes_with_attr(scene[0], "data-lab-excerpt-highlight")) == 1
+    assert "Illustrative workflow" in _normalize(scene[0].raw_text())
+    assert "source-lab-hero" not in source
 
     caption = _nodes_with_attr(document, "id", "lab-scene-caption")
     assert len(caption) == 1
     caption_text = _normalize(caption[0].raw_text()).lower()
-    assert "conceptual illustration" in caption_text
-    assert "source → excerpt → action" in caption_text
+    assert "illustrative workflow" in caption_text
 
-    for attr, label in (("data-lab-source", "Source"), ("data-lab-excerpt", "Excerpt"), ("data-lab-action", "Action")):
-        labels = _nodes_with_attr(document, attr)
-        assert len(labels) == 1
-        assert _normalize(labels[0].raw_text()) == label
+    assert len(_nodes_with_attr(document, "data-lab-source")) == 1
     assert len(_nodes_with_attr(document, "data-lab-line")) == 1
+    assert len(_nodes_with_attr(document, "data-lab-motion-status")) == 1
     motion_controls = _nodes_with_tag(document, "button")
     motion_controls = [node for node in motion_controls if "data-lab-motion" in node.attrs]
     assert len(motion_controls) == 1
@@ -299,9 +302,15 @@ def test_homepage_css_reduced_motion_is_static_and_has_no_animation_loop() -> No
 
     # The visual line may be animated by the external GSAP enhancement, but its
     # initial CSS state must remain a readable static line without that runtime.
-    line_rules = [
-        body for selector, body in _css_rules(css)
-        if "b26-lab-scene__line" in selector
-    ]
+    line_rules = [body for selector, body in _css_rules(css) if "b26-lab-track" in selector]
     assert line_rules
-    assert any("transform-origin: left center" in body for body in line_rules)
+    assert any("position: absolute" in body for body in line_rules)
+
+
+def test_homepage_uses_purposeful_groups_without_decorative_indices() -> None:
+    source, document = _parse_homepage()
+    assert "b26-lab-tool-row__index" not in source
+    assert "b26-lab-sequence__number" not in source
+    assert not re.search(r">\s*0[1-6]\s*<", source)
+    assert len(_nodes_with_attr(document, "data-lab-entry-group")) >= 2
+    assert len(_nodes_with_attr(document, "data-lab-entry")) >= 5

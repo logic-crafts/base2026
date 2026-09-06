@@ -298,7 +298,7 @@ class ToolsStudioContractTests(unittest.TestCase):
     def test_required_contract_literals_are_not_silently_renamed(self) -> None:
         for key in ("documents_indexed", "distinct_sources", "public_evidence_routes", "projected_cards"):
             self.assertIn(f'"{key}"', self.js)
-        self.assertIn('index: "04 / USE"', self.js)
+        self.assertIn('label: "Use"', self.js)
         self.assertIn('title: "Build a brief. Choose the next move."', self.js)
         self.assertIn("payload.generated_at", self.js)
         self.assertIn('"Public counters stale', self.js)

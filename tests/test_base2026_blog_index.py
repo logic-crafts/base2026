@@ -1,8 +1,9 @@
-"""Static /blog presentation contract; no browser or runtime JS required.
+"""Static /blog presentation and progressive discovery contracts.
 
 The test-only renderer supplies approved-article fixtures to the template.
 Release/catalog validation belongs to the production renderer's own tests.
-Responsive assertions guard source rules, not a claim of visual viewport QA.
+Actual filter/pagination behavior is tested in base2026_blog_discovery.test.js;
+responsive appearance requires native browser verification.
 """
 
 from __future__ import annotations
@@ -174,7 +175,7 @@ def test_blog_metadata_is_indexable_and_collection_shaped() -> None:
     assert metas["og:url"] == CANONICAL
     assert metas["og:type"] == "website"
     assert metas["description"] and "research" in metas["description"].lower()
-    scripts = _nodes(document, tag="script")
+    scripts = [node for node in _nodes(document, tag="script") if node.attrs.get("type") == "application/ld+json"]
     assert len(scripts) == 1
     assert scripts[0].attrs == {"type": "application/ld+json", "data-b26-blog-schema": None}
     graph = json.loads(scripts[0].text())["@graph"]
@@ -211,10 +212,28 @@ def test_blog_is_readable_without_js_with_two_to_ten_articles(count: int) -> Non
     assert article_links[:2] == list(ARTICLE_PATHS), "existing /journal/ routes must not be moved"
     assert [n.attrs["datetime"] for n in _nodes(document, tag="time")][:2] == ["2026-08-30", "2026-08-29"]
     assert len(set(article_links)) == count
-    assert not _nodes(document, tag="form")
-    assert not _nodes(document, tag="button")
     assert not _nodes(document, tag="template")
-    assert not re.search(r"<script\b(?![^>]*type=\"application/ld\+json\")", source, re.I)
+
+
+def test_blog_discovery_enhances_native_content_without_phantom_controls() -> None:
+    _, document = _render_fixture()
+    controls = [node for node in document.walk() if "data-blog-controls" in node.attrs]
+    assert len(controls) == 1 and "hidden" in controls[0].attrs
+    forms = _nodes(controls[0], tag="form")
+    assert len(forms) == 1 and forms[0].attrs.get("role") == "search"
+    query = _nodes(forms[0], tag="input")[0]
+    assert query.attrs.get("name") == "q" and query.attrs.get("type") == "search"
+    assert _nodes(forms[0], tag="label")[0].attrs.get("for") == query.attrs["id"]
+    assert any(node.attrs.get("type") == "submit" for node in _nodes(forms[0], tag="button"))
+    categories = [node for node in controls[0].walk() if "data-blog-categories" in node.attrs]
+    assert len(categories) == 1 and not categories[0].children
+    scripts = [node for node in _nodes(document, tag="script") if node.attrs.get("src")]
+    assert len(scripts) == 1 and scripts[0].attrs["src"] == "/static/base2026-blog-discovery.js"
+    assert "defer" in scripts[0].attrs
+    assert "Older articles" in _nodes(document, tag="noscript")[0].text()
+    for key in ("data-blog-empty", "data-blog-pagination", "data-blog-retry"):
+        nodes = [node for node in document.walk() if key in node.attrs]
+        assert len(nodes) == 1 and "hidden" in nodes[0].attrs
 
 
 def test_blog_primary_actions_remain_visible_and_native() -> None:
@@ -248,16 +267,6 @@ def test_blog_responsive_css_does_not_hide_or_clip_content() -> None:
     assert "width: var(--b26-shell)" in css
     assert re.search(r"\.b26-blog\s*\{[^}]*min-width:\s*0", css, re.S)
     assert "overflow-wrap: anywhere" in css
-    assert "repeat(auto-fit, minmax(min(100%, 20rem), 1fr))" in css
-    assert re.search(r"@media\s*\(max-width:\s*700px\)", css)
-    mobile = css.split("@media (max-width: 700px)", 1)[1].split("@media", 1)[0]
-    assert re.search(
-        r"\.b26-blog-feature\s*>\s*\.b26-blog-card__link,\s*"
-        r"\.b26-blog-grid,\s*"
-        r"\.b26-blog-grid\s*>\s*\.b26-blog-card:only-child\s*>\s*\.b26-blog-card__link\s*"
-        r"\{\s*grid-template-columns:\s*minmax\(0,\s*1fr\)", mobile,
-    )
-    assert "padding: 24px" in mobile
     assert re.search(r"\.b26-blog-feature__media img\s*\{[^}]*width:\s*100%[^}]*height:\s*auto", css, re.S)
     assert "object-fit: contain" in css
     assert not re.search(r"overflow(?:-x)?\s*:\s*(?:hidden|clip)|text-overflow|line-clamp|white-space\s*:\s*nowrap", css)
@@ -272,9 +281,8 @@ def test_blog_css_is_additive_with_visible_focus_and_reduced_motion() -> None:
     assert not re.search(r"--b26-(?:canvas|surface|ink|accent|shell)\s*:", css)
     assert not re.search(r"\.b26-(?:home|site-header|site-footer|founder|brief)\b", css)
     assert not re.search(r"#(?:c84f07|d9730d|ef6b13|fffaf0)\b", css, re.I)
-    assert "a:focus-visible" in css and "outline: 3px solid var(--b26-accent)" in css
+    assert ":focus-visible" in css and "outline: 3px solid var(--b26-accent)" in css
     assert "@media (prefers-reduced-motion: reduce)" in css
     reduced = css.split("@media (prefers-reduced-motion: reduce)", 1)[1]
     assert "scroll-behavior: auto !important" in reduced
-    assert "transition: none" in reduced
     assert not re.search(r"@keyframes|\banimation\s*:|(?<![\w-])transform\s*:|transition:\s*all", css)

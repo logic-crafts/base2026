@@ -50,18 +50,62 @@
       </div>
 
       <figure class="b26-lab-scene" data-lab-scene aria-labelledby="lab-scene-caption">
-        <div class="b26-lab-scene__frame">
-          <picture>
-            <source media="(max-width: 620px)" srcset="/static/assets/source-lab/source-lab-hero-mobile.webp" width="840" height="473">
-            <img class="b26-lab-scene__image" src="/static/assets/source-lab/source-lab-hero.webp" width="1440" height="810" fetchpriority="high" decoding="async" alt="Conceptual source laboratory: paper source cards pass through a glass prism toward a cobalt action card, connected by a blue line.">
-          </picture>
-          <span class="b26-lab-scene__label b26-lab-scene__label--source" data-lab-source>Source</span>
-          <span class="b26-lab-scene__label b26-lab-scene__label--excerpt" data-lab-excerpt>Excerpt</span>
-          <span class="b26-lab-scene__label b26-lab-scene__label--action" data-lab-action>Action</span>
-          <span class="b26-lab-scene__line" data-lab-line aria-hidden="true"></span>
+        <div class="b26-lab-scene__frame" data-lab-stage>
+          <svg class="b26-lab-track" data-lab-line viewBox="0 0 600 450" role="presentation" aria-hidden="true">
+            <defs>
+              <linearGradient id="b26-lab-track-gradient" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#315EEA" stop-opacity=".08"></stop>
+                <stop offset=".5" stop-color="#315EEA" stop-opacity=".58"></stop>
+                <stop offset="1" stop-color="#315EEA" stop-opacity=".12"></stop>
+              </linearGradient>
+            </defs>
+            <path class="b26-lab-track__path" d="M52 208 C152 156 201 168 287 225 S418 283 548 230" fill="none" stroke="url(#b26-lab-track-gradient)" stroke-width="2" stroke-dasharray="5 9"></path>
+            <path class="b26-lab-track__path b26-lab-track__path--quiet" d="M62 330 C182 274 228 296 319 246 S442 176 548 154" fill="none" stroke="#DCE5F0" stroke-width="1"></path>
+          </svg>
+
+          <div class="b26-lab-source-stack" data-lab-source aria-label="Illustrative source cards">
+            <article class="b26-lab-paper b26-lab-paper--one" data-lab-source-card>
+              <span class="b26-lab-paper__eyebrow">Source note</span>
+              <strong>AI search visibility</strong>
+              <span class="b26-lab-paper__line">Question in focus</span>
+              <span class="b26-lab-paper__foot">public record</span>
+            </article>
+            <article class="b26-lab-paper b26-lab-paper--two" data-lab-source-card>
+              <span class="b26-lab-paper__eyebrow">Source note</span>
+              <strong>Content refresh</strong>
+              <span class="b26-lab-paper__line">Method and context</span>
+              <span class="b26-lab-paper__foot">creator attached</span>
+            </article>
+            <article class="b26-lab-paper b26-lab-paper--three" data-lab-source-card>
+              <span class="b26-lab-paper__eyebrow">Source note</span>
+              <strong>Structured data</strong>
+              <span class="b26-lab-paper__line">Check the original</span>
+              <span class="b26-lab-paper__foot">illustrative input</span>
+            </article>
+          </div>
+
+          <div class="b26-lab-lens" data-lab-lens>
+            <span class="b26-lab-lens__halo" aria-hidden="true"></span>
+            <img class="b26-lab-lens__image" src="/static/brand/b26-seal.webp" width="116" height="116" loading="eager" decoding="async" alt="Base2026 ceramic seal lens">
+          </div>
+
+          <article class="b26-lab-excerpt" data-lab-excerpt aria-label="Illustrative attributed excerpt">
+            <div class="b26-lab-card__eyebrow">Attributed excerpt</div>
+            <p><span data-lab-excerpt-highlight>Keep the question beside the source context.</span></p>
+            <small>Illustrative workflow · source link retained</small>
+          </article>
+
+          <article class="b26-lab-brief" data-lab-action aria-label="Illustrative working brief">
+            <div class="b26-lab-card__eyebrow">Working brief</div>
+            <h3 data-lab-brief-heading>Question in focus</h3>
+            <div class="b26-lab-brief__part" data-lab-brief-source><span>Source</span><strong>Keep the record attached</strong></div>
+            <div class="b26-lab-brief__part" data-lab-brief-next><span>Next step</span><strong>Check the original context</strong></div>
+          </article>
+
           <button class="b26-lab-scene__motion" type="button" data-lab-motion="toggle" hidden>Pause illustration</button>
+          <p class="b26-lab-motion-status" data-lab-motion-status role="status" aria-live="polite">Illustration ready.</p>
         </div>
-        <figcaption id="lab-scene-caption">Conceptual illustration · source → excerpt → action.</figcaption>
+        <figcaption id="lab-scene-caption">Illustrative workflow: source cards become an attributed excerpt and a working brief.</figcaption>
       </figure>
     </section>
 
@@ -89,39 +133,35 @@
           <p>Choose a focused tool, explore the sources, and keep the useful context in your own workflow.</p>
         </header>
 
-        <div class="b26-lab-tool-features">
-          <article class="b26-lab-tool-feature">
-            <div class="b26-lab-tool__top"><span>01 / FIND</span><span>Free · no signup</span></div>
+        <div class="b26-lab-tool-features" data-lab-entry-group>
+          <article class="b26-lab-tool-feature" data-lab-entry>
+            <div class="b26-lab-tool__top"><span>Core research tool</span><span>Free · no signup</span></div>
             <h3>Evidence Search</h3>
             <p>Search inside expert videos for a narrow SEO, GEO or AEO question, then open the attributed record and follow the original source.</p>
             <a class="b26-lab-tool__link" href="/tools/evidence-search/">Search the evidence <span aria-hidden="true">↗</span></a>
           </article>
-          <article class="b26-lab-tool-feature">
-            <div class="b26-lab-tool__top"><span>02 / CHECK</span><span>Free · supplied HTML</span></div>
+          <article class="b26-lab-tool-feature" data-lab-entry>
+            <div class="b26-lab-tool__top"><span>Source inspection</span><span>Free · supplied HTML</span></div>
             <h3>Page Source Check</h3>
             <p>Inspect supplied page HTML for titles, headings, links and structured-data syntax. The check observes what you provide and does not claim rankings or indexation.</p>
             <a class="b26-lab-tool__link" href="/tools/page-readiness/">Check page source <span aria-hidden="true">↗</span></a>
           </article>
         </div>
 
-        <div class="b26-lab-tool-rows" aria-label="More free tools">
-          <a class="b26-lab-tool-row" href="/tools/source-backed-brief/">
-            <span class="b26-lab-tool-row__index">03</span>
+        <div class="b26-lab-tool-rows" data-lab-entry-group aria-label="More free tools">
+          <a class="b26-lab-tool-row" data-lab-entry href="/tools/source-backed-brief/">
             <span><strong>Source-backed Brief</strong><small>Turn selected public records into a local note with excerpts, attribution and visible unknowns.</small></span>
             <span class="b26-lab-tool-row__meta">Build a brief ↗</span>
           </a>
-          <a class="b26-lab-tool-row" href="/tools/source-diversity-check/">
-            <span class="b26-lab-tool-row__index">04</span>
+          <a class="b26-lab-tool-row" data-lab-entry href="/tools/source-diversity-check/">
             <span><strong>Source Diversity Check</strong><small>Compare record, creator and original-source relationships before calling a pattern independent evidence.</small></span>
             <span class="b26-lab-tool-row__meta">Check sources ↗</span>
           </a>
-          <a class="b26-lab-tool-row" href="/tools/wordpress-evidence-sidebar/">
-            <span class="b26-lab-tool-row__index">05</span>
+          <a class="b26-lab-tool-row" data-lab-entry href="/tools/wordpress-evidence-sidebar/">
             <span><strong>Evidence Sidebar for WordPress <em>0.1.1</em></strong><small>Research one question from Gutenberg, inspect the source and keep any inserted note editable.</small></span>
             <span class="b26-lab-tool-row__meta">See the beta ↗</span>
           </a>
-          <a class="b26-lab-tool-row" href="https://github.com/offflinerpsy/base2026/blob/main/docs/BASE2026_FREE_SKILLS.md#seo-experiment-planner" target="_blank" rel="noopener noreferrer">
-            <span class="b26-lab-tool-row__index">06</span>
+          <a class="b26-lab-tool-row" data-lab-entry href="https://github.com/offflinerpsy/base2026/blob/main/docs/BASE2026_FREE_SKILLS.md#seo-experiment-planner" target="_blank" rel="noopener noreferrer">
             <span><strong>SEO Experiment Planner</strong><small>Plan one measurable content-refresh decision with a handoff and measurement sheet inside your existing workflow.</small></span>
             <span class="b26-lab-tool-row__meta">Read the skill ↗</span>
           </a>
@@ -133,26 +173,28 @@
       <div class="b26-home-shell">
         <header class="b26-section-head">
           <div>
-            <p class="b26-home-kicker">The source path</p>
+            <p class="b26-home-kicker">A visible research loop</p>
             <h2 id="sequence-title">From source to a usable decision.</h2>
           </div>
           <p>Base2026 helps you move through evidence in a visible order. The original creator remains part of the answer at every step.</p>
         </header>
-        <div class="b26-lab-sequence__progress" data-lab-progress-line aria-hidden="true"></div>
-        <ol class="b26-lab-sequence__list">
-          <li>
-            <span class="b26-lab-sequence__number">01</span>
-            <div><h3>Find the source</h3><p>Search inside expert videos by question, topic or creator. Start with a narrow question that can be checked record by record.</p></div>
-          </li>
-          <li>
-            <span class="b26-lab-sequence__number">02</span>
-            <div><h3>Keep the excerpt</h3><p>Read the attributed passage in context, note what it supports and follow the original source when you need the full argument.</p></div>
-          </li>
-          <li>
-            <span class="b26-lab-sequence__number">03</span>
-            <div><h3>Build the brief</h3><p>Turn selected records into a local working note, with the question, source links and unknowns still close at hand.</p></div>
-          </li>
-        </ol>
+        <div class="b26-lab-sequence__list" data-lab-entry-group>
+          <article data-lab-entry>
+            <span class="b26-lab-sequence__label">Search</span>
+            <h3>Find the source</h3>
+            <p>Search inside expert videos by question, topic or creator. Start with a narrow question that can be checked record by record.</p>
+          </article>
+          <article data-lab-entry>
+            <span class="b26-lab-sequence__label">Context</span>
+            <h3>Keep the excerpt</h3>
+            <p>Read the attributed passage in context, note what it supports and follow the original source when you need the full argument.</p>
+          </article>
+          <article data-lab-entry>
+            <span class="b26-lab-sequence__label">Working brief</span>
+            <h3>Build the brief</h3>
+            <p>Turn selected records into a local working note, with the question, source links and unknowns still close at hand.</p>
+          </article>
+        </div>
       </div>
     </section>
 
