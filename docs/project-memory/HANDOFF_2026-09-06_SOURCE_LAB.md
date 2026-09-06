@@ -1,8 +1,8 @@
-# Source Laboratory presentation candidate — 2026-09-06
+# Source Laboratory release — 2026-09-06
 
-Status: HQ accepted the desktop/mobile composition, hero and typography;
-the requested final copy and YouTube footer delta is complete. Ready for HQ
-private-runtime integration. No commit, push, merge, deployment or intake run performed.
+Status: PUBLISHED_VERIFIED. HQ integrated and deployed the accepted v4
+artifact with the current private auth runtime, then verified the live site.
+Public source is tracked by [PR62](https://github.com/offflinerpsy/base2026/pull/62).
 
 ## Scope and source
 
@@ -54,7 +54,34 @@ The 16 affected homepage/tools tests and the canonical build gates pass.
 Original browser screenshots describe the accepted v3 layout; this pass did
 not use the browser because HQ owns its review surface.
 
-## Review limits and next action
+## Live release and next action
+
+- Worker version `35dd4bbe-d10f-4701-adcb-b68931d1988e` is active at 100%.
+- Reviewed combined bundle SHA-256:
+  `ff02ca72f969109f6d3bcdce8b61226ca2940d5f952c31f255906b77bddb51e3`.
+- Before the presentation patch, the isolated baseline build matched the
+  previously accepted production bundle byte for byte. The combined runtime
+  passed 647 Worker and 27 auth tests, typecheck and an explicit-assets dry run.
+- Live readback matched the homepage, workspace, tools, shared CSS/JS, member
+  script and both WordPress downloads to the reviewed files. Bindings,
+  compatibility settings and observability were preserved; temporary auth
+  recovery and diagnostic flags remain off.
+- Native live checks passed at 1440 and 390 px: loaded hero, completed motion,
+  keyboard menu closure/focus, no horizontal overflow or console errors,
+  canonical dynamic source header/footer with three excerpt cards, and the
+  five-record Source Diversity result (five records, five sources, one creator).
+- The existing signed-in research session opened its retained collection and
+  saved source after deployment. No private research mutation was needed.
+- Project-owned source passes the default whitespace check. Pinned GSAP
+  minified files preserve the official npm archive verbatim, including its
+  two banner/end-of-file whitespace exceptions per file.
+
+These are release checks, not external usage or growth measurements. Keep the
+accepted private runtime as the deployment baseline; source-only public main
+is not a substitute for the private auth integration. No schema or intake
+change was performed by this release.
+
+## Earlier candidate review context
 
 Local preview is `http://127.0.0.1:8753/`, now serving v4. Its development adapter sends only
 public read-only retrieval and synthetic source-check requests to the public
@@ -67,8 +94,8 @@ renderer with an identified synthetic public row.
 
 HQ's current private auth-recovery Worker is newer than public main. The
 projected-source presentation patch passes `git apply --check` against that
-private source. HQ must apply this narrow patch to its accepted runtime and
-complete the combined release checks; the public-source dry-run is not a
+private source. HQ applied this narrow patch to an isolated copy of the accepted runtime
+and completed the combined checks; the public-source dry-run is not a
 replacement for that runtime. No private implementation was copied into Git.
 
 Review source in this worktree and the existing Design office's

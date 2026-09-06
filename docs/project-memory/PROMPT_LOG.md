@@ -10278,3 +10278,13 @@ in [the Source Laboratory handoff](HANDOFF_2026-09-06_SOURCE_LAB.md).
   contain only the approved text/link delta. Renderer patch and all other
   artifact bytes are unchanged. No browser use, commit, merge or deployment.
 - Current artifact/hash and HQ integration action are in the Source Lab handoff.
+
+### 2026-09-06 — HQ Source Laboratory production acceptance
+
+Integrated only the reviewed source presentation patch into an isolated copy
+of the accepted private runtime. Original build matched production byte for
+byte; combined 647 Worker/27 auth tests, types and exact-assets dry run passed.
+Published the reviewed v4 artifact, verified active version/content attribution,
+protected assets/bindings/flags and native live public/member behavior. Public
+source is tracked in PR62; full release facts are in the Source Lab handoff.
+No intake, schema, member-data mutation or growth/adoption claim was made.

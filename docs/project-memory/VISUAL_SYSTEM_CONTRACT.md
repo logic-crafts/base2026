@@ -1,6 +1,6 @@
 # Base2026 Visual System Contract
 
-Last updated: 2026-09-06 (Source Laboratory source candidate; release requires HQ review)
+Last updated: 2026-09-06 (Source Laboratory published and verified)
 Authority: `b26-independent-v1`
 
 ## Rule
@@ -63,7 +63,7 @@ shell or palette.
 
 ## Source Laboratory presentation
 
-The owner-authorized candidate keeps the independent palette and typography.
+The owner-authorized release keeps the independent palette and typography.
 Use a compact grouped navigation, a source-oriented hero, clear editorial
 rows and calm working forms. Context, attribution and unknowns remain visible.
 The conceptual paper/prism/action artwork is separate from measured data.
