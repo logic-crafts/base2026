@@ -10254,3 +10254,27 @@ passed. Wrangler dry-run was attempted but the configured generated release
 asset directory is absent in this source checkout; no deploy, push, merge,
 IndexNow, D1 or Cloudflare mutation occurred. Handoff:
 `HANDOFF_2026-09-04_SOURCE_DIVERSITY_CHECK.md`.
+
+## 2026-09-06 — Source Laboratory site presentation candidate
+
+Owner-authorized substantial redesign via the existing HQ: cool-white, navy
+and cobalt across all page families, the accepted conceptual hero and
+meaningful GSAP motion. Built from fresh public main, using the latest
+accepted public assets and explicit preservation of the newer released member
+runtime. Canonical templates, builder and projected-source presentation only;
+no auth/data/API implementation changes, public release or intake automation.
+Astra owns integration and review; bounded Luna/max workers handled assigned
+template/runtime slices. Native in-app browser is the only UI verification
+surface. Acceptance, preview limits and concrete HQ next action are recorded
+in [the Source Laboratory handoff](HANDOFF_2026-09-06_SOURCE_LAB.md).
+
+### 2026-09-06 — HQ final Source Laboratory copy delta
+
+- HQ accepted the actual desktop/mobile home and tools composition, hero and
+  typography; requested six exact copy replacements and a shared YouTube link.
+- Updated homepage/tools/footer and existing copy assertions. One canonical
+  v4 rebuild uses the same accepted public baseline and retains member JS.
+- 16 affected tests and build gates pass; all 4,212 changed artifact files
+  contain only the approved text/link delta. Renderer patch and all other
+  artifact bytes are unchanged. No browser use, commit, merge or deployment.
+- Current artifact/hash and HQ integration action are in the Source Lab handoff.

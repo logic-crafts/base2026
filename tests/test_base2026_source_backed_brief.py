@@ -5,7 +5,7 @@ import re
 import subprocess
 from pathlib import Path
 
-from test_build_base2026_cloudflare_release import builder, write_fixture
+from test_build_base2026_cloudflare_release import builder, write_fixture, write_legacy_plugin_fixture
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -352,15 +352,17 @@ def test_source_backed_brief_stylesheet_observes_visual_and_accessibility_contra
     assert "var(--b26-surface)" in stylesheet
     assert "@media (max-width: 640px)" in stylesheet
     assert "@media (prefers-reduced-motion: reduce)" in stylesheet
-    assert "overflow-x" not in stylesheet
+    assert "overflow-x: hidden" not in stylesheet
     assert "#" not in re.sub(r"#[a-z][a-z0-9_-]*", "", stylesheet, flags=re.IGNORECASE)
     assert "warm" not in stylesheet.lower()
 
 
-def test_source_backed_brief_builder_emits_route_assets_sitemap_and_public_llms_links(tmp_path: Path) -> None:
+def test_source_backed_brief_builder_emits_route_assets_sitemap_and_public_llms_links(tmp_path: Path, monkeypatch) -> None:
     source = tmp_path / "source-web"
     output = tmp_path / "release"
     write_fixture(source)
+
+    write_legacy_plugin_fixture(source, monkeypatch)
 
     receipt = builder.build_release(
         source,

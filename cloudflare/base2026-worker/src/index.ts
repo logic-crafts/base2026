@@ -57,6 +57,8 @@ const PUBLIC_ORIGIN = "https://base2026.dev";
 const MAX_DYNAMIC_SITEMAP_URLS = 50_000;
 const DYNAMIC_SOURCE_ROUTE = /^\/sources\/tiktok-video-(\d{10,30})\/?$/u;
 const SOCIAL_IMAGE_URL = `${PUBLIC_ORIGIN}/static/assets/base2026-ai-visibility-card.png`;
+const PROJECTED_SOURCE_SHELL_URL = `${PUBLIC_ORIGIN}/sources/index.html`;
+const MAX_PROJECTED_SOURCE_SHELL_BYTES = 256 * 1024;
 
 const PUBLIC_FIELDS = Object.freeze([
   "admission_state",
@@ -320,6 +322,11 @@ interface ProjectedSourcePageRow {
   evidence_excerpt: string;
   evidence_start_seconds: number;
   evidence_end_seconds: number;
+}
+
+interface ProjectedSourceShell {
+  header: string;
+  footer: string;
 }
 
 interface DynamicSitemapRow {
@@ -993,7 +1000,72 @@ async function readProjectedSourceRows(db: D1Database, videoId: string): Promise
   return result.results;
 }
 
-function renderProjectedSourcePage(videoId: string, rows: ProjectedSourcePageRow[]): string {
+function projectedSourceShellPart(html: string, tag: "header" | "footer", className: string): string | null {
+  const pattern = new RegExp(
+    `<${tag}\\b[^>]*\\bclass=(['"])[^'"]*\\b${className}\\b[^'"]*\\1[^>]*>[\\s\\S]*?<\\/${tag}>`,
+    "iu",
+  );
+  return html.match(pattern)?.[0] ?? null;
+}
+
+async function readProjectedSourceShell(assets?: Fetcher): Promise<ProjectedSourceShell | null> {
+  if (!assets) return null;
+  let asset: Response;
+  try {
+    // ASSETS bypasses the public router. Keep this URL fixed and never forward
+    // the incoming source URL, cookies, authorization or query parameters.
+    asset = await assets.fetch(new Request(PROJECTED_SOURCE_SHELL_URL, { headers: { Accept: "text/html" } }));
+  } catch {
+    return null;
+  }
+  const body = asset.body;
+  if (asset.status !== 200 || !/^text\/html(?:\s*;|$)/iu.test(asset.headers.get("Content-Type") ?? "") || !body) {
+    await body?.cancel();
+    return null;
+  }
+  const lengthHeader = asset.headers.get("Content-Length");
+  if (lengthHeader !== null && (!/^\d+$/u.test(lengthHeader) || Number(lengthHeader) > MAX_PROJECTED_SOURCE_SHELL_BYTES)) {
+    await body.cancel();
+    return null;
+  }
+  const reader = body.getReader();
+  const chunks: Uint8Array[] = [];
+  let length = 0;
+  try {
+    while (true) {
+      const chunk = await reader.read();
+      if (chunk.done) break;
+      length += chunk.value.byteLength;
+      if (length > MAX_PROJECTED_SOURCE_SHELL_BYTES) {
+        await reader.cancel();
+        return null;
+      }
+      chunks.push(chunk.value);
+    }
+  } catch {
+    try { await reader.cancel(); } catch { /* best-effort bounded read cleanup */ }
+    return null;
+  } finally {
+    reader.releaseLock();
+  }
+  const bytes = new Uint8Array(length);
+  let offset = 0;
+  for (const chunk of chunks) {
+    bytes.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+  let html: string;
+  try {
+    html = new TextDecoder("utf-8", { fatal: true }).decode(bytes);
+  } catch {
+    return null;
+  }
+  const header = projectedSourceShellPart(html, "header", "b26-site-header");
+  const footer = projectedSourceShellPart(html, "footer", "b26-site-footer");
+  return header && footer ? { header, footer } : null;
+}
+
+async function renderProjectedSourcePage(videoId: string, rows: ProjectedSourcePageRow[], assets?: Fetcher): Promise<string> {
   const first = rows[0];
   const canonical = `${PUBLIC_ORIGIN}/sources/tiktok-video-${videoId}`;
   const sourceUrl = safePublicSourceUrl(first.source_url);
@@ -1018,25 +1090,29 @@ function renderProjectedSourcePage(videoId: string, rows: ProjectedSourcePageRow
   }).replaceAll("<", "\\u003c");
   const cards = rows.map((row) => {
     const evidenceTime = `${secondsLabel(row.evidence_start_seconds)}–${secondsLabel(row.evidence_end_seconds)}`;
-    return `<article class="card"><p class="topic">${escapeHtml(row.topic_label)}</p><h2>${escapeHtml(row.claim_text)}</h2><blockquote>${escapeHtml(row.evidence_excerpt)}</blockquote><p class="time">Source excerpt ${escapeHtml(evidenceTime)}</p><h3>Suggested action</h3><p>${escapeHtml(row.suggested_action)}</p></article>`;
+    return `<article class="b26-source-record"><p class="topic">${escapeHtml(row.topic_label)}</p><h2>${escapeHtml(row.claim_text)}</h2><blockquote>${escapeHtml(row.evidence_excerpt)}</blockquote><p class="time">Source excerpt ${escapeHtml(evidenceTime)}</p><h3>Suggested action</h3><p>${escapeHtml(row.suggested_action)}</p></article>`;
   }).join("");
   const topicQuery = encodeURIComponent(topics[0] || title);
+  const shell = await readProjectedSourceShell(assets);
+  const breadcrumb = `<nav class="b26-source-breadcrumbs" aria-label="Breadcrumb"><a href="/">Base2026</a><span aria-hidden="true">/</span><a href="/sources/">Source records</a><span aria-hidden="true">/</span><span>${escapeHtml(sourceId)}</span></nav>`;
+  const navigation = shell ? breadcrumb : breadcrumb.replace('class="b26-source-breadcrumbs"', 'class="b26-source-fallback"');
+  const header = shell?.header ?? "";
+  const footer = shell?.footer ?? "";
   return `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${escapeHtml(browserTitle)}</title><meta name="description" content="${escapeHtml(description)}">
 <meta name="robots" content="index,follow"><link rel="canonical" href="${canonical}">
-<link rel="icon" type="image/png" sizes="32x32" href="/static/assets/alex-yarosh-favicon-32.png"><link rel="apple-touch-icon" sizes="180x180" href="/static/assets/alex-yarosh-apple-touch.png">
+<link rel="icon" type="image/svg+xml" href="/static/base2026-mark.svg"><link rel="apple-touch-icon" sizes="180x180" href="/static/assets/alex-yarosh-apple-touch.png">
 <meta property="og:type" content="article"><meta property="og:title" content="${escapeHtml(title)}"><meta property="og:description" content="${escapeHtml(description)}"><meta property="og:url" content="${canonical}">
 <meta property="og:image" content="${SOCIAL_IMAGE_URL}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Base2026 public-source intelligence">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${escapeHtml(title)}"><meta name="twitter:description" content="${escapeHtml(description)}"><meta name="twitter:image" content="${SOCIAL_IMAGE_URL}"><meta name="twitter:image:alt" content="Base2026 public-source intelligence">
 <script type="application/ld+json">${jsonLd}</script>
-<link rel="stylesheet" href="/static/base2026-core.css?v=20260820-b26v1">
-<style>:root{color-scheme:light;--ink:#101827;--muted:#5d6878;--line:#d8dfeb;--paper:#f7f9fc;--accent:#315eea}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.65 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}a{color:inherit}.shell{max-width:1040px;margin:auto;padding:24px}.nav{display:flex;gap:18px;align-items:center;padding:8px 0 38px}.brand{font-weight:900;text-decoration:none}.nav a:not(.brand){color:var(--muted)}.hero{max-width:860px;padding:42px 0}.eyebrow,.topic,.time{font-size:13px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}h1{font-size:clamp(38px,7vw,72px);line-height:1.03;letter-spacing:-.04em;margin:.2em 0}.lede{font-size:19px;color:var(--muted)}.cards{display:grid;gap:18px}.card{background:#fff;border:1px solid var(--line);border-radius:22px;padding:clamp(24px,5vw,44px)}.card h2{font-size:clamp(24px,4vw,36px);line-height:1.15}.card h3{margin-top:28px}blockquote{margin:24px 0;padding-left:18px;border-left:4px solid var(--accent);font-size:18px}.source{margin:34px 0;padding:28px;border:1px solid var(--line);border-radius:18px}.actions{display:flex;flex-wrap:wrap;gap:12px;margin:28px 0 60px}.actions a{padding:11px 18px;border:1px solid var(--ink);border-radius:999px;text-decoration:none;font-weight:800}.actions a:first-child{background:var(--ink);color:#fff}@media(max-width:620px){.nav{flex-wrap:wrap}.shell{padding:18px}}</style></head>
-<body><main class="shell"><nav class="nav" aria-label="Primary"><a class="brand" href="/">Base2026</a><a href="/workspace/">Search</a><a href="/topics/">Topics</a><a href="/methodology">Methodology</a></nav>
-<header class="hero"><p class="eyebrow">Public source record · ${escapeHtml(creator)}</p><h1>${escapeHtml(pageTitle)}</h1><p class="lede">Source-backed excerpt cards generated by the Base2026 public evidence pipeline. The original creator remains the canonical source.</p></header>
-<section class="cards" aria-label="Public evidence cards">${cards}</section>
-<section class="source"><h2>Source and attribution</h2><p>Creator: <strong>${escapeHtml(creator)}</strong>${first.published_date ? ` · Published ${escapeHtml(first.published_date)}` : ""}</p>${sourceUrl ? `<p><a href="${escapeHtml(sourceUrl)}" rel="nofollow noopener noreferrer">Open the original TikTok video</a></p>` : ""}<p>Base2026 publishes short evidence excerpts, not raw media or a full private transcript. See the <a href="/methodology">methodology</a> and <a href="/opt-out">correction policy</a>.</p></section>
-<div class="actions"><a href="/workspace/?q=${topicQuery}">Find related evidence</a><a href="/sources/">Browse sources</a></div></main></body></html>`;
+<link rel="stylesheet" href="/static/base2026-core.css?v=20260820-b26v1"><script src="/static/base2026-source-lab.js" defer></script></head>
+<body class="b26-form-page b26-projected-source-page">${header}<main id="content" class="b26-projected-source">${navigation}
+<header class="b26-source-record-hero"><p class="b26-eyebrow">Public source record · ${escapeHtml(creator)}</p><h1>${escapeHtml(pageTitle)}</h1><p class="lede">Source-backed excerpt cards generated by the Base2026 public evidence pipeline. The original creator remains the canonical source.</p></header>
+<section class="b26-source-records" aria-label="Public evidence cards">${cards}</section>
+<section class="b26-source-attribution"><h2>Source and attribution</h2><p>Creator: <strong>${escapeHtml(creator)}</strong>${first.published_date ? ` · Published ${escapeHtml(first.published_date)}` : ""}</p>${sourceUrl ? `<p><a href="${escapeHtml(sourceUrl)}" rel="nofollow noopener noreferrer">Open the original TikTok video</a></p>` : ""}<p>Base2026 publishes short evidence excerpts, not raw media or a full private transcript. See the <a href="/methodology">methodology</a> and <a href="/opt-out">correction policy</a>.</p></section>
+<div class="b26-source-actions"><a class="b26-button--primary" href="/workspace/?q=${escapeHtml(topicQuery)}">Find related evidence</a><a class="b26-button--secondary" href="/sources/">Browse sources</a></div></main>${footer}</body></html>`;
 }
 
 async function handleProjectedSourcePage(request: Request, env: EnvWithBindings, videoId: string): Promise<Response | null> {
@@ -1044,7 +1120,7 @@ async function handleProjectedSourcePage(request: Request, env: EnvWithBindings,
   if (!env.DB) throw new RequestError(503, "DB_NOT_CONFIGURED", "D1 search database is unavailable");
   const rows = await readProjectedSourceRows(env.DB, videoId);
   if (!rows.length) return null;
-  const body = renderProjectedSourcePage(videoId, rows);
+  const body = await renderProjectedSourcePage(videoId, rows, env.ASSETS);
   return new Response(request.method === "HEAD" ? null : body, {
     status: 200,
     headers: withPublicResponseHeaders({

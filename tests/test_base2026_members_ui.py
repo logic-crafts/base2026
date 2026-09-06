@@ -23,7 +23,7 @@ def test_shared_header_exposes_sign_in_without_gating_public_search() -> None:
     assert mobile is not None
     assert desktop.select_one('a[href="/workspace/"]') is not None
     assert mobile.select_one('a[href="/workspace/"]') is not None
-    desktop_account = desktop.select_one('a[href="/my-research/"][data-members-account-link]')
+    desktop_account = soup.select_one('.b26-header-actions a[href="/my-research/"][data-members-account-link]')
     mobile_account = mobile.select_one('a[href="/my-research/"][data-members-account-link]')
     assert desktop_account is not None
     assert mobile_account is not None

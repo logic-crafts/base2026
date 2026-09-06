@@ -97,6 +97,11 @@ DEFAULT_EVIDENCE_BRIEF_SCRIPT = PROJECT_ROOT / "templates" / "base2026-evidence-
 DEFAULT_MEMBERS_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-my-research.html"
 DEFAULT_MEMBERS_STYLESHEET = PROJECT_ROOT / "templates" / "base2026-members.css"
 DEFAULT_MEMBERS_SCRIPT = PROJECT_ROOT / "templates" / "base2026-members.js"
+SOURCE_LAB_MEDIA_ROOT = PROJECT_ROOT / "templates" / "assets" / "source-lab"
+SOURCE_LAB_MEDIA_ALLOWLIST = {
+    "source-lab-hero.webp": (47562, "ccdc2dca2f1711c19bbc31484437ce454c8d9d61a381af1d425b64e26fb39087"),
+    "source-lab-hero-mobile.webp": (19926, "af0bb1bbf6cbb1c70ce5f11ba0dd556394ec5bda85b6ad9c615763b060c7176d"),
+}
 DEFAULT_MEMBERS_PRIVACY = PROJECT_ROOT / "templates" / "base2026-members-privacy.html"
 DEFAULT_ROADMAP_SCRIPT = PROJECT_ROOT / "web" / "static" / "roadmap.js"
 DEFAULT_ROADMAP_PAGE = PROJECT_ROOT / "web" / "static" / "roadmap.html"
@@ -1520,6 +1525,20 @@ PERSONAL_COMMERCIAL_MARKERS = (
 )
 
 
+def _with_source_lab_runtime(text: str) -> str:
+    # One local enhancement entrypoint; the larger motion libraries are only
+    # needed on pages with an illustrative scene or a scroll progress marker.
+    text = re.sub(r'<script\b[^>]*src=["\']/static/(?:vendor/gsap/(?:gsap|ScrollTrigger)\.min|base2026-source-lab)\.js(?:\?[^"\']*)?["\'][^>]*>\s*</script>', "", text)
+    scripts = []
+    if "data-lab-scene" in text or "data-lab-progress" in text:
+        scripts.extend(["vendor/gsap/gsap.min", "vendor/gsap/ScrollTrigger.min"])
+    scripts.append("base2026-source-lab")
+    enhancement_tags = "\n".join(f'<script src="/static/{name}.js" defer></script>' for name in scripts)
+    if "</head>" in text:
+        text = text.replace("</head>", enhancement_tags + "\n</head>", 1)
+    return text
+
+
 def _apply_startup_shell(text: str, header_html: str, footer_html: str) -> str:
     """Replace the inherited personal-site chrome on a public HTML page."""
 
@@ -1533,6 +1552,7 @@ def _apply_startup_shell(text: str, header_html: str, footer_html: str) -> str:
             text = text.replace("</head>", f"  {STARTUP_CORE_LINK}\n</head>", 1)
         else:
             text = STARTUP_CORE_LINK + "\n" + text
+    text = _with_source_lab_runtime(text)
     text = PERSONAL_ASSET_TAG_RE.sub("", text)
     text = PERSONAL_IMAGE_TAG_RE.sub("", text)
     text = LEGACY_RESEARCH_NAV_RE.sub("", text)
@@ -1642,7 +1662,7 @@ def _render_startup_page(template: str, header_html: str, footer_html: str) -> b
     rendered = template.replace("{{STARTUP_HEADER}}", header_html).replace(
         "{{STARTUP_FOOTER}}", footer_html
     )
-    return _ensure_social_image_meta(rendered).encode("utf-8")
+    return _ensure_social_image_meta(_with_source_lab_runtime(rendered)).encode("utf-8")
 
 
 def _hub_sitemap_payload() -> bytes:
@@ -2124,6 +2144,20 @@ def _rewrite_workspace_html(
                 text,
                 count=1,
             )
+    if 'class="hero workspace-hero"' in text and "</main>" in text:
+        text = re.sub(r'<body\b([^>]*?)class="([^"]*)"', lambda match: '<body' + match[1] + 'class="' + " ".join(dict.fromkeys((match[2] + " b26-workspace").split())) + '"', text, count=1)
+        # Keep the working search directly after its heading. Background and
+        # policy copy remain readable below the results in the document order.
+        context_sections = []
+        def collect_workspace_context(match: re.Match[str]) -> str:
+            context_sections.append(match[0].strip())
+            return ""
+        text = re.sub(r'\s*<section class="(?:project-identity[^"<>]*|research-bridge)"[^>]*>.*?</section>', collect_workspace_context, text, flags=re.DOTALL)
+        text = re.sub(r'\s*</main>', lambda _: "\n" + "\n".join(context_sections) + "\n</main>", text, count=1)
+        snapshot = re.search(r'<p class="workspace-stat-snapshot">[^<]*</p>', text)
+        if snapshot:
+            text = text.replace(snapshot[0], "", 1)
+            text = re.sub(r'(<a class="workspace-stat-link"[^>]*>)', snapshot[0] + r'\1', text, count=1)
     return text
 
 
@@ -2312,6 +2346,7 @@ def build_release(
     homepage_template: Path | str | None = None,
     homepage_stylesheet: Path | str | None = None,
     members_workspace: bool = False,
+    retain_member_script: bool = False,
 ) -> dict[str, object]:
     """Build and verify a release; return the deterministic JSON receipt."""
 
@@ -2325,6 +2360,11 @@ def build_release(
     standalone_startup = bool(homepage_template_path)
     if members_workspace and not standalone_startup:
         raise ReleaseBuildError("member workspace requires the current startup shell")
+    retained_member_path = source / "static" / "base2026-members.js"
+    if retain_member_script and (
+        not members_workspace or retained_member_path.is_symlink() or not retained_member_path.is_file()
+    ):
+        raise ReleaseBuildError("--retain-member-script requires --members-workspace and an existing public member script")
     if not members_workspace and (source / "my-research" / "index.html").exists():
         raise ReleaseBuildError("member-enabled input requires explicit --members-workspace")
     reviewed_media_manifest_bytes = b""
@@ -2631,6 +2671,31 @@ def build_release(
             write_generated_public_file("static/base2026-startup-homepage.css", homepage_css)
             write_generated_public_file("static/base2026-startup-shell.css", startup_shell_css)
             write_generated_public_file("static/base2026-core.css", core_css)
+            write_generated_public_file("static/base2026-source-lab.js", (PROJECT_ROOT / "templates/base2026-source-lab.js").read_bytes())
+            for vendor_name in ("gsap.min.js", "ScrollTrigger.min.js", "LICENSE", "manifest.json"):
+                write_generated_public_file(f"static/vendor/gsap/{vendor_name}", (PROJECT_ROOT / "templates/vendor/gsap" / vendor_name).read_bytes())
+            source_lab_manifest = json.loads((SOURCE_LAB_MEDIA_ROOT / "asset-manifest.json").read_text(encoding="utf-8"))
+            manifest_assets = source_lab_manifest.get("assets", [])
+            if len(manifest_assets) != 2 or {item.get("file") for item in manifest_assets} != set(SOURCE_LAB_MEDIA_ALLOWLIST):
+                raise ReleaseBuildError("Source Laboratory manifest does not match the reviewed two-file allowlist")
+            for item in manifest_assets:
+                name = item["file"]
+                expected_size, expected_sha = SOURCE_LAB_MEDIA_ALLOWLIST[name]
+                media_path = SOURCE_LAB_MEDIA_ROOT / name
+                if media_path.is_symlink() or not media_path.is_file():
+                    raise ReleaseBuildError(f"Source Laboratory asset is not a regular file: {name}")
+                media_payload = media_path.read_bytes()
+                relative_name = f"static/assets/source-lab/{name}"
+                if (len(media_payload), _sha256(media_payload)) != (expected_size, expected_sha) or (item.get("bytes"), item.get("sha256"), item.get("path")) != (expected_size, expected_sha, f"/{relative_name}"):
+                    raise ReleaseBuildError(f"Source Laboratory asset differs from reviewed bytes: {name}")
+                write_generated_public_file(relative_name, media_payload, kind="binary")
+                # This binary comes from the exact reviewed repository asset,
+                # independently of any older public artifact's media inventory.
+                for index, record in enumerate(records):
+                    if record.relative_path == relative_name:
+                        records[index] = FileRecord(relative_path=relative_name, source_sha256=expected_sha, artifact_sha256=expected_sha, source_size=expected_size, artifact_size=expected_size, kind="binary", changed=False)
+                        break
+            write_generated_public_file("static/assets/source-lab/asset-manifest.json", (SOURCE_LAB_MEDIA_ROOT / "asset-manifest.json").read_bytes())
             write_generated_public_file("static/base2026-forms.js", DEFAULT_FORMS_SCRIPT.read_bytes())
             write_generated_public_file("static/base2026-evidence-brief.js", DEFAULT_EVIDENCE_BRIEF_SCRIPT.read_bytes())
             write_generated_public_file("static/roadmap.js", DEFAULT_ROADMAP_SCRIPT.read_bytes())
@@ -2860,7 +2925,18 @@ def build_release(
                     ),
                 )
                 write_generated_public_file("static/base2026-members.css", DEFAULT_MEMBERS_STYLESHEET.read_bytes())
-                write_generated_public_file("static/base2026-members.js", DEFAULT_MEMBERS_SCRIPT.read_bytes())
+                if retain_member_script:
+                    # Auth recovery can be newer than the repository's optional
+                    # UI. Preserve the explicitly selected released bytes.
+                    retained_payload = retained_member_path.read_bytes()
+                    _write_bytes(stage / "static/base2026-members.js", retained_payload, 0o644)
+                    for index, record in enumerate(records):
+                        if record.relative_path == "static/base2026-members.js":
+                            artifact_bytes += len(retained_payload) - record.artifact_size
+                            records[index] = FileRecord(relative_path=record.relative_path, source_sha256=_sha256(retained_payload), artifact_sha256=_sha256(retained_payload), source_size=len(retained_payload), artifact_size=len(retained_payload), kind="text", changed=False)
+                            break
+                else:
+                    write_generated_public_file("static/base2026-members.js", DEFAULT_MEMBERS_SCRIPT.read_bytes())
                 write_generated_public_file(
                     "privacy.html",
                     _render_startup_page(
@@ -3072,6 +3148,8 @@ def build_release(
         )
 
         verification = {
+            "member_script_retained": retain_member_script,
+            "source_lab_media_verified": True if standalone_startup else None,
             "wordpress_plugin_package_verified": (
                 (stage / WORDPRESS_PLUGIN_DOWNLOAD).read_bytes() == _wordpress_plugin_package()
                 if standalone_startup else None
@@ -3162,6 +3240,7 @@ def _build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="include the optional private My Research UI (requires separately configured auth)",
     )
+    parser.add_argument("--retain-member-script", action="store_true", help="retain the exact public member runtime from source-web during a presentation-only rebuild")
     return parser
 
 
@@ -3174,6 +3253,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             homepage_template=args.homepage_template,
             homepage_stylesheet=args.homepage_stylesheet,
             members_workspace=args.members_workspace,
+            retain_member_script=args.retain_member_script,
         )
     except (OSError, ReleaseBuildError, UnicodeError) as exc:
         print(f"error: {exc}", file=sys.stderr)

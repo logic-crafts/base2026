@@ -415,8 +415,11 @@ describe("Base2026 search Worker", () => {
     expect(html).toContain('property="og:image" content="https://base2026.dev/static/assets/base2026-ai-visibility-card.png"');
     expect(html).toContain('name="twitter:image" content="https://base2026.dev/static/assets/base2026-ai-visibility-card.png"');
     expect(html).toContain('/static/base2026-core.css?v=20260820-b26v1');
-    expect(html).toContain('rel="icon" type="image/png" sizes="32x32"');
+    expect(html).toContain('rel="icon" type="image/svg+xml" href="/static/base2026-mark.svg"');
     expect(html).toContain('rel="apple-touch-icon" sizes="180x180"');
+    expect(html).toContain('class="b26-projected-source"');
+    expect(html).toContain('class="b26-source-record"');
+    expect(html).toContain('class="b26-source-fallback"');
     const browserTitle = html.match(/<title>([^<]+)<\/title>/u)?.[1] ?? "";
     expect(browserTitle.length).toBeLessThanOrEqual(65);
     expect(browserTitle).toContain("2864223510");
@@ -424,9 +427,56 @@ describe("Base2026 search Worker", () => {
     expect(description.length).toBeLessThanOrEqual(160);
     expect(description).toContain("Source 2864223510.");
     expect(html).toContain("Useful &lt;AI&gt; source evidence — source 2864223510");
-    expect(html).toContain('--accent:#315eea');
     expect(html).not.toContain('#ff5a36');
     expect(html).not.toContain("Useful <AI> source evidence");
+  });
+
+  it("uses the canonical header and footer from the fixed source shell asset", async () => {
+    const requests: Request[] = [];
+    const shell = `<!doctype html><html><head><link rel="stylesheet" href="/static/base2026-core.css"></head><body>
+      <header class="b26-site-header" data-b26-shell><a href="/">Canonical header</a></header>
+      <main id="content"><h1>Source Records</h1></main>
+      <footer class="b26-site-footer" data-b26-shell><a href="/methodology">Canonical footer</a></footer>
+    </body></html>`;
+    const response = await worker.fetch(
+      new Request("https://base2026.dev/sources/tiktok-video-7657638702864223510"),
+      {
+        ...env(new FakeSeoDatabase() as unknown as FakeDatabase),
+        ASSETS: {
+          fetch: async (input: RequestInfo | URL, init?: RequestInit) => {
+            requests.push(new Request(input, init));
+            return new Response(shell, { headers: { "Content-Type": "text/html; charset=utf-8" } });
+          },
+        },
+      } as unknown as Env,
+      {} as ExecutionContext,
+    );
+    const html = await response.text();
+    expect(response.status).toBe(200);
+    expect(requests.map((request) => request.url)).toEqual(["https://base2026.dev/sources/index.html"]);
+    expect(html).toContain("Canonical header");
+    expect(html).toContain("Canonical footer");
+    expect(html).toContain('class="b26-source-record-hero"');
+    expect(html).toContain('class="b26-source-records"');
+    expect(html).toContain('class="b26-source-attribution"');
+    expect(html).toContain('class="b26-source-actions"');
+    expect(html).not.toContain('class="b26-source-fallback"');
+  });
+
+  it("falls back to breadcrumbs when the canonical shell asset is unavailable", async () => {
+    const response = await worker.fetch(
+      new Request("https://base2026.dev/sources/tiktok-video-7657638702864223510"),
+      {
+        ...env(new FakeSeoDatabase() as unknown as FakeDatabase),
+        ASSETS: { fetch: async () => { throw new Error("synthetic shell failure"); } },
+      } as unknown as Env,
+      {} as ExecutionContext,
+    );
+    const html = await response.text();
+    expect(response.status).toBe(200);
+    expect(html).toContain('class="b26-source-fallback"');
+    expect(html).not.toContain('class="b26-site-header"');
+    expect(html).not.toContain('class="b26-site-footer"');
   });
 
   it("redirects only trailing-slash dynamic source variants to the extensionless canonical", async () => {
