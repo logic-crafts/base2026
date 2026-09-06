@@ -107,7 +107,7 @@ class ToolsStudioContractTests(unittest.TestCase):
         hrefs = {attrs.get("href") for _, attrs in self.parser.links}
         self.assertTrue(expected_hrefs.issubset(hrefs))
         self.assertNotRegex(self.html.lower(), r'<a[^>]+href=["\'][^"\']*download[^"\']*["\']')
-        self.assertIn("Live counters need JavaScript to read <code>/api/stats</code>", self.html)
+        self.assertIn("Enable JavaScript to load the current collection totals.", self.html)
         self.assertIn("The output is a decision, not another tab.", self.html)
         self.assertIn("supplied public HTML with an optional HTTPS URL context", self.html)
         self.assertNotIn("public source path receives only deliberate, non-sensitive queries or IDs", self.html)
@@ -134,7 +134,7 @@ class ToolsStudioContractTests(unittest.TestCase):
         self.assertEqual(toggle.get("aria-pressed"), "false")
         self.assertIn("hidden", toggle, "the pause affordance should appear only after JS initializes it")
         self.assertIn("Pause illustration", self.html)
-        self.assertIn("Pipeline illustration · public counters below update live", self.html)
+        self.assertIn("From source records to a working brief.", self.html)
         self.assertIn('data-factory-playing="true"', self.html)
         self.assertIn('data-factory-visible="false"', self.html)
         publish_button = re.search(

@@ -1,6 +1,6 @@
 # Base2026 Visual System Contract
 
-Last updated: 2026-08-28
+Last updated: 2026-09-06 (Source Laboratory published and verified)
 Authority: `b26-independent-v1`
 
 ## Rule
@@ -19,6 +19,8 @@ The final design authority is:
 - `templates/base2026-startup-header.html` and
   `templates/base2026-startup-footer.html` — the only public header/footer;
 - `templates/base2026-startup-homepage.html/.css` — homepage content/layout;
+- `templates/base2026-source-lab.js` and the pinned local GSAP core /
+  ScrollTrigger assets — progressive illustration and navigation behavior;
 - `scripts/build-base2026-cloudflare-release.py` — the only production release
   boundary that may normalize retained generated pages;
 - the builder tests and design-authority gate — release blockers, not optional
@@ -58,6 +60,20 @@ shell or palette.
   overflow at 390px;
 - no visual change is complete until desktop and mobile screenshots, DOM
   checks, console checks, search/API checks and the release receipt pass.
+
+## Source Laboratory presentation
+
+The owner-authorized release keeps the independent palette and typography.
+Use a compact grouped navigation, a source-oriented hero, clear editorial
+rows and calm working forms. Context, attribution and unknowns remain visible.
+The conceptual paper/prism/action artwork is separate from measured data.
+
+Motion is an enhancement: a finite source-to-excerpt-to-action sequence and
+natural scroll progress on its explanatory section. Headlines, forms, results
+and member data remain readable without JavaScript. Respect reduced motion;
+pause offscreen or in a hidden tab, preserve an explicit user pause across
+breakpoints and bfcache, and offer Pause, Resume and Replay. No scroll locking,
+pinning, snapping, infinite loops or progress claims based on illustrations.
 
 ## Forbidden regression markers
 

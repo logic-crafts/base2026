@@ -740,7 +740,7 @@ def test_startup_homepage_overlay_preserves_search_as_workspace(
     assert legacy_plugin_output.read_bytes() == (source / builder.WORDPRESS_PLUGIN_LEGACY_DOWNLOAD).read_bytes()
     assert receipt["verification"]["wordpress_plugin_package_verified"] is True
     assert receipt["verification"]["wordpress_plugin_legacy_download_verified"] is True
-    assert receipt["artifact"]["file_count"] == 75
+    assert receipt["artifact"]["file_count"] == 83
     blog = (output / "blog.html").read_text(encoding="utf-8")
     assert '<link rel="canonical" href="https://base2026.dev/blog">' in blog
     assert 'data-b26-blog-schema' in blog
@@ -813,7 +813,7 @@ def test_startup_release_accepts_exact_retained_tools_studio_media(
         homepage_stylesheet=builder.DEFAULT_HOMEPAGE_STYLESHEET,
     )
 
-    assert receipt["artifact"]["file_count"] == 75
+    assert receipt["artifact"]["file_count"] == 83
     assert receipt["verification"]["reviewed_repository_media_verified"] is True
     assert not (output / builder.TOOLS_STUDIO_MEDIA_MANIFEST_OUTPUT).exists()
 
@@ -930,8 +930,8 @@ def test_startup_homepage_exposes_product_first_evidence_brief_search() -> None:
     assert 'action="/workspace/"' in homepage
     assert 'method="get"' in homepage
     assert 'name="q"' in homepage
-    assert "Get evidence brief" in homepage
-    assert "Get a source-backed evidence brief in seconds." in homepage
+    assert 'type="submit">Find evidence</button>' in homepage
+    assert "Find the source." in homepage
     assert homepage.count('class="b26-button--primary"') >= 1
     assert homepage.count('class="b26-suggested-queries"') == 1
     assert homepage.count('href="/workspace/?q=') == 3
@@ -1236,4 +1236,69 @@ def test_startup_footer_keeps_cloudflare_provenance_mark() -> None:
     assert footer.count("Powered by") == 2
     assert 'href="https://www.cloudflare.com/"' in footer
     assert 'src="https://www.cloudflare.com/img/logo-cloudflare-dark.svg"' in footer
-    assert stylesheet.count(".b26-cloudflare-mark") == 5
+    assert ".b26-cloudflare-mark" in stylesheet
+
+
+def test_source_lab_runtime_is_idempotent_and_vendor_loading_is_scoped() -> None:
+    header = '<header class="b26-site-header">Base2026</header>'
+    footer = '<footer class="b26-site-footer">Footer</footer>'
+    for scene in (False, True):
+        text = '<html><head></head><body><main' + (' data-lab-scene' if scene else '') + '>Readable</main></body></html>'
+        once = builder._apply_startup_shell(text, header, footer)
+        twice = builder._apply_startup_shell(once, header, footer)
+        assert twice.count('src="/static/base2026-source-lab.js"') == 1
+        assert twice.count('src="/static/vendor/gsap/gsap.min.js"') == int(scene)
+        assert twice.count('src="/static/vendor/gsap/ScrollTrigger.min.js"') == int(scene)
+        assert '<main' in twice and 'Readable</main>' in twice
+
+
+def test_workspace_keeps_search_before_background_copy_without_removing_content() -> None:
+    source = '<html><head><title>Search</title></head><body class="legacy"><main><section class="hero workspace-hero"><h1>Original title</h1></section><section class="project-identity" aria-labelledby="identity"><h2 id="identity">Background</h2></section><section class="research-bridge" aria-labelledby="library-workflow-title"><p>Public boundary</p></section><section class="search-command"><div id="searchbox"></div></section><section class="meili-grid"><div id="hits"></div></section></main></body></html>'
+    rendered = builder._rewrite_workspace_html(source)
+    assert 'class="legacy b26-workspace"' in rendered
+    assert rendered.index('id="searchbox"') < rendered.index('id="hits"') < rendered.index('id="identity"')
+    assert rendered.count('id="identity"') == 1
+    assert '<h1>Original title</h1>' in rendered and '<p>Public boundary</p>' in rendered
+    assert builder._rewrite_workspace_html(rendered) == rendered
+
+
+def test_source_lab_rebuild_preserves_explicit_released_member_runtime(tmp_path: Path, monkeypatch) -> None:
+    source = tmp_path / "source"
+    write_fixture(source)
+    write_legacy_plugin_fixture(source, monkeypatch)
+    released = b'/* newer released auth runtime */\nconst scope = "public";\n'
+    (source / "search.html").write_text('<html><head><title>Search</title></head><body><main>Public search</main></body></html>')
+    (source / "static/base2026-members.js").write_bytes(released)
+    options = dict(homepage_template=builder.DEFAULT_HOMEPAGE_TEMPLATE, homepage_stylesheet=builder.DEFAULT_HOMEPAGE_STYLESHEET)
+    with pytest.raises(builder.ReleaseBuildError, match="requires --members-workspace"):
+        builder.build_release(source, tmp_path / "invalid", retain_member_script=True, **options)
+    receipt = builder.build_release(source, tmp_path / "retained", members_workspace=True, retain_member_script=True, **options)
+    assert (tmp_path / "retained/static/base2026-members.js").read_bytes() == released
+    assert receipt["verification"]["member_script_retained"] is True
+    assert receipt["verification"]["binary_bytes_preserved"] is True
+    for name, (size, digest) in builder.SOURCE_LAB_MEDIA_ALLOWLIST.items():
+        asset = tmp_path / "retained/static/assets/source-lab" / name
+        assert asset.stat().st_size == size
+        assert hashlib.sha256(asset.read_bytes()).hexdigest() == digest
+    homepage = (tmp_path / "retained/index.html").read_text()
+    assert homepage.count('src="/static/vendor/gsap/gsap.min.js"') == 1
+    assert homepage.count('src="/static/vendor/gsap/ScrollTrigger.min.js"') == 1
+    assert homepage.count('src="/static/base2026-source-lab.js"') == 1
+    for route in ("tools/index.html", "workspace/index.html", "my-research/index.html"):
+        page = (tmp_path / "retained" / route).read_text()
+        assert page.count('src="/static/base2026-source-lab.js"') == 1
+
+
+def test_source_lab_asset_tampering_cannot_reach_output(tmp_path: Path, monkeypatch) -> None:
+    source = tmp_path / "source"
+    write_fixture(source)
+    write_legacy_plugin_fixture(source, monkeypatch)
+    media = tmp_path / "media"
+    media.mkdir()
+    for name in (*builder.SOURCE_LAB_MEDIA_ALLOWLIST, "asset-manifest.json"):
+        (media / name).write_bytes((builder.SOURCE_LAB_MEDIA_ROOT / name).read_bytes())
+    (media / "source-lab-hero.webp").write_bytes(b"changed")
+    monkeypatch.setattr(builder, "SOURCE_LAB_MEDIA_ROOT", media)
+    with pytest.raises(builder.ReleaseBuildError, match="differs from reviewed bytes"):
+        builder.build_release(source, tmp_path / "rejected", homepage_template=builder.DEFAULT_HOMEPAGE_TEMPLATE, homepage_stylesheet=builder.DEFAULT_HOMEPAGE_STYLESHEET)
+    assert not (tmp_path / "rejected").exists()

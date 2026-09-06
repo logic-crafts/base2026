@@ -1,0 +1,31 @@
+{
+  "schema": "base2026.source-lab-media.v1",
+  "provenance": {
+    "artifact": "Base2026 Source Laboratory hero v1",
+    "status": "HQ-accepted owner-authorized product artwork",
+    "processing": "Responsive WebP encodes preserve the full supplied composition; no creative alteration or crop.",
+    "source_filename": "base2026-source-lab-hero-v1.png"
+  },
+  "assets": [
+    {
+      "file": "source-lab-hero.webp",
+      "path": "/static/assets/source-lab/source-lab-hero.webp",
+      "width": 1440,
+      "height": 810,
+      "format": "image/webp",
+      "quality": 88,
+      "bytes": 47562,
+      "sha256": "ccdc2dca2f1711c19bbc31484437ce454c8d9d61a381af1d425b64e26fb39087"
+    },
+    {
+      "file": "source-lab-hero-mobile.webp",
+      "path": "/static/assets/source-lab/source-lab-hero-mobile.webp",
+      "width": 840,
+      "height": 473,
+      "format": "image/webp",
+      "quality": 88,
+      "bytes": 19926,
+      "sha256": "af0bb1bbf6cbb1c70ce5f11ba0dd556394ec5bda85b6ad9c615763b060c7176d"
+    }
+  ]
+}

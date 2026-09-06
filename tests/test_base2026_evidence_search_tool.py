@@ -4,16 +4,17 @@ import json
 import re
 from pathlib import Path
 
-from test_build_base2026_cloudflare_release import builder, write_fixture
+from test_build_base2026_cloudflare_release import builder, write_fixture, write_legacy_plugin_fixture
 
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def test_evidence_search_build_is_additive_and_indexable(tmp_path: Path) -> None:
+def test_evidence_search_build_is_additive_and_indexable(tmp_path: Path, monkeypatch) -> None:
     source = tmp_path / "source-web"
     output = tmp_path / "release"
     write_fixture(source)
+    write_legacy_plugin_fixture(source, monkeypatch)
     (source / "index.html").write_text(
         (source / "index.html").read_text(encoding="utf-8").replace(
             "/wp-admin/admin-post.php", "/support.html"
