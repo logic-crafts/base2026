@@ -1,5 +1,16 @@
 # Prompt Log
 
+## 2026-09-06 — Preserve truthful reviewer receipts through the target relay
+
+Completed the remaining target-relay compatibility for Astra-reviewed
+editorial packets. The relay accepts only the two approved reviewer values
+and returns the original receipt identity through publish, inspect and replay.
+Eleven relay contract tests, typechecking and the same tests against the exact
+patched active bundle passed. HQ verified the first resulting article through
+the signed publisher and public HTML/API/blog/RSS/sitemap; all legacy receipts
+remain intact. No auth, nonce, privacy, revision or hash gate was weakened.
+
+
 ## 2026-09-06 — Preserve the actual editorial reviewer
 
 The owner assigned architecture and review to Astra and routine execution to

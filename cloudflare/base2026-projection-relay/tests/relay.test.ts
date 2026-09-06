@@ -15,7 +15,13 @@ import {
   type RelayEnvironment,
   type RelayOperation,
 } from "../src/relay";
-import { validateEditorialPacket, validateEditorialPayload } from "../src/editorial-contract";
+import {
+  validateEditorialPacket,
+  validateEditorialPayload,
+  type EditorialReview,
+} from "../src/editorial-contract";
+
+type EditorialReviewer = EditorialReview["reviewer"];
 
 const SECRET = "cross-account-relay-test-secret-cross-account-relay";
 const NOW_MS = Date.parse("2026-09-04T00:00:00.000Z");
@@ -222,7 +228,12 @@ function targetStub(overrides: Partial<ProjectionTargetRpc> = {}): ProjectionTar
       calls.push({ method: "publishEditorialArticle", args: [input, overwrite] });
       const checked = await validateEditorialPacket(input, new Date(NOW_MS).toISOString());
       if (!checked.ok) throw new Error("test editorial target fixture invalid");
-      return { ok: true, status: "published", receipt: editorialReceipt(checked.payload_sha256), diagnostics: editorialDiagnostics() };
+      return {
+        ok: true,
+        status: "published",
+        receipt: editorialReceipt(checked.payload_sha256, checked.review.reviewer, checked.payload.slug),
+        diagnostics: editorialDiagnostics(),
+      };
     },
     inspectEditorialArticle: async (slug) => { calls.push({ method: "inspectEditorialArticle", args: [slug] }); return { ok: false, code: "NOT_FOUND" }; },
     ...overrides,
@@ -241,34 +252,31 @@ function editorialDiagnostics() {
   };
 }
 
-let editorialPacketPromise: Promise<Record<string, unknown>> | undefined;
-function editorialPacket(): Promise<Record<string, unknown>> {
-  editorialPacketPromise ??= (async () => {
-    const checked = await validateEditorialPayload(EDITORIAL_PAYLOAD, new Date(NOW_MS).toISOString());
-    if (!checked.ok) throw new Error("test editorial fixture invalid");
-    return {
-      payload: EDITORIAL_PAYLOAD,
-      review: {
-        reviewer: "sol-max",
-        outcome: "pass",
-        reviewed_at: "2026-09-03T00:00:00.000Z",
-        payload_sha256: checked.payload_sha256,
-      },
-    };
-  })();
-  return editorialPacketPromise;
+async function editorialPacket(reviewer: EditorialReviewer = "sol-max", slug = EDITORIAL_PAYLOAD.slug): Promise<Record<string, unknown>> {
+  const payload = slug === EDITORIAL_PAYLOAD.slug ? EDITORIAL_PAYLOAD : { ...EDITORIAL_PAYLOAD, slug };
+  const checked = await validateEditorialPayload(payload, new Date(NOW_MS).toISOString());
+  if (!checked.ok) throw new Error("test editorial fixture invalid");
+  return {
+    payload,
+    review: {
+      reviewer,
+      outcome: "pass",
+      reviewed_at: "2026-09-03T00:00:00.000Z",
+      payload_sha256: checked.payload_sha256,
+    },
+  };
 }
 
-function editorialReceipt(payloadSha256 = "f".repeat(64)) {
+function editorialReceipt(payloadSha256 = "f".repeat(64), reviewer: EditorialReviewer = "sol-max", slug = "relay-contract-note") {
   return {
     schema_version: "base2026.editorial-publication-receipt.v1",
-    slug: "relay-contract-note",
+    slug,
     revision: 1,
     payload_sha256: payloadSha256,
-    public_path: "/blog/relay-contract-note/",
+    public_path: `/blog/${slug}/`,
     published_at: "2026-09-03T00:00:00.000Z",
     updated_at: "2026-09-03T00:00:00.000Z",
-    reviewer: "sol-max",
+    reviewer,
     reviewed_at: "2026-09-03T00:00:00.000Z",
     recorded_at: "2026-09-04T00:00:00.000Z",
   };
@@ -441,6 +449,170 @@ describe("base2026 target-account projection relay", () => {
     expect(target.calls).toHaveLength(2);
     expect(runtime.db.nonces.size).toBe(1);
     expect(runtime.db.audits).toHaveLength(2);
+  });
+
+  it("forwards both reviewer values and preserves the original receipt across fresh-nonce replay and inspect", async () => {
+    const receipts = new Map<string, ReturnType<typeof editorialReceipt>>();
+    const rpcCalls: string[] = [];
+    const target = targetStub({
+      publishEditorialArticle: async (input) => {
+        rpcCalls.push("publishEditorialArticle");
+        const checked = await validateEditorialPacket(input, new Date(NOW_MS).toISOString());
+        if (!checked.ok) throw new Error("test editorial target fixture invalid");
+        const existing = receipts.get(checked.payload.slug);
+        const stored = existing ?? editorialReceipt(checked.payload_sha256, checked.review.reviewer, checked.payload.slug);
+        if (!existing) receipts.set(checked.payload.slug, stored);
+        return {
+          ok: true,
+          status: existing ? "already_published" : "published",
+          receipt: stored,
+          diagnostics: editorialDiagnostics(),
+        };
+      },
+      inspectEditorialArticle: async (slug) => {
+        rpcCalls.push("inspectEditorialArticle");
+        const stored = receipts.get(slug);
+        return stored ? { ok: true, receipt: stored } : { ok: false, code: "NOT_FOUND" };
+      },
+    });
+    const runtime = env(target);
+    const cases: Array<{
+      reviewer: EditorialReviewer;
+      slug: string;
+      idempotencyKey: string;
+      publishNonce: string;
+      replayNonce: string;
+      inspectNonce: string;
+    }> = [
+      {
+        reviewer: "sol-max",
+        slug: "relay-contract-note",
+        idempotencyKey: "1".repeat(40),
+        publishNonce: "nonce-editorial-sol-publish-01",
+        replayNonce: "nonce-editorial-sol-replay-01",
+        inspectNonce: "nonce-editorial-sol-inspect-01",
+      },
+      {
+        reviewer: "gpt-6-astra",
+        slug: "relay-contract-note-astra",
+        idempotencyKey: "2".repeat(40),
+        publishNonce: "nonce-editorial-astra-publish-01",
+        replayNonce: "nonce-editorial-astra-replay-01",
+        inspectNonce: "nonce-editorial-astra-inspect-01",
+      },
+    ];
+
+    let originalSolReceipt: Record<string, unknown> | undefined;
+    for (const current of cases) {
+      const packet = await editorialPacket(current.reviewer, current.slug);
+      const published = await handleRelayRequest(await signedRequest("editorial_publish", { packet }, {
+        nonce: current.publishNonce,
+        idempotencyKey: current.idempotencyKey,
+      }), runtime, NOW_MS);
+      expect(published.status).toBe(200);
+      const publishedResult = (await jsonBody(published)).result as Record<string, unknown>;
+      expect(publishedResult.status).toBe("published");
+      const originalReceipt = publishedResult.receipt as Record<string, unknown>;
+      expect(originalReceipt.reviewer).toBe(current.reviewer);
+      if (current.reviewer === "sol-max") originalSolReceipt = originalReceipt;
+
+      const replayed = await handleRelayRequest(await signedRequest("editorial_publish", { packet }, {
+        nonce: current.replayNonce,
+        idempotencyKey: current.idempotencyKey,
+      }), runtime, NOW_MS);
+      expect(replayed.status).toBe(200);
+      const replayedResult = (await jsonBody(replayed)).result as Record<string, unknown>;
+      expect(replayedResult.status).toBe("already_published");
+      expect(replayedResult.receipt).toEqual(originalReceipt);
+
+      const inspected = await handleRelayRequest(await signedRequest("editorial_inspect", { slug: current.slug }, {
+        nonce: current.inspectNonce,
+        idempotencyKey: `${Number(current.idempotencyKey[0]) + 2}`.repeat(40),
+      }), runtime, NOW_MS);
+      expect(inspected.status).toBe(200);
+      const inspectedResult = (await jsonBody(inspected)).result as Record<string, unknown>;
+      expect(inspectedResult.receipt).toEqual(originalReceipt);
+    }
+
+    const astraPacketForSolReceipt = await editorialPacket("gpt-6-astra", "relay-contract-note");
+    const astraReplayOfSol = await handleRelayRequest(await signedRequest("editorial_publish", { packet: astraPacketForSolReceipt }, {
+      nonce: "nonce-editorial-sol-legacy-astra-01",
+      idempotencyKey: "8".repeat(40),
+    }), runtime, NOW_MS);
+    expect(astraReplayOfSol.status).toBe(200);
+    const astraReplayResult = (await jsonBody(astraReplayOfSol)).result as Record<string, unknown>;
+    expect(astraReplayResult.status).toBe("already_published");
+    expect(astraReplayResult.receipt).toEqual(originalSolReceipt);
+
+    const legacySolPacket = await editorialPacket("sol-max", "relay-contract-note-astra");
+    const legacyReplay = await handleRelayRequest(await signedRequest("editorial_publish", { packet: legacySolPacket }, {
+      nonce: "nonce-editorial-astra-legacy-sol-01",
+      idempotencyKey: "7".repeat(40),
+    }), runtime, NOW_MS);
+    expect(legacyReplay.status).toBe(200);
+    const legacyResult = (await jsonBody(legacyReplay)).result as Record<string, unknown>;
+    expect(legacyResult.status).toBe("already_published");
+    expect((legacyResult.receipt as Record<string, unknown>).reviewer).toBe("gpt-6-astra");
+    expect(rpcCalls).toEqual([
+      "publishEditorialArticle", "publishEditorialArticle", "inspectEditorialArticle",
+      "publishEditorialArticle", "publishEditorialArticle", "inspectEditorialArticle",
+      "publishEditorialArticle",
+      "publishEditorialArticle",
+    ]);
+    expect(runtime.db.nonces.size).toBe(8);
+    expect(runtime.db.audits).toHaveLength(8);
+  });
+
+  it("rejects an unsupported packet reviewer before RPC and rejects unsupported publish and inspect receipts", async () => {
+    const validPacket = await editorialPacket("sol-max");
+    const unsupportedPacket = {
+      ...validPacket,
+      review: { ...(validPacket.review as Record<string, unknown>), reviewer: "luna-max" },
+    };
+    const target = targetStub();
+    const runtime = env(target);
+    const packetResponse = await handleRelayRequest(await signedRequest("editorial_publish", { packet: unsupportedPacket }, {
+      nonce: "nonce-editorial-invalid-packet-01",
+    }), runtime, NOW_MS);
+    expect(packetResponse.status).toBe(400);
+    expect((await jsonBody(packetResponse)).code).toBe("relay_editorial_packet_invalid");
+    expect(target.calls).toHaveLength(0);
+    expect(runtime.db.batchCalls).toBe(0);
+
+    const publishCalls: unknown[] = [];
+    const invalidPublishTarget = targetStub({
+      publishEditorialArticle: async (input) => {
+        publishCalls.push(input);
+        const checked = await validateEditorialPacket(input, new Date(NOW_MS).toISOString());
+        if (!checked.ok) throw new Error("test editorial target fixture invalid");
+        return {
+          ok: true,
+          status: "published",
+          receipt: { ...editorialReceipt(checked.payload_sha256), reviewer: "luna-max" },
+          diagnostics: editorialDiagnostics(),
+        };
+      },
+    });
+    const invalidPublishResponse = await handleRelayRequest(await signedRequest("editorial_publish", { packet: validPacket }, {
+      nonce: "nonce-editorial-invalid-publish-receipt-01",
+    }), env(invalidPublishTarget), NOW_MS);
+    expect(invalidPublishResponse.status).toBe(502);
+    expect((await jsonBody(invalidPublishResponse)).code).toBe("relay_editorial_receipt_mismatch");
+    expect(publishCalls).toHaveLength(1);
+
+    const inspectCalls: string[] = [];
+    const invalidInspectTarget = targetStub({
+      inspectEditorialArticle: async (slug) => {
+        inspectCalls.push(slug);
+        return { ok: true, receipt: { ...editorialReceipt(), reviewer: "luna-max" } };
+      },
+    });
+    const invalidInspectResponse = await handleRelayRequest(await signedRequest("editorial_inspect", { slug: "relay-contract-note" }, {
+      nonce: "nonce-editorial-invalid-inspect-receipt-01",
+    }), env(invalidInspectTarget), NOW_MS);
+    expect(invalidInspectResponse.status).toBe(502);
+    expect((await jsonBody(invalidInspectResponse)).code).toBe("relay_editorial_receipt_mismatch");
+    expect(inspectCalls).toEqual(["relay-contract-note"]);
   });
 
   it("maps all four projection RPC operations and both editorial operations", async () => {

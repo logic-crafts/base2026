@@ -116,6 +116,8 @@ interface ValidatedRelayPayload {
   editorial?: EditorialForwardMetadata;
 }
 
+type EditorialReviewer = "sol-max" | "gpt-6-astra";
+
 interface EditorialReceipt {
   schema_version: "base2026.editorial-publication-receipt.v1";
   slug: string;
@@ -124,7 +126,7 @@ interface EditorialReceipt {
   public_path: string;
   published_at: string;
   updated_at: string;
-  reviewer: "sol-max";
+  reviewer: EditorialReviewer;
   reviewed_at: string;
   recorded_at: string;
 }
@@ -454,7 +456,8 @@ function editorialReceipt(value: unknown, slug: string, kind?: EditorialForwardM
   exactKeys(value, ["schema_version", "slug", "revision", "payload_sha256", "public_path", "published_at", "updated_at", "reviewer", "reviewed_at", "recorded_at"], [], "relay_editorial_receipt_invalid");
   const path = kind === "evidence_guide" ? `/topics/${slug}` : `/blog/${slug}/`;
   if (value.schema_version !== "base2026.editorial-publication-receipt.v1"
-    || value.slug !== slug || value.public_path !== path || value.reviewer !== "sol-max"
+    || value.slug !== slug || value.public_path !== path
+    || (value.reviewer !== "sol-max" && value.reviewer !== "gpt-6-astra")
     || typeof value.revision !== "number" || !Number.isSafeInteger(value.revision) || value.revision < 1
     || (revision !== undefined && value.revision !== revision)
     || typeof value.payload_sha256 !== "string" || !HASH_PATTERN.test(value.payload_sha256)
@@ -473,7 +476,7 @@ function editorialReceipt(value: unknown, slug: string, kind?: EditorialForwardM
     public_path: path,
     published_at: publishedAt,
     updated_at: updatedAt,
-    reviewer: "sol-max",
+    reviewer: value.reviewer,
     reviewed_at: reviewedAt,
     recorded_at: recordedAt,
   };

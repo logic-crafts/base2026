@@ -8,13 +8,15 @@ The active product phase remains Phase 29.
    releases must retain the current member script, both WordPress downloads,
    public/private boundaries and the newer private auth implementation.
    The source checkout's default asset path is not a deployment baseline.
-2. HQ is integrating truthful Astra reviewer compatibility through the existing
-   publisher. Public runtime and receipt migration are verified; preserve all
-   legacy Sol receipts and use a compatible private ingress before the next
-   reviewed article. Growth continues fitting free-channel
-   distribution through the existing editorial workflow. Recheck published
-   slugs and prior sends before acting. The branded YouTube channel and three
-   Shorts are delivered; do not duplicate those uploads.
+2. Truthful Astra reviewer compatibility is verified through the existing
+   publisher, private ingress and target relay. Preserve the accepted reviewer
+   values and all legacy receipts; a replay returns the original reviewer.
+   The [source-diversity article](https://base2026.dev/blog/five-links-one-creator-source-diversity-brief/)
+   is published and verified in the public API, blog, RSS and sitemap.
+   Growth continues fitting free-channel distribution through the existing
+   editorial workflow. Recheck published slugs and prior sends before acting.
+   The branded YouTube channel and three Shorts are delivered; do not duplicate
+   those uploads.
 3. Continue WordPress.org submission when its official form is available,
    and seek actual external installation feedback. The released manual-install
    beta and local validation are not directory approval or outside adoption.
