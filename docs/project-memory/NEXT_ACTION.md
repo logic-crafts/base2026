@@ -1,35 +1,37 @@
 # Next Action
 
-Checkpoint: 2026-09-06 — the agency correction is published and verified.
-Continue from the [agency correction handoff](HANDOFF_2026-09-06_AGENCY_CORRECTION.md).
-The earlier [Source Laboratory release](HANDOFF_2026-09-06_SOURCE_LAB.md)
-is retained as history. The active product phase remains Phase 29.
+Checkpoint: 2026-09-06 — the product experience release is live and verified.
+Continue from the [release handoff](HANDOFF_2026-09-06_PRODUCT_EXPERIENCE.md).
+The active product phase remains Phase 29.
 
-1. Preserve the accepted correction artifact and combined private runtime.
-   The released version is `f200b4b7-87b6-4174-a87e-c0d6eea69947`.
-   Keep the shared b26 identity, complete Blog and Topics discovery, finite
-   motion lifecycle, current member script, both WordPress ZIPs, bindings,
-   auth implementation and PR63/64 reviewer compatibility. Continue the
-   existing AgencyOS build/distribution/observation loop; next media
-   preproduction covers Page Source Check. The public checkout's default
-   asset path is not a deployment baseline.
-2. Truthful Astra reviewer compatibility is verified through the existing
-   publisher, private ingress and target relay. Preserve the accepted reviewer
-   values and all legacy receipts; a replay returns the original reviewer.
-   The [source-diversity article](https://base2026.dev/blog/five-links-one-creator-source-diversity-brief/)
-   is published and verified in the public API, blog, RSS and sitemap.
-   Growth continues fitting free-channel distribution through the existing
-   editorial workflow. Recheck published slugs and prior sends before acting.
-   The branded YouTube channel and three Shorts are delivered; do not duplicate
-   those uploads.
-3. Continue WordPress.org submission when its official form is available,
-   and seek actual external installation feedback. The released manual-install
-   beta and local validation are not directory approval or outside adoption.
-4. Measure useful external actions and repeat use. Our release QA, source
-   inventory and submitted catalog PRs are separate from those outcomes.
-5. Chief maintains the existing AgencyOS registry; HQ owns integration and
-   release. Reuse current departments, browser ownership and the supervisor.
-   Routine workers use Luna/max; architecture and review remain Astra-owned.
+1. Preserve the published Astra/max Founder, navigation and social-footer
+   redesign and the accepted combined private runtime. Current Worker:
+   `138e8cd6-b85b-49e6-9d59-e7ca370412e4`. Keep shared navigation,
+   attributed examples, Blog/Topics discovery, source-catalog shell validation,
+   member assets, both WordPress ZIPs, bindings and auth. A public checkout's
+   default asset directory is not a deployment baseline.
+2. Continue the existing AgencyOS execution loop: accept a useful assignment,
+   produce its concrete result, verify it, then assign one eligible successor.
+   The local 3D factory consumes the same registry; its public counterpart is
+   a fixed scenario. Do not publish private adapters or operational snapshots.
+3. Advance the next approved Page Source Check media episode from its existing
+   preproduction evidence. Continue fitting distribution and the scheduled
+   observation of the already-published videos/article. Recheck prior sends
+   and exact source URLs before any external action; do not repeat uploads.
+4. Use the completed Pipeline source-type capability analysis to bound future
+   work: TikTok is the implemented source lane; YouTube and generic text need
+   separate implementation and evidence. Preserve the normal discovery schedule
+   and packet-based Creator admission. Do not rearm held work to create volume.
+5. Measure external tool actions, repeat use and concrete practitioner feedback.
+   Test the proposed small-SEO-practice workflow against actual demand and
+   delivery cost. Keep free tools available and label commercial hypotheses.
+6. Continue WordPress.org submission when its official form becomes available,
+   and obtain outside installation feedback. The downloadable manual-install
+   beta, local tests and catalog submissions are distinct outcomes.
 
-Earlier Studio source checkpoints remain in their dated handoffs. Do not
-resume the closed auth recovery or redeploy an older runtime from them.
+Chief maintains the existing AgencyOS registry; HQ owns integration/release.
+Routine workers use Luna/max. Astra/max owns design, architecture, engineering
+and their review; ordinary supervision uses Astra/medium, with bounded
+intermediate analysis on Sol/medium or Terra/medium. Preserve
+current browser ownership, departments and supervisor; do not create a second
+queue or restart the closed login recovery from a dated handoff.

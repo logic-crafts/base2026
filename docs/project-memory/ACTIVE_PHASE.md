@@ -1,21 +1,26 @@
 # Active Phase
 
-Phase 29 — applied research and free product adoption.
-Checkpoint: 2026-09-06, after the Source Laboratory production release.
+The Astra/max Founder, navigation and social-footer redesign is published
+and verified on desktop and mobile. Its original artwork and public case
+captures are pinned in the release builder.
 
-The [current release](HANDOFF_2026-09-06_SOURCE_LAB.md) completes the shared
-site redesign and preserves the working tools, accepted auth and WordPress
-beta. The branded YouTube channel and three voiced Shorts are delivered.
+Phase 29 — applied research and free product adoption.
+Checkpoint: 2026-09-06, after the product experience production release.
+
+The [current release](HANDOFF_2026-09-06_PRODUCT_EXPERIENCE.md) delivers the
+source-linked homepage, shared mega-menu and mobile navigation, investor
+explanation, roadmap, methodology, source policy and public 3D scenario.
+The private local factory reads the existing AgencyOS operational state.
+The tools, auth, WordPress beta, branded YouTube channel, three voiced videos
+on both current video channels and source-diversity article are preserved.
 
 The next outcomes are useful external tool actions, concrete feedback and
-repeat use. Growth continues the original article and fitting free-channel
-distribution; Directories follows submitted entries without duplicate sends;
-WordPress.org submission and externally verified installation remain separate
-from the released manual-install beta. The supplied-HTML checker does not
-complete arbitrary live-URL auditing.
+repeat use. The proposed SEO-practice pilot must establish actual demand and
+delivery costs. Growth continues existing distribution and observation;
+Media prepares the next accepted demonstration; Creator and Pipeline retain
+existing admission and source-processing boundaries. Do not duplicate sends,
+uploads, prior intake or completed auth recovery.
 
-The department structure is unchanged: Astra owns architecture, decisions
-and review; routine workers use Luna/max. Chief maintains the one existing
-AgencyOS registry. HQ integrates and verifies production. Continue from
-[NEXT_ACTION.md](NEXT_ACTION.md); completed auth recovery and old deployment
-waits must not be restarted from dated history.
+Astra owns architecture, decisions and review; routine workers use Luna/max.
+Chief maintains the single AgencyOS registry. HQ integrates and verifies
+production. [NEXT_ACTION.md](NEXT_ACTION.md) carries the next concrete work.

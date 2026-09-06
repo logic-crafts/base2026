@@ -243,8 +243,8 @@ describe("editorial HTML and public DTO integration", () => {
     expect(html.match(/<h1(?:\s|>)/gu)).toHaveLength(1);
     expect(html.match(/<link rel="canonical"/gu)).toHaveLength(1);
     expect(html).toContain('<link rel="canonical" href="https://base2026.dev/blog">');
-    expect(html.match(/class="b26-site-header"/gu)).toHaveLength(1);
-    expect(html.match(/class="b26-site-footer"/gu)).toHaveLength(1);
+    expect(html.match(/class="b26-site-header(?:\s[^"]*)?"/gu)).toHaveLength(1);
+    expect(html.match(/class="b26-site-footer(?:\s[^"]*)?"/gu)).toHaveLength(1);
     expect(html).not.toContain("{{");
     expect(schemaFrom(html)["@graph"].map((node) => node["@type"])).toEqual(["CollectionPage", "Blog"]);
     expect(db.batchCalls).toBe(0);

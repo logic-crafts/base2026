@@ -1,71 +1,85 @@
 # Base2026 Roadmap
 
-Base2026 is a working open-source video research engine at
-<https://base2026.dev/>. This roadmap describes verified product outcomes, not
-fundraising, traction or ranking promises.
+Base2026 is a free, open-source research product at
+<https://base2026.dev/>. It connects a professional question to selected
+public practitioner videos, attributed searchable passages, original links and
+source context. Selection improves retrieval and context; it does not certify
+that a recommendation or claim is true.
 
-## Live
+This roadmap describes the public product sequence and its hypotheses. It is
+not a deployment receipt, a fundraising statement, a traction report, a ranking
+promise or a funding guarantee.
 
-- the complete public product on Cloudflare Workers Static Assets;
-- D1 FTS5 search, public API and a dated machine-readable corpus;
-- source, creator, topic and comparison discovery surfaces;
-- canonical URLs, sitemaps, structured data and dynamic projected-source pages;
-- methodology, attribution, correction/removal and privacy boundaries;
-- a private Cloudflare Workers/D1/R2/Queues/Workflows/Workers AI evidence lane;
-- automatic, receipt-gated publication of sanitized excerpt cards only;
-- public JSONL, dataset landing page, machine-readable catalog, API quickstart,
-  data dictionary, API index, `llms.txt` and GitHub source;
-- an enrichment registry in `data/base2026_topic_traffic_pages.json`;
-  configuration, evidence support, published routes and indexing are separate
-  checks. One orphan entry with unsuitable evidence was retired on August31;
-  the other 59 entries were preserved, not newly certified by this cleanup;
-- Google Search Console and Bing Webmaster Tools connections.
-- a reviewed original blog with durable D1 revisions, RSS and article sitemap;
-- maintained task guides on existing topic canonicals, with exact public
-  evidence dependencies, separate guide API/sitemap and drift holds;
-- five independently reviewed task guides and live receipt-backed source
-  navigation, preserving the existing legacy selection.
+## Now — Free evidence search and tools
 
-## Now
+- Improve Evidence Search, Source Diversity Check, Source-backed Brief,
+  navigation, mobile use, source explanations, attribution and correction
+  paths.
+- Keep the free WordPress Evidence Sidebar, public API and stateless read-only
+  MCP interface available as current developer surfaces. MCP is part of the
+  product surface, not a future roadmap item.
+- Keep selected public practitioner material searchable as attributed passages
+  with original links and context. The founder and team select creators for
+  practical relevance, usefulness and provenance; Base2026 does not accept
+  paid creator placement or creator applications.
+- Preserve the public/private boundary and the correction, removal and source
+  policy paths. The investor overview, public roadmap and authored factory
+  scenario are live; future commercial milestones remain hypotheses.
 
-- monitor discovery, indexation and performance in Google and Bing; GSC processed
-  the new guide sitemap with one discovered page, not a traffic result. The last
-  dated performance observation covers Aug27–28:45 impressions/0 clicks;
-  Bing performance data was still preparing at its last recorded check;
-- operate the five-topic maintained-guide cohort through the existing six-hour
-  editorial office: material evidence changes, separate semantic review and a
-  single sequential data-only publisher. The first recurring run on August 31
-  published four reviewed guides without changing the runtime; all five are live.
-  Two archive-backed articles are published; five blog articles are live as
-  of August31 10:15 UTC. Comparison is complete; two archive candidates remain.
-  Unchanged guides are not republished;
-- keep public counters, D1 projections, canonicals and sitemaps synchronized;
-- review enrichment source support, public routes and search treatment
-  individually; keep unsupported or unresolved additions held;
-- strengthen creator claims, correction tracking and public change history;
-- enforce the single `b26-independent-v1` visual authority in every release.
+## Next — Repeatable professional workflows
 
-## Next
+- Test a proposed commercial pilot for small SEO practices that repeatedly make
+  client research decisions. The test would examine repeat use, willingness to
+  pay and the effort required to deliver useful research.
+- Keep the hypothesis explicit: it is unproven, with no shipped paid plan and
+  no claim of traction, ROI or funding.
+- Improve provenance labels, public change history, machine-readable manifests
+  and quality benchmarks. Expand maintained workflows only after distinct
+  user jobs and evidence support are clear.
 
-- corpus changelog and machine-readable manifest diffs;
-- read-only MCP contract for source, topic, creator and comparison lookup;
-- better provenance labels and public quality benchmarks;
-- carefully reviewed source expansion where attribution and rights stay clear.
-- expand maintained-guide coverage only after distinct-task/evidence review,
-  without duplicate keyword pages or a publication-volume quota.
+## Exploring — Commercial integrations
 
-## Research
+- Consider additional public source platforms, developer integrations, shared
+  research and paid workflows only after the free product shows repeated use
+  and responsible delivery remains workable.
+- Any future layer must retain useful free access, source attribution,
+  correction rights and the public/private boundary.
 
-- citation-aware answers with visible sources and strict limits;
-- support, partnership or premium research models driven by observed usage;
-- additional public platforms only after policy and acquisition review.
+## Product boundary
+
+The public [`/factory/`](https://base2026.dev/factory/) route is a separate
+English playable authored Scenario. A private local AgencyOS snapshot UI exists
+as an operational view for the project; the AgencyOS database and
+implementation are not published here and are not a separate startup release.
+The scenario and the private operational view do not turn internal operations
+into public product data.
+
+## How progress is judged
+
+- People return to complete another research task.
+- Sources remain attributable, useful and correctable.
+- Professional users identify additional value without requiring recurring
+  bespoke research.
+- Operating cost and editorial effort remain workable at the observed level of
+  use.
+
+Corpus supply, publication activity, QA, directory submissions and accepted
+discovery requests are separate from external use, retention, revenue and
+commercial value.
 
 ## Intentionally out of scope
 
 Base2026 is not a video host, downloader, raw transcript dump, universal TikTok
-index, private-data search engine, real-time brand-monitoring suite or a promise
-of search rankings or AI citations.
+index, private-data search engine, real-time brand-monitoring suite or a
+promise of search rankings, AI citations or recommendation truth. It does not
+currently promise a separate public AgencyOS startup release, paid creator
+placement or creator applications.
 
-The detailed live roadmap and cloud workflow are maintained in
+The detailed technical roadmap and cloud workflow are maintained in
 [`docs/public-pages/01_ROADMAP.md`](docs/public-pages/01_ROADMAP.md) and the
 [`canonical Cloudflare operating manual`](docs/BASE2026_CLOUDFLARE_PIPELINE_CANONICAL_OPERATING_MANUAL.md).
+
+Read the [public roadmap](https://base2026.dev/roadmap),
+[investor overview](https://base2026.dev/investors) and
+[factory scenario](https://base2026.dev/factory/) for the corresponding public
+product pages.

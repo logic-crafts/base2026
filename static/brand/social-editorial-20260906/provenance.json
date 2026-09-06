@@ -1,0 +1,32 @@
+{
+  "schema": "base2026.social-editorial.v1",
+  "asset": "static/brand/social-editorial-20260906/channels-atlas.webp",
+  "bytes": 90644,
+  "sha256": "e4321623622bcaaf396afde39e19a321bbbde60ea7ff56e874a298964dfb0fd4",
+  "width": 1536,
+  "height": 1024,
+  "format": "webp",
+  "generation": "Built-in image generation tool. No model selector was exposed.",
+  "content": "Original six-cell 3D editorial artwork atlas: moving pictures, a flowing ribbon, exchanged ideas, source code, connection, and research. Channel names and existing platform marks remain live HTML and vector assets.",
+  "composition": {
+    "columns": 3,
+    "rows": 2,
+    "cells": [
+      "YouTube artwork",
+      "TikTok artwork",
+      "X artwork",
+      "GitHub artwork",
+      "LinkedIn artwork",
+      "Research menu artwork"
+    ]
+  },
+  "optimization": "Format conversion only: cwebp -q 86 -m 6. No artwork content edits.",
+  "references": [
+    "https://linear.app/homepage",
+    "https://locomotive.ca/en",
+    "https://www.ordinaryfolk.co/"
+  ],
+  "prompt_summary": "Six equally sized square scenes in a 3 by 2 atlas with no gutters, text or logos. Original premium editorial 3D sculpture in cobalt ceramic, frosted optical glass, satin aluminum and chalk-white paper. Cool upper-left daylight and natural contact shadows. Reading order: ceramic play aperture; glass ribbon through a ceramic ring; crossing aluminum and glass ribbons; ceramic parentheses around a glass sphere; connected glass blocks; optical glass annulus, paper and ceramic sphere.",
+  "source_sha256": "cc02c8235793cf8b2d6b5402ba3f8cd15b18e00906767c27efb86f33e01638ec",
+  "prompt": "Create one original premium 3D editorial artwork atlas for the Base2026 research product website footer. This is a production raster texture atlas, not a screenshot or UI mockup. Format: a perfect 3 columns by 2 rows grid of SIX square scenes, exactly equal cell sizes, seamless edge-to-edge panels with NO gutters, NO frames, NO text, NO letters, NO logos, NO watermarks. Landscape 3:2 overall. Each square is an exquisitely art-directed small still-life sculpture photographed like a high-end industrial design magazine. Shared materials: vivid cobalt blue glazed ceramic, frosted pale blue optical glass, satin aluminum, chalk-white paper. Shared lighting: broad cool daylight from upper left, delicate caustics, natural soft shadows, fine material microtexture, gallery-grade realism. Restrained, precise, sophisticated, tactile; no purple, pink, rainbow, cyberpunk, neon glows, sparkle dust, clouds, robots, or generic AI imagery. Each sculpture sits in the middle 65 percent of its square, fully visible with generous surrounding space and a beautiful grounded contact shadow. No pedestals and no ornament. Six scenes in exact reading order: TOP LEFT: a thick cobalt ceramic rounded rectangle with a triangular aperture, hovering gently above a pale cool-white floor, suggesting moving pictures and a play button without being a platform logo. TOP MIDDLE: a sculptural curved strip of frosted glass rising through one cobalt ceramic ring, a dynamic flowing composition on a saturated cobalt backdrop with strong shape contrast. TOP RIGHT: two precise satin aluminum diagonal ribbons passing through each other, one cobalt glass accent slab, on a very pale blue backdrop, suggesting an exchange of ideas without forming a letter. BOTTOM LEFT: two monumental smooth white ceramic parentheses with a cobalt-blue optical glass sphere between them, on a deep navy backdrop, suggesting open-source craft; simple and elegant not an official logo. BOTTOM MIDDLE: a grouping of three offset precision-cut blue glass blocks and one white ceramic horizontal connector on a cool-white background, human connection represented by physical architecture, balanced and sophisticated. BOTTOM RIGHT: a large optical glass annulus beside a folded chalk-white paper sheet, with a cobalt ceramic sphere, on a powder-blue backdrop, quiet intellectual atmosphere. Maintain a coherent camera angle, scale, tonal balance and visual weight in all six cells. The artwork will be shown with separate live HTML channel labels and accurate vector platform marks, so the artwork itself must have absolutely NO typography and NO brand logos. Deliver beautiful professional commercial quality, generous framing, and crisp dimensional material detail."
+}

@@ -1,0 +1,5 @@
+# Preserve upstream license text verbatim; the factory manifest checks its bytes.
+packages/factory3d/public/licenses/*.txt -whitespace
+templates/assets/factory3d/licenses/*.txt -whitespace
+# The pinned generated Three.js bundle contains upstream GLSL string literals.
+templates/assets/factory3d/assets/index-zNYj3I9L.js -whitespace

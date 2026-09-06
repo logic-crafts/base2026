@@ -13,6 +13,16 @@ Date: 2026-06-06
 - `docs/BASE2026_CLOUDFLARE_PIPELINE_CANONICAL_OPERATING_MANUAL.md` after the
   exact staged diff passes redaction and secret review
 - `scripts/`
+- reviewed `templates/base2026-*` UI source and contract tests
+- the three reviewed WebP Founder publication images under
+  `static/assets/founder-editorial-20260906/` and the reviewed social atlas
+  under `static/brand/social-editorial-20260906/`; the builder pins the four
+  exact paths, sizes and hashes and never copies their source directories
+- `packages/factory3d/` public source, authored scenario, tests, package lock,
+  selected licensed models/textures and provenance; exclude dependencies,
+  `dist/`, original ZIPs, private providers, endpoints and snapshot data
+- `templates/assets/factory3d/` exact reviewed 20-file compiled public package
+  plus its hash manifest; the builder rejects extra, changed or private files
 - `scripts/tiktok-source-review-audit.py`
 - the four reviewed UTF-8 source files under `plugins/wordpress/base2026-evidence-sidebar/`
   (`base2026-evidence-sidebar.php`, `assets/editor.js`, `readme.txt`, `LICENSE`)

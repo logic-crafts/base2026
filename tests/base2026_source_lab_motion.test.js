@@ -6,369 +6,497 @@ const vm = require("node:vm");
 
 const source = fs.readFileSync(path.join(__dirname, "..", "templates", "base2026-source-lab.js"), "utf8");
 
-function element(name) {
+function element(name, { hidden = false, textContent = "", innerText = "" } = {}) {
   const listeners = {};
-  return {
+  const classes = new Set();
+  const node = {
     name,
-    hidden: false,
-    textContent: "",
+    hidden,
+    textContent,
+    innerText: innerText || textContent,
     attributes: {},
     open: false,
-    getAttribute(key) { return this.attributes[key] || ""; },
+    tabIndex: 0,
+    focused: 0,
+    style: {
+      removeProperty(property) { delete this[property]; }
+    },
+    classList: {
+      add(...names) { names.forEach((value) => classes.add(value)); },
+      remove(...names) { names.forEach((value) => classes.delete(value)); },
+      contains(value) { return classes.has(value); }
+    },
+    getAttribute(key) { return Object.prototype.hasOwnProperty.call(this.attributes, key) ? this.attributes[key] : null; },
     setAttribute(key, value) { this.attributes[key] = String(value); },
     addEventListener(type, handler) { (listeners[type] ||= []).push(handler); },
     removeEventListener(type, handler) { listeners[type] = (listeners[type] || []).filter((item) => item !== handler); },
-    dispatch(type, event = {}) { (listeners[type] || []).slice().forEach((handler) => handler(event)); },
+    dispatch(type, event = {}) { return (listeners[type] || []).slice().map((handler) => handler(event)); },
     querySelector() { return null; },
     querySelectorAll() { return []; },
-    contains(target) { return target === this; }
+    contains(target) { return target === this; },
+    closest() { return null; },
+    focus() { this.focused += 1; },
+    getClientRects() { return [{ width: 100, height: 30 }]; }
   };
+  return node;
 }
 
-function createGsapHarness(initialConditions, options = {}) {
-  const timelines = [];
-  const entries = [];
-  let latestMedia = null;
+function createMatchMedia({ reduceMotion = false, desktop = true } = {}) {
+  const queries = {};
+  function matchMedia(query) {
+    const listeners = [];
+    const media = {
+      media: query,
+      matches: query.includes("prefers-reduced-motion") ? reduceMotion : query.includes("min-width") ? desktop : false,
+      addEventListener(type, handler) { if (type === "change") listeners.push(handler); },
+      removeEventListener(type, handler) {
+        if (type === "change") {
+          const index = listeners.indexOf(handler);
+          if (index >= 0) listeners.splice(index, 1);
+        }
+      },
+      dispatchChange(matches) {
+        this.matches = matches;
+        listeners.slice().forEach((handler) => handler({ matches, media: query }));
+      }
+    };
+    queries[query] = media;
+    return media;
+  }
+  return { matchMedia, queries };
+}
 
-  function timeline(optionsForTimeline) {
-    let progress = 0;
-    let total = 0;
+function createTimelineHarness() {
+  const timelines = [];
+  const transitions = [];
+
+  function makeTimeline(options) {
     const stats = {
+      calls: [],
       play: 0,
       pause: 0,
       resume: 0,
-      restart: 0,
       killed: 0,
-      steps: [],
+      complete: 0,
+      playing: false,
+      progress: 0,
       timeline: null
     };
-    const fake = {
-      fromTo(target, from, to, at = 0) {
-        const count = Array.isArray(target) ? target.length : 1;
-        const duration = Number(to.duration) || 0;
-        const stagger = Number(to.stagger) || 0;
-        total = Math.max(total, Number(at) + duration + Math.max(0, count - 1) * stagger);
-        stats.steps.push({ type: "fromTo", target, from, to, at: Number(at) });
-        return fake;
+    let duration = 0;
+    const invoked = new Set();
+    const timeline = {
+      call(callback, args = [], at = 0) {
+        const time = Number(at) || 0;
+        duration = Math.max(duration, time);
+        stats.calls.push({ callback, args, at: time });
+        return timeline;
       },
-      to(target, vars, at = 0) {
-        const count = Array.isArray(target) ? target.length : 1;
-        const duration = Number(vars.duration) || 0;
-        const stagger = Number(vars.stagger) || 0;
-        total = Math.max(total, Number(at) + duration + Math.max(0, count - 1) * stagger);
-        stats.steps.push({ type: "to", target, vars, at: Number(at) });
-        return fake;
-      },
-      progress(value, suppressEvents) {
-        if (typeof value === "undefined") return progress;
-        progress = Math.max(0, Math.min(1, Number(value) || 0));
-        if (!suppressEvents && optionsForTimeline.onUpdate) optionsForTimeline.onUpdate();
-        return fake;
-      },
-      duration() { return total; },
+      duration() { return duration; },
       play(value) {
         stats.play += 1;
-        if (typeof value === "number") progress = Math.max(0, Math.min(1, value / (total || 1)));
-        if (optionsForTimeline.onStart) optionsForTimeline.onStart();
-        return fake;
+        stats.playing = true;
+        if (typeof value === "number") {
+          stats.progress = duration ? Math.max(0, Math.min(1, value / duration)) : 0;
+          timeline.runAt(value);
+        }
+        return timeline;
       },
-      pause() {
-        stats.pause += 1;
-        if (optionsForTimeline.onPause) optionsForTimeline.onPause();
-        return fake;
-      },
-      resume() {
-        stats.resume += 1;
-        return fake;
-      },
-      restart() {
-        stats.restart += 1;
-        progress = 0;
-        if (optionsForTimeline.onStart) optionsForTimeline.onStart();
-        return fake;
-      },
+      pause() { stats.pause += 1; stats.playing = false; return timeline; },
+      resume() { stats.resume += 1; stats.playing = true; return timeline; },
+      kill() { stats.killed += 1; stats.playing = false; return timeline; },
       complete() {
-        progress = 1;
-        if (optionsForTimeline.onComplete) optionsForTimeline.onComplete();
+        stats.complete += 1;
+        stats.progress = 1;
+        stats.playing = false;
+        if (options.onComplete) options.onComplete();
+        return timeline;
       },
-      kill() { stats.killed += 1; }
-    };
-    stats.timeline = fake;
-    timelines.push(stats);
-    return fake;
-  }
-
-  function mediaController() {
-    let callback;
-    let cleanup;
-    const controller = {
-      add(_query, next) {
-        callback = next;
-        cleanup = callback({ conditions: initialConditions });
+      runAt(time) {
+        stats.progress = duration ? Math.max(0, Math.min(1, time / duration)) : 0;
+        stats.calls
+          .filter((entry) => entry.at <= time && !invoked.has(entry))
+          .sort((left, right) => left.at - right.at)
+          .forEach((entry) => { invoked.add(entry); entry.callback(...entry.args); });
+        return timeline;
       },
-      rebuild(conditions) {
-        // Real GSAP reverts its animations before calling custom cleanup.
-        // An emptied timeline reports progress 1; callbacks are suppressed.
-        if (options.revertBeforeCleanup && timelines.length) timelines.at(-1).timeline.progress(1, true);
-        if (typeof cleanup === "function") cleanup();
-        cleanup = callback({ conditions });
-      },
-      revert() {
-        if (typeof cleanup === "function") cleanup();
-        cleanup = null;
+      progress(value) {
+        if (typeof value === "undefined") return stats.progress;
+        stats.progress = Math.max(0, Math.min(1, Number(value) || 0));
+        return timeline;
       }
     };
-    latestMedia = controller;
-    return controller;
+    stats.timeline = timeline;
+    timelines.push(stats);
+    return timeline;
   }
 
-  const gsap = {
-    registerPlugin() {},
-    matchMedia: mediaController,
-    timeline,
-    set() {},
-    saveStyles() {},
-    fromTo(target, from, to) { entries.push({ target, from, to }); return { kill() {} }; },
-    context(callback) { callback(); return { revert() {} }; }
+  return {
+    timelines,
+    transitions,
+    gsap: {
+      timeline: makeTimeline,
+      fromTo(target, from, to) {
+        const transition = { target, from, to, killed: 0, kill() { this.killed += 1; } };
+        transitions.push(transition);
+        return transition;
+      }
+    }
   };
-  return { gsap, timelines, entries, get media() { return latestMedia; }, options };
 }
 
-function load({ conditions = { desktop: true, mobile: false, reduceMotion: false }, intersection = false, gsapHarness } = {}) {
-  const scene = element("scene");
-  const sourceGroup = element("source-group");
-  const sourceCards = [element("source-one"), element("source-two"), element("source-three")];
-  const lens = element("lens");
-  const excerpt = element("excerpt");
-  const excerptHighlight = element("excerpt-highlight");
-  const brief = element("brief");
-  const briefHeading = element("brief-heading");
-  const briefSource = element("brief-source");
-  const briefNext = element("brief-next");
-  const track = element("track");
-  const toggle = element("toggle");
-  const status = element("status");
-  toggle.attributes["data-lab-motion"] = "toggle";
-  const toolGroup = element("tool-group");
-  const sequenceGroup = element("sequence-group");
-  const toolEntries = [element("tool-one"), element("tool-two")];
-  const sequenceEntries = [element("sequence-one"), element("sequence-two"), element("sequence-three")];
-  const listeners = { window: {}, document: {} };
+function makeDetails(name) {
+  const details = element(name);
+  const summary = element(`${name}-summary`);
+  const firstLink = element(`${name}-first-link`);
+  details.querySelector = (selector) => selector === "summary" ? summary : selector === "a[href]" ? firstLink : null;
+  details.contains = (target) => target === details || target === summary || target === firstLink;
+  return { details, summary, firstLink };
+}
+
+function load({ navigation = false, example = true, gsapHarness = null, reduceMotion = false, desktop = true, clipboard = null, intersection = false } = {}) {
+  const documentListeners = {};
+  const windowListeners = {};
+  const media = createMatchMedia({ reduceMotion, desktop });
+  const body = element("body");
+  const header = navigation ? element("header") : null;
+  const research = navigation ? makeDetails("research") : null;
+  const tools = navigation ? makeDetails("tools") : null;
+  const opener = navigation ? element("mobile-opener", { hidden: true }) : null;
+  const fallback = navigation ? element("mobile-fallback", { hidden: false }) : null;
+  const closeButton = navigation ? element("mobile-close") : null;
+  const sheet = navigation ? element("mobile-sheet") : null;
+  const groups = navigation ? [research.details, tools.details] : [];
   let observerInstance = null;
 
-  const groups = new Map([[toolGroup, toolEntries], [sequenceGroup, sequenceEntries]]);
-  toolGroup.querySelectorAll = (selector) => selector === "[data-lab-entry]" ? toolEntries : [];
-  sequenceGroup.querySelectorAll = (selector) => selector === "[data-lab-entry]" ? sequenceEntries : [];
+  if (navigation) {
+    sheet.querySelector = (selector) => selector === "[data-mobile-close]" ? closeButton : null;
+    sheet.showModal = () => { sheet.open = true; };
+    sheet.close = () => {
+      if (!sheet.open) return;
+      sheet.open = false;
+      sheet.dispatch("close");
+    };
+    header.querySelector = (selector) => ({
+      ".b26-mobile-sheet": sheet,
+      "[data-mobile-open]": opener,
+      "[data-mobile-fallback]": fallback
+    })[selector] || null;
+    header.querySelectorAll = (selector) => selector === ".b26-nav-group" ? groups : [];
+    header.contains = (target) => [header, ...groups, research.summary, tools.summary, opener, fallback, sheet, closeButton].includes(target);
+  }
+
+  let exampleNode = null;
+  let panels = [];
+  let steps = [];
+  let play = null;
+  let status = null;
+  let copy = null;
+  let note = null;
+  if (example) {
+    exampleNode = element("worked-example");
+    panels = [0, 1, 2].map((index) => element(`panel-${index}`));
+    steps = ["Find", "Inspect", "Keep"].map((label, index) => element(`step-${index}`, { hidden: true, textContent: label }));
+    play = element("play", { hidden: true, textContent: "Play walkthrough" });
+    status = element("status", { textContent: "A real source, selected for this example." });
+    copy = element("copy", { hidden: true, textContent: "Copy example note" });
+    note = element("note", { innerText: "Finding: crawler activity is a signal.\nNext step: track citations separately." });
+    exampleNode.querySelector = (selector) => ({
+      "[data-example-play]": play,
+      "[data-example-status]": status,
+      "[data-example-copy]": copy,
+      "[data-example-note]": note
+    })[selector] || null;
+    exampleNode.querySelectorAll = (selector) => selector === "[data-example-panel]" ? panels : selector === "[data-example-step]" ? steps : [];
+  }
+
   const document = {
     hidden: false,
-    body: element("body"),
+    body,
     querySelector(selector) {
-      return ({
-        "[data-lab-scene]": scene,
-        "[data-lab-source]": sourceGroup,
-        "[data-lab-lens]": lens,
-        "[data-lab-excerpt]": excerpt,
-        "[data-lab-excerpt-highlight]": excerptHighlight,
-        "[data-lab-action]": brief,
-        "[data-lab-brief-heading]": briefHeading,
-        "[data-lab-brief-source]": briefSource,
-        "[data-lab-brief-next]": briefNext,
-        "[data-lab-motion-status]": status
-      })[selector] || null;
+      if (selector === ".b26-experience-header") return header;
+      if (selector === "[data-worked-example]") return exampleNode;
+      return null;
     },
     querySelectorAll(selector, root) {
-      if (selector === ".b26-nav-group" || selector === ".b26-mobile-nav") return [];
-      if (selector === "[data-lab-entry-group]") return [toolGroup, sequenceGroup];
-      if (selector === "[data-lab-source-card]") return sourceCards;
-      if (selector === "[data-lab-line]") return [track];
-      if (selector === "button[data-lab-motion='toggle']") return [toggle];
-      if (selector === "[data-lab-entry]" && root) return groups.get(root) || [];
+      if (selector === ".b26-nav-group" && root === header) return groups;
+      if (selector === "[data-example-panel]" && root === exampleNode) return panels;
+      if (selector === "[data-example-step]" && root === exampleNode) return steps;
       return [];
     },
-    addEventListener(type, handler) { (listeners.document[type] ||= []).push(handler); },
-    removeEventListener(type, handler) { listeners.document[type] = (listeners.document[type] || []).filter((item) => item !== handler); },
-    dispatch(type, event = {}) { (listeners.document[type] || []).slice().forEach((handler) => handler(event)); }
+    addEventListener(type, handler) { (documentListeners[type] ||= []).push(handler); },
+    removeEventListener(type, handler) { documentListeners[type] = (documentListeners[type] || []).filter((item) => item !== handler); },
+    dispatch(type, event = {}) { return (documentListeners[type] || []).slice().map((handler) => handler(event)); }
   };
-
+  const navigator = { clipboard: clipboard || null };
   const window = {
     document,
-    addEventListener(type, handler) { (listeners.window[type] ||= []).push(handler); },
-    removeEventListener(type, handler) { listeners.window[type] = (listeners.window[type] || []).filter((item) => item !== handler); },
-    dispatch(type, event = {}) { (listeners.window[type] || []).slice().forEach((handler) => handler(event)); },
-    ScrollTrigger: {},
+    navigator,
+    __queryLog: [],
+    matchMedia: media.matchMedia,
+    addEventListener(type, handler) { (windowListeners[type] ||= []).push(handler); },
+    removeEventListener(type, handler) { windowListeners[type] = (windowListeners[type] || []).filter((item) => item !== handler); },
+    dispatch(type, event = {}) { return (windowListeners[type] || []).slice().map((handler) => handler(event)); },
     gsap: gsapHarness ? gsapHarness.gsap : undefined
   };
   if (intersection) {
     window.IntersectionObserver = class {
       constructor(callback) { this.callback = callback; observerInstance = this; }
-      observe() {}
+      observe(target) { this.target = target; }
       disconnect() {}
     };
   }
-  vm.runInNewContext(source, { window, document, console, isFinite });
+  vm.runInNewContext(source, { window, document, navigator, console, isFinite, Promise });
   return {
     window,
     document,
-    scene,
-    toggle,
+    media: { reduced: media.queries["(prefers-reduced-motion: reduce)"], desktop: media.queries["(min-width: 1101px)"] },
+    header,
+    groups: { research, tools },
+    mobile: { opener, fallback, sheet, closeButton },
+    example: exampleNode,
+    panels,
+    steps,
+    play,
     status,
+    copy,
+    note,
     observer: () => observerInstance,
-    controls: { toggle },
-    sourceCards,
-    groups: { toolGroup, sequenceGroup },
-    entries: { toolEntries, sequenceEntries }
+    timelineHarness: gsapHarness
   };
 }
 
-test("does not initialize source motion when GSAP is unavailable", () => {
-  const control = element("control");
-  let motionQueried = false;
-  const document = {
-    querySelector() { motionQueried = true; return control; },
-    querySelectorAll(selector) {
-      if (selector !== ".b26-nav-group" && selector !== ".b26-mobile-nav") motionQueried = true;
-      return [];
-    }
-  };
-  const window = { document };
-  vm.runInNewContext(source, { window, document, console, isFinite });
-  assert.equal(motionQueried, false);
-  assert.equal(control.hidden, false);
-});
+test("keeps exactly one desktop disclosure open, restores Escape focus, and closes on outside interaction", () => {
+  const loaded = load({ navigation: true, example: false });
+  const { research, tools } = loaded.groups;
+  research.details.open = true;
+  research.details.dispatch("toggle");
+  assert.equal(research.details.open, true);
+  assert.equal(research.summary.attributes["aria-expanded"], "true");
 
-function navigationOnlyLoad() {
-  const listeners = { document: {} };
-  function menu(name) {
-    const details = element(name);
-    const summary = element(`${name}-summary`);
-    details.open = false;
-    summary.focused = 0;
-    summary.focus = () => { summary.focused += 1; };
-    details.querySelector = (selector) => selector === "summary" ? summary : null;
-    details.contains = (target) => target === details || target === summary;
-    return { details, summary };
-  }
-
-  const research = menu("research");
-  const build = menu("build");
-  const mobile = menu("mobile");
-  const outside = element("outside");
-  const document = {
-    querySelectorAll(selector) {
-      if (selector === ".b26-nav-group") return [research.details, build.details];
-      if (selector === ".b26-mobile-nav") return [mobile.details];
-      return [];
-    },
-    addEventListener(type, handler) { (listeners.document[type] ||= []).push(handler); },
-    removeEventListener(type, handler) { listeners.document[type] = (listeners.document[type] || []).filter((item) => item !== handler); },
-    dispatch(type, event = {}) { (listeners.document[type] || []).slice().forEach((handler) => handler(event)); }
-  };
-  const window = { document };
-  vm.runInNewContext(source, { window, document, console, isFinite });
-  return { document, research, build, mobile, outside };
-}
-
-test("keeps desktop and mobile details navigation usable without GSAP", () => {
-  const loaded = navigationOnlyLoad();
-  loaded.research.details.open = true;
-  loaded.research.details.dispatch("toggle");
-  loaded.build.details.open = true;
-  loaded.build.details.dispatch("toggle");
-  assert.equal(loaded.research.details.open, false);
-  assert.equal(loaded.build.details.open, true);
+  tools.details.open = true;
+  tools.details.dispatch("toggle");
+  assert.equal(research.details.open, false);
+  assert.equal(tools.details.open, true);
 
   let prevented = false;
-  loaded.build.details.dispatch("keydown", {
-    key: "Escape",
-    preventDefault() { prevented = true; }
-  });
+  tools.details.dispatch("keydown", { key: "Escape", preventDefault() { prevented = true; } });
   assert.equal(prevented, true);
-  assert.equal(loaded.build.details.open, false);
-  assert.equal(loaded.build.summary.focused, 1);
+  assert.equal(tools.details.open, false);
+  assert.equal(tools.summary.focused, 1);
+  assert.equal(tools.summary.attributes["aria-expanded"], "false");
 
-  loaded.mobile.details.open = true;
-  loaded.mobile.details.dispatch("keydown", {
-    keyCode: 27,
-    preventDefault() {}
-  });
-  assert.equal(loaded.mobile.details.open, false);
-  assert.equal(loaded.mobile.summary.focused, 1);
+  research.details.open = true;
+  research.details.dispatch("toggle");
+  loaded.document.dispatch("pointerdown", { target: element("outside-pointer") });
+  assert.equal(research.details.open, false);
 
-  loaded.research.details.open = true;
-  loaded.mobile.details.open = true;
-  loaded.document.dispatch("click", { target: loaded.outside });
-  assert.equal(loaded.research.details.open, false);
-  assert.equal(loaded.mobile.details.open, false);
+  tools.details.open = true;
+  tools.details.dispatch("toggle");
+  loaded.document.dispatch("focusin", { target: element("outside-focus") });
+  assert.equal(tools.details.open, false);
 });
 
-test("builds one finite 7.8 second source-to-brief storyboard with physical objects", () => {
-  const harness = createGsapHarness({ desktop: true, mobile: false, reduceMotion: false });
+test("opens and closes the native mobile dialog, clears scroll lock, restores opener focus, and closes on desktop resize", () => {
+  const loaded = load({ navigation: true, example: false, desktop: false });
+  const { opener, fallback, sheet, closeButton } = loaded.mobile;
+  assert.equal(opener.hidden, false);
+  assert.equal(fallback.hidden, true);
+
+  opener.dispatch("click");
+  assert.equal(sheet.open, true);
+  assert.equal(loaded.document.body.classList.contains("b26-navigation-open"), true);
+  assert.equal(opener.attributes["aria-expanded"], "true");
+
+  closeButton.dispatch("click");
+  assert.equal(sheet.open, false);
+  assert.equal(loaded.document.body.classList.contains("b26-navigation-open"), false);
+  assert.equal(opener.attributes["aria-expanded"], "false");
+  assert.equal(opener.focused, 1);
+
+  opener.dispatch("click");
+  loaded.mobile.sheet.dispatch("click", { target: loaded.mobile.sheet });
+  assert.equal(sheet.open, false);
+  assert.equal(loaded.document.body.classList.contains("b26-navigation-open"), false);
+
+  opener.dispatch("click");
+  loaded.media.desktop.dispatchChange(true);
+  assert.equal(sheet.open, false);
+  assert.equal(loaded.document.body.classList.contains("b26-navigation-open"), false);
+  assert.equal(opener.focused, 3);
+});
+
+test("keyboard entry reaches the first menu destination and moving focus to another header control dismisses it", () => {
+  const loaded = load({ navigation: true, example: false });
+  const { research } = loaded.groups;
+  let prevented = false;
+  research.details.dispatch("keydown", { key: "ArrowDown", target: research.summary, preventDefault() { prevented = true; } });
+  assert.equal(prevented, true);
+  assert.equal(research.details.open, true);
+  assert.equal(research.firstLink.focused, 1);
+  loaded.document.dispatch("focusin", { target: research.firstLink });
+  assert.equal(research.details.open, true);
+  loaded.document.dispatch("focusin", { target: loaded.mobile.opener });
+  assert.equal(research.details.open, false);
+  assert.equal(research.summary.attributes["aria-expanded"], "false");
+});
+
+test("desktop disclosures close when the layout changes or the document leaves", () => {
+  const loaded = load({ navigation: true, example: false });
+  const { research } = loaded.groups;
+  research.details.open = true;
+  loaded.media.desktop.dispatchChange(false);
+  assert.equal(research.details.open, false);
+  research.details.open = true;
+  loaded.window.dispatch("pagehide");
+  assert.equal(research.details.open, false);
+});
+
+test("native cancel and page navigation release the mobile scroll lock and allow a clean reopen", () => {
+  const loaded = load({ navigation: true, example: false, desktop: false });
+  const { opener, sheet } = loaded.mobile;
+  opener.dispatch("click");
+  let prevented = false;
+  sheet.dispatch("cancel", { preventDefault() { prevented = true; } });
+  assert.equal(prevented, true);
+  assert.equal(sheet.open, false);
+  assert.equal(loaded.document.body.classList.contains("b26-navigation-open"), false);
+  opener.dispatch("click");
+  assert.equal(sheet.open, true);
+  loaded.window.dispatch("pagehide");
+  assert.equal(sheet.open, false);
+  assert.equal(loaded.document.body.classList.contains("b26-navigation-open"), false);
+});
+
+test("keeps the worked example manual-first when GSAP is unavailable", () => {
+  const loaded = load({ gsapHarness: null });
+  assert.equal(loaded.play.hidden, true);
+  assert.equal(loaded.steps.every((step) => step.hidden === false), true);
+  loaded.steps[1].dispatch("click");
+  assert.equal(loaded.panels[0].hidden, true);
+  assert.equal(loaded.panels[1].hidden, false);
+  assert.match(loaded.status.textContent, /^Inspect:/);
+});
+
+test("manual example steps cancel autoplay and retain the selected panel", () => {
+  const harness = createTimelineHarness();
   const loaded = load({ gsapHarness: harness });
+  loaded.play.dispatch("click");
   assert.equal(harness.timelines.length, 1);
-  const timeline = harness.timelines[0];
-  assert.equal(timeline.timeline.duration(), 7.8);
-  assert.equal(loaded.toggle.hidden, false);
-  assert.equal(loaded.toggle.textContent, "Pause illustration");
-  assert.ok(timeline.steps.some((step) => step.type === "to" && Array.isArray(step.target) && step.target.length === 3 && step.at === 1.1));
-  assert.ok(timeline.steps.some((step) => step.target && step.target.name === "excerpt" && step.at >= 3.2 && step.at < 3.5));
-  assert.ok(timeline.steps.some((step) => step.target && step.target.name === "brief" && step.at === 5.1));
-  assert.ok(harness.entries.length >= 2, "lower groups receive bounded one-time entry motion");
-  assert.match(loaded.status.textContent, /Playing illustrative workflow/);
+  assert.equal(harness.timelines[0].playing, true);
+  assert.equal(loaded.play.textContent, "Pause walkthrough");
+
+  loaded.steps[1].dispatch("click");
+  assert.equal(harness.timelines[0].killed, 1);
+  assert.equal(loaded.panels[0].hidden, true);
+  assert.equal(loaded.panels[1].hidden, false);
+  assert.match(loaded.status.textContent, /^Inspect:/);
+  assert.equal(loaded.play.textContent, "Play walkthrough");
 });
 
-test("preserves progress and explicit pause across responsive rebuilds, with replay", () => {
-  const harness = createGsapHarness({ desktop: true, mobile: false, reduceMotion: false }, { revertBeforeCleanup: true });
+test("plays a finite walkthrough, supports pause/resume, and creates a fresh replay", () => {
+  const harness = createTimelineHarness();
   const loaded = load({ gsapHarness: harness });
+  loaded.play.dispatch("click");
   const first = harness.timelines[0];
-  first.timeline.progress(0.42);
-  loaded.toggle.dispatch("click");
+  assert.equal(first.timeline.duration(), 9.6);
+  assert.equal(first.play, 1);
+  first.timeline.runAt(3.2);
+  assert.match(loaded.status.textContent, /^Inspect:/);
+  loaded.play.dispatch("click");
   assert.equal(first.pause, 1);
-  assert.equal(loaded.toggle.textContent, "Resume illustration");
-  harness.media.rebuild({ desktop: false, mobile: true, reduceMotion: false });
+  assert.equal(loaded.play.textContent, "Resume walkthrough");
+  loaded.play.dispatch("click");
+  assert.equal(first.resume, 1);
+  assert.equal(loaded.play.textContent, "Pause walkthrough");
+  first.timeline.complete();
+  assert.equal(loaded.play.textContent, "Replay walkthrough");
+  loaded.play.dispatch("click");
   assert.equal(harness.timelines.length, 2);
-  assert.equal(harness.timelines[1].timeline.progress(), 0.42);
-  assert.equal(harness.timelines[1].play, 0);
-  loaded.toggle.dispatch("click");
-  assert.equal(harness.timelines[1].resume, 1);
-  assert.equal(loaded.toggle.textContent, "Pause illustration");
-  harness.timelines[1].timeline.complete();
-  assert.equal(loaded.toggle.textContent, "Replay illustration");
-  loaded.toggle.dispatch("click");
-  assert.equal(harness.timelines[1].restart, 1);
+  assert.equal(harness.timelines[1].play, 1);
+  assert.equal(loaded.play.textContent, "Pause walkthrough");
 });
 
-test("pauses offscreen and hidden-tab playback without taking over scroll", () => {
-  const harness = createGsapHarness({ desktop: true, mobile: false, reduceMotion: false });
+test("pauses hidden or offscreen playback and resumes only environmental pauses", () => {
+  const harness = createTimelineHarness();
   const loaded = load({ gsapHarness: harness, intersection: true });
+  loaded.play.dispatch("click");
   const timeline = harness.timelines[0];
-  assert.equal(timeline.play, 0, "offscreen setup waits for intersection");
-  loaded.observer().callback([{ isIntersecting: true, intersectionRatio: 1 }]);
-  assert.equal(timeline.play, 1);
+
   loaded.document.hidden = true;
   loaded.document.dispatch("visibilitychange");
   assert.equal(timeline.pause, 1);
+  assert.equal(loaded.play.textContent, "Resume walkthrough");
   loaded.document.hidden = false;
   loaded.document.dispatch("visibilitychange");
   assert.equal(timeline.resume, 1);
+  assert.equal(loaded.play.textContent, "Pause walkthrough");
+
+  loaded.observer().callback([{ isIntersecting: false }]);
+  assert.equal(timeline.pause, 2);
+  loaded.observer().callback([{ isIntersecting: true }]);
+  assert.equal(timeline.resume, 2);
 });
 
-test("reduced motion hides the replay control and keeps a static status", () => {
-  const harness = createGsapHarness({ desktop: true, mobile: false, reduceMotion: true });
+test("does not auto-resume an explicit manual pause after visibility changes", () => {
+  const harness = createTimelineHarness();
   const loaded = load({ gsapHarness: harness });
+  loaded.play.dispatch("click");
+  const timeline = harness.timelines[0];
+  loaded.play.dispatch("click");
+  assert.equal(timeline.pause, 1);
+  loaded.document.hidden = true;
+  loaded.document.dispatch("visibilitychange");
+  loaded.document.hidden = false;
+  loaded.document.dispatch("visibilitychange");
+  assert.equal(timeline.resume, 0);
+  assert.equal(loaded.play.textContent, "Resume walkthrough");
+});
+
+test("reduced motion disables autoplay while manual steps remain usable", () => {
+  const harness = createTimelineHarness();
+  const loaded = load({ gsapHarness: harness, reduceMotion: true });
   assert.equal(harness.timelines.length, 0);
-  assert.equal(loaded.toggle.hidden, true);
-  assert.equal(loaded.toggle.attributes["data-lab-motion-state"], "disabled");
-  assert.match(loaded.status.textContent, /Reduced motion/);
+  assert.equal(loaded.play.hidden, true);
+  loaded.steps[2].dispatch("click");
+  assert.equal(loaded.panels[2].hidden, false);
+  assert.equal(loaded.panels[0].hidden, true);
+  assert.match(loaded.status.textContent, /^Keep:/);
+  loaded.media.reduced.dispatchChange(false);
+  assert.equal(loaded.play.hidden, false);
 });
 
-test("pagehide cleans the finite timeline and pageshow restores a fresh setup", () => {
-  const harness = createGsapHarness({ desktop: true, mobile: false, reduceMotion: false });
-  const loaded = load({ gsapHarness: harness });
-  harness.timelines[0].timeline.progress(0.35);
-  loaded.window.dispatch("pagehide");
-  assert.equal(loaded.toggle.hidden, true);
-  loaded.window.dispatch("pageshow", { persisted: true });
-  assert.equal(harness.timelines.length, 2);
-  assert.equal(harness.timelines[1].timeline.progress(), 0.35);
-  assert.equal(loaded.toggle.hidden, false);
+test("reports clipboard success only after the write resolves and does not log a query", async () => {
+  let resolveWrite;
+  const writes = [];
+  const clipboard = {
+    writeText(value) {
+      writes.push(value);
+      return new Promise((resolve) => { resolveWrite = resolve; });
+    }
+  };
+  const harness = createTimelineHarness();
+  const loaded = load({ gsapHarness: harness, clipboard });
+  const [pending] = loaded.copy.dispatch("click");
+  assert.equal(loaded.status.textContent, "Find: a real source, chosen for this example.");
+  assert.equal(loaded.copy.textContent, "Copy example note");
+  assert.deepEqual(loaded.window.__queryLog, []);
+  assert.equal(writes.length, 1);
+  assert.equal(writes[0], loaded.note.innerText.trim());
+
+  resolveWrite();
+  await pending;
+  assert.equal(loaded.status.textContent, "Example note copied. It has not been saved to an account.");
+  assert.equal(loaded.copy.textContent, "Copied");
+  assert.deepEqual(loaded.window.__queryLog, []);
+});
+
+test("reports clipboard fallback after a rejected write", async () => {
+  const loaded = load({
+    clipboard: { writeText() { return Promise.reject(new Error("denied")); } }
+  });
+  const [pending] = loaded.copy.dispatch("click");
+  await pending;
+  assert.equal(loaded.status.textContent, "Copy is unavailable here. Select and copy the note below.");
+  assert.equal(loaded.note.tabIndex, -1);
+  assert.equal(loaded.note.focused, 1);
 });

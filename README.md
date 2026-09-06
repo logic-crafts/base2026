@@ -1,6 +1,6 @@
 # Base2026
 
-Base2026 is an open-source video research engine and source-first evidence library for short-form expert video. It turns reviewed public videos into attributed, searchable evidence that people and AI systems can inspect, compare and trace to the original source.
+Base2026 is a free, open-source video research engine and source-first evidence library. It turns selected public practitioner videos into attributed, searchable passages with original links and context, so a researcher can move from a question to the source. Selection improves retrieval and context; it does not certify that a recommendation or claim is true.
 
 Built and maintained by solo founder Alex Yarosh.
 
@@ -16,7 +16,9 @@ Built and maintained by solo founder Alex Yarosh.
 - Blog: <https://base2026.dev/blog>
 - Blog RSS: <https://base2026.dev/blog/feed.xml>
 - Methodology: <https://base2026.dev/methodology>
+- Investor overview: <https://base2026.dev/investors>
 - Public roadmap: <https://base2026.dev/roadmap>
+- Factory scenario: <https://base2026.dev/factory/>
 - Support: <https://base2026.dev/support>
 - Partnerships: <https://base2026.dev/partner>
 
@@ -24,12 +26,12 @@ Built and maintained by solo founder Alex Yarosh.
 
 Useful expert knowledge is increasingly published in short-form video, but it is difficult to search, verify and cite. Platform feeds are optimized for viewing, not research. Search engines and AI agents often lose the original speaker, timestamp and context.
 
-Base2026 creates a public evidence layer that keeps those connections visible.
+Base2026 creates a public evidence layer that keeps those connections visible. The founder and team select creators for practical relevance, usefulness and provenance. Base2026 does not accept paid creator placement or creator applications; the original source remains the reference point, with correction and removal paths available.
 
 ## What the product does
 
 - discovers public expert sources in SEO, GEO, AEO, AI search and adjacent fields;
-- converts reviewed public source material into searchable passages;
+- converts selected public practitioner videos into attributed, searchable passages with original links and evidence context;
 - preserves creator attribution, original-source links and evidence context;
 - generates source, creator, topic and comparison pages;
 - exposes public-safe machine-readable files for scripts and AI agents;
@@ -91,25 +93,43 @@ the [API guide](docs/public-pages/08_API_ACCESS.md),
 [MCP guide](docs/public-pages/10_MCP_FOR_AI_AGENTS.md) and
 [integration guide](docs/public-pages/11_PLUGINS_AND_INTEGRATIONS.md).
 
-The current release is a working public prototype. Live corpus dimensions are
-available from the read-only [`/api/stats`](https://base2026.dev/api/stats)
-endpoint and must not be treated as users, revenue, universal coverage or
-commercial traction. Public full transcripts remain disabled by design; the
-public product exposes bounded excerpts with attribution instead.
+The public product is a live working prototype. The [product experience
+release](docs/project-memory/HANDOFF_2026-09-06_PRODUCT_EXPERIENCE.md) records
+the current reviewed site and public factory scenario. Live corpus dimensions
+are available from the read-only
+[`/api/stats`](https://base2026.dev/api/stats) endpoint and must not be treated
+as users, revenue, universal coverage or commercial traction. Public full
+transcripts remain disabled by design; the public product exposes bounded
+excerpts with attribution instead.
 
-Five maintained task guides are live as of August 31, 2026: internal linking,
-content refresh, Search Console opportunity selection, structured-data checks
-and llms.txt consumer evaluation. They are original, source-linked decision
-workflows at existing topic URLs, separate from the blog. The first recurring
-editorial run published four of them without a Worker redeploy; see the
+Maintained task guides cover internal linking, content refresh, Search Console
+opportunity selection, structured-data checks and llms.txt consumer evaluation.
+They are original, source-linked decision workflows at existing topic URLs,
+separate from the blog. An initial recurring editorial run published reviewed
+guides without a Worker redeploy; see the
 [data-only publication receipt](docs/project-memory/BASE2026_EDITORIAL_OFFICE_RUN_2026_08_31.md).
-More than two dozen original research articles are live, including an
+Original research articles are available, including an
 [evidence-first content backlog](https://base2026.dev/blog/evidence-first-content-backlog/)
 and a [comparison-page evidence check](https://base2026.dev/blog/comparison-page-evidence-check/),
 both built from existing reviewed sources. The same editorial office can produce
 useful new work without waiting for new videos; unchanged guides are not redated.
 Publication and accepted discovery requests do not establish traffic growth.
 See the [source synchronization and quality receipt](docs/project-memory/BASE2026_OFFICE_CLOSURE_2026_08_31.md).
+
+## Product and operating boundary
+
+Base2026's free product includes Evidence Search, Source Diversity Check,
+Source-backed Brief, the WordPress Evidence Sidebar, public API access and the
+read-only MCP interface described above. A proposed commercial pilot would test
+whether small SEO practices return to Base2026 for recurring client research
+decisions; it is unproven, and there is no shipped paid plan or claim of
+traction, ROI or funding.
+
+The public [`/factory/`](https://base2026.dev/factory/) route is a separate
+English playable authored Scenario. A private local AgencyOS snapshot UI is an
+operational view for the project; its database and implementation are not
+published here and are not a separate startup release. The factory scenario and
+that private operational view do not change the public product boundary.
 
 ## Public dataset quickstart
 
@@ -179,9 +199,10 @@ Retries are idempotent; corrections require an explicit revision comparison.
 Existing journal URLs remain unchanged.
 
 Sources, contextual research links and AI-assistance disclosures are visible.
-This is not a raw-transcript republishing lane. Sol Max research and review
-currently run in the owner's Codex office; the cloud serves published articles
-independently. No unlimited, cloud-only ChatGPT Pro authoring service is claimed.
+Assisted research and review remain bounded by the public/private publication
+contract; the cloud serves
+published articles independently. No unlimited, cloud-only ChatGPT Pro
+authoring service is claimed.
 
 See the [editorial operating contract](docs/BASE2026_EDITORIAL_PUBLISHING.md)
 and the [first live publication/replay receipt](docs/project-memory/BASE2026_EDITORIAL_RUNTIME_RELEASE_2026_08_30.md).
@@ -298,11 +319,15 @@ python3 scripts/audit-publication-boundary.py
 
 ## Roadmap
 
-Current priorities are measured indexation, reviewing source support for
-configured topic-enrichment entries, stronger provenance and
-creator-rights workflows. The dataset landing page, versioned catalog and API
-quickstart are already live. See [ROADMAP.md](ROADMAP.md) or the
-[live roadmap](https://base2026.dev/roadmap).
+**Now:** improve free evidence search, practical tools, navigation, source
+explanations, attribution and correction paths.
+
+**Next:** measure repeat research and test a proposed recurring workflow with
+small SEO practices while keeping the public search and tools free.
+
+**Exploring:** consider commercial integrations only after repeated use and
+responsible delivery provide evidence. See [ROADMAP.md](ROADMAP.md) or the
+[public roadmap](https://base2026.dev/roadmap).
 
 ## Contributing and security
 

@@ -64,6 +64,11 @@ DEFAULT_SUPPORT_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-support.html"
 DEFAULT_PARTNER_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-partner.html"
 DEFAULT_PRIVACY_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-privacy.html"
 DEFAULT_ABOUT_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-about.html"
+DEFAULT_INVESTORS_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-investors.html"
+DEFAULT_INVESTORS_STYLESHEET = PROJECT_ROOT / "templates" / "base2026-investors.css"
+DEFAULT_PUBLIC_PAGES_STYLESHEET = PROJECT_ROOT / "templates" / "base2026-public-pages.css"
+DEFAULT_METHODOLOGY_PAGE = PROJECT_ROOT / "templates" / "base2026-methodology.html"
+DEFAULT_SOURCE_POLICY_PAGE = PROJECT_ROOT / "templates" / "base2026-source-policy.html"
 DEFAULT_FOUNDER_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-founder.html"
 DEFAULT_DATASET_TEMPLATE = PROJECT_ROOT / "templates" / "base2026-dataset.html"
 DEFAULT_JOURNAL_CLOUDFLARE_TEMPLATE = (
@@ -116,9 +121,16 @@ BRAND_MEDIA_ALLOWLIST = {
     "youtube.svg": (258, "92ffcc58a104616a4868982584d15e5b4b2b186707ed97a90622f51b96df0020"),
     "linkedin.svg": (343, "8fc5b2f0e066a1697eb964e269ddb77572f5c66402dcc8faa80c1d6307d4b812"),
 }
+EDITORIAL_MEDIA_ROOT = PROJECT_ROOT
+EDITORIAL_MEDIA_ALLOWLIST = {
+    "static/assets/founder-editorial-20260906/alex-yarosh-cobalt-portrait.webp": (73264, "0e325b8906493eec89a0295f8aa6aa0b9a8d6b268882269e0de564515e2e5a7b"),
+    "static/assets/founder-editorial-20260906/aster-films-home.webp": (77148, "487dce824d13cc20e44412572318a10d3e97d3646a8c20559aaedac465cef702"),
+    "static/assets/founder-editorial-20260906/dreamwood-portfolio.webp": (127622, "44fea0df55d762948118767ef8ec3834aa8c19b36e5ca5231046030b8e879dd4"),
+    "static/brand/social-editorial-20260906/channels-atlas.webp": (90644, "e4321623622bcaaf396afde39e19a321bbbde60ea7ff56e874a298964dfb0fd4"),
+}
 DEFAULT_MEMBERS_PRIVACY = PROJECT_ROOT / "templates" / "base2026-members-privacy.html"
 DEFAULT_ROADMAP_SCRIPT = PROJECT_ROOT / "web" / "static" / "roadmap.js"
-DEFAULT_ROADMAP_PAGE = PROJECT_ROOT / "web" / "static" / "roadmap.html"
+DEFAULT_ROADMAP_PAGE = PROJECT_ROOT / "templates" / "base2026-roadmap-public.html"
 DEFAULT_ANALYTICS_PAGE = PROJECT_ROOT / "web" / "static" / "analytics.html"
 DEFAULT_API_PAGE = PROJECT_ROOT / "web" / "static" / "api.html"
 DEFAULT_API_INDEX = PROJECT_ROOT / "web" / "static" / "api-index.json"
@@ -208,6 +220,33 @@ TOOLS_STUDIO_REVIEWED_MEDIA_ALLOWLIST = {
     },
 }
 
+# The Factory is a separate authored browser page.  Its reviewed dist copy is
+# admitted through one manifest and one explicit destination, rather than by
+# walking a package directory or inheriting a retained /factory tree.
+FACTORY_RELEASE_ROOT = PROJECT_ROOT / "templates" / "assets" / "factory3d"
+FACTORY_RELEASE_MANIFEST = FACTORY_RELEASE_ROOT / "factory-release.json"
+FACTORY_RELEASE_SCHEMA = "base2026.factory-release.v1"
+FACTORY_RELEASE_MANIFEST_SHA256 = (
+    "c8417b186a68b499b13685fd1e431b76f6ba67e52066e339134a7ea597c413d3"
+)
+FACTORY_RELEASE_DEST_PREFIX = "factory"
+FACTORY_RELEASE_ALLOWED_EXTENSIONS = frozenset(
+    {".css", ".glb", ".html", ".js", ".png", ".txt", ".webp"}
+)
+FACTORY_RELEASE_TEXT_EXTENSIONS = frozenset({".css", ".html", ".js", ".txt"})
+FACTORY_RELEASE_LICENSE_PREFIX = "licenses/"
+FACTORY_RELEASE_PRIVATE_MARKER_PATTERNS = (
+    re.compile(r"\bcreateFactoryApp\b", re.IGNORECASE),
+    re.compile(r"\bFactoryDataProvider\b", re.IGNORECASE),
+    re.compile(r"\bCurrentSnapshot\b", re.IGNORECASE),
+    re.compile(r"\bprivate[-_ ]adapter\b", re.IGNORECASE),
+    re.compile(r"\bprivate[-_ ]factory\b", re.IGNORECASE),
+    re.compile(r"\b(?:PRIVATE|FACTORY_PRIVATE|PRIVATE_FACTORY)_(?:ADAPTER|ENDPOINT|SNAPSHOT)\b"),
+    re.compile(r"\bagency\.sqlite\b", re.IGNORECASE),
+    re.compile(r"/api/office(?:[^A-Za-z0-9_-]|$)", re.IGNORECASE),
+    re.compile(r"\b(?:task_id|thread_id|project_id)\b", re.IGNORECASE),
+)
+
 # Public web text is intentionally broader than the sample's extension set so
 # this remains useful for future static assets.  Content-based detection below
 # still protects arbitrary binary files with a non-standard extension.
@@ -239,6 +278,7 @@ KNOWN_BINARY_EXTENSIONS = {
     ".bmp",
     ".eot",
     ".gif",
+    ".glb",
     ".gz",
     ".ico",
     ".jpeg",
@@ -517,6 +557,182 @@ def _validate_public_relative_path(relative_path: Path) -> None:
         raise ReleaseBuildError(
             f"private/database/archive file is not a public web artifact: {relative_path.as_posix()}"
         )
+
+
+def _factory_path_has_symlink(root: Path, relative_path: Path | None = None) -> bool:
+    """Return whether a Factory root or any path parent is a symlink."""
+
+    current = root
+    if current.is_symlink():
+        return True
+    for part in relative_path.parts if relative_path is not None else ():
+        current /= part
+        if current.is_symlink():
+            return True
+    return False
+
+
+def _factory_source_files(root: Path) -> list[Path]:
+    """List regular Factory files and reject links, hidden paths and odd entries."""
+
+    if _factory_path_has_symlink(root) or not root.is_dir():
+        raise ReleaseBuildError(f"Factory release root must be a regular directory: {root}")
+    files: list[Path] = []
+    for current, directories, filenames in os.walk(root, topdown=True, followlinks=False):
+        current_path = Path(current)
+        directories.sort()
+        filenames.sort()
+        for name in tuple(directories):
+            candidate = current_path / name
+            if name.startswith("."):
+                raise ReleaseBuildError(f"Factory release contains a hidden path: {candidate}")
+            if candidate.is_symlink():
+                raise ReleaseBuildError(f"Factory release contains a symlink: {candidate}")
+        for name in filenames:
+            candidate = current_path / name
+            if name.startswith(".") and name != FACTORY_RELEASE_MANIFEST.name:
+                raise ReleaseBuildError(f"Factory release contains a hidden path: {candidate}")
+            if candidate.is_symlink():
+                raise ReleaseBuildError(f"Factory release contains a symlink: {candidate}")
+            if not candidate.is_file():
+                raise ReleaseBuildError(f"Factory release entry is not a regular file: {candidate}")
+            files.append(candidate.relative_to(root))
+    return sorted(files, key=lambda item: item.as_posix())
+
+
+def _factory_private_marker_count(text: str) -> int:
+    return sum(len(pattern.findall(text)) for pattern in FACTORY_RELEASE_PRIVATE_MARKER_PATTERNS)
+
+
+def _load_reviewed_factory_release() -> tuple[bytes, tuple[dict[str, object], ...]]:
+    """Validate the exact public Factory dist snapshot before any writes."""
+
+    root = FACTORY_RELEASE_ROOT
+    manifest_path = FACTORY_RELEASE_MANIFEST
+    if _factory_path_has_symlink(root) or _factory_path_has_symlink(
+        manifest_path.parent, Path(manifest_path.name)
+    ):
+        raise ReleaseBuildError("Factory release manifest or parent is a symlink")
+    if not manifest_path.is_file():
+        raise ReleaseBuildError(f"Factory release manifest is missing: {manifest_path}")
+    try:
+        manifest_bytes = manifest_path.read_bytes()
+    except OSError as exc:
+        raise ReleaseBuildError("Factory release manifest could not be read") from exc
+    actual_manifest_sha256 = _sha256(manifest_bytes)
+    if actual_manifest_sha256 != FACTORY_RELEASE_MANIFEST_SHA256:
+        raise ReleaseBuildError(
+            "Factory release manifest hash does not match the pinned review: "
+            f"expected={FACTORY_RELEASE_MANIFEST_SHA256}, actual={actual_manifest_sha256}"
+        )
+    try:
+        manifest = json.loads(manifest_bytes.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise ReleaseBuildError("Factory release manifest is not valid UTF-8 JSON") from exc
+    if not isinstance(manifest, dict) or set(manifest) != {"files", "schema"}:
+        raise ReleaseBuildError("Factory release manifest has an unexpected schema")
+    if manifest.get("schema") != FACTORY_RELEASE_SCHEMA:
+        raise ReleaseBuildError("Factory release manifest schema is not supported")
+    entries = manifest.get("files")
+    if not isinstance(entries, list) or len(entries) != 20:
+        raise ReleaseBuildError("Factory release manifest must contain exactly 20 files")
+
+    validated: list[dict[str, object]] = []
+    seen_paths: set[str] = set()
+    for entry in entries:
+        if not isinstance(entry, dict) or set(entry) != {"bytes", "path", "sha256"}:
+            raise ReleaseBuildError("Factory release manifest file entry is malformed")
+        relative_name = entry.get("path")
+        byte_count = entry.get("bytes")
+        expected_sha256 = entry.get("sha256")
+        if not isinstance(relative_name, str) or not relative_name:
+            raise ReleaseBuildError("Factory release manifest path is invalid")
+        parts = relative_name.split("/")
+        if (
+            relative_name.startswith("/")
+            or "\\" in relative_name
+            or any(part in {"", ".", ".."} or part.startswith(".") for part in parts)
+            or relative_name != Path(relative_name).as_posix()
+        ):
+            raise ReleaseBuildError(f"Factory release manifest path is unsafe: {relative_name}")
+        normalized_key = relative_name.casefold()
+        if normalized_key in seen_paths:
+            raise ReleaseBuildError(f"Factory release manifest contains a duplicate path: {relative_name}")
+        seen_paths.add(normalized_key)
+        if Path(relative_name).suffix.casefold() not in FACTORY_RELEASE_ALLOWED_EXTENSIONS:
+            raise ReleaseBuildError(f"Factory release manifest has an unsupported extension: {relative_name}")
+        if not isinstance(byte_count, int) or isinstance(byte_count, bool) or byte_count <= 0:
+            raise ReleaseBuildError(f"Factory release byte count is invalid: {relative_name}")
+        if not isinstance(expected_sha256, str) or not re.fullmatch(r"[0-9a-f]{64}", expected_sha256):
+            raise ReleaseBuildError(f"Factory release hash is invalid: {relative_name}")
+        validated.append(
+            {
+                "path": relative_name,
+                "bytes": byte_count,
+                "sha256": expected_sha256,
+            }
+        )
+    manifest_paths = [str(entry["path"]) for entry in validated]
+    if manifest_paths != sorted(manifest_paths):
+        raise ReleaseBuildError("Factory release manifest paths must be sorted")
+
+    expected_files = _factory_source_files(root)
+    expected_names = sorted(
+        relative.as_posix()
+        for relative in expected_files
+        if relative.as_posix() != manifest_path.relative_to(root).as_posix()
+    )
+    if expected_names != manifest_paths:
+        raise ReleaseBuildError("Factory release files do not exactly match the pinned manifest")
+
+    module_paths = [name for name in manifest_paths if Path(name).suffix.casefold() == ".js"]
+    stylesheet_paths = [name for name in manifest_paths if Path(name).suffix.casefold() == ".css"]
+    license_paths = [name for name in manifest_paths if name.startswith(FACTORY_RELEASE_LICENSE_PREFIX)]
+    if manifest_paths.count("index.html") != 1 or len(module_paths) != 1 or len(stylesheet_paths) != 1:
+        raise ReleaseBuildError("Factory release requires one index, module and stylesheet")
+    if len(license_paths) != 4 or any(Path(name).suffix.casefold() != ".txt" for name in license_paths):
+        raise ReleaseBuildError("Factory release requires four license text files")
+
+    checked: list[dict[str, object]] = []
+    payloads: dict[str, bytes] = {}
+    for entry in validated:
+        relative_name = str(entry["path"])
+        relative_path = Path(relative_name)
+        if _factory_path_has_symlink(root, relative_path):
+            raise ReleaseBuildError(f"Factory release path contains a symlink: {relative_name}")
+        source_path = root / relative_path
+        payload = source_path.read_bytes()
+        if len(payload) != int(entry["bytes"]) or _sha256(payload) != str(entry["sha256"]):
+            raise ReleaseBuildError(f"Factory release asset hash/bytes mismatch: {relative_name}")
+        is_text = relative_path.suffix.casefold() in FACTORY_RELEASE_TEXT_EXTENSIONS
+        if is_text:
+            try:
+                text = payload.decode("utf-8")
+            except UnicodeDecodeError as exc:
+                raise ReleaseBuildError(f"Factory release text is not UTF-8: {relative_name}") from exc
+            safety = _public_safety_findings(text)
+            private_marker_count = _factory_private_marker_count(text)
+            if any(safety.values()) or private_marker_count:
+                raise ReleaseBuildError(
+                    f"Factory release text contains a private marker: {relative_name}"
+                )
+        elif _is_text_file(relative_path, payload):
+            raise ReleaseBuildError(f"Factory release binary has text-like content: {relative_name}")
+        payloads[relative_name] = payload
+        checked.append({**entry, "kind": "text" if is_text else "binary"})
+
+    index_text = payloads["index.html"].decode("utf-8")
+    expected_module_url = f"/factory/{module_paths[0]}"
+    expected_stylesheet_url = f"/factory/{stylesheet_paths[0]}"
+    if index_text.count(expected_module_url) != 1 or index_text.count(expected_stylesheet_url) != 1:
+        raise ReleaseBuildError("Factory index does not reference the pinned module and stylesheet")
+    if 'rel="canonical" href="https://base2026.dev/factory/"' not in index_text:
+        raise ReleaseBuildError("Factory index canonical is not the public /factory/ route")
+    if "{{STARTUP_HEADER}}" in index_text or "{{STARTUP_FOOTER}}" in index_text:
+        raise ReleaseBuildError("Factory index must not use the main startup shell")
+    if "b26-site-header" in index_text or "b26-site-footer" in index_text:
+        raise ReleaseBuildError("Factory index must retain its independent layout")
+    return manifest_bytes, tuple(checked)
 
 
 def _is_excluded_source_path(relative_path: Path) -> bool:
@@ -1149,6 +1365,8 @@ HUB_SITEMAP_ROUTES = (
     "/mcp",
     "/integrations",
     "/about",
+    "/investors",
+    "/source-policy",
     "/founder",
     "/privacy",
     "/partner",
@@ -1194,6 +1412,7 @@ schema, content structure and entity trust.
 - Creators: https://base2026.dev/creators/
 - Methodology: https://base2026.dev/methodology
 - Roadmap: https://base2026.dev/roadmap
+- Investor overview: https://base2026.dev/investors
 - API and AI access: https://base2026.dev/api
 - Public dataset: https://base2026.dev/dataset
 - Build journal: https://base2026.dev/journal/source-backed-video-search-cloudflare/
@@ -1234,6 +1453,7 @@ site or a private client workspace.
 - Creator index: https://base2026.dev/creators/
 - Source index: https://base2026.dev/sources/
 - Methodology: https://base2026.dev/methodology
+- Investor overview: https://base2026.dev/investors
 - Founder and selected work: https://base2026.dev/founder
 - Apply research: https://base2026.dev/apply-research
 - API and AI access: https://base2026.dev/api
@@ -1573,6 +1793,20 @@ def _reviewed_brand_assets() -> dict[str, bytes]:
         if (len(payload), _sha256(payload)) != (size, digest) or (assets[name].get("bytes"), assets[name].get("sha256")) != (size, digest):
             raise ReleaseBuildError(f"brand asset differs from reviewed bytes: {name}")
         result[name] = payload
+    return result
+
+
+def _reviewed_editorial_assets() -> dict[str, bytes]:
+    """Admit only the four reviewed publication images, never source folders."""
+    result = {}
+    for relative_name, (size, digest) in EDITORIAL_MEDIA_ALLOWLIST.items():
+        path = EDITORIAL_MEDIA_ROOT / relative_name
+        if path.is_symlink() or not path.is_file():
+            raise ReleaseBuildError(f"editorial asset is not a regular file: {relative_name}")
+        payload = path.read_bytes()
+        if (len(payload), _sha256(payload)) != (size, digest):
+            raise ReleaseBuildError(f"editorial asset differs from reviewed bytes: {relative_name}")
+        result[relative_name] = payload
     return result
 
 
@@ -2418,8 +2652,15 @@ def build_release(
         raise ReleaseBuildError("member-enabled input requires explicit --members-workspace")
     reviewed_media_manifest_bytes = b""
     reviewed_media_assets: tuple[dict[str, object], ...] = ()
+    factory_release_manifest_bytes = b""
+    factory_release_assets: tuple[dict[str, object], ...] = ()
     if standalone_startup:
         reviewed_media_manifest_bytes, reviewed_media_assets = _load_reviewed_tools_studio_media()
+        # Validate the complete, pinned Factory snapshot before creating a
+        # staging directory or writing any generated artifact.  The source
+        # release may retain an older /factory tree, but that tree is never a
+        # source of truth for a startup rebuild.
+        factory_release_manifest_bytes, factory_release_assets = _load_reviewed_factory_release()
     startup_header = DEFAULT_STARTUP_HEADER.read_text(encoding="utf-8").strip() if standalone_startup else ""
     startup_footer = DEFAULT_STARTUP_FOOTER.read_text(encoding="utf-8").strip() if standalone_startup else ""
     startup_shell_css = DEFAULT_STARTUP_SHELL_STYLESHEET.read_bytes() if standalone_startup else b""
@@ -2448,6 +2689,11 @@ def build_release(
         for relative_path in scanned_files
         if _is_excluded_source_path(relative_path)
         or relative_path in startup_excluded_pages
+        or (
+            standalone_startup
+            and relative_path.parts
+            and relative_path.parts[0].casefold() == FACTORY_RELEASE_DEST_PREFIX.casefold()
+        )
         or (standalone_startup and relative_path.as_posix() in STARTUP_PERSONAL_ASSET_PATHS)
     ]
     relative_files = [
@@ -2535,12 +2781,13 @@ def build_release(
             payload: bytes,
             *,
             kind: str = "text",
+            normalize_urls: bool = True,
         ) -> None:
             """Write a required root file and update its audit record."""
 
             nonlocal artifact_bytes
             destination = stage / relative_name
-            if Path(relative_name).suffix.casefold() in {".html", ".json", ".js", ".txt", ".xml"}:
+            if normalize_urls and Path(relative_name).suffix.casefold() in {".html", ".json", ".js", ".txt", ".xml"}:
                 try:
                     payload = _normalize_base2026_static_urls(
                         payload.decode("utf-8"), replacements
@@ -2631,6 +2878,50 @@ def build_release(
                     "kind": "binary",
                 }
             )
+
+        def write_reviewed_factory_asset(asset: Mapping[str, object]) -> None:
+            """Write one exact Factory snapshot file and bind its receipt hash."""
+
+            relative_name = str(asset["path"])
+            source_path = FACTORY_RELEASE_ROOT / Path(relative_name)
+            expected_size = int(asset["bytes"])
+            expected_sha256 = str(asset["sha256"])
+            payload = source_path.read_bytes()
+            if (
+                len(payload) != expected_size
+                or _sha256(payload) != expected_sha256
+            ):
+                raise ReleaseBuildError(
+                    f"reviewed Factory release changed during build: {relative_name}"
+                )
+            output_path = f"{FACTORY_RELEASE_DEST_PREFIX}/{relative_name}"
+            write_generated_public_file(
+                output_path,
+                payload,
+                kind=str(asset["kind"]),
+                normalize_urls=False,
+            )
+            for index, existing in enumerate(records):
+                if existing.relative_path != output_path:
+                    continue
+                if existing.source_sha256 and existing.source_sha256 != expected_sha256:
+                    raise ReleaseBuildError(
+                        f"retained Factory release provenance mismatch: {relative_name}"
+                    )
+                records[index] = FileRecord(
+                    relative_path=output_path,
+                    source_sha256=expected_sha256,
+                    artifact_sha256=expected_sha256,
+                    source_size=expected_size,
+                    artifact_size=expected_size,
+                    kind=str(asset["kind"]),
+                    changed=False,
+                )
+                break
+            else:  # pragma: no cover - writer always creates the record above
+                raise ReleaseBuildError(
+                    f"reviewed Factory release record was not created: {relative_name}"
+                )
 
         def write_tracked_public_overlay(relative_name: str, source_path: Path) -> None:
             """Publish a reviewed repository page through the normal release transforms."""
@@ -2750,7 +3041,38 @@ def build_release(
             write_generated_public_file("static/base2026-forms.js", DEFAULT_FORMS_SCRIPT.read_bytes())
             write_generated_public_file("static/base2026-evidence-brief.js", DEFAULT_EVIDENCE_BRIEF_SCRIPT.read_bytes())
             write_generated_public_file("static/roadmap.js", DEFAULT_ROADMAP_SCRIPT.read_bytes())
-            write_tracked_public_overlay("roadmap.html", DEFAULT_ROADMAP_PAGE)
+            write_generated_public_file(
+                "static/base2026-investors.css", DEFAULT_INVESTORS_STYLESHEET.read_bytes()
+            )
+            write_generated_public_file(
+                "static/base2026-public-pages.css", DEFAULT_PUBLIC_PAGES_STYLESHEET.read_bytes()
+            )
+            for factory_asset in factory_release_assets:
+                write_reviewed_factory_asset(factory_asset)
+            write_generated_public_file(
+                "roadmap.html",
+                _render_startup_page(
+                    DEFAULT_ROADMAP_PAGE.read_text(encoding="utf-8"),
+                    startup_header,
+                    startup_footer,
+                ),
+            )
+            write_generated_public_file(
+                "methodology.html",
+                _render_startup_page(
+                    DEFAULT_METHODOLOGY_PAGE.read_text(encoding="utf-8"),
+                    startup_header,
+                    startup_footer,
+                ),
+            )
+            write_generated_public_file(
+                "source-policy.html",
+                _render_startup_page(
+                    DEFAULT_SOURCE_POLICY_PAGE.read_text(encoding="utf-8"),
+                    startup_header,
+                    startup_footer,
+                ),
+            )
             write_tracked_public_overlay("analytics.html", DEFAULT_ANALYTICS_PAGE)
             write_tracked_public_overlay("api.html", DEFAULT_API_PAGE)
             write_tracked_public_overlay("api-index.json", DEFAULT_API_INDEX)
@@ -2773,6 +3095,12 @@ def build_release(
                             records[index] = FileRecord(relative_path=relative_name, source_sha256=_sha256(payload), artifact_sha256=_sha256(payload), source_size=len(payload), artifact_size=len(payload), kind=kind, changed=False)
                             break
             write_generated_public_file("static/brand/b26-brand-manifest.json", (BRAND_MEDIA_ROOT / "b26-brand-manifest.json").read_bytes())
+            for relative_name, payload in _reviewed_editorial_assets().items():
+                write_generated_public_file(relative_name, payload, kind="binary")
+                for index, record in enumerate(records):
+                    if record.relative_path == relative_name:
+                        records[index] = FileRecord(relative_path=relative_name, source_sha256=_sha256(payload), artifact_sha256=_sha256(payload), source_size=len(payload), artifact_size=len(payload), kind="binary", changed=False)
+                        break
             write_generated_public_file("static/base2026-mark.svg", DEFAULT_MARK_ICON.read_bytes())
             write_generated_public_file(
                 "static/base2026-founder.css", DEFAULT_FOUNDER_STYLESHEET.read_bytes()
@@ -2803,6 +3131,14 @@ def build_release(
                 "about.html",
                 _render_startup_page(
                     DEFAULT_ABOUT_TEMPLATE.read_text(encoding="utf-8"), startup_header, startup_footer
+                ),
+            )
+            write_generated_public_file(
+                "investors.html",
+                _render_startup_page(
+                    DEFAULT_INVESTORS_TEMPLATE.read_text(encoding="utf-8"),
+                    startup_header,
+                    startup_footer,
                 ),
             )
             write_generated_public_file(
@@ -3213,9 +3549,40 @@ def build_release(
             else None
         )
 
+        factory_release_outputs_match = None
+        factory_release_verified = None
+        if standalone_startup:
+            factory_release_outputs_match = True
+            for asset in factory_release_assets:
+                relative_name = str(asset["path"])
+                destination = stage / FACTORY_RELEASE_DEST_PREFIX / Path(relative_name)
+                if not destination.is_file() or destination.is_symlink():
+                    factory_release_outputs_match = False
+                    continue
+                payload = destination.read_bytes()
+                if (
+                    len(payload) != int(asset["bytes"])
+                    or _sha256(payload) != str(asset["sha256"])
+                ):
+                    factory_release_outputs_match = False
+            if not factory_release_outputs_match:
+                raise ReleaseBuildError(
+                    "staged Factory release does not match the reviewed manifest/provenance"
+                )
+            factory_release_verified = True
+
         verification = {
             "member_script_retained": retain_member_script,
             "source_lab_media_verified": True if standalone_startup else None,
+            "editorial_media_verified": (
+                all(
+                    (stage / name).is_file()
+                    and len((stage / name).read_bytes()) == size
+                    and _sha256((stage / name).read_bytes()) == digest
+                    for name, (size, digest) in EDITORIAL_MEDIA_ALLOWLIST.items()
+                ) if standalone_startup else None
+            ),
+            "editorial_media_count": len(EDITORIAL_MEDIA_ALLOWLIST) if standalone_startup else 0,
             "wordpress_plugin_package_verified": (
                 (stage / WORDPRESS_PLUGIN_DOWNLOAD).read_bytes() == _wordpress_plugin_package()
                 if standalone_startup else None
@@ -3252,6 +3619,11 @@ def build_release(
             ),
             "reviewed_repository_media_count": len(reviewed_repository_media_provenance),
             "reviewed_repository_media_verified": reviewed_media_verified,
+            "factory_release_file_count": len(factory_release_assets),
+            "factory_release_manifest_sha256": (
+                _sha256(factory_release_manifest_bytes) if standalone_startup else None
+            ),
+            "factory_release_verified": factory_release_verified,
             "artifact_files_include_required_root_metadata": all(
                 (stage / required).is_file() for required in (ROBOTS_FILENAME, HEADERS_FILENAME)
             ),

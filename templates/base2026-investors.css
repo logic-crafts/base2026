@@ -1,0 +1,76 @@
+.b26-investors-main {
+  width: min(1160px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 78px 0 104px;
+}
+.b26-investors-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(280px, .75fr);
+  gap: clamp(32px, 7vw, 92px);
+  align-items: end;
+  padding-bottom: 78px;
+  border-bottom: 1px solid var(--b26-line);
+}
+.b26-investors-hero h1 {
+  max-width: 850px;
+  margin: 0;
+  color: var(--b26-ink);
+  font-size: clamp(44px, 7vw, 82px);
+  letter-spacing: -.07em;
+  line-height: .96;
+}
+.b26-investors-hero .b26-lede { max-width: 720px; margin: 26px 0 0; font-size: clamp(18px, 2.2vw, 22px); }
+.b26-investors-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; }
+.b26-investors-quiet { max-width: 680px; margin: 22px 0 0; color: var(--b26-muted); font-size: 12px; line-height: 1.6; }
+.b26-investors-signal {
+  padding: 25px;
+  border: 1px solid var(--b26-line);
+  border-top: 3px solid var(--b26-accent);
+  border-radius: var(--b26-radius-surface);
+  background: var(--b26-surface);
+  box-shadow: var(--b26-shadow-sm);
+}
+.b26-investors-signal__label { display: block; margin-bottom: 18px; color: var(--b26-accent); font: 10px/1 "Geist Mono", ui-monospace, monospace; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+.b26-investors-signal strong { display: block; color: var(--b26-ink); font-size: 20px; letter-spacing: -.035em; line-height: 1.15; }
+.b26-investors-signal p { margin: 18px 0 0; color: var(--b26-muted); font-size: 13px; line-height: 1.65; }
+.b26-investors-section { padding: 76px 0; border-bottom: 1px solid var(--b26-line); }
+.b26-investors-section__intro { max-width: 760px; margin-bottom: 30px; }
+.b26-investors-section h2, .b26-investors-cta h2 { margin: 0; color: var(--b26-ink); font-size: clamp(28px, 4vw, 48px); letter-spacing: -.055em; line-height: 1.02; }
+.b26-investors-section h3 { margin: 0 0 12px; color: var(--b26-ink); font-size: 18px; letter-spacing: -.025em; }
+.b26-investors-grid { display: grid; gap: 14px; }
+.b26-investors-grid--three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.b26-investors-grid--two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.b26-investors-card { min-height: 100%; padding: 26px; border: 1px solid var(--b26-line); border-radius: var(--b26-radius-surface); background: var(--b26-surface); box-shadow: var(--b26-shadow-sm); }
+.b26-investors-grid--three .b26-investors-card, .b26-investors-grid--two .b26-investors-card { padding: 28px 0 4px; border: 0; border-top: 2px solid var(--b26-line); border-radius: 0; background: transparent; box-shadow: none; }
+.b26-investors-grid--three .b26-investors-card--accent { border-top-color: var(--b26-accent); background: transparent; }
+.b26-investors-card p, .b26-investors-prose p, .b26-investors-roadmap p, .b26-investors-footnote { margin: 0; color: var(--b26-muted); font-size: 14px; line-height: 1.72; }
+.b26-investors-card--accent { border: 0; border-top: 2px solid var(--b26-accent); border-radius: 0; background: transparent; box-shadow: none; }
+.b26-investors-section--split, .b26-investors-section--technology, .b26-investors-section--hypothesis, .b26-investors-section--disclosure { display: grid; grid-template-columns: minmax(230px, .8fr) minmax(0, 1.2fr); gap: clamp(30px, 8vw, 120px); align-items: start; }
+.b26-investors-prose { display: grid; gap: 16px; max-width: 700px; }
+.b26-investors-boundary { padding: 18px 20px; border-left: 3px solid var(--b26-accent); background: var(--b26-surface-muted); }
+.b26-investors-boundary strong { color: var(--b26-ink); }
+.b26-investors-section--hypothesis { padding: 70px clamp(22px, 5vw, 72px); border: 1px solid var(--b26-ink); border-radius: var(--b26-radius-surface); background: var(--b26-ink); }
+.b26-investors-section--hypothesis h2, .b26-investors-section--hypothesis .b26-eyebrow { color: #fff !important; }
+.b26-investors-section--hypothesis .b26-eyebrow { color: #b9c8ff !important; }
+.b26-investors-section--hypothesis .b26-investors-prose p { color: #d8e0ef; }
+.b26-investors-roadmap { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.b26-investors-roadmap article { padding: 24px; border-top: 2px solid var(--b26-accent); background: var(--b26-surface); }
+.b26-investors-roadmap span { display: block; margin-bottom: 26px; color: var(--b26-accent); font: 10px/1 "Geist Mono", ui-monospace, monospace; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+.b26-investors-roadmap h3 { font-size: 17px; }
+.b26-investors-footnote { margin-top: 22px; font-size: 12px; }
+.b26-investors-section--disclosure a { color: var(--b26-accent); font-weight: 800; }
+.b26-investors-cta { display: flex; align-items: center; justify-content: space-between; gap: 28px; margin-top: 76px; padding: 32px; border-radius: var(--b26-radius-surface); background: var(--b26-surface-muted); }
+.b26-investors-cta p:not(.b26-eyebrow) { max-width: 700px; margin: 16px 0 0; color: var(--b26-muted); font-size: 14px; line-height: 1.65; }
+.b26-investors-cta .b26-button--primary { flex: 0 0 auto; }
+@media (max-width: 800px) {
+  .b26-investors-main { width: min(1160px, calc(100% - 28px)); padding-top: 54px; }
+  .b26-investors-hero, .b26-investors-section--split, .b26-investors-section--technology, .b26-investors-section--hypothesis, .b26-investors-section--disclosure { grid-template-columns: 1fr; gap: 28px; }
+  .b26-investors-grid--three, .b26-investors-grid--two, .b26-investors-roadmap { grid-template-columns: 1fr; }
+  .b26-investors-section { padding: 52px 0; }
+  .b26-investors-hero { padding-bottom: 54px; }
+  .b26-investors-section--hypothesis { padding: 52px 22px; }
+  .b26-investors-cta { align-items: flex-start; flex-direction: column; margin-top: 52px; padding: 24px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .b26-investors-card, .b26-investors-cta .b26-button--primary { transition: none; }
+}

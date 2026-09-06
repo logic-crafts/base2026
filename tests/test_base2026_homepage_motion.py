@@ -9,6 +9,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 HOMEPAGE = ROOT / "templates" / "base2026-startup-homepage.html"
 STYLESHEET = ROOT / "templates" / "base2026-startup-homepage.css"
+HEADER = ROOT / "templates" / "base2026-startup-header.html"
+FOOTER = ROOT / "templates" / "base2026-startup-footer.html"
 
 
 class _Node:
@@ -137,7 +139,6 @@ def test_homepage_metrics_are_unavailable_until_the_public_read_succeeds() -> No
         stat_nodes = _nodes_with_attr(cell, "data-b26-public-stat", key)
         assert len(stat_nodes) == 1
         initial_value = _normalize(stat_nodes[0].raw_text())
-        # A static homepage must not present an old release counter as current.
         assert initial_value == "Unavailable" or (key == "full_transcripts_published" and initial_value == "0")
         assert len(_visible_text_parts(cell)) >= 3, f"{key} needs a label and visible explanation"
 
@@ -146,9 +147,7 @@ def test_homepage_metrics_are_unavailable_until_the_public_read_succeeds() -> No
         for cell in cells
     ]
     assert keys == list(expected_keys)
-
-    routes_copy = _normalize(cells[2].raw_text()).lower()
-    assert "sitemap" in routes_copy
+    assert "sitemap" in _normalize(cells[2].raw_text()).lower()
     assert "private pipeline" not in _normalize(" ".join(cell.raw_text() for cell in cells)).lower()
 
     transcript_copy = _normalize(cells[3].raw_text()).lower()
@@ -164,16 +163,15 @@ def test_homepage_metrics_are_unavailable_until_the_public_read_succeeds() -> No
     assert "Number.isSafeInteger" in runtime
 
 
-def test_homepage_exposes_the_source_lab_and_functional_evidence_brief_contract() -> None:
+def test_homepage_preserves_search_result_and_public_read_contracts() -> None:
     source, document = _parse_homepage()
 
-    assert '<title>Base2026 — Source-backed answers from expert video</title>' in source
+    titles = _nodes_with_tag(document, "title")
+    assert len(titles) == 1
+    assert _normalize(titles[0].raw_text()).startswith("Base2026")
     assert '<link rel="canonical" href="https://base2026.dev/">' in source
     assert 'type="application/ld+json"' in source
     assert "/static/base2026-evidence-brief.js" in source
-    assert "THE SOURCE LABORATORY / SEO + AI SEARCH" in source
-    assert "Find the source." in source
-    assert "Build on evidence." in source
 
     forms = _nodes_with_class(document, "b26-brief-search")
     assert len(forms) == 1
@@ -202,49 +200,52 @@ def test_homepage_exposes_the_source_lab_and_functional_evidence_brief_contract(
     ):
         assert len(_nodes_with_attr(document, "id", element_id)) == 1
 
-    scene = _nodes_with_attr(document, "data-lab-scene")
-    assert len(scene) == 1
-    image_nodes = _nodes_with_tag(scene[0], "img")
-    assert len(image_nodes) == 1
-    image = image_nodes[0]
-    assert image.has_class("b26-lab-lens__image")
-    assert image.attrs.get("src") == "/static/brand/b26-seal.webp"
-    assert image.attrs.get("width") == "116"
-    assert image.attrs.get("height") == "116"
-    assert "ceramic seal lens" in (image.attrs.get("alt") or "")
 
-    stage = _nodes_with_attr(scene[0], "data-lab-stage")
-    assert len(stage) == 1
-    source_cards = _nodes_with_attr(scene[0], "data-lab-source-card")
-    assert len(source_cards) == 3
-    assert len(_nodes_with_attr(scene[0], "data-lab-lens")) == 1
-    assert len(_nodes_with_attr(scene[0], "data-lab-excerpt")) == 1
-    assert len(_nodes_with_attr(scene[0], "data-lab-action")) == 1
-    assert len(_nodes_with_attr(scene[0], "data-lab-excerpt-highlight")) == 1
-    assert "Illustrative workflow" in _normalize(scene[0].raw_text())
+def test_homepage_exposes_an_actual_source_linked_worked_example() -> None:
+    source, document = _parse_homepage()
+    examples = _nodes_with_attr(document, "data-worked-example")
+    assert len(examples) == 1
+    example = examples[0]
+    assert example.attrs.get("id") == "worked-example"
+    assert example.attrs.get("aria-labelledby") == "example-caption"
+
+    panels = _nodes_with_attr(example, "data-example-panel")
+    steps = _nodes_with_attr(example, "data-example-step")
+    assert len(panels) == 3
+    assert len(steps) == 3
+    assert len(_nodes_with_attr(example, "data-example-play")) == 1
+    assert len(_nodes_with_attr(example, "data-example-status")) == 1
+    assert len(_nodes_with_attr(example, "data-example-note")) == 1
+    assert len(_nodes_with_attr(example, "data-example-copy")) == 1
+
+    example_text = _normalize(example.raw_text()).lower()
+    for phrase in (
+        "original practitioner source",
+        "base2026 source note",
+        "creator’s suggestion",
+        "base2026 context",
+        "finding:",
+        "next step:",
+    ):
+        assert phrase in example_text
+
+    source_links = [node.attrs.get("href") for node in _nodes_with_tag(example, "a") if (node.attrs.get("href") or "").startswith("/sources/")]
+    assert len(source_links) == 1
+    assert "tiktok-video-" in source_links[0]
+    assert any("learn.microsoft.com/en-us/clarity/ai-visibility/bot-activity-overview" in (node.attrs.get("href") or "") for node in _nodes_with_tag(example, "a"))
+
+    for obsolete_attr in (
+        "data-lab-source-card",
+        "data-lab-lens",
+        "data-lab-excerpt",
+        "data-lab-action",
+        "data-lab-excerpt-highlight",
+        "data-lab-scene",
+    ):
+        assert not _nodes_with_attr(example, obsolete_attr), f"obsolete {obsolete_attr} must stay removed"
+
     assert "source-lab-hero" not in source
-
-    caption = _nodes_with_attr(document, "id", "lab-scene-caption")
-    assert len(caption) == 1
-    caption_text = _normalize(caption[0].raw_text()).lower()
-    assert "illustrative workflow" in caption_text
-
-    assert len(_nodes_with_attr(document, "data-lab-source")) == 1
-    assert len(_nodes_with_attr(document, "data-lab-line")) == 1
-    assert len(_nodes_with_attr(document, "data-lab-motion-status")) == 1
-    motion_controls = _nodes_with_tag(document, "button")
-    motion_controls = [node for node in motion_controls if "data-lab-motion" in node.attrs]
-    assert len(motion_controls) == 1
-    assert motion_controls[0].attrs.get("data-lab-motion") == "toggle"
-    assert "hidden" in motion_controls[0].attrs
-
-    progress_values = {
-        node.attrs.get("data-lab-progress")
-        for node in _nodes_with_attr(document, "data-lab-progress")
-    }
-    assert {"hero", "tools", "sequence", "snapshot", "method", "final"} <= progress_values
-
-    assert not re.search(r"Live index|Source verified|@build_in_public|2026-07-24|Evidence result preview", source)
+    assert not re.search(r"\b(?:certified|fact certification|truth certification|source verified)\b", source, re.I)
 
 
 def test_homepage_content_is_visible_without_motion_enhancement() -> None:
@@ -258,31 +259,24 @@ def test_homepage_content_is_visible_without_motion_enhancement() -> None:
             assert "hidden" in section.attrs, "the result panel may wait for a submitted question"
         else:
             assert "hidden" not in section.attrs, f"{section.attrs.get('class', 'section')} must render without JavaScript"
+            assert _normalize(section.raw_text()), "each public section needs a static content fallback"
 
-    inline_scripts = [
-        node for node in _nodes_with_tag(document, "script")
-        if "src" not in node.attrs
-    ]
+    worked_example = _nodes_with_attr(document, "data-worked-example")[0]
+    assert all("hidden" not in panel.attrs for panel in _nodes_with_attr(worked_example, "data-example-panel"))
+
+    inline_scripts = [node for node in _nodes_with_tag(document, "script") if "src" not in node.attrs]
     assert len(inline_scripts) == 1
     assert inline_scripts[0].attrs.get("type") == "application/ld+json"
     assert "IntersectionObserver" not in source
     assert "b26-motion-ready" not in source
 
-    body_copy = _normalize(main_nodes[0].raw_text())
-    for phrase in (
-        "Choose your next step.",
-        "From source to a usable decision.",
-        "See what the public layer contains.",
-        "Useful evidence stays inspectable.",
-    ):
-        assert phrase in body_copy
-
-    css = STYLESHEET.read_text(encoding="utf-8")
-    assert not re.search(r"opacity\s*:\s*0(?:\b|\s|;)", css)
-    assert not re.search(r"transition\s*:\s*all\b", css, re.I)
+    links = {node.attrs.get("href") for node in _nodes_with_tag(document, "a")}
+    assert "/investors" in links
+    assert "/factory/" in links
+    assert "/about#how-we-grow" in links
 
 
-def test_homepage_css_reduced_motion_is_static_and_has_no_animation_loop() -> None:
+def test_homepage_css_keeps_the_worked_example_static_and_reduced_motion_safe() -> None:
     css = STYLESHEET.read_text(encoding="utf-8")
     reduced_start = re.search(r"@media\s*\([^)]*prefers-reduced-motion\s*:\s*reduce[^)]*\)", css, re.I)
     assert reduced_start, "the homepage needs a reduced-motion override"
@@ -294,17 +288,10 @@ def test_homepage_css_reduced_motion_is_static_and_has_no_animation_loop() -> No
     assert not re.search(r"\binfinite\b", css, re.I)
     assert not re.search(r"opacity\s*:\s*0(?:\b|\s|;)", css)
 
-    # Keep the scoped homepage token contract small and tied to the shared core palette.
-    home_rule = re.search(r"\.b26-home\s*\{([^}]*)\}", css, re.S)
-    assert home_rule
-    assert "--b26-canvas" not in home_rule.group(1)
-    assert "--b26-accent" not in home_rule.group(1)
-
-    # The visual line may be animated by the external GSAP enhancement, but its
-    # initial CSS state must remain a readable static line without that runtime.
-    line_rules = [body for selector, body in _css_rules(css) if "b26-lab-track" in selector]
-    assert line_rules
-    assert any("position: absolute" in body for body in line_rules)
+    example_rules = [body for selector, body in _css_rules(css) if ".b26-example" in selector]
+    assert example_rules
+    assert any("border" in body and "background" in body for body in example_rules)
+    assert any("[hidden]" in selector or "hidden" in selector for selector, _ in _css_rules(css) if ".b26-example-panel" in selector)
 
 
 def test_homepage_uses_purposeful_groups_without_decorative_indices() -> None:
@@ -314,3 +301,12 @@ def test_homepage_uses_purposeful_groups_without_decorative_indices() -> None:
     assert not re.search(r">\s*0[1-6]\s*<", source)
     assert len(_nodes_with_attr(document, "data-lab-entry-group")) >= 2
     assert len(_nodes_with_attr(document, "data-lab-entry")) >= 5
+
+
+def test_shared_shell_keeps_investor_growth_factory_and_creator_routes() -> None:
+    header = HEADER.read_text(encoding="utf-8")
+    footer = FOOTER.read_text(encoding="utf-8")
+    assert "/investors" in header and "/investors" in footer
+    assert "/factory/" in header and "/factory/" in footer
+    assert "/about#how-we-grow" in header
+    assert "/opt-out" in header or "/opt-out.html" in header

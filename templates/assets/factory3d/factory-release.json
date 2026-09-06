@@ -1,0 +1,105 @@
+{
+  "files": [
+    {
+      "bytes": 11094,
+      "path": "assets/index-_dIXbGJ4.css",
+      "sha256": "3d2eebf5e244aedb6750f23ea3a9237ec6dd4d6c9649e35528a09c9de3da3032"
+    },
+    {
+      "bytes": 651573,
+      "path": "assets/index-zNYj3I9L.js",
+      "sha256": "93c9ed82eb04c1042ebde914a2e547da05da0435e497d929af76300800510d98"
+    },
+    {
+      "bytes": 11813,
+      "path": "assets/kenney/Textures/colormap.png",
+      "sha256": "35d7bd6900dde0208429eeaec87fa17fbf024ed59f3f4eab54bc92802eba9dd7"
+    },
+    {
+      "bytes": 20171,
+      "path": "assets/kenney/Textures/texture-a.png",
+      "sha256": "257e944c582ce7cda206fbd8ceb717be648f9721756baf377a36478c11c0059a"
+    },
+    {
+      "bytes": 15606,
+      "path": "assets/kenney/Textures/texture-b.png",
+      "sha256": "c614148428fbf63ab701ab95e2ebe0b6103ea0e2e6212c986d8931899bad7692"
+    },
+    {
+      "bytes": 113596,
+      "path": "assets/kenney/character-inspector.glb",
+      "sha256": "8ee5dae167ec589863f6bba222467eb90ace8be357a4c5abfcab289290181616"
+    },
+    {
+      "bytes": 113596,
+      "path": "assets/kenney/character-worker.glb",
+      "sha256": "30ed390a741a1b285f587544819aa8a02c8f7f270e552ed742eb84785034f62a"
+    },
+    {
+      "bytes": 18688,
+      "path": "assets/kenney/factory-conveyor-long.glb",
+      "sha256": "9087ec11d9dcc85ada9d14a66910244bfbb5df57c64b2647956a32525935dee3"
+    },
+    {
+      "bytes": 1804,
+      "path": "assets/kenney/factory-floor-large.glb",
+      "sha256": "6d4cf453bcacd653389a4a3071468ae1167b98c2b13f042aba55e8fe3de21db0"
+    },
+    {
+      "bytes": 25620,
+      "path": "assets/kenney/factory-machine.glb",
+      "sha256": "a39e3042bcb7789274428357383317d70e1c31906e5301c99e7d9e90ac584863"
+    },
+    {
+      "bytes": 22192,
+      "path": "assets/kenney/factory-scanner-low.glb",
+      "sha256": "0baa337bc3c653522ce01baa09cc02b8810640225e823fe735dc8e4167a7913b"
+    },
+    {
+      "bytes": 13904,
+      "path": "assets/kenney/factory-screen-wide.glb",
+      "sha256": "220211ee38d51a521475caec06bb27aa231f5b1d43fd74cb93393cca47edfda3"
+    },
+    {
+      "bytes": 5572,
+      "path": "assets/kenney/factory-structure-doorway-wide.glb",
+      "sha256": "588655c5594b55d6f715ca6251febb18f9636f6804e0e193e31d68643e7b2107"
+    },
+    {
+      "bytes": 4236,
+      "path": "assets/kenney/factory-structure-wall.glb",
+      "sha256": "3bdcb31d693b4e97a9fa198e9de1a47bfd14e829520da08ceaacadbdb258582c"
+    },
+    {
+      "bytes": 7032,
+      "path": "index.html",
+      "sha256": "62b4a9ec5300365a989f2e3062feae41ee9198c03521c887a17741b719471a91"
+    },
+    {
+      "bytes": 706,
+      "path": "licenses/kenney-blocky-characters.txt",
+      "sha256": "610fec89c16826112e9d6b80497b726c43fea0e42c9cd9d7cb081f8ad550c0ec"
+    },
+    {
+      "bytes": 700,
+      "path": "licenses/kenney-factory-kit.txt",
+      "sha256": "61e86565dd297e143ad631594980eda0a17fc81a4cd7c6d71acf2f5e0cad30b6"
+    },
+    {
+      "bytes": 1081,
+      "path": "licenses/three-MIT.txt",
+      "sha256": "bfe119ea4fd413f5f7ca3fcd63adb0c4a073ed39daa2fe7d3e6b769e21272601"
+    },
+    {
+      "bytes": 102749,
+      "path": "licenses/vite-MIT.txt",
+      "sha256": "96780749b45f52a04de34596425d20532f6425ef9d1a4b0398101c00a013c103"
+    },
+    {
+      "bytes": 15140,
+      "path": "static/brand/b26-seal.webp",
+      "sha256": "92bce2a6e3b11dcb727e13eebf0d94365116c615ccdc1d67e8cbf4545f87eb2d"
+    }
+  ],
+  "schema": "base2026.factory-release.v1"
+}

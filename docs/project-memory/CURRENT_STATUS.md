@@ -1,39 +1,37 @@
 # Base2026 Current Status
 
-Checkpoint: 2026-09-06. The Source Laboratory redesign is live and verified.
-Use [the release handoff](HANDOFF_2026-09-06_SOURCE_LAB.md),
+The Astra/max redesign of Founder, shared navigation and the social footer
+is published and verified. The Founder page uses an original portrait and
+actual public website captures; five illustrated social links remain visible
+alongside the main navigation and directory references.
+
+Checkpoint: 2026-09-06. The product experience release is live and verified.
+Use the [release handoff](HANDOFF_2026-09-06_PRODUCT_EXPERIENCE.md),
 [PROJECT_STATE.md](PROJECT_STATE.md) and [NEXT_ACTION.md](NEXT_ACTION.md).
-These replace the earlier Studio integration and auth-recovery wait states;
-older dated receipts remain historical evidence.
+Earlier Source Laboratory and agency-correction handoffs are release history.
 
-The new shared design covers the homepage, search workspace, free tools,
-source records, documentation, editorial pages and member shell. Original
-paper-and-glass artwork, bounded GSAP motion, accessible native navigation
-and a consistent cool-white/navy/cobalt palette are published. Desktop/mobile,
-working source comparison, dynamic source pages and the retained signed-in
-research session passed live review.
+The homepage explains searchable practitioner video knowledge through a real,
+attributed Find → Inspect → Keep example. Shared animated mega-menus, a
+mobile dialog and editorial footer connect the tools, research,
+investor overview, roadmap, methodology and source policy. The public 3D
+factory is an English authored scenario built from licensed modular assets.
+AgencyOS remains a private operating environment; its separate local view
+reads the existing task registry without exporting operational data.
 
-Worker `35dd4bbe-d10f-4701-adcb-b68931d1988e` is active at 100%, serving the
-reviewed 4,302-file v4 artifact. The release handoff binds the artifact and
-combined runtime hashes. Current auth implementation, member script, data,
-bindings and WordPress 0.1.0/0.1.1 downloads are preserved. Recovery and
-diagnostic controls remain off. A public source build alone does not replace
-the accepted private auth integration.
+Worker `138e8cd6-b85b-49e6-9d59-e7ca370412e4` is active at 100 percent.
+The 4,339-file artifact and combined runtime have verified hashes. Public
+member assets, accepted auth implementation, bindings, member data and both
+WordPress downloads are preserved. Diagnostic and recovery controls are off.
+The public source checkout alone is not the private runtime deployment base.
 
-The WordPress Evidence Sidebar 0.1.1 beta is downloadable. Its source release
-and validation are complete; WordPress.org submission remains unavailable at
-the official form, and an external installation is not yet demonstrated.
-Page Source Check inspects supplied HTML; arbitrary-URL crawling remains a
-separate product scope.
+Evidence Search, Source Diversity Check, Source-backed Brief, supplied-HTML
+Page Source Check, WordPress Evidence Sidebar 0.1.1, API/MCP, source catalogs
+and Blog/Topics discovery remain available. The original source-diversity
+article and three voiced videos on both YouTube and TikTok are published.
+WordPress.org submission and external installation are still separate from
+the released manual-install beta. QA and publication do not prove adoption.
 
-The [Base2026 YouTube channel](https://www.youtube.com/@base2026dev) is created,
-branded and has three published Shorts. LinkedIn and three TikTok deliveries
-have publication receipts. An approved MCP catalog listing is live and an
-additional catalog PR is pending maintainer review. A full original article
-continues through the existing editorial workflow. Publication, local tests
-and our QA actions are not measured external adoption.
-
-HQ owns architecture, source integration and releases. Existing Growth,
-Design, Engineering, Identity, Media and Directories departments retain their
-scopes; Chief is the sole AgencyOS registry writer. Current next actions are
-in NEXT_ACTION, with no second queue or scheduler.
+Phase 29 remains active. HQ owns architecture, integration and review;
+routine workers use Luna/max. Existing departments and the Chief-maintained
+AgencyOS registry coordinate the next outcomes. Follow NEXT_ACTION rather
+than restarting closed auth, branding, video or site deliveries.

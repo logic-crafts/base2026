@@ -1,58 +1,46 @@
-<header class="b26-site-header" data-b26-shell>
+<header class="b26-site-header b26-experience-header" data-b26-shell>
   <div class="b26-site-header__inner">
-    <a class="b26-wordmark" href="/" aria-label="Base2026 home">
-      <img class="b26-wordmark__seal" src="/static/brand/b26-seal.webp" alt="" width="44" height="44" fetchpriority="high" decoding="async">
-      <span class="b26-wordmark__text"><span>Base</span><strong>2026</strong></span>
-    </a>
+    <a class="b26-wordmark" href="/" aria-label="Base2026 home"><img class="b26-wordmark__seal" src="/static/brand/b26-seal.webp" alt="" width="44" height="44" decoding="async"><span class="b26-wordmark__text"><span>Base</span><strong>2026</strong></span></a>
     <nav class="b26-desktop-nav" aria-label="Primary navigation">
-      <a href="/tools/">Tools</a>
-      <details class="b26-nav-group">
-        <summary>Research <span aria-hidden="true">⌄</span></summary>
-        <div class="b26-nav-group__links">
-          <a href="/workspace/">Search the evidence</a>
-          <a href="/topics/">Browse topics</a>
-          <a href="/creators/">Meet the creators</a>
-          <a href="/dataset.html">Public dataset</a>
-          <a href="/methodology.html">Our methodology</a>
+      <details class="b26-nav-group" data-mega="research">
+        <summary aria-controls="b26-menu-research">Research<svg viewBox="0 0 16 16" aria-hidden="true" width="14" height="14"><path d="m4 6 4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></summary>
+        <div class="b26-mega" id="b26-menu-research">
+          <a class="b26-mega-feature" href="/tools/evidence-search/"><span class="b26-mega-feature__art" aria-hidden="true"></span><span class="b26-mega-feature__copy"><small>Start with a question</small><strong>Find the explanation.<br>Keep the source.</strong><span>Open Evidence Search <span aria-hidden="true">↗</span></span></span></a>
+          <div class="b26-mega__links">
+            <div class="b26-mega__column"><p class="b26-mega__label">Explore the collection</p><a class="b26-mega__link" href="/topics/"><strong>Topics</strong><small>Follow an idea.</small></a><a class="b26-mega__link" href="/creators/"><strong>Creators</strong><small>Meet the practitioners.</small></a><a class="b26-mega__link" href="/dataset"><strong>Source collection</strong><small>Browse the public records.</small></a></div>
+            <div class="b26-mega__column"><p class="b26-mega__label">Make it useful</p><a class="b26-mega__link" href="/workspace/"><strong>Search Workspace</strong><small>Inspect sources side by side.</small></a><a class="b26-mega__link" href="/my-research/"><strong>My Research</strong><small>Return to your saved work.</small></a><a class="b26-mega__link" href="/blog/"><strong>Blog</strong><small>Ideas put into practice.</small></a></div>
+          </div>
+          <div class="b26-mega__bottom"><span>Useful explanations. Original sources.</span><a href="/#worked-example">See a worked example <span aria-hidden="true">↗</span></a></div>
         </div>
       </details>
-      <a href="/blog">Journal</a>
-      <details class="b26-nav-group">
-        <summary>Build with us <span aria-hidden="true">⌄</span></summary>
-        <div class="b26-nav-group__links">
-          <a href="/api.html">Public API</a>
-          <a href="/mcp.html">MCP for agents</a>
-          <a href="/integrations.html">Integrations</a>
-          <a href="/roadmap.html">Roadmap</a>
-          <a href="/founder.html">About the founder</a>
-          <a href="/partner.html">Partner with Base2026</a>
+      <a href="/tools/">Free tools</a>
+      <details class="b26-nav-group" data-mega="about">
+        <summary aria-controls="b26-menu-about">About<svg viewBox="0 0 16 16" aria-hidden="true" width="14" height="14"><path d="m4 6 4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></summary>
+        <div class="b26-mega" id="b26-menu-about">
+          <a class="b26-mega-feature b26-mega-feature--project" href="/founder"><span class="b26-mega-feature__art" aria-hidden="true"><img src="/static/brand/b26-seal.webp" alt="" width="110" height="110" decoding="async"></span><span class="b26-mega-feature__copy"><small>Made by a curious builder</small><strong>A small project.<br>A real person behind it.</strong><span>Meet Alex Yarosh <span aria-hidden="true">↗</span></span></span></a>
+          <div class="b26-mega__links">
+            <div class="b26-mega__column"><p class="b26-mega__label">The project</p><a class="b26-mega__link" href="/about"><strong>About Base2026</strong><small>What we’re building and why.</small></a><a class="b26-mega__link" href="/roadmap"><strong>Roadmap</strong><small>What exists. What comes next.</small></a><a class="b26-mega__link" href="/about#how-we-grow"><strong>How we grow</strong><small>Useful tools and shared learning.</small></a></div>
+            <div class="b26-mega__column"><p class="b26-mega__label">Built in the open</p><a class="b26-mega__link" href="/methodology"><strong>Methodology</strong><small>How we select and organize.</small></a><a class="b26-mega__link" href="/source-policy"><strong>Source policy</strong><small>Attribution and context.</small></a><a class="b26-mega__link" href="/api"><strong>API &amp; MCP</strong><small>Work with the public collection.</small></a></div>
+          </div>
+          <div class="b26-mega__bottom"><a href="/opt-out">Creator rights &amp; corrections</a><a href="/factory/">Visit the 3D factory <span aria-hidden="true">↗</span></a></div>
         </div>
       </details>
+      <a class="b26-investors-link" href="/investors">Investors</a>
     </nav>
-    <div class="b26-header-actions">
-      <a class="b26-account-link" href="/my-research/" data-members-account-link>Sign in</a>
-      <a class="b26-header-cta" href="/workspace/">Start researching <span aria-hidden="true">↗</span></a>
-    </div>
-    <details class="b26-mobile-nav">
-      <summary aria-label="Open navigation">Menu</summary>
-      <nav aria-label="Mobile navigation">
-        <a href="/workspace/">Search</a>
-        <a href="/tools/">Tools</a>
-        <a href="/my-research/" data-members-account-link>Sign in</a>
-        <a href="/topics/">Topics</a>
-        <a href="/creators/">Creators</a>
-        <a href="/dataset.html">Data</a>
-        <a href="/methodology.html">Methodology</a>
-        <a href="/blog">Blog</a>
-        <a href="/founder.html">Founder</a>
-        <a href="/api.html">API</a>
-        <a href="/mcp.html">MCP</a>
-        <a href="/integrations.html">Integrations</a>
-        <a href="/roadmap.html">Roadmap</a>
-        <a href="/support.html">Support</a>
-        <a href="/partner.html">Partner</a>
-        <a href="https://github.com/offflinerpsy/base2026" target="_blank" rel="noopener noreferrer">GitHub</a>
-      </nav>
-    </details>
+    <div class="b26-header-actions"><a class="b26-account-link" href="/my-research/" data-members-account-link>Sign in</a><a class="b26-header-cta" href="/tools/evidence-search/">Search evidence <span aria-hidden="true">↗</span></a></div>
+    <button class="b26-mobile-open" type="button" data-mobile-open aria-controls="b26-mobile-sheet" aria-haspopup="dialog" aria-expanded="false" hidden><span>Explore</span><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 7h14M3 13h14" stroke="currentColor" stroke-width="1.5"/></svg></button>
+    <details class="b26-mobile-nav" data-mobile-fallback><summary>Explore</summary><nav aria-label="Navigation without JavaScript"><a href="/tools/evidence-search/">Search evidence</a><a href="/tools/">Free tools</a><a href="/topics/">Topics</a><a href="/creators/">Creators</a><a href="/dataset">Source collection</a><a href="/workspace/">Search Workspace</a><a href="/my-research/" data-members-account-link>Sign in</a><a href="/blog/">Blog</a><a href="/about">About Base2026</a><a href="/founder">Alex Yarosh, founder</a><a href="/investors">Investors</a><a href="/roadmap">Roadmap</a><a href="/methodology">Methodology</a><a href="/source-policy">Source policy</a><a href="/opt-out">Creator rights</a><a href="/api">API &amp; MCP</a><a href="/factory/">The 3D factory</a></nav></details>
   </div>
+  <dialog class="b26-mobile-sheet" id="b26-mobile-sheet" aria-labelledby="b26-mobile-title">
+    <div class="b26-mobile-sheet__inner">
+      <div class="b26-mobile-sheet__top"><span id="b26-mobile-title"><img src="/static/brand/b26-seal.webp" alt="" width="36" height="36">Explore Base2026</span><button type="button" data-mobile-close aria-label="Close navigation">Close <span aria-hidden="true">×</span></button></div>
+      <nav aria-label="Mobile navigation">
+        <div class="b26-mobile-primary"><a href="/tools/evidence-search/">Search evidence <span aria-hidden="true">↗</span></a><a href="/tools/">Free tools <span aria-hidden="true">↗</span></a><a href="/topics/">Explore topics <span aria-hidden="true">↗</span></a><a href="/about">About Base2026 <span aria-hidden="true">↗</span></a><a href="/investors">For investors <span aria-hidden="true">↗</span></a></div>
+        <div class="b26-mobile-account"><span>A place for your sources.</span><a href="/my-research/" data-members-account-link>Sign in <span aria-hidden="true">↗</span></a></div>
+        <div class="b26-mobile-secondary"><div><p>Keep exploring</p><a href="/creators/">Creators</a><a href="/dataset">Source collection</a><a href="/workspace/">Search Workspace</a><a href="/blog/">Blog</a><a href="/api">API &amp; MCP</a></div><div><p>Behind Base2026</p><a href="/founder">Meet the founder</a><a href="/roadmap">Roadmap</a><a href="/methodology">Methodology</a><a href="/source-policy">Source policy</a><a href="/opt-out">Creator rights</a></div></div>
+        <a class="b26-mobile-factory" href="/factory/">Step inside the 3D factory <span aria-hidden="true">↗</span></a>
+      </nav>
+      <p class="b26-mobile-sheet__note">Useful explanations. Original sources.<br>Context you can inspect.</p>
+    </div>
+  </dialog>
 </header>
