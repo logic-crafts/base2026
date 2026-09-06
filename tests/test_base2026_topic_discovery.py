@@ -138,4 +138,3 @@ def test_real_source_lab_artifact_keeps_every_indexed_route_and_exact_leading_co
     rendered = MODULE.render_topic_discovery(source)
     assert rendered.count('class="b26-topic-card"') == len(records)
     assert MODULE.render_topic_discovery(rendered) == rendered
-
