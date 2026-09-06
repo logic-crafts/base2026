@@ -14,7 +14,7 @@ import {
 } from "../src/editorial-render";
 import {
   EDITORIAL_SCHEMA, getEditorialArticle, publishEditorialArticle, validateEditorialPayload,
-  type EditorialListCursor, type EditorialPacket, type EditorialPayload,
+  type EditorialListCursor, type EditorialPacket, type EditorialPayload, type EditorialReviewer,
 } from "../src/editorial";
 
 const NOW = "2026-08-30T20:00:00.000Z";
@@ -24,6 +24,7 @@ const ORIGIN = "https://base2026.dev";
 const MAX_SHELL_BYTES = 256 * 1024;
 const legacyPaths = LEGACY_EDITORIAL_CATALOG.map((item) => item.path);
 const migration = readFileSync(new URL("../migrations/0004_editorial_articles.sql", import.meta.url), "utf8");
+const reviewerMigration = readFileSync(new URL("../migrations/0007_editorial_astra_review.sql", import.meta.url), "utf8");
 const template = readFileSync(new URL("../../../templates/base2026-blog-index.html", import.meta.url), "utf8");
 const header = readFileSync(new URL("../../../templates/base2026-startup-header.html", import.meta.url), "utf8");
 const footer = readFileSync(new URL("../../../templates/base2026-startup-footer.html", import.meta.url), "utf8");
@@ -59,10 +60,10 @@ function payload(overrides: Partial<EditorialPayload> = {}): EditorialPayload {
   };
 }
 
-async function reviewedPacket(article = payload()): Promise<EditorialPacket> {
+async function reviewedPacket(article = payload(), reviewer: EditorialReviewer = "gpt-6-astra"): Promise<EditorialPacket> {
   const checked = await validateEditorialPayload(article, NOW);
   if (!checked.ok) throw new Error(`Invalid public fixture: ${JSON.stringify(checked.issues)}`);
-  return { payload: checked.payload, review: { reviewer: "sol-max", outcome: "pass", reviewed_at: REVIEWED, payload_sha256: checked.payload_sha256 } };
+  return { payload: checked.payload, review: { reviewer, outcome: "pass", reviewed_at: REVIEWED, payload_sha256: checked.payload_sha256 } };
 }
 
 function sqlValue(value: unknown): SQLInputValue {
@@ -105,7 +106,7 @@ class SqliteD1 implements D1Database {
   readonly prepared: string[] = [];
   batchCalls = 0;
   unavailable = false;
-  constructor() { this.sqlite.exec(migration); databases.add(this); }
+  constructor() { this.sqlite.exec(migration); this.sqlite.exec(reviewerMigration); databases.add(this); }
   prepare(sql: string): D1PreparedStatement {
     this.prepared.push(sql);
     if (this.unavailable) throw new Error("Synthetic D1 outage");
@@ -356,6 +357,19 @@ describe("editorial HTML and public DTO integration", () => {
     for (const field of ['"review":', '"receipt":', '"payload_json":', '"stored_at":', '"reviewer":', '"diagnostics":']) expect(keys).not.toContain(field);
     expect(db.batchCalls).toBe(0);
     expect(db.prepared.every((sql) => sql.trimStart().startsWith("SELECT"))).toBe(true);
+  });
+
+  it("counts an Astra receipt in the public sitemap while keeping reviewer state out of the response", async () => {
+    const db = new SqliteD1(); const env = environment(db); await seed(db); db.resetCalls();
+    const response = await route("/sitemap-blog.xml", env);
+    const body = await response.text();
+    expect(response.status).toBe(200);
+    expect(body).toContain("/sitemaps/blog-1.xml");
+    expect(body).not.toContain("gpt-6-astra");
+    const child = await route("/sitemaps/blog-1.xml", env);
+    const childBody = await child.text();
+    expect(childBody).toContain(`${ORIGIN}/blog/fixture-source-check/`);
+    expect(childBody).not.toContain("gpt-6-astra");
   });
 });
 

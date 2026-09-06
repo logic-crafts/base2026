@@ -21,6 +21,7 @@ import {
   type EditorialDatabase,
   type EditorialPacket,
   type EditorialPayload,
+  type EditorialReviewer,
 } from "../src/editorial";
 
 const NOW = "2026-08-30T16:00:00.000Z";
@@ -34,6 +35,7 @@ const SYNTHETIC_CREDENTIAL_FIXTURES = {
   asset: ["sk", "live", "not", "a", "real", "credential"].join("_"),
 };
 const migration = readFileSync(new URL("../migrations/0004_editorial_articles.sql", import.meta.url), "utf8");
+const reviewerMigration = readFileSync(new URL("../migrations/0007_editorial_astra_review.sql", import.meta.url), "utf8");
 const databases = new Set<SqliteD1>();
 
 function article(overrides: Partial<EditorialPayload> = {}): EditorialPayload {
@@ -72,10 +74,10 @@ function article(overrides: Partial<EditorialPayload> = {}): EditorialPayload {
   };
 }
 
-async function packet(payload = article()): Promise<EditorialPacket> {
+async function packet(payload = article(), reviewer: EditorialReviewer = "sol-max"): Promise<EditorialPacket> {
   const checked = await validateEditorialPayload(payload, NOW);
   if (!checked.ok) throw new Error(`invalid test fixture: ${JSON.stringify(checked.issues)}`);
-  return { payload, review: { reviewer: "sol-max", outcome: "pass", reviewed_at: REVIEWED, payload_sha256: checked.payload_sha256 } };
+  return { payload, review: { reviewer, outcome: "pass", reviewed_at: REVIEWED, payload_sha256: checked.payload_sha256 } };
 }
 
 function paragraphText(payload: EditorialPayload, text: string): EditorialPayload {
@@ -134,10 +136,11 @@ class SqliteD1 implements EditorialDatabase {
   readonly sqlite = new DatabaseSync(":memory:");
   batchCalls = 0;
 
-  constructor() {
+  constructor(applyReviewerMigration = true) {
     for (const name of ["0001_search.sql", "0002_align_fts_content_columns.sql", "0003_public_projection.sql", "0004_editorial_articles.sql"]) {
       this.sqlite.exec(readFileSync(new URL(`../migrations/${name}`, import.meta.url), "utf8"));
     }
+    if (applyReviewerMigration) this.sqlite.exec(reviewerMigration);
     databases.add(this);
   }
 
@@ -225,6 +228,14 @@ describe("editorial structural/public boundary", () => {
     for (const value of [{ payload: input.payload }, { ...input, private_notes: "not public" }, { ...input, review: { ...input.review, reviewer: "other" } }, { ...input, review: { ...input.review, outcome: "hold" } }, { ...input, review: { ...input.review, prompt: "not public" } }]) {
       expect((await validateEditorialPacket(value, NOW)).ok).toBe(false);
     }
+  });
+
+  it.each(["unknown", "luna-max", "gpt-5.6-luna"])("rejects non-allowlisted reviewer %s while retaining the actual Astra identity", async (reviewer) => {
+    const input = await packet(article(), "gpt-6-astra");
+    const result = await validateEditorialPacket({ ...input, review: { ...input.review, reviewer } }, NOW);
+    expect(result).toEqual({ ok: false, issues: [{ code: "EDITORIAL_REVIEW_REQUIRED", field: "review" }] });
+    const accepted = await validateEditorialPacket(input, NOW);
+    expect(accepted.ok && accepted.review.reviewer).toBe("gpt-6-astra");
   });
 
   it.each(["Upper-Case", "has_underscore", "two--hyphens", "trailing-", "-leading", "../path", "café", "a/b", "x".repeat(121)])("rejects noncanonical slug %s", async (slug) => { await rejected(article({ slug })); });
@@ -345,6 +356,24 @@ describe("editorial structural/public boundary", () => {
     expect((await validateEditorialPacket({ ...changed, review: { ...changed.review, reviewed_at: "2026-08-30T15:30:00.000Z" } }, NOW)).ok).toBe(true);
   });
 
+  it("keeps hash, time, staleness and outcome guards for Astra reviews", async () => {
+    const input = await packet(article({ slug: "astra-review-guards" }), "gpt-6-astra");
+    expect(await validateEditorialPacket({ ...input, payload: { ...input.payload, title: "Changed after Astra review" } }, NOW)).toMatchObject({
+      ok: false, issues: [{ code: "EDITORIAL_REVIEW_HASH_MISMATCH", field: "review.payload_sha256" }],
+    });
+    const stale = await packet(article({ slug: "astra-review-stale", updated_at: "2026-08-30T15:30:00.000Z" }), "gpt-6-astra");
+    expect(await validateEditorialPacket(stale, NOW)).toMatchObject({ ok: false, issues: [{ code: "EDITORIAL_REVIEW_STALE", field: "review.reviewed_at" }] });
+    expect(await validateEditorialPacket({ ...input, review: { ...input.review, reviewed_at: "2026-08-29T09:00:00.000Z" } }, NOW)).toMatchObject({
+      ok: false, issues: [{ code: "EDITORIAL_TIMESTAMP_ORDER", field: "review.reviewed_at" }],
+    });
+    expect(await validateEditorialPacket({ ...input, review: { ...input.review, reviewed_at: "2026-08-30T16:06:00.000Z" } }, NOW)).toMatchObject({
+      ok: false, issues: [{ code: "EDITORIAL_TIMESTAMP_FUTURE", field: "review.reviewed_at" }],
+    });
+    expect(await validateEditorialPacket({ ...input, review: { ...input.review, outcome: "hold" } }, NOW)).toMatchObject({
+      ok: false, issues: [{ code: "EDITORIAL_REVIEW_REQUIRED", field: "review" }],
+    });
+  });
+
   it.each(["/blog/", "/workspace/", "/workspace/?q=private", "/session/example", "/source-policy", "//example.com/path", "https://base2026.dev/dataset", "/blog/../workspace/", "/blog/%2e%2e/", "/api?email=person", "/dataset#state", "/topics/private_notes", "/topics/call-555-123-4567"])("rejects unsafe/noncanonical related path %s", async (path) => { await rejected(article({ related_paths: [path] })); });
 
   it("admits only clean public related routes and keeps the two static journal paths", async () => {
@@ -408,6 +437,17 @@ describe("editorial D1 durability and current-live idempotency", () => {
     expect(await getEditorialArticle(db, "absent", NOW)).toBeNull();
   });
 
+  it("reads a Sol receipt seeded under the original 0004 schema after the reviewer migration", async () => {
+    const db = new SqliteD1(false);
+    const input = await packet(article({ slug: "legacy-sol-readback" }), "sol-max");
+    expect(await publishEditorialArticle(db, input, { now: NOW })).toMatchObject({ status: "published", receipt: { reviewer: "sol-max" } });
+    db.sqlite.exec(reviewerMigration);
+    const stored = await getEditorialArticle(db, input.payload.slug, NOW);
+    expect(stored?.payload).toEqual(input.payload);
+    expect(stored?.receipt.reviewer).toBe("sol-max");
+    expect(db.sqlite.prepare("SELECT reviewer FROM editorial_publication_receipts_legacy_0007 WHERE slug=?").get(input.payload.slug)).toEqual({ reviewer: "sol-max" });
+  });
+
   it("replays the exact current tuple without mutating its timestamps or receipt", async () => {
     const db = new SqliteD1();
     const input = await packet();
@@ -416,6 +456,31 @@ describe("editorial D1 durability and current-live idempotency", () => {
     expect(replay).toMatchObject({ ok: true, status: "already_published" });
     if (initial.ok && replay.ok) expect(replay.receipt).toEqual(initial.receipt);
     expect(db.count("editorial_publication_receipts")).toBe(1);
+  });
+
+  it("publishes, reads and idempotently replays an Astra-reviewed tuple with its actual reviewer", async () => {
+    const db = new SqliteD1();
+    const input = await packet(article({ slug: "astra-reviewed-evidence" }), "gpt-6-astra");
+    const published = await publishEditorialArticle(db, input, { now: NOW });
+    expect(published).toMatchObject({
+      ok: true, status: "published",
+      receipt: { slug: input.payload.slug, reviewer: "gpt-6-astra", reviewed_at: REVIEWED, recorded_at: NOW },
+    });
+    const stored = await getEditorialArticle(db, input.payload.slug, NOW);
+    expect(stored?.receipt.reviewer).toBe("gpt-6-astra");
+    const replay = await publishEditorialArticle(db, { ...input, review: { ...input.review, reviewed_at: NOW } }, { now: "2026-08-30T16:01:00.000Z" });
+    expect(replay).toMatchObject({ ok: true, status: "already_published", receipt: { reviewer: "gpt-6-astra" } });
+    expect(db.sqlite.prepare("SELECT reviewer FROM editorial_publication_receipts WHERE slug=?").get(input.payload.slug)).toEqual({ reviewer: "gpt-6-astra" });
+  });
+
+  it("replays an existing Sol receipt exactly when the same payload is reviewed by Astra", async () => {
+    const db = new SqliteD1();
+    const original = await packet(article({ slug: "sol-to-astra-replay" }), "sol-max");
+    const first = await publishEditorialArticle(db, original, { now: NOW });
+    const replay = await publishEditorialArticle(db, { ...original, review: { ...original.review, reviewer: "gpt-6-astra" } }, { now: "2026-08-30T16:01:00.000Z" });
+    expect(first).toMatchObject({ ok: true, status: "published", receipt: { reviewer: "sol-max" } });
+    expect(replay).toMatchObject({ ok: true, status: "already_published", receipt: { reviewer: "sol-max" } });
+    expect(db.sqlite.prepare("SELECT reviewer, reviewed_at, recorded_at FROM editorial_publication_receipts WHERE slug=?").get(original.payload.slug)).toEqual({ reviewer: "sol-max", reviewed_at: REVIEWED, recorded_at: NOW });
   });
 
   it("returns conflict for same/lower payload revisions or higher revisions without explicit CAS", async () => {

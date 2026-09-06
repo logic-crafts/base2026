@@ -1,5 +1,16 @@
 # Prompt Log
 
+## 2026-09-06 — Preserve the actual editorial reviewer
+
+The owner assigned architecture and review to Astra and routine execution to
+Luna Max. Preparing the next original article exposed an obsolete Sol-only
+validator and receipt CHECK. HQ requested one compatible change through the
+existing publisher: accept actual Astra reviews alongside retained legacy Sol
+receipts; preserve hash, time, privacy, citation, authority and replay checks.
+The public candidate changes only reviewer validation, receipt write/readback,
+route filtering, one preserving migration and targeted tests. Private adapter
+maintenance stays outside public Git. HQ owns integration and release.
+
 ## 2026-09-05 — Combined Studio release candidate
 
 HQ lifted the temporary engineering integration pause and assigned Chief one

@@ -8,7 +8,10 @@ The active product phase remains Phase 29.
    releases must retain the current member script, both WordPress downloads,
    public/private boundaries and the newer private auth implementation.
    The source checkout's default asset path is not a deployment baseline.
-2. Growth continues the authorized original article and fitting free-channel
+2. HQ is integrating truthful Astra reviewer compatibility through the existing
+   publisher. Public runtime and receipt migration are verified; preserve all
+   legacy Sol receipts and use a compatible private ingress before the next
+   reviewed article. Growth continues fitting free-channel
    distribution through the existing editorial workflow. Recheck published
    slugs and prior sends before acting. The branded YouTube channel and three
    Shorts are delivered; do not duplicate those uploads.

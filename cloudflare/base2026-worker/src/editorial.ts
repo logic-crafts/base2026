@@ -3,7 +3,7 @@
  *
  * No HTTP handler, authoring model, source fetch, renderer or publication
  * authority lives here. The caller must be a separately authorized service
- * binding. A Sol review declaration binds a payload, not proof of its facts.
+ * binding. A reviewer declaration binds a payload, not proof of its facts.
  */
 
 import {
@@ -126,8 +126,14 @@ export interface EditorialPayload {
   evidence?: EditorialEvidence;
 }
 
+export type EditorialReviewer = "sol-max" | "gpt-6-astra";
+
+function isEditorialReviewer(value: unknown): value is EditorialReviewer {
+  return value === "sol-max" || value === "gpt-6-astra";
+}
+
 export interface EditorialReview {
-  reviewer: "sol-max";
+  reviewer: EditorialReviewer;
   outcome: "pass";
   reviewed_at: string;
   payload_sha256: string;
@@ -559,13 +565,14 @@ export async function validateEditorialPayload(value: unknown, now: string): Pro
 
 function review(value: unknown, payload: EditorialPayload, now: string): EditorialReview {
   const input = record(value, ["reviewer", "outcome", "reviewed_at", "payload_sha256"], [], "review");
-  if (input.reviewer !== "sol-max" || input.outcome !== "pass") reject("EDITORIAL_REVIEW_REQUIRED", "review");
+  if (!isEditorialReviewer(input.reviewer) || input.outcome !== "pass") reject("EDITORIAL_REVIEW_REQUIRED", "review");
+  const reviewer = input.reviewer;
   const reviewedAt = timestamp(input.reviewed_at, "review.reviewed_at", Date.parse(timestamp(now, "now")));
   if (reviewedAt < payload.published_at) reject("EDITORIAL_TIMESTAMP_ORDER", "review.reviewed_at");
   if (reviewedAt < payload.updated_at || payload.sources.some((item) => reviewedAt < item.checked_at)) {
     reject("EDITORIAL_REVIEW_STALE", "review.reviewed_at");
   }
-  return { reviewer: "sol-max", outcome: "pass", reviewed_at: reviewedAt, payload_sha256: hash(input.payload_sha256, "review.payload_sha256") };
+  return { reviewer, outcome: "pass", reviewed_at: reviewedAt, payload_sha256: hash(input.payload_sha256, "review.payload_sha256") };
 }
 
 export async function validateEditorialPacket(value: unknown, now: string): Promise<EditorialPacketValidation> {
@@ -611,7 +618,7 @@ export interface EditorialPublicationReceipt {
   public_path: string;
   published_at: string;
   updated_at: string;
-  reviewer: "sol-max";
+  reviewer: EditorialReviewer;
   reviewed_at: string;
   recorded_at: string;
 }
@@ -671,7 +678,7 @@ async function storedArticle(row: StoredRow, now: string): Promise<StoredEditori
       || result.payload.slug !== row.slug || result.payload.revision !== row.revision
       || result.payload.published_at !== row.published_at || result.payload.updated_at !== row.updated_at
       || row.receipt_published_at !== row.published_at || row.receipt_updated_at !== row.updated_at
-      || row.reviewer !== "sol-max" || row.stored_at !== row.recorded_at) throw new Error("tuple");
+      || !isEditorialReviewer(row.reviewer) || row.stored_at !== row.recorded_at) throw new Error("tuple");
     const reviewed = review({ reviewer: row.reviewer, outcome: "pass", reviewed_at: row.reviewed_at, payload_sha256: row.receipt_hash }, result.payload, now);
     const storedAt = timestamp(row.stored_at, "stored_at", Date.parse(timestamp(now, "now")));
     if (storedAt !== row.stored_at || timestamp(row.created_at, "created_at") > storedAt || storedAt < reviewed.reviewed_at) throw new Error("stored time");
@@ -681,7 +688,7 @@ async function storedArticle(row: StoredRow, now: string): Promise<StoredEditori
       receipt: {
         schema_version: EDITORIAL_RECEIPT_SCHEMA, slug: row.slug, revision: row.revision,
         payload_sha256: result.payload_sha256, public_path: path, published_at: row.published_at,
-        updated_at: row.updated_at, reviewer: "sol-max", reviewed_at: reviewed.reviewed_at, recorded_at: storedAt,
+        updated_at: row.updated_at, reviewer: reviewed.reviewer, reviewed_at: reviewed.reviewed_at, recorded_at: storedAt,
       },
     };
   } catch { throw new EditorialStoreError("EDITORIAL_PERSISTED_STATE_INVALID"); }
@@ -753,10 +760,10 @@ export async function publishEditorialArticle(db: EditorialDatabase, value: unkn
     const receipt = db.prepare(
       `INSERT INTO editorial_publication_receipts
        (slug, revision, payload_sha256, published_at, updated_at, reviewer, reviewed_at, recorded_at)
-     SELECT slug, revision, payload_sha256, published_at, updated_at, 'sol-max', ?4, stored_at
+     SELECT slug, revision, payload_sha256, published_at, updated_at, ?4, ?5, stored_at
        FROM editorial_articles
       WHERE slug=?1 AND revision=?2 AND payload_sha256=?3 AND changes()=1`,
-    ).bind(payload.slug, payload.revision, checked.payload_sha256, checked.review.reviewed_at);
+    ).bind(payload.slug, payload.revision, checked.payload_sha256, checked.review.reviewer, checked.review.reviewed_at);
     const readback = db.prepare(`SELECT ${READ_COLUMNS} ${READ_FROM} WHERE a.slug=?1 LIMIT 1`).bind(payload.slug);
     const statements = [mutate, receipt, readback];
     // Keep receipt directly after mutation: changes() must describe that write.

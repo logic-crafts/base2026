@@ -1,5 +1,14 @@
 # Decisions
 
+## 2026-09-06 — Store truthful reviewer identity without rewriting history
+
+New editorial approvals follow Astra ownership. Accept exact gpt-6-astra and
+legacy sol-max identities through the existing publisher; routine executors
+cannot approve their own output. Store and return the actual approved reviewer.
+The receipt migration widens only the CHECK and retains every legacy row in a
+backup table. A rollback after any Astra receipt must fail rather than discard
+or relabel data. Preserve all source, timestamp, hash and authority checks.
+
 ## 2026-09-05 — Bring the research workflow into an editor people already use
 
 Ship one small, free WordPress companion to the existing public evidence API,
